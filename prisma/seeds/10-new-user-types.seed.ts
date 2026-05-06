@@ -28,7 +28,7 @@ export async function seedNewUserTypes(prisma: PrismaClient) {
         create: {
           id: 'PHPROF001',
           licenseNumber: 'PHARM-MU-2019-001',
-          pharmacyName: 'CarePharm Central',
+          pharmacyName: 'PillPal Pharmacy',
           pharmacyAddress: 'Royal Road, Port Louis',
           specializations: ['Clinical Pharmacy', 'Geriatric Pharmacy'],
         },
@@ -53,7 +53,7 @@ export async function seedNewUserTypes(prisma: PrismaClient) {
         create: {
           id: 'PHPROF002',
           licenseNumber: 'PHARM-MU-2020-002',
-          pharmacyName: 'MediPlus Pharmacy',
+          pharmacyName: 'HealthyHippo Pharmacy',
           pharmacyAddress: 'St Jean Road, Quatre Bornes',
           specializations: ['Oncology Pharmacy', 'Pediatric Pharmacy'],
         },
@@ -93,7 +93,7 @@ export async function seedNewUserTypes(prisma: PrismaClient) {
         create: {
           id: 'LTPROF001',
           licenseNumber: 'LAB-MU-2018-001',
-          labName: 'HealthLab Mauritius',
+          labName: 'WizardLab Mauritius',
           specializations: ['Hematology', 'Clinical Chemistry'],
         },
       },
@@ -117,7 +117,7 @@ export async function seedNewUserTypes(prisma: PrismaClient) {
         create: {
           id: 'LTPROF002',
           licenseNumber: 'LAB-MU-2021-002',
-          labName: 'BioAnalytics Lab',
+          labName: 'BubbleTest Labs',
           specializations: ['Microbiology', 'Immunology'],
         },
       },

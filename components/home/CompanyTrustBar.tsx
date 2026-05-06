@@ -67,12 +67,12 @@ function orgsToItems(orgs: OrgEntity[]): TrustItem[] {
 // ─── Static fallback ──────────────────────────────────────────────────────────
 
 const FALLBACK: TrustItem[] = [
-  { id: 'f1', name: 'MediShield Mauritius', badge: 'Insurance', href: '/search/company' },
-  { id: 'f2', name: 'Rogers Group', badge: 'Corporate', href: '/search/company' },
-  { id: 'f3', name: 'Swan Life Ltd', badge: 'Insurance', href: '/search/company' },
-  { id: 'f4', name: 'City Clinic Rose Hill', badge: 'Clinic', href: '/search/organizations' },
-  { id: 'f5', name: 'MUA Insurance', badge: 'Insurance', href: '/search/company' },
-  { id: 'f6', name: 'Grand Baie Medical', badge: 'Hospital', href: '/search/organizations' },
+  { id: 'f1', name: 'Flamingo Health Co', badge: 'Insurance', href: '/search/company' },
+  { id: 'f2', name: 'Coconut Tree Holdings', badge: 'Corporate', href: '/search/company' },
+  { id: 'f3', name: 'Flamingo Assurance Ltd', badge: 'Insurance', href: '/search/company' },
+  { id: 'f4', name: 'Bonsai Medical Centre', badge: 'Clinic', href: '/search/organizations' },
+  { id: 'f5', name: 'CloudNine Insurance', badge: 'Insurance', href: '/search/company' },
+  { id: 'f6', name: 'Sunset Bay Medical', badge: 'Hospital', href: '/search/organizations' },
 ]
 
 // ─── Badge icon ──────────────────────────────────────────────────────────────

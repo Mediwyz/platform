@@ -23,7 +23,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
     const company = await prisma.corporateAdminProfile.create({
       data: {
         userId: 'DOC001',
-        companyName: 'MediCare Clinic Mauritius',
+        companyName: 'BlueLagoon Medical Clinic',
         registrationNumber: 'BRN-MU-2024-001',
         industry: 'Healthcare',
         employeeCount: 15,
@@ -57,7 +57,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
   // Create company-branded posts
   const companyPosts = [
     {
-      content: 'Exciting news! MediCare Clinic Mauritius is now offering free health screenings every Saturday. Book your slot today through MediWyz. #HealthAwareness #FreeClinics',
+      content: 'Exciting news! BlueLagoon Medical Clinic is now offering free health screenings every Saturday. Book your slot today through MediWyz. #HealthAwareness #FreeClinics',
       category: 'news',
       tags: ['health-screening', 'free-clinic', 'mauritius'],
     },

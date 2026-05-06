@@ -19,13 +19,13 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
   if (!owner) { console.log('  (skipped — owner email not seeded)'); return }
 
   let company = await prisma.corporateAdminProfile.findFirst({
-    where: { userId: owner.id, companyName: 'MediShield Mauritius' },
+    where: { userId: owner.id, companyName: 'Flamingo Health Co' },
   })
   if (!company) {
     company = await prisma.corporateAdminProfile.create({
       data: {
         userId: owner.id,
-        companyName: 'MediShield Mauritius',
+        companyName: 'Flamingo Health Co',
         industry: 'Insurance',
         employeeCount: 25,
         isInsuranceCompany: true,
@@ -34,7 +34,7 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
         registrationNumber: 'BRN-MSMU-2026-001',
       },
     })
-    console.log('  ✓ Created insurance company MediShield Mauritius')
+    console.log('  ✓ Created insurance company Flamingo Health Co')
   }
 
   // ── 2. Enrol seeded patients as members ──────────────────────────────────

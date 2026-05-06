@@ -9,14 +9,14 @@ export default function HomePage() {
       {/* 1 — Hook: book a slot or search; shows global availability by role */}
       <HeroSection />
 
-      {/* 2 — Validate: partner logos + key stats (flows dark→dark with hero) */}
+      {/* 2 — Locate: Google Maps with all provider pins + directions; lazy-loaded */}
+      <NearMeSectionLoader />
+
+      {/* 3 — Validate: partner logos + key stats */}
       <CompanyTrustBar />
 
-      {/* 3 — Explore: Services / Providers / Organisations / Community / Shop tabs */}
+      {/* 4 — Explore: Services / Providers / Organisations / Community / Shop tabs */}
       <DiscoverSection />
-
-      {/* 4 — Locate: Google Maps with all provider pins + directions; lazy-loaded */}
-      <NearMeSectionLoader />
     </>
   )
 }

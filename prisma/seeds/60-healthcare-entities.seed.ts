@@ -13,32 +13,32 @@ import { PrismaClient } from '@prisma/client'
 const ENTITIES = [
   // ── Mauritius ──────────────────────────────────────────────────────────────
   {
-    name: 'City Clinic Mauritius',
+    name: 'BlueLagoon Clinic',
     type: 'clinic',
     description: 'Multi-specialty outpatient clinic in the heart of Port Louis, serving all ages with general practice, specialist consultations, and minor procedures.',
     address: '12 Sir William Newton St',
     city: 'Port Louis',
     country: 'MU',
     phone: '+230 211 0000',
-    email: 'info@cityclinic.mu',
+    email: 'info@bluelagoonclinic.mu',
     latitude: -20.1619,
     longitude: 57.4989,
   },
   {
-    name: 'Apollo Bramwell Hospital',
+    name: 'Mount Olympus Hospital',
     type: 'hospital',
     description: 'Leading private hospital in Mauritius offering 24/7 emergency care, surgical suites, and over 40 specialties.',
     address: 'Royal Road, Moka',
     city: 'Moka',
     country: 'MU',
     phone: '+230 605 1000',
-    email: 'info@apollobramwell.com',
+    email: 'info@mountolympushospital.mu',
     latitude: -20.2366,
     longitude: 57.5056,
     isVerified: true,
   },
   {
-    name: 'Grand Baie Medical Centre',
+    name: 'Sunset Bay Medical Centre',
     type: 'clinic',
     description: 'Full-service medical centre in the north of Mauritius — GP consultations, specialist referrals, and preventive health screening.',
     address: 'Royal Road, Grand Baie',
@@ -49,19 +49,19 @@ const ENTITIES = [
     longitude: 57.5869,
   },
   {
-    name: 'MedLab Analysis',
+    name: 'QuirkLab Analysis',
     type: 'laboratory',
     description: 'Accredited diagnostic laboratory offering blood panels, urine tests, pathology, and home sample collection.',
     address: '45 Pope Hennessy St',
     city: 'Port Louis',
     country: 'MU',
     phone: '+230 208 4747',
-    email: 'labs@medlab.mu',
+    email: 'labs@quirklab.mu',
     latitude: -20.1644,
     longitude: 57.5029,
   },
   {
-    name: 'SmileFirst Dental Clinic',
+    name: 'ToothFairy Dental Clinic',
     type: 'dental_clinic',
     description: 'Modern dental practice offering general dentistry, orthodontics, implants, and cosmetic treatments.',
     address: '3 St Georges St',
@@ -72,7 +72,7 @@ const ENTITIES = [
     longitude: 57.5264,
   },
   {
-    name: 'ClearVision Optical Centre',
+    name: 'FourEyes Optical Centre',
     type: 'optical_center',
     description: 'Optometry practice with full eye examination suite, contact lens fitting, and a wide selection of prescription frames.',
     address: 'Bagatelle Mall, Moka',
@@ -83,7 +83,7 @@ const ENTITIES = [
     longitude: 57.4928,
   },
   {
-    name: 'Physiotherapy & Rehab Centre Mauritius',
+    name: 'BendRight Rehab Centre',
     type: 'wellness_center',
     description: 'Dedicated rehabilitation facility for post-surgical recovery, sports injuries, neurological rehab, and occupational therapy.',
     address: '7 Dr Ferriere St',
@@ -95,9 +95,9 @@ const ENTITIES = [
   },
   // ── Madagascar ────────────────────────────────────────────────────────────
   {
-    name: 'Clinique Adventiste Antananarivo',
+    name: 'Clinique Bonne Humeur',
     type: 'clinic',
-    description: 'Non-profit faith-based clinic providing affordable general medicine, maternity care, and laboratory services in Antananarivo.',
+    description: 'Non-profit clinic providing affordable general medicine, maternity care, and laboratory services in Antananarivo.',
     address: 'Lot IVA 26 Soamanandray, Antananarivo',
     city: 'Antananarivo',
     country: 'MG',
@@ -107,7 +107,7 @@ const ENTITIES = [
   },
   // ── Kenya ─────────────────────────────────────────────────────────────────
   {
-    name: 'Nairobi West Hospital',
+    name: 'Nairobi Sunrise Hospital',
     type: 'hospital',
     description: 'Level 4 private hospital offering specialist consultations, maternity, surgical, and emergency services in Nairobi.',
     address: 'Raila Odinga Way, Nairobi West',
@@ -166,22 +166,22 @@ export async function seedHealthcareEntities(prisma: PrismaClient) {
     role?: string
     isPrimary?: boolean
   }> = [
-    // Doctors → Apollo Bramwell Hospital
-    { email: 'sarah.johnson@mediwyz.com', entityName: 'Apollo Bramwell Hospital', role: 'Consultant Physician', isPrimary: true },
-    { email: 'michael.chen@mediwyz.com',  entityName: 'Apollo Bramwell Hospital', role: 'Senior Consultant',   isPrimary: true },
-    { email: 'aisha.patel@mediwyz.com',   entityName: 'City Clinic Mauritius',    role: 'General Practitioner', isPrimary: true },
-    // Nurses → Grand Baie Medical Centre
-    { email: 'marie.dupont@mediwyz.com',  entityName: 'Grand Baie Medical Centre', role: 'Registered Nurse',   isPrimary: true },
-    { email: 'john.smith@mediwyz.com',    entityName: 'City Clinic Mauritius',     role: 'Registered Nurse',   isPrimary: true },
-    // Lab Technicians → MedLab Analysis
-    { email: 'raj.labtech@mediwyz.com',   entityName: 'MedLab Analysis',          role: 'Senior Lab Technician', isPrimary: true },
-    { email: 'fatima.lab@mediwyz.com',    entityName: 'MedLab Analysis',          role: 'Lab Technician',        isPrimary: true },
+    // Doctors → Mount Olympus Hospital
+    { email: 'sarah.johnson@mediwyz.com', entityName: 'Mount Olympus Hospital', role: 'Consultant Physician', isPrimary: true },
+    { email: 'michael.chen@mediwyz.com',  entityName: 'Mount Olympus Hospital', role: 'Senior Consultant',   isPrimary: true },
+    { email: 'aisha.patel@mediwyz.com',   entityName: 'BlueLagoon Clinic',    role: 'General Practitioner', isPrimary: true },
+    // Nurses → Sunset Bay Medical Centre
+    { email: 'marie.dupont@mediwyz.com',  entityName: 'Sunset Bay Medical Centre', role: 'Registered Nurse',   isPrimary: true },
+    { email: 'john.smith@mediwyz.com',    entityName: 'BlueLagoon Clinic',     role: 'Registered Nurse',   isPrimary: true },
+    // Lab Technicians → QuirkLab Analysis
+    { email: 'raj.labtech@mediwyz.com',   entityName: 'QuirkLab Analysis',          role: 'Senior Lab Technician', isPrimary: true },
+    { email: 'fatima.lab@mediwyz.com',    entityName: 'QuirkLab Analysis',          role: 'Lab Technician',        isPrimary: true },
     // Dentist → SmileFirst
-    { email: 'david.dentist@mediwyz.com', entityName: 'SmileFirst Dental Clinic', role: 'General Dentist',    isPrimary: true },
+    { email: 'david.dentist@mediwyz.com', entityName: 'ToothFairy Dental Clinic', role: 'General Dentist',    isPrimary: true },
     // Optometrist → ClearVision
-    { email: 'lisa.optom@mediwyz.com',    entityName: 'ClearVision Optical Centre', role: 'Optometrist',      isPrimary: true },
+    { email: 'lisa.optom@mediwyz.com',    entityName: 'FourEyes Optical Centre', role: 'Optometrist',      isPrimary: true },
     // Physiotherapist → Physio & Rehab Centre
-    { email: 'carlos.physio@mediwyz.com', entityName: 'Physiotherapy & Rehab Centre Mauritius', role: 'Senior Physiotherapist', isPrimary: true },
+    { email: 'carlos.physio@mediwyz.com', entityName: 'BendRight Rehab Centre', role: 'Senior Physiotherapist', isPrimary: true },
   ]
 
   let linked = 0
