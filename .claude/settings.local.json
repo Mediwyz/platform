@@ -266,7 +266,12 @@
       "Bash(Start-Process -NoNewWindow -FilePath \"npm\" -ArgumentList \"run\",\"dev\")",
       "Bash(echo \"PID: $!\")",
       "Bash(echo \"started PID $!\")",
-      "Bash(curl -s http://localhost:3001/api/roles)"
+      "Bash(curl -s http://localhost:3001/api/roles)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(echo \"Response size: $\\(curl -sk -L --insecure --max-time 15 \"https://102.222.105.151/\" 2>&1)",
+      "Bash(echo \"---HTML size: $\\(curl -sk --insecure -L \"https://102.222.105.151/\" 2>&1)",
+      "Bash(echo \"Monitoring run 25463310879 in background PID=$!\")",
+      "WebFetch(domain:102.222.105.151)"
     ]
   }
 }
