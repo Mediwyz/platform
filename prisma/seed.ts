@@ -55,6 +55,7 @@ import { seedHealthShopCategories } from './seeds/58-health-shop-categories.seed
 import { seedServiceConfigBackfill } from './seeds/59-service-config-backfill.seed'
 import { seedHealthcareEntities } from './seeds/60-healthcare-entities.seed'
 import { seedUserCoordinates } from './seeds/61-user-coordinates.seed'
+import { seedCleanupNames } from './seeds/62-cleanup-names.seed'
 
 const prisma = new PrismaClient()
 
@@ -269,6 +270,7 @@ async function main() {
   await seedServiceConfigBackfill(prisma)   // must run after 57 + 58
   await seedHealthcareEntities(prisma)      // seed 60 — clinics/hospitals + provider links
   await seedUserCoordinates(prisma)         // seed 61 — GPS coordinates for nearest-provider search
+  await seedCleanupNames(prisma)            // seed 62 — delete old real names, rename to mock names
 
   // ── Final step: ensure ALL users have subscriptions ──────────────
   console.log('  Ensuring all users have subscriptions...')
