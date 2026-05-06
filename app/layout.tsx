@@ -13,6 +13,7 @@ import FloatingBookingCart from '@/components/shared/FloatingBookingCart'
 import FloatingAuthFAB from '@/components/shared/FloatingAuthFAB'
 import FloatingCart from '@/components/health-shop/FloatingCart'
 import FloatingPrescriptionFAB from '@/components/shared/FloatingPrescriptionFAB'
+import FloatingGeoFAB from '@/components/shared/FloatingGeoFAB'
 import { PrescriptionProvider } from '@/lib/contexts/prescription-context'
 import { BookingDrawerProvider } from '@/lib/contexts/booking-drawer-context'
 import BookingDrawer from '@/components/shared/BookingDrawer'
@@ -193,6 +194,7 @@ export default function RootLayout({
  <FloatingAuthFAB />
  <FloatingBookingCart />
  <FloatingCart />
+ <FloatingGeoFAB />
  <FloatingPrescriptionFAB />
  <FloatingChatWidget />
  <BookingDrawer />
