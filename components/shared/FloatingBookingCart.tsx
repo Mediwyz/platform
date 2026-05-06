@@ -54,7 +54,7 @@ export default function FloatingBookingCart() {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 60, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-              className="fixed bottom-[280px] sm:bottom-[204px] right-4 sm:right-5 z-[60] w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="fixed bottom-[340px] sm:bottom-[264px] right-4 sm:right-5 z-[60] w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-2xl overflow-hidden"
               style={{ boxShadow: '0 24px 60px rgba(0,30,64,0.25)' }}
             >
               {/* Panel header */}
@@ -150,7 +150,7 @@ export default function FloatingBookingCart() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           onClick={() => setOpen(v => !v)}
-          className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
+          className="fixed bottom-[276px] sm:bottom-[200px] right-4 sm:right-5 z-[150]
             h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
             text-white flex items-center gap-2.5 text-sm font-semibold
             transition-all hover:scale-105 active:scale-95"
@@ -166,7 +166,7 @@ export default function FloatingBookingCart() {
       ) : (
         <button
           onClick={() => setOpen(v => !v)}
-          className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
+          className="fixed bottom-[276px] sm:bottom-[200px] right-4 sm:right-5 z-[150]
             h-12 pl-3 pr-5 rounded-full shadow-lg
             bg-white border-2 border-gray-200
             flex items-center gap-2.5 text-sm font-semibold
@@ -186,7 +186,7 @@ export default function FloatingBookingCart() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className="fixed bottom-[280px] sm:bottom-[204px] right-4 sm:right-5 z-[150] bg-white border border-gray-200 rounded-xl shadow-lg px-4 py-3 w-52 text-center"
+            className="fixed bottom-[340px] sm:bottom-[264px] right-4 sm:right-5 z-[150] bg-white border border-gray-200 rounded-xl shadow-lg px-4 py-3 w-52 text-center"
           >
             <p className="text-xs font-semibold text-gray-700">No service selected</p>
             <p className="text-[10px] text-gray-400 mt-0.5">Pick a date & service from the booking widget above</p>

@@ -16,7 +16,7 @@ export default function FloatingCart() {
         onClick={() => setOpen(!open)}
         title="Health Shop"
         aria-label="Health Shop"
-        className={`fixed bottom-[276px] sm:bottom-[200px] right-4 sm:right-5 z-[150]
+        className={`fixed bottom-[336px] sm:bottom-[260px] right-4 sm:right-5 z-[150]
           h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold
           transition-all hover:scale-105 active:scale-95
@@ -33,7 +33,7 @@ export default function FloatingCart() {
 
       {/* Empty cart panel */}
       {open && totalItems === 0 && (
-        <div className="fixed bottom-[344px] sm:bottom-[268px] right-4 sm:right-5 z-[150] bg-white rounded-2xl shadow-xl border border-gray-200 p-4 w-52">
+        <div className="fixed bottom-[404px] sm:bottom-[328px] right-4 sm:right-5 z-[150] bg-white rounded-2xl shadow-xl border border-gray-200 p-4 w-52">
           <p className="text-sm font-semibold text-gray-900 mb-1">Health Shop</p>
           <p className="text-xs text-gray-500 mb-3">Your cart is empty. Browse products from all providers.</p>
           <Link href="/search/health-shop" className="block w-full text-center bg-[#0C6780] text-white py-2 rounded-xl text-xs font-medium">
@@ -44,7 +44,7 @@ export default function FloatingCart() {
 
       {/* Cart panel — when items present */}
       {open && totalItems > 0 && (
-        <div className="fixed bottom-[344px] sm:bottom-[268px] right-4 sm:right-5 z-[150] w-[360px] max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
+        <div className="fixed bottom-[404px] sm:bottom-[328px] right-4 sm:right-5 z-[150] w-[360px] max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b bg-gray-50">
             <h3 className="font-bold text-gray-900 text-sm">Cart ({totalItems} items)</h3>
