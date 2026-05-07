@@ -21,7 +21,10 @@ export default function NearMeSectionLoader() {
   const [isMobile, setIsMobile] = useState<boolean | null>(null)
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768)
+    // Touch device OR narrow viewport → skip Google Maps entirely
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    const isNarrow = window.innerWidth < 1024
+    setIsMobile(isTouch || isNarrow)
   }, [])
 
   if (isMobile === null) {
