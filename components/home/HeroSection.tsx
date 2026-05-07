@@ -146,7 +146,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
   return (
     <section
       className="overflow-hidden"
-      style={{ background: '#001E40', minHeight: 520 }}
+      style={{ background: '#001E40', minHeight: 400 }}
     >
       {/* ── 3-column flex row — fills the hero height ─────────────── */}
       <div className="flex flex-col lg:flex-row lg:items-stretch" style={{ minHeight: 'inherit' }}>
@@ -158,7 +158,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="lg:flex-[45] flex flex-col justify-center
             px-6 sm:px-10 lg:px-12 xl:px-16
-            py-8 sm:py-10 lg:py-0"
+            py-5 sm:py-6 lg:py-0"
         >
           {/* Country flag + platform badge */}
           <div className="inline-flex self-start items-center bg-white/10 rounded-lg px-3 py-1.5 mb-5 border border-white/20">

@@ -225,7 +225,7 @@ export default function HeroBookingWidget({ fullHeight = false }: HeroBookingWid
         </div>
 
         {/* ── Slot grid ───────────────────────────────────────────────── */}
-        <div className={`px-3 pb-2 ${fullHeight ? 'flex-1 min-h-0 overflow-y-auto' : ''}`}>
+        <div className={`px-3 pt-2 pb-2 ${fullHeight ? 'flex-1 min-h-0 overflow-y-auto' : ''}`}>
           {isSunday ? (
             <div className="py-5 text-center">
               <p className="text-white/30 text-xs">Closed on Sundays</p>
@@ -248,7 +248,7 @@ export default function HeroBookingWidget({ fullHeight = false }: HeroBookingWid
             </div>
           ) : (
             <div
-              className={`grid grid-cols-4 gap-1.5
+              className={`flex flex-wrap justify-center gap-1.5
                 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20
                 ${fullHeight ? 'content-start' : 'max-h-44 overflow-y-auto'}`}
             >
@@ -258,7 +258,7 @@ export default function HeroBookingWidget({ fullHeight = false }: HeroBookingWid
                   <button
                     key={slot.time}
                     onClick={() => handleSlotClick(slot)}
-                    className={`py-2 rounded-lg text-[10px] font-semibold transition-all text-center leading-tight cursor-pointer relative group
+                    className={`w-[calc(25%-6px)] py-2 rounded-lg text-[10px] font-semibold transition-all text-center leading-tight cursor-pointer relative group
                       ${sel
                         ? 'bg-white text-[#001E40] ring-2 ring-white/60 shadow-lg scale-105'
                         : 'bg-white/15 text-white hover:bg-[#9AE1FF]/30 hover:text-white hover:scale-105 active:scale-95'
@@ -266,7 +266,7 @@ export default function HeroBookingWidget({ fullHeight = false }: HeroBookingWid
                   >
                     {toSlotLabel(slot.time)}
                     {slot.available > 1 && (
-                      <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#9AE1FF] text-[#001E40] text-[7px] font-black flex items-center justify-center leading-none">
+                      <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#9AE1FF] text-[#001E40] text-[7px] font-black flex items-center justify-center leading-none">
                         {slot.available > 9 ? '9+' : slot.available}
                       </span>
                     )}
