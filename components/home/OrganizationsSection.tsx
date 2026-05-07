@@ -54,7 +54,7 @@ function OrgCard({ entity }: { entity: OrgEntity }) {
   }
 
   return (
-    <div className="w-[200px] sm:w-[220px] flex-shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 overflow-hidden">
+    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 overflow-hidden">
       <div className="h-1" style={{ background: color }} />
       <div className="p-4">
         <Link href={`/search/organizations/${entity.id}`} className="block">
@@ -113,23 +113,35 @@ function OrgCard({ entity }: { entity: OrgEntity }) {
   )
 }
 
+const TYPE_FILTERS = [
+  { key: '',               label: 'All' },
+  { key: 'hospital',       label: 'Hospitals' },
+  { key: 'clinic',         label: 'Clinics' },
+  { key: 'laboratory',     label: 'Labs' },
+  { key: 'dental_clinic',  label: 'Dental' },
+  { key: 'optical_center', label: 'Optical' },
+  { key: 'wellness_center',label: 'Wellness' },
+]
+
 export default function OrganizationsSection() {
-  const [query, setQuery] = useState('')
+  const [query, setQuery]   = useState('')
+  const [typeFilter, setTypeFilter] = useState('')
   const [entities, setEntities] = useState<OrgEntity[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]   = useState(true)
 
   useEffect(() => {
     setLoading(true)
-    const params = new URLSearchParams({ limit: '12' })
-    if (query) params.set('q', query)
+    const params = new URLSearchParams({ limit: '50' })
+    if (query)      params.set('q', query)
+    if (typeFilter) params.set('type', typeFilter)
     fetch(`/api/search/organizations?${params}`)
       .then(r => r.json())
       .then(j => { if (j.success) setEntities(j.data ?? []) })
       .finally(() => setLoading(false))
-  }, [query])
+  }, [query, typeFilter])
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Section header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -139,23 +151,40 @@ export default function OrganizationsSection() {
         <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">See All →</Link>
       </div>
 
-      {/* Search bar */}
-      <div className="relative mb-5">
-        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={13} />
-        <input
-          type="text"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Search by name or city..."
-          className="w-full max-w-sm pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C53030]/20"
-        />
+      {/* Search + type filters */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        <div className="relative flex-1 max-w-sm">
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={13} />
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search by name or city..."
+            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C53030]/20"
+          />
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {TYPE_FILTERS.map(f => (
+            <button
+              key={f.key}
+              onClick={() => setTypeFilter(f.key)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                typeFilter === f.key
+                  ? 'bg-[#C53030] text-white border-[#C53030]'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-[#C53030]/40 hover:text-[#C53030]'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Cards */}
+      {/* Cards — responsive grid, full width */}
       {loading ? (
-        <div className="flex gap-3 overflow-x-auto pb-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="w-[200px] flex-shrink-0 h-36 bg-gray-100 animate-pulse rounded-2xl" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="h-40 bg-gray-100 animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : entities.length === 0 ? (
@@ -169,17 +198,10 @@ export default function OrganizationsSection() {
           </Link>
         </div>
       ) : (
-        <div className="flex gap-3 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {entities.map(entity => (
             <OrgCard key={entity.id} entity={entity} />
           ))}
-          {/* See more card */}
-          <Link
-            href="/search/organizations"
-            className="w-[200px] sm:w-[220px] flex-shrink-0 bg-gray-50 rounded-2xl border border-dashed border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors"
-          >
-            <span className="text-sm text-gray-400 font-medium">See All →</span>
-          </Link>
         </div>
       )}
     </div>
