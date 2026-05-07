@@ -1,9 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
-// Dynamic import with ssr:false must live inside a Client Component
-const NearMeSection = dynamic(() => import('./NearMeSection'), {
+const NearMeSectionDesktop = dynamic(() => import('./NearMeSection'), {
   ssr: false,
   loading: () => (
     <div className="bg-[#001E40] flex items-center justify-center" style={{ minHeight: 420 }}>
@@ -15,4 +15,25 @@ const NearMeSection = dynamic(() => import('./NearMeSection'), {
   ),
 })
 
-export default NearMeSection
+const NearMeSectionMobile = dynamic(() => import('./NearMeSectionMobile'), { ssr: false })
+
+export default function NearMeSectionLoader() {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
+  if (isMobile === null) {
+    return (
+      <div className="bg-[#001E40] flex items-center justify-center" style={{ minHeight: 420 }}>
+        <div className="text-center">
+          <div className="w-10 h-10 border-2 border-brand-sky border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <p className="text-white/50 text-sm">Loading…</p>
+        </div>
+      </div>
+    )
+  }
+
+  return isMobile ? <NearMeSectionMobile /> : <NearMeSectionDesktop />
+}
