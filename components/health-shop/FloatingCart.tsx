@@ -17,7 +17,7 @@ export default function FloatingCart() {
         title="Health Shop"
         aria-label="Health Shop"
         className={`fixed bottom-[336px] sm:bottom-[260px] right-4 sm:right-5 z-[150]
-          h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
+          h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold
           transition-all hover:scale-105 active:scale-95
           ${totalItems > 0 ? 'bg-[#0C6780] text-white' : 'bg-white border-2 border-gray-200 text-gray-400 hover:border-[#0C6780] hover:text-[#0C6780]'}`}

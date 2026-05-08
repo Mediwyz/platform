@@ -167,7 +167,7 @@ export default function FloatingGeoFAB() {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
-          h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
+          h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold text-white
           bg-[#0C6780] hover:bg-[#0a5c73]
           transition-all hover:scale-105 active:scale-95"

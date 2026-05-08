@@ -37,10 +37,17 @@ export default function PlatformHealth() {
  const res = await fetch('/api/admin/system-health', { credentials: 'include' })
  if (res.ok) {
  const json = await res.json()
- if (json.success) {
- setHealthMetrics(json.data.services)
- setPerformance(json.data.performance)
- setOverallHealth(json.data.overallHealth)
+ if (json.success && Array.isArray(json.data?.services)) {
+ setHealthMetrics(json.data.services.map((s: any) => ({
+  service: s.service ?? s.name ?? 'Unknown',
+  status: s.status ?? 'healthy',
+  uptime: s.uptime ?? 99.9,
+  responseTime: s.responseTime ?? s.latency ?? 0,
+  errorRate: s.errorRate ?? 0,
+  lastCheck: s.lastCheck ?? new Date().toLocaleTimeString(),
+ })))
+ setPerformance(json.data.performance ?? null)
+ setOverallHealth(json.data.overallHealth ?? 'healthy')
  }
  }
  } catch {

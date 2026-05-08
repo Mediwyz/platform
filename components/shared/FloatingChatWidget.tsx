@@ -195,7 +195,7 @@ export default function FloatingChatWidget() {
         title={open ? 'Close Wyzo' : 'Wyzo — Health AI Assistant'}
         aria-label={open ? 'Close Wyzo' : 'Wyzo — Health AI Assistant'}
         className={`fixed bottom-24 sm:bottom-5 right-4 sm:right-5 z-[150]
-          h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
+          h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold text-white
           transition-all duration-200 hover:scale-105 active:scale-95
           ${open ? 'bg-gray-700' : 'bg-gradient-to-r from-[#001E40] to-[#0C6780]'}`}

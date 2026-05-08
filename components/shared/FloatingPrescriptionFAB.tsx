@@ -432,7 +432,7 @@ export default function FloatingPrescriptionFAB() {
         aria-label="Prescription"
         title="Prescription"
         className="fixed bottom-[156px] sm:bottom-[80px] right-4 sm:right-5 z-[150]
-          h-12 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
+          h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold text-white
           transition-all duration-200 hover:scale-105 active:scale-95"
         style={{ backgroundColor: hasPrescription ? '#f59e0b' : '#0C6780', border: 'none' }}

@@ -160,9 +160,9 @@ export default function ActivityHeatmap() {
  )}
 
  <div className="pt-2 border-t mt-2">
- <p className="text-xs text-gray-500 mb-1">Peak Time: {region.peakTime}</p>
+ {region.peakTime && <p className="text-xs text-gray-500 mb-1">Peak Time: {region.peakTime}</p>}
  <div className="flex flex-wrap gap-1">
- {region.popularServices.map((service, sIdx) => (
+ {(region.popularServices ?? []).map((service, sIdx) => (
  <span key={sIdx} className="text-xs bg-gray-100 px-2 py-1 rounded">
  {service}
  </span>
