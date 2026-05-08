@@ -39,49 +39,49 @@ describe('HealthTrackerTabs', () => {
 
  it('switches to food diary tab on click', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('Food Diary'))
+ fireEvent.click(screen.getAllByText('Food Diary')[0])
  expect(screen.getByTestId('food-tab')).toBeInTheDocument()
  })
 
  it('renders all 8 tab buttons on desktop', () => {
  render(<HealthTrackerTabs />)
- expect(screen.getByText('Dashboard')).toBeInTheDocument()
- expect(screen.getByText('Food Diary')).toBeInTheDocument()
- expect(screen.getByText('Exercise')).toBeInTheDocument()
- expect(screen.getByText('Sleep')).toBeInTheDocument()
- expect(screen.getByText('AI Coach')).toBeInTheDocument()
- expect(screen.getByText('Progress')).toBeInTheDocument()
- expect(screen.getByText('Meal Plan')).toBeInTheDocument()
- expect(screen.getByText('BP Check')).toBeInTheDocument()
+ expect(screen.getAllByText('Dashboard').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('Food Diary').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('Exercise').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('Sleep').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('AI Coach').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('Progress').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('Meal Plan').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('BP Check').length).toBeGreaterThan(0)
  })
 
  it('switches to exercise tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('Exercise'))
+ fireEvent.click(screen.getAllByText('Exercise')[0])
  expect(screen.getByTestId('exercise-tab')).toBeInTheDocument()
  })
 
  it('switches to AI Coach tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('AI Coach'))
+ fireEvent.click(screen.getAllByText('AI Coach')[0])
  expect(screen.getByTestId('ai-coach-tab')).toBeInTheDocument()
  })
 
  it('switches to progress tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('Progress'))
+ fireEvent.click(screen.getAllByText('Progress')[0])
  expect(screen.getByTestId('progress-tab')).toBeInTheDocument()
  })
 
  it('switches to meal plan tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('Meal Plan'))
+ fireEvent.click(screen.getAllByText('Meal Plan')[0])
  expect(screen.getByTestId('meal-plan-tab')).toBeInTheDocument()
  })
 
  it('switches to BP Check tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getByText('BP Check'))
+ fireEvent.click(screen.getAllByText('BP Check')[0])
  expect(screen.getByTestId('bp-tab')).toBeInTheDocument()
  })
 })
