@@ -26,10 +26,13 @@ export class WorkflowRegistry {
   }) {
     const { platformServiceId, providerUserId, providerType, serviceMode, regionCode } = params;
 
+    // Published-only filter — drafts are invisible to the booking engine.
+    const published = { isDraft: false };
+
     // 1. Provider's custom template explicitly linked to THIS service
     if (platformServiceId) {
       const t = await this.prisma.workflowTemplate.findFirst({
-        where: { platformServiceId, createdByProviderId: providerUserId, serviceMode, isActive: true },
+        where: { platformServiceId, createdByProviderId: providerUserId, serviceMode, isActive: true, ...published },
       });
       if (t) return t;
     }
@@ -37,7 +40,7 @@ export class WorkflowRegistry {
     // 2. Regional admin template linked to THIS service
     if (platformServiceId && regionCode) {
       const t = await this.prisma.workflowTemplate.findFirst({
-        where: { platformServiceId, createdByAdminId: { not: null }, regionCode, serviceMode, isActive: true },
+        where: { platformServiceId, createdByAdminId: { not: null }, regionCode, serviceMode, isActive: true, ...published },
       });
       if (t) return t;
     }
@@ -46,6 +49,7 @@ export class WorkflowRegistry {
     if (platformServiceId) {
       const t = await this.prisma.workflowTemplate.findFirst({
         where: { platformServiceId, isDefault: true, serviceMode, isActive: true },
+        // System defaults are never drafts — no isDraft filter needed
       });
       if (t) return t;
     }
@@ -59,7 +63,7 @@ export class WorkflowRegistry {
     // 4. Regional admin generic template for provider type + mode (region-scoped)
     if (regionCode) {
       const t = await this.prisma.workflowTemplate.findFirst({
-        where: { createdByAdminId: { not: null }, providerType, serviceMode, regionCode, isActive: true, platformServiceId: null },
+        where: { createdByAdminId: { not: null }, providerType, serviceMode, regionCode, isActive: true, platformServiceId: null, ...published },
       });
       if (t) return t;
     }
@@ -70,11 +74,11 @@ export class WorkflowRegistry {
     });
     if (systemDefault) return systemDefault;
 
-    // 6. Last resort — provider's generic template (no platformServiceId).
+    // 6. Last resort — provider's generic published template (no platformServiceId).
     //    Only if NO default covers this (providerType, mode) pair. This
     //    keeps the old escape hatch alive for roles with no seeded default.
     return this.prisma.workflowTemplate.findFirst({
-      where: { createdByProviderId: providerUserId, providerType, serviceMode, platformServiceId: null, isActive: true },
+      where: { createdByProviderId: providerUserId, providerType, serviceMode, platformServiceId: null, isActive: true, ...published },
     });
   }
 }

@@ -301,6 +301,17 @@ async function main() {
   }
   if (enrollCount > 0) console.log(`  ✓ Enrolled ${enrollCount} additional users in plans`)
 
+  // ── Publish all seeded workflow templates ────────────────────────────
+  // Seeds create templates with isDraft=true (schema default). All seeded
+  // templates are considered production-ready — mark them published so the
+  // booking engine can resolve them. User-created templates start as drafts
+  // and require an explicit Publish action in the builder.
+  const { count: publishedCount } = await prisma.workflowTemplate.updateMany({
+    where: {},
+    data: { isDraft: false },
+  })
+  console.log(`  ✓ Published ${publishedCount} workflow templates`)
+
   console.log('Database seeded successfully!')
 }
 

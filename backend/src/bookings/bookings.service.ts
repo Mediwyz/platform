@@ -107,6 +107,119 @@ export class BookingsService {
     return 0;
   }
 
+  // ─── Subscription Discount Resolution ────────────────────────────────
+
+  /**
+   * Checks the patient's active subscription and applies any plan discount.
+   * Returns the effective fee to charge plus tracking info for usage increment.
+   *
+   * Logic:
+   *  - Find active UserSubscription for this patient
+   *  - Find a SubscriptionPlanService that covers providerType (via platformServiceId or serviceGroup)
+   *  - If monthlyLimit allows another use this month → apply discount / adminPrice / isFree price
+   *  - Quota exhausted or no matching plan coverage → return originalFee unchanged
+   */
+  private async applySubscriptionDiscount(
+    patientUserId: string,
+    providerType: string,
+    platformServiceId: string | undefined,
+    originalFee: number,
+  ): Promise<{ effectiveFee: number; subscriptionId?: string; usageKey?: string }> {
+    try {
+      const sub = await this.prisma.userSubscription.findUnique({
+        where: { userId: patientUserId },
+        select: { id: true, status: true, planId: true },
+      });
+      if (!sub || sub.status !== 'active') return { effectiveFee: originalFee };
+
+      // Find plan coverage: direct platformService match first, then by providerType via serviceGroups
+      let planService: any = null;
+
+      if (platformServiceId) {
+        planService = await this.prisma.subscriptionPlanService.findFirst({
+          where: {
+            planId: sub.planId,
+            platformServiceId,
+          },
+          select: { id: true, isFree: true, discountPercent: true, adminPrice: true, monthlyLimit: true },
+        });
+      }
+
+      // Fallback: find any plan service whose platformService covers this providerType
+      if (!planService) {
+        planService = await this.prisma.subscriptionPlanService.findFirst({
+          where: {
+            planId: sub.planId,
+            platformService: { providerType: providerType as any },
+          },
+          select: { id: true, isFree: true, discountPercent: true, adminPrice: true, monthlyLimit: true },
+        });
+      }
+
+      if (!planService) return { effectiveFee: originalFee };
+
+      // monthlyLimit: -1 = unlimited, 0 = pay-per-use (no quota), N = N per month
+      if (planService.monthlyLimit === 0) return { effectiveFee: originalFee };
+
+      const usageKey = providerType;
+      if (planService.monthlyLimit > 0) {
+        // Check current month usage
+        const month = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+        const usage = await this.prisma.subscriptionUsage.findUnique({
+          where: { subscriptionId_month: { subscriptionId: sub.id, month } },
+          select: { usageData: true },
+        });
+        const usageData = (usage?.usageData ?? {}) as Record<string, number>;
+        const usedCount = usageData[usageKey] ?? 0;
+        if (usedCount >= planService.monthlyLimit) {
+          // Quota exhausted — charge full price
+          return { effectiveFee: originalFee };
+        }
+      }
+
+      // Apply pricing
+      let effectiveFee = originalFee;
+      if (planService.isFree) {
+        effectiveFee = 0;
+      } else if (planService.adminPrice != null) {
+        effectiveFee = planService.adminPrice;
+      } else if (planService.discountPercent > 0) {
+        effectiveFee = originalFee * (1 - planService.discountPercent / 100);
+      }
+
+      return { effectiveFee, subscriptionId: sub.id, usageKey };
+    } catch {
+      // Non-fatal — if subscription check fails, fall back to full price
+      return { effectiveFee: originalFee };
+    }
+  }
+
+  /** Increment SubscriptionUsage after a booking is confirmed */
+  private async trackSubscriptionUsage(subscriptionId: string, usageKey: string) {
+    const month = new Date().toISOString().slice(0, 7);
+    try {
+      const existing = await this.prisma.subscriptionUsage.findUnique({
+        where: { subscriptionId_month: { subscriptionId, month } },
+        select: { id: true, usageData: true },
+      });
+      const usageData = ((existing?.usageData ?? {}) as Record<string, number>);
+      usageData[usageKey] = (usageData[usageKey] ?? 0) + 1;
+
+      if (existing) {
+        await this.prisma.subscriptionUsage.update({
+          where: { subscriptionId_month: { subscriptionId, month } },
+          data: { usageData },
+        });
+      } else {
+        await this.prisma.subscriptionUsage.create({
+          data: { subscriptionId, month, usageData },
+        });
+      }
+    } catch {
+      // Non-fatal — usage tracking is a best-effort operation
+    }
+  }
+
   // ─── Unified Booking Creation ─────────────────────────────────────────
 
   async createBooking(patientUserId: string, data: {
@@ -141,7 +254,12 @@ export class BookingsService {
     // `data.servicePrice` the client sends; prices come from ProviderServiceConfig
     // / PlatformService. Letting the client dictate the charge was a silent
     // money-flow hole (found in the April 2026 audit).
-    const fee = await this.resolveBookingFee(data.providerUserId, providerType, data.serviceName);
+    const marketFee = await this.resolveBookingFee(data.providerUserId, providerType, data.serviceName);
+
+    // Apply subscription discount (or quota enforcement) if the patient has an active plan
+    const { effectiveFee: fee, subscriptionId, usageKey } = await this.applySubscriptionDiscount(
+      patientUserId, providerType, data.platformServiceId, marketFee,
+    );
 
     // Check balance — skip if role has skipWalletCheck (e.g., emergency services)
     if (fee > 0) {
@@ -252,6 +370,11 @@ export class BookingsService {
         'No workflow template is configured for this service type. ' +
         'A regional admin must create a workflow template before bookings can be accepted.',
       );
+    }
+
+    // Track subscription usage — fire-and-forget, non-blocking
+    if (subscriptionId && usageKey) {
+      this.trackSubscriptionUsage(subscriptionId, usageKey).catch(() => {});
     }
 
     return { booking, workflowInstanceId: wf.workflowInstanceId };

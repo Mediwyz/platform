@@ -444,3 +444,35 @@ jobs:
           echo "=== Resource Usage ==="
           free -h | grep Mem
           df -h / | tail -1
+
+  # ─── E2E Smoke Tests (post-deploy, GitHub-hosted) ────────────────────────
+  e2e:
+    name: E2E Smoke Tests
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E smoke tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ secrets.APP_DOMAIN != '' && format('https://{0}', secrets.APP_DOMAIN) || format('http://{0}', secrets.VPS_HOST) }}
+        run: npx playwright test --project=chromium --reporter=github
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

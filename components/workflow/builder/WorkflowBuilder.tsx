@@ -493,8 +493,11 @@ export default function WorkflowBuilder({
   const [newStepEmoji,    setNewStepEmoji]    = useState('📋')
 
   const [saving,          setSaving]          = useState(false)
+  const [publishing,      setPublishing]      = useState(false)
   const [error,           setError]           = useState<string | null>(null)
   const [success,         setSuccess]         = useState(false)
+  const [isDraft,         setIsDraft]         = useState<boolean>((initialData as any)?.isDraft ?? true)
+  const [inFlightCount,   setInFlightCount]   = useState<number>(0)
   const [providerTypes,   setProviderTypes]   = useState<string[]>(FALLBACK_PROVIDER_TYPES)
   const [view,            setView]            = useState<'builder' | 'preview'>('builder')
   const [stepTypes,       setStepTypes]       = useState<StepTypeOption[]>([])
@@ -540,6 +543,16 @@ export default function WorkflowBuilder({
       .then(json => { if (json.success && Array.isArray(json.data)) setStepTypes(json.data) })
       .catch(() => {})
   }, [])
+
+  // Fetch in-flight count for existing published templates
+  useEffect(() => {
+    if (!initialData?.id || isDraft) return
+    fetch(`/api/workflow/templates/${initialData.id}/in-flight-count`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(json => { if (json.success) setInFlightCount(json.data.count ?? 0) })
+      .catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData?.id, isDraft])
 
   useEffect(() => {
     fetch('/api/roles?isProvider=true')
@@ -755,22 +768,54 @@ export default function WorkflowBuilder({
       }
       const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(payload) })
       const data = await res.json()
-      if (data.success) { setSuccess(true); setSlug(finalSlug); onSave?.(data.data) }
+      if (data.success) {
+        setSuccess(true); setSlug(finalSlug)
+        if (data.data?.isDraft !== undefined) setIsDraft(data.data.isDraft)
+        onSave?.(data.data)
+      }
       else setError(data.message || 'Failed to save')
     } catch { setError('Network error') }
     finally { setSaving(false) }
+  }
+
+  async function handlePublish() {
+    // First save the latest state as a draft, then publish
+    if (!name || !serviceMode) { setError('Name and service mode are required'); return }
+    if (steps.length < 2) { setError('At least 2 steps are required'); return }
+    setPublishing(true); setError(null); setSuccess(false)
+    try {
+      await handleSave()
+      const id = initialData?.id
+      if (!id) { setPublishing(false); return } // new template — handleSave created it, user can publish after
+      const res  = await fetch(`/api/workflow/templates/${id}/publish`, {
+        method: 'POST', credentials: 'include',
+      })
+      const data = await res.json()
+      if (data.success) { setIsDraft(false); setSuccess(true) }
+      else setError(data.message || 'Failed to publish')
+    } catch { setError('Network error') }
+    finally { setPublishing(false) }
   }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
 
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <Link href={backHref} className="flex items-center gap-1 text-[#0C6780] hover:text-[#001E40] text-sm mb-2">
             <FiArrowLeft className="w-4 h-4" /> Back to workflows
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Edit Workflow' : 'Create Workflow'}</h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Edit Workflow' : 'Create Workflow'}</h1>
+            {isEdit && (
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                isDraft ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+              }`}>
+                {isDraft ? '● Draft' : '✓ Published'}
+              </span>
+            )}
+          </div>
         </div>
         <div className="flex gap-2">
           <button type="button" onClick={() => setAiOpen(true)}
@@ -779,17 +824,52 @@ export default function WorkflowBuilder({
           </button>
           <button
             onClick={handleSave}
-            disabled={saving || issues.length > 0}
-            title={issues.length > 0 ? `Fix ${issues.length} issue${issues.length === 1 ? '' : 's'} first` : undefined}
-            className="bg-[#001E40] hover:bg-[#0C6780] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
+            disabled={saving || publishing || issues.length > 0}
+            title={issues.length > 0 ? `Fix ${issues.length} issue${issues.length === 1 ? '' : 's'} first` : 'Save as draft'}
+            className="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
             <FiSave className="w-4 h-4" />
-            {saving ? 'Saving…' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : isEdit ? 'Update' : 'Create'}
+            {saving ? 'Saving…' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : 'Save Draft'}
           </button>
+          {isEdit && (
+            <button
+              onClick={handlePublish}
+              disabled={saving || publishing || issues.length > 0}
+              title={isDraft ? 'Publish — makes this template active for new bookings' : 'Re-publish with latest changes'}
+              className="bg-[#0C6780] hover:bg-[#001E40] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
+              {publishing ? 'Publishing…' : isDraft ? 'Publish' : 'Update & Publish'}
+            </button>
+          )}
+          {!isEdit && (
+            <button
+              onClick={handleSave}
+              disabled={saving || issues.length > 0}
+              title="Create workflow as draft"
+              className="bg-[#001E40] hover:bg-[#0C6780] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
+              {saving ? 'Creating…' : 'Create Draft'}
+            </button>
+          )}
         </div>
       </div>
 
       {error   && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">{error}</div>}
-      {success && <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-3 text-sm">Workflow saved successfully!</div>}
+      {success && <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-3 text-sm">
+        {isDraft ? 'Draft saved successfully.' : 'Workflow published — it is now active for new bookings.'}
+      </div>}
+
+      {/* In-flight warning: editing a published template that has active bookings */}
+      {!isDraft && inFlightCount > 0 && (
+        <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex items-start gap-3">
+          <span className="text-amber-600 text-lg leading-none flex-shrink-0">⚠</span>
+          <div>
+            <p className="text-sm font-semibold text-amber-800">
+              {inFlightCount} active booking{inFlightCount === 1 ? '' : 's'} are running this template
+            </p>
+            <p className="text-xs text-amber-700 mt-0.5">
+              Changes you publish will only apply to new bookings. In-flight bookings continue on the version that was active when they were created.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Builder / Preview tab */}
       <div className="bg-white border border-gray-200 rounded-xl p-1 flex gap-1 max-w-xs text-sm font-medium">

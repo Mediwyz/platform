@@ -68,6 +68,7 @@ class AppDrawer extends ConsumerWidget {
                 _NavItem(icon: Icons.insights_outlined, color: Colors.orange, label: 'Insights', path: '/insights'),
 
                 const _SectionHeader('Services'),
+                _NavItem(icon: Icons.medical_services_outlined, color: MediWyzColors.teal, label: 'Book a Service', path: '/services'),
                 _NavItem(icon: Icons.search, color: MediWyzColors.teal, label: 'Find a provider', path: '/search'),
                 _NavItem(icon: Icons.event_note_outlined, color: Colors.purple, label: 'Bookings', path: '/bookings'),
                 _NavItem(icon: Icons.star_outline, color: Colors.amber, label: 'My providers', path: '/my-providers'),

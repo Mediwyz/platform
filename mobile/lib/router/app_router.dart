@@ -51,6 +51,7 @@ import '../screens/commission_config_screen.dart';
 import '../screens/content_cms_screen.dart';
 import '../screens/food_scan_screen.dart';
 import '../screens/health_insights_screen.dart';
+import '../screens/search_services_screen.dart';
 import '../services/auth_service.dart';
 
 GoRouter buildRouter(WidgetRef ref) {
@@ -77,6 +78,7 @@ GoRouter buildRouter(WidgetRef ref) {
         builder: (_, state) => ResetPasswordScreen(token: state.uri.queryParameters['token']),
       ),
       GoRoute(path: '/feed', builder: (_, __) => const FeedScreen()),
+      GoRoute(path: '/services', builder: (_, __) => const SearchServicesScreen()),
       GoRoute(path: '/chat', builder: (_, __) => const ChatListScreen()),
       GoRoute(path: '/chat/ai-assistant', builder: (_, __) => const AiChatScreen()),
       GoRoute(

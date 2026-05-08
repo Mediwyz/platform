@@ -464,6 +464,35 @@ export class WorkflowController {
     return { success: true, data: updated };
   }
 
+  // ─── POST /api/workflow/templates/:id/publish ──────────────────────────
+
+  @Post('workflow/templates/:id/publish')
+  @HttpCode(HttpStatus.OK)
+  async publishTemplate(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
+    const existing = await this.templateRepo.findById(id);
+    if (!existing) throw new NotFoundException('Template not found');
+    if (existing.isDefault) throw new ForbiddenException('Cannot modify default templates');
+
+    const dbUser = await this.prisma.user.findUnique({ where: { id: user.sub }, select: { userType: true } });
+    const isAdmin = dbUser?.userType === 'REGIONAL_ADMIN';
+    if (existing.createdByProviderId !== user.sub && !isAdmin) {
+      throw new ForbiddenException('You can only publish your own templates');
+    }
+    const steps = (existing.steps as any[]) ?? [];
+    if (steps.length < 2) throw new BadRequestException('A published template needs at least 2 steps');
+
+    const published = await this.templateRepo.publish(id);
+    return { success: true, data: published };
+  }
+
+  // ─── GET /api/workflow/templates/:id/in-flight-count ──────────────────
+
+  @Get('workflow/templates/:id/in-flight-count')
+  async getInFlightCount(@Param('id') id: string) {
+    const count = await this.templateRepo.countActiveInstances(id);
+    return { success: true, data: { count } };
+  }
+
   // ─── DELETE /api/workflow/templates/:id ─────────────────────────────────
 
   @Delete('workflow/templates/:id')

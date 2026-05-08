@@ -67,6 +67,31 @@ self.addEventListener('fetch', (event) => {
 
   // --- Production caching below ---
 
+    // Stale-while-revalidate for slow-changing config endpoints.
+  // Serve cache immediately so pages feel instant; refresh in background.
+  const SWR_PATTERNS = [
+    /^\/api\/roles(\?|$)/,
+    /^\/api\/regions(\?|$)/,
+    /^\/api\/cms\/testimonials(\?|$)/,
+    /^\/api\/subscriptions(\?|$)/,
+  ]
+  if (SWR_PATTERNS.some(p => p.test(url.pathname + url.search))) {
+    event.respondWith(
+      caches.open(API_CACHE).then(async (cache) => {
+        const cached = await cache.match(request)
+        const networkFetch = fetch(request).then((res) => {
+          if (res.ok) cache.put(request, res.clone())
+          return res
+        }).catch(() => null)
+        return cached || networkFetch || new Response(
+          JSON.stringify({ success: false, message: 'Offline' }),
+          { status: 503, headers: { 'Content-Type': 'application/json' } }
+        )
+      })
+    )
+    return
+  }
+
   // API requests: network-first with cache fallback
   if (url.pathname.startsWith('/api/')) {
     // Don't cache auth endpoints

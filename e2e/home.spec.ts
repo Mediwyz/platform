@@ -1,70 +1,83 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Home Page', () => {
-  test('loads successfully and has correct title', async ({ page }) => {
+  test('loads and shows the hero section', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveTitle(/MediWyz/i)
+    // Country badge or platform description visible
+    await expect(page.locator('text=/HealthTech|Platform/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('displays the main content area', async ({ page }) => {
+  test('has a navigation bar and footer', async ({ page }) => {
     await page.goto('/')
-    const main = page.locator('main#main-content')
-    await expect(main).toBeVisible()
+    await expect(page.locator('nav').first()).toBeVisible()
+    await expect(page.locator('footer')).toBeVisible()
   })
 
-  test('has a navigation bar', async ({ page }) => {
+  test('hero section has trust stats', async ({ page }) => {
     await page.goto('/')
-    const nav = page.locator('nav')
-    await expect(nav).toBeVisible()
+    // Dynamic stat counters are always rendered
+    await expect(page.locator('text=/Verified Providers/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('contains a link to the login page', async ({ page }) => {
+  test('HowItWorks strip shows the three steps', async ({ page }) => {
     await page.goto('/')
-    const loginLink = page.locator('a[href*="login"]').first()
-    await expect(loginLink).toBeVisible()
+    await expect(page.locator('text=/How it works/i').first()).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('text=Search').first()).toBeVisible()
+    await expect(page.locator('text=Book').first()).toBeVisible()
+    await expect(page.locator('text=Consult').first()).toBeVisible()
   })
 
-  test('navigates to the login page from the navbar', async ({ page }) => {
+  test('CompanyTrustBar is visible', async ({ page }) => {
     await page.goto('/')
-    const loginLink = page.locator('a[href*="login"]').first()
-    await loginLink.click()
-    await expect(page).toHaveURL(/.*login/)
+    // Marquee trust bar scrolls provider types or partner logos
+    const trustBar = page.locator('[class*="marquee"], [class*="trust"], text=/Doctors|Nurses|Dentists/i').first()
+    await expect(trustBar).toBeVisible({ timeout: 10_000 })
   })
 
-  test('contains a link to the signup page', async ({ page }) => {
+  test('TestimonialsSection shows patient quotes', async ({ page }) => {
     await page.goto('/')
-    const signupLink = page.locator('a[href*="signup"]').first()
-    await expect(signupLink).toBeVisible()
+    await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('displays the stats section', async ({ page }) => {
+  test('DiscoverSection tab strip is visible', async ({ page }) => {
     await page.goto('/')
-    // The StatsSection component should render stat cards
-    const statsSection = page.locator('text=/Qualified Doctors|Happy Patients|Consultations|Cities Covered/i').first()
-    await expect(statsSection).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 10_000 })
+    // All 5 tab choices should render
+    await expect(page.locator('text=/Book a Service/i').first()).toBeVisible()
+    await expect(page.locator('text=/Find a Provider/i').first()).toBeVisible()
   })
 
-  test('displays the services section', async ({ page }) => {
+  test('discover tab switching works', async ({ page }) => {
     await page.goto('/')
-    // Look for the services section heading or content
-    const servicesHeading = page.locator('text=/our services|what we offer/i').first()
-    await expect(servicesHeading).toBeVisible({ timeout: 10_000 })
+    // Click "Find a Provider" tab
+    await page.locator('button', { hasText: /Find a Provider/i }).first().click()
+    // Map panel or providers list should appear
+    await expect(page.locator('text=/Browse all providers/i, text=/No providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('page has structured data (JSON-LD)', async ({ page }) => {
+  test('hero feature pills dispatch to correct tab', async ({ page }) => {
     await page.goto('/')
-    const jsonLd = page.locator('script[type="application/ld+json"]')
-    await expect(jsonLd).toBeAttached()
-
-    const content = await jsonLd.textContent()
-    const parsed = JSON.parse(content || '{}')
-    expect(parsed['@type']).toBe('MedicalOrganization')
-    expect(parsed.name).toBe('MediWyz')
+    // Click "Home Visits" pill → should switch Discover to Services tab
+    const pill = page.locator('button', { hasText: /Home Visits/i }).first()
+    await expect(pill).toBeVisible({ timeout: 10_000 })
+    await pill.click()
+    await expect(page.locator('#discover')).toBeInViewport({ timeout: 5_000 })
   })
 
-  test('has a footer on the home page', async ({ page }) => {
+  test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {
     await page.goto('/')
-    const footer = page.locator('footer')
-    await expect(footer).toBeVisible()
+    // Scroll down past the hero
+    await page.evaluate(() => window.scrollBy(0, 800))
+    await page.waitForTimeout(500)
+    // CTA bar has "Book Now" text
+    const ctaBar = page.locator('text=/Book Now/i').first()
+    await expect(ctaBar).toBeVisible({ timeout: 5_000 })
+  })
+
+  test('search/services page loads', async ({ page }) => {
+    await page.goto('/search/services')
+    await expect(page).toHaveURL(/search\/services/)
+    await expect(page.locator('text=/service|Book/i').first()).toBeVisible({ timeout: 10_000 })
   })
 })

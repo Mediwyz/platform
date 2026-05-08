@@ -8,20 +8,22 @@ import { userTypeToProfileRelation } from '../auth/auth.service';
  * don't have profile tables and use User fields + ProviderRole config only.
  *
  * This map will shrink over time as legacy profiles are deprecated.
+ * `specialtyField` is the array field on the profile that holds specialties —
+ * stored here so specialty-filter logic never needs to branch on role codes.
  */
-const LEGACY_PROFILE_INCLUDE: Record<string, Record<string, any>> = {
-  DOCTOR: { doctorProfile: { select: { id: true, specialty: true, subSpecialties: true, rating: true, reviewCount: true, experience: true, consultationFee: true, videoConsultationFee: true, consultationTypes: true, bio: true, location: true, languages: true, emergencyAvailable: true, homeVisitAvailable: true, telemedicineAvailable: true } } },
-  NURSE: { nurseProfile: { select: { id: true, specializations: true, experience: true, licenseNumber: true } } },
-  NANNY: { nannyProfile: { select: { id: true, experience: true, certifications: true } } },
-  PHARMACIST: { pharmacistProfile: { select: { id: true, pharmacyName: true, specializations: true } } },
-  LAB_TECHNICIAN: { labTechProfile: { select: { id: true, labName: true, specializations: true } } },
-  EMERGENCY_WORKER: { emergencyWorkerProfile: { select: { id: true, certifications: true, vehicleType: true, responseZone: true, emtLevel: true } } },
-  CAREGIVER: { caregiverProfile: { select: { id: true, experience: true, specializations: true, certifications: true } } },
-  PHYSIOTHERAPIST: { physiotherapistProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } },
-  DENTIST: { dentistProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } },
-  OPTOMETRIST: { optometristProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } },
-  NUTRITIONIST: { nutritionistProfile: { select: { id: true, experience: true, specializations: true, certifications: true } } },
-  INSURANCE_REP: { insuranceRepProfile: { select: { id: true, companyName: true, coverageTypes: true } } },
+const LEGACY_PROFILE_INCLUDE: Record<string, { include: Record<string, any>; specialtyField: string }> = {
+  DOCTOR:           { specialtyField: 'specialty',        include: { doctorProfile: { select: { id: true, specialty: true, subSpecialties: true, rating: true, reviewCount: true, experience: true, consultationFee: true, videoConsultationFee: true, consultationTypes: true, bio: true, location: true, languages: true, emergencyAvailable: true, homeVisitAvailable: true, telemedicineAvailable: true } } } },
+  NURSE:            { specialtyField: 'specializations',  include: { nurseProfile: { select: { id: true, specializations: true, experience: true, licenseNumber: true } } } },
+  NANNY:            { specialtyField: 'certifications',   include: { nannyProfile: { select: { id: true, experience: true, certifications: true } } } },
+  PHARMACIST:       { specialtyField: 'specializations',  include: { pharmacistProfile: { select: { id: true, pharmacyName: true, specializations: true } } } },
+  LAB_TECHNICIAN:   { specialtyField: 'specializations',  include: { labTechProfile: { select: { id: true, labName: true, specializations: true } } } },
+  EMERGENCY_WORKER: { specialtyField: 'certifications',   include: { emergencyWorkerProfile: { select: { id: true, certifications: true, vehicleType: true, responseZone: true, emtLevel: true } } } },
+  CAREGIVER:        { specialtyField: 'specializations',  include: { caregiverProfile: { select: { id: true, experience: true, specializations: true, certifications: true } } } },
+  PHYSIOTHERAPIST:  { specialtyField: 'specializations',  include: { physiotherapistProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } } },
+  DENTIST:          { specialtyField: 'specializations',  include: { dentistProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } } },
+  OPTOMETRIST:      { specialtyField: 'specializations',  include: { optometristProfile: { select: { id: true, experience: true, specializations: true, clinicName: true } } } },
+  NUTRITIONIST:     { specialtyField: 'specializations',  include: { nutritionistProfile: { select: { id: true, experience: true, specializations: true, certifications: true } } } },
+  INSURANCE_REP:    { specialtyField: 'coverageTypes',    include: { insuranceRepProfile: { select: { id: true, companyName: true, coverageTypes: true } } } },
 };
 
 @Injectable()
@@ -162,25 +164,21 @@ export class SearchService {
       ];
     }
 
-    // Specialty filtering — uses ProviderSpecialty model (dynamic, DB-driven)
-    // Also supports legacy profile-level specialty arrays for backward compat
+    // Specialty filtering — uses the specialtyField declared in LEGACY_PROFILE_INCLUDE
+    // (no hardcoded role-code branches). New dynamic roles are filtered post-query
+    // via ProviderSpecialty since they have no dedicated profile relation.
     if (specialty) {
-      const hasLegacyProfile = LEGACY_PROFILE_INCLUDE[uType];
-      if (hasLegacyProfile) {
-        // Legacy: filter on profile relation's specialty/specializations field
+      const legacyEntry = LEGACY_PROFILE_INCLUDE[uType];
+      if (legacyEntry) {
         const profileRelation = userTypeToProfileRelation[uType];
         if (profileRelation) {
-          // DoctorProfile uses 'specialty' (String[]), others use 'specializations' (String[])
-          const specField = uType === 'DOCTOR' ? 'specialty' : 'specializations';
-          where[profileRelation] = { [specField]: { has: specialty } };
+          where[profileRelation] = { [legacyEntry.specialtyField]: { has: specialty } };
         }
       }
-      // Note: for new dynamic roles without legacy profiles, specialty filtering
-      // happens post-query via ProviderSpecialty since there's no profile relation to filter on
     }
 
     // Include legacy profile data if available, otherwise just user fields
-    const profileInclude = LEGACY_PROFILE_INCLUDE[uType] || {};
+    const profileInclude = LEGACY_PROFILE_INCLUDE[uType]?.include ?? {};
 
     const [users, total] = await Promise.all([
       this.prisma.user.findMany({

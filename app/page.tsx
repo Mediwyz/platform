@@ -1,21 +1,29 @@
 import HeroSection from '@/components/home/HeroSection'
+import HowItWorksSection from '@/components/home/HowItWorksSection'
 import CompanyTrustBar from '@/components/home/CompanyTrustBar'
+import TestimonialsSection from '@/components/home/TestimonialsSection'
 import DiscoverSection from '@/components/home/DiscoverSection'
-import NearMeSectionLoader from '@/components/home/NearMeSectionLoader'
+import StickyCTABar from '@/components/home/StickyCTABar'
 
 export default function HomePage() {
   return (
     <>
-      {/* 1 — Hook: book a slot or search; shows global availability by role */}
+      {/* 1 — Hook: value prop + booking widget */}
       <HeroSection />
 
-      {/* 2 — Locate: Google Maps with all provider pins + directions; lazy-loaded */}
-      <NearMeSectionLoader />
+      {/* Sticky "Find Provider / Book Now" bar — appears after scrolling past hero */}
+      <StickyCTABar />
 
-      {/* 3 — Validate: partner logos + key stats */}
+      {/* 2 — Explain: 3-step "Search → Book → Consult" strip */}
+      <HowItWorksSection />
+
+      {/* 3 — Validate: partner logos + key stats marquee */}
       <CompanyTrustBar />
 
-      {/* 4 — Explore: Services / Providers / Organisations / Community / Shop tabs */}
+      {/* 4 — Social proof: patient testimonials */}
+      <TestimonialsSection />
+
+      {/* 5 — Explore: Services / Providers (with map) / Organisations (with map) / Community / Shop */}
       <DiscoverSection />
     </>
   )

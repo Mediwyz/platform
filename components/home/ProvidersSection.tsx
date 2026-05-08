@@ -118,6 +118,9 @@ export default function ProvidersSection() {
     setActiveRole(code)
     setSearchQuery('')
 
+    // Notify the MapPanel (via DiscoverSection) to sync its filter
+    window.dispatchEvent(new CustomEvent('discover-map-mode', { detail: code }))
+
     if (code === 'ALL') {
       setGridProviders([])
       return

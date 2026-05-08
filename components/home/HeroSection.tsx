@@ -179,21 +179,29 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
 
           <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-lg mb-5">
             {content?.subtitle ||
-              "Connect with verified doctors, nurses, dentists, pharmacists, and 10+ specialist types across Africa. Book appointments, consult online, order medicines, and manage your health — all in one secure platform."}
+              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
           </p>
 
-          {/* Feature pills */}
+          {/* Feature pills — clickable, navigate to the relevant Discover tab */}
           <div className="flex flex-wrap gap-2 mb-6">
             {[
-              { icon: <FaRobot className="text-brand-sky" />,   label: 'AI Health Assistant' },
-              { icon: <FaVideo className="text-brand-sky" />,   label: 'Video Consultations' },
-              { icon: <FaHome  className="text-brand-sky" />,   label: 'Home Visits' },
-              { icon: <FaPills className="text-brand-sky" />,   label: 'Online Pharmacy' },
-            ].map(f => (
-              <span key={f.label} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/8 border border-white/15 text-[11px] font-medium text-white/80">
-                {f.icon} {f.label}
-              </span>
-            ))}
+              { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
+              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  tab: 'providers' },
+              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          tab: 'services'  },
+              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      tab: 'health-shop' },
+            ].map(f => {
+              const cls = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/25 text-[11px] font-medium text-white hover:bg-white/25 transition-colors cursor-pointer"
+              if ('href' in f) return (
+                <a key={f.label} href={f.href} className={cls}>{f.icon} {f.label}</a>
+              )
+              return (
+                <button key={f.label} type="button" className={cls} onClick={() => {
+                  window.dispatchEvent(new CustomEvent('discover-tab', { detail: f.tab }))
+                }}>
+                  {f.icon} {f.label}
+                </button>
+              )
+            })}
           </div>
 
           {/* Trust stats — dynamic from DB */}
@@ -222,6 +230,44 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             border-t lg:border-t-0 lg:border-l lg:border-r border-white/10"
         >
           <HeroBookingWidget fullHeight />
+
+          {/* Mobile-only hero image — shown below the booking widget on small screens */}
+          <div className="lg:hidden mt-3 relative h-44 rounded-xl overflow-hidden flex-shrink-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`mobile-${currentImageIndex}`}
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1, transition: { duration: 0.8 } }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={heroImages[currentImageIndex].src}
+                  alt={heroImages[currentImageIndex].alt}
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                />
+              </motion.div>
+            </AnimatePresence>
+            {/* Caption overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#001E40]/80 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5">
+              <div className="w-0.5 h-6 rounded-full bg-[#9AE1FF] flex-shrink-0" />
+              <p className="text-xs font-bold text-white leading-tight">{heroImages[currentImageIndex].title}</p>
+            </div>
+            {/* Carousel dots */}
+            <div className="absolute top-3 right-3 flex gap-1">
+              {heroImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentImageIndex(i)}
+                  aria-label={`Slide ${i + 1}`}
+                  className={`h-1 rounded-full transition-all duration-300 ${i === currentImageIndex ? 'bg-white w-4' : 'bg-white/40 w-1'}`}
+                />
+              ))}
+            </div>
+          </div>
         </motion.div>
 
         {/* ── COL 3: Image animation + caption (right, ~23%) ───────── */}

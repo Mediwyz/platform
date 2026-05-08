@@ -2668,6 +2668,7 @@ model WorkflowTemplate {
   serviceMode  String // office, home, video
   isDefault    Boolean @default(false) // system seed = true
   isActive     Boolean @default(true)
+  isDraft      Boolean @default(true)  // true = not yet published; engine ignores drafts during booking
   isLibrary    Boolean @default(false) // true = appears in the "Start from template" picker for admins
   isBundle     Boolean @default(false) // true = complete pre-built template ready to use
   category     String? // loose grouping: 'Consultation', 'Home Visit', 'Lab', 'Delivery', 'Emergency'

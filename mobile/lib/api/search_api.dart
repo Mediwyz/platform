@@ -23,6 +23,27 @@ class SearchApi {
     return {'providers': [], 'total': 0};
   }
 
+  /// GET /search/services — browse all bookable services across roles.
+  static Future<List<Map<String, dynamic>>> services({
+    String? q,
+    String? providerType,
+    String? category,
+    int limit = 50,
+  }) async {
+    final res = await ApiClient.instance.get('/search/services', queryParameters: {
+      if (q != null && q.isNotEmpty) 'q': q,
+      if (providerType != null) 'providerType': providerType,
+      if (category != null) 'category': category,
+      'limit': limit,
+    });
+    final body = res.data as Map?;
+    if (body?['success'] == true) {
+      final data = body!['data'];
+      if (data is List) return data.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    }
+    return [];
+  }
+
   /// GET /search/health-shop — browse all providers' inventory items.
   static Future<Map<String, dynamic>> healthShop({
     String? q,
