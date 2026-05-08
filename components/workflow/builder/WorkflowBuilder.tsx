@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiBookOpen, FiRefreshCw } from 'react-icons/fi'
+import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiBookOpen, FiRefreshCw, FiTrash2 } from 'react-icons/fi'
 import Link from 'next/link'
 import StepEditor, { type WorkflowStep, type StepAction } from './StepEditor'
 import WorkflowPreview from './WorkflowPreview'
@@ -59,6 +59,38 @@ const RECURRENCE_OPTIONS = [
   { value: 'monthly',   label: 'Monthly check-ins' },
 ]
 
+const CUSTOM_STEP_EMOJIS = [
+  '📋','✅','⏳','🔍','📝','💬','📞','🚗',
+  '🏥','🩺','💊','🩹','🧪','🔬','📄','🤝',
+  '💪','🌡️','🫀','🧠','👁️','🦷','🩻','🧬',
+  '🏃','🛏️','📦','🔑','🌟','🎯','📱','✍️',
+]
+
+// Status codes that the engine auto-generates — used to classify legacy steps on load.
+const KNOWN_SYSTEM_CODES = new Set([
+  'pending','submitted','confirmed','in_progress','session_active','session_notes_pending',
+  'video_call_active','audio_call_active','at_location','travelling','en_route','on_scene',
+  'dispatched','transporting','preparing','out_for_delivery','under_review','intake_assessment',
+  'sample_collected','processing','results_ready','prescription_issued','exam_complete',
+  'prescription_written','care_notes_written','plan_delivered','meal_plan_created',
+  'treatment_planned','completed','cancelled',
+])
+
+function classifyInitialSteps(steps: WorkflowStep[]): WorkflowStep[] {
+  return steps.map(s => ({
+    ...s,
+    kind: s.kind ?? (KNOWN_SYSTEM_CODES.has(s.statusCode) ? 'system' : 'custom'),
+  }))
+}
+
+function makeUniqueCode(label: string, existingCodes: string[]): string {
+  const base = 'custom_' + (label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'step')
+  if (!existingCodes.includes(base)) return base
+  let i = 2
+  while (existingCodes.includes(`${base}_${i}`)) i++
+  return `${base}_${i}`
+}
+
 function derivePaymentTiming(mode: string): string {
   if (mode === 'delivery')  return 'IMMEDIATE'
   if (mode === 'emergency') return 'PAY_LATER'
@@ -70,7 +102,8 @@ function derivePaymentTiming(mode: string): string {
 
 type PartialStep = Omit<WorkflowStep, 'order'>
 
-const T = (s: PartialStep): PartialStep => s
+// All template-defined steps are system steps — locked in the builder UI.
+const T = (s: PartialStep): PartialStep => ({ kind: 'system', ...s })
 
 const PENDING = T({ statusCode: 'pending', label: 'Request sent', flags: {},
   actionsForPatient: [{ action: 'cancel', label: 'Cancel', targetStatus: 'cancelled', style: 'danger' }],
@@ -298,37 +331,52 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
   if (steps.length === 0) return null
 
   return (
-    <div className="overflow-x-auto pb-1">
+    <div className="overflow-x-auto pb-2">
       <div className="flex items-start py-2 min-w-max">
         {steps.map((step, idx) => {
-          const { bg, border, text } = stepStyle(step)
-          const emoji = STEP_ICON_EMOJI[inferStepIcon({
-            statusCode: step.statusCode,
-            label: step.label,
-            flags: step.flags as Record<string, unknown>,
-            hasActions: (step.actionsForPatient?.length ?? 0) + (step.actionsForProvider?.length ?? 0) > 0,
-          })]
+          const isCustom = step.kind === 'custom'
+          const { bg, border, text } = isCustom
+            ? { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-800' }
+            : stepStyle(step)
+          const emoji = isCustom
+            ? (step.customEmoji || '📋')
+            : STEP_ICON_EMOJI[inferStepIcon({
+                statusCode: step.statusCode,
+                label: step.label,
+                flags: step.flags as Record<string, unknown>,
+                hasActions: (step.actionsForPatient?.length ?? 0) + (step.actionsForProvider?.length ?? 0) > 0,
+              })]
           const isLast = idx === steps.length - 1
 
           return (
             <div key={`${step.statusCode}-${idx}`} className="flex items-center">
               {/* Step pill */}
-              <div className={`flex flex-col items-center text-center rounded-xl border-2 px-2.5 py-2 w-[90px] shrink-0 ${bg} ${border}`}>
+              <div className={`relative flex flex-col items-center text-center rounded-xl border-2 px-2.5 py-2 w-[90px] shrink-0 ${bg} ${border}`}>
+                {/* System indicator */}
+                {!isCustom && (
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-gray-300" title="System step — auto-generated, locked">⚙️</span>
+                )}
+                {/* Custom milestone indicator */}
+                {isCustom && (
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-emerald-400 font-bold" title="Custom milestone">✦</span>
+                )}
                 <span className="text-2xl leading-tight">{emoji}</span>
                 <span className={`text-[11px] font-semibold mt-1 leading-tight line-clamp-2 ${text}`}>
                   {step.label || step.statusCode}
                 </span>
-                <code className="text-[9px] text-gray-400 mt-0.5 font-mono truncate max-w-full px-0.5">
-                  {step.statusCode}
-                </code>
-                {/* Flag badges */}
-                {!!step.flags?.triggers_video_call && (
+                {!isCustom && (
+                  <code className="text-[9px] text-gray-400 mt-0.5 font-mono truncate max-w-full px-0.5">
+                    {step.statusCode}
+                  </code>
+                )}
+                {/* System step trigger badges */}
+                {!isCustom && !!step.flags?.triggers_video_call && (
                   <span className="mt-1 text-[9px] bg-blue-100 text-blue-600 rounded px-1">📹 call</span>
                 )}
-                {!!step.flags?.triggers_audio_call && (
+                {!isCustom && !!step.flags?.triggers_audio_call && (
                   <span className="mt-1 text-[9px] bg-cyan-100 text-cyan-600 rounded px-1">📞 call</span>
                 )}
-                {!!step.flags?.requires_content && (
+                {!isCustom && !!step.flags?.requires_content && (
                   <span className="mt-1 text-[9px] bg-indigo-100 text-indigo-600 rounded px-1">📎 attach</span>
                 )}
               </div>
@@ -345,6 +393,11 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
             </div>
           )
         })}
+      </div>
+      {/* Legend */}
+      <div className="flex items-center gap-4 mt-1 text-[10px] text-gray-400">
+        <span className="flex items-center gap-1">⚙️ System step <span className="text-gray-300">(auto-generated, locked)</span></span>
+        <span className="flex items-center gap-1 text-emerald-600">✦ Custom milestone <span className="text-emerald-300">(editable)</span></span>
       </div>
     </div>
   )
@@ -425,13 +478,19 @@ export default function WorkflowBuilder({
   const [configSample,      setConfigSample]      = useState('none')
   const [configOutput,      setConfigOutput]      = useState('none')
 
-  // Steps — if initialData provided, they're already authored; otherwise derive from mode
+  // Steps — if initialData provided, classify legacy steps; otherwise derive from mode
   const [steps, setSteps] = useState<WorkflowStep[]>(() => {
-    if (initialData?.steps?.length) return initialData.steps
+    if (initialData?.steps?.length) return classifyInitialSteps(initialData.steps)
     return deriveStepsFromConfig('office', 'none', 'none')
   })
-  // Track whether the admin has manually edited steps (disables auto-rederive)
+  // True when the admin has added custom milestones (disables auto-rederive of system steps)
   const [stepsCustomized, setStepsCustomized] = useState(!!initialData)
+
+  // Custom milestone insertion state
+  const [addingCustom,    setAddingCustom]    = useState(false)
+  const [newStepAfterIdx, setNewStepAfterIdx] = useState('0')
+  const [newStepLabel,    setNewStepLabel]    = useState('')
+  const [newStepEmoji,    setNewStepEmoji]    = useState('📋')
 
   const [saving,          setSaving]          = useState(false)
   const [error,           setError]           = useState<string | null>(null)
@@ -550,7 +609,8 @@ export default function WorkflowBuilder({
       if (!s.label) out.push({ key: `s-${i}-label`, message: `Step ${i + 1}: missing label.`, stepIdx: i })
       const isTerminal = s.statusCode === 'completed' || s.statusCode === 'cancelled'
       const hasAction = (s.actionsForPatient ?? []).length + (s.actionsForProvider ?? []).length > 0
-      if (!isTerminal && !hasAction) {
+      // Custom milestones get auto-generated proceed actions before save — skip stuck check
+      if (!isTerminal && !hasAction && s.kind !== 'custom') {
         out.push({ key: `s-${i}-stuck`, message: `Step ${i + 1} ("${s.label || s.statusCode}") has no actions — bookings will get stuck here.`, stepIdx: i })
       }
       const allActions = [...(s.actionsForPatient ?? []), ...(s.actionsForProvider ?? [])]
@@ -566,7 +626,14 @@ export default function WorkflowBuilder({
 
   function generateTransitions() {
     const transitions: Array<{ from: string; to: string; action: string; allowedRoles: string[] }> = []
-    for (const step of steps) {
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i]
+      if (step.kind === 'custom') {
+        // Auto pass-through: provider presses "Continue" → next step
+        const next = steps[i + 1]
+        if (next) transitions.push({ from: step.statusCode, to: next.statusCode, action: 'proceed', allowedRoles: ['provider'] })
+        continue
+      }
       for (const action of step.actionsForProvider) {
         if (action.action && action.targetStatus) transitions.push({ from: step.statusCode, to: action.targetStatus, action: action.action, allowedRoles: ['provider'] })
       }
@@ -604,27 +671,43 @@ export default function WorkflowBuilder({
     setStepLibraryOpen(false)
   }
 
-  function addStep() {
-    const newOrder = steps.length + 1
-    const cancelledIdx = steps.findIndex(s => s.statusCode === 'cancelled')
-    const newStep: WorkflowStep = { order: newOrder, statusCode: `step_${newOrder}`, label: `Step ${newOrder}`, actionsForPatient: [], actionsForProvider: [], flags: {}, notifyPatient: null, notifyProvider: null }
-    if (cancelledIdx >= 0) {
-      const updated = [...steps]; updated.splice(cancelledIdx, 0, newStep)
-      setSteps(updated.map((s, i) => ({ ...s, order: i + 1 })))
-    } else {
-      setSteps([...steps, newStep].map((s, i) => ({ ...s, order: i + 1 })))
+  function openAddCustomForm() {
+    const completedIdx = steps.findIndex(s => s.statusCode === 'completed')
+    const defaultIdx = completedIdx > 0 ? completedIdx - 1 : Math.max(0, steps.length - 2)
+    setNewStepAfterIdx(String(defaultIdx))
+    setNewStepLabel('')
+    setNewStepEmoji('📋')
+    setAddingCustom(true)
+  }
+
+  function confirmAddCustomStep() {
+    if (!newStepLabel.trim()) return
+    const code = makeUniqueCode(newStepLabel.trim(), steps.map(s => s.statusCode))
+    const newStep: WorkflowStep = {
+      kind: 'custom',
+      customEmoji: newStepEmoji,
+      order: 0,
+      statusCode: code,
+      label: newStepLabel.trim(),
+      actionsForPatient: [],
+      actionsForProvider: [],
+      flags: {},
+      notifyPatient: null,
+      notifyProvider: null,
     }
+    const insertAfter = parseInt(newStepAfterIdx, 10)
+    const updated = [...steps]
+    updated.splice(insertAfter + 1, 0, newStep)
+    setSteps(updated.map((s, i) => ({ ...s, order: i + 1 })))
     setStepsCustomized(true)
+    setAddingCustom(false)
+    setNewStepLabel('')
+    setNewStepEmoji('📋')
   }
 
-  function updateStep(idx: number, step: WorkflowStep) {
-    const updated = [...steps]; updated[idx] = step; setSteps(updated)
-    setStepsCustomized(true)
-  }
-
-  function removeStep(idx: number) {
+  function removeCustomStep(idx: number) {
+    if (steps[idx]?.kind !== 'custom') return
     setSteps(steps.filter((_, i) => i !== idx).map((s, i) => ({ ...s, order: i + 1 })))
-    setStepsCustomized(true)
   }
 
   function handleRegenerate() {
@@ -649,10 +732,21 @@ export default function WorkflowBuilder({
     try {
       const url    = isEdit ? `/api/workflow/templates/${initialData!.id}` : '/api/workflow/templates'
       const method = isEdit ? 'PATCH' : 'POST'
+      // Auto-fill custom step actions based on position before persisting
+      const stepsToSave = steps.map((s, i) => {
+        if (s.kind !== 'custom') return s
+        const next = steps[i + 1]
+        return {
+          ...s,
+          actionsForProvider: next
+            ? [{ action: 'proceed', label: 'Continue', targetStatus: next.statusCode, style: 'primary' as const }]
+            : [],
+        }
+      })
       const payload: Record<string, unknown> = {
         name, slug: finalSlug, description, providerType, serviceMode, paymentTiming,
         platformServiceId: platformServiceId || null,
-        steps, transitions, serviceConfig,
+        steps: stepsToSave, transitions, serviceConfig,
       }
       if (showAdminFields) {
         payload.expectedDurationHours = expectedDurationHours ? parseInt(expectedDurationHours, 10) : null
@@ -891,57 +985,138 @@ export default function WorkflowBuilder({
           <StepFlowIllustration steps={steps} />
         </div>
 
-        {/* ─── Workflow Steps (advanced editing) ──────────────────── */}
+        {/* ─── Custom Milestones ──────────────────────────────────── */}
         <div className="space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
-              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Customise Steps</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Expand any step to edit labels, actions, flags, and notifications.</p>
+              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Custom Milestones</h2>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Add named checkpoints between system steps. Choose an emoji icon and a position.
+              </p>
             </div>
-            <div className="flex items-center gap-2">
-              {stepTypes.length > 0 && (
-                <button type="button" onClick={() => setStepLibraryOpen(!stepLibraryOpen)}
-                  className="text-sm text-gray-600 hover:text-[#001E40] flex items-center gap-1 font-medium border border-gray-200 rounded-lg px-2.5 py-1.5 hover:bg-gray-50">
-                  <FiBookOpen className="w-4 h-4" /> Step library
-                </button>
-              )}
-              <button type="button" onClick={addStep}
-                className="text-sm text-[#0C6780] hover:text-[#001E40] flex items-center gap-1 font-medium">
-                <FiPlus className="w-4 h-4" /> Add blank
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={openAddCustomForm}
+              disabled={addingCustom}
+              className="text-sm text-[#0C6780] hover:text-[#001E40] flex items-center gap-1 font-medium disabled:opacity-40"
+            >
+              <FiPlus className="w-4 h-4" /> Add milestone
+            </button>
           </div>
 
-          {stepLibraryOpen && stepTypes.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Click a step type to insert it</p>
-                <button onClick={() => setStepLibraryOpen(false)} className="p-1 hover:bg-gray-100 rounded text-gray-400"><FiX className="w-3 h-3" /></button>
+          {/* Inline add form */}
+          {addingCustom && (
+            <div className="bg-white border border-[#0C6780]/30 rounded-xl p-4 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-1">Insert after</label>
+                  <select
+                    value={newStepAfterIdx}
+                    onChange={e => setNewStepAfterIdx(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                  >
+                    {steps.map((s, i) => (
+                      <option key={i} value={i}>{s.label || s.statusCode}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-1">Step name *</label>
+                  <input
+                    autoFocus
+                    type="text"
+                    value={newStepLabel}
+                    onChange={e => setNewStepLabel(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') confirmAddCustomStep() }}
+                    placeholder="e.g. Patient preparation"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto">
-                {stepTypes.map(st => (
-                  <button key={st.code} type="button" onClick={() => insertFromStepType(st)}
-                    className="text-left p-2.5 border border-gray-200 rounded-lg hover:border-[#0C6780] hover:bg-[#0C6780]/5 transition group">
-                    <div className="text-xs font-semibold text-gray-800 group-hover:text-[#0C6780]">{st.label}</div>
-                    <div className="text-[10px] text-gray-400 font-mono mt-0.5">{st.code}</div>
-                    {st.description && <div className="text-[10px] text-gray-500 mt-1 line-clamp-2">{st.description}</div>}
-                  </button>
-                ))}
+
+              {/* Emoji picker */}
+              <div>
+                <label className="text-xs font-medium text-gray-500 block mb-2">
+                  Icon <span className="font-normal text-gray-400">— click to choose</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {CUSTOM_STEP_EMOJIS.map(em => (
+                    <button
+                      key={em}
+                      type="button"
+                      onClick={() => setNewStepEmoji(em)}
+                      className={`w-9 h-9 rounded-lg text-xl flex items-center justify-center border-2 transition ${
+                        newStepEmoji === em
+                          ? 'border-[#0C6780] bg-[#0C6780]/10 scale-110'
+                          : 'border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                      }`}
+                    >
+                      {em}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={() => { setAddingCustom(false); setNewStepLabel(''); setNewStepEmoji('📋') }}
+                  className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmAddCustomStep}
+                  disabled={!newStepLabel.trim()}
+                  className="text-sm font-medium bg-[#0C6780] hover:bg-[#001E40] text-white px-4 py-1.5 rounded-lg disabled:opacity-40 transition"
+                >
+                  Add milestone
+                </button>
               </div>
             </div>
           )}
 
-          {steps.map((step, idx) => (
-            <StepEditor
-              key={`${step.statusCode}-${idx}`}
-              step={step}
-              allStatusCodes={allStatusCodes}
-              onChange={(s) => updateStep(idx, s)}
-              onRemove={() => removeStep(idx)}
-              isFirst={idx === 0}
-              isLast={idx === steps.length - 1}
-            />
-          ))}
+          {/* Existing custom steps list */}
+          {steps.filter(s => s.kind === 'custom').length === 0 && !addingCustom && (
+            <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
+              <p className="text-sm text-gray-500">No custom milestones yet.</p>
+              <p className="text-xs text-gray-400 mt-1">
+                System steps cover the full flow — add milestones to create named checkpoints visible to provider and member.
+              </p>
+            </div>
+          )}
+
+          {steps.map((step, idx) => {
+            if (step.kind !== 'custom') return null
+            const prev = idx > 0 ? steps[idx - 1] : null
+            const next = idx < steps.length - 1 ? steps[idx + 1] : null
+            return (
+              <div key={step.statusCode} className="bg-white border border-emerald-200 rounded-xl p-3 flex items-center gap-3">
+                <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || '📋'}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm text-gray-900">{step.label}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">
+                    <span>After: <span className="text-gray-600">{prev?.label || '—'}</span></span>
+                    {next && (
+                      <> · <span>Before: <span className="text-gray-600">{next.label}</span></span></>
+                    )}
+                  </div>
+                </div>
+                <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex-shrink-0">
+                  custom milestone
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeCustomStep(idx)}
+                  className="p-1.5 text-gray-400 hover:text-red-500 rounded flex-shrink-0"
+                  title="Remove milestone"
+                >
+                  <FiTrash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )
+          })}
         </div>
 
         {/* ─── Auto-Generated Transitions ─────────────────────────── */}
