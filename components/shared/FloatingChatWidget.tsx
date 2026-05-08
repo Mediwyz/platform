@@ -200,11 +200,13 @@ export default function FloatingChatWidget() {
           transition-all duration-200 hover:scale-105 active:scale-95
           ${open ? 'bg-gray-700' : 'bg-gradient-to-r from-[#001E40] to-[#0C6780]'}`}
       >
-        {open ? (
-          <FaTimes className="text-white text-sm" />
-        ) : (
-          <Image src="/images/logo-icon.png" alt="Wyzo" width={28} height={28} className="rounded-full flex-shrink-0" />
-        )}
+        <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+          {open ? (
+            <FaTimes className="text-white text-base" />
+          ) : (
+            <Image src="/images/logo-icon.png" alt="Wyzo" width={20} height={20} className="rounded-full" />
+          )}
+        </span>
         <span>{open ? 'Close' : 'Wyzo AI'}</span>
         {!open && turns.length > 1 && (
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white" />

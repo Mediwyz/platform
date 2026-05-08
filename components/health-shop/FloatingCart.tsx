@@ -22,7 +22,9 @@ export default function FloatingCart() {
           transition-all hover:scale-105 active:scale-95
           ${totalItems > 0 ? 'bg-[#0C6780] text-white' : 'bg-white border-2 border-gray-200 text-gray-400 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
       >
-        <FaShoppingCart className="text-base flex-shrink-0" />
+        <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+          <FaShoppingCart className="text-base" />
+        </span>
         <span>Health Shop</span>
         {totalItems > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">

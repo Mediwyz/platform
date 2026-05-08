@@ -174,7 +174,9 @@ export default function FloatingGeoFAB() {
         aria-label="Find nearest healthcare"
         title="Find Nearest Healthcare"
       >
-        <FaLocationArrow className="text-base flex-shrink-0" />
+        <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+          <FaLocationArrow className="text-base" />
+        </span>
         <span>Near Me</span>
       </button>
 

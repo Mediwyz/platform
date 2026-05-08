@@ -159,7 +159,9 @@ export default function FloatingBookingCart() {
             boxShadow: `0 8px 24px ${selection?.role.color ?? '#0C6780'}50`,
           }}
         >
-          <FaCalendarAlt className="text-base flex-shrink-0" />
+          <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+            <FaCalendarAlt className="text-base" />
+          </span>
           <span>My Booking</span>
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">1</span>
         </motion.button>
@@ -174,7 +176,9 @@ export default function FloatingBookingCart() {
           aria-label="My Booking"
           title="My Booking"
         >
-          <FaCalendarAlt className="text-base flex-shrink-0" />
+          <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+            <FaCalendarAlt className="text-base" />
+          </span>
           <span>My Booking</span>
         </button>
       )}

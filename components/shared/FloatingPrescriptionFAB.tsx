@@ -437,7 +437,9 @@ export default function FloatingPrescriptionFAB() {
           transition-all duration-200 hover:scale-105 active:scale-95"
         style={{ backgroundColor: hasPrescription ? '#f59e0b' : '#0C6780', border: 'none' }}
       >
-        <FaFileMedical className="text-base flex-shrink-0" />
+        <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+          <FaFileMedical className="text-base" />
+        </span>
         <span>Prescription</span>
         {isExtracting && (
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-300 rounded-full flex items-center justify-center border-2 border-white">
