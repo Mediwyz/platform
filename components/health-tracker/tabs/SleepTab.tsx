@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
- FaBed, FaMoon, FaClock, FaStar, FaChevronLeft, FaChevronRight, FaPlus, FaTrash,
+ FaBed, FaMoon, FaClock, FaStar, FaChevronLeft, FaChevronRight, FaPlus, FaTrash, FaTimes,
 } from 'react-icons/fa'
 
 interface SleepEntry {
@@ -20,20 +20,12 @@ interface SleepDayData {
 }
 
 const QUALITIES = [
- { value: 'terrible', label: 'Terrible', color: 'red' },
- { value: 'poor', label: 'Poor', color: 'orange' },
- { value: 'fair', label: 'Fair', color: 'yellow' },
- { value: 'good', label: 'Good', color: 'green' },
- { value: 'excellent', label: 'Excellent', color: 'emerald' },
+ { value: 'terrible', label: '😫 Terrible', activeClass: 'bg-red-500 text-white' },
+ { value: 'poor', label: '😕 Poor', activeClass: 'bg-orange-500 text-white' },
+ { value: 'fair', label: '😐 Fair', activeClass: 'bg-yellow-500 text-white' },
+ { value: 'good', label: '😊 Good', activeClass: 'bg-green-500 text-white' },
+ { value: 'excellent', label: '😄 Excellent', activeClass: 'bg-emerald-500 text-white' },
 ]
-
-const qualityColorMap: Record<string, string> = {
- terrible: 'text-red-500',
- poor: 'text-orange-500',
- fair: 'text-yellow-500',
- good: 'text-green-500',
- excellent: 'text-emerald-500',
-}
 
 const qualityBgMap: Record<string, string> = {
  terrible: 'bg-red-100 text-red-700',
@@ -43,18 +35,61 @@ const qualityBgMap: Record<string, string> = {
  excellent: 'bg-emerald-100 text-emerald-700',
 }
 
-const qualityActiveMap: Record<string, string> = {
- red: 'bg-red-500 text-white',
- orange: 'bg-orange-500 text-white',
- yellow: 'bg-yellow-500 text-white',
- green: 'bg-green-500 text-white',
- emerald: 'bg-emerald-500 text-white',
+const qualityEmoji: Record<string, string> = {
+ terrible: '😫', poor: '😕', fair: '😐', good: '😊', excellent: '😄',
 }
 
 function formatDuration(totalMin: number): string {
  const h = Math.floor(totalMin / 60)
  const m = totalMin % 60
- return `${h}h ${m}m`
+ return m > 0 ? `${h}h ${m}m` : `${h}h`
+}
+
+function parseMinsFromTime(time: string): number | null {
+ if (!time) return null
+ const [h, m] = time.split(':').map(Number)
+ if (Number.isNaN(h) || Number.isNaN(m)) return null
+ return h * 60 + m
+}
+
+function calcDuration(bedtime: string, wakeTime: string): number | null {
+ const bed = parseMinsFromTime(bedtime)
+ const wake = parseMinsFromTime(wakeTime)
+ if (bed === null || wake === null) return null
+ let diff = wake - bed
+ if (diff <= 0) diff += 24 * 60
+ return diff
+}
+
+function formatTime12h(time24: string): string {
+ const [h, m] = time24.split(':').map(Number)
+ const period = h >= 12 ? 'PM' : 'AM'
+ const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h
+ return `${h12}:${String(m).padStart(2, '0')} ${period}`
+}
+
+function getSleepScoreColor(durationMin: number, targetMin: number): string {
+ const ratio = durationMin / targetMin
+ if (ratio >= 0.9) return 'text-emerald-500'
+ if (ratio >= 0.7) return 'text-yellow-500'
+ return 'text-red-500'
+}
+
+function generateSleepInsight(entry: SleepEntry, targetMin: number): { text: string; emoji: string } {
+ const ratio = entry.durationMin / targetMin
+ if (entry.quality === 'excellent' && ratio >= 0.9) {
+  return { emoji: '🌟', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
+ }
+ if (ratio < 0.6) {
+  return { emoji: '😴', text: `You slept ${formatDuration(entry.durationMin)} — well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
+ }
+ if (entry.quality === 'terrible' || entry.quality === 'poor') {
+  return { emoji: '💤', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
+ }
+ if (ratio >= 0.9) {
+  return { emoji: '✅', text: `You hit your sleep target (${formatDuration(entry.durationMin)}). Consistent sleep timing is one of the best things for your health.` }
+ }
+ return { emoji: '🌙', text: "Good effort! Aim to go to bed 30 minutes earlier tonight to reach your full sleep target." }
 }
 
 export default function SleepTab() {
@@ -64,384 +99,375 @@ export default function SleepTab() {
  const [error, setError] = useState('')
  const [showAddModal, setShowAddModal] = useState(false)
  const [actionError, setActionError] = useState('')
+ const [insight, setInsight] = useState<{ text: string; emoji: string } | null>(null)
+ const [insightDismissed, setInsightDismissed] = useState(false)
 
- // Form state
- const [formHours, setFormHours] = useState(7)
- const [formMinutes, setFormMinutes] = useState(30)
+ // Form state — bedtime/wake are the primary inputs
+ const [formBedtime, setFormBedtime] = useState('22:30')
+ const [formWakeTime, setFormWakeTime] = useState('06:30')
  const [formQuality, setFormQuality] = useState('good')
- const [formBedtime, setFormBedtime] = useState('')
- const [formWakeTime, setFormWakeTime] = useState('')
  const [formNotes, setFormNotes] = useState('')
  const [submitting, setSubmitting] = useState(false)
+
+ const derivedDuration = calcDuration(formBedtime, formWakeTime)
 
  const dateStr = selectedDate.toISOString().split('T')[0]
 
  const fetchData = useCallback(async () => {
- try {
- setLoading(true)
- setError('')
- const res = await fetch(`/api/ai/health-tracker/sleep?date=${dateStr}`, { credentials: 'include' })
- if (!res.ok) throw new Error('Failed to load sleep data')
- const json = await res.json()
- if (!json.success) throw new Error(json.message || 'Failed to load sleep data')
- const d = json.data
- setData({
- entry: d.entry,
- targetSleepMin: d.targetSleepMin,
- })
- } catch (err) {
- setError(err instanceof Error ? err.message : 'Something went wrong')
- } finally {
- setLoading(false)
- }
+  try {
+   setLoading(true)
+   setError('')
+   const res = await fetch(`/api/ai/health-tracker/sleep?date=${dateStr}`, { credentials: 'include' })
+   if (!res.ok) throw new Error('Failed to load sleep data')
+   const json = await res.json()
+   if (!json.success) throw new Error(json.message || 'Failed to load sleep data')
+   const d = json.data
+   setData({ entry: d.entry, targetSleepMin: d.targetSleepMin })
+   if (d.entry) {
+    setInsight(generateSleepInsight(d.entry, d.targetSleepMin ?? 480))
+    setInsightDismissed(false)
+   }
+  } catch (err) {
+   setError(err instanceof Error ? err.message : 'Something went wrong')
+  } finally {
+   setLoading(false)
+  }
  }, [dateStr])
 
  useEffect(() => {
- fetchData()
+  fetchData()
  }, [fetchData])
 
  const handleDelete = async (id: string) => {
- try {
- const res = await fetch(`/api/ai/health-tracker/sleep/${id}`, { method: 'DELETE', credentials: 'include' })
- if (!res.ok) throw new Error('Failed to delete')
- await fetchData()
- } catch {
- setActionError('Failed to delete sleep entry')
- setTimeout(() => setActionError(''), 4000)
- await fetchData()
- }
- }
-
- // Auto-calculate duration from bedtime and wake time
- const autoCalculateDuration = (bedtime: string, wakeTime: string) => {
- if (!bedtime || !wakeTime) return
- const [bedH, bedM] = bedtime.split(':').map(Number)
- const [wakeH, wakeM] = wakeTime.split(':').map(Number)
- let totalMin = (wakeH * 60 + wakeM) - (bedH * 60 + bedM)
- if (totalMin <= 0) totalMin += 24 * 60 // crossed midnight
- setFormHours(Math.floor(totalMin / 60))
- setFormMinutes(totalMin % 60)
- }
-
- const handleBedtimeChange = (value: string) => {
- setFormBedtime(value)
- autoCalculateDuration(value, formWakeTime)
- }
-
- const handleWakeTimeChange = (value: string) => {
- setFormWakeTime(value)
- autoCalculateDuration(formBedtime, value)
+  try {
+   const res = await fetch(`/api/ai/health-tracker/sleep/${id}`, { method: 'DELETE', credentials: 'include' })
+   if (!res.ok) throw new Error('Failed to delete')
+   await fetchData()
+  } catch {
+   setActionError('Failed to delete sleep entry')
+   setTimeout(() => setActionError(''), 4000)
+   await fetchData()
+  }
  }
 
  const handleAdd = async () => {
- try {
- setSubmitting(true)
- const durationMin = formHours * 60 + formMinutes
- const res = await fetch('/api/ai/health-tracker/sleep', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({
- durationMin,
- quality: formQuality,
- bedtime: formBedtime || undefined,
- wakeTime: formWakeTime || undefined,
- notes: formNotes || undefined,
- date: dateStr,
- }),
- credentials: 'include',
- })
- if (!res.ok) throw new Error('Failed to log sleep')
- setShowAddModal(false)
- resetForm()
- await fetchData()
- } catch {
- setActionError('Failed to log sleep')
- setTimeout(() => setActionError(''), 4000)
- } finally {
- setSubmitting(false)
- }
+  try {
+   setSubmitting(true)
+   const durationMin = derivedDuration ?? 480
+   const res = await fetch('/api/ai/health-tracker/sleep', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+     durationMin,
+     quality: formQuality,
+     bedtime: formBedtime || undefined,
+     wakeTime: formWakeTime || undefined,
+     notes: formNotes || undefined,
+     date: dateStr,
+    }),
+    credentials: 'include',
+   })
+   if (!res.ok) throw new Error('Failed to log sleep')
+   setShowAddModal(false)
+   resetForm()
+   await fetchData()
+  } catch {
+   setActionError('Failed to log sleep')
+   setTimeout(() => setActionError(''), 4000)
+  } finally {
+   setSubmitting(false)
+  }
  }
 
  const resetForm = () => {
- setFormHours(7)
- setFormMinutes(30)
- setFormQuality('good')
- setFormBedtime('')
- setFormWakeTime('')
- setFormNotes('')
+  setFormBedtime('22:30')
+  setFormWakeTime('06:30')
+  setFormQuality('good')
+  setFormNotes('')
  }
 
  const changeDate = (days: number) => {
- const newDate = new Date(selectedDate)
- newDate.setDate(newDate.getDate() + days)
- setSelectedDate(newDate)
+  const newDate = new Date(selectedDate)
+  newDate.setDate(newDate.getDate() + days)
+  setSelectedDate(newDate)
  }
 
  const formatDate = (date: Date) => {
- const today = new Date()
- const yesterday = new Date(today)
- yesterday.setDate(yesterday.getDate() - 1)
-
- if (date.toDateString() === today.toDateString()) return 'Today'
- if (date.toDateString() === yesterday.toDateString()) return 'Yesterday'
- return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
+  if (date.toDateString() === today.toDateString()) return 'Today'
+  if (date.toDateString() === yesterday.toDateString()) return 'Yesterday'
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
  }
 
  const entry = data?.entry
  const targetMin = data?.targetSleepMin ?? 480
 
  return (
- <div className="p-4 space-y-4">
- {actionError && (
- <div className="mx-4 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex justify-between items-center">
- <span>{actionError}</span>
- <button onClick={() => setActionError('')} className="text-red-500 hover:text-red-700 ml-2">&#10005;</button>
- </div>
- )}
- {/* Date Selector */}
- <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-3">
- <button
- onClick={() => changeDate(-1)}
- className="p-2 text-gray-500 hover:text-blue-600 transition-colors rounded-lg hover:bg-gray-100"
- aria-label="Previous day"
- >
- <FaChevronLeft className="w-4 h-4" />
- </button>
- <span className="text-sm font-semibold text-gray-800">{formatDate(selectedDate)}</span>
- <button
- onClick={() => changeDate(1)}
- className="p-2 text-gray-500 hover:text-blue-600 transition-colors rounded-lg hover:bg-gray-100"
- aria-label="Next day"
- >
- <FaChevronRight className="w-4 h-4" />
- </button>
- </div>
+  <div className="p-4 space-y-4">
+   {actionError && (
+    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex justify-between items-center">
+     <span>{actionError}</span>
+     <button onClick={() => setActionError('')} className="text-red-500 ml-2">&#10005;</button>
+    </div>
+   )}
 
- {/* Summary Cards */}
- {data && (
- <div className="grid grid-cols-3 gap-3">
- <div className="bg-white rounded-lg shadow-sm p-3 text-center">
- <FaMoon className="w-5 h-5 text-indigo-500 mx-auto mb-1" />
- <p className="text-lg font-bold text-gray-800">
- {entry ? formatDuration(entry.durationMin) : '--'}
- </p>
- <p className="text-xs text-gray-500">Sleep Duration</p>
- </div>
- <div className="bg-white rounded-lg shadow-sm p-3 text-center">
- <FaStar className={`w-5 h-5 mx-auto mb-1 ${entry ? (qualityColorMap[entry.quality] || 'text-gray-400') : 'text-gray-400'}`} />
- {entry ? (
- <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${qualityBgMap[entry.quality] || 'bg-gray-100 text-gray-600'}`}>
- {entry.quality}
- </span>
- ) : (
- <p className="text-lg font-bold text-gray-800">--</p>
- )}
- <p className="text-xs text-gray-500 mt-1">Quality</p>
- </div>
- <div className="bg-white rounded-lg shadow-sm p-3 text-center">
- <FaClock className="w-5 h-5 text-blue-500 mx-auto mb-1" />
- <p className="text-lg font-bold text-gray-800">
- {entry ? formatDuration(targetMin) : '--'}
- </p>
- <p className="text-xs text-gray-500">Target</p>
- </div>
- </div>
- )}
+   {/* Date Selector */}
+   <div className="flex items-center justify-between bg-white rounded-xl shadow-sm p-3">
+    <button onClick={() => changeDate(-1)} className="p-2 text-gray-500 hover:text-[#0C6780] rounded-lg hover:bg-gray-100" aria-label="Previous day">
+     <FaChevronLeft className="w-4 h-4" />
+    </button>
+    <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
+    <button onClick={() => changeDate(1)} className="p-2 text-gray-500 hover:text-[#0C6780] rounded-lg hover:bg-gray-100" aria-label="Next day">
+     <FaChevronRight className="w-4 h-4" />
+    </button>
+   </div>
 
- {/* Log Sleep Button */}
- <button
- onClick={() => setShowAddModal(true)}
- className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
- >
- <FaPlus className="w-4 h-4" />
- Log Sleep
- </button>
+   {/* Log Sleep CTA */}
+   {!entry && !loading && !error && (
+    <button
+     onClick={() => setShowAddModal(true)}
+     className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#001E40] text-white rounded-xl font-medium hover:bg-[#0C6780] transition-colors"
+    >
+     <FaPlus className="w-4 h-4" />
+     Log Last Night's Sleep
+    </button>
+   )}
 
- {/* Loading */}
- {loading && (
- <div className="space-y-3">
- {[1, 2, 3].map((i) => (
- <div key={i} className="h-20 bg-gray-200 rounded-lg animate-pulse" />
- ))}
- </div>
- )}
+   {loading && (
+    <div className="space-y-3">
+     {[1, 2].map((i) => <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse" />)}
+    </div>
+   )}
+   {error && (
+    <div className="text-center p-4">
+     <p className="text-red-500 mb-3">{error}</p>
+     <button onClick={fetchData} className="px-4 py-2 bg-[#0C6780] text-white rounded-lg text-sm hover:bg-[#001E40]">Retry</button>
+    </div>
+   )}
 
- {/* Error */}
- {error && (
- <div className="text-center p-4">
- <p className="text-red-500 mb-3">{error}</p>
- <button
- onClick={fetchData}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
- >
- Retry
- </button>
- </div>
- )}
+   {/* Sleep Entry Display */}
+   {!loading && !error && (
+    <div className="space-y-4">
+     {!entry ? (
+      <div className="text-center py-10">
+       <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
+        <FaMoon className="w-10 h-10 text-indigo-300" />
+       </div>
+       <p className="text-sm font-medium text-gray-500 mb-1">No sleep logged</p>
+       <p className="text-xs text-gray-400">Track your bedtime and wake time for personalised insights.</p>
+      </div>
+     ) : (
+      <>
+       {/* Sleep summary card */}
+       <div className="bg-gradient-to-br from-[#001E40] to-indigo-800 rounded-2xl p-5 text-white">
+        <div className="flex items-center justify-between mb-4">
+         <div>
+          <p className="text-white/60 text-xs font-medium uppercase tracking-wide">Sleep Duration</p>
+          <p className={`text-4xl font-black mt-0.5 ${getSleepScoreColor(entry.durationMin, targetMin).replace('text-', 'text-')}`}>
+           {formatDuration(entry.durationMin)}
+          </p>
+          <p className="text-white/50 text-xs mt-0.5">Target: {formatDuration(targetMin)}</p>
+         </div>
+         <div className="flex flex-col items-end gap-2">
+          <span className={`px-3 py-1 rounded-full text-xs font-bold capitalize ${qualityBgMap[entry.quality] ?? 'bg-white/20 text-white'}`}>
+           {qualityEmoji[entry.quality]} {entry.quality}
+          </span>
+          <button
+           onClick={() => entry && handleDelete(entry.id)}
+           className="p-1.5 text-white/30 hover:text-red-400 transition-colors"
+           aria-label="Delete entry"
+          >
+           <FaTrash className="w-3.5 h-3.5" />
+          </button>
+         </div>
+        </div>
 
- {/* Sleep Entry */}
- {!loading && !error && (
- <div className="space-y-3">
- {!entry ? (
- <div className="text-center py-8">
- <FaBed className="w-10 h-10 text-gray-300 mx-auto mb-3" />
- <p className="text-sm text-gray-400">No sleep logged for today</p>
- </div>
- ) : (
- <div className="bg-white rounded-lg shadow-sm p-4">
- <div className="flex items-start justify-between">
- <div className="flex items-center gap-3">
- <div className="p-2 bg-indigo-50 rounded-lg">
- <FaBed className="w-5 h-5 text-indigo-500" />
- </div>
- <div>
- <p className="text-sm font-semibold text-gray-800">
- {formatDuration(entry.durationMin)}
- </p>
- <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium capitalize ${qualityBgMap[entry.quality] || 'bg-gray-100 text-gray-600'}`}>
- {entry.quality}
- </span>
- </div>
- </div>
- <button
- onClick={() => handleDelete(entry.id)}
- className="p-2 text-gray-400 hover:text-red-500 transition-colors"
- aria-label="Delete sleep entry"
- >
- <FaTrash className="w-4 h-4" />
- </button>
- </div>
- {(entry.bedtime || entry.wakeTime) && (
- <div className="mt-3 flex gap-4 text-xs text-gray-500">
- {entry.bedtime && (
- <span className="flex items-center gap-1">
- <FaMoon className="w-3 h-3" /> Bedtime: {entry.bedtime}
- </span>
- )}
- {entry.wakeTime && (
- <span className="flex items-center gap-1">
- <FaClock className="w-3 h-3" /> Wake: {entry.wakeTime}
- </span>
- )}
- </div>
- )}
- {entry.notes && (
- <p className="mt-2 text-xs text-gray-500">{entry.notes}</p>
- )}
- </div>
- )}
- </div>
- )}
+        {/* Sleep arc progress bar */}
+        <div className="mb-3">
+         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div
+           className={`h-full rounded-full transition-all duration-700 ${
+            entry.durationMin / targetMin >= 0.9 ? 'bg-emerald-400' :
+            entry.durationMin / targetMin >= 0.7 ? 'bg-yellow-400' : 'bg-red-400'
+           }`}
+           style={{ width: `${Math.min((entry.durationMin / targetMin) * 100, 100)}%` }}
+          />
+         </div>
+         <p className="text-white/40 text-xs mt-1 text-right">
+          {Math.round((entry.durationMin / targetMin) * 100)}% of target
+         </p>
+        </div>
 
- {/* Add Sleep Modal */}
- {showAddModal && (
- <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
- <div className="bg-white w-full md:max-w-lg md:rounded-lg rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
- <div className="flex items-center justify-between p-4 border-b">
- <h3 className="text-lg font-semibold text-gray-800">Log Sleep</h3>
- <button
- onClick={() => { setShowAddModal(false); resetForm() }}
- className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
- >
- &times;
- </button>
- </div>
- <div className="p-4 space-y-4">
- {/* Duration: Hours and Minutes */}
- <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
- <div className="flex gap-3">
- <div className="flex-1">
- <label className="block text-xs text-gray-500 mb-1">Hours</label>
- <input
- type="number"
- value={formHours}
- onChange={(e) => setFormHours(Math.max(0, Math.min(23, Number(e.target.value))))}
- min={0}
- max={23}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
- />
- </div>
- <div className="flex-1">
- <label className="block text-xs text-gray-500 mb-1">Minutes</label>
- <input
- type="number"
- value={formMinutes}
- onChange={(e) => setFormMinutes(Math.max(0, Math.min(59, Number(e.target.value))))}
- min={0}
- max={59}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
- />
- </div>
- </div>
- </div>
+        {/* Bedtime/wake row */}
+        {(entry.bedtime || entry.wakeTime) && (
+         <div className="flex gap-4 pt-3 border-t border-white/10">
+          {entry.bedtime && (
+           <div className="flex items-center gap-1.5">
+            <FaMoon className="w-3.5 h-3.5 text-indigo-300" />
+            <div>
+             <p className="text-white/40 text-[10px]">Bedtime</p>
+             <p className="text-white font-semibold text-sm">{formatTime12h(entry.bedtime)}</p>
+            </div>
+           </div>
+          )}
+          {entry.wakeTime && (
+           <div className="flex items-center gap-1.5">
+            <FaClock className="w-3.5 h-3.5 text-amber-300" />
+            <div>
+             <p className="text-white/40 text-[10px]">Wake up</p>
+             <p className="text-white font-semibold text-sm">{formatTime12h(entry.wakeTime)}</p>
+            </div>
+           </div>
+          )}
+         </div>
+        )}
+        {entry.notes && (
+         <p className="mt-3 pt-3 border-t border-white/10 text-white/50 text-xs">{entry.notes}</p>
+        )}
+       </div>
 
- {/* Quality */}
- <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Quality</label>
- <div className="flex gap-2">
- {QUALITIES.map((q) => (
- <button
- key={q.value}
- onClick={() => setFormQuality(q.value)}
- className={`flex-1 py-2 text-xs rounded-lg font-medium capitalize transition-colors ${
- formQuality === q.value
- ? qualityActiveMap[q.color]
- : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
- }`}
- >
- {q.label}
- </button>
- ))}
- </div>
- </div>
+       {/* Log new (replace) */}
+       <button
+        onClick={() => setShowAddModal(true)}
+        className="w-full py-2.5 border-2 border-dashed border-indigo-200 rounded-xl text-sm text-indigo-500 hover:bg-indigo-50 transition-colors font-medium"
+       >
+        Update sleep log
+       </button>
+      </>
+     )}
+    </div>
+   )}
 
- {/* Bedtime */}
- <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Bedtime (optional)</label>
- <input
- type="time"
- value={formBedtime}
- onChange={(e) => handleBedtimeChange(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
- />
- </div>
+   {/* AI Insight */}
+   {insight && !insightDismissed && (
+    <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-[#001E40] to-[#0C6780] text-white shadow-md">
+     <span className="text-xl flex-shrink-0 mt-0.5">{insight.emoji}</span>
+     <p className="text-sm leading-relaxed flex-1">{insight.text}</p>
+     <button onClick={() => setInsightDismissed(true)} className="flex-shrink-0 text-white/60 hover:text-white" aria-label="Dismiss">
+      <FaTimes className="w-3.5 h-3.5" />
+     </button>
+    </div>
+   )}
 
- {/* Wake Time */}
- <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Wake Time (optional)</label>
- <input
- type="time"
- value={formWakeTime}
- onChange={(e) => handleWakeTimeChange(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
- />
- </div>
+   {/* Sleep tips when no entry */}
+   {!loading && !entry && (
+    <div className="bg-white rounded-xl p-4 shadow-sm">
+     <p className="text-xs font-semibold text-[#001E40] mb-3 flex items-center gap-1.5">
+      <FaStar className="text-amber-400" /> Sleep tips
+     </p>
+     <ul className="space-y-2">
+      {[
+       "Keep a consistent bedtime — even on weekends",
+       "Stop screens 45 min before bed for deeper sleep",
+       "A cool, dark room helps you fall asleep faster",
+       "Avoid caffeine after 2 PM",
+      ].map((tip, i) => (
+       <li key={i} className="text-xs text-gray-500 flex items-start gap-2">
+        <span className="text-indigo-300 mt-0.5">•</span>{tip}
+       </li>
+      ))}
+     </ul>
+    </div>
+   )}
 
- {/* Notes */}
- <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
- <textarea
- value={formNotes}
- onChange={(e) => setFormNotes(e.target.value)}
- placeholder="How did you sleep?"
- rows={2}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
- />
- </div>
+   {/* Add Sleep Modal — bedtime/wake as primary */}
+   {showAddModal && (
+    <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
+     <div className="bg-white w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
+      <div className="flex items-center justify-between p-4 border-b">
+       <div>
+        <h3 className="text-base font-bold text-[#001E40]">Log Sleep</h3>
+        <p className="text-xs text-gray-400">Enter bedtime & wake time — duration is calculated automatically</p>
+       </div>
+       <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-gray-400 hover:text-gray-600">&times;</button>
+      </div>
+      <div className="p-4 space-y-5">
+       {/* Bedtime + Wake time — side by side */}
+       <div className="grid grid-cols-2 gap-4">
+        <div>
+         <label className="block text-sm font-medium text-[#001E40] mb-1.5 flex items-center gap-1.5">
+          <FaMoon className="text-indigo-400 text-xs" /> Bedtime
+         </label>
+         <input
+          type="time"
+          value={formBedtime}
+          onChange={(e) => setFormBedtime(e.target.value)}
+          className="w-full px-3 py-3 border-2 border-gray-200 rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+         />
+        </div>
+        <div>
+         <label className="block text-sm font-medium text-[#001E40] mb-1.5 flex items-center gap-1.5">
+          <FaClock className="text-amber-400 text-xs" /> Wake up
+         </label>
+         <input
+          type="time"
+          value={formWakeTime}
+          onChange={(e) => setFormWakeTime(e.target.value)}
+          className="w-full px-3 py-3 border-2 border-gray-200 rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+         />
+        </div>
+       </div>
 
- {/* Submit */}
- <button
- onClick={handleAdd}
- disabled={submitting}
- className="w-full py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
- >
- {submitting ? 'Saving...' : 'Log Sleep'}
- </button>
- </div>
- </div>
- </div>
- )}
- </div>
+       {/* Derived duration preview */}
+       {derivedDuration !== null && (
+        <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-xl">
+         <FaBed className="text-indigo-500 text-lg flex-shrink-0" />
+         <div>
+          <p className="text-xs text-gray-500">Sleep duration</p>
+          <p className="text-2xl font-black text-[#001E40]">{formatDuration(derivedDuration)}</p>
+         </div>
+         {derivedDuration < 360 && (
+          <p className="text-xs text-amber-600 ml-auto text-right">Less than 6 hours<br/>Consider an earlier bedtime</p>
+         )}
+         {derivedDuration >= 420 && (
+          <p className="text-xs text-emerald-600 ml-auto text-right">✓ Good duration</p>
+         )}
+        </div>
+       )}
+
+       {/* Quality */}
+       <div>
+        <label className="block text-sm font-medium text-[#001E40] mb-2">How did you sleep?</label>
+        <div className="grid grid-cols-5 gap-1.5">
+         {QUALITIES.map((q) => (
+          <button
+           key={q.value}
+           onClick={() => setFormQuality(q.value)}
+           className={`py-2 text-[11px] rounded-xl font-medium text-center transition-all leading-tight ${
+            formQuality === q.value ? q.activeClass : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+           }`}
+          >
+           {q.label}
+          </button>
+         ))}
+        </div>
+       </div>
+
+       {/* Notes */}
+       <div>
+        <label className="block text-sm font-medium text-[#001E40] mb-1">Notes (optional)</label>
+        <textarea
+         value={formNotes}
+         onChange={(e) => setFormNotes(e.target.value)}
+         placeholder="Vivid dreams? Woke up during the night? Note anything unusual."
+         rows={2}
+         className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/40 resize-none"
+        />
+       </div>
+
+       <button
+        onClick={handleAdd}
+        disabled={submitting || derivedDuration === null}
+        className="w-full py-3 bg-[#001E40] text-white rounded-xl font-medium hover:bg-[#0C6780] transition-colors disabled:opacity-50"
+       >
+        {submitting ? 'Saving...' : derivedDuration ? `Log ${formatDuration(derivedDuration)} of sleep` : 'Set bedtime & wake time above'}
+       </button>
+      </div>
+     </div>
+    </div>
+   )}
+  </div>
  )
 }
