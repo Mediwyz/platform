@@ -220,10 +220,10 @@ export class WorkflowEngineService {
     const targetStep = findStepByStatus(steps, targetStatus);
     if (!targetStep) throw new BadRequestException(`Step definition not found for status "${targetStatus}"`);
 
-    // Merge WorkflowStepType.defaultFlags into the step's own flags so that
-    // step-type behaviour (e.g. RESULTS_READY requires_content, VIDEO_CALL_READY
-    // triggers_video_call) is SYSTEMATIC — the admin picks a step type and the
-    // flags come with it automatically. Explicit step flags always win over defaults.
+    // Merge WorkflowStepType.defaultFlags into the TARGET step's own flags so that
+    // step-type behaviour (e.g. VIDEO_CALL_READY triggers_video_call) is SYSTEMATIC —
+    // the admin picks a step type and the execution flags come with it automatically.
+    // Explicit step flags always win over defaults.
     let resolvedFlags: StepFlags = { ...targetStep.flags };
     const stepTypeName: string | undefined = (targetStep as any).stepType;
     if (stepTypeName) {
@@ -234,6 +234,24 @@ export class WorkflowEngineService {
         const typeDefaults = stepTypeRow.defaultFlags as StepFlags;
         // Defaults apply only where the step has NOT set the flag explicitly
         resolvedFlags = { ...typeDefaults, ...resolvedFlags };
+      }
+    }
+
+    // Also resolve CURRENT step flags for departure guards (requires_content,
+    // requires_prescription). These flags say "you must supply X before leaving
+    // this step" — so we check them against the step the booking is leaving,
+    // not the step it's entering. Execution triggers (video room, payment, etc.)
+    // continue to use resolvedFlags (target step) via Tier 2/3 below.
+    const currentStepDef = findStepByStatus(steps, instance.currentStatus);
+    let currentStepResolvedFlags: StepFlags = { ...currentStepDef?.flags };
+    const currentStepTypeName: string | undefined = (currentStepDef as any)?.stepType;
+    if (currentStepTypeName) {
+      const currentStepTypeRow = await this.prisma.workflowStepType.findUnique({
+        where: { code: currentStepTypeName }, select: { defaultFlags: true },
+      });
+      if (currentStepTypeRow?.defaultFlags) {
+        const typeDefaults = currentStepTypeRow.defaultFlags as StepFlags;
+        currentStepResolvedFlags = { ...typeDefaults, ...currentStepResolvedFlags };
       }
     }
 
@@ -250,12 +268,14 @@ export class WorkflowEngineService {
     if (!isSelfTransition) {
       const preErrors: string[] = [];
 
-      // Step-type-driven validation (requires_content, requires_prescription)
-      // Uses resolvedFlags — the merge of targetStep.flags + WorkflowStepType.defaultFlags —
-      // so that step types like RESULTS_READY carry their content requirement automatically.
+      // Step-type-driven departure guards (requires_content, requires_prescription).
+      // Checks the CURRENT step's flags — these guard leaving the current step,
+      // not entering the target step. The content handler receives a ctx with
+      // current-step flags so it can verify the right content type was provided.
       for (const [flagKey, handler] of this.flagHandlers) {
-        if (resolvedFlags[flagKey as keyof StepFlags] && handler.validate) {
-          const result = await handler.validate(ctx);
+        if (currentStepResolvedFlags[flagKey as keyof StepFlags] && handler.validate) {
+          const ctxForValidation = { ...ctx, flags: currentStepResolvedFlags };
+          const result = await handler.validate(ctxForValidation);
           if (!result.valid) preErrors.push(...result.errors);
         }
       }
