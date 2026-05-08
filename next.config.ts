@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs';
 
 const securityHeaders = [
   {
@@ -138,4 +139,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Only upload source maps when DSN is configured (i.e. in production)
+  silent: !process.env.SENTRY_DSN,
+  disableLogger: true,
+  automaticVercelMonitors: false,
+});

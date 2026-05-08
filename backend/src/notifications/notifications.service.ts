@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsGateway } from './notifications.gateway';
+import { EmailService } from '../shared/services/email.service';
+import { WebPushService } from '../shared/services/web-push.service';
 
 interface CreateNotificationParams {
   userId: string;
@@ -17,20 +19,27 @@ interface CreateNotificationParams {
   groupKey?: string;
 }
 
+// Notification types that warrant an email
+const EMAIL_TYPES = new Set([
+  'booking_confirmed', 'booking_status', 'document_reviewed',
+  'payment_received', 'appointment_reminder',
+]);
+
 /**
  * Replaces lib/notifications.ts createNotification().
- * Creates DB record + emits Socket.IO event to user room.
+ * Creates DB record + emits Socket.IO event + sends email + web push.
+ * All side-channels (email, push) are fire-and-forget — they never block the main flow.
  */
 @Injectable()
 export class NotificationsService {
   constructor(
     private prisma: PrismaService,
     private gateway: NotificationsGateway,
+    private email: EmailService,
+    private webPush: WebPushService,
   ) {}
 
   async createNotification(params: CreateNotificationParams) {
-    // Derive a default groupKey so same-booking updates on the same day
-    // collapse into one row in the inbox.
     const groupKey = params.groupKey
       ?? (params.referenceId && params.referenceType
             ? `${params.referenceType}:${params.referenceId}`
@@ -49,7 +58,7 @@ export class NotificationsService {
       },
     });
 
-    // Emit real-time notification via Socket.IO
+    // 1. Real-time via Socket.IO
     this.gateway.emitToUser(params.userId, 'notification:new', {
       id: notification.id,
       type: notification.type,
@@ -62,13 +71,48 @@ export class NotificationsService {
       groupKey: notification.groupKey,
     });
 
+    // 2. Email + web push — fire and forget
+    this.dispatchSideChannels(params).catch(() => {});
+
     return notification;
   }
 
-  /**
-   * Mark a single notification read and broadcast 'notification:read' over Socket.IO
-   * so other tabs/devices belonging to the same user update without re-fetching.
-   */
+  private async dispatchSideChannels(params: CreateNotificationParams) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: params.userId },
+      select: {
+        email: true, firstName: true,
+        pushSubscriptions: { select: { endpoint: true, p256dh: true, auth: true } },
+      },
+    });
+    if (!user) return;
+
+    // Email — only for high-signal types
+    if (EMAIL_TYPES.has(params.type) && user.email) {
+      await this.email.sendStatusUpdate({
+        to: user.email,
+        userName: user.firstName,
+        bookingId: params.referenceId ?? '',
+        serviceName: (params.payload?.serviceName as string) ?? 'your booking',
+        newStatus: params.type,
+        statusLabel: params.title,
+        message: params.message,
+      }).catch(() => {});
+    }
+
+    // Web push — to all registered browsers
+    for (const sub of user.pushSubscriptions) {
+      const ok = await this.webPush.send(
+        { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+        { title: params.title, body: params.message, url: params.referenceId ? `/bookings/${params.referenceId}` : '/', tag: params.groupKey },
+      );
+      // Remove expired subscription
+      if (!ok) {
+        this.prisma.pushSubscription.delete({ where: { endpoint: sub.endpoint } }).catch(() => {});
+      }
+    }
+  }
+
   async markRead(userId: string, notificationId: string) {
     const updated = await this.prisma.notification.updateMany({
       where: { id: notificationId, userId, readAt: null },
@@ -80,7 +124,6 @@ export class NotificationsService {
     return { ok: updated.count > 0 };
   }
 
-  /** Mark every unread notification read; broadcast a single 'notification:read-all' event. */
   async markAllRead(userId: string) {
     const updated = await this.prisma.notification.updateMany({
       where: { userId, readAt: null },

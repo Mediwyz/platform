@@ -255,4 +255,32 @@ export class UsersController {
     await this.usersService.deleteBilling(id, body.billingId);
     return { success: true, message: 'Billing info removed' };
   }
+
+  // ─── Push subscriptions ─────────────────────────────────────────────────
+
+  @Post(':id/push-subscription')
+  async addPushSubscription(
+    @Param('id') id: string,
+    @Body() body: { endpoint: string; p256dh: string; auth: string; userAgent?: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    this.assertSelf(user, id);
+    await this.prisma.pushSubscription.upsert({
+      where: { endpoint: body.endpoint },
+      create: { userId: id, endpoint: body.endpoint, p256dh: body.p256dh, auth: body.auth, userAgent: body.userAgent },
+      update: { p256dh: body.p256dh, auth: body.auth, userAgent: body.userAgent },
+    });
+    return { success: true, message: 'Push subscription registered' };
+  }
+
+  @Delete(':id/push-subscription')
+  async removePushSubscription(
+    @Param('id') id: string,
+    @Body() body: { endpoint: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    this.assertSelf(user, id);
+    await this.prisma.pushSubscription.deleteMany({ where: { userId: id, endpoint: body.endpoint } });
+    return { success: true, message: 'Push subscription removed' };
+  }
 }
