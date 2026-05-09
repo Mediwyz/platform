@@ -84,8 +84,8 @@ export default function MyServicesManager({ providerType, slug }: { providerType
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  // Panel views: 'list' | 'add-catalog' | 'manage-workflows' | 'edit-price'
-  type Panel = 'list' | 'add-catalog' | 'manage-workflows' | 'edit-price'
+  // Panel views
+  type Panel = 'list' | 'add-catalog' | 'create-service' | 'manage-workflows' | 'edit-price'
   const [panel, setPanel] = useState<Panel>('list')
 
   // Catalog add flow
@@ -102,6 +102,14 @@ export default function MyServicesManager({ providerType, slug }: { providerType
   // Edit price for existing service
   const [editingConfig, setEditingConfig] = useState<ServiceConfig | null>(null)
   const [editPriceValue, setEditPriceValue] = useState('')
+
+  // Create custom service form
+  const [createName, setCreateName] = useState('')
+  const [createDescription, setCreateDescription] = useState('')
+  const [createCategory, setCreateCategory] = useState('')
+  const [createEmoji, setCreateEmoji] = useState('')
+  const [createPrice, setCreatePrice] = useState('')
+  const [createDuration, setCreateDuration] = useState('')
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
 
@@ -148,17 +156,16 @@ export default function MyServicesManager({ providerType, slug }: { providerType
   // Services already offered by this provider (by platformServiceId)
   const offeredIds = useMemo(() => new Set(configs.filter(c => c.isActive).map(c => c.platformServiceId)), [configs])
 
-  // Catalog services not yet offered
+  // All catalog services, filtered only by search query
   const filteredCatalog = useMemo(() => {
     const q = catalogSearch.toLowerCase()
     return catalogGroups.map(group => ({
       ...group,
       services: group.services.filter(s =>
-        !offeredIds.has(s.id) &&
-        (!q || s.serviceName.toLowerCase().includes(q))
+        !q || s.serviceName.toLowerCase().includes(q)
       ),
     })).filter(g => g.services.length > 0)
-  }, [catalogGroups, offeredIds, catalogSearch])
+  }, [catalogGroups, catalogSearch])
 
   // Active configs
   const activeConfigs = configs.filter(c => c.isActive)
@@ -171,6 +178,46 @@ export default function MyServicesManager({ providerType, slug }: { providerType
     setNewPriceOverride('')
     setNewWorkflowIds(new Set())
     setPanel('add-catalog')
+  }
+
+  function openCreateService() {
+    setCreateName('')
+    setCreateDescription('')
+    setCreateCategory('')
+    setCreateEmoji('')
+    setCreatePrice('')
+    setCreateDuration('')
+    setPanel('create-service')
+  }
+
+  async function handleCreateService() {
+    if (!createName.trim()) { showToast('error', 'Service name is required'); return }
+    setSaving(true)
+    try {
+      const res = await fetch('/api/services/custom', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: createName.trim(),
+          description: createDescription.trim() || undefined,
+          category: createCategory.trim() || undefined,
+          emoji: createEmoji.trim() || undefined,
+          price: createPrice ? Number(createPrice) : undefined,
+          duration: createDuration ? Number(createDuration) : undefined,
+        }),
+      })
+      const j = await res.json()
+      if (!j.success) throw new Error(j.message)
+      showToast('success', `"${createName}" created and added to your services`)
+      setPanel('list')
+      fetchMyServices()
+      fetchCatalog()
+    } catch (e) {
+      showToast('error', e instanceof Error ? e.message : 'Failed to create service')
+    } finally {
+      setSaving(false)
+    }
   }
 
   function openManageWorkflows(config: ServiceConfig) {
@@ -315,37 +362,30 @@ export default function MyServicesManager({ providerType, slug }: { providerType
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          {panel !== 'list' ? (
+          {panel !== 'list' && (
             <button
               onClick={() => setPanel('list')}
               className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0C6780] mb-2 transition-colors"
             >
               <FaArrowLeft className="text-xs" /> Back to My Services
             </button>
-          ) : null}
+          )}
 
           <h1 className="text-2xl font-bold text-[#001E40]">
             {panel === 'list'             && 'My Services'}
-            {panel === 'add-catalog'      && 'Add a Service'}
+            {panel === 'add-catalog'      && 'Add from Catalog'}
+            {panel === 'create-service'   && 'Create a Service'}
             {panel === 'manage-workflows' && 'Appointment Types'}
             {panel === 'edit-price'       && 'Edit Price'}
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
             {panel === 'list'             && `${activeConfigs.length} service${activeConfigs.length !== 1 ? 's' : ''} — patients see these when booking`}
-            {panel === 'add-catalog'      && 'Pick a service from the platform catalog and choose which appointment types you offer'}
+            {panel === 'add-catalog'      && 'Pick any service from the catalog and choose which appointment types you offer'}
+            {panel === 'create-service'   && 'Create a new service template shared with all providers of your type'}
             {panel === 'manage-workflows' && `Appointment types patients can choose for "${managingConfig?.platformService.serviceName}"`}
             {panel === 'edit-price'       && `Override the default price for "${editingConfig?.platformService.serviceName}"`}
           </p>
         </div>
-
-        {panel === 'list' && (
-          <button
-            onClick={openAddCatalog}
-            className="flex items-center gap-2 px-4 py-2.5 bg-[#0C6780] text-white rounded-xl text-sm font-semibold hover:bg-[#0a5a6e] transition-colors shadow-sm"
-          >
-            <FaPlus className="text-xs" /> Add Service
-          </button>
-        )}
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════ */}
@@ -359,7 +399,7 @@ export default function MyServicesManager({ providerType, slug }: { providerType
             ))}
           </div>
         ) : activeConfigs.length === 0 ? (
-          <EmptyServicesState onAdd={openAddCatalog} />
+          <EmptyServicesState onAdd={openAddCatalog} onCreate={openCreateService} />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {activeConfigs.map(config => (
@@ -371,16 +411,33 @@ export default function MyServicesManager({ providerType, slug }: { providerType
                 onRemove={() => handleRemoveService(config)}
               />
             ))}
-            {/* Add tile */}
+            {/* Add from catalog tile */}
             <button
               onClick={openAddCatalog}
               className="flex flex-col items-center justify-center gap-3 min-h-[180px] rounded-2xl border-2 border-dashed border-gray-200
                 hover:border-[#0C6780] hover:bg-[#0C6780]/5 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-gray-100 group-hover:bg-[#0C6780]/15 flex items-center justify-center transition-colors">
-                <FaPlus className="text-gray-400 group-hover:text-[#0C6780] transition-colors" />
+                <FaListAlt className="text-gray-400 group-hover:text-[#0C6780] transition-colors" />
               </div>
-              <p className="text-sm font-medium text-gray-400 group-hover:text-[#0C6780] transition-colors">Add a service</p>
+              <div className="text-center">
+                <p className="text-sm font-medium text-gray-700 group-hover:text-[#0C6780] transition-colors">Add from catalog</p>
+                <p className="text-xs text-gray-400 mt-0.5">Platform &amp; shared services</p>
+              </div>
+            </button>
+            {/* Create service tile */}
+            <button
+              onClick={openCreateService}
+              className="flex flex-col items-center justify-center gap-3 min-h-[180px] rounded-2xl border-2 border-dashed border-gray-200
+                hover:border-purple-400 hover:bg-purple-50/50 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gray-100 group-hover:bg-purple-100 flex items-center justify-center transition-colors">
+                <FaPlus className="text-gray-400 group-hover:text-purple-600 transition-colors" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-medium text-gray-700 group-hover:text-purple-600 transition-colors">Create a service</p>
+                <p className="text-xs text-gray-400 mt-0.5">Share with other providers</p>
+              </div>
             </button>
           </div>
         )
@@ -409,11 +466,10 @@ export default function MyServicesManager({ providerType, slug }: { providerType
               {filteredCatalog.length === 0 ? (
                 <div className="text-center py-12 text-gray-400">
                   <FaConciergeBell className="text-3xl mx-auto mb-3" />
-                  <p className="text-sm">
-                    {offeredIds.size > 0 && !catalogSearch
-                      ? 'You\'re already offering all available platform services!'
-                      : 'No services match your search.'}
-                  </p>
+                  <p className="text-sm">No services match your search.</p>
+                  <button onClick={openCreateService} className="mt-3 text-sm font-semibold text-[#0C6780] hover:underline">
+                    Create a new service →
+                  </button>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -423,30 +479,49 @@ export default function MyServicesManager({ providerType, slug }: { providerType
                         {group.category.replace(/^[A-Z_]+\s—\s/, '')}
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {group.services.map(svc => (
-                          <button
-                            key={svc.id}
-                            onClick={() => { setSelectedCatalogSvc(svc); setNewWorkflowIds(new Set()) }}
-                            className="flex items-center gap-3 px-4 py-3 rounded-2xl border-2 border-gray-100 bg-white
-                              hover:border-[#0C6780]/60 hover:bg-[#0C6780]/5 transition-all text-left"
-                          >
-                            <div className="w-10 h-10 rounded-xl bg-[#0C6780]/10 flex items-center justify-center flex-shrink-0">
-                              {svc.emoji ? (
-                                <span className="text-xl">{svc.emoji}</span>
-                              ) : svc.iconKey ? (
-                                <Icon icon={svc.iconKey} width={24} height={24} color="#0C6780" />
-                              ) : (
-                                <FaConciergeBell className="text-[#0C6780]" />
+                        {group.services.map(svc => {
+                          const alreadyAdded = offeredIds.has(svc.id)
+                          const existingConfig = configs.find(c => c.platformServiceId === svc.id && c.isActive)
+                          return (
+                            <button
+                              key={svc.id}
+                              onClick={() => {
+                                if (alreadyAdded && existingConfig) {
+                                  openManageWorkflows(existingConfig)
+                                } else {
+                                  setSelectedCatalogSvc(svc)
+                                  setNewWorkflowIds(new Set())
+                                }
+                              }}
+                              className={`relative flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all text-left ${
+                                alreadyAdded
+                                  ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50'
+                                  : 'border-gray-100 bg-white hover:border-[#0C6780]/60 hover:bg-[#0C6780]/5'
+                              }`}
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-[#0C6780]/10 flex items-center justify-center flex-shrink-0">
+                                {svc.emoji ? (
+                                  <span className="text-xl">{svc.emoji}</span>
+                                ) : svc.iconKey ? (
+                                  <Icon icon={svc.iconKey} width={24} height={24} color="#0C6780" />
+                                ) : (
+                                  <FaConciergeBell className="text-[#0C6780]" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-[#001E40] truncate">{svc.serviceName}</p>
+                                <p className="text-xs text-gray-400">Rs {svc.defaultPrice.toLocaleString()}
+                                  {svc.duration ? ` · ${svc.duration}m` : ''}
+                                </p>
+                              </div>
+                              {alreadyAdded && (
+                                <span className="flex-shrink-0 flex items-center gap-1 text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">
+                                  <FaCheckCircle className="text-[9px]" /> Added
+                                </span>
                               )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-semibold text-[#001E40] truncate">{svc.serviceName}</p>
-                              <p className="text-xs text-gray-400">Rs {svc.defaultPrice.toLocaleString()}
-                                {svc.duration ? ` · ${svc.duration}m` : ''}
-                              </p>
-                            </div>
-                          </button>
-                        ))}
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
                   ))}
@@ -568,6 +643,106 @@ export default function MyServicesManager({ providerType, slug }: { providerType
                 <span className="flex gap-1">{[0,1,2].map(i => <span key={i} className="w-1.5 h-1.5 rounded-full bg-white/70 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}</span>
               ) : (
                 <><FaSave className="text-xs" /> Save Appointment Types</>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      {/* PANEL: CREATE CUSTOM SERVICE                                       */}
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      {panel === 'create-service' && (
+        <div className="max-w-lg space-y-5">
+          <div className="bg-purple-50 border border-purple-200 rounded-xl px-4 py-3 text-sm text-purple-800">
+            <strong>Shared template:</strong> this service will be visible to all providers of your type and can be added to their catalog too.
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Service name <span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                value={createName}
+                onChange={e => setCreateName(e.target.value)}
+                placeholder="e.g. Home Blood Pressure Check"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                autoFocus
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Emoji icon</label>
+                <input
+                  type="text"
+                  value={createEmoji}
+                  onChange={e => setCreateEmoji(e.target.value)}
+                  placeholder="🩺"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Category</label>
+                <input
+                  type="text"
+                  value={createCategory}
+                  onChange={e => setCreateCategory(e.target.value)}
+                  placeholder="e.g. Consultation"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Description</label>
+              <textarea
+                value={createDescription}
+                onChange={e => setCreateDescription(e.target.value)}
+                placeholder="What does this service include?"
+                rows={2}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 resize-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Default price (Rs)</label>
+                <input
+                  type="number"
+                  value={createPrice}
+                  onChange={e => setCreatePrice(e.target.value)}
+                  placeholder="500"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Duration (minutes)</label>
+                <input
+                  type="number"
+                  value={createDuration}
+                  onChange={e => setCreateDuration(e.target.value)}
+                  placeholder="30"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+            <button onClick={() => setPanel('list')} className="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
+              Cancel
+            </button>
+            <button
+              onClick={handleCreateService}
+              disabled={saving || !createName.trim()}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-purple-600 text-white rounded-xl text-sm font-semibold
+                hover:bg-purple-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {saving ? (
+                <span className="flex gap-1">{[0,1,2].map(i => <span key={i} className="w-1.5 h-1.5 rounded-full bg-white/70 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}</span>
+              ) : (
+                <><FaPlus className="text-xs" /> Create &amp; Add to My Services</>
               )}
             </button>
           </div>
@@ -835,7 +1010,7 @@ function WorkflowSelector({
 
 // ─── Empty State ───────────────────────────────────────────────────────────────
 
-function EmptyServicesState({ onAdd }: { onAdd: () => void }) {
+function EmptyServicesState({ onAdd, onCreate }: { onAdd: () => void; onCreate: () => void }) {
   return (
     <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-200">
       <div className="w-16 h-16 bg-[#0C6780]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -843,14 +1018,22 @@ function EmptyServicesState({ onAdd }: { onAdd: () => void }) {
       </div>
       <h3 className="text-base font-bold text-[#001E40] mb-1">No services yet</h3>
       <p className="text-sm text-gray-400 max-w-xs mx-auto mb-5">
-        Add services from the platform catalog. For each service, choose which appointment types (workflows) you offer — patients will see these choices when booking.
+        Add from the service catalog or create your own. For each service, you choose which appointment types patients can book.
       </p>
-      <button
-        onClick={onAdd}
-        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0C6780] text-white rounded-xl text-sm font-semibold hover:bg-[#0a5a6e] transition-colors"
-      >
-        <FaPlus className="text-xs" /> Add Your First Service
-      </button>
+      <div className="flex items-center justify-center gap-3">
+        <button
+          onClick={onAdd}
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0C6780] text-white rounded-xl text-sm font-semibold hover:bg-[#0a5a6e] transition-colors"
+        >
+          <FaListAlt className="text-xs" /> Add from catalog
+        </button>
+        <button
+          onClick={onCreate}
+          className="inline-flex items-center gap-2 px-5 py-2.5 border border-purple-300 text-purple-600 rounded-xl text-sm font-semibold hover:bg-purple-50 transition-colors"
+        >
+          <FaPlus className="text-xs" /> Create new
+        </button>
+      </div>
     </div>
   )
 }

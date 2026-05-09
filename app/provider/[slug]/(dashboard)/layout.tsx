@@ -5,7 +5,7 @@ import { createDashboardLayout } from '@/lib/dashboard/createDashboardLayout'
 import type { SidebarItem } from '@/components/dashboard/DashboardSidebar'
 import {
   FaHome, FaRss, FaBriefcaseMedical, FaMoneyBillWave, FaCubes,
-  FaCogs, FaProjectDiagram, FaVideo, FaComments, FaRobot,
+  FaCogs, FaProjectDiagram, FaVideo, FaPhone, FaComments, FaRobot,
   FaHeartbeat, FaShieldAlt, FaUsersCog, FaSitemap, FaTag,
   FaBuilding, FaCalendarAlt,
 } from 'react-icons/fa'
@@ -24,6 +24,7 @@ function getAllSidebarItems(base: string): SidebarItem[] {
     { id: 'availability', label: 'My Availability', labelKey: 'nav.availability', icon: FaCalendarAlt, color: 'text-teal-600', bgColor: 'bg-teal-50', href: `${base}/availability` },
     { id: 'workflows', label: 'Workflows', labelKey: 'nav.workflows', icon: FaProjectDiagram, color: 'text-indigo-600', bgColor: 'bg-indigo-50', href: `${base}/workflows` },
     { id: 'video', label: 'Video Call', labelKey: 'nav.video', icon: FaVideo, color: 'text-teal-600', bgColor: 'bg-teal-50', href: `${base}/video` },
+    { id: 'audio', label: 'Audio Call', labelKey: 'nav.audio', icon: FaPhone, color: 'text-cyan-600', bgColor: 'bg-cyan-50', href: `${base}/audio` },
     { id: 'messages', label: 'Messages', labelKey: 'nav.messages', icon: FaComments, color: 'text-pink-600', bgColor: 'bg-pink-50', href: `${base}/messages` },
     { id: 'my-company', label: 'My Company', labelKey: 'nav.myCompany', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: `${base}/my-company` },
     ...getPatientHealthItems(base),
@@ -38,7 +39,7 @@ function getActiveSectionFromPath(pathname: string): string {
     feed: 'feed', practice: 'practice', billing: 'billing',
     services: 'services', inventory: 'inventory', workflows: 'workflows',
     availability: 'availability',
-    video: 'video', messages: 'messages', 'ai-assistant': 'ai-assistant',
+    video: 'video', audio: 'audio', messages: 'messages', 'ai-assistant': 'ai-assistant',
     'my-health': 'my-health', 'my-company': 'my-company', administration: 'administration',
     roles: 'roles', network: 'network', profile: 'profile',
   }

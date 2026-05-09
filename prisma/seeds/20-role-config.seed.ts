@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 export async function seedRoleConfig(prisma: PrismaClient) {
-  const commonFeatures = ['feed', 'overview', 'profile', 'billing', 'video', 'messages', 'settings']
+  const commonFeatures = ['feed', 'overview', 'profile', 'billing', 'video', 'audio', 'messages', 'settings']
 
   const roleFeatures: Record<string, string[]> = {
     PATIENT: [
