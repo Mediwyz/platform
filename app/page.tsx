@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 import HeroSection from '@/components/home/HeroSection'
 import HowItWorksSection from '@/components/home/HowItWorksSection'
