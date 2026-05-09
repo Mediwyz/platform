@@ -181,13 +181,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
           </p>
 
-          {/* Feature pills — clickable, navigate to the relevant Discover tab */}
+          {/* Feature pills — clickable, scroll to the relevant section */}
           <div className="flex flex-wrap gap-2 mb-7">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
-              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  tab: 'providers' },
-              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          tab: 'services'  },
-              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      tab: 'health-shop' },
+              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'providers-section' },
+              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'services-section'  },
+              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'health-shop-section' },
             ].map(f => {
               const cls = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-[11px] font-medium text-white hover:bg-white/25 transition-colors cursor-pointer"
               if ('href' in f) return (
@@ -195,7 +195,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
               )
               return (
                 <button key={f.label} type="button" className={cls} onClick={() => {
-                  window.dispatchEvent(new CustomEvent('discover-tab', { detail: f.tab }))
+                  document.getElementById(f.sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}>
                   {f.icon} {f.label}
                 </button>
