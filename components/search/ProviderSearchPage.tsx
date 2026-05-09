@@ -119,6 +119,13 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  const [searchResults, setSearchResults] = useState<Provider[]>([])
  const [allProviders, setAllProviders] = useState<Provider[]>([])
  const [hasSearched, setHasSearched] = useState(!!initialQuery)
+
+ // Re-sync state from URL params after Suspense hydration / back-forward navigation
+ useEffect(() => {
+   const q = searchParams.get('q') || ''
+   setSearchQuery(q)
+   setHasSearched(!!q)
+ }, [searchParams])
  const [showHistory, setShowHistory] = useState(false)
 
  // Booking modal state
