@@ -1,10 +1,7 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PrismaService } from '../prisma/prisma.service';
 import { WorkflowEngineService } from '../workflow/workflow-engine.service';
-import { NotificationsService } from '../notifications/notifications.service';
 import { BookingsService } from '../bookings/bookings.service';
-import { ProvidersService } from '../providers/providers.service';
 import { SearchService } from '../search/search.service';
 import { Public } from '../auth/decorators/public.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -23,12 +20,9 @@ import { JwtPayload } from '../auth/jwt.strategy';
 @Controller()
 export class LegacyRoutesController {
   constructor(
-    private prisma: PrismaService,
-    private workflowEngine: WorkflowEngineService,
-    private notifications: NotificationsService,
-    private bookingsService: BookingsService,
-    private providersService: ProvidersService,
-    private searchService: SearchService,
+    private readonly workflowEngine: WorkflowEngineService,
+    private readonly bookingsService: BookingsService,
+    private readonly searchService: SearchService,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -140,12 +134,8 @@ export class LegacyRoutesController {
 
   @Get('bookings/service')
   async listServiceBookings(@CurrentUser() user: JwtPayload) {
-    const patientProfile = await this.prisma.patientProfile.findUnique({ where: { userId: user.sub }, select: { id: true } });
-    const bookings = await this.prisma.serviceBooking.findMany({
-      where: { OR: [...(patientProfile ? [{ patientId: patientProfile.id }] : []), { providerUserId: user.sub }] },
-      orderBy: { createdAt: 'desc' }, take: 50,
-    });
-    return { success: true, data: bookings };
+    const data = await this.bookingsService.listServiceBookingsForUser(user.sub);
+    return { success: true, data };
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -166,28 +156,7 @@ export class LegacyRoutesController {
         action, actionByUserId: user.sub, actionByRole: 'provider', notes,
       });
     } catch {
-      // Direct status update fallback — update BOTH the booking AND the workflow instance
-      const statusMap: Record<string, string> = { accept: 'confirmed', deny: 'cancelled', decline: 'cancelled', cancel: 'cancelled', complete: 'completed' };
-      const newStatus = statusMap[action] || action;
-
-      // Update ServiceBooking
-      try {
-        await this.prisma.serviceBooking.update({ where: { id: bookingId }, data: { status: newStatus } });
-      } catch {
-        const modelMap: Record<string, string> = { appointment: 'appointment', nurse_booking: 'nurseBooking', childcare_booking: 'childcareBooking', lab_test_booking: 'labTestBooking', emergency_booking: 'emergencyBooking' };
-        const modelName = modelMap[bookingType];
-        if (modelName) await (this.prisma as any)[modelName]?.update?.({ where: { id: bookingId }, data: { status: newStatus } }).catch(() => {});
-      }
-
-      // Also update the WorkflowInstance so the unified provider list reflects the change
-      await this.prisma.workflowInstance.updateMany({
-        where: { bookingId },
-        data: {
-          currentStatus: newStatus,
-          ...(newStatus === 'completed' ? { completedAt: new Date() } : {}),
-          ...(newStatus === 'cancelled' ? { cancelledAt: new Date() } : {}),
-        },
-      }).catch(() => {});
+      await this.bookingsService.fallbackStatusUpdate(bookingId, bookingType, action);
     }
 
     // Video room creation, payment, conversation, refund, and review request

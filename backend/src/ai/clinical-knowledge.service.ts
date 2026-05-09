@@ -76,4 +76,50 @@ export class ClinicalKnowledgeService {
     }
     return out;
   }
+
+  async listAll() {
+    return this.prisma.clinicalKnowledge.findMany({
+      orderBy: [{ active: 'desc' }, { category: 'asc' }, { conditionKey: 'asc' }],
+    });
+  }
+
+  async create(data: {
+    conditionKey: string; aliases?: string[]; dietaryGuidance: string;
+    category?: string; sources?: string[]; active?: boolean;
+  }) {
+    const row = await this.prisma.clinicalKnowledge.create({
+      data: {
+        conditionKey: data.conditionKey.trim().toLowerCase(),
+        aliases: (data.aliases ?? []).map((a) => a.trim().toLowerCase()),
+        dietaryGuidance: data.dietaryGuidance.trim(),
+        category: data.category ?? 'nutrition',
+        sources: data.sources ?? [],
+        active: data.active ?? true,
+      },
+    });
+    this.invalidate();
+    return row;
+  }
+
+  async update(id: string, data: Partial<{
+    conditionKey: string; aliases: string[]; dietaryGuidance: string;
+    category: string; sources: string[]; active: boolean;
+  }>) {
+    const update: any = {};
+    if (data.conditionKey !== undefined) update.conditionKey = data.conditionKey.trim().toLowerCase();
+    if (data.aliases !== undefined) update.aliases = data.aliases.map((a) => a.trim().toLowerCase());
+    if (data.dietaryGuidance !== undefined) update.dietaryGuidance = data.dietaryGuidance.trim();
+    if (data.category !== undefined) update.category = data.category;
+    if (data.sources !== undefined) update.sources = data.sources;
+    if (data.active !== undefined) update.active = data.active;
+
+    const row = await this.prisma.clinicalKnowledge.update({ where: { id }, data: update });
+    this.invalidate();
+    return row;
+  }
+
+  async remove(id: string) {
+    await this.prisma.clinicalKnowledge.delete({ where: { id } });
+    this.invalidate();
+  }
 }

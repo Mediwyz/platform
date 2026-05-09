@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Patch, Put, Delete, Param, Query, Body, ForbiddenException } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from './users.service';
 import { InvoiceService } from '../shared/services/invoice.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -12,9 +11,8 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 @Controller('users')
 export class UsersController {
   constructor(
-    private usersService: UsersService,
-    private prisma: PrismaService,
-    private invoiceService: InvoiceService,
+    private readonly usersService: UsersService,
+    private readonly invoiceService: InvoiceService,
   ) {}
 
   private assertSelf(user: JwtPayload, id: string) {
@@ -26,21 +24,7 @@ export class UsersController {
   @Get('search')
   async searchUsers(@Query('q') q: string, @CurrentUser() user: JwtPayload) {
     try {
-      if (!q || q.length < 2) return { success: true, data: [] };
-      const users = await this.prisma.user.findMany({
-        where: {
-          id: { not: user.sub },
-          OR: [
-            { firstName: { contains: q, mode: 'insensitive' } },
-            { lastName: { contains: q, mode: 'insensitive' } },
-            { email: { contains: q, mode: 'insensitive' } },
-          ],
-        },
-        select: { id: true, firstName: true, lastName: true, email: true, profileImage: true, userType: true },
-        take: 20,
-        orderBy: { firstName: 'asc' },
-      });
-      return { success: true, data: users };
+      return { success: true, data: await this.usersService.searchUsers(q, user.sub) };
     } catch { return { success: true, data: [] }; }
   }
 
@@ -265,11 +249,7 @@ export class UsersController {
     @CurrentUser() user: JwtPayload,
   ) {
     this.assertSelf(user, id);
-    await this.prisma.pushSubscription.upsert({
-      where: { endpoint: body.endpoint },
-      create: { userId: id, endpoint: body.endpoint, p256dh: body.p256dh, auth: body.auth, userAgent: body.userAgent },
-      update: { p256dh: body.p256dh, auth: body.auth, userAgent: body.userAgent },
-    });
+    await this.usersService.addPushSubscription(id, body);
     return { success: true, message: 'Push subscription registered' };
   }
 
@@ -280,7 +260,7 @@ export class UsersController {
     @CurrentUser() user: JwtPayload,
   ) {
     this.assertSelf(user, id);
-    await this.prisma.pushSubscription.deleteMany({ where: { userId: id, endpoint: body.endpoint } });
+    await this.usersService.removePushSubscription(id, body.endpoint);
     return { success: true, message: 'Push subscription removed' };
   }
 }

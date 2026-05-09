@@ -608,4 +608,35 @@ export class BookingsService {
     });
     return { message: 'Booking rescheduled successfully' };
   }
+
+  async listServiceBookingsForUser(userId: string) {
+    const patientProfile = await this.prisma.patientProfile.findUnique({ where: { userId }, select: { id: true } });
+    return this.prisma.serviceBooking.findMany({
+      where: { OR: [...(patientProfile ? [{ patientId: patientProfile.id }] : []), { providerUserId: userId }] },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+  }
+
+  async fallbackStatusUpdate(bookingId: string, bookingType: string, action: string) {
+    const statusMap: Record<string, string> = { accept: 'confirmed', deny: 'cancelled', decline: 'cancelled', cancel: 'cancelled', complete: 'completed' };
+    const newStatus = statusMap[action] || action;
+
+    try {
+      await this.prisma.serviceBooking.update({ where: { id: bookingId }, data: { status: newStatus } });
+    } catch {
+      const modelMap: Record<string, string> = { appointment: 'appointment', nurse_booking: 'nurseBooking', childcare_booking: 'childcareBooking', lab_test_booking: 'labTestBooking', emergency_booking: 'emergencyBooking' };
+      const modelName = modelMap[bookingType];
+      if (modelName) await (this.prisma as any)[modelName]?.update?.({ where: { id: bookingId }, data: { status: newStatus } }).catch(() => {});
+    }
+
+    await this.prisma.workflowInstance.updateMany({
+      where: { bookingId },
+      data: {
+        currentStatus: newStatus,
+        ...(newStatus === 'completed' ? { completedAt: new Date() } : {}),
+        ...(newStatus === 'cancelled' ? { cancelledAt: new Date() } : {}),
+      },
+    }).catch(() => {});
+  }
 }

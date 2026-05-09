@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
-import { PrismaService } from '../prisma/prisma.service';
+import { HealthService } from './health.service';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Health')
@@ -9,16 +9,11 @@ import { Public } from '../auth/decorators/public.decorator';
 @SkipThrottle()
 @Public()
 export class HealthController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly healthService: HealthService) {}
 
   @Get()
   async check() {
-    // Verify DB connectivity
-    try {
-      await this.prisma.$queryRaw`SELECT 1`;
-      return { status: 'ok', database: 'connected', timestamp: new Date().toISOString() };
-    } catch {
-      return { status: 'degraded', database: 'disconnected', timestamp: new Date().toISOString() };
-    }
+    const result = await this.healthService.checkDatabase();
+    return { ...result, timestamp: new Date().toISOString() };
   }
 }

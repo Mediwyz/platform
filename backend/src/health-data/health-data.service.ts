@@ -183,4 +183,42 @@ export class HealthDataService {
       include: { plan: true },
     });
   }
+
+  async getPatientAppointments(userId: string, limit?: number) {
+    const profile = await this.prisma.patientProfile.findUnique({ where: { userId }, select: { id: true } });
+    if (!profile) return [];
+    return this.prisma.appointment.findMany({
+      where: { patientId: profile.id },
+      include: { doctor: { include: { user: { select: { id: true, firstName: true, lastName: true, profileImage: true } } } } },
+      orderBy: { scheduledAt: 'desc' },
+      take: limit || 50,
+    });
+  }
+
+  async getPatientBookings(userId: string, type?: string, limit?: number) {
+    const profile = await this.prisma.patientProfile.findUnique({ where: { userId }, select: { id: true } });
+    if (!profile) return [];
+    const take = limit || 50;
+    const patientId = profile.id;
+
+    const [appointments, nurseBookings, childcareBookings, labTests, emergencyBookings, serviceBookings] = await Promise.all([
+      this.prisma.appointment.findMany({ where: { patientId }, orderBy: { scheduledAt: 'desc' }, take }).catch(() => []),
+      this.prisma.nurseBooking.findMany({ where: { patientId }, orderBy: { scheduledAt: 'desc' }, take }).catch(() => []),
+      this.prisma.childcareBooking.findMany({ where: { patientId }, orderBy: { scheduledAt: 'desc' }, take }).catch(() => []),
+      this.prisma.labTestBooking.findMany({ where: { patientId }, orderBy: { scheduledAt: 'desc' }, take }).catch(() => []),
+      this.prisma.emergencyBooking.findMany({ where: { patientId }, orderBy: { createdAt: 'desc' }, take }).catch(() => []),
+      this.prisma.serviceBooking.findMany({ where: { patientId }, orderBy: { scheduledAt: 'desc' }, take }).catch(() => []),
+    ]);
+
+    const toPlain = (obj: any) => JSON.parse(JSON.stringify(obj));
+    const bookings: any[] = [];
+    appointments.forEach(a => bookings.push({ ...toPlain(a), bookingType: 'appointment', type: 'doctor' }));
+    nurseBookings.forEach(b => bookings.push({ ...toPlain(b), bookingType: 'nurse_booking', type: 'nurse' }));
+    childcareBookings.forEach(b => bookings.push({ ...toPlain(b), bookingType: 'childcare_booking', type: 'nanny' }));
+    labTests.forEach(b => bookings.push({ ...toPlain(b), bookingType: 'lab_test_booking', type: 'lab-test' }));
+    emergencyBookings.forEach(b => bookings.push({ ...toPlain(b), bookingType: 'emergency_booking', type: 'emergency' }));
+    serviceBookings.forEach(b => bookings.push({ ...toPlain(b), bookingType: 'service_booking', type: 'service' }));
+
+    return type ? bookings.filter(b => b.type === type || b.bookingType?.includes(type)) : bookings;
+  }
 }

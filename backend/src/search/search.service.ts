@@ -223,4 +223,167 @@ export class SearchService {
 
     return { data, total, page: pageNum, limit: take, totalPages: Math.ceil(total / take) };
   }
+
+  async searchLabTests(q?: string, page?: number, limit?: number) {
+    const pageNum = Math.max(page || 1, 1);
+    const limitNum = Math.min(limit || 20, 50);
+    const where: any = {};
+    if (q) where.OR = [{ name: { contains: q, mode: 'insensitive' } }, { description: { contains: q, mode: 'insensitive' } }];
+    const [tests, total] = await Promise.all([
+      this.prisma.labTestCatalog.findMany({ where, include: { labTech: { include: { user: { select: { id: true, firstName: true, lastName: true, profileImage: true } } } } }, skip: (pageNum - 1) * limitNum, take: limitNum, orderBy: { name: 'asc' } }),
+      this.prisma.labTestCatalog.count({ where }),
+    ]);
+    return { data: tests, total, page: pageNum, limit: limitNum, totalPages: Math.ceil(total / limitNum) };
+  }
+
+  async searchInsurance(q?: string, page?: number, limit?: number) {
+    const pageNum = Math.max(page || 1, 1);
+    const limitNum = Math.min(limit || 20, 50);
+    const where: any = {};
+    if (q) where.OR = [{ planName: { contains: q, mode: 'insensitive' } }];
+    const [plans, total] = await Promise.all([
+      this.prisma.insurancePlanListing.findMany({ where, include: { insuranceRep: { include: { user: { select: { id: true, firstName: true, lastName: true, profileImage: true } } } } }, skip: (pageNum - 1) * limitNum, take: limitNum }),
+      this.prisma.insurancePlanListing.count({ where }),
+    ]);
+    return { data: plans, total, page: pageNum, limit: limitNum, totalPages: Math.ceil(total / limitNum) };
+  }
+
+  async searchEmergency(q?: string, page?: number, limit?: number) {
+    const pageNum = Math.max(page || 1, 1);
+    const limitNum = Math.min(limit || 20, 50);
+    const where: any = {};
+    if (q) where.OR = [{ serviceName: { contains: q, mode: 'insensitive' } }];
+    const [services, total] = await Promise.all([
+      this.prisma.emergencyServiceListing.findMany({ where, include: { worker: { include: { user: { select: { id: true, firstName: true, lastName: true, profileImage: true } } } } }, skip: (pageNum - 1) * limitNum, take: limitNum }),
+      this.prisma.emergencyServiceListing.count({ where }),
+    ]);
+    return { data: services, total, page: pageNum, limit: limitNum, totalPages: Math.ceil(total / limitNum) };
+  }
+
+  async autocomplete(q: string, category?: string, limit?: number) {
+    const take = Math.min(limit || 8, 20);
+    const results: any[] = [];
+
+    if (!category || category === 'providers') {
+      const providers = await this.prisma.user.findMany({
+        where: { accountStatus: 'active', userType: { notIn: ['MEMBER' as any, 'CORPORATE_ADMIN' as any] }, OR: [{ firstName: { contains: q, mode: 'insensitive' } }, { lastName: { contains: q, mode: 'insensitive' } }] },
+        select: { id: true, firstName: true, lastName: true, userType: true, profileImage: true },
+        take,
+      });
+      providers.forEach(p => results.push({ id: p.id, label: `${p.firstName} ${p.lastName}`, type: 'provider', category: p.userType, image: p.profileImage }));
+    }
+
+    if (!category || category === 'products') {
+      const items = await this.prisma.providerInventoryItem.findMany({
+        where: { isActive: true, name: { contains: q, mode: 'insensitive' } },
+        select: { id: true, name: true, category: true, price: true },
+        take,
+      });
+      items.forEach(i => results.push({ id: i.id, label: i.name, type: 'product', category: i.category, price: i.price }));
+    }
+
+    return results.slice(0, take);
+  }
+
+  async searchServices(q?: string, providerType?: string, category?: string, limit?: number) {
+    const take = Math.min(limit || 30, 100);
+    const where: any = { isActive: true };
+    if (q) {
+      where.OR = [
+        { serviceName: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+        { category: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+    if (providerType) where.providerType = providerType.toUpperCase();
+    if (category) where.category = { contains: category, mode: 'insensitive' };
+
+    const services = await this.prisma.platformService.findMany({ where, take, orderBy: { serviceName: 'asc' } });
+
+    const providerCounts = await this.prisma.providerServiceConfig.groupBy({
+      by: ['platformServiceId'],
+      where: { platformServiceId: { in: services.map(s => s.id) }, isActive: true },
+      _count: { id: true },
+    });
+    const countMap: Record<string, number> = {};
+    for (const pc of providerCounts) countMap[pc.platformServiceId] = pc._count.id;
+
+    return services.map(svc => ({
+      id: svc.id,
+      serviceName: svc.serviceName,
+      category: svc.category,
+      description: svc.description,
+      providerType: svc.providerType,
+      defaultPrice: svc.defaultPrice,
+      currency: svc.currency,
+      duration: svc.duration,
+      iconKey: (svc as any).iconKey ?? null,
+      emoji: (svc as any).emoji ?? null,
+      imageUrl: (svc as any).imageUrl ?? null,
+      providerCount: countMap[svc.id] ?? 0,
+      sampleProviders: [],
+    }));
+  }
+
+  async searchOrganizations(q?: string, type?: string, city?: string, country?: string, page?: number, limit?: number) {
+    const pageNum = Math.max(page || 1, 1);
+    const take = Math.min(limit || 20, 100);
+    const skip = (pageNum - 1) * take;
+
+    const where: any = { isActive: true };
+    if (type) where.type = type;
+    if (city) where.city = { contains: city, mode: 'insensitive' };
+    if (country) where.country = country.toUpperCase();
+    if (q) {
+      where.OR = [
+        { name: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+        { city: { contains: q, mode: 'insensitive' } },
+        { address: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    const [entities, total] = await Promise.all([
+      (this.prisma.healthcareEntity as any).findMany({
+        where,
+        include: {
+          providers: {
+            where: { isActive: true },
+            include: { provider: { select: { id: true, firstName: true, lastName: true, userType: true, profileImage: true } } },
+            take: 5,
+          },
+        },
+        skip,
+        take,
+        orderBy: [{ isVerified: 'desc' }, { name: 'asc' }],
+      }),
+      (this.prisma.healthcareEntity as any).count({ where }),
+    ]);
+
+    const data = entities.map((e: any) => ({
+      ...e,
+      providerCount: e.providers.length,
+      sampleProviders: e.providers.slice(0, 3).map((wp: any) => ({
+        id: wp.provider.id,
+        name: `${wp.provider.firstName} ${wp.provider.lastName}`,
+        userType: wp.provider.userType,
+        profileImage: wp.provider.profileImage,
+        role: wp.role,
+      })),
+    }));
+
+    return { data, total, page: pageNum, limit: take, totalPages: Math.ceil(total / take) };
+  }
+
+  async searchMedicines(q?: string, page?: number, limit?: number) {
+    const pageNum = Math.max(page || 1, 1);
+    const limitNum = Math.min(limit || 20, 50);
+    const where: any = { isActive: true, category: { in: ['medication', 'vitamins', 'supplements'] } };
+    if (q) where.name = { contains: q, mode: 'insensitive' };
+    const [items, total] = await Promise.all([
+      this.prisma.providerInventoryItem.findMany({ where, skip: (pageNum - 1) * limitNum, take: limitNum, orderBy: { name: 'asc' } }),
+      this.prisma.providerInventoryItem.count({ where }),
+    ]);
+    return { data: items, total, page: pageNum, limit: limitNum, totalPages: Math.ceil(total / limitNum) };
+  }
 }

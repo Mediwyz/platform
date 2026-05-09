@@ -427,4 +427,33 @@ export class UsersService {
     if (!billing || billing.userId !== userId) throw new NotFoundException('Billing info not found');
     await this.prisma.billingInfo.delete({ where: { id: billingId } });
   }
+
+  async searchUsers(q: string, excludeUserId: string) {
+    if (!q || q.length < 2) return [];
+    return this.prisma.user.findMany({
+      where: {
+        id: { not: excludeUserId },
+        OR: [
+          { firstName: { contains: q, mode: 'insensitive' } },
+          { lastName: { contains: q, mode: 'insensitive' } },
+          { email: { contains: q, mode: 'insensitive' } },
+        ],
+      },
+      select: { id: true, firstName: true, lastName: true, email: true, profileImage: true, userType: true },
+      take: 20,
+      orderBy: { firstName: 'asc' },
+    });
+  }
+
+  async addPushSubscription(userId: string, data: { endpoint: string; p256dh: string; auth: string; userAgent?: string }) {
+    await this.prisma.pushSubscription.upsert({
+      where: { endpoint: data.endpoint },
+      create: { userId, endpoint: data.endpoint, p256dh: data.p256dh, auth: data.auth, userAgent: data.userAgent },
+      update: { p256dh: data.p256dh, auth: data.auth, userAgent: data.userAgent },
+    });
+  }
+
+  async removePushSubscription(userId: string, endpoint: string) {
+    await this.prisma.pushSubscription.deleteMany({ where: { userId, endpoint } });
+  }
 }
