@@ -22,16 +22,22 @@ test.describe('Home Page', () => {
 
   test('HowItWorks strip shows the three steps', async ({ page }) => {
     await page.goto('/')
+    // "How it works" heading is present
     await expect(page.locator('text=/How it works/i').first()).toBeVisible({ timeout: 10_000 })
-    await expect(page.locator('text=Search').first()).toBeVisible()
-    await expect(page.locator('text=Book').first()).toBeVisible()
-    await expect(page.locator('text=Consult').first()).toBeVisible()
+    // Step numbers 01 / 02 / 03 are unique to this section
+    const section = page.locator('div').filter({ has: page.locator('text=/How it works/i') }).first()
+    await expect(section.locator('text=01').first()).toBeVisible()
+    await expect(section.locator('text=02').first()).toBeVisible()
+    await expect(section.locator('text=03').first()).toBeVisible()
   })
 
   test('CompanyTrustBar is visible', async ({ page }) => {
     await page.goto('/')
-    // Marquee trust bar scrolls provider types or partner logos
-    const trustBar = page.locator('[class*="marquee"], [class*="trust"], text=/Doctors|Nurses|Dentists/i').first()
+    // Marquee trust bar — try CSS class variants, fall back to provider-type text
+    const trustBar = page.locator('[class*="marquee"]')
+      .or(page.locator('[class*="trust"]'))
+      .or(page.locator('text=/Doctors|Nurses|Dentists/i'))
+      .first()
     await expect(trustBar).toBeVisible({ timeout: 10_000 })
   })
 
