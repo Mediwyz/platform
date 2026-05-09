@@ -7,57 +7,55 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Golden path — service discovery funnel', () => {
-  test('homepage loads all 5 sections without JS errors', async ({ page }) => {
+  test('homepage loads all key sections without JS errors', async ({ page }) => {
     const errors: string[] = []
     page.on('pageerror', e => errors.push(e.message))
 
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
-    // All 5 key sections present
+    // Hero + static sections always present
     await expect(page.locator('text=/Healthcare.*Reimagined|HealthTech/i').first()).toBeVisible({ timeout: 10_000 })
     await expect(page.locator('text=/How it works/i').first()).toBeVisible()
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible()
-    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible()
+
+    // Dynamic sections load after hydration
+    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
 
     expect(errors.filter(e => !e.includes('ResizeObserver'))).toHaveLength(0)
   })
 
-  test('can browse services from the Discover section', async ({ page }) => {
+  test('ServicesSection is visible on the homepage', async ({ page }) => {
     await page.goto('/')
-    await page.locator('button', { hasText: /Book a Service/i }).first().click()
-
-    // ServicesSection renders role-group headings (e.g. "Doctors", "Nurses")
-    // or a search input — confirm the section rendered
-    const servicesContent = page.locator('text=/Doctors|Nurses|General|Services/i')
-      .or(page.locator('input[placeholder*="search" i]'))
-      .first()
-    await expect(servicesContent).toBeVisible({ timeout: 15_000 })
+    // ServicesSection is always present — no tab click needed
+    await expect(page.locator('#services-section')).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('can switch to providers tab and see provider cards', async ({ page }) => {
+  test('ProvidersSection is visible on the homepage', async ({ page }) => {
     await page.goto('/')
-    await page.locator('button', { hasText: /Find a Provider/i }).first().click()
-
-    // ProvidersSection or map panel renders
-    await expect(
-      page.locator('text=/Browse all providers|Dr\.|No providers/i').first()
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('#providers-section')).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('search/services page filters by query', async ({ page }) => {
+  test('search/services page loads and shows a search input', async ({ page }) => {
     await page.goto('/search/services')
     await page.waitForLoadState('networkidle')
 
+    // Page has "All Services" heading
+    await expect(page.locator('text=/All Services/i').first()).toBeVisible({ timeout: 10_000 })
+
+    // Search input is present
     const searchInput = page.locator('input[type="text"], input[placeholder*="search" i]').first()
     await expect(searchInput).toBeVisible({ timeout: 10_000 })
+
     await searchInput.fill('consult')
     await page.waitForTimeout(400)
 
-    // At least one result visible or empty state
-    const results = page.locator('[class*="card"], article')
-    const emptyState = page.locator('text=/no.*result|empty/i')
-    await expect(results.or(emptyState).first()).toBeVisible({ timeout: 10_000 })
+    // Results show h3 service names, or an empty-state message
+    const results = page.locator('h3').or(page.locator('text=/no.*result|empty|No services/i'))
+    await expect(results.first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('provider profile page loads with Services tab when provider', async ({ page }) => {

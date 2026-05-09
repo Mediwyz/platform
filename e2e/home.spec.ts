@@ -4,7 +4,6 @@ test.describe('Home Page', () => {
   test('loads and shows the hero section', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveTitle(/MediWyz/i)
-    // Country badge or platform description visible
     await expect(page.locator('text=/HealthTech|Platform/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
@@ -16,15 +15,13 @@ test.describe('Home Page', () => {
 
   test('hero section has trust stats', async ({ page }) => {
     await page.goto('/')
-    // Dynamic stat counters are always rendered
     await expect(page.locator('text=/Verified Providers/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('HowItWorks strip shows the three steps', async ({ page }) => {
     await page.goto('/')
-    // "How it works" heading is present
     await expect(page.locator('text=/How it works/i').first()).toBeVisible({ timeout: 10_000 })
-    // Step numbers 01 / 02 / 03 are unique to this section
+    // Step numbers 01 / 02 / 03 are unique to HowItWorks
     const section = page.locator('div').filter({ has: page.locator('text=/How it works/i') }).first()
     await expect(section.locator('text=01').first()).toBeVisible()
     await expect(section.locator('text=02').first()).toBeVisible()
@@ -33,12 +30,8 @@ test.describe('Home Page', () => {
 
   test('CompanyTrustBar is visible', async ({ page }) => {
     await page.goto('/')
-    // Marquee trust bar — try CSS class variants, fall back to provider-type text
-    const trustBar = page.locator('[class*="marquee"]')
-      .or(page.locator('[class*="trust"]'))
-      .or(page.locator('text=/Doctors|Nurses|Dentists/i'))
-      .first()
-    await expect(trustBar).toBeVisible({ timeout: 10_000 })
+    // CompanyTrustBar shows "Trusted by companies & organizations"
+    await expect(page.locator('text=/Trusted by companies/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('TestimonialsSection shows patient quotes', async ({ page }) => {
@@ -46,47 +39,37 @@ test.describe('Home Page', () => {
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('DiscoverSection tab strip is visible', async ({ page }) => {
+  test('ServicesSection and ProvidersSection are visible', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 10_000 })
-    // All 5 tab choices should render
-    await expect(page.locator('text=/Book a Service/i').first()).toBeVisible()
-    await expect(page.locator('text=/Find a Provider/i').first()).toBeVisible()
+    // New layout: sections are always present (no tab clicks required)
+    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('discover tab switching works', async ({ page }) => {
+  test('ServicesSection renders with a search input', async ({ page }) => {
     await page.goto('/')
-    // Click "Find a Provider" tab
-    await page.locator('button', { hasText: /Find a Provider/i }).first().click()
-    // Map panel or providers list should appear
-    const browseLink = page.locator('text=/Browse all providers/i').first()
-    const noProviders = page.locator('text=/No providers/i').first()
-    await expect(browseLink.or(noProviders)).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('#services-section')).toBeVisible({ timeout: 15_000 })
+    // ServicesSection has a search input inside it
+    const searchInput = page.locator('#services-section input').first()
+    await expect(searchInput).toBeVisible({ timeout: 10_000 })
   })
 
-  test('hero feature pills dispatch to correct tab', async ({ page }) => {
+  test('hero feature pills scroll to the correct section', async ({ page }) => {
     await page.goto('/')
-    // Click "Home Visits" pill → should switch Discover to Services tab
+    // "Home Visits" pill scrolls to #services-section
     const pill = page.locator('button', { hasText: /Home Visits/i }).first()
     await expect(pill).toBeVisible({ timeout: 10_000 })
     await pill.click()
-    await expect(page.locator('#discover')).toBeInViewport({ timeout: 5_000 })
+    await expect(page.locator('#services-section')).toBeInViewport({ timeout: 5_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {
     await page.goto('/')
-    // Scroll down past the hero to trigger the sticky bar
     await page.evaluate(() => window.scrollBy(0, 900))
-    // Give the IntersectionObserver / scroll handler time to fire
     await page.waitForTimeout(800)
-    // CTA bar has "Book Now" text (may be hidden until scroll threshold)
     const ctaBar = page.locator('text=/Book Now/i').first()
-    // Soft check — CTA bar may not be wired on all viewports
     const visible = await ctaBar.isVisible().catch(() => false)
-    if (!visible) {
-      // Acceptable: sticky bar only appears past a certain scroll depth
-      return
-    }
+    if (!visible) return
     await expect(ctaBar).toBeVisible()
   })
 
