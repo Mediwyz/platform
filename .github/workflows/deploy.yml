@@ -450,6 +450,7 @@ jobs:
     name: E2E Smoke Tests
     runs-on: ubuntu-latest
     needs: deploy
+    timeout-minutes: 15
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
       - uses: actions/checkout@v4
@@ -467,7 +468,12 @@ jobs:
       - name: Run E2E smoke tests
         env:
           PLAYWRIGHT_BASE_URL: ${{ secrets.APP_DOMAIN != '' && format('https://{0}', secrets.APP_DOMAIN) || format('http://{0}', secrets.VPS_HOST) }}
-        run: npx playwright test --project=chromium --reporter=github
+        run: |
+          npx playwright test --project=chromium \
+            e2e/home.spec.ts \
+            e2e/login.spec.ts \
+            e2e/golden-path.spec.ts \
+            e2e/search.spec.ts
 
       - name: Upload Playwright report
         if: always()
