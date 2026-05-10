@@ -11,6 +11,11 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
+# Cancel in-progress runs on the same branch so stale deploys never queue
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ─── Lint & Type Check ────────────────────────────────────────────────────
   lint:
@@ -35,7 +40,7 @@ jobs:
         run: cd backend && npm ci && npx tsc --noEmit
 
       - name: Lint
-        run: npx eslint . --max-warnings=0 || true
+        run: npx eslint . --max-warnings=0
 
   # ─── Unit Tests ──────────────────────────────────────────────────────────
   test:
@@ -54,8 +59,11 @@ jobs:
 
       - run: npx prisma generate
 
-      - name: Run unit tests
+      - name: Run frontend unit tests (Vitest)
         run: npx vitest run --exclude='__tests__/**'
+
+      - name: Run backend unit tests (Jest)
+        run: cd backend && npm ci && npx jest --passWithNoTests --forceExit
 
   # ─── Build Docker Images (parallel) ──────────────────────────────────────
   build-frontend:
@@ -94,7 +102,9 @@ jobs:
 
       - name: Build and push Next.js image
         run: |
+          docker pull ${{ steps.meta.outputs.image_tag }} 2>/dev/null || true
           docker build \
+            --cache-from ${{ steps.meta.outputs.image_tag }} \
             --build-arg NEXT_PUBLIC_APP_URL=${{ steps.meta.outputs.app_url }} \
             --build-arg NEXT_PUBLIC_SOCKET_URL=${{ steps.meta.outputs.app_url }} \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.meta.outputs.app_url }} \
@@ -134,7 +144,9 @@ jobs:
 
       - name: Build and push NestJS image
         run: |
+          docker pull ${{ steps.meta.outputs.image_tag }} 2>/dev/null || true
           docker build \
+            --cache-from ${{ steps.meta.outputs.image_tag }} \
             -t ${{ steps.meta.outputs.image_tag }} \
             -f backend/Dockerfile \
             .
@@ -188,6 +200,10 @@ jobs:
           SUPER_ADMIN_FIRST_NAME=$SUPER_ADMIN_FIRST_NAME
           SUPER_ADMIN_LAST_NAME=$SUPER_ADMIN_LAST_NAME
           APP_DOMAIN=$APP_DOMAIN
+          NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN
+          SENTRY_DSN=$SENTRY_DSN
+          SENTRY_ORG=$SENTRY_ORG
+          SENTRY_PROJECT=$SENTRY_PROJECT
           ENVEOF
           sed -i 's/^[[:space:]]*//' .env
           echo ".env written ($(wc -l < .env) vars)"
@@ -288,18 +304,36 @@ jobs:
             done
           '
 
-          echo "=== Pushing schema changes ==="
+          echo "=== Applying schema migrations ==="
+          # Step 1: try migrate deploy (idempotent, safe — applies only unapplied migration files).
+          # This is a no-op until you create migration files locally with:
+          #   npx prisma migrate dev --name <description>
+          # then commit the generated prisma/migrations/* files.
           docker compose exec -T api \
-            node_modules/.bin/prisma db push \
+            node_modules/.bin/prisma migrate deploy \
               --schema=./prisma/schema.prisma \
-              --accept-data-loss \
+          && echo "migrate deploy: OK" \
           || {
-            echo "WARNING: --accept-data-loss failed (likely column type change with existing data)"
-            echo "Retrying with --force-reset (wipes DB — seed will repopulate)..."
+            echo "WARNING: migrate deploy failed (likely no migrations exist yet) — falling back to db push."
+            # Step 2: db push for additive changes (no column drops without --accept-data-loss flag).
             docker compose exec -T api \
               node_modules/.bin/prisma db push \
                 --schema=./prisma/schema.prisma \
-                --force-reset
+                --accept-data-loss \
+            || {
+              echo "ERROR: prisma db push --accept-data-loss also failed."
+              if [ "${ALLOW_DB_RESET}" = "true" ]; then
+                echo "ALLOW_DB_RESET=true — wiping DB (all data will be lost)..."
+                docker compose exec -T api \
+                  node_modules/.bin/prisma db push \
+                    --schema=./prisma/schema.prisma \
+                    --force-reset
+              else
+                echo "Set ALLOW_DB_RESET=true in GitHub Secrets only if data loss is acceptable."
+                echo "Aborting deploy to protect production data."
+                exit 1
+              fi
+            }
           }
 
           echo "=== Seeding database ==="
@@ -420,6 +454,10 @@ jobs:
           DEPLOY_DIR:          ${{ secrets.DEPLOY_DIR }}
           APP_DOMAIN:          ${{ secrets.APP_DOMAIN }}
           ADMIN_EMAIL:         ${{ secrets.SUPER_ADMIN_EMAIL }}
+          ALLOW_DB_RESET:      ${{ secrets.ALLOW_DB_RESET }}
+          SENTRY_DSN:          ${{ secrets.SENTRY_DSN }}
+          SENTRY_ORG:          ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT:      ${{ secrets.SENTRY_PROJECT }}
 
       - name: Verify deployment
         run: |

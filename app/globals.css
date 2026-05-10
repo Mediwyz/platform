@@ -9,6 +9,19 @@
   --color-primary-blue: #001E40;
   --color-primary-teal: #0C6780;
   --color-secondary-green: #0C6780;
+
+  /* xs breakpoint (was tailwind.config.ts extend.screens) */
+  --breakpoint-xs: 375px;
+
+  /* blob animation (used in components) */
+  --animate-blob: blob 7s infinite;
+}
+
+@keyframes blob {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }
 
 /* Prevent horizontal overflow on mobile */

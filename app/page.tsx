@@ -7,10 +7,8 @@ import CompanyTrustBar from '@/components/home/CompanyTrustBar'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import StickyCTABar from '@/components/home/StickyCTABar'
 
-const ServicesSection        = dynamic(() => import('@/components/home/ServicesSection'),        { ssr: false })
-const ProvidersSection       = dynamic(() => import('@/components/home/ProvidersSection'),       { ssr: false })
-const HealthShopMarketplace  = dynamic(() => import('@/components/home/HealthShopMarketplace'),  { ssr: false })
-const CommunityPosts         = dynamic(() => import('@/components/home/CommunityPosts'),         { ssr: false })
+const DiscoverSection = dynamic(() => import('@/components/home/DiscoverSection'), { ssr: false })
+const CommunityPosts  = dynamic(() => import('@/components/home/CommunityPosts'),  { ssr: false })
 
 export default function HomePage() {
   return (
@@ -27,24 +25,17 @@ export default function HomePage() {
       {/* 3 — Trust: partner logos + key stats marquee */}
       <CompanyTrustBar />
 
-      {/* 4 — Discover: always-visible sections (no tab clicks required) */}
-      <div id="services-section">
-        <ServicesSection />
+      {/* 4 — Discover: tabbed (Providers / Services / Health Shop) with live Google Map */}
+      <div id="discover-section">
+        <DiscoverSection />
       </div>
 
-      <div id="health-shop-section">
-        <HealthShopMarketplace />
-      </div>
-
-      <div id="providers-section">
-        <ProvidersSection />
-      </div>
-
+      {/* 5 — Community posts */}
       <div id="community-section">
         <CommunityPosts />
       </div>
 
-      {/* 5 — Social proof: patient testimonials */}
+      {/* 6 — Social proof: patient testimonials */}
       <TestimonialsSection />
     </>
   )

@@ -1,0 +1,95 @@
+name: Git History Cleanup (BFG)
+
+# Manual-only — removes large/unwanted files from git history then force-pushes.
+# Requires CONFIRM_FORCE_PUSH = "yes-i-know" to proceed.
+#
+# Typical usage:
+#   1. Trigger via GitHub Actions → "Run workflow"
+#   2. Set CONFIRM_FORCE_PUSH = "yes-i-know"
+#   3. Optionally set FILES_TO_DELETE (comma-separated glob patterns)
+#
+# After the push, all collaborators must run:
+#   git fetch origin && git reset --hard origin/main
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_force_push:
+        description: 'Type "yes-i-know" to confirm you understand this rewrites git history'
+        required: true
+        default: ''
+      files_to_delete:
+        description: 'Comma-separated filename patterns to strip (e.g. "*.exe,*.apk,*.traineddata")'
+        required: false
+        default: '*.exe,*.apk,*.traineddata,*.jar,*.zip'
+      branch:
+        description: 'Branch to clean (default: main)'
+        required: false
+        default: 'main'
+
+jobs:
+  cleanup:
+    name: BFG — strip large files from history
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Abort if not confirmed
+        if: ${{ inputs.confirm_force_push != 'yes-i-know' }}
+        run: |
+          echo "ERROR: You must set confirm_force_push = 'yes-i-know' to proceed."
+          exit 1
+
+      - name: Checkout full history (bare clone)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch }}
+
+      - name: Set up Java (required for BFG)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Download BFG Repo-Cleaner
+        run: |
+          curl -L -o bfg.jar \
+            https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
+
+      - name: Create bare clone for BFG
+        run: |
+          cd ..
+          git clone --mirror $GITHUB_WORKSPACE repo.git
+
+      - name: Run BFG — delete matching files
+        run: |
+          PATTERNS="${{ inputs.files_to_delete }}"
+          # Convert comma list → repeated --delete-files flags
+          ARGS=""
+          IFS=',' read -ra PATS <<< "$PATTERNS"
+          for pat in "${PATS[@]}"; do
+            pat_trimmed="${pat// /}"
+            [ -n "$pat_trimmed" ] && ARGS="$ARGS --delete-files '$pat_trimmed'"
+          done
+          echo "BFG args: $ARGS"
+          eval "java -jar $GITHUB_WORKSPACE/bfg.jar $ARGS ../repo.git"
+
+      - name: Expire reflogs and garbage-collect
+        run: |
+          cd ../repo.git
+          git reflog expire --expire=now --all
+          git gc --prune=now --aggressive
+
+      - name: Push cleaned history
+        run: |
+          cd ../repo.git
+          git push --force
+
+      - name: Summary
+        run: |
+          echo "✅ Git history cleaned and force-pushed to ${{ inputs.branch }}."
+          echo ""
+          echo "⚠️  All collaborators must run:"
+          echo "    git fetch origin && git reset --hard origin/${{ inputs.branch }}"
+          echo ""
+          echo "Files removed matching: ${{ inputs.files_to_delete }}"

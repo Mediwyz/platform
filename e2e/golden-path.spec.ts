@@ -20,8 +20,8 @@ test.describe('Golden path — service discovery funnel', () => {
     await expect(page.locator('text=/How it works/i').first()).toBeVisible()
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible()
 
-    // Dynamic sections load after hydration
-    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
+    // Unified DiscoverSection loads after hydration (Providers tab is default)
+    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
     await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
 
     // Filter out known non-fatal errors: ResizeObserver and React #418 (ssr:false Suspense hydration)
@@ -34,17 +34,19 @@ test.describe('Golden path — service discovery funnel', () => {
     expect(fatalErrors).toHaveLength(0)
   })
 
-  test('ServicesSection is visible on the homepage', async ({ page }) => {
+  test('DiscoverSection shows Providers tab by default', async ({ page }) => {
     await page.goto('/')
-    // ServicesSection is always present — no tab click needed
-    await expect(page.locator('#services-section')).toBeVisible({ timeout: 15_000 })
-    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
+    // Providers tab is active by default
+    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('ProvidersSection is visible on the homepage', async ({ page }) => {
+  test('DiscoverSection Services tab is accessible', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#providers-section')).toBeVisible({ timeout: 15_000 })
-    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
+    // Click the Services tab pill
+    await page.locator('#discover-section').getByRole('button', { name: /Services/i }).first().click()
+    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('search/services page loads and shows a search input', async ({ page }) => {

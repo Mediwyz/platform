@@ -39,28 +39,26 @@ test.describe('Home Page', () => {
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('ServicesSection and ProvidersSection are visible', async ({ page }) => {
+  test('DiscoverSection is visible with tab navigation', async ({ page }) => {
     await page.goto('/')
-    // New layout: sections are always present (no tab clicks required)
-    await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 15_000 })
+    // DiscoverSection replaces the old separate sections — shows Providers tab by default
+    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
     await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
-  test('ServicesSection renders with a search input', async ({ page }) => {
+  test('DiscoverSection has a search input in Providers tab', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#services-section')).toBeVisible({ timeout: 15_000 })
-    // ServicesSection has a search input inside it
-    const searchInput = page.locator('#services-section input').first()
+    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
+    const searchInput = page.locator('#discover-section input').first()
     await expect(searchInput).toBeVisible({ timeout: 10_000 })
   })
 
-  test('hero feature pills scroll to the correct section', async ({ page }) => {
+  test('hero feature pills scroll to DiscoverSection', async ({ page }) => {
     await page.goto('/')
-    // "Home Visits" pill scrolls to #services-section
-    const pill = page.locator('button', { hasText: /Home Visits/i }).first()
+    const pill = page.locator('button, a').filter({ hasText: /Home Visits/i }).first()
     await expect(pill).toBeVisible({ timeout: 10_000 })
     await pill.click()
-    await expect(page.locator('#services-section')).toBeInViewport({ timeout: 5_000 })
+    await expect(page.locator('#discover-section')).toBeInViewport({ timeout: 5_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {

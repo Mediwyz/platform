@@ -145,7 +145,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
   return (
     <section
       className="overflow-hidden"
-      style={{ background: '#001E40', minHeight: 400 }}
+      style={{ background: '#001E40', minHeight: 320 }}
     >
       {/* ── 2-column flex row ─────────────────────────────────────── */}
       <div className="flex flex-col lg:flex-row lg:items-stretch" style={{ minHeight: 'inherit' }}>
@@ -157,7 +157,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="lg:flex-[58] flex flex-col justify-center
             px-6 sm:px-10 lg:px-12 xl:px-16
-            py-8 sm:py-10 lg:py-12"
+            py-5 sm:py-7 lg:py-8"
         >
           {/* Country flag + platform badge */}
           <div className="inline-flex self-start items-center bg-white/10 rounded-lg px-3 py-1.5 mb-5 border border-white/20">
@@ -167,7 +167,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-extrabold mb-4 leading-[1.08] text-white">
+          <h1 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold mb-3 leading-[1.08] text-white">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -176,18 +176,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             ))}
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-lg mb-6">
+          <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-lg mb-4">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
           </p>
 
           {/* Feature pills — clickable, scroll to the relevant section */}
-          <div className="flex flex-wrap gap-2 mb-7">
+          <div className="flex flex-wrap gap-2 mb-5">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
-              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'providers-section' },
-              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'services-section'  },
-              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'health-shop-section' },
+              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'discover-section' },
+              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'discover-section' },
+              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'discover-section' },
             ].map(f => {
               const cls = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-[11px] font-medium text-white hover:bg-white/25 transition-colors cursor-pointer"
               if ('href' in f) return (
@@ -204,7 +204,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           </div>
 
           {/* Trust stats — dynamic from DB */}
-          <div className="flex flex-wrap gap-6 sm:gap-8">
+          <div className="flex flex-wrap gap-5 sm:gap-7">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
@@ -212,7 +212,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
               { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
             ].map(stat => (
               <div key={stat.label} className="flex flex-col">
-                <span className="text-2xl sm:text-3xl font-black text-white leading-none">{stat.value}</span>
+                <span className="text-xl sm:text-2xl font-black text-white leading-none">{stat.value}</span>
                 <span className="text-xs font-semibold text-white/80 mt-0.5">{stat.label}</span>
                 <span className="text-[10px] text-white/40 mt-0.5">{stat.sub}</span>
               </div>
@@ -225,10 +225,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="lg:flex-[42] relative overflow-hidden min-h-[260px]"
+          className="lg:flex-[42] relative overflow-hidden min-h-[200px]"
         >
           {/* Mobile image strip */}
-          <div className="lg:hidden relative h-52">
+          <div className="lg:hidden relative h-44">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`mobile-${currentImageIndex}`}
