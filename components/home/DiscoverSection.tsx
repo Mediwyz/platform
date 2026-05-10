@@ -15,6 +15,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useBookingDrawer } from '@/lib/contexts/booking-drawer-context'
 import { avatarSrc } from '@/lib/utils/avatar'
+import { trackEvent } from '@/lib/analytics'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -376,6 +377,7 @@ export default function DiscoverSection() {
   const handleRoleSelect = useCallback(async (code: string) => {
     setTabRoleFilter(code)
     setProvSearch('')
+    trackEvent('discover_role_filter', { role: code })
     if (code === 'ALL') { setGridProviders([]); return }
     setGridLoading(true); setGridProviders([])
     try {
@@ -462,7 +464,10 @@ export default function DiscoverSection() {
             {TABS.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id)
+                  trackEvent('discover_tab_switch', { tab: tab.id })
+                }}
                 className={`flex items-center gap-2 px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                   activeTab === tab.id
                     ? 'bg-[#9AE1FF] text-[#001E40] shadow-lg shadow-[#9AE1FF]/20'
@@ -966,7 +971,10 @@ function ProviderCardItem({ provider, color, slug, onBook }: { provider: Provide
   const avatarUrl = avatarSrc(provider.profileImage, provider.firstName, provider.lastName)
 
   return (
-    <button onClick={onBook}
+    <button onClick={() => {
+      trackEvent('discover_provider_book', { providerId: provider.id, userType: provider.userType })
+      onBook()
+    }}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
       <div className="relative w-full h-24 sm:h-28 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgLight} 100%)` }}>
@@ -1004,7 +1012,10 @@ function ServiceCardItem({ service, color, roleLabel, onBook }: { service: Servi
   const bgMedium = hex2rgba(color, 0.20)
 
   return (
-    <button onClick={onBook}
+    <button onClick={() => {
+      trackEvent('discover_service_book', { serviceId: service.id, category: service.category, providerType: service.providerType })
+      onBook()
+    }}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
       <div className="relative w-full h-24 sm:h-28 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgLight} 100%)` }}>
@@ -1036,7 +1047,9 @@ function ServiceCardItem({ service, color, roleLabel, onBook }: { service: Servi
 
 function ShopItemCard({ item, authenticated }: { item: ShopItem; authenticated: boolean }) {
   return (
-    <Link href={authenticated ? `/search/health-shop/${item.id}` : '/login'}
+    <Link
+      href={authenticated ? `/search/health-shop/${item.id}` : '/login'}
+      onClick={() => trackEvent('discover_shop_item_tap', { itemId: item.id, category: item.category, authenticated })}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
       <div className="relative w-full h-24 sm:h-28 bg-gradient-to-br from-teal-50 to-sky-50 flex items-center justify-center overflow-hidden">
         {item.imageUrl
