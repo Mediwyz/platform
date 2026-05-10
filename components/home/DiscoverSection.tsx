@@ -772,7 +772,7 @@ export default function DiscoverSection() {
                           </div>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                             {group.providers.slice(0, 4).map(provider => (
-                              <ProviderCardItem key={provider.id} provider={provider} color={group.color} slug={group.slug}
+                              <ProviderCardItem key={provider.id} provider={provider} color={group.color}
                                 onBook={() => openDrawer({ provider: { id: provider.id, name: `${provider.firstName} ${provider.lastName}`, userType: provider.userType, profileImage: provider.profileImage, rating: provider.rating ?? undefined, specializations: provider.specialty ? [provider.specialty as string] : [] } })} />
                             ))}
                           </div>
@@ -795,7 +795,7 @@ export default function DiscoverSection() {
                       const role = roles.find(r => r.code === provider.userType)
                       return (
                         <ProviderCardItem key={provider.id} provider={provider}
-                          color={role?.color ?? '#0C6780'} slug={role?.slug ?? provider.userType.toLowerCase()}
+                          color={role?.color ?? '#0C6780'}
                           onBook={() => openDrawer({ provider: { id: provider.id, name: `${provider.firstName} ${provider.lastName}`, userType: provider.userType, profileImage: provider.profileImage, rating: provider.rating ?? undefined, specializations: provider.specialty ? [provider.specialty as string] : [] } })} />
                       )
                     })}
