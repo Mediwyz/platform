@@ -65,3 +65,10 @@ backend/.env
 # Claude Code worktrees
 .claude/worktrees/
 icons/
+
+# Large binaries — use CI artifacts or download at runtime instead
+*.exe
+*.apk
+*.aab
+*.traineddata
+error.txt

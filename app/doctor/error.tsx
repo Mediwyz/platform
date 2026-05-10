@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-export default function PatientError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function DoctorError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#001E40]">
       <div className="text-center max-w-md px-6">
@@ -24,7 +24,7 @@ export default function PatientError({ error, reset }: { error: Error & { digest
             Try Again
           </button>
           <Link
-            href="/patient"
+            href="/doctor"
             className="w-full sm:w-auto px-5 py-2.5 bg-white/10 text-white rounded-xl text-sm font-semibold hover:bg-white/20 transition-colors text-center"
           >
             Go to Dashboard

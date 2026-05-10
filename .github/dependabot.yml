@@ -1,0 +1,46 @@
+version: 2
+
+updates:
+  # ── Next.js frontend ────────────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    groups:
+      next-react:
+        patterns: ["next", "react", "react-dom", "@types/react*"]
+      testing:
+        patterns: ["vitest", "@vitest/*", "@testing-library/*", "@playwright/test"]
+      prisma:
+        patterns: ["prisma", "@prisma/*"]
+    ignore:
+      # Major version bumps require manual review
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # ── NestJS backend ───────────────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    groups:
+      nestjs:
+        patterns: ["@nestjs/*"]
+      prisma:
+        patterns: ["prisma", "@prisma/*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # ── GitHub Actions ───────────────────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3

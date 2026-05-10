@@ -965,7 +965,7 @@ function mapProviders(raw: unknown[]): ProviderCard[] {
   }))
 }
 
-function ProviderCardItem({ provider, color, slug, onBook }: { provider: ProviderCard; color: string; slug: string; onBook: () => void }) {
+function ProviderCardItem({ provider, color, onBook }: { provider: ProviderCard; color: string; onBook: () => void }) {
   const bgLight  = hex2rgba(color, 0.10)
   const bgMedium = hex2rgba(color, 0.20)
   const avatarUrl = avatarSrc(provider.profileImage, provider.firstName, provider.lastName)
@@ -979,9 +979,11 @@ function ProviderCardItem({ provider, color, slug, onBook }: { provider: Provide
       <div className="relative w-full h-24 sm:h-28 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgLight} 100%)` }}>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={avatarUrl} alt="" className="w-full h-full object-cover object-top scale-150 blur-2xl opacity-40" />
         </div>
         <div className="relative group-hover:scale-105 transition-transform duration-300">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={avatarUrl} alt={`${provider.firstName} ${provider.lastName}`}
             className="w-14 h-14 sm:h-16 sm:w-16 rounded-full object-cover object-top border-2 border-white shadow-lg" />
           {provider.verified && <FaCheckCircle className="absolute -bottom-0.5 -right-0.5 text-blue-500 text-xs bg-white rounded-full" />}
@@ -1053,6 +1055,7 @@ function ShopItemCard({ item, authenticated }: { item: ShopItem; authenticated: 
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
       <div className="relative w-full h-24 sm:h-28 bg-gradient-to-br from-teal-50 to-sky-50 flex items-center justify-center overflow-hidden">
         {item.imageUrl
+          // eslint-disable-next-line @next/next/no-img-element
           ? <img src={item.imageUrl} alt={item.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" />
           : <span className="text-5xl leading-none group-hover:scale-110 transition-transform duration-300">💊</span>
         }

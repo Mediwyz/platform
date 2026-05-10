@@ -40,14 +40,8 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
   },
 ]
 
-function StarRow({ count }: { count: number }) {
-  return (
-    <div className="flex gap-0.5">
-      {Array.from({ length: count }).map((_, i) => (
-        <FaStar key={i} className="text-yellow-400 text-xs" />
-      ))}
-    </div>
-  )
+function initials(name: string) {
+  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
 }
 
 export default function TestimonialsSection() {
@@ -62,7 +56,7 @@ export default function TestimonialsSection() {
             id: t.id,
             name: t.patientName ?? t.name,
             role: t.location ?? t.role,
-            avatar: t.avatarUrl ?? t.avatar ?? '/images/hero/patient-1.png',
+            avatar: t.avatarUrl ?? t.avatar ?? '',
             rating: t.rating ?? 5,
             quote: t.quote,
             countryCode: t.countryCode,
@@ -73,40 +67,45 @@ export default function TestimonialsSection() {
   }, [])
 
   return (
-    <div className="bg-[#f8fafc] border-b border-gray-100 py-10 sm:py-14">
+    <section className="bg-[#001E40] py-12 sm:py-16 border-t border-white/5">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-7 text-center">
-          Trusted by patients across Africa
-        </p>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-brand-sky/60 mb-3">
+            What our members say
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
+            Trusted by patients across Africa
+          </h2>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {testimonials.slice(0, 3).map((t, i) => (
             <div
               key={t.id ?? i}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3"
+              className="rounded-2xl p-6 border border-white/10 bg-white/5 flex flex-col gap-4 hover:bg-white/[0.08] transition-colors"
             >
-              <FaQuoteLeft className="text-[#0C6780]/20 text-2xl flex-shrink-0" />
+              <FaQuoteLeft className="text-brand-sky/30 text-3xl flex-shrink-0" />
 
-              <p className="text-sm text-gray-600 leading-relaxed flex-1">
-                {t.quote}
+              {/* Stars */}
+              <div className="flex gap-0.5">
+                {Array.from({ length: Math.min(t.rating, 5) }).map((_, j) => (
+                  <FaStar key={j} className="text-yellow-400 text-xs" />
+                ))}
+              </div>
+
+              {/* Quote */}
+              <p className="text-sm text-white/80 leading-relaxed flex-1">
+                &ldquo;{t.quote}&rdquo;
               </p>
 
-              <div>
-                <StarRow count={t.rating} />
-                <div className="flex items-center gap-2.5 mt-2.5">
-                  <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/hero/patient-1.png' }}
-                    />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-900 leading-tight">{t.name}</p>
-                    <p className="text-[10px] text-gray-400">{t.role}</p>
-                  </div>
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-3 border-t border-white/10">
+                <AvatarOrInitials src={t.avatar} name={t.name} />
+                <div>
+                  <p className="text-xs font-bold text-white leading-tight">{t.name}</p>
+                  <p className="text-[10px] text-brand-sky/60 mt-0.5">{t.role}</p>
                 </div>
               </div>
             </div>
@@ -114,6 +113,29 @@ export default function TestimonialsSection() {
         </div>
 
       </div>
+    </section>
+  )
+}
+
+function AvatarOrInitials({ src, name }: { src: string; name: string }) {
+  const [errored, setErrored] = useState(false)
+
+  if (!src || errored) {
+    return (
+      <div className="w-9 h-9 rounded-full bg-brand-teal/40 ring-2 ring-brand-sky/20 flex items-center justify-center flex-shrink-0">
+        <span className="text-[10px] font-bold text-brand-sky">{initials(name)}</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-brand-sky/20 flex-shrink-0">
+      <img
+        src={src}
+        alt={name}
+        className="w-full h-full object-cover"
+        onError={() => setErrored(true)}
+      />
     </div>
   )
 }
