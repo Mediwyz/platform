@@ -275,7 +275,7 @@ export default function MealPlannerTab() {
    {/* Selected Day Macros */}
    {currentDay && currentDay.meals.length > 0 && (
     <div className="bg-white rounded-xl shadow-sm p-4">
-     <p className="text-xs text-gray-400 mb-2 font-medium">{currentDay.day}'s totals</p>
+     <p className="text-xs text-gray-400 mb-2 font-medium">{currentDay.day}&apos;s totals</p>
      <div className="grid grid-cols-4 gap-2 text-center">
       <div>
        <p className="text-lg font-bold text-[#001E40]">{currentDay.totalCalories}</p>

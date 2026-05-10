@@ -102,7 +102,7 @@ let nurseUserId = ''
 // ─── 1. Setup: Login and ensure wallet balance ─────────────────────────────
 
 test.describe.serial('Workflow Triggers Full Coverage', () => {
-  let providerCookiesMap: Record<string, string> = {}
+  const providerCookiesMap: Record<string, string> = {}
 
   test('1.1 Login as patient and ensure wallet balance', async ({ request }) => {
     patientCookies = await loginAndGetCookies(request, USERS.patient.email, USERS.patient.password)

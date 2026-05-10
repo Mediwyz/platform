@@ -107,7 +107,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
    {/* Today's snapshot */}
    {snapshot && (
     <div className="bg-white rounded-xl shadow-sm p-4">
-     <p className="text-xs font-semibold text-[#001E40] mb-3 uppercase tracking-wide">Today's snapshot (Wyzo sees this)</p>
+     <p className="text-xs font-semibold text-[#001E40] mb-3 uppercase tracking-wide">Today&apos;s snapshot (Wyzo sees this)</p>
      <div className="grid grid-cols-3 gap-3">
       <div className="text-center">
        <div className="w-10 h-10 rounded-xl bg-[#001E40]/5 flex items-center justify-center mx-auto mb-1">

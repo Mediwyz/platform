@@ -354,7 +354,7 @@ export default function FloatingPrescriptionFAB() {
                     </button>
                   )}
                   <p className="text-sm text-gray-600 mb-4">
-                    Upload your prescription. We'll extract the medicines and show matching products at the top of the Health Shop.
+                    Upload your prescription. We&apos;ll extract the medicines and show matching products at the top of the Health Shop.
                   </p>
 
                   {extractError && (

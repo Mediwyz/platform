@@ -185,7 +185,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
               <div className="text-xs text-gray-500 italic">
                 No notification to {side} at this step.
                 {step.actionsForProvider.length === 0 && step.actionsForPatient.length === 0 && (
-                  <> This is a terminal state — that's fine.</>
+                  <> This is a terminal state — that&apos;s fine.</>
                 )}
               </div>
             )}

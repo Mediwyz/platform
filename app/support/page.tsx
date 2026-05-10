@@ -45,14 +45,14 @@ export default function SupportPage() {
             <FaLifeRing className="text-[#0C6780]" /> Contact support
           </h1>
           <p className="text-sm text-gray-500 mb-6">
-            Your message reaches the MediWyz admin team via in-app notification. We\'ll respond inside the app.
+            Your message reaches the MediWyz admin team via in-app notification. We&apos;ll respond inside the app.
           </p>
 
           {sent ? (
             <div className="text-center py-8">
               <FaCheckCircle className="mx-auto text-green-500 text-5xl mb-3" />
               <p className="text-lg font-semibold text-[#001E40] mb-1">Message sent</p>
-              <p className="text-sm text-gray-500">We\'ll get back to you inside the app.</p>
+              <p className="text-sm text-gray-500">We&apos;ll get back to you inside the app.</p>
               <button
                 onClick={() => { setSent(false); setForm({ name: '', email: '', subject: '', message: '', website: '' }) }}
                 className="mt-5 text-[#0C6780] hover:underline text-sm"

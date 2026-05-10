@@ -196,9 +196,9 @@ const LoginForm: React.FC = () => {
  </button>
 
  <div className="text-center mt-3">
- <a href="/forgot-password" className="text-sm text-[#0C6780] hover:underline">
+ <Link href="/forgot-password" className="text-sm text-[#0C6780] hover:underline">
  Forgot password?
- </a>
+ </Link>
  </div>
  </form>
 

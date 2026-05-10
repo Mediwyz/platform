@@ -98,7 +98,7 @@ export default function CompanyDangerZone({
         <div className="bg-white border border-red-200 rounded-lg p-4 space-y-3">
           {mode === 'transfer' && (
             <label className="block">
-              <span className="text-xs font-medium text-gray-700">New owner's email</span>
+              <span className="text-xs font-medium text-gray-700">New owner&apos;s email</span>
               <input
                 type="email"
                 value={newOwnerEmail}

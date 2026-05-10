@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   FaTimes, FaArrowLeft, FaArrowRight, FaCheckCircle, FaCalendarAlt,
   FaUserMd, FaConciergeBell, FaClock, FaLock, FaStar,
@@ -882,7 +883,7 @@ function WorkflowStep({
 
   return (
     <div className="px-4 pt-3 pb-6 space-y-3">
-      <p className="text-xs text-gray-400">Choose how you'd like this appointment — tap to see what happens at each step.</p>
+      <p className="text-xs text-gray-400">Choose how you&apos;d like this appointment — tap to see what happens at each step.</p>
       {workflows.map(wf => {
         const modeLabel = MODE_LABEL[wf.serviceMode] ?? wf.serviceMode
         const modeEmoji = MODE_EMOJI[wf.serviceMode] ?? '📋'
@@ -1165,7 +1166,7 @@ function AuthStep({
         </button>
         <p className="text-center text-xs text-gray-400">
           No account?{' '}
-          <a href="/signup" className="text-[#0C6780] font-medium hover:underline">Create one here →</a>
+          <Link href="/signup" className="text-[#0C6780] font-medium hover:underline">Create one here →</Link>
         </p>
       </div>
     </div>
@@ -1277,7 +1278,7 @@ function ConfirmStep({
           </div>
           {canAfford
             ? <span className="text-green-500 text-base flex-shrink-0">✓</span>
-            : <a href="/patient/billing" className="text-[11px] text-[#0C6780] font-medium hover:underline flex-shrink-0 whitespace-nowrap">Top up →</a>}
+            : <Link href="/patient/billing" className="text-[11px] text-[#0C6780] font-medium hover:underline flex-shrink-0 whitespace-nowrap">Top up →</Link>}
         </div>
       )}
 

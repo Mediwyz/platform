@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Link from 'next/link'
 import {
   FaChartLine, FaPiggyBank, FaExclamationTriangle, FaArrowUp,
   FaArrowDown, FaHourglassHalf, FaFileInvoiceDollar, FaShieldAlt,
@@ -64,7 +65,7 @@ export default function InsuranceAnalyticsPage() {
   if (error) return (
     <div className="p-6">
       <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">
-        {error}. You may not own an insurance company yet — visit the <a href="/insurance/plans" className="underline font-semibold">plans</a> page.
+        {error}. You may not own an insurance company yet — visit the <Link href="/insurance/plans" className="underline font-semibold">plans</Link> page.
       </div>
     </div>
   )
@@ -152,7 +153,7 @@ export default function InsuranceAnalyticsPage() {
       </section>
 
       <footer className="text-[11px] text-gray-500 pt-2">
-        Ledger reconciliation runs nightly. If you see numbers that don't match your own records, do NOT write to the balance directly — file a ticket and wait for a compensating ledger row.
+        Ledger reconciliation runs nightly. If you see numbers that don&apos;t match your own records, do NOT write to the balance directly — file a ticket and wait for a compensating ledger row.
       </footer>
     </div>
   )

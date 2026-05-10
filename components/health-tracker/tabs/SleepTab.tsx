@@ -231,7 +231,7 @@ export default function SleepTab() {
      className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#001E40] text-white rounded-xl font-medium hover:bg-[#0C6780] transition-colors"
     >
      <FaPlus className="w-4 h-4" />
-     Log Last Night's Sleep
+     Log Last Night&apos;s Sleep
     </button>
    )}
 

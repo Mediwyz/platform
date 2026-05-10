@@ -155,7 +155,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
 
       {/* Header with refresh */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-[#001E40]">Today's Summary</h2>
+        <h2 className="text-lg font-bold text-[#001E40]">Today&apos;s Summary</h2>
         <button
           onClick={fetchData}
           className="p-2 text-gray-400 hover:text-[#0C6780] transition-colors rounded-lg hover:bg-gray-100"

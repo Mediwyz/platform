@@ -89,7 +89,7 @@ export default function RoleRequestsPage() {
           <FiCheckCircle className="text-4xl text-green-300 mx-auto mb-3" />
           <p className="font-medium text-gray-600">No pending role requests</p>
           <p className="text-sm text-gray-400 mt-1">
-            When someone proposes a new role on signup, it'll appear here for review.
+            When someone proposes a new role on signup, it&apos;ll appear here for review.
           </p>
         </div>
       )}

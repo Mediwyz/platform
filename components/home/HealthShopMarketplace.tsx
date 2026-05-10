@@ -208,7 +208,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
               <FaShoppingCart className="text-3xl text-gray-300 mx-auto mb-3" />
               <p className="text-sm font-medium text-gray-600">Products are loading...</p>
               <p className="text-xs text-gray-400 mt-1">
-                <a href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</a>
+                <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</Link>
               </p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
             <FaShoppingCart className="text-3xl text-gray-300 mx-auto mb-3" />
             <p className="text-sm font-medium text-gray-600">Products are loading...</p>
             <p className="text-xs text-gray-400 mt-1">
-              <a href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</a>
+              <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</Link>
             </p>
           </div>
         </div>

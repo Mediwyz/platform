@@ -108,7 +108,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
       ) : (
         <div className="space-y-3">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700 mb-1.5 block">I'm registering as</span>
+            <span className="text-sm font-medium text-gray-700 mb-1.5 block">I&apos;m registering as</span>
             <select
               value={selectedUserType}
               onChange={(e) => onUserTypeChange(e.target.value)}
