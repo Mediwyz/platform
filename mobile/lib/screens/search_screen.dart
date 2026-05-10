@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../api/search_api.dart';
+import '../api/geo_api.dart';
 import '../api/roles_api.dart';
+import '../api/search_api.dart';
 import '../services/cart_service.dart';
 import '../theme/mediwyz_theme.dart';
 import '../widgets/app_drawer.dart';
@@ -11,7 +12,7 @@ import '../widgets/favorite_button.dart';
 
 /// Discover — unified tabbed discovery screen.
 /// Mirrors web components/home/DiscoverSection.tsx:
-///   Providers 👨‍⚕️ | Services 🩺 | Health Shop 🛒
+///   Services 🩺 | Providers 👨‍⚕️ | Organisations 🏥 | Health Shop 🛒
 ///
 /// Roles are always fetched from /api/roles — no hardcoded role codes.
 class SearchScreen extends ConsumerStatefulWidget {
@@ -24,9 +25,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   int _tabIndex = 0;
 
   static const _tabs = [
-    {'id': 'providers', 'label': 'Providers',   'emoji': '👨‍⚕️'},
-    {'id': 'services',  'label': 'Services',    'emoji': '🩺'},
-    {'id': 'shop',      'label': 'Health Shop', 'emoji': '🛒'},
+    {'id': 'services',      'label': 'Services',       'emoji': '🩺'},
+    {'id': 'providers',     'label': 'Providers',      'emoji': '👨‍⚕️'},
+    {'id': 'organisations', 'label': 'Orgs',           'emoji': '🏥'},
+    {'id': 'shop',          'label': 'Health Shop',    'emoji': '🛒'},
   ];
 
   @override
@@ -42,7 +44,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             style: TextStyle(fontWeight: FontWeight.bold, color: MediWyzColors.navy)),
         iconTheme: const IconThemeData(color: MediWyzColors.navy),
         actions: [
-          if (_tabIndex == 2) ...[
+          if (_tabIndex == 3) ...[
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -119,8 +121,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             child: IndexedStack(
               index: _tabIndex,
               children: const [
-                _ProvidersTab(),
                 _ServicesTab(),
+                _ProvidersTab(),
+                _OrganisationsTab(),
                 _ShopTab(),
               ],
             ),
@@ -697,6 +700,210 @@ class _ShopTabState extends ConsumerState<_ShopTab> {
                       color: Colors.white, fontWeight: FontWeight.w600)),
               onPressed: () => context.push('/checkout'),
             ),
+          ),
+      ],
+    );
+  }
+}
+
+// ─── Organisations tab ────────────────────────────────────────────────────────
+
+class _OrganisationsTab extends StatefulWidget {
+  const _OrganisationsTab();
+  @override
+  State<_OrganisationsTab> createState() => _OrganisationsTabState();
+}
+
+class _OrganisationsTabState extends State<_OrganisationsTab> {
+  static const _types = [
+    {'id': 'all',        'label': 'All'},
+    {'id': 'clinic',     'label': 'Clinics'},
+    {'id': 'hospital',   'label': 'Hospitals'},
+    {'id': 'lab',        'label': 'Labs'},
+    {'id': 'pharmacy',   'label': 'Pharmacies'},
+  ];
+
+  String _selectedType = 'all';
+  String _query = '';
+  List<Map<String, dynamic>> _entities = [];
+  bool _loading = true;
+  String? _error;
+  final _queryCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void dispose() {
+    _queryCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await GeoApi.mapData();
+      final raw = (data['entities'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+      setState(() {
+        _entities = raw;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() { _error = e.toString(); _loading = false; });
+    }
+  }
+
+  List<Map<String, dynamic>> get _filtered {
+    var list = _entities;
+    if (_selectedType != 'all') {
+      list = list.where((e) {
+        final t = (e['type'] as String? ?? '').toLowerCase();
+        return t.contains(_selectedType);
+      }).toList();
+    }
+    if (_query.isNotEmpty) {
+      final q = _query.toLowerCase();
+      list = list.where((e) {
+        final name = (e['name'] as String? ?? '').toLowerCase();
+        final address = (e['address'] as String? ?? '').toLowerCase();
+        return name.contains(q) || address.contains(q);
+      }).toList();
+    }
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Filter chips
+        SizedBox(
+          height: 44,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: _types.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            itemBuilder: (_, i) {
+              final t = _types[i];
+              final selected = _selectedType == t['id'];
+              return ChoiceChip(
+                label: Text(t['label']!),
+                selected: selected,
+                onSelected: (_) => setState(() => _selectedType = t['id']!),
+                selectedColor: MediWyzColors.teal,
+                backgroundColor: Colors.grey.shade100,
+                labelStyle: TextStyle(
+                  color: selected ? Colors.white : MediWyzColors.navy,
+                  fontSize: 12,
+                ),
+              );
+            },
+          ),
+        ),
+        // Search
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: TextField(
+            controller: _queryCtrl,
+            decoration: InputDecoration(
+              hintText: 'Search clinics, hospitals, labs…',
+              hintStyle: const TextStyle(fontSize: 13),
+              prefixIcon: const Icon(Icons.search, size: 20),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300)),
+            ),
+            onChanged: (v) => setState(() => _query = v),
+          ),
+        ),
+        if (_loading) const LinearProgressIndicator(),
+        if (_error != null)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(children: [
+              Text(_error!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 8),
+              TextButton(onPressed: _load, child: const Text('Retry')),
+            ]),
+          )
+        else
+          Expanded(
+            child: _filtered.isEmpty && !_loading
+                ? _EmptyState(
+                    icon: Icons.business_outlined,
+                    message: 'No organisations found',
+                    hint: 'Try a different filter or search term',
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: _filtered.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (_, i) {
+                      final org = _filtered[i];
+                      final name = org['name']?.toString() ?? '';
+                      final type = org['type']?.toString() ?? '';
+                      final address = org['address']?.toString() ?? '';
+                      final phone = org['phone']?.toString();
+                      return Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.grey.shade200)),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 8),
+                          leading: Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: MediWyzColors.sky.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.business, color: MediWyzColors.navy),
+                          ),
+                          title: Text(name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  color: MediWyzColors.navy)),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (type.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(type,
+                                    style: const TextStyle(
+                                        fontSize: 11, color: MediWyzColors.teal)),
+                              ],
+                              if (address.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(address,
+                                    style: const TextStyle(
+                                        fontSize: 11, color: Colors.black54),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis),
+                              ],
+                            ],
+                          ),
+                          trailing: phone != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.phone_outlined,
+                                      color: MediWyzColors.teal, size: 20),
+                                  onPressed: () {},
+                                )
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
           ),
       ],
     );
