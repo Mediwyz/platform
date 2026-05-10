@@ -57,11 +57,12 @@ interface ShopItem {
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: 'providers' as const, label: 'Providers',     emoji: '👨‍⚕️' },
-  { id: 'services'  as const, label: 'Services',      emoji: '🩺'  },
-  { id: 'shop'      as const, label: 'Health Shop',   emoji: '🛒'  },
+  { id: 'services'      as const, label: 'Services',      emoji: '🩺',  desc: 'Consultations & treatments' },
+  { id: 'providers'     as const, label: 'Providers',     emoji: '👨‍⚕️', desc: 'Qualified professionals'    },
+  { id: 'organisations' as const, label: 'Organisations', emoji: '🏥',  desc: 'Clinics, hospitals & labs'  },
+  { id: 'shop'          as const, label: 'Health Shop',   emoji: '🛒',  desc: 'Medicines & health products' },
 ]
-type TabId = 'providers' | 'services' | 'shop'
+type TabId = 'services' | 'providers' | 'organisations' | 'shop'
 
 const ENTITY_MODES = [
   { value: 'clinic',     label: 'Clinics',   color: '#DC2626', emoji: '🏥' },
@@ -192,7 +193,7 @@ export default function DiscoverSection() {
   const onMapLoad = useCallback((map: google.maps.Map) => { mapRef.current = map }, [])
 
   // ── Tab state ──────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<TabId>('providers')
+  const [activeTab, setActiveTab] = useState<TabId>('services')
   const [mobileMapOpen, setMobileMapOpen] = useState(false)
 
   // ── Shared role data (fetched once, used by all tabs + map) ────────────────
@@ -247,11 +248,13 @@ export default function DiscoverSection() {
   // When tab changes, sync map mode: providers tab uses selected role, others show ALL
   const [tabRoleFilter, setTabRoleFilter] = useState('ALL')
   const [tabServiceRole, setTabServiceRole] = useState('ALL')
+  const [orgTypeFilter, setOrgTypeFilter] = useState<string>('ALL')
 
   useEffect(() => {
     if (activeTab === 'providers') setMapMode(tabRoleFilter)
+    else if (activeTab === 'organisations') setMapMode(orgTypeFilter === 'ALL' ? 'clinic' : orgTypeFilter)
     else setMapMode('ALL')
-  }, [activeTab, tabRoleFilter])
+  }, [activeTab, tabRoleFilter, orgTypeFilter])
 
   const locate = useCallback(() => {
     if (!navigator.geolocation) { setLocError('Geolocation not supported'); return }
@@ -441,6 +444,23 @@ export default function DiscoverSection() {
     return shopItems.filter(i => i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q))
   }, [shopItems, shopSearch])
 
+  // ─── Organisations tab state ───────────────────────────────────────────────
+  const [orgSearch, setOrgSearch] = useState('')
+
+  const filteredOrgs = useMemo(() => {
+    let list = allEntities
+    if (orgTypeFilter !== 'ALL') list = list.filter(e => e.type === orgTypeFilter)
+    if (orgSearch.trim()) {
+      const q = orgSearch.toLowerCase()
+      list = list.filter(e =>
+        (e.name?.toLowerCase().includes(q)) ||
+        (e.city?.toLowerCase().includes(q)) ||
+        (e.address?.toLowerCase().includes(q))
+      )
+    }
+    return list
+  }, [allEntities, orgTypeFilter, orgSearch])
+
   // ─── Layout ────────────────────────────────────────────────────────────────
 
   return (
@@ -458,27 +478,25 @@ export default function DiscoverSection() {
           </p>
         </div>
 
-        {/* 3 rounded pill tabs */}
-        <div className="flex justify-center">
-          <div className="inline-flex bg-white/10 p-1 rounded-full gap-1">
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id)
-                  trackEvent('discover_tab_switch', { tab: tab.id })
-                }}
-                className={`flex items-center gap-2 px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-[#9AE1FF] text-[#001E40] shadow-lg shadow-[#9AE1FF]/20'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <span className="text-base leading-none">{tab.emoji}</span>
-                <span className="hidden xs:inline sm:inline">{tab.label}</span>
-              </button>
-            ))}
-          </div>
+        {/* 4 rounded-border tab buttons */}
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id)
+                trackEvent('discover_tab_switch', { tab: tab.id })
+              }}
+              className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 text-sm font-semibold transition-all duration-200 ${
+                activeTab === tab.id
+                  ? 'border-[#9AE1FF] bg-[#9AE1FF] text-[#001E40] shadow-lg shadow-[#9AE1FF]/25'
+                  : 'border-white/25 text-white/75 hover:border-[#9AE1FF]/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="text-base leading-none">{tab.emoji}</span>
+              <span>{tab.label}</span>
+            </button>
+          ))}
         </div>
 
         {/* Mobile: map toggle button */}
@@ -508,7 +526,9 @@ export default function DiscoverSection() {
                   <p className="text-xs font-bold text-white">
                     {activeTab === 'providers' && tabRoleFilter !== 'ALL'
                       ? `${allModes.find(m => m.value === tabRoleFilter)?.emoji ?? '👨‍⚕️'} ${activeRoleInfo?.label ?? ''} near you`
-                      : 'Find nearby healthcare'}
+                      : activeTab === 'organisations'
+                        ? `🏥 Clinics, hospitals & labs near you`
+                        : 'Find nearby healthcare'}
                   </p>
                   <p className="text-[10px] text-white/40 mt-0.5">Tap a pin for directions</p>
                 </div>
@@ -873,6 +893,94 @@ export default function DiscoverSection() {
                       )
                     })}
                   </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ── Organisations tab ──────────────────────────────────────────────────── */}
+          {activeTab === 'organisations' && (
+            <div className="py-6 sm:py-8 overflow-hidden">
+              <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
+
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <FaClinicMedical className="text-[#0C6780] text-lg" />
+                      Organisations
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-0.5">Find clinics, hospitals, laboratories & pharmacies near you</p>
+                  </div>
+                  <Link href="/search/providers" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
+                    See All <FaArrowRight className="text-xs" />
+                  </Link>
+                </div>
+
+                {/* Type filter + search */}
+                <div className="flex flex-col sm:flex-row gap-2 mb-5">
+                  <div className="relative flex-shrink-0 sm:w-56">
+                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                    <input type="text" placeholder="Search by name or city…" value={orgSearch}
+                      onChange={e => setOrgSearch(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+                  </div>
+                  <div className="flex gap-1.5 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
+                    {[
+                      { key: 'ALL',       label: 'All',         emoji: '🏥' },
+                      { key: 'clinic',    label: 'Clinics',     emoji: '🏥' },
+                      { key: 'hospital',  label: 'Hospitals',   emoji: '🏨' },
+                      { key: 'laboratory',label: 'Labs',        emoji: '🔬' },
+                      { key: 'pharmacy',  label: 'Pharmacies',  emoji: '💊' },
+                    ].map(t => (
+                      <button key={t.key} onClick={() => setOrgTypeFilter(t.key)}
+                        className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border whitespace-nowrap
+                          ${orgTypeFilter === t.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                      >
+                        {t.emoji} {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {filteredOrgs.length === 0 ? (
+                  <div className="text-center py-12">
+                    <FaClinicMedical className="text-4xl text-gray-200 mx-auto mb-3" />
+                    <p className="text-sm text-gray-500">No organisations match your search.</p>
+                    <button onClick={() => { setOrgSearch(''); setOrgTypeFilter('ALL') }}
+                      className="mt-2 text-xs text-[#0C6780] hover:underline">Clear filters</button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                    {filteredOrgs.slice(0, 30).map(org => (
+                      <button
+                        key={org.id}
+                        onClick={() => {
+                          setSelected(org)
+                          mapRef.current?.panTo({ lat: org.latitude, lng: org.longitude })
+                          mapRef.current?.setZoom(16)
+                          setMobileMapOpen(true)
+                          trackEvent('discover_org_tap', { orgId: org.id, type: org.type })
+                        }}
+                        className="group flex gap-3 items-start bg-white border border-gray-100 rounded-2xl p-4 text-left hover:shadow-lg hover:border-[#0C6780]/20 hover:-translate-y-0.5 transition-all duration-200"
+                      >
+                        <div className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-xl"
+                          style={{ background: ENTITY_MODES.find(m => m.value === org.type)?.color ? hex2rgba(ENTITY_MODES.find(m => m.value === org.type)!.color, 0.12) : '#f3f4f6' }}>
+                          {ENTITY_MODES.find(m => m.value === org.type)?.emoji ?? '🏥'}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-gray-900 truncate group-hover:text-[#0C6780] transition-colors">{org.name}</p>
+                          <p className="text-[11px] text-gray-400 capitalize mt-0.5">{org.type}</p>
+                          {org.address && <p className="text-[11px] text-gray-500 mt-1 line-clamp-1 flex items-center gap-1"><FaMapMarkerAlt className="text-[#0C6780] text-[9px] flex-shrink-0" />{org.address}{org.city ? `, ${org.city}` : ''}</p>}
+                          {org.phone && <p className="text-[11px] text-gray-500 mt-0.5">{org.phone}</p>}
+                        </div>
+                        <FaChevronRight className="text-gray-300 group-hover:text-[#0C6780] text-xs flex-shrink-0 mt-1 transition-colors" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {filteredOrgs.length > 30 && (
+                  <p className="text-center text-xs text-gray-400 mt-4">Showing 30 of {filteredOrgs.length} organisations. Use the map to explore more.</p>
                 )}
               </div>
             </div>
