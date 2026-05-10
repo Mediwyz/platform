@@ -305,17 +305,29 @@ jobs:
           '
 
           echo "=== Applying schema migrations ==="
-          # Step 1: try migrate deploy (idempotent, safe — applies only unapplied migration files).
-          # This is a no-op until you create migration files locally with:
-          #   npx prisma migrate dev --name <description>
-          # then commit the generated prisma/migrations/* files.
-          docker compose exec -T api \
-            node_modules/.bin/prisma migrate deploy \
-              --schema=./prisma/schema.prisma \
-          && echo "migrate deploy: OK" \
-          || {
-            echo "WARNING: migrate deploy failed (likely no migrations exist yet) — falling back to db push."
-            # Step 2: db push for additive changes (no column drops without --accept-data-loss flag).
+          # Count committed migration SQL files.
+          # When developers run `prisma migrate dev --name <x>` locally and commit
+          # the resulting prisma/migrations/* files, MIGRATION_COUNT > 0 and the
+          # pipeline uses migrate deploy (idempotent, production-safe).
+          # Until then (early development, schema-only workflow) it falls through
+          # to db push automatically — no manual step required either way.
+          MIGRATION_COUNT=$(docker compose exec -T api sh -c \
+            'find prisma/migrations -name "migration.sql" 2>/dev/null | wc -l' \
+            | tr -d '[:space:]')
+          echo "Committed migration files found: $MIGRATION_COUNT"
+
+          if [ "${MIGRATION_COUNT}" -gt 0 ]; then
+            echo "Running prisma migrate deploy (${MIGRATION_COUNT} migration files)..."
+            docker compose exec -T api \
+              node_modules/.bin/prisma migrate deploy \
+                --schema=./prisma/schema.prisma \
+            && echo "migrate deploy: OK" \
+            || {
+              echo "ERROR: migrate deploy failed — investigate prisma/migrations/ or reset."
+              exit 1
+            }
+          else
+            echo "No migration files — syncing schema with prisma db push..."
             docker compose exec -T api \
               node_modules/.bin/prisma db push \
                 --schema=./prisma/schema.prisma \
@@ -334,7 +346,7 @@ jobs:
                 exit 1
               fi
             }
-          }
+          fi
 
           echo "=== Seeding database ==="
           docker compose exec -T api sh -c "
