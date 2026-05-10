@@ -12,7 +12,14 @@ const compat = new FlatCompat({
 const eslintConfig = [
   // Global ignores must be first
   {
-    ignores: ["server.js", "node_modules/", ".next/"],
+    ignores: [
+      "server.js",
+      "node_modules/",
+      ".next/",
+      "backend/",   // NestJS has its own ESLint config
+      "mobile/",    // Flutter — no JS/TS to lint here
+      "prisma/",    // generated client + seed scripts
+    ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {

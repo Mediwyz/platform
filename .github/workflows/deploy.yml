@@ -39,7 +39,7 @@ jobs:
       - name: Type check (backend)
         run: cd backend && npm ci && npx tsc --noEmit
 
-      - name: Lint
+      - name: Lint (frontend)
         run: npx eslint . --max-warnings=0
 
   # ─── Unit Tests ──────────────────────────────────────────────────────────
@@ -305,25 +305,46 @@ jobs:
           '
 
           echo "=== Applying schema migrations ==="
-          # Count committed migration SQL files.
-          # When developers run `prisma migrate dev --name <x>` locally and commit
-          # the resulting prisma/migrations/* files, MIGRATION_COUNT > 0 and the
-          # pipeline uses migrate deploy (idempotent, production-safe).
-          # Until then (early development, schema-only workflow) it falls through
-          # to db push automatically — no manual step required either way.
+          # Count committed Prisma migration files (excludes manual/ SQL scripts).
           MIGRATION_COUNT=$(docker compose exec -T api sh -c \
             'find prisma/migrations -name "migration.sql" 2>/dev/null | wc -l' \
             | tr -d '[:space:]')
           echo "Committed migration files found: $MIGRATION_COUNT"
 
           if [ "${MIGRATION_COUNT}" -gt 0 ]; then
-            echo "Running prisma migrate deploy (${MIGRATION_COUNT} migration files)..."
+            # Detect baseline scenario: DB already has tables (managed by db push)
+            # but Prisma has never tracked migrations (_prisma_migrations missing).
+            # In that case, mark every committed migration as "already applied" so
+            # migrate deploy skips them and only runs truly new future migrations.
+            DB_HAS_TABLES=$(docker compose exec -T db \
+              psql -U mediwyz -d mediwyz -tAc \
+              "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';" \
+              | tr -d '[:space:]')
+            MIGRATIONS_TRACKED=$(docker compose exec -T db \
+              psql -U mediwyz -d mediwyz -tAc \
+              "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='_prisma_migrations';" \
+              | tr -d '[:space:]')
+
+            if [ "${DB_HAS_TABLES:-0}" -gt 0 ] && [ "${MIGRATIONS_TRACKED:-0}" -eq 0 ]; then
+              echo "Existing DB (${DB_HAS_TABLES} tables, no migration history) — marking all migrations as applied..."
+              docker compose exec -T api sh -c \
+                'find prisma/migrations -mindepth 1 -maxdepth 1 -type d | sort | while read dir; do
+                   name=$(basename "$dir")
+                   echo "  Resolving: $name"
+                   node_modules/.bin/prisma migrate resolve \
+                     --applied "$name" \
+                     --schema=./prisma/schema.prisma 2>&1 || true
+                 done'
+              echo "Baseline resolved — future schema changes will use migrate deploy."
+            fi
+
+            echo "Running prisma migrate deploy..."
             docker compose exec -T api \
               node_modules/.bin/prisma migrate deploy \
                 --schema=./prisma/schema.prisma \
             && echo "migrate deploy: OK" \
             || {
-              echo "ERROR: migrate deploy failed — investigate prisma/migrations/ or reset."
+              echo "ERROR: migrate deploy failed — check prisma/migrations/ for conflicts."
               exit 1
             }
           else
