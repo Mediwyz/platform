@@ -455,7 +455,7 @@ function MedicinesContent() {
  <option value="antibiotics">Antibiotics</option>
  <option value="diabetes">Diabetes</option>
  <option value="heart">Heart Health</option>
- <option value="children">Children's Health</option>
+ <option value="children">Children&apos;s Health</option>
  <option value="vitamins">Vitamins & Supplements</option>
  <option value="digestive">Digestive Health</option>
  <option value="skin">Skin & Dermatology</option>

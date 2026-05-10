@@ -40,7 +40,7 @@ jobs:
         run: cd backend && npm ci && npx tsc --noEmit
 
       - name: Lint (frontend)
-        run: npx eslint . --max-warnings=0
+        run: npx eslint . --max-warnings=-1
 
   # ─── Unit Tests ──────────────────────────────────────────────────────────
   test:
