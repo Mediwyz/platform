@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { useParams } from 'next/navigation'
@@ -9,7 +10,7 @@ import {
  FaArrowLeft, FaStar, FaMapMarkerAlt, FaCalendarAlt,
  FaPhone, FaEnvelope, FaVideo, FaHome, FaLanguage, FaCheckCircle,
  FaCertificate, FaGraduationCap, FaBriefcase,
- FaUserNurse, FaComments, FaHospital, FaShieldAlt, FaUserPlus,
+ FaUserNurse, FaComments, FaHospital, FaShieldAlt,
 } from 'react-icons/fa'
 import AuthBookingLink from '@/components/booking/AuthBookingLink'
 import ConnectButton from '@/components/search/ConnectButton'
@@ -80,12 +81,11 @@ export default function NurseDetailsPage() {
  <div className="bg-white rounded-xl shadow-lg p-6">
  <div className="flex items-start gap-6">
  <div className="relative">
- <img
+ <Image
  src={nurse.profileImage}
  alt={`${nurse.firstName} ${nurse.lastName}`}
  width={120}
  height={120}
- loading="lazy"
  className="rounded-full object-cover border-4 border-blue-100"
  />
  {nurse.verified && (
@@ -318,12 +318,11 @@ export default function NurseDetailsPage() {
  {nurse.patientComments.map((comment) => (
  <div key={comment.id} className="p-4 bg-gray-50 rounded-lg">
  <div className="flex items-start gap-4">
- <img
+ <Image
  src={comment.patientProfileImage}
  alt={`${comment.patientFirstName} ${comment.patientLastName}`}
  width={40}
  height={40}
- loading="lazy"
  className="rounded-full object-cover"
  />
  <div className="flex-1">

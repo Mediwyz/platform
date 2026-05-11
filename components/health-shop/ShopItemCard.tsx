@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { FaPlus, FaMinus, FaShoppingCart, FaPrescription } from 'react-icons/fa'
 import { useCart } from './CartContext'
 import PrescriptionUploadModal from '@/components/shared/PrescriptionUploadModal'
@@ -34,7 +35,7 @@ interface Product {
 }
 
 export default function ShopItemCard({ product, rxMatch = false }: { product: Product; rxMatch?: boolean }) {
-  const { items, addToCart, updateQuantity, removeFromCart } = useCart()
+  const { items, addToCart, updateQuantity } = useCart()
   const cartItem = items.find(i => i.id === product.id)
   const qtyInCart = cartItem?.quantity || 0
 
@@ -65,7 +66,7 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
     doAddToCart()
   }
 
-  const handleRxConfirmed = (_prescriptionUrl: string) => {
+  const handleRxConfirmed = (_: string) => {
     doAddToCart()
     setShowRxModal(false)
   }
@@ -76,11 +77,14 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
       {/* Product image / fallback */}
       {product.imageUrl && !imgError ? (
         <div className="h-32 bg-gray-100 overflow-hidden">
-          <img
+          <Image
             src={product.imageUrl}
             alt={product.name}
+            width={80}
+            height={80}
             onError={() => setImgError(true)}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            style={{ objectFit: 'cover' }}
           />
         </div>
       ) : (
@@ -88,7 +92,7 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
           {CATEGORY_EMOJI[product.category] ? (
             <span className="text-4xl">{CATEGORY_EMOJI[product.category]}</span>
           ) : (
-            <img src="/images/logo-icon.svg" alt="MediWyz" className="w-10 h-10 opacity-40" />
+            <Image src="/images/logo-icon.svg" alt="MediWyz" width={40} height={40} className="w-10 h-10 opacity-40" />
           )}
         </div>
       )}

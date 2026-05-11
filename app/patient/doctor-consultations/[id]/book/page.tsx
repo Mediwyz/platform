@@ -10,16 +10,12 @@ import {
  FaVideo,
  FaUser,
  FaCheck,
- FaCreditCard,
  FaInfoCircle,
  FaStar,
  FaPhone,
  FaCalendarAlt,
- FaClock,
  FaShieldAlt,
- FaBuilding,
  FaWallet,
- FaFileInvoiceDollar,
  FaTicketAlt,
  FaDownload,
  FaPrint,
@@ -147,7 +143,7 @@ export default function DoctorConsultationBooking() {
  const res = await fetch(`/api/search/doctors?q=`)
  const data = await res.json()
  if (data.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const doc = data.data.find((d: any) => d.id === doctorId)
  if (doc) {
  setAppointmentDetails(prev => ({
@@ -180,10 +176,10 @@ export default function DoctorConsultationBooking() {
  const data = await res.json()
  if (data.data?.length > 0) {
  const dayOfWeek = new Date(appointmentDetails.date).getDay()
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const daySlots = data.data.filter((s: any) => s.dayOfWeek === dayOfWeek)
  if (daySlots.length > 0) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setTimeSlots(daySlots.map((s: any) => ({
  time: s.startTime,
  available: s.isAvailable !== false,

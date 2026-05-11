@@ -168,7 +168,7 @@ export default function CompletePharmacyOrderBooking() {
  const res = await fetch(`/api/search/medicines?q=`)
  const data = await res.json()
  if (data.data?.length > 0) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const med = data.data.find((m: any) => m.pharmacist?.id === pharmacyId)
  if (med) {
  setOrderDetails(prev => ({

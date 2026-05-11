@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -78,13 +79,13 @@ function PostCard({ post }: { post: Post }) {
     <article className="bg-white rounded-2xl border border-gray-200 hover:shadow-md transition-all overflow-hidden">
       {post.imageUrl && (
         <div className="h-40 overflow-hidden">
-          <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
+          <Image src={post.imageUrl} alt="" width={400} height={160} className="w-full h-full object-cover" />
         </div>
       )}
       <div className="p-4">
         <div className="flex items-center gap-2.5 mb-3">
           {post.author.profileImage ? (
-            <img src={post.author.profileImage} alt="" className="w-9 h-9 rounded-full object-cover" />
+            <Image src={post.author.profileImage} alt="" width={36} height={36} className="w-9 h-9 rounded-full object-cover" />
           ) : (
             <div className="w-9 h-9 rounded-full bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center text-xs font-bold flex-shrink-0">
               {getInitials(post.author.firstName, post.author.lastName)}
@@ -125,7 +126,7 @@ function PeopleYouMayKnow({ users }: { users: SuggestedUser[] }) {
         {users.length > 0 ? users.map(u => (
           <div key={u.id} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors">
             {u.profileImage ? (
-              <img src={u.profileImage} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+              <Image src={u.profileImage} alt="" width={32} height={32} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
             ) : (
               <div className="w-8 h-8 rounded-full bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {getInitials(u.firstName, u.lastName)}

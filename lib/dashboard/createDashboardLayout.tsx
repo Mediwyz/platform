@@ -75,7 +75,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     const [userData, setUserData] = useState<UserData | null>(null)
     const [contextData, setContextData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [error] = useState<string | null>(null)
     const router = useRouter()
     const pathname = usePathname()
 

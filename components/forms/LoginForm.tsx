@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent, ChangeEvent } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -101,7 +102,7 @@ const LoginForm: React.FC = () => {
  <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
  {/* Header */}
  <div className="text-center mb-6">
- <img src="/images/logo-icon.png" alt="MediWyz" className="w-16 h-16 mx-auto mb-3" />
+ <Image src="/images/logo-icon.png" alt="MediWyz" width={64} height={64} className="w-16 h-16 mx-auto mb-3" />
  <h3 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h3>
  <p className="text-gray-600">Sign in to your MediWyz account</p>
  </div>

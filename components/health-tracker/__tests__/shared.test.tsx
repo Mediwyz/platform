@@ -28,7 +28,7 @@ describe('Health Tracker Shared Components', () => {
  })
 
  it('caps progress at 100%', () => {
- const { container } = render(<GoalProgressBar label="Water" current={2500} target={2000} unit="ml" />)
+ render(<GoalProgressBar label="Water" current={2500} target={2000} unit="ml" />)
  // Progress bar should be capped visually
  expect(screen.getByText('2500/2000 ml')).toBeInTheDocument()
  })

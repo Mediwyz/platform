@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
+import Image from 'next/image'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -41,8 +42,8 @@ const ProviderCard = ({ provider, slug, accentColor, onBook }: { provider: Provi
  <div className="flex items-start gap-3 flex-1 min-w-0">
  <div className="relative flex-shrink-0">
  {provider.profileImage ? (
- <img src={provider.profileImage} alt={`${provider.firstName} ${provider.lastName}`}
- width={48} height={48} loading="lazy"
+ <Image src={provider.profileImage} alt={`${provider.firstName} ${provider.lastName}`}
+ width={48} height={48}
  className={`rounded-full object-cover border-2 ${accentColor}`} />
  ) : (
  <div className={`w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-brand-teal font-bold border-2 ${accentColor}`}>

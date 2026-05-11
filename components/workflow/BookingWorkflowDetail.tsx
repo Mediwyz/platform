@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { FiArrowLeft, FiCalendar, FiUser, FiClock } from 'react-icons/fi'
 import Link from 'next/link'
-import { toast } from 'react-toastify'
 import { useSocket } from '@/hooks/useSocket'
 import WorkflowTimeline from './WorkflowTimeline'
 import WorkflowCurrentStep from './WorkflowCurrentStep'

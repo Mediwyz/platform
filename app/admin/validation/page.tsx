@@ -75,12 +75,6 @@ export default function AccountValidation() {
  return matchSearch
  })
 
- const statusCounts = {
- pending: accounts.filter(a => statusFilter === 'pending').length,
- active: 0,
- suspended: 0,
- }
-
  const formatUserType = (userType: string) =>
  userType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 

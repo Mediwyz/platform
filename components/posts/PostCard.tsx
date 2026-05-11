@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { FaCheckCircle, FaHeart, FaComment, FaShare } from 'react-icons/fa'
 
 interface PostCardProps {
@@ -94,9 +95,11 @@ export default function PostCard({
  {/* Author row */}
  <div className="flex items-start gap-3">
  {author.profileImage ? (
- <img
+ <Image
  src={author.profileImage}
  alt={`${author.firstName} ${author.lastName}`}
+ width={40}
+ height={40}
  className="w-10 h-10 rounded-full object-cover flex-shrink-0"
  />
  ) : (
@@ -147,9 +150,11 @@ export default function PostCard({
  {/* Post Image */}
  {post.imageUrl && (
  <div className="mt-3 rounded-lg overflow-hidden">
- <img
+ <Image
  src={post.imageUrl}
  alt="Post attachment"
+ width={400}
+ height={300}
  className="w-full max-h-96 object-cover rounded-lg"
  />
  </div>

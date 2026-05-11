@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { FaQuoteLeft, FaStar } from 'react-icons/fa'
 
 interface Testimonial {
@@ -130,9 +131,11 @@ function AvatarOrInitials({ src, name }: { src: string; name: string }) {
 
   return (
     <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-brand-sky/20 flex-shrink-0">
-      <img
+      <Image
         src={src}
         alt={name}
+        width={36}
+        height={36}
         className="w-full h-full object-cover"
         onError={() => setErrored(true)}
       />

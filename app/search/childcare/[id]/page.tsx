@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { useParams } from 'next/navigation'
@@ -81,12 +82,11 @@ export default function NannyDetailsPage() {
  <div className="bg-white rounded-xl shadow-lg p-6">
  <div className="flex items-start gap-6">
  <div className="relative">
- <img
+ <Image
  src={nanny.profileImage}
  alt={`${nanny.firstName} ${nanny.lastName}`}
  width={120}
  height={120}
- loading="lazy"
  className="rounded-full object-cover border-4 border-purple-100"
  onError={(e) => {
  const target = e.target as HTMLImageElement;
@@ -330,12 +330,11 @@ export default function NannyDetailsPage() {
  {nanny.patientComments.map((comment) => (
  <div key={comment.id} className="p-4 bg-gray-50 rounded-lg">
  <div className="flex items-start gap-4">
- <img
+ <Image
  src={comment.patientProfileImage}
  alt={`${comment.patientFirstName} ${comment.patientLastName}`}
  width={40}
  height={40}
- loading="lazy"
  className="rounded-full object-cover"
  onError={(e) => {
  const target = e.target as HTMLImageElement;

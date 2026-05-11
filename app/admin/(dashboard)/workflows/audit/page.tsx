@@ -16,11 +16,6 @@ interface StepLog {
   instance?: { bookingType: string; template?: { name: string; providerType: string } }
 }
 
-const ROLE_COLORS: Record<string, string> = {
-  patient: 'bg-blue-50 text-blue-700',
-  provider: 'bg-teal-50 text-teal-700',
-  system: 'bg-gray-100 text-gray-600',
-}
 
 export default function AdminWorkflowAuditPage() {
   const [logs, setLogs] = useState<StepLog[]>([])

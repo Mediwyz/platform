@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { FaSearch, FaShieldAlt, FaStar, FaClock, FaCheckCircle, FaStarHalfAlt, FaShoppingCart, FaLock, FaExclamationTriangle, FaHeadset, FaHeart, FaBaby, FaHandHoldingMedical, FaPercent, FaAmbulance, FaBuilding, FaUsers, FaMoneyBillWave, FaUserShield, FaCreditCard, FaCalculator, FaGift } from 'react-icons/fa'
+import { FaSearch, FaShieldAlt, FaStar, FaClock, FaCheckCircle, FaShoppingCart, FaExclamationTriangle, FaHeart, FaBaby, FaHandHoldingMedical, FaPercent, FaAmbulance, FaBuilding, FaUsers, FaMoneyBillWave, FaUserShield, FaCreditCard } from 'react-icons/fa'
 
 // Insurance type icons mapping
 const typeIcons = {

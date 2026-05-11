@@ -16,7 +16,6 @@ export default function NavigationButtons({
  canProceed,
  onPrevious,
  onNext,
- onSubmit
 }: NavigationButtonsProps) {
  return (
  <div className="flex justify-between mt-8 pt-6 border-t">

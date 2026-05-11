@@ -95,7 +95,7 @@ describe('createSubscriptionPlanSchema', () => {
   })
 
   it('defaults currency to MUR', () => {
-    const { currency, ...rest } = validData
+    const { currency: _currency, ...rest } = validData
     const result = createSubscriptionPlanSchema.safeParse(rest)
     expect(result.success).toBe(true)
     if (result.success) {

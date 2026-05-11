@@ -51,10 +51,6 @@ interface EditableField {
 const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => {
  const [activeTab, setActiveTab] = useState<ActiveTab>('profile')
  const [editingFields, setEditingFields] = useState<{ [key: string]: EditableField }>({})
- const [showPassword, setShowPassword] = useState(false)
- const [newPassword, setNewPassword] = useState('')
- const [confirmPassword, setConfirmPassword] = useState('')
- const [isChangingPassword, setIsChangingPassword] = useState(false)
  const [expandedSection, setExpandedSection] = useState<string>('profile')
 
  const handleNotificationToggle = (key: keyof typeof patientData.notificationPreferences) => {
@@ -107,22 +103,6 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  delete newFields[field]
  return newFields
  })
- }
-
- const changePassword = () => {
- if (newPassword !== confirmPassword) {
- alert('Passwords do not match')
- return
- }
- if (newPassword.length < 8) {
- alert('Password must be at least 8 characters')
- return
- }
- // In a real app, this would update the password
- setIsChangingPassword(false)
- setNewPassword('')
- setConfirmPassword('')
- alert('Password changed successfully')
  }
 
  const tabs = [

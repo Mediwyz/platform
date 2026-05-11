@@ -13,7 +13,7 @@ interface PlatformConfig {
 }
 
 export default function CommissionConfigPage() {
- const [config, setConfig] = useState<PlatformConfig | null>(null)
+ const [, setConfig] = useState<PlatformConfig | null>(null)
  const [loading, setLoading] = useState(true)
  const [saving, setSaving] = useState(false)
  const [error, setError] = useState<string | null>(null)

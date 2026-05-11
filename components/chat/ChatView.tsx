@@ -428,7 +428,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
 
  fetchConversations()
  return () => { cancelled = true }
- }, [currentUser.id])
+ }, [currentUser.id, currentUser.userType])
 
  // ---- Search platform users when query has 2+ characters ----
  useEffect(() => {
@@ -728,7 +728,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  }
 
  inputRef.current?.focus()
- }, [inputText, selectedId, sendMessage, stopTyping, senderFullName, currentUser.userType, currentUser.id, currentUser.userType])
+ }, [inputText, selectedId, sendMessage, stopTyping, senderFullName, currentUser.userType, currentUser.id])
 
  // ---- Typing indicator ----
  const handleInputChange = useCallback(

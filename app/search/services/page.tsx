@@ -85,7 +85,7 @@ export default function ServicesSearchPage() {
     if (activeCategory !== 'ALL') params.set('category', activeCategory)
     const str = params.toString()
     router.replace(`/search/services${str ? `?${str}` : ''}`, { scroll: false })
-  }, [searchQuery, activeRole, activeCategory])
+  }, [searchQuery, activeRole, activeCategory, router])
 
   // All unique categories in the current dataset
   const allCategories = useMemo(() => {

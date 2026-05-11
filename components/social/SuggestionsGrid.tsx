@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaUserPlus, FaCheck, FaSpinner } from 'react-icons/fa'
 import { getUserTypeLabel } from '@/lib/constants/userTypeStyles'
@@ -109,9 +110,11 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
             <div key={user.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
               {/* Avatar — links to profile */}
               <Link href={`/profile/${user.id}`} className="flex-shrink-0 mb-2">
-                <img
+                <Image
                   src={avatarSrc(user.profileImage, user.firstName, user.lastName)}
                   alt={`${user.firstName} ${user.lastName}`}
+                  width={56}
+                  height={56}
                   className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 bg-gray-100"
                   onError={e => { e.currentTarget.src = initialsAvatar(user.firstName, user.lastName) }}
                 />

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { FaCalendarCheck, FaSearch } from 'react-icons/fa'
 import { FiRefreshCw, FiList, FiClock, FiActivity, FiCheckCircle, FiXCircle } from 'react-icons/fi'
 import BookingCard, { type BookingCardData } from './BookingCard'
-import { type StepCategory } from '@/components/workflow/stepCategoryStyles'
 
 export interface BookingsDashboardProps {
   /** User's ID — used to fetch patient names for provider view (lazy) */
@@ -241,7 +240,6 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
 function EmptyState({
   filter,
   role,
-  roleLabel: _roleLabel,
   hasSearch,
   onClearSearch,
 }: {

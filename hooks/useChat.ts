@@ -39,6 +39,8 @@ export function useChat(options: UseChatOptions) {
   useEffect(() => {
     if (!enabled || !userId) return
 
+    const timers = typingTimersRef.current
+
     // Points to NestJS backend for Socket.IO
     let socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001'
 
@@ -146,7 +148,7 @@ export function useChat(options: UseChatOptions) {
     // Listen for read receipts
     socket.on(
       'chat:read',
-      (_data: { conversationId: string; userId: string }) => {
+      () => {
         // Components can handle read receipts via onNewMessage or separate listeners
       }
     )
@@ -154,8 +156,8 @@ export function useChat(options: UseChatOptions) {
     // Cleanup on unmount
     return () => {
       // Clear all typing timers
-      typingTimersRef.current.forEach((timer) => clearTimeout(timer))
-      typingTimersRef.current.clear()
+      timers.forEach((timer) => clearTimeout(timer))
+      timers.clear()
 
       socket.removeAllListeners()
       socket.disconnect()

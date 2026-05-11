@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import {
  FaStar, FaToggleOn, FaToggleOff, FaEdit, FaTrash, FaPlus,
  FaSpinner, FaTimes, FaSave, FaQuoteLeft,
@@ -235,9 +236,11 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  {/* Avatar */}
  <div className="w-14 h-14 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
  {t.imageUrl ? (
- <img
+ <Image
  src={t.imageUrl}
  alt={t.name}
+ width={56}
+ height={56}
  className="w-full h-full object-cover"
  onError={(e) => {
  (e.target as HTMLImageElement).style.display = 'none'

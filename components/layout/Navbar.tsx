@@ -15,10 +15,8 @@ import {
  FaInfoCircle,
  FaUserNurse,
  FaAmbulance,
- FaFlask,
  FaBaby,
  FaChevronDown,
- FaShieldAlt,
  FaUser,
  FaSignOutAlt,
 } from 'react-icons/fa'
@@ -137,8 +135,6 @@ const Navbar: React.FC = () => {
      })
      .catch(() => {})
  }, [])
- const [userSlug, setUserSlug] = useState<string | null>(null)
-
  useEffect(() => {
  const handleResize = () => {
  setIsMobile(window.innerWidth < 640)
@@ -157,11 +153,9 @@ const Navbar: React.FC = () => {
  .find((c) => c.trim().startsWith('mediwyz_userType='))
  if (match) {
  const cookieVal = decodeURIComponent(match.trim().split('=')[1] ?? '')
- const slug = cookieToSlug[cookieVal] || 'patient'
  setProfileHref(getProfilePath(cookieVal))
- setUserSlug(slug)
  }
- }, [])
+ }, [cookieToSlug])
 
  const handleLogout = useCallback(async () => {
  try {

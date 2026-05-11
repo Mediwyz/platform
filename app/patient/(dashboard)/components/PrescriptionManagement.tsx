@@ -72,7 +72,7 @@ interface PillReminder {
  frequency: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function normalizePrescription(p: any): Prescription {
  return {
  id: p.id,
@@ -143,7 +143,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  const res = await fetch(`/api/patients/${userId}/pill-reminders`, { credentials: 'include' })
  const data = await res.json()
  if (data.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setReminders(data.data.map((r: any) => ({
  id: r.id,
  medicineId: r.medicineId || r.id,

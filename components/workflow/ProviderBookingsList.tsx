@@ -42,8 +42,6 @@ interface ProviderBookingsListProps {
   defaultActiveOnly?: boolean
 }
 
-const STATUS_GROUP_ORDER = ['active', 'completed', 'cancelled']
-
 export default function ProviderBookingsList({ basePath, defaultActiveOnly = false }: ProviderBookingsListProps) {
   const [instances, setInstances] = useState<BookingInstance[]>([])
   const [patientCache, setPatientCache] = useState<Record<string, PatientInfo>>({})

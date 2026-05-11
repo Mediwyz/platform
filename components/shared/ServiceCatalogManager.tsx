@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import Image from 'next/image'
 import { useUser } from '@/hooks/useUser'
 import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import {
   FaPlus, FaEdit, FaTrash, FaSearch, FaSpinner, FaTimes,
   FaCheckCircle, FaTimesCircle, FaFilter, FaExclamationTriangle,
-  FaImage, FaIcons, FaSmile, FaUpload,
+  FaImage, FaIcons, FaUpload,
 } from 'react-icons/fa'
 import { FiLink } from 'react-icons/fi'
 import ServiceWorkflowLinker from '@/components/workflow/ServiceWorkflowLinker'
@@ -402,7 +403,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                 {(service.imageUrl || service.iconKey || service.emoji) && (
                   <div className="h-24 bg-gradient-to-r from-teal-50 to-sky-50 flex items-center justify-center">
                     {service.imageUrl ? (
-                      <img src={service.imageUrl} alt={service.serviceName} className="h-20 w-full object-contain px-4" />
+                      <Image src={service.imageUrl} alt={service.serviceName} width={400} height={80} className="h-20 w-full object-contain px-4" />
                     ) : service.emoji ? (
                       <span className="text-5xl leading-none select-none">{service.emoji}</span>
                     ) : service.iconKey ? (
@@ -569,7 +570,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
 
                     {currentImageUrl ? (
                       <div className="flex items-center gap-3">
-                        <img src={currentImageUrl} alt="Service illustration" className="w-24 h-16 object-contain rounded-lg border border-gray-200 bg-gray-50" />
+                        <Image src={currentImageUrl} alt="Service illustration" width={96} height={64} className="w-24 h-16 object-contain rounded-lg border border-gray-200 bg-gray-50" />
                         <div className="flex flex-col gap-1.5">
                           <button
                             type="button"

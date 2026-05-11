@@ -32,7 +32,7 @@ const TYPE_COLORS: Record<string, string> = {
   other: '#718096',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const TYPE_ICONS: Record<string, React.ComponentType<any>> = {
   clinic: FaBriefcaseMedical,
   hospital: FaHospital,

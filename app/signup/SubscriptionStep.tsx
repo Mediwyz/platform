@@ -31,7 +31,6 @@ interface SubscriptionStepProps {
 
 export default function SubscriptionStep({
  regionId,
- userType,
  selectedPlanId,
  selectedBusinessPlanId,
  onSelectPlan,

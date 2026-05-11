@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import {
@@ -211,12 +212,11 @@ export default function RegionalAdminsPage() {
  <div className="p-6">
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center gap-4">
- <img
+ <Image
  src={initialsAvatar(admin.name.split(' ')[0] ?? admin.name, admin.name.split(' ')[1] ?? '')}
  alt={admin.name}
  width={60}
  height={60}
- loading="lazy"
  className="rounded-full"
  />
  <div>

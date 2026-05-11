@@ -411,6 +411,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  }
 
  restoreCallState()
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [])
 
  useEffect(() => {

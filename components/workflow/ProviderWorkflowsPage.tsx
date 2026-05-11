@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { DashboardLoadingState } from '@/components/dashboard'
-import { FiSettings, FiChevronDown, FiChevronUp, FiCheckCircle, FiPlus, FiList, FiTrash2, FiBookOpen, FiSend, FiInbox } from 'react-icons/fi'
+import { FiChevronDown, FiChevronUp, FiCheckCircle, FiPlus, FiList, FiTrash2, FiBookOpen, FiSend, FiInbox } from 'react-icons/fi'
 import Link from 'next/link'
 
 interface WorkflowTemplate {

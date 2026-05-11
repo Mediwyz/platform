@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
+import Image from 'next/image'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { useProviderRoles, ProviderRole } from '@/hooks/useProviderRoles'
-import { FaTimes, FaSpinner, FaCalendarAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FaTimes, FaSpinner, FaCalendarAlt, FaChevronLeft } from 'react-icons/fa'
 
 interface Provider {
  id: string
@@ -115,7 +116,6 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  const [submitting, setSubmitting] = useState(false)
  const [error, setError] = useState<string | null>(null)
 
- const weekDates = useMemo(() => getWeekDates(weekOffset), [weekOffset])
  // Show BOTH this week AND next week on screen at once — 14 days visible
  // so the user doesn't have to navigate with chevrons to find a free slot.
  const twoWeekDates = useMemo(
@@ -377,7 +377,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  <button key={p.id} onClick={() => { setSelectedProvider(p); setStep(3) }}
  className="w-full p-3 border rounded-lg text-left hover:border-blue-300 hover:bg-blue-50 transition flex items-center gap-3">
  {p.profileImage ? (
- <img src={p.profileImage} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-blue-100 flex-shrink-0" />
+ <Image src={p.profileImage} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover border-2 border-blue-100 flex-shrink-0" />
  ) : (
  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm flex-shrink-0">
  {p.firstName[0]}{p.lastName[0]}

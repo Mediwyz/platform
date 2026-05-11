@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FaBuilding, FaSpinner, FaSave, FaCheck, FaTimes, FaExclamationTriangle } from 'react-icons/fa'
+import { FaBuilding, FaSpinner, FaSave, FaCheck, FaTimes } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
 
 interface CompanyProfile {

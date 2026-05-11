@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import {
  FaBars,
  FaTimes,
- FaUser,
  FaSignOutAlt,
  FaUserFriends,
  FaHome,
@@ -18,16 +18,6 @@ import { useCapacitor } from '@/hooks/useCapacitor'
 
 const NotificationBell = dynamic(() => import('@/components/shared/NotificationBell'), { ssr: false })
 
-interface NotificationItem {
- id: string
- type: string
- title: string
- message: string
- createdAt: string
- readAt: string | null
- referenceId?: string | null
- referenceType?: string | null
-}
 
 interface DashboardHeaderProps {
  userName: string
@@ -42,121 +32,11 @@ interface DashboardHeaderProps {
  userId?: string
 }
 
-function timeAgo(dateStr: string): string {
- const diff = Date.now() - new Date(dateStr).getTime()
- const minutes = Math.floor(diff / 60000)
- if (minutes < 1) return 'Just now'
- if (minutes < 60) return `${minutes}m ago`
- const hours = Math.floor(minutes / 60)
- if (hours < 24) return `${hours}h ago`
- const days = Math.floor(hours / 24)
- return `${days}d ago`
-}
-
-// Per-user-type route mapping for notification clicks
-// All provider roles use these clean URL paths (mapped within their dashboard)
-const DEFAULT_ROUTES: Record<string, string> = {
- appointment: '/practice', booking: '/practice', prescription: '/practice',
- message: '/messages', connection: '/network', lab_result: '/practice',
- emergency: '/practice', corporate_enrollment: '/my-company',
- review_request: '/reviews', workflow: '/practice',
-}
-
-// Role-specific overrides for patient (uses my-* paths)
-const PATIENT_ROUTES: Record<string, string> = {
- appointment: '/my-consultations', booking: '/bookings',
- prescription: '/my-prescriptions', message: '/messages',
- lab_result: '/my-lab-results', emergency: '/my-emergency',
- connection: '/network', corporate_enrollment: '/my-company',
-}
-
-const NOTIFICATION_ROUTES: Record<string, Record<string, string>> = {
- patient: PATIENT_ROUTES,
- insurance: { ...DEFAULT_ROUTES, booking: '/claims' },
- corporate: DEFAULT_ROUTES,
- 'referral-partner': DEFAULT_ROUTES,
- regional: DEFAULT_ROUTES,
-}
-
-// Normalize notification type/referenceType to a canonical key
-function normalizeNotifKey(raw: string): string {
- switch (raw) {
- case 'appointment':
- case 'doctor_booking':
- case 'nurse_booking':
- case 'nanny_booking':
- return 'appointment'
- case 'lab_test_booking':
- case 'lab-test':
- case 'lab_result':
- return 'lab_result'
- case 'emergency_booking':
- case 'emergency':
- return 'emergency'
- case 'prescription':
- return 'prescription'
- case 'message':
- return 'message'
- case 'connection':
- return 'connection'
- case 'booking':
- case 'booking_request':
- case 'booking_cancelled':
- return 'booking'
- default:
- return raw
- }
-}
-
-function getNotificationHref(n: NotificationItem, profileHref: string): string | null {
- const base = profileHref.replace(/\/profile$/, '')
- const userSlug = base.split('/')[1] || 'patient'
- const routes = NOTIFICATION_ROUTES[userSlug] || DEFAULT_ROUTES
-
- // Workflow notifications deep-link to the booking detail page with timeline
- if (n.type === 'workflow' && n.referenceId && n.referenceType) {
- return `${base}/bookings/${n.referenceType}/${n.referenceId}`
- }
-
- // Review request notifications also deep-link
- if (n.type === 'review_request' && n.referenceId && n.referenceType) {
- return `${base}/bookings/${n.referenceType}/${n.referenceId}`
- }
-
- // For booking requests/cancellations, use type (the action) over referenceType (the entity)
- // e.g. type='booking_request' + referenceType='appointment' → should route to requests tab
- const actionTypes = ['booking_request', 'booking_cancelled']
- const rawKey = (n.type && actionTypes.includes(n.type)) ? n.type : (n.referenceType || n.type || '')
- if (rawKey) {
- const canonical = normalizeNotifKey(rawKey)
- if (routes[canonical]) return `${base}${routes[canonical]}`
- }
-
- // Fallback: match on title keywords
- const title = n.title.toLowerCase()
- if (title.includes('appointment') || title.includes('consultation'))
- return routes.appointment ? `${base}${routes.appointment}` : null
- if (title.includes('booking'))
- return routes.booking ? `${base}${routes.booking}` : null
- if (title.includes('prescription') || title.includes('refill') || title.includes('medication') || title.includes('pickup'))
- return routes.prescription ? `${base}${routes.prescription}` : null
- if (title.includes('lab') || title.includes('result') || title.includes('test'))
- return routes.lab_result ? `${base}${routes.lab_result}` : null
- if (title.includes('message') || title.includes('chat'))
- return routes.message ? `${base}${routes.message}` : null
- if (title.includes('connection') || title.includes('network'))
- return routes.connection ? `${base}${routes.connection}` : null
- if (title.includes('emergency'))
- return routes.emergency ? `${base}${routes.emergency}` : null
-
- return null
-}
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  userName,
  userImage,
  userSubtitle,
- notificationCount: _notificationCount,
  profileHref,
  networkHref,
  sidebarOpen,
@@ -262,9 +142,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  aria-label="My Profile"
  >
  {userImage ? (
- <img
+ <Image
  src={userImage}
  alt={userName}
+ width={36}
+ height={36}
  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-brand-teal/30 hover:border-brand-teal transition-colors"
  />
  ) : (

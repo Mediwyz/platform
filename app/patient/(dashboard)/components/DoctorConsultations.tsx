@@ -6,9 +6,7 @@ import ProviderPageHeader from '@/components/booking/ProviderPageHeader'
 import ProviderSearchSelect, { ProviderOption } from '@/components/booking/ProviderSearchSelect'
 import {
  FaVideo,
- FaPlus,
  FaStethoscope,
- FaUserMd,
  FaCheckCircle,
  FaTimes,
  FaSpinner,
@@ -48,7 +46,7 @@ interface AvailableDoctor {
  location: string | null
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function normalizeAppointment(a: any): Appointment {
  const dt = a.scheduledAt ? new Date(a.scheduledAt) : null
  // Support both legacy Appointment (a.doctor.user.firstName) and ServiceBooking (a.providerName)
@@ -72,7 +70,7 @@ function normalizeAppointment(a: any): Appointment {
  }
 }
 
-const DoctorConsultations: React.FC<Props> = ({ patientData, onVideoCall }) => {
+const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  const [showBookingForm, setShowBookingForm] = useState(false)
  const [appointments, setAppointments] = useState<Appointment[]>([])
  const [loadingBookings, setLoadingBookings] = useState(true)
@@ -116,7 +114,7 @@ const DoctorConsultations: React.FC<Props> = ({ patientData, onVideoCall }) => {
  } finally {
  setLoadingBookings(false)
  }
- }, [patientData.id])
+ }, [])
 
  useEffect(() => {
  fetchAppointments()
@@ -132,7 +130,7 @@ const DoctorConsultations: React.FC<Props> = ({ patientData, onVideoCall }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setAvailableDoctors(json.data.map((d: any) => ({
  id: d.id,
  userId: d.id,

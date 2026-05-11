@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useUser } from '@/hooks/useUser'
 import {
@@ -207,8 +208,6 @@ const DOCUMENT_TYPE_COLORS: Record<string, string> = {
  other: 'bg-gray-100 text-gray-700',
 }
 
-const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
-
 /* ─── Helper: format file size ───────────────────────────────────────────── */
 
 function formatFileSize(bytes?: number): string {
@@ -244,7 +243,7 @@ function getEditableFieldsForType(
 /* Main component */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-export default function UserProfile({ userId, userType, settingsPath }: UserProfileProps) {
+export default function UserProfile({ userId, userType }: UserProfileProps) {
  const { updateUser } = useUser()
  const searchParams = useSearchParams()
  const initialTab = (searchParams?.get('tab') as TabId) || 'overview'
@@ -263,7 +262,6 @@ export default function UserProfile({ userId, userType, settingsPath }: UserProf
  const [uploadOpen, setUploadOpen] = useState(false)
  const [uploadName, setUploadName] = useState('')
  const [uploadType, setUploadType] = useState<string>('other')
- const [uploadUrl, setUploadUrl] = useState('')
  const [uploading, setUploading] = useState(false)
  const [viewingDoc, setViewingDoc] = useState<DocumentData | null>(null)
  const [docError, setDocError] = useState('')
@@ -427,7 +425,7 @@ export default function UserProfile({ userId, userType, settingsPath }: UserProf
  }
  setIsEditing(true)
  setSaveMsg(null)
- }, [userData, userType])
+ }, [userData, userType, profileFieldsByCode])
 
  /* ─── Save edits ───────────────────────────────────────────────────────── */
 
@@ -522,7 +520,6 @@ export default function UserProfile({ userId, userType, settingsPath }: UserProf
  const name = uploadName.trim() || file.name.replace(/\.[^.]+$/, '')
  await handleDocumentFileUpload(file, name, uploadType)
  setUploadName('')
- setUploadUrl('')
  setUploadType('other')
  setUploadOpen(false)
  await fetchDocuments()
@@ -1290,7 +1287,7 @@ export default function UserProfile({ userId, userType, settingsPath }: UserProf
  title="Click to change profile picture"
  >
  {userData.profileImage ? (
- <img src={userData.profileImage} alt={`${userData.firstName || ''} ${userData.lastName || ''} profile photo`} className="w-20 h-20 rounded-full object-cover" loading="lazy" />
+ <Image src={userData.profileImage} alt={`${userData.firstName || ''} ${userData.lastName || ''} profile photo`} width={80} height={80} className="w-20 h-20 rounded-full object-cover" />
  ) : (
  `${userData.firstName?.[0] || ''}${userData.lastName?.[0] || ''}`
  )}
@@ -1400,7 +1397,7 @@ export default function UserProfile({ userId, userType, settingsPath }: UserProf
  <button onClick={() => setViewingDoc(null)} className="p-2 text-gray-500 hover:text-gray-700"><FaTimes /></button>
  </div>
  </div>
- <img src={viewingDoc.url} alt={viewingDoc.name} className="max-w-full rounded-lg" />
+ <Image src={viewingDoc.url} alt={viewingDoc.name} width={800} height={600} className="max-w-full rounded-lg" />
  </div>
  </div>
  ) : (
@@ -1516,7 +1513,6 @@ function renderTypeSpecificSummary(userType: string, profile: UserProfileData | 
 function RequiredDocUploadSlot({
  documentName,
  required,
- userId,
  onUploaded,
 }: {
  documentName: string

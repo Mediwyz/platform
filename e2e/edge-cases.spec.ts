@@ -1,19 +1,6 @@
-import { test, expect, Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 test.setTimeout(90_000)
-
-async function loginAs(page: Page, email: string, password: string) {
-  await page.goto('/login')
-  const emailInput = page.locator('input[name="email"]')
-  await expect(emailInput).toBeVisible({ timeout: 10_000 })
-  await emailInput.fill(email)
-  await page.locator('input[name="password"]').fill(password)
-  await page.locator('button[type="submit"]').click()
-  await page.waitForURL(
-    /\/(patient|doctor|nurse|nanny|pharmacist|lab-technician|responder|insurance|corporate|referral-partner|regional|admin)\//,
-    { timeout: 30_000 }
-  )
-}
 
 test.describe('M. Edge Cases', () => {
   test('M1: Login with wrong password shows error', async ({ page }) => {

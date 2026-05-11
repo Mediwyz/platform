@@ -108,6 +108,7 @@ export default function ReferralPartnerDashboard() {
   }
 
   fetchDashboard()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [userId])
 
  return (

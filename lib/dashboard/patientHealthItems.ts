@@ -29,7 +29,7 @@ const ICON_MAP: Record<string, typeof FaSearch> = {
  * Reusable across all role sidebar configs.
  * NOTE: This is the static fallback. For dynamic roles, use getSearchItemsFromRoles().
  */
-export function getSearchItems(base: string): SidebarItem[] {
+export function getSearchItems(_base?: string): SidebarItem[] {
   return [
     { id: 'divider-search', label: 'Search & Browse', icon: FaSearch, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '', divider: true },
     { id: 'search-doctors', label: 'Find Doctors', icon: FaUserMd, color: 'text-blue-600', bgColor: 'bg-blue-50', href: `/search/doctors` },
@@ -112,7 +112,7 @@ export function getMyCompanyItem(base: string): SidebarItem {
  * "Invite friends" entry — every user has a referral code and earns
  * wallet credit for every signup via their link. Capability, not role.
  */
-export function getInviteFriendsItem(_base: string): SidebarItem {
+export function getInviteFriendsItem(_base?: string): SidebarItem {
   // Top-level /invite page — shared across every dashboard. Backend
   // auto-provisions a referral code on first visit, so the page works
   // for any authenticated user regardless of role.

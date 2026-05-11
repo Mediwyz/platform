@@ -1,4 +1,4 @@
-import { FaHome, FaNewspaper, FaBriefcaseMedical, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaUsers, FaBell, FaChartLine, FaShieldAlt } from 'react-icons/fa'
+import { FaHome, FaNewspaper, FaBriefcaseMedical, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaUsers, FaBell } from 'react-icons/fa'
 import type { SidebarItem } from '@/components/dashboard/DashboardSidebar'
 import { createGetActiveSectionFromPath } from '@/lib/dashboard/getActiveSectionFromPath'
 import { getPatientHealthItems, getSearchItems, getInviteFriendsItem } from '@/lib/dashboard/patientHealthItems'

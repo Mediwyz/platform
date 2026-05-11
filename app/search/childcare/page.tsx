@@ -1,15 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-
+import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 import { type Nanny } from '@/lib/data'
 import AuthBookingLink from '@/components/booking/AuthBookingLink'
 import ConnectButton from '@/components/search/ConnectButton'
 import {
  FaSearch, FaBaby, FaStar, FaMapMarkerAlt, FaClock, FaCalendarAlt,
- FaGraduationCap,
- FaShieldAlt, FaHome, FaLanguage, FaCheckCircle, FaExclamationCircle,
+ FaHome, FaLanguage, FaCheckCircle, FaExclamationCircle,
 } from 'react-icons/fa'
 
 interface NannyProps {
@@ -37,12 +36,11 @@ const NannyCard = ({ nanny }: NannyProps) => {
  {/* Left: Avatar + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
  <div className="relative flex-shrink-0">
- <img
+ <Image
  src={nanny.profileImage}
  alt={`${nanny.firstName} ${nanny.lastName}`}
  width={48}
  height={48}
- loading="lazy"
  className="rounded-full object-cover border-2 border-pink-100"
  onError={(e) => {
  const target = e.target as HTMLImageElement;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor, cleanup, act } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import React from 'react'
 import { BookingDrawerProvider, useBookingDrawer } from '@/lib/contexts/booking-drawer-context'
 
@@ -7,7 +7,7 @@ import { BookingDrawerProvider, useBookingDrawer } from '@/lib/contexts/booking-
 vi.mock('framer-motion', async () => {
   const R = await import('react')
   const MotionDiv = R.forwardRef(
-    ({ children, initial, animate, exit, transition, whileHover, whileTap, layoutId, mode, ...props }: any, ref: any) =>
+    ({ children, ...props }: any, ref: any) =>
       R.createElement('div', { ref, ...props }, children)
   )
   MotionDiv.displayName = 'MotionDiv'

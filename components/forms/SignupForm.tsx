@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, FormEvent, ChangeEvent } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { 
- FaUser, 
- FaUserMd, 
- FaUserNurse, 
- FaPills, 
+import {
+ FaUser,
+ FaUserMd,
+ FaUserNurse,
+ FaPills,
  FaFlask, 
  FaAmbulance, 
  FaShieldAlt,
@@ -349,7 +350,7 @@ export default function EnhancedRegistrationForm() {
  <div className="max-w-4xl mx-auto">
  {/* Header */}
  <div className="text-center mb-8">
- <img src="/images/logo-icon.png" alt="MediWyz" className="w-20 h-20 mx-auto mb-4" />
+ <Image src="/images/logo-icon.png" alt="MediWyz" width={80} height={80} className="w-20 h-20 mx-auto mb-4" />
  <h1 className="text-4xl font-bold text-gray-900 mb-2">Join MediWyz</h1>
  <p className="text-gray-600 text-lg">Create your professional healthcare account</p>
  </div>

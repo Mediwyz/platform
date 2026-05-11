@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import { FaTimes, FaUpload, FaCamera, FaCheckCircle, FaFileMedical, FaSpinner } from 'react-icons/fa'
 import { usePrescription } from '@/lib/contexts/prescription-context'
 
@@ -112,7 +113,7 @@ export default function PrescriptionUploadModal({ medicineName, onConfirm, onClo
               >
                 {preview ? (
                   <div className="space-y-2">
-                    <img src={preview} alt="Prescription preview" className="max-h-40 mx-auto rounded-lg object-contain" />
+                    <Image src={preview} alt="Prescription preview" width={400} height={160} className="max-h-40 mx-auto rounded-lg object-contain" />
                     <p className="text-xs text-gray-500 truncate">{fileName}</p>
                     <p className="text-xs text-[#0C6780] font-medium">Click to change</p>
                   </div>

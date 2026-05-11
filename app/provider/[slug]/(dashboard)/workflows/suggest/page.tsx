@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { use } from 'react'
 import { FiSend, FiPlus, FiTrash2, FiArrowLeft, FiCheckCircle } from 'react-icons/fi'
 import Link from 'next/link'
@@ -29,7 +28,6 @@ interface SuggestedStep {
 
 export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
-  const router = useRouter()
 
   const [stepTypes, setStepTypes] = useState<StepType[]>([])
   const [name, setName] = useState('')

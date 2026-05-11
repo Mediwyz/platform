@@ -5,8 +5,7 @@ import { createDashboardLayout } from '@/lib/dashboard/createDashboardLayout'
 import type { SidebarItem } from '@/components/dashboard/DashboardSidebar'
 import {
   FaHome, FaRss, FaBriefcaseMedical, FaMoneyBillWave, FaCubes,
-  FaCogs, FaProjectDiagram, FaVideo, FaPhone, FaComments, FaRobot,
-  FaHeartbeat, FaShieldAlt, FaUsersCog, FaSitemap, FaTag,
+  FaCogs, FaProjectDiagram, FaVideo, FaPhone, FaComments,
   FaBuilding, FaCalendarAlt,
 } from 'react-icons/fa'
 import { getPatientHealthItems, getSearchItems } from '@/lib/dashboard/patientHealthItems'

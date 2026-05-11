@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
- FaChartLine, FaUsers, FaCalendarAlt, FaDollarSign,
+ FaUsers, FaCalendarAlt, FaDollarSign,
  FaUserMd, FaUserNurse, FaChild, FaAmbulance, FaPills, FaFlask,
  FaArrowUp, FaSpinner
 } from 'react-icons/fa'

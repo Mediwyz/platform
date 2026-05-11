@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import {
  FaArrowUp, FaArrowDown, FaToggleOn, FaToggleOff,
  FaEdit, FaTrash, FaPlus, FaImage, FaSpinner, FaTimes, FaSave,
@@ -217,9 +218,11 @@ export default function HeroSlidesManager({ slides, onRefresh }: HeroSlidesManag
  {/* Image Preview */}
  <div className="w-40 h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
  {slide.imageUrl ? (
- <img
+ <Image
  src={slide.imageUrl}
  alt={slide.title}
+ width={160}
+ height={96}
  className="w-full h-full object-cover"
  onError={(e) => {
  (e.target as HTMLImageElement).style.display = 'none'

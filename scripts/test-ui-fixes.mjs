@@ -2,8 +2,6 @@
  * E2E + API tests for the 8 UI fixes
  * Run: node scripts/test-ui-fixes.mjs [https://h-wyz.com | http://localhost:3000]
  */
-import fs from 'fs';
-
 const BASE = process.argv[2] || 'http://localhost:3000';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 

@@ -38,12 +38,12 @@ describe('createNurseBookingSchema', () => {
   })
 
   it('rejects missing nurseId', () => {
-    const { nurseId, ...rest } = valid
+    const { nurseId: _nurseId, ...rest } = valid
     expect(createNurseBookingSchema.safeParse(rest).success).toBe(false)
   })
 
   it('rejects missing scheduledDate', () => {
-    const { scheduledDate, ...rest } = valid
+    const { scheduledDate: _scheduledDate, ...rest } = valid
     expect(createNurseBookingSchema.safeParse(rest).success).toBe(false)
   })
 
@@ -81,7 +81,7 @@ describe('createNannyBookingSchema', () => {
   })
 
   it('rejects missing nannyId', () => {
-    const { nannyId, ...rest } = valid
+    const { nannyId: _nannyId, ...rest } = valid
     expect(createNannyBookingSchema.safeParse(rest).success).toBe(false)
   })
 
@@ -119,12 +119,12 @@ describe('createLabTestBookingSchema', () => {
   })
 
   it('rejects missing testName', () => {
-    const { testName, ...rest } = valid
+    const { testName: _testName, ...rest } = valid
     expect(createLabTestBookingSchema.safeParse(rest).success).toBe(false)
   })
 
   it('rejects missing scheduledDate', () => {
-    const { scheduledDate, ...rest } = valid
+    const { scheduledDate: _scheduledDate2, ...rest } = valid
     expect(createLabTestBookingSchema.safeParse(rest).success).toBe(false)
   })
 
@@ -168,17 +168,17 @@ describe('createEmergencyBookingSchema', () => {
   })
 
   it('rejects missing emergencyType', () => {
-    const { emergencyType, ...rest } = valid
+    const { emergencyType: _emergencyType, ...rest } = valid
     expect(createEmergencyBookingSchema.safeParse(rest).success).toBe(false)
   })
 
   it('rejects missing location', () => {
-    const { location, ...rest } = valid
+    const { location: _location, ...rest } = valid
     expect(createEmergencyBookingSchema.safeParse(rest).success).toBe(false)
   })
 
   it('rejects missing contactNumber', () => {
-    const { contactNumber, ...rest } = valid
+    const { contactNumber: _contactNumber, ...rest } = valid
     expect(createEmergencyBookingSchema.safeParse(rest).success).toBe(false)
   })
 

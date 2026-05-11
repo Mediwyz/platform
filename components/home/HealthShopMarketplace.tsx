@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -272,9 +273,11 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
           >
             {item.imageUrl ? (
               <div className="h-20 sm:h-28 bg-gray-100 overflow-hidden rounded-t-[1.4rem]">
-                <img
+                <Image
                   src={item.imageUrl}
                   alt={item.name}
+                  width={400}
+                  height={112}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>

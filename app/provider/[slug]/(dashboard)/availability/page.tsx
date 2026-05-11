@@ -6,7 +6,7 @@ import AvailabilityScheduler from '@/components/providers/AvailabilityScheduler'
 import { FaCalendarAlt } from 'react-icons/fa'
 
 export default function AvailabilityPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params)
+  const { slug: _slug } = use(params)
   const user = useDashboardUser()
 
   return (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { useParams } from 'next/navigation'
@@ -11,7 +12,7 @@ import {
  FaCertificate, FaGraduationCap, FaBriefcase,
  FaUserMd, FaExclamationCircle, FaComments,
  FaHospital, FaShieldAlt,
- FaChevronDown, FaChevronUp, FaUserPlus
+ FaChevronDown, FaChevronUp
 } from 'react-icons/fa'
 import AuthBookingLink from '@/components/booking/AuthBookingLink'
 import ConnectButton from '@/components/search/ConnectButton'
@@ -88,12 +89,11 @@ export default function DoctorDetailsPage() {
  <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
  <div className="relative">
- <img
+ <Image
  src={doctor.profileImage}
  alt={`Dr. ${doctor.firstName} ${doctor.lastName}`}
  width={100}
  height={100}
- loading="lazy"
  className="rounded-full object-cover border-4 border-blue-100 w-20 h-20 sm:w-[120px] sm:h-[120px]"
  />
  {doctor.verified && (
@@ -557,12 +557,11 @@ function ReviewsContent({ doctor, mobile = false }: { doctor: Doctor; mobile?: b
  {doctor.patientComments.map((comment) => (
  <div key={comment.id} className="p-3 sm:p-4 bg-gray-50 rounded-lg">
  <div className="flex items-start gap-3 sm:gap-4">
- <img
+ <Image
  src={comment.patientProfileImage}
  alt={`${comment.patientFirstName} ${comment.patientLastName}`}
  width={32}
  height={32}
- loading="lazy"
  className="rounded-full object-cover w-8 h-8 sm:w-10 sm:h-10"
  />
  <div className="flex-1">

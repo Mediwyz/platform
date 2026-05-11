@@ -53,7 +53,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  const [activeTab, setActiveTab] = useState<'records' | 'vitals' | 'metrics' | 'timeline'>('records')
 
  // Self-fetch medical records
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const [medicalRecords, setMedicalRecords] = useState<any[]>([])
  const [activePrescriptions, setActivePrescriptions] = useState<any[]>([])
  const [loadingRecords, setLoadingRecords] = useState(true)
@@ -335,7 +335,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  Attachments ({record.attachments.length})
  </h4>
  <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-2 md:gap-3">
- {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+ { }
  {record.attachments.map((attachment: any, index: number) => (
  <button
  key={index}
@@ -701,7 +701,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 bg-gray-300"></div>
  
  <div className="space-y-4 sm:space-y-6">
- {timelineEvents.map((event, index) => (
+ {timelineEvents.map((event, _index) => (
  <div key={event.id} className="relative flex items-start gap-3 sm:gap-4">
  {/* Timeline dot */}
  <div className={`relative z-10 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${

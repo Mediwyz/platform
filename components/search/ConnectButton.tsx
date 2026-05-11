@@ -21,7 +21,7 @@ interface ConnectionRecord {
 export default function ConnectButton({ providerId, className = '' }: ConnectButtonProps) {
  const router = useRouter()
  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('none')
- const [connectionId, setConnectionId] = useState<string | null>(null)
+ const [, setConnectionId] = useState<string | null>(null)
  const [loading, setLoading] = useState(true)
  const [acting, setActing] = useState(false)
 

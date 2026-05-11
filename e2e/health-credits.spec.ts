@@ -185,7 +185,7 @@ test.describe.serial('Health Credits Lifecycle', () => {
     // Booking should still be created (payment happens on acceptance, not creation)
     // But acceptance should fail due to insufficient balance
     if (createJson.booking?.id) {
-      const { json: acceptJson } = await apiPost(request, doctorCookies, '/api/bookings/action', {
+      await apiPost(request, doctorCookies, '/api/bookings/action', {
         bookingId: createJson.booking.id, bookingType: 'service', action: 'accept',
       })
       // Either the workflow blocks it or it succeeds but with payment failure

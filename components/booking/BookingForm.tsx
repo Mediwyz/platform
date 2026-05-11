@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import WeeklySlotPicker from '@/components/booking/WeeklySlotPicker'
@@ -12,9 +13,7 @@ import {
  FaArrowLeft,
  FaArrowRight,
  FaCheck,
- FaSpinner,
  FaLock,
- FaArrowRight as FaChevronRight,
 } from 'react-icons/fa'
 import { FiArrowRight } from 'react-icons/fi'
 
@@ -230,7 +229,7 @@ export default function BookingForm({
  const [scheduledTime, setScheduledTime] = useState('')
  const [reason, setReason] = useState('')
  const [notes, setNotes] = useState('')
- const [duration, setDuration] = useState(30)
+ const [duration] = useState(30)
 
  // Lab-specific
  const [testName, setTestName] = useState('')
@@ -312,7 +311,7 @@ export default function BookingForm({
  return `Please select ${missing.join(' and ')}`
  }
  return null
- }, [step, canAdvanceStep1, canAdvanceStep2, providerType, selectedServiceId, testName, sampleType, emergencyType, location, contactNumber, scheduledDate, scheduledTime, reason, isReasonRequired])
+ }, [step, canAdvanceStep1, canAdvanceStep2, providerType, testName, sampleType, emergencyType, location, contactNumber, scheduledDate, scheduledTime, reason, isReasonRequired])
 
  // ── Build submit data ───────────────────────────────────────────────────────
 
@@ -360,14 +359,6 @@ export default function BookingForm({
  if (step > 1) setStep(step - 1)
  }
 
- // ── Render helpers ──────────────────────────────────────────────────────────
-
- const colorMap: Record<string, { ring: string; bg: string; text: string; border: string }> = {
- blue: { ring: 'ring-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-600' },
- teal: { ring: 'ring-teal-600', bg: 'bg-teal-50', text: 'text-teal-600', border: 'border-teal-600' },
- green: { ring: 'ring-green-600', bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-600' },
- }
-
  // ── JSX ─────────────────────────────────────────────────────────────────────
 
  // Auth gate — show sign-in prompt if not authenticated
@@ -405,9 +396,11 @@ export default function BookingForm({
  <div className="flex items-center gap-4">
  {/* Avatar / initials */}
  {providerImage ? (
- <img
+ <Image
  src={providerImage}
  alt={providerName}
+ width={64}
+ height={64}
  className="w-16 h-16 rounded-full object-cover border-2 border-blue-100"
  />
  ) : (

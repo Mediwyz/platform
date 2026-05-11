@@ -283,7 +283,6 @@ test.describe('Booking → workflow triggers', () => {
   let doctorCookies: string
   let patientCookies: string
   let workflowInstanceId: string
-  let bookingId: string
 
   test.beforeAll(async ({ request }) => {
     doctorCookies = await login(request, USERS.doctor.email, USERS.doctor.password)
@@ -311,7 +310,6 @@ test.describe('Booking → workflow triggers', () => {
     // Shape guard: booking must have id
     const bId = res.body?.booking?.id ?? res.body?.data?.booking?.id ?? res.body?.data?.id
     expect(bId, 'booking.id must be present').toBeTruthy()
-    bookingId = bId
     workflowInstanceId = res.body?.workflowInstanceId ?? res.body?.data?.workflowInstanceId
     expect(workflowInstanceId, 'workflowInstanceId must be returned').toBeTruthy()
   })

@@ -133,7 +133,7 @@ export default function ContentManagementPage() {
  } finally {
  setLoading(false)
  }
- }, [showMessage])
+ }, [showMessage, countryCode])
 
  useEffect(() => {
  if (countryCode !== null) fetchAllData()
@@ -166,7 +166,7 @@ export default function ContentManagementPage() {
  } finally {
  setSaving(false)
  }
- }, [showMessage])
+ }, [showMessage, countryCode])
 
  const refreshSlides = useCallback(async () => {
  const cc = countryCode ? `&countryCode=${countryCode}` : ''

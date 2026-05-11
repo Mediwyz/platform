@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { FaUpload, FaFileAlt, FaSpinner, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaRobot } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
 

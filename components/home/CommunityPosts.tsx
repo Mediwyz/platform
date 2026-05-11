@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaHeart, FaComment, FaCheckCircle, FaArrowRight, FaSearch } from 'react-icons/fa'
 
@@ -144,9 +145,11 @@ export default function CommunityPosts() {
               {/* Post image if available */}
               {post.imageUrl && (
                 <div className="h-36 overflow-hidden">
-                  <img
+                  <Image
                     src={post.imageUrl}
                     alt=""
+                    width={400}
+                    height={144}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
                 </div>
@@ -156,9 +159,11 @@ export default function CommunityPosts() {
                 {/* Author */}
                 <div className="flex items-center gap-2.5 mb-3">
                   {post.author.profileImage ? (
-                    <img
+                    <Image
                       src={post.author.profileImage}
                       alt=""
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded-full object-cover"
                     />
                   ) : (

@@ -272,7 +272,7 @@ export default function LabTestingBooking() {
  const data = await res.json()
  if (data.success && Array.isArray(data.data)) {
  // Find a test offered by this lab tech to get facility info
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const match = data.data.find((t: any) => t.labTechnician?.id === labTechId)
  if (match) {
  const facility: LabFacility = {
@@ -347,7 +347,7 @@ export default function LabTestingBooking() {
  // group.category is "LAB_TECHNICIAN — <category>"
  const categoryParts = (group.category as string).split(' — ')
  const category = categoryParts[1] || categoryParts[0]
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  for (const svc of group.services as any[]) {
  apiTests.push({
  id: svc.id,

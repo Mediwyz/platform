@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Socket } from 'socket.io-client'
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 let SimplePeer: (new (opts: Record<string, unknown>) => SimplePeerInstance) | null = null
 if (typeof window !== 'undefined') {
   SimplePeer = require('simple-peer')
@@ -372,6 +372,7 @@ export function useWebRTC({
     } finally {
       setTimeout(() => processingPeers.current.delete(targetSocketId), 1000)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, isPolite, performIceRestart, getReconnectDelay, resetReconnectBackoff])
 
   // Remove peer
@@ -427,9 +428,14 @@ export function useWebRTC({
   useEffect(() => {
     if (!socket || !roomId || !localStream || !SimplePeer) return
 
+    const iceTimers = iceRestartTimers.current
+    const peers = peersRef.current
+    const remoteStreams = remoteStreamsRef.current
+    const processing = processingPeers.current
+
     roomJoined.current = false
     joinInProgress.current = false
-    processingPeers.current.clear()
+    processing.clear()
 
     if (connectionCheckInterval.current) clearInterval(connectionCheckInterval.current)
     connectionCheckInterval.current = setInterval(checkConnectionHealth, CONNECTION_STATE_CHECK_INTERVAL)
@@ -600,8 +606,8 @@ export function useWebRTC({
     return () => {
       clearTimeout(joinTimeout)
       if (connectionCheckInterval.current) clearInterval(connectionCheckInterval.current)
-      iceRestartTimers.current.forEach(timer => clearTimeout(timer))
-      iceRestartTimers.current.clear()
+      iceTimers.forEach(timer => clearTimeout(timer))
+      iceTimers.clear()
 
       if (!isReconnecting && socket.connected) socket.emit('leave-room')
 
@@ -621,7 +627,7 @@ export function useWebRTC({
       socket.off('disconnect', handleDisconnect)
 
       if (!isReconnecting) {
-        peersRef.current.forEach(pc => {
+        peers.forEach(pc => {
           pc.isDestroyed = true
           try {
             if (pc.peer && !pc.peer.destroyed) {
@@ -631,14 +637,15 @@ export function useWebRTC({
             }
           } catch {}
         })
-        peersRef.current.clear()
-        remoteStreamsRef.current.clear()
-        processingPeers.current.clear()
+        peers.clear()
+        remoteStreams.clear()
+        processing.clear()
         roomJoined.current = false
         joinInProgress.current = false
         if (clearRoomState) clearRoomState()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket?.id, roomId, localStream])
 
   // Media controls
@@ -680,6 +687,7 @@ export function useWebRTC({
     } catch {
       return false
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, roomId])
 
   const stopScreenShare = useCallback(() => {

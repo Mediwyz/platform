@@ -46,7 +46,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  const [current, setCurrent] = useState<CurrentSubscription | null>(null)
  const [individualPlans, setIndividualPlans] = useState<Plan[]>([])
  const [corporatePlans, setCorporatePlans] = useState<Plan[]>([])
- const [isCorporateAdmin, setIsCorporateAdmin] = useState(false)
+ const [, setIsCorporateAdmin] = useState(false)
  const [isCorporateEmployee, setIsCorporateEmployee] = useState(false)
  const [loading, setLoading] = useState(true)
  const [changing, setChanging] = useState(false)

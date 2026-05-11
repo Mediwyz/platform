@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import Image from 'next/image'
 import { FaVideo, FaCalendarAlt, FaClock, FaUser, FaSpinner, FaArrowLeft, FaHistory, FaCheckCircle } from 'react-icons/fa'
 import VideoConsultation from './VideoConsultation'
 
@@ -191,7 +192,7 @@ export default function VideoCallRoomsList({ currentUser, initialRoomId }: Video
  <div className="flex items-center gap-4">
  <div className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl bg-green-500 shadow-md">
  {selectedRoomData.participantImage ? (
- <img src={selectedRoomData.participantImage} alt={selectedRoomData.participantName} className="w-16 h-16 rounded-full" loading="lazy" />
+ <Image src={selectedRoomData.participantImage} alt={selectedRoomData.participantName} width={64} height={64} className="w-16 h-16 rounded-full" />
  ) : (
  <FaUser />
  )}
@@ -256,7 +257,7 @@ export default function VideoCallRoomsList({ currentUser, initialRoomId }: Video
  upcoming ? 'bg-green-500' : 'bg-gray-400'
  }`}>
  {room.participantImage ? (
- <img src={room.participantImage} alt={room.participantName} className="w-14 h-14 rounded-full" loading="lazy" />
+ <Image src={room.participantImage} alt={room.participantName} width={56} height={56} className="w-14 h-14 rounded-full" />
  ) : (
  <FaUser />
  )}

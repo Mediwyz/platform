@@ -12,8 +12,6 @@ import {
  FaFilter,
  FaEye,
  FaVideo,
- FaComments,
- FaEdit,
  FaChevronDown,
  FaChevronUp,
  FaHome,

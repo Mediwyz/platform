@@ -119,7 +119,7 @@ export default function NannyBookingPage() {
  const res = await fetch('/api/search/providers?type=NANNY')
  const data = await res.json()
  if (data.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setNannies(data.data.map((n: any) => ({
  id: n.id,
  name: `${n.firstName} ${n.lastName}`,
@@ -157,7 +157,7 @@ export default function NannyBookingPage() {
  if (data.success && Array.isArray(data.data)) {
  const apiTypes: ServiceType[] = []
  for (const group of data.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  for (const svc of group.services as any[]) {
  apiTypes.push({
  id: svc.id,

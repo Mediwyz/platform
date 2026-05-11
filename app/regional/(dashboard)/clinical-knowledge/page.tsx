@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { FaPlus, FaTrash, FaCheck, FaBan, FaEdit, FaTimes, FaBook } from 'react-icons/fa'
+import { FaPlus, FaTrash, FaCheck, FaBan, FaEdit, FaBook } from 'react-icons/fa'
 
 /**
  * Regional admin CRUD for the AI assistant's clinical knowledge base.

@@ -13,7 +13,7 @@ interface VerificationBannerProps {
  * Shows a banner when the user's account is not yet verified (verified === false).
  * Prompts them to upload required documents from their settings page.
  */
-const VerificationBanner: React.FC<VerificationBannerProps> = ({ userId, userType }) => {
+const VerificationBanner: React.FC<VerificationBannerProps> = ({ userId }) => {
   const [verified, setVerified] = useState<boolean | null>(null)
   const [dismissed, setDismissed] = useState(false)
 

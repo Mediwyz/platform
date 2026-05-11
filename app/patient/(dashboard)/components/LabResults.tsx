@@ -55,7 +55,7 @@ interface LabBookingData {
  resultDate?: string
 }
 
-const LabResults: React.FC<Props> = ({ patientData }) => {
+const LabResults: React.FC<Props> = () => {
  const [showBookingForm, setShowBookingForm] = useState(false)
  const [labBookings, setLabBookings] = useState<LabBookingData[]>([])
  const [loadingBookings, setLoadingBookings] = useState(true)
@@ -78,7 +78,6 @@ const LabResults: React.FC<Props> = ({ patientData }) => {
  const [selectedCategory, setSelectedCategory] = useState('all')
  const [showFilters, setShowFilters] = useState(false)
  const [expandedTest, setExpandedTest] = useState<string | null>(null)
- const [expandedResultId, setExpandedResultId] = useState<string | null>(null)
  const [viewResultModal, setViewResultModal] = useState(false)
  const [viewResultData, setViewResultData] = useState<LabBookingData | null>(null)
 
@@ -92,7 +91,7 @@ const LabResults: React.FC<Props> = ({ patientData }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setAvailableLabTechs(json.data.map((lt: any) => ({
  id: lt.id,
  userId: lt.id,
@@ -124,7 +123,7 @@ const LabResults: React.FC<Props> = ({ patientData }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setAvailableTests(json.data.map((t: any) => ({
  id: t.id,
  name: t.testName,
@@ -156,7 +155,7 @@ const LabResults: React.FC<Props> = ({ patientData }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const labItems = json.data.filter((b: any) => b.type === 'lab-test').map((b: any) => ({
  id: b.id,
  testName: b.detail || b.testName || 'Lab Test',
@@ -175,7 +174,7 @@ const LabResults: React.FC<Props> = ({ patientData }) => {
  } finally {
  setLoadingBookings(false)
  }
- }, [patientData.id])
+ }, [])
 
  useEffect(() => {
  fetchBookings()

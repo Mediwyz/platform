@@ -12,7 +12,7 @@ interface RoomState {
   sessionId?: string  // Add this line to include sessionId as optional
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+ 
 const debug = process.env.NODE_ENV === 'development' ? console.log : () => {}
 
 export const useSocket = () => {
@@ -174,6 +174,7 @@ export const useSocket = () => {
         socketInstance.disconnect()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Function to save room state for reconnection

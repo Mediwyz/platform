@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaStar, FaArrowLeft, FaCalendarPlus } from 'react-icons/fa'
 
@@ -76,7 +77,7 @@ export default function MyProvidersPage() {
             <div key={f.id} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-sky-50 flex items-center justify-center overflow-hidden flex-shrink-0">
                 {f.provider.profileImage
-                  ? <img src={f.provider.profileImage} alt="" className="w-full h-full object-cover" />
+                  ? <Image src={f.provider.profileImage} alt="" width={48} height={48} className="w-full h-full object-cover" />
                   : <span className="text-lg font-bold text-[#001E40]">
                       {(f.provider.firstName[0] || '') + (f.provider.lastName[0] || '')}
                     </span>}

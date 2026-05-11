@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { FaFileMedical, FaTimes, FaUpload, FaCamera, FaCheckCircle, FaSpinner, FaTrash, FaPills, FaEdit, FaSave } from 'react-icons/fa'
+import Image from 'next/image'
+import { FaFileMedical, FaTimes, FaUpload, FaCamera, FaCheckCircle, FaSpinner, FaTrash, FaPills, FaSave } from 'react-icons/fa'
 import { usePrescription } from '@/lib/contexts/prescription-context'
 
 // Read a cookie value by name (non-httpOnly cookies only)
@@ -161,7 +162,6 @@ export default function FloatingPrescriptionFAB() {
     setSaveSuccess(false)
   }
 
-  const isUploadMode = !hasPrescription || showReplace
   const userType = getCookie('mediwyz_userType')
   const isLoggedIn = !!getCookie('mediwyz_token')
 
@@ -204,7 +204,7 @@ export default function FloatingPrescriptionFAB() {
                   </div>
 
                   {preview && (
-                    <img src={preview} alt="Prescription" className="w-full h-28 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
+                    <Image src={preview} alt="Prescription" width={400} height={112} className="w-full h-28 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
                   )}
 
                   {/* Extracted medications (editable) */}
@@ -304,7 +304,7 @@ export default function FloatingPrescriptionFAB() {
                   </div>
 
                   {prescription.imageUrl && (
-                    <img src={prescription.imageUrl} alt="Prescription" className="w-full h-36 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
+                    <Image src={prescription.imageUrl} alt="Prescription" width={400} height={144} className="w-full h-36 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
                   )}
 
                   {prescription.medicines.length > 0 && (
@@ -374,7 +374,7 @@ export default function FloatingPrescriptionFAB() {
                   >
                     {preview && preview !== prescription.imageUrl ? (
                       <div>
-                        <img src={preview} alt="Preview" className="max-h-32 mx-auto rounded-lg object-contain mb-2" />
+                        <Image src={preview} alt="Preview" width={400} height={128} className="max-h-32 mx-auto rounded-lg object-contain mb-2" />
                         <p className="text-xs text-gray-500 truncate">{fileName}</p>
                         <p className="text-xs text-amber-600 font-medium mt-1">Click to change</p>
                       </div>

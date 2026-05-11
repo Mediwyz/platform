@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
- FaBell, FaCheck, FaCheckDouble, FaSpinner, FaTrash, FaExclamationCircle,
+ FaBell, FaCheck, FaCheckDouble, FaSpinner, FaExclamationCircle,
  FaInfoCircle, FaCheckCircle
 } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'

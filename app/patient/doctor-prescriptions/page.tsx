@@ -48,7 +48,7 @@ interface Prescription {
  notes: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function mapApiPrescription(p: any): Prescription {
  const doc = p.doctor
  const docUser = doc?.user

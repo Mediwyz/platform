@@ -50,7 +50,7 @@ interface RealClaim {
 const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  const [expandedSection, setExpandedSection] = useState<string>('coverage')
  const [showClaimForm, setShowClaimForm] = useState(false)
- const [selectedBillingMethod, setSelectedBillingMethod] = useState<string>('')
+ const [, setSelectedBillingMethod] = useState<string>('')
  const [realClaims, setRealClaims] = useState<RealClaim[]>([])
  const [claimsLoading, setClaimsLoading] = useState(true)
 

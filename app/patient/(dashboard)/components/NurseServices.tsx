@@ -40,7 +40,7 @@ interface NurseBookingData {
  notes?: string
 }
 
-const NurseServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
+const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  const [showBookingForm, setShowBookingForm] = useState(false)
  const [bookings, setBookings] = useState<NurseBookingData[]>([])
  const [loadingBookings, setLoadingBookings] = useState(true)
@@ -66,7 +66,7 @@ const NurseServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const nurseItems = json.data.filter((b: any) => b.type === 'nurse').map((b: any) => ({
  id: b.id,
  nurseId: '',
@@ -85,7 +85,7 @@ const NurseServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  } finally {
  setLoadingBookings(false)
  }
- }, [patientData.id])
+ }, [])
 
  useEffect(() => {
  fetchBookings()
@@ -101,7 +101,7 @@ const NurseServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setAvailableNurses(json.data.map((n: any) => ({
  id: n.id,
  userId: n.id,

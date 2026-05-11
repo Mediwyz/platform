@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
+import Image from 'next/image'
 import { FaPaperPlane, FaTags, FaImage, FaTimes, FaBuilding } from 'react-icons/fa'
 import { getUserId } from '@/hooks/useUser'
 
@@ -170,9 +171,11 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
  {/* Image preview */}
  {imagePreview && (
  <div className="relative mt-2 inline-block">
- <img
+ <Image
  src={imagePreview}
  alt="Upload preview"
+ width={400}
+ height={160}
  className="max-h-40 rounded-lg object-cover"
  />
  <button

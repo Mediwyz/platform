@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-// Using <img> instead of next/image for user-uploaded content (SVG/dynamic)
+import Image from 'next/image'
 import { FaCheckCircle } from 'react-icons/fa'
 
 interface ProviderListCardProps {
@@ -49,13 +49,12 @@ export default function ProviderListCard({
  {avatar && (
  <div className="relative flex-shrink-0">
  {avatar.src ? (
- <img
+ <Image
  src={avatar.src}
  alt={avatar.alt}
  width={48}
  height={48}
  className={`rounded-full object-cover border-2 ${avatar.borderColor || 'border-gray-100'}`}
- loading="lazy"
  />
  ) : (
  <div

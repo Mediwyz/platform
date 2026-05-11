@@ -96,7 +96,7 @@ export default function DoctorConsultationBooking() {
  const searchParams = useSearchParams()
  const doctorId = searchParams.get('doctorId')
  const [currentStep, setCurrentStep] = useState(1)
- const [loadingDoctor, setLoadingDoctor] = useState(!!doctorId)
+ const [, setLoadingDoctor] = useState(!!doctorId)
  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(generateTimeSlots())
  const [appointmentDetails, setAppointmentDetails] = useState<AppointmentDetails>({
  doctor: defaultDoctor,
@@ -169,7 +169,7 @@ export default function DoctorConsultationBooking() {
  const res = await fetch(`/api/search/doctors?q=`)
  const data = await res.json()
  if (data.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const doc = data.data.find((d: any) => d.id === doctorId)
  if (doc) {
  setAppointmentDetails(prev => ({
@@ -203,10 +203,10 @@ export default function DoctorConsultationBooking() {
  const data = await res.json()
  if (data.data?.length > 0) {
  const dayOfWeek = new Date(appointmentDetails.date).getDay()
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const daySlots = data.data.filter((s: any) => s.dayOfWeek === dayOfWeek)
  if (daySlots.length > 0) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setTimeSlots(daySlots.map((s: any) => ({
  time: s.startTime,
  available: s.isAvailable !== false,

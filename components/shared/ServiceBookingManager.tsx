@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, ReactNode } from 'react'
 import {
- FaCheck, FaTimes, FaSpinner, FaCalendarAlt, FaClock, FaEnvelope, FaPhone,
+ FaCheck, FaTimes, FaSpinner, FaCalendarAlt, FaClock, FaPhone,
  FaSearch, FaCheckCircle, FaTimesCircle, FaFileAlt, FaBan, FaMapMarkerAlt,
  FaTruck, FaExclamationCircle,
 } from 'react-icons/fa'

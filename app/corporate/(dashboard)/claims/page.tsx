@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FaFileAlt, FaSearch, FaFilter, FaSpinner, FaCheckCircle, FaClock, FaTimes } from 'react-icons/fa'
+import { FaFileAlt, FaSearch, FaFilter, FaCheckCircle, FaClock, FaTimes } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
 
 interface Claim {

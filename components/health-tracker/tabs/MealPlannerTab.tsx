@@ -159,11 +159,11 @@ export default function MealPlannerTab() {
    if (!res.ok || !json?.success) throw new Error(json?.message || 'Failed to generate meal plan')
    const d = json.data
    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
    const days: MealPlanDay[] = dayNames.map((name, index) => {
     const dayPlan = d?.days?.[index]
     const m = dayPlan?.meals ?? {}
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const toMeal = (mealType: string, meal: any): MealPlanMeal | null =>
      meal ? { id: `${index}-${mealType}`, mealType, name: meal.name, calories: meal.calories ?? 0, protein: meal.protein ?? 0, carbs: meal.carbs ?? 0, fat: meal.fat ?? 0 } : null
     const meals: MealPlanMeal[] = [

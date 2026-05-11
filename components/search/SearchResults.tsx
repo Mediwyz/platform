@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import {
  FaStar, FaMapMarkerAlt, FaCheckCircle, FaVideo, FaHome,
@@ -134,13 +135,12 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  {/* Avatar */}
  <div className="relative flex-shrink-0">
  {result.profileImage ? (
- <img
+ <Image
  src={result.profileImage}
  alt={result.name}
  width={52}
  height={52}
  className="rounded-full object-cover border-2 border-gray-100"
- loading="lazy"
  />
  ) : (
  <div className="w-13 h-13 rounded-full bg-gray-100 flex items-center justify-center text-xl text-gray-400" style={{ width: 52, height: 52 }}>

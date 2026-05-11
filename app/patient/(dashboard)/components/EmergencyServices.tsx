@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Patient } from '@/lib/data/patients'
 import { 
  FaAmbulance, 
@@ -30,8 +30,6 @@ import {
  FaMedkit,
  FaHardHat,
  FaLifeRing,
- FaChevronDown,
- FaChevronUp
 } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 
@@ -55,13 +53,12 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  const [activeTab, setActiveTab] = useState<'emergency' | 'contacts' | 'history' | 'chat'>('emergency')
  const [showMedicalInfo, setShowMedicalInfo] = useState(false)
  const [isEmergencyCall, setIsEmergencyCall] = useState(false)
- const [expandedSection, setExpandedSection] = useState<string>('emergency')
 
  const hasEmergencyContacts = patientData.emergencyServiceContacts && patientData.emergencyServiceContacts.length > 0
  const hasEmergencyChat = patientData.chatHistory?.emergencyServices && patientData.chatHistory.emergencyServices.length > 0
 
  const [emergencyServices, setEmergencyServices] = useState<EmergencyContact[]>([])
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const [activeMedications, setActiveMedications] = useState<any[]>([])
 
  // Self-fetch active prescriptions for medical info display
@@ -93,7 +90,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setEmergencyServices(json.data.map((r: any) => ({
  id: r.id,
  name: `${r.firstName} ${r.lastName}`,
@@ -146,15 +143,6 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  { id: 'history', label: 'History', icon: FaHistory, color: 'purple' },
  { id: 'chat', label: 'Communications', icon: FaComments, color: 'green' }
  ]
-
- const toggleSection = (sectionId: string) => {
- if (expandedSection === sectionId) {
- setExpandedSection('')
- } else {
- setExpandedSection(sectionId)
- setActiveTab(sectionId as typeof activeTab)
- }
- }
 
  const renderEmergencyPanel = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">

@@ -98,19 +98,19 @@ describe('createDoctorBookingSchema', () => {
   })
 
   it('rejects booking with missing doctorId', () => {
-    const { doctorId, ...incomplete } = validBooking
+    const { doctorId: _doctorId, ...incomplete } = validBooking
     const result = createDoctorBookingSchema.safeParse(incomplete)
     expect(result.success).toBe(false)
   })
 
   it('rejects booking with missing scheduledDate', () => {
-    const { scheduledDate, ...incomplete } = validBooking
+    const { scheduledDate: _scheduledDate, ...incomplete } = validBooking
     const result = createDoctorBookingSchema.safeParse(incomplete)
     expect(result.success).toBe(false)
   })
 
   it('rejects booking with missing consultationType', () => {
-    const { consultationType, ...incomplete } = validBooking
+    const { consultationType: _consultationType, ...incomplete } = validBooking
     const result = createDoctorBookingSchema.safeParse(incomplete)
     expect(result.success).toBe(false)
   })

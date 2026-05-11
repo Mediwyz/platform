@@ -7,7 +7,7 @@
  * audit log completeness.
  */
 import { test, expect } from '@playwright/test'
-import { login, api, USERS, BASE } from './helpers/qa-api-helpers'
+import { login, api, USERS } from './helpers/qa-api-helpers'
 
 test.setTimeout(120_000)
 
@@ -19,14 +19,6 @@ test.describe('Transaction Pipeline', () => {
     doctorCookies = await login(request, USERS.doctor.email, USERS.doctor.password)
     patientCookies = await login(request, USERS.patient.email, USERS.patient.password)
   })
-
-  // Shared helper: find the first seeded patient↔doctor booking that has a
-  // workflow instance attached and is still in an early state we can drive.
-  async function findTransitionableInstance(cookies: string, currentStatus = 'pending') {
-    const res = await api(request => request, 'GET', '', '') // placeholder — real code uses `request`
-    // Instead: caller passes `request` directly. See per-test usage below.
-    return res
-  }
 
   test('1. provider sees workflow instances for their bookings', async ({ request }) => {
     const res = await api(request, 'GET', '/api/workflow/instances?role=provider', doctorCookies)

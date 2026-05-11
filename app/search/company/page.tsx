@@ -59,7 +59,7 @@ export default function FindCompanyPage() {
     finally { setLoading(false) }
   }
 
-  useEffect(() => { load(query, activeType) }, [])
+  useEffect(() => { load(query, activeType) }, [activeType, query])
 
   // Sync URL params without triggering reload
   const syncUrl = (q: string, type: string) => {

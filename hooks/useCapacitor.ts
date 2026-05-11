@@ -13,7 +13,7 @@ export function useCapacitor(): boolean {
     const ua = navigator.userAgent || ''
     if (
       ua.includes('MediWyz-Android') ||
-      // eslint-disable-next-line no-prototype-builtins
+       
       window.hasOwnProperty('Capacitor') ||
       ua.includes('wv') // Android WebView marker
     ) {

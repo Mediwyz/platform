@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { FaComments, FaCircle } from 'react-icons/fa'
 import Link from 'next/link'
 import { initialsAvatar, avatarSrc } from '@/lib/utils/avatar'
@@ -146,9 +147,11 @@ export default function ChatContactsSidebar({ currentUserId, messagesPath }: Cha
  >
  {/* Avatar */}
  <div className="relative flex-shrink-0">
- <img
+ <Image
    src={avatarUrl(other)}
    alt={`${other.firstName} ${other.lastName}`}
+   width={36}
+   height={36}
    className="w-9 h-9 rounded-full object-cover border border-gray-100 bg-gray-100"
    onError={e => { e.currentTarget.src = initialsAvatar(other.firstName, other.lastName) }}
  />

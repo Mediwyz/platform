@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { FaCheckCircle, FaCalendarAlt, FaClock, FaStethoscope, FaWallet } from 'react-icons/fa'
+import { FaCheckCircle, FaCalendarAlt, FaClock, FaWallet } from 'react-icons/fa'
 import { PROVIDER_BOOKING_COLORS } from '@/lib/constants/userTypeStyles'
 import type { BookingSubmitData } from './BookingForm'
 

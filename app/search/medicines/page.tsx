@@ -1,26 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { FaSearch, FaPills, FaStar, FaMapMarkerAlt, FaTruck, FaCheckCircle, FaShoppingCart, FaLock, FaLeaf, FaExclamationTriangle, FaHeart, FaBrain, FaBaby, FaEye, FaTooth, FaBone, FaHandHoldingMedical, FaMedkit, FaPercent, FaPlus, FaMinus, FaTrash, FaHistory, FaTimes } from 'react-icons/fa'
+import { FaSearch, FaPills, FaStar, FaMapMarkerAlt, FaTruck, FaCheckCircle, FaShoppingCart, FaLock, FaExclamationTriangle, FaPercent, FaTrash, FaHistory, FaTimes } from 'react-icons/fa'
 import { useCart } from '@/app/search/medicines/contexts/CartContext'
 import { useSearchHistory } from '@/hooks/useSearchHistory'
 import PrescriptionUploadModal from '@/components/shared/PrescriptionUploadModal'
-
-const categoryIcons = {
- "Pain Relief": FaHandHoldingMedical,
- "Diabetes": FaHeart,
- "Antibiotics": FaLock,
- "Vitamins": FaLeaf,
- "Digestive Health": FaMedkit,
- "Heart Health": FaHeart,
- "Mental Health": FaBrain,
- "Children's Health": FaBaby,
- "Eye Care": FaEye,
- "Dental Care": FaTooth,
- "Bone Health": FaBone
-}
 
 // Medicine UI interface (mapped from API response)
 interface MedicineUi {
@@ -65,8 +50,6 @@ interface MedicineProps {
 
 const MedicineCard = ({ medicine, onAddRx }: MedicineProps) => {
  const { addToCart, cartItems } = useCart()
- const CategoryIcon = categoryIcons[medicine.category as keyof typeof categoryIcons] || FaPills
-
  const itemInCart = cartItems.find(item => item.id === medicine.id)
  const quantityInCart = itemInCart?.quantity || 0
 
@@ -319,7 +302,7 @@ function MedicinesContent() {
  if (cat && cat !== 'all') params.set('category', cat)
  const qs = params.toString()
  router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
- }, [router])
+ }, [router, pathname])
 
  const fetchMedicines = useCallback(async () => {
  setIsLoading(true)

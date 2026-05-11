@@ -4,7 +4,7 @@ import HealthTrackerTabs from '../HealthTrackerTabs'
 
 // Mock all tab components to avoid complex rendering
 vi.mock('../tabs/DashboardTab', () => ({
- default: ({ onNavigateToTab }: any) => <div data-testid="dashboard-tab">Dashboard Tab</div>,
+ default: () => <div data-testid="dashboard-tab">Dashboard Tab</div>,
 }))
 vi.mock('../tabs/FoodDiaryTab', () => ({
  default: () => <div data-testid="food-tab">Food Diary Tab</div>,

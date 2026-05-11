@@ -14,7 +14,7 @@ import {
  FaTimes,
 } from 'react-icons/fa'
 import * as FaIcons from 'react-icons/fa'
-// Using <img> for user-uploaded profile images (SVG/dynamic content)
+import Image from 'next/image'
 import type { IconType } from 'react-icons'
 
 type SearchCategory = string
@@ -316,13 +316,12 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  result.image ? '' : colorClass.split(' ')[1]
  }`}>
  {result.image ? (
- <img
+ <Image
  src={result.image}
  alt={result.label}
  width={40}
  height={40}
  className="rounded-full object-cover"
- loading="lazy"
  />
  ) : (
  <CategoryIcon className={`text-lg ${colorClass.split(' ')[0]}`} />

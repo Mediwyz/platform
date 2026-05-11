@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
   FaTimes, FaArrowLeft, FaArrowRight, FaCheckCircle, FaCalendarAlt,
-  FaUserMd, FaConciergeBell, FaClock, FaLock, FaStar,
+  FaLock, FaStar,
 } from 'react-icons/fa'
-import { useBookingDrawer, DrawerService, DrawerProvider, DrawerRole, DrawerOrganization, DrawerWorkflow } from '@/lib/contexts/booking-drawer-context'
+import { useBookingDrawer, DrawerService, DrawerProvider, DrawerOrganization, DrawerWorkflow } from '@/lib/contexts/booking-drawer-context'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -768,7 +768,7 @@ function ServiceStep({
 // ─── PROVIDER STEP ─────────────────────────────────────────────────────────────
 
 function ProviderStep({
-  providers, loading, onSelect, selectedId, service, roleColor, error,
+  providers, loading, onSelect, selectedId, service, roleColor: _roleColor, error,
 }: {
   providers: DrawerProvider[]
   loading: boolean
@@ -820,9 +820,11 @@ function ProviderStep({
                 }`}
             >
               <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
-                <img
+                <Image
                   src={avatarUrl(p)}
                   alt={p.name}
+                  width={40}
+                  height={40}
                   className="w-full h-full object-cover"
                   onError={e => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=0C6780&color=fff&size=80` }}
                 />
@@ -1218,9 +1220,11 @@ function ConfirmStep({
       {provider && (
         <SummaryRow
           icon={
-            <img
+            <Image
               src={avatarUrl(provider)}
               alt={provider.name}
+              width={40}
+              height={40}
               className="w-full h-full object-cover"
               onError={e => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=0C6780&color=fff&size=80` }}
             />

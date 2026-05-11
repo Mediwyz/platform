@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Icon } from '@iconify/react'
 import IconPicker from '@/components/shared/IconPicker'
 import {
-  FaPlus, FaEdit, FaTrash, FaTimes, FaCheck, FaSpinner,
+  FaPlus, FaEdit, FaTrash, FaTimes, FaSpinner,
   FaUsersCog, FaEye, FaEyeSlash, FaFileAlt,
   // Healthcare & Medical
   FaUserMd, FaUserNurse, FaBaby, FaPills, FaFlask, FaAmbulance,

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaCheck, FaTimes, FaUserMd, FaUserNurse, FaChild, FaFlask, FaAmbulance, FaUsers } from 'react-icons/fa'
 import { getUserTypeLabel } from '@/lib/constants/userTypeStyles'
@@ -172,9 +173,11 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  return (
  <div key={req.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition">
  <Link href={`/profile/${req.sender.id}`} className="flex-shrink-0">
- <img
+ <Image
  src={avatarSrc(req.sender.profileImage, req.sender.firstName, req.sender.lastName)}
  alt={`${req.sender.firstName} ${req.sender.lastName}`}
+ width={48}
+ height={48}
  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 bg-gray-100"
  />
  </Link>
@@ -225,9 +228,11 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  return (
  <div key={conn.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition">
  <Link href={`/profile/${person.id}`} className="flex-shrink-0">
- <img
+ <Image
  src={avatarSrc(person.profileImage, person.firstName, person.lastName)}
  alt={`${person.firstName} ${person.lastName}`}
+ width={48}
+ height={48}
  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 bg-gray-100"
  />
  </Link>

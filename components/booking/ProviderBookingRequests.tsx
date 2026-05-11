@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import {
  FaSearch,
  FaCalendarAlt,
@@ -76,7 +77,6 @@ const ACCENT_STYLES: Record<string, { header: string; button: string; statBg: st
 export default function ProviderBookingRequests({
  apiEndpoint,
  actionEndpoint,
- providerLabel,
  accentColor = 'blue',
  showTestFields = false,
  showChildrenFields = false,
@@ -237,9 +237,11 @@ export default function ProviderBookingRequests({
  <div className="flex items-start gap-4">
  {/* Patient Avatar */}
  {booking.patient.profileImage ? (
- <img
+ <Image
  src={booking.patient.profileImage}
  alt={`${booking.patient.firstName} ${booking.patient.lastName}`}
+ width={48}
+ height={48}
  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
  />
  ) : (

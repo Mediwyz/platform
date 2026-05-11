@@ -78,7 +78,7 @@ function addMinutes(dateStr: string, mins: number): string {
  return formatTime(d.toISOString())
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function mapApiAppointment(apt: any): Appointment {
  // Support both legacy Appointment (apt.doctor.user) and ServiceBooking (apt.providerName)
  const doc = apt.doctor

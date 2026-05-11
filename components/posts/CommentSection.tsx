@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { FaPaperPlane } from 'react-icons/fa'
 
 interface Comment {
@@ -75,7 +76,6 @@ function getInitials(firstName: string, lastName: string): string {
 export default function CommentSection({
  postId,
  currentUserId,
- currentUserType,
 }: CommentSectionProps) {
  const [comments, setComments] = useState<Comment[]>([])
  const [loading, setLoading] = useState(true)
@@ -153,9 +153,11 @@ export default function CommentSection({
  {comments.map((comment) => (
  <div key={comment.id} className="flex items-start gap-2.5">
  {comment.author.profileImage ? (
- <img
+ <Image
  src={comment.author.profileImage}
  alt={`${comment.author.firstName} ${comment.author.lastName}`}
+ width={32}
+ height={32}
  className="w-8 h-8 rounded-full object-cover flex-shrink-0"
  />
  ) : (

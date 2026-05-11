@@ -182,6 +182,7 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  if (streamUpdateTrigger > 0) {
  setTimeout(attachLocalStream, 100)
  }
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [localStream, streamUpdateTrigger])
 
  useEffect(() => {
@@ -198,6 +199,7 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  })
  }, 500)
  }
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [remoteStreams, streamUpdateTrigger])
 
  useEffect(() => {

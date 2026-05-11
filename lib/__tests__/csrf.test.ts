@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { generateCsrfToken, verifyCsrfToken, validateCsrf, setCsrfCookie } from '@/lib/auth/csrf'
 import { NextRequest, NextResponse } from 'next/server'
 

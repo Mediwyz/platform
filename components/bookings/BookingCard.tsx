@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FiCalendar, FiClock, FiUser, FiExternalLink, FiChevronDown, FiChevronUp, FiVideo } from 'react-icons/fi'
 import WorkflowActionButton, { type StepAction, type StepFlags } from '@/components/workflow/WorkflowActionButton'
@@ -105,7 +106,7 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
               {/* Avatar */}
               <div className="w-9 h-9 rounded-full bg-brand-teal/10 flex items-center justify-center text-brand-teal font-semibold text-xs flex-shrink-0">
                 {data.patientImage
-                  ? <img src={data.patientImage} alt="" className="w-9 h-9 rounded-full object-cover" />
+                  ? <Image src={data.patientImage} alt="" width={36} height={36} className="w-9 h-9 rounded-full object-cover" />
                   : initials !== '?' ? initials : <FiUser className="w-4 h-4" />
                 }
               </div>

@@ -48,7 +48,7 @@ interface ChildcareBookingData {
  status: string
 }
 
-const ChildcareServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
+const ChildcareServices: React.FC<Props> = ({ onVideoCall }) => {
  const [showBookingForm, setShowBookingForm] = useState(false)
  const [bookings, setBookings] = useState<ChildcareBookingData[]>([])
  const [loadingBookings, setLoadingBookings] = useState(true)
@@ -78,7 +78,7 @@ const ChildcareServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  const nannyItems = json.data.filter((b: any) => b.type === 'nanny').map((b: any) => ({
  id: b.id,
  nannyId: '',
@@ -98,7 +98,7 @@ const ChildcareServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  } finally {
  setLoadingBookings(false)
  }
- }, [patientData.id])
+ }, [])
 
  useEffect(() => {
  fetchBookings()
@@ -114,7 +114,7 @@ const ChildcareServices: React.FC<Props> = ({ patientData, onVideoCall }) => {
  if (res.ok) {
  const json = await res.json()
  if (json.success && json.data) {
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
  setAvailableNannies(json.data.map((n: any) => ({
  id: n.id,
  userId: n.id,

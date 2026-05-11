@@ -1,4 +1,4 @@
-// Using <img> for user-uploaded profile images
+import Image from 'next/image'
 import { FaStar, FaMapMarkerAlt, FaHospital, FaLanguage } from 'react-icons/fa'
 import type { Doctor } from '@/lib/data'
 
@@ -16,13 +16,12 @@ export default function DoctorInfo({ doctor, onNext }: DoctorInfoProps) {
  <div className="flex flex-col lg:flex-row gap-8">
  <div className="lg:w-1/3">
  <div className="text-center">
- <img
+ <Image
  src={doctor.profileImage}
  alt={`Dr. ${doctor.firstName} ${doctor.lastName}`}
  width={200}
  height={200}
  className="rounded-full object-cover border-4 border-blue-100 mx-auto mb-4"
- loading="lazy"
  />
  <div className="flex items-center justify-center gap-1 text-yellow-500 mb-2">
  <FaStar />

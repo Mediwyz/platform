@@ -1751,7 +1751,7 @@ async function testUpdateDoctorAvailability(auth) {
   }
   slots.push({ dayOfWeek: 6, startTime: '09:00', endTime: '12:00', isActive: true })
 
-  const { status, data } = await apiPutAuth(
+  const { status } = await apiPutAuth(
     `/api/users/${auth.userId}/availability`,
     { slots },
     auth.cookies,
@@ -1835,7 +1835,7 @@ async function testNurseAvailability() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/users/${auth.userId}/availability`,
     auth.cookies,
     `nurse-avail-${TIMESTAMP}`
@@ -1856,7 +1856,7 @@ async function testNannyAvailability() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/users/${auth.userId}/availability`,
     auth.cookies,
     `nanny-avail-${TIMESTAMP}`
@@ -1900,7 +1900,7 @@ async function testDoctorAppointmentsApi() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/doctors/${auth.userId}/appointments`,
     auth.cookies,
     `doc-appts-${TIMESTAMP}`
@@ -1921,7 +1921,7 @@ async function testDoctorPatientsApi() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/doctors/${auth.userId}/patients`,
     auth.cookies,
     `doc-patients-${TIMESTAMP}`
@@ -1942,7 +1942,7 @@ async function testDoctorStatisticsApi() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/doctors/${auth.userId}/statistics`,
     auth.cookies,
     `doc-stats-${TIMESTAMP}`
@@ -1963,7 +1963,7 @@ async function testDoctorPrescriptionsApi() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/doctors/${auth.userId}/prescriptions`,
     auth.cookies,
     `doc-prescriptions-${TIMESTAMP}`
@@ -2140,7 +2140,7 @@ async function testPatientOrders() {
   const auth = await loginAndGetCookies('emma.johnson@mediwyz.com', 'Patient123!')
   if (!auth) { log('FAIL', 'J3', 'Patient orders — login failed'); return }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     '/api/orders',
     auth.cookies,
     `patient-orders-${TIMESTAMP}`
@@ -2185,7 +2185,7 @@ async function apiPutAuth(endpoint, body, cookieStr, forwardedFor = '') {
 // ─── Section K: Edge Case APIs ──────────────────────────────────────────────
 
 async function testLoginWrongPassword() {
-  const { status, data } = await apiPost('/api/auth/login', {
+  const { status } = await apiPost('/api/auth/login', {
     email: 'emma.johnson@mediwyz.com',
     password: 'TotallyWrongPassword!',
   }, { 'X-Forwarded-For': `edge-wrong-pw-${Date.now()}` })
@@ -2199,7 +2199,7 @@ async function testLoginWrongPassword() {
 }
 
 async function testLoginNonexistentEmail() {
-  const { status, data } = await apiPost('/api/auth/login', {
+  const { status } = await apiPost('/api/auth/login', {
     email: `nonexistent.${Date.now()}@example.com`,
     password: 'Test1234!',
   }, { 'X-Forwarded-For': `edge-nouser-${Date.now()}` })
@@ -2305,7 +2305,7 @@ async function testAdminDashboardApi() {
   const auth = await loginAndGetCookies('hassan.doorgakant@mediwyz.com', 'Admin123!')
   if (!auth) { log('SKIP', 'L4', 'Admin dashboard API — login failed'); return }
 
-  const { status, data } = await apiGetAuth('/api/admin/dashboard', auth.cookies)
+  const { status } = await apiGetAuth('/api/admin/dashboard', auth.cookies)
 
   log(
     status === 200 ? 'PASS' : 'FAIL',
@@ -2333,7 +2333,7 @@ async function testAdminSystemHealthApi() {
   const auth = await loginAndGetCookies('hassan.doorgakant@mediwyz.com', 'Admin123!')
   if (!auth) { log('SKIP', 'L6', 'Admin system health — login failed'); return }
 
-  const { status, data } = await apiGetAuth('/api/admin/system-health', auth.cookies)
+  const { status } = await apiGetAuth('/api/admin/system-health', auth.cookies)
 
   log(
     status === 200 ? 'PASS' : 'FAIL',
@@ -2520,7 +2520,7 @@ async function testLabTechBookingRequests() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/lab-techs/${labAuth.userId}/booking-requests`,
     labAuth.cookies,
     `lab-bookreq-${TIMESTAMP}`
@@ -2541,7 +2541,7 @@ async function testLabTechTests() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     `/api/lab-techs/${labAuth.userId}/tests`,
     labAuth.cookies,
     `lab-tests-${TIMESTAMP}`
@@ -2792,7 +2792,7 @@ async function testInsuranceClaimCreate() {
   )
 
   // Test with valid UUID format (will fail at DB level if patient doesn't exist, but validates schema)
-  const { status: validStatus, data: validData } = await apiPostAuth(
+  const { status: validStatus } = await apiPostAuth(
     '/api/insurance/claims',
     {
       patientId: '550e8400-e29b-41d4-a716-446655440000', // Valid UUID, non-existent patient
@@ -3131,7 +3131,7 @@ async function testAdminSecurity() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     '/api/admin/security',
     auth.cookies,
     `admin-security-${TIMESTAMP}`
@@ -3163,7 +3163,7 @@ async function testRegionalAdminDashboard() {
     return
   }
 
-  const { status, data } = await apiGetAuth(
+  const { status } = await apiGetAuth(
     '/api/admin/dashboard',
     auth.cookies,
     `regional-dash-${TIMESTAMP}`
@@ -3295,7 +3295,7 @@ async function main() {
     const health = await fetch(`${BASE_URL}/api/health`)
     if (!health.ok) throw new Error(`Health check failed: HTTP ${health.status}`)
     console.log('  Server: OK')
-  } catch (e) {
+  } catch {
     console.error(`\n  ERROR: Server not reachable at ${BASE_URL}`)
     console.error('  Run: npm run dev')
     process.exit(1)
@@ -3367,7 +3367,7 @@ async function main() {
   console.log('  D. DOCTOR POSTS & COMMUNITY')
   console.log('─'.repeat(90))
 
-  const communityFeedResult = await testGetCommunityFeed()
+  await testGetCommunityFeed()
   const testPostId = await testDoctorCreatePost()
   if (testPostId) {
     await testPatientCommentOnPost(testPostId)

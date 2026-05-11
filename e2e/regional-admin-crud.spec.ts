@@ -16,10 +16,9 @@
  *   - Database seeded
  */
 
-import { test, expect, Page, BrowserContext } from '@playwright/test'
+import { test, expect, Page } from '@playwright/test'
 
 const BASE = 'http://localhost:3000'
-const API = 'http://localhost:3001/api'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

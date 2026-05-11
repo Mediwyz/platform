@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import {
  FaUsers, FaSearch, FaSpinner, FaCheck, FaBan, FaUserTimes,
@@ -239,9 +240,11 @@ export default function RegionalUsersPage() {
         className="p-4 flex flex-col md:flex-row md:items-center justify-between hover:bg-gray-50 transition-colors gap-4"
        >
         <div className="flex items-center gap-4 flex-1">
-         <img
+         <Image
           src={avatarSrc(user.profileImage, user.firstName, user.lastName)}
           alt={`${user.firstName} ${user.lastName}`}
+          width={48}
+          height={48}
           className="w-12 h-12 rounded-full object-cover border border-gray-200 bg-gray-100 flex-shrink-0"
           onError={e => { e.currentTarget.src = initialsAvatar(user.firstName, user.lastName) }}
          />

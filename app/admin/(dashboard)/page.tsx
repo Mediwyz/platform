@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useUser } from '@/hooks/useUser'
 import {
  FaUsers, FaUserMd,
- FaCheckCircle, FaChartBar, FaDollarSign, FaChartLine,
- FaNewspaper, FaFileAlt, FaUsersCog, FaSpinner, FaShieldAlt,
- FaPercentage, FaMoneyBillWave, FaExchangeAlt, FaGlobeAmericas
+ FaCheckCircle, FaDollarSign, FaChartLine,
+ FaNewspaper, FaUsersCog, FaSpinner, FaShieldAlt,
+ FaPercentage, FaExchangeAlt, FaGlobeAmericas
 } from 'react-icons/fa'
 import { IconType } from 'react-icons'
 import WalletBalanceCard from '@/components/shared/WalletBalanceCard'

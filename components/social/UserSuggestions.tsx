@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaUserPlus, FaUserMd, FaUserNurse, FaChild, FaFlask, FaAmbulance } from 'react-icons/fa'
 import { getUserTypeLabel } from '@/lib/constants/userTypeStyles'
@@ -125,9 +126,11 @@ export default function UserSuggestions({ currentUserId, maxResults = 7, classNa
  return (
  <div key={user.id} className="flex items-center gap-3">
  <Link href={`/profile/${user.id}`} className="flex-shrink-0">
- <img
+ <Image
  src={avatarUrl(user)}
  alt={`${user.firstName} ${user.lastName}`}
+ width={40}
+ height={40}
  className="w-10 h-10 rounded-full object-cover border-2 border-gray-100 bg-gray-100"
  onError={e => { e.currentTarget.src = initialsAvatar(user.firstName, user.lastName) }}
  />

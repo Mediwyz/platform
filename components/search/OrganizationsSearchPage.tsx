@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaSearch, FaMapMarkerAlt, FaPhone, FaGlobe, FaBriefcaseMedical, FaHospital, FaFlask, FaTooth, FaEye, FaHeart } from 'react-icons/fa'
@@ -47,7 +47,7 @@ const ENTITY_TYPES = [
   { value: 'other', label: 'Other' },
 ]
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const TYPE_ICONS: Record<string, React.ComponentType<any>> = {
   clinic: FaBriefcaseMedical,
   hospital: FaHospital,
@@ -166,7 +166,6 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function OrganizationsSearchPage() {
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   const [query, setQuery] = useState(searchParams.get('q') ?? '')

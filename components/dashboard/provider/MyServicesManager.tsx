@@ -76,7 +76,7 @@ const MODE_EMOJI: Record<string, string> = {
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 
-export default function MyServicesManager({ providerType, slug }: { providerType: string; slug?: string }) {
+export default function MyServicesManager({ providerType }: { providerType: string; slug?: string }) {
   // ── State ──────────────────────────────────────────────────────────────────
   const [configs, setConfigs] = useState<ServiceConfig[]>([])
   const [catalogGroups, setCatalogGroups] = useState<CatalogGroup[]>([])
@@ -235,7 +235,7 @@ export default function MyServicesManager({ providerType, slug }: { providerType
   function toggleNewWorkflow(id: string) {
     setNewWorkflowIds(prev => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      if (next.has(id)) { next.delete(id) } else { next.add(id) }
       return next
     })
   }
@@ -243,7 +243,7 @@ export default function MyServicesManager({ providerType, slug }: { providerType
   function toggleManagedWorkflow(id: string) {
     setManagedWorkflowIds(prev => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      if (next.has(id)) { next.delete(id) } else { next.add(id) }
       return next
     })
   }

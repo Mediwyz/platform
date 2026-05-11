@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
- FaUsers, FaSearch, FaSpinner, FaUserCheck, FaUserTimes, FaBan,
+ FaUsers, FaSearch, FaSpinner,
  FaFilter
 } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
@@ -81,8 +81,6 @@ export default function AdminUsersPage() {
  (userTypeLabels[u.userType] || u.userType).toLowerCase().includes(q)
  )
  })
-
- const userTypes = ['all', ...Object.keys(userTypeLabels)]
 
  return (
  <div className="p-6 max-w-7xl mx-auto">

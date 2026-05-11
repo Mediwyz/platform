@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiBookOpen, FiRefreshCw, FiTrash2 } from 'react-icons/fi'
+import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiRefreshCw, FiTrash2 } from 'react-icons/fi'
 import Link from 'next/link'
-import StepEditor, { type WorkflowStep, type StepAction } from './StepEditor'
+import { type WorkflowStep, type StepAction } from './StepEditor'
 import WorkflowPreview from './WorkflowPreview'
 import { STEP_ICON_EMOJI, inferStepIcon } from '../stepIconRegistry'
 export type { WorkflowStep, StepAction }
@@ -49,14 +49,6 @@ const OUTPUT_OPTIONS = [
   { value: 'exercise_plan',  label: 'Exercise / rehab plan' },
   { value: 'meal_plan',      label: 'Nutrition / meal plan' },
   { value: 'dental_chart',   label: 'Dental chart / treatment plan' },
-]
-
-const RECURRENCE_OPTIONS = [
-  { value: 'none',      label: 'One-time (single session)' },
-  { value: 'protocol',  label: 'Fixed protocol (e.g. 5-session series)' },
-  { value: 'weekly',    label: 'Weekly recurring sessions' },
-  { value: 'biweekly',  label: 'Bi-weekly sessions' },
-  { value: 'monthly',   label: 'Monthly check-ins' },
 ]
 
 const CUSTOM_STEP_EMOJIS = [
@@ -445,15 +437,6 @@ interface PlatformServiceOption {
   defaultPrice?: number | null
 }
 
-interface StepTypeOption {
-  code: string
-  label: string
-  description: string | null
-  category: string
-  defaultFlags: Record<string, boolean | string>
-  defaultActionsProvider: Array<{ action: string; label: string; targetStatus: string; style: string }>
-  defaultActionsPatient:  Array<{ action: string; label: string; targetStatus: string; style: string }>
-}
 
 export default function WorkflowBuilder({
   backHref, initialData, lockedProviderType, showAdminFields,
@@ -500,8 +483,6 @@ export default function WorkflowBuilder({
   const [inFlightCount,   setInFlightCount]   = useState<number>(0)
   const [providerTypes,   setProviderTypes]   = useState<string[]>(FALLBACK_PROVIDER_TYPES)
   const [view,            setView]            = useState<'builder' | 'preview'>('builder')
-  const [stepTypes,       setStepTypes]       = useState<StepTypeOption[]>([])
-  const [stepLibraryOpen, setStepLibraryOpen] = useState(false)
   const [aiOpen,          setAiOpen]          = useState(false)
   const [aiPrompt,        setAiPrompt]        = useState('')
   const [aiBusy,          setAiBusy]          = useState(false)
@@ -521,20 +502,20 @@ export default function WorkflowBuilder({
       setSteps(wizardData.steps as WorkflowStep[])
       setStepsCustomized(false)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [wizardData])
 
   // Auto-derive steps when mode or axes change (only if not manually edited)
   useEffect(() => {
     if (stepsCustomized) return
     setSteps(deriveStepsFromConfig(serviceMode, configSample, configOutput))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [serviceMode, configSample, configOutput, stepsCustomized])
 
   // Auto-derive paymentTiming when serviceMode changes
   useEffect(() => {
     setPaymentTiming(derivePaymentTiming(serviceMode))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [serviceMode])
 
   useEffect(() => {
@@ -551,7 +532,7 @@ export default function WorkflowBuilder({
       .then(r => r.json())
       .then(json => { if (json.success) setInFlightCount(json.data.count ?? 0) })
       .catch(() => {})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [initialData?.id, isDraft])
 
   useEffect(() => {
@@ -607,8 +588,6 @@ export default function WorkflowBuilder({
     finally { setAiBusy(false) }
   }
 
-  const allStatusCodes = steps.map(s => s.statusCode)
-
   const issues = (() => {
     const out: Array<{ key: string; message: string; stepIdx?: number }> = []
     if (!name.trim()) out.push({ key: 'name', message: 'Workflow needs a name.' })
@@ -662,27 +641,6 @@ export default function WorkflowBuilder({
   }
 
   function autoSlug(val: string) { return val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') }
-
-  function insertFromStepType(st: StepTypeOption) {
-    const newStep: WorkflowStep = {
-      order: steps.length + 1,
-      statusCode: st.code.toLowerCase(),
-      label: st.label,
-      flags: (st.defaultFlags ?? {}) as Record<string, boolean>,
-      actionsForProvider: (st.defaultActionsProvider ?? []) as StepAction[],
-      actionsForPatient:  (st.defaultActionsPatient  ?? []) as StepAction[],
-      notifyPatient: null, notifyProvider: null,
-    }
-    const cancelledIdx = steps.findIndex(s => s.statusCode === 'cancelled')
-    if (cancelledIdx >= 0) {
-      const updated = [...steps]; updated.splice(cancelledIdx, 0, newStep)
-      setSteps(updated.map((s, i) => ({ ...s, order: i + 1 })))
-    } else {
-      setSteps([...steps, newStep].map((s, i) => ({ ...s, order: i + 1 })))
-    }
-    setStepsCustomized(true)
-    setStepLibraryOpen(false)
-  }
 
   function openAddCustomForm() {
     const completedIdx = steps.findIndex(s => s.statusCode === 'completed')

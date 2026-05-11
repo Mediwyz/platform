@@ -1,4 +1,4 @@
-import { test, expect, Page, Browser, BrowserContext } from '@playwright/test'
+import { test, expect, Page, Browser } from '@playwright/test'
 
 test.setTimeout(120_000)
 

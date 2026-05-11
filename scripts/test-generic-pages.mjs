@@ -46,17 +46,6 @@ async function login(email, password) {
   return res.json()
 }
 
-async function fetchPage(urlPath) {
-  try {
-    const res = await fetch(`${BASE}${urlPath}`, {
-      headers: { Cookie: authCookie },
-      redirect: 'manual',
-    })
-    return { status: res.status, ok: res.ok || res.status === 307 || res.status === 308 }
-  } catch {
-    return { status: 0, ok: false }
-  }
-}
 
 async function api(urlPath, options = {}) {
   const res = await fetch(`${BASE}${urlPath}`, {

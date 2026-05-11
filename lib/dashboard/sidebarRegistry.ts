@@ -6,7 +6,6 @@ import { INSURANCE_SIDEBAR_ITEMS, getActiveSectionFromPath as insuranceGetActive
 import { CORPORATE_SIDEBAR_ITEMS, getActiveSectionFromPath as corporateGetActive } from '@/app/corporate/(dashboard)/sidebar-config'
 import { REFERRAL_SIDEBAR_ITEMS, getActiveSectionFromPath as referralGetActive } from '@/app/referral-partner/(dashboard)/sidebar-config'
 import { REGIONAL_ADMIN_SIDEBAR_ITEMS, getActiveSectionFromPath as regionalGetActive } from '@/app/regional/(dashboard)/sidebar-config'
-import { ADMIN_SIDEBAR_ITEMS, getActiveSectionFromPath as adminGetActive } from '@/app/admin/(dashboard)/sidebar-config'
 
 export interface SidebarConfig {
   items: SidebarItem[]

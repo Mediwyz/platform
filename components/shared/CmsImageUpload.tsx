@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import { FaCloudUploadAlt, FaSpinner, FaTimes, FaImage } from 'react-icons/fa'
 
 interface CmsImageUploadProps {
@@ -53,9 +54,11 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
 
  {value ? (
  <div className="relative group">
- <img
+ <Image
  src={value}
  alt="Preview"
+ width={400}
+ height={160}
  className="w-full h-40 object-cover rounded-lg border border-gray-200"
  onError={(e) => { (e.target as HTMLImageElement).src = '' }}
  />

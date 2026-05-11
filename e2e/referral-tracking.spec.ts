@@ -105,7 +105,6 @@ test.describe('Referral Partner Tracking System', () => {
       // Registration may succeed or fail depending on DB state, but check the flow
       if (registerRes.status() === 200 || registerRes.status() === 201) {
         expect(registerJson.success).toBe(true)
-        const newUserId = registerJson.userId
 
         // Step 3: Login as referral partner (try multiple email variants)
         let loginJson: { success: boolean; data?: { id: string } } = { success: false }

@@ -8,7 +8,7 @@ import { useWebRTC } from '@/hooks/useWebRTC'
 import { useUser } from '@/hooks/useUser'
 import {
  FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaDesktop, FaComments,
- FaUserMd, FaUser, FaWifi, FaClock, FaPaperPlane, FaExpand, FaCompress, FaVolumeUp, 
+ FaUserMd, FaUser, FaWifi, FaClock, FaPaperPlane, FaExpand, FaCompress,
  FaArrowLeft, FaSync
 } from 'react-icons/fa'
 
@@ -64,7 +64,7 @@ const VideoGrid: React.FC<VideoGridProps> = ({
  remoteStreams,
  participants,
  localUserName,
- localUserType, // may be unused
+ localUserType: _localUserType, // passed as prop but unused inside VideoGrid
 }) => {
  const localVideoRef = useRef<HTMLVideoElement>(null)
  const remoteVideoRefs = useRef<Map<string, HTMLVideoElement>>(new Map())
@@ -234,7 +234,8 @@ export default function PatientVideoCall() {
  mounted = false
  if (currentStream) currentStream.getTracks().forEach(track => { track.stop(); track.enabled = false })
  }
- }, [patientInfo.id]) // keep warnings
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [patientInfo.id])
 
  useEffect(() => {
  const i = setInterval(() => setCallDuration(p => p + 1), 1000)
@@ -245,7 +246,8 @@ export default function PatientVideoCall() {
  const handleBeforeUnload = () => { cleanupMediaStream() }
  window.addEventListener('beforeunload', handleBeforeUnload)
  return () => window.removeEventListener('beforeunload', handleBeforeUnload)
- }, [localStream]) // keep warning
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [localStream])
 
  const formatDuration = (seconds: number) => {
  const h = Math.floor(seconds / 3600)
@@ -256,7 +258,7 @@ export default function PatientVideoCall() {
 
  const handleToggleVideo = () => { const v = !isVideoEnabled; setIsVideoEnabled(v); toggleVideo(v) }
  const handleToggleAudio = () => { const v = !isAudioEnabled; setIsAudioEnabled(v); toggleAudio(v) }
- const handleScreenShare = async () => { isScreenSharing ? stopScreenShare() : await startScreenShare() }
+ const handleScreenShare = async () => { if (isScreenSharing) { stopScreenShare() } else { await startScreenShare() } }
 
  const handleSendMessage = (e: React.FormEvent) => {
  e.preventDefault()

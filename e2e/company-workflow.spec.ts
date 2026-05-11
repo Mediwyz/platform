@@ -39,10 +39,6 @@ async function apiGet(request: APIRequestContext, cookies: string, path: string)
   return { ok: res.ok(), json: await res.json() }
 }
 
-async function apiPatch(request: APIRequestContext, cookies: string, path: string, data: any) {
-  const res = await request.patch(`${BASE}${path}`, { headers: auth(cookies), data })
-  return { ok: res.ok(), json: await res.json() }
-}
 
 // ─── Test Users ────────────────────────────────────────────────────────────
 
@@ -112,7 +108,7 @@ test.describe.serial('Company/Corporate Workflow', () => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   test('Employee can accept pending invitation', async ({ request }) => {
-    const { ok, json } = await apiPost(request, employeeCookies, '/api/corporate/accept', {})
+    const { json } = await apiPost(request, employeeCookies, '/api/corporate/accept', {})
     // Should succeed if invitation exists
     expect(json.success === true || json.message).toBeTruthy()
   })

@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaEye, FaEyeSlash, FaUsers, FaCamera, FaBuilding } from 'react-icons/fa'
 import { SignupFormData, UserType } from './types'
@@ -99,7 +100,7 @@ export default function BasicInfoStep({
  onClick={() => fileInputRef.current?.click()}
  >
  {profilePreview ? (
- <img src={profilePreview} alt="Profile" className="w-full h-full object-cover rounded-full" />
+ <Image src={profilePreview} alt="Profile" width={64} height={64} className="w-full h-full object-cover rounded-full" />
  ) : (
  SelectedIcon && <SelectedIcon className="text-3xl" />
  )}

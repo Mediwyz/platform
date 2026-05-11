@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, ChangeEvent } from 'react'
+import { useState, useEffect, useRef, useCallback, ChangeEvent } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import {
@@ -313,16 +313,16 @@ function MembersTab({ id }: { id: string }) {
   const [actionLoading, setActionLoading] = useState(false)
   const [showRejected, setShowRejected] = useState(false)
 
-  async function load() {
+  const load = useCallback(async () => {
     try {
       const res = await fetch(`/api/organizations/${id}/members`, { credentials: 'include' })
       const json = await res.json()
       if (json.success) setMembers(json.data ?? [])
     } catch { /* silent */ }
     finally { setLoading(false) }
-  }
+  }, [id])
 
-  useEffect(() => { load() }, [id])
+  useEffect(() => { load() }, [load])
 
   async function approve(workplaceId: string) {
     setActionLoading(true)
@@ -435,15 +435,15 @@ function InviteTab({ id }: { id: string }) {
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [copied, setCopied] = useState(false)
 
-  async function loadInvitations() {
+  const loadInvitations = useCallback(async () => {
     try {
       const res = await fetch(`/api/organizations/${id}/invitations`, { credentials: 'include' })
       const json = await res.json()
       if (json.success) setInvitations(json.data ?? [])
     } catch { /* silent */ }
-  }
+  }, [id])
 
-  useEffect(() => { loadInvitations() }, [id])
+  useEffect(() => { loadInvitations() }, [loadInvitations])
 
   async function send() {
     if (!email.trim()) { setError('Email is required'); return }
