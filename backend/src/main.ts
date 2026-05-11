@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
@@ -10,6 +11,15 @@ import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
 import { GlobalExceptionFilter } from './shared/filters/http-exception.filter';
 import { join, resolve } from 'path';
 import { existsSync, readFileSync, mkdirSync } from 'fs';
+
+// Sentry error monitoring — init before any async code so all exceptions are captured
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV || 'development',
+    tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  });
+}
 
 // Load root .env so NestJS uses the same JWT_SECRET as Next.js
 const envPath = resolve(__dirname, '../../.env');

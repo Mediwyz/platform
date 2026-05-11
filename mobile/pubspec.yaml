@@ -51,6 +51,9 @@ dependencies:
   # Open external URLs (e.g. prescription PDF view in the system browser)
   url_launcher: ^6.3.0
 
+  # Error monitoring
+  sentry_flutter: ^8.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

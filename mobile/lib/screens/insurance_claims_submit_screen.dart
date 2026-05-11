@@ -1,5 +1,8 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 import '../api/client.dart';
 import '../theme/mediwyz_theme.dart';
 import '../widgets/app_drawer.dart';
@@ -234,7 +237,7 @@ class _InsuranceClaimsSubmitScreenState extends ConsumerState<InsuranceClaimsSub
   }
 }
 
-/// Bottom-sheet form for filing a new claim.
+/// Bottom-sheet form for filing a new claim — with OCR receipt scanning.
 class _SubmitClaimForm extends StatefulWidget {
   const _SubmitClaimForm();
   @override
@@ -242,11 +245,15 @@ class _SubmitClaimForm extends StatefulWidget {
 }
 
 class _SubmitClaimFormState extends State<_SubmitClaimForm> {
+  String _step = 'upload'; // upload | scanning | review
   String? _companyId;
-  final _description = TextEditingController();
-  final _amount = TextEditingController();
-  final _receiptUrl = TextEditingController();
+  final _descCtrl = TextEditingController();
+  final _amountCtrl = TextEditingController();
   List<Map<String, dynamic>> _companies = [];
+  Uint8List? _imageBytes;
+  String? _merchantInfo;
+  String? _originalAmount;
+  String? _receiptUrl;
   bool _busy = false;
   String? _error;
 
@@ -254,6 +261,7 @@ class _SubmitClaimFormState extends State<_SubmitClaimForm> {
   void initState() {
     super.initState();
     _loadCompanies();
+    _amountCtrl.addListener(() { if (mounted) setState(() {}); });
   }
 
   Future<void> _loadCompanies() async {
@@ -265,11 +273,55 @@ class _SubmitClaimFormState extends State<_SubmitClaimForm> {
           _companies = data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? [];
         });
       }
-    } catch (_) { /* silent */ }
+    } catch (_) {}
+  }
+
+  Future<void> _pickAndScan() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1600);
+    if (picked == null || !mounted) return;
+    final bytes = await picked.readAsBytes();
+    setState(() { _imageBytes = bytes; _step = 'scanning'; _error = null; });
+    try {
+      final formData = FormData.fromMap({
+        'receipt': MultipartFile.fromBytes(bytes, filename: 'receipt.jpg'),
+      });
+      final res = await ApiClient.instance.post('/corporate/insurance/claims/ocr', data: formData);
+      if ((res.data as Map?)?['success'] != true) {
+        throw Exception((res.data as Map?)?['message']?.toString() ?? 'OCR failed');
+      }
+      final data = (res.data as Map?)?['data'] as Map?;
+      _descCtrl.text = data?['description']?.toString() ?? '';
+      final amt = (data?['amount'] as num?)?.toDouble();
+      _originalAmount = amt?.toStringAsFixed(2);
+      _amountCtrl.text = _originalAmount ?? '';
+      _receiptUrl = data?['receiptUrl']?.toString();
+      final merchant = data?['merchantName']?.toString();
+      final date = data?['receiptDate']?.toString();
+      _merchantInfo = [merchant, date].where((s) => s != null && s.isNotEmpty).join(' · ');
+      setState(() => _step = 'review');
+    } catch (e) {
+      setState(() {
+        _error = e.toString().replaceFirst('Exception: ', '');
+        _step = 'upload';
+      });
+    }
+  }
+
+  void _resetScan() {
+    setState(() {
+      _step = 'upload';
+      _imageBytes = null;
+      _merchantInfo = null;
+      _originalAmount = null;
+      _receiptUrl = null;
+      _descCtrl.clear();
+      _amountCtrl.clear();
+    });
   }
 
   Future<void> _submit() async {
-    if (_companyId == null || _description.text.trim().isEmpty || _amount.text.trim().isEmpty) {
+    if (_companyId == null || _descCtrl.text.trim().isEmpty || _amountCtrl.text.trim().isEmpty) {
       setState(() => _error = 'Please fill in all required fields');
       return;
     }
@@ -277,15 +329,16 @@ class _SubmitClaimFormState extends State<_SubmitClaimForm> {
     try {
       final res = await ApiClient.instance.post('/corporate/insurance/claims', data: {
         'companyProfileId': _companyId,
-        'description': _description.text.trim(),
-        'amount': double.tryParse(_amount.text) ?? 0,
-        if (_receiptUrl.text.trim().isNotEmpty) 'receiptUrl': _receiptUrl.text.trim(),
+        'description': _descCtrl.text.trim(),
+        'amount': double.tryParse(_amountCtrl.text) ?? 0,
+        if (_receiptUrl != null && _receiptUrl!.isNotEmpty) 'receiptUrl': _receiptUrl,
       });
-      final ok = (res.data as Map?)?['success'] == true;
-      if (!ok) throw Exception((res.data as Map?)?['message']?.toString() ?? 'Failed');
+      if ((res.data as Map?)?['success'] != true) {
+        throw Exception((res.data as Map?)?['message']?.toString() ?? 'Failed');
+      }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
-      setState(() => _error = e.toString());
+      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -293,9 +346,8 @@ class _SubmitClaimFormState extends State<_SubmitClaimForm> {
 
   @override
   void dispose() {
-    _description.dispose();
-    _amount.dispose();
-    _receiptUrl.dispose();
+    _descCtrl.dispose();
+    _amountCtrl.dispose();
     super.dispose();
   }
 
@@ -304,50 +356,146 @@ class _SubmitClaimFormState extends State<_SubmitClaimForm> {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 0, 16, bottom + 16),
+      child: _step == 'scanning' ? _buildScanning() : _buildForm(),
+    );
+  }
+
+  Widget _buildScanning() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 20),
+        if (_imageBytes != null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.memory(_imageBytes!, height: 96, width: 96, fit: BoxFit.cover),
+          ),
+        const SizedBox(height: 16),
+        const CircularProgressIndicator(color: MediWyzColors.teal, strokeWidth: 3),
+        const SizedBox(height: 12),
+        const Text('Scanning receipt with AI…', style: TextStyle(color: Colors.black54)),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildForm() {
+    final amountChanged = _originalAmount != null && _amountCtrl.text.isNotEmpty && _amountCtrl.text != _originalAmount;
+    return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text('New claim', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Row(children: [
+            const Expanded(child: Text('New claim', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+            if (_merchantInfo != null && _merchantInfo!.isNotEmpty)
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(20)),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    const Icon(Icons.check_circle, size: 12, color: Colors.green),
+                    const SizedBox(width: 4),
+                    Flexible(child: Text(_merchantInfo!, style: const TextStyle(fontSize: 10, color: Colors.green), overflow: TextOverflow.ellipsis)),
+                  ]),
+                ),
+              ),
+          ]),
           const SizedBox(height: 12),
-          DropdownButtonFormField<String>(
-            value: _companyId,
-            decoration: const InputDecoration(labelText: 'Insurance company', border: OutlineInputBorder()),
-            items: _companies
-                .map((c) => DropdownMenuItem(value: c['id']?.toString(), child: Text(c['companyName']?.toString() ?? '')))
-                .toList(),
-            onChanged: (v) => setState(() => _companyId = v),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: _description,
-            decoration: const InputDecoration(labelText: 'Description *', border: OutlineInputBorder()),
-            maxLines: 3,
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: _amount,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(labelText: 'Amount (MUR) *', border: OutlineInputBorder()),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: _receiptUrl,
-            keyboardType: TextInputType.url,
-            decoration: const InputDecoration(labelText: 'Receipt URL (optional)', border: OutlineInputBorder()),
-          ),
+
+          // ── Step: upload ──────────────────────────────────────────────
+          if (_step == 'upload') ...[
+            GestureDetector(
+              onTap: _pickAndScan,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 28),
+                decoration: BoxDecoration(
+                  border: Border.all(color: MediWyzColors.teal.withOpacity(0.4), width: 1.5),
+                  borderRadius: BorderRadius.circular(12),
+                  color: MediWyzColors.teal.withOpacity(0.04),
+                ),
+                child: const Column(children: [
+                  Icon(Icons.camera_alt_outlined, size: 32, color: MediWyzColors.teal),
+                  SizedBox(height: 8),
+                  Text('Upload receipt photo', style: TextStyle(color: MediWyzColors.teal, fontWeight: FontWeight.w500)),
+                  SizedBox(height: 4),
+                  Text('JPG, PNG · Max 10 MB', style: TextStyle(fontSize: 11, color: Colors.black45)),
+                ]),
+              ),
+            ),
+            const SizedBox(height: 6),
+            TextButton(
+              onPressed: () => setState(() => _step = 'review'),
+              child: const Text('Skip scan — fill in manually', style: TextStyle(color: Colors.black45, fontSize: 12)),
+            ),
+          ],
+
+          // ── Step: review ──────────────────────────────────────────────
+          if (_step == 'review') ...[
+            if (_imageBytes != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.memory(_imageBytes!, height: 110, fit: BoxFit.contain),
+              ),
+              const SizedBox(height: 12),
+            ],
+            DropdownButtonFormField<String>(
+              value: _companyId,
+              decoration: const InputDecoration(labelText: 'Insurance company *', border: OutlineInputBorder()),
+              items: _companies
+                  .map((c) => DropdownMenuItem(value: c['id']?.toString(), child: Text(c['companyName']?.toString() ?? '')))
+                  .toList(),
+              onChanged: (v) => setState(() => _companyId = v),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _descCtrl,
+              decoration: const InputDecoration(labelText: 'Description *', border: OutlineInputBorder()),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _amountCtrl,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: 'Amount (MUR) *',
+                border: const OutlineInputBorder(),
+                prefixText: 'MUR ',
+                helperText: amountChanged ? 'OCR read MUR $_originalAmount — you\'ve changed this' : null,
+                helperStyle: TextStyle(color: Colors.amber.shade700, fontSize: 11),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: _resetScan,
+                icon: const Icon(Icons.refresh, size: 14),
+                label: const Text('Re-scan', style: TextStyle(fontSize: 12)),
+                style: TextButton.styleFrom(foregroundColor: Colors.black45, padding: EdgeInsets.zero),
+              ),
+            ),
+          ],
+
           if (_error != null) ...[
             const SizedBox(height: 10),
-            Text(_error!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
+              child: Text(_error!, style: TextStyle(color: Colors.red.shade700, fontSize: 12)),
+            ),
           ],
-          const SizedBox(height: 14),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: MediWyzColors.teal, padding: const EdgeInsets.symmetric(vertical: 14)),
-            onPressed: _busy ? null : _submit,
-            child: _busy
-                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : const Text('Submit claim', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
+
+          if (_step == 'review') ...[
+            const SizedBox(height: 14),
+            FilledButton(
+              style: FilledButton.styleFrom(backgroundColor: MediWyzColors.teal, padding: const EdgeInsets.symmetric(vertical: 14)),
+              onPressed: _busy ? null : _submit,
+              child: _busy
+                  ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Text('Submit claim', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
         ],
       ),
     );
