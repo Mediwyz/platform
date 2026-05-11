@@ -26,9 +26,7 @@ export default function HomePage() {
       <CompanyTrustBar />
 
       {/* 4 — Discover: tabbed (Providers / Services / Health Shop) with live Google Map */}
-      <div id="discover-section">
-        <DiscoverSection />
-      </div>
+      <DiscoverSection />
 
       {/* 5 — Community posts */}
       <div id="community-section">

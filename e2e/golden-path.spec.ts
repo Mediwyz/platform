@@ -21,7 +21,7 @@ test.describe('Golden path — service discovery funnel', () => {
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible()
 
     // Unified DiscoverSection loads after hydration (Providers tab is default)
-    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
+    // Use text check — #discover-section may have mobile+desktop variants (both in DOM)
     await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
 
     // Filter out known non-fatal errors: ResizeObserver and React #418 (ssr:false Suspense hydration)
@@ -36,16 +36,15 @@ test.describe('Golden path — service discovery funnel', () => {
 
   test('DiscoverSection shows Providers tab by default', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
     // Providers tab is active by default
     await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
   })
 
   test('DiscoverSection Services tab is accessible', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
-    // Click the Services tab pill
-    await page.locator('#discover-section').getByRole('button', { name: /Services/i }).first().click()
+    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
+    // Click the Services tab pill — use first() to handle mobile+desktop DOM variants
+    await page.getByRole('button', { name: /^Services$/i }).first().click()
     await expect(page.locator('text=/Find Services/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
