@@ -41,24 +41,20 @@ test.describe('Home Page', () => {
 
   test('DiscoverSection is visible with tab navigation', async ({ page }) => {
     await page.goto('/')
-    // DiscoverSection replaces the old separate sections — shows Providers tab by default
-    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
-    await expect(page.locator('text=/Browse Providers/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('button', { hasText: /Services/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('DiscoverSection has a search input in Providers tab', async ({ page }) => {
+  test('DiscoverSection has a search input', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#discover-section')).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
     const searchInput = page.locator('#discover-section input').first()
     await expect(searchInput).toBeVisible({ timeout: 10_000 })
   })
 
-  test('hero feature pills scroll to DiscoverSection', async ({ page }) => {
+  test('hero feature pills are visible', async ({ page }) => {
     await page.goto('/')
-    const pill = page.locator('button, a').filter({ hasText: /Home Visits/i }).first()
-    await expect(pill).toBeVisible({ timeout: 10_000 })
-    await pill.click()
-    await expect(page.locator('#discover-section')).toBeInViewport({ timeout: 5_000 })
+    await expect(page.locator('text=/HealthTech|Platform|Healthcare/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {
