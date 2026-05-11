@@ -1,21 +1,17 @@
-name: Fix VPS — Grant sudo + Open 443 + Provision SSL
+name: Fix VPS — Grant sudo + Open 443 + Install Caddy
 
 on:
   workflow_dispatch:
 
 jobs:
   fix:
-    name: Fix VPS permissions and provision SSL
+    name: Fix VPS permissions and install Caddy
     runs-on: [self-hosted, mediwyz]
     steps:
       - name: Grant runner passwordless sudo via Docker
         run: |
-          # The runner is in the docker group so it can run docker commands.
-          # We mount /etc from the host inside an alpine container to write
-          # the sudoers file — no existing sudo needed.
           RUNNER_USER="$(whoami)"
           echo "Runner is running as: $RUNNER_USER"
-
           docker run --rm \
             -v /etc:/host-etc \
             -v /usr/sbin:/host-usrsbin \
@@ -28,146 +24,81 @@ jobs:
       - name: Verify sudo works
         run: sudo id
 
-      - name: Open port 443 in UFW
+      - name: Open ports 80 + 443 in UFW
         run: |
+          sudo ufw allow 80/tcp || true
           sudo ufw allow 443/tcp || true
-          sudo ufw allow 'Nginx Full' || true
           sudo ufw --force enable || true
           sudo ufw status
 
-      - name: Stop host nginx if running (to free ports)
-        run: sudo systemctl stop nginx 2>/dev/null || true
-
-      - name: Install nginx + certbot if missing
+      - name: Install Caddy (official apt repo)
         run: |
+          if command -v caddy >/dev/null 2>&1; then
+            echo "Caddy already installed: $(caddy version)"
+            exit 0
+          fi
           sudo apt-get update -qq
-          sudo apt-get install -y nginx certbot python3-certbot-nginx
-          nginx -v
-          certbot --version
+          sudo apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
+          curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
+            | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+          curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
+            | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+          sudo apt-get update
+          sudo apt-get install -y caddy
+          caddy version
 
-      - name: List existing certs on VPS
+      - name: Stop and disable nginx if present
         run: |
-          echo "=== Certs in /etc/letsencrypt/live/ ==="
-          sudo ls -la /etc/letsencrypt/live/ 2>/dev/null || echo "No certs directory found"
-          echo ""
-          echo "=== certbot certificates ==="
-          sudo certbot certificates 2>/dev/null || echo "certbot not installed yet"
+          sudo systemctl stop nginx 2>/dev/null || true
+          sudo systemctl disable nginx 2>/dev/null || true
+          echo "nginx stopped (if it was running)"
 
-      - name: Configure nginx + HTTPS (inline — no script file)
+      - name: Write Caddy environment (APP_DOMAIN)
         env:
           APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
-          ADMIN_EMAIL: ${{ secrets.SUPER_ADMIN_EMAIL }}
-        timeout-minutes: 5
+        run: |
+          sudo mkdir -p /etc/systemd/system/caddy.service.d
+          printf '[Service]\nEnvironment="APP_DOMAIN=%s"\n' "$APP_DOMAIN" \
+            | sudo tee /etc/systemd/system/caddy.service.d/mediwyz.conf > /dev/null
+          sudo systemctl daemon-reload
+          echo "Caddy environment set: APP_DOMAIN=$APP_DOMAIN"
+
+      - name: Write Caddyfile
+        env:
+          APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
         run: |
           DOMAIN="$APP_DOMAIN"
-          echo "Domain: $DOMAIN"
-
-          # Pull latest code so VPS scripts are up-to-date going forward
-          DEPLOY_DIR="${{ secrets.DEPLOY_DIR || 'mediwyz' }}"
-          git -C /root/$DEPLOY_DIR pull origin main 2>/dev/null || true
-
-          # Find existing cert — handles mediwyz.com OR mediwyz.com-0001 suffixes
-          CERT_DIR=$(ls -d /etc/letsencrypt/live/${DOMAIN}* 2>/dev/null | head -1 || true)
-          HAS_CERT=0
-          if [ -n "$CERT_DIR" ] && [ -f "$CERT_DIR/fullchain.pem" ]; then
-            HAS_CERT=1
-            echo "Found cert at: $CERT_DIR (valid)"
-          else
-            echo "No cert found — will attempt to obtain one"
-          fi
-
-          # Start nginx with HTTP-only config first (needed for webroot challenge)
-          # Note: no heredoc — unindented content in heredocs breaks YAML block scalars
           {
-            echo "server {"
-            echo "    listen 80;"
-            echo "    server_name ${DOMAIN} www.${DOMAIN};"
-            echo "    location /.well-known/acme-challenge/ { root /var/www/html; }"
-            echo "    location / {"
-            echo "        proxy_pass http://localhost:3000;"
-            echo "        proxy_http_version 1.1;"
-            echo "        proxy_set_header Upgrade \$http_upgrade;"
-            echo "        proxy_set_header Connection upgrade;"
-            echo "        proxy_set_header Host \$host;"
-            echo "        proxy_set_header X-Real-IP \$remote_addr;"
-            echo "        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;"
-            echo "        proxy_set_header X-Forwarded-Proto \$scheme;"
-            echo "        client_max_body_size 50M;"
-            echo "    }"
-            echo "    location /socket.io/ {"
-            echo "        proxy_pass http://localhost:3001;"
-            echo "        proxy_http_version 1.1;"
-            echo "        proxy_set_header Upgrade \$http_upgrade;"
-            echo "        proxy_set_header Connection upgrade;"
-            echo "        proxy_set_header Host \$host;"
-            echo "    }"
+            echo "${DOMAIN}, www.${DOMAIN} {"
+            echo "    reverse_proxy /socket.io/* localhost:3001"
+            echo "    reverse_proxy localhost:3000"
+            echo "    encode gzip"
             echo "}"
-          } | sudo tee /etc/nginx/sites-available/mediwyz > /dev/null
-          sudo ln -sf /etc/nginx/sites-available/mediwyz /etc/nginx/sites-enabled/mediwyz
-          sudo rm -f /etc/nginx/sites-enabled/default 2>/dev/null || true
-          sudo systemctl enable nginx
-          sudo systemctl start nginx || sudo systemctl reload nginx
-          sudo systemctl is-active nginx && echo "nginx running (HTTP)"
+          } | sudo tee /etc/caddy/Caddyfile > /dev/null
+          cat /etc/caddy/Caddyfile
+          sudo caddy validate --config /etc/caddy/Caddyfile && echo "Caddyfile valid"
 
-          # Obtain cert if missing
-          if [ "$HAS_CERT" = "0" ]; then
-            echo "Requesting cert via webroot..."
-            sudo mkdir -p /var/www/html/.well-known/acme-challenge
-            sudo certbot certonly --webroot -w /var/www/html \
-              -d "$DOMAIN" -d "www.$DOMAIN" \
-              --non-interactive --agree-tos -m "$ADMIN_EMAIL" && {
-              CERT_DIR=$(ls -d /etc/letsencrypt/live/${DOMAIN}* 2>/dev/null | head -1 || true)
-              [ -n "$CERT_DIR" ] && [ -f "$CERT_DIR/fullchain.pem" ] && HAS_CERT=1
-            } || echo "WARNING: certbot failed"
-          fi
-
-          # Write HTTPS config if cert is available
-          if [ "$HAS_CERT" = "1" ] && [ -n "$CERT_DIR" ]; then
-            echo "Writing HTTPS nginx config using cert: $CERT_DIR"
-            {
-              echo "server {"
-              echo "    listen 80;"
-              echo "    server_name ${DOMAIN} www.${DOMAIN};"
-              echo "    return 301 https://\$host\$request_uri;"
-              echo "}"
-              echo "server {"
-              echo "    listen 443 ssl;"
-              echo "    server_name ${DOMAIN} www.${DOMAIN};"
-              echo "    ssl_certificate     ${CERT_DIR}/fullchain.pem;"
-              echo "    ssl_certificate_key ${CERT_DIR}/privkey.pem;"
-              echo "    ssl_protocols TLSv1.2 TLSv1.3;"
-              echo "    ssl_ciphers HIGH:!aNULL:!MD5;"
-              echo "    location / {"
-              echo "        proxy_pass http://localhost:3000;"
-              echo "        proxy_http_version 1.1;"
-              echo "        proxy_set_header Upgrade \$http_upgrade;"
-              echo "        proxy_set_header Connection upgrade;"
-              echo "        proxy_set_header Host \$host;"
-              echo "        proxy_set_header X-Real-IP \$remote_addr;"
-              echo "        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;"
-              echo "        proxy_set_header X-Forwarded-Proto \$scheme;"
-              echo "        client_max_body_size 50M;"
-              echo "    }"
-              echo "    location /socket.io/ {"
-              echo "        proxy_pass http://localhost:3001;"
-              echo "        proxy_http_version 1.1;"
-              echo "        proxy_set_header Upgrade \$http_upgrade;"
-              echo "        proxy_set_header Connection upgrade;"
-              echo "        proxy_set_header Host \$host;"
-              echo "    }"
-              echo "}"
-            } | sudo tee /etc/nginx/sites-available/mediwyz > /dev/null
-            sudo nginx -t && sudo systemctl reload nginx && echo "nginx reloaded with HTTPS"
-          else
-            echo "No cert — running HTTP only"
-          fi
+      - name: Enable and start Caddy
+        run: |
+          sudo systemctl enable caddy
+          sudo systemctl restart caddy
+          sleep 8
+          sudo systemctl is-active caddy && echo "Caddy is running"
+          sudo journalctl -u caddy --no-pager -n 20
 
       - name: Verify HTTPS
         env:
           APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
         run: |
-          sleep 5
-          echo "=== HTTP response ==="
-          curl -sI http://$APP_DOMAIN | head -3
-          echo "=== HTTPS response ==="
-          curl -sI https://$APP_DOMAIN | head -3 && echo "HTTPS is live!" || echo "HTTPS not yet responding"
+          echo "Waiting up to 60s for Caddy to provision the TLS cert..."
+          for i in $(seq 1 12); do
+            sleep 5
+            if curl -sf --max-time 5 "https://$APP_DOMAIN" > /dev/null 2>&1; then
+              echo "HTTPS is live after $((i * 5))s"
+              curl -sI "https://$APP_DOMAIN" | head -5
+              exit 0
+            fi
+            echo "Still waiting... ($((i * 5))s)"
+          done
+          echo "HTTPS not responding yet — Caddy may still be obtaining the cert."
+          curl -sI "http://$APP_DOMAIN" | head -3 || true
