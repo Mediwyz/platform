@@ -125,6 +125,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-3 py-10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   {preview && <img src={preview} alt="receipt" className="w-24 h-24 object-cover rounded-xl shadow" />}
                   <FaSpinner className="w-6 h-6 animate-spin text-[#0C6780]" />
                   <p className="text-sm text-gray-600">Scanning receipt with AI…</p>
@@ -157,6 +158,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 </div>
               )}
 
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               {preview && (
                 <img src={preview} alt="receipt" className="w-full max-h-40 object-contain rounded-xl border border-gray-200" />
               )}

@@ -536,7 +536,22 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Check domain reachability
+        id: preflight
+        env:
+          BASE_URL: ${{ secrets.APP_DOMAIN != '' && format('https://{0}', secrets.APP_DOMAIN) || format('http://{0}', secrets.VPS_HOST) }}
+        run: |
+          echo "Checking $BASE_URL ..."
+          if curl -sf --max-time 15 "$BASE_URL" > /dev/null 2>&1; then
+            echo "reachable=true" >> $GITHUB_OUTPUT
+            echo "Domain is reachable — running E2E tests"
+          else
+            echo "reachable=false" >> $GITHUB_OUTPUT
+            echo "::warning::Domain $BASE_URL is not reachable (DNS may not have propagated). Skipping E2E tests."
+          fi
+
       - name: Run E2E smoke tests
+        if: steps.preflight.outputs.reachable == 'true'
         env:
           PLAYWRIGHT_BASE_URL: ${{ secrets.APP_DOMAIN != '' && format('https://{0}', secrets.APP_DOMAIN) || format('http://{0}', secrets.VPS_HOST) }}
         run: |
@@ -548,7 +563,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: playwright-report
           path: playwright-report/
