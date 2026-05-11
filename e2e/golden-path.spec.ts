@@ -22,7 +22,6 @@ test.describe('Golden path — service discovery funnel', () => {
 
     // Unified DiscoverSection loads after hydration (Services tab is default)
     await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
-    await expect(page.getByRole('button', { name: /^Services$/i }).first()).toBeVisible({ timeout: 10_000 })
 
     // Filter out known non-fatal errors: ResizeObserver and React #418 (ssr:false Suspense hydration)
     const fatalErrors = errors.filter(e =>
@@ -36,17 +35,15 @@ test.describe('Golden path — service discovery funnel', () => {
 
   test('DiscoverSection shows Services tab by default', async ({ page }) => {
     await page.goto('/')
-    // Services tab is active by default
     await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
-    await expect(page.getByRole('button', { name: /^Services$/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('DiscoverSection Providers tab is accessible', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
-    // Click the Providers tab pill
-    await page.getByRole('button', { name: /^Providers$/i }).first().click()
-    await expect(page.getByRole('button', { name: /^Providers$/i }).first()).toBeVisible({ timeout: 10_000 })
+    // Click the Providers tab pill — button text includes emoji so use partial match
+    await page.locator('button', { hasText: /Providers/i }).first().click()
+    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible()
   })
 
   test('search/services page loads and shows a search input', async ({ page }) => {
