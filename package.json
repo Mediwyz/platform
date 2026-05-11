@@ -31,7 +31,7 @@
     "@capacitor/camera": "^8.0.2",
     "@capacitor/cli": "^8.2.0",
     "@capacitor/core": "^8.2.0",
-    "@capacitor/keyboard": "^8.0.1",
+    "@capacitor/keyboard": "^8.0.3",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/splash-screen": "^8.0.1",
     "@google-cloud/secret-manager": "^6.1.0",
