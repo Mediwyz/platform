@@ -3,12 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
  FaFileAlt, FaSearch, FaClock, FaCheck,
- FaTimes, FaSpinner, FaEye, FaFilter, FaShieldAlt
+ FaTimes, FaSpinner, FaEye, FaFilter, FaShieldAlt, FaPlus
 } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
 import { useCurrency } from '@/hooks/useCurrency'
 import { InsuranceClaim } from '../types'
 import ClaimReviewDrawer, { ClaimDetail } from '@/components/insurance/ClaimReviewDrawer'
+import OcrClaimModal from '@/components/insurance/OcrClaimModal'
 
 const CLAIM_STATUSES = [
  { value: '', label: 'All Statuses' },
@@ -42,6 +43,7 @@ export default function InsuranceClaimsPage() {
  const [statusFilter, setStatusFilter] = useState('')
  const [searchTerm, setSearchTerm] = useState('')
  const [reviewClaim, setReviewClaim] = useState<ClaimDetail | null>(null)
+ const [showOcrModal, setShowOcrModal] = useState(false)
  const { format } = useCurrency()
 
  const fetchClaims = useCallback(async () => {
@@ -89,13 +91,29 @@ export default function InsuranceClaimsPage() {
  return (
  <div className="p-6 max-w-7xl mx-auto">
  {/* Header */}
- <div className="flex items-center gap-3 mb-8">
+ <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
+ <div className="flex items-center gap-3">
  <FaFileAlt className="text-3xl text-blue-600" />
  <div>
  <h1 className="text-2xl font-bold text-gray-900">Claims Management</h1>
  <p className="text-sm text-gray-500">Review and manage insurance claims</p>
  </div>
  </div>
+ <button
+ onClick={() => setShowOcrModal(true)}
+ className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
+ >
+ <FaPlus className="w-3.5 h-3.5" />
+ File a claim
+ </button>
+ </div>
+
+ {showOcrModal && (
+ <OcrClaimModal
+ onClose={() => setShowOcrModal(false)}
+ onSubmitted={fetchClaims}
+ />
+ )}
 
  {/* Error Banner */}
  {error && (

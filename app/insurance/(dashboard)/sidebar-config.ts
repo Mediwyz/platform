@@ -1,4 +1,4 @@
-import { FaHome, FaNewspaper, FaBriefcaseMedical, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaUsers, FaBell } from 'react-icons/fa'
+import { FaHome, FaNewspaper, FaBriefcaseMedical, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaUsers, FaBell, FaChartLine } from 'react-icons/fa'
 import type { SidebarItem } from '@/components/dashboard/DashboardSidebar'
 import { createGetActiveSectionFromPath } from '@/lib/dashboard/getActiveSectionFromPath'
 import { getPatientHealthItems, getSearchItems, getInviteFriendsItem } from '@/lib/dashboard/patientHealthItems'
@@ -15,6 +15,7 @@ export const INSURANCE_SIDEBAR_ITEMS: SidebarItem[] = [
   // automatically when the current user has the capability.
   { id: 'portfolio', label: 'My Portfolio', labelKey: 'nav.portfolio', icon: FaBriefcaseMedical, color: 'text-blue-600', bgColor: 'bg-blue-50', href: `${base}/portfolio` },
   { id: 'members', label: 'Members', labelKey: 'nav.members', icon: FaUsers, color: 'text-purple-600', bgColor: 'bg-purple-50', href: `${base}/members` },
+  { id: 'member-payments', label: 'Member Payments', icon: FaChartLine, color: 'text-teal-600', bgColor: 'bg-teal-50', href: `${base}/member-payments` },
   { id: 'billing', label: 'Billing', labelKey: 'nav.billing', icon: FaMoneyBillWave, color: 'text-emerald-600', bgColor: 'bg-emerald-50', href: `${base}/billing` },
   { id: 'video', label: 'Video Call', labelKey: 'nav.video', icon: FaVideo, color: 'text-green-600', bgColor: 'bg-green-50', href: `${base}/video` },
   { id: 'audio', label: 'Audio Call', icon: FaPhone, color: 'text-cyan-600', bgColor: 'bg-cyan-50', href: `${base}/audio` },
