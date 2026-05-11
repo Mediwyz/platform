@@ -38,12 +38,11 @@ jobs:
       - name: Stop host nginx if running (to free ports)
         run: sudo systemctl stop nginx 2>/dev/null || true
 
-      - name: Install certbot if missing
+      - name: Install nginx + certbot if missing
         run: |
-          if ! command -v certbot >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo apt-get install -y certbot python3-certbot-nginx
-          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y nginx certbot python3-certbot-nginx
+          nginx -v
           certbot --version
 
       - name: List existing certs on VPS
@@ -106,8 +105,9 @@ jobs:
           } | sudo tee /etc/nginx/sites-available/mediwyz > /dev/null
           sudo ln -sf /etc/nginx/sites-available/mediwyz /etc/nginx/sites-enabled/mediwyz
           sudo rm -f /etc/nginx/sites-enabled/default 2>/dev/null || true
-          sudo systemctl start nginx 2>/dev/null || sudo systemctl reload nginx
-          echo "nginx running (HTTP)"
+          sudo systemctl enable nginx
+          sudo systemctl start nginx || sudo systemctl reload nginx
+          sudo systemctl is-active nginx && echo "nginx running (HTTP)"
 
           # Obtain cert if missing
           if [ "$HAS_CERT" = "0" ]; then
