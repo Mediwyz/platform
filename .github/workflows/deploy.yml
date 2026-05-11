@@ -536,19 +536,29 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Check domain reachability
+      - name: Wait for app to be ready (post-deploy warmup)
         id: preflight
         env:
           BASE_URL: ${{ secrets.APP_DOMAIN != '' && format('https://{0}', secrets.APP_DOMAIN) || format('http://{0}', secrets.VPS_HOST) }}
         run: |
-          echo "Checking $BASE_URL ..."
-          if curl -sf --max-time 15 "$BASE_URL" > /dev/null 2>&1; then
-            echo "reachable=true" >> $GITHUB_OUTPUT
-            echo "Domain is reachable — running E2E tests"
-          else
-            echo "reachable=false" >> $GITHUB_OUTPUT
-            echo "::warning::Domain $BASE_URL is not reachable (DNS may not have propagated). Skipping E2E tests."
-          fi
+          echo "Polling $BASE_URL for up to 3 minutes..."
+          ATTEMPTS=0
+          MAX=36
+          while [ $ATTEMPTS -lt $MAX ]; do
+            ATTEMPTS=$((ATTEMPTS + 1))
+            HTTP=$(curl -o /dev/null -s -w "%{http_code}" --max-time 10 "$BASE_URL" 2>/dev/null || echo "000")
+            echo "Attempt $ATTEMPTS/$MAX — HTTP $HTTP"
+            if [ "$HTTP" = "200" ] || [ "$HTTP" = "301" ] || [ "$HTTP" = "302" ]; then
+              echo "reachable=true" >> $GITHUB_OUTPUT
+              echo "App ready (HTTP $HTTP)"
+              # Extra pause so Next.js hydration stabilises after cold start
+              sleep 10
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "reachable=false" >> $GITHUB_OUTPUT
+          echo "::warning::$BASE_URL did not become ready after $((MAX * 5))s — skipping E2E."
 
       - name: Run E2E smoke tests
         if: steps.preflight.outputs.reachable == 'true'

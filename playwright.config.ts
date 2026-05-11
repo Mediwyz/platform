@@ -15,7 +15,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     actionTimeout: process.env.CI ? 30_000 : 15_000,
-    navigationTimeout: process.env.CI ? 60_000 : 30_000,
+    // 90s in CI: VPS cold-start after deploy can be slow (Next.js JIT + chunk serving)
+    navigationTimeout: process.env.CI ? 90_000 : 30_000,
   },
   projects: [
     {
