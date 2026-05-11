@@ -59,7 +59,7 @@ jobs:
             --dart-define=SOCKET_URL=https://mediwyz.com
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: mediwyz-android-release
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
@@ -152,7 +152,7 @@ jobs:
             --dart-define=SOCKET_URL=https://mediwyz.com
 
       - name: Upload iOS build artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: mediwyz-ios-release
           path: mobile/build/ios/iphoneos/Runner.app
