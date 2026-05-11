@@ -73,7 +73,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@mermaid-js/mermaid-cli": "^11.12.0",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.1.11",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -94,7 +94,7 @@
     "tailwindcss": "^4.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.5"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
