@@ -43,6 +43,7 @@ import '../screens/ai_chat_screen.dart';
 import '../screens/booking_detail_screen.dart';
 import '../screens/my_providers_screen.dart';
 import '../screens/insurance_claims_submit_screen.dart';
+import '../screens/insurance_member_payments_screen.dart';
 import '../screens/video_waiting_room_screen.dart';
 import '../screens/admin_screen.dart';
 import '../screens/consultations_screen.dart';
@@ -142,6 +143,7 @@ GoRouter buildRouter(WidgetRef ref) {
       GoRoute(path: '/insurance/plans', builder: (_, __) => const InsurancePlansScreen()),
       GoRoute(path: '/insurance/find', builder: (_, __) => const FindInsuranceScreen()),
       GoRoute(path: '/insurance/submit-claims', builder: (_, __) => const InsuranceClaimsSubmitScreen()),
+      GoRoute(path: '/insurance/member-payments', builder: (_, __) => const InsuranceMemberPaymentsScreen()),
       GoRoute(path: '/referral/dashboard', builder: (_, __) => const ReferralDashboardScreen()),
 
       // Admin console
