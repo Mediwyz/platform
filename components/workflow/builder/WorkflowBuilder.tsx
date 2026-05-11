@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiRefreshCw, FiTrash2 } from 'react-icons/fi'
+import { FiPlus, FiSave, FiArrowLeft, FiZap, FiX, FiRefreshCw, FiTrash2, FiMenu } from 'react-icons/fi'
 import Link from 'next/link'
 import { type WorkflowStep, type StepAction } from './StepEditor'
 import WorkflowPreview from './WorkflowPreview'
@@ -518,13 +518,6 @@ export default function WorkflowBuilder({
    
   }, [serviceMode])
 
-  useEffect(() => {
-    fetch('/api/workflow/step-types', { credentials: 'include' })
-      .then(r => r.json())
-      .then(json => { if (json.success && Array.isArray(json.data)) setStepTypes(json.data) })
-      .catch(() => {})
-  }, [])
-
   // Fetch in-flight count for existing published templates
   useEffect(() => {
     if (!initialData?.id || isDraft) return
@@ -679,6 +672,37 @@ export default function WorkflowBuilder({
   function removeCustomStep(idx: number) {
     if (steps[idx]?.kind !== 'custom') return
     setSteps(steps.filter((_, i) => i !== idx).map((s, i) => ({ ...s, order: i + 1 })))
+  }
+
+  const dragSourceIdx = useRef<number | null>(null)
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
+
+  function handleDragStart(idx: number) {
+    dragSourceIdx.current = idx
+  }
+
+  function handleDragOver(e: React.DragEvent, idx: number) {
+    e.preventDefault()
+    if (dragSourceIdx.current !== null && dragSourceIdx.current !== idx) {
+      setDragOverIdx(idx)
+    }
+  }
+
+  function handleDrop(idx: number) {
+    const from = dragSourceIdx.current
+    if (from === null || from === idx) { dragSourceIdx.current = null; setDragOverIdx(null); return }
+    const updated = [...steps]
+    const [moved] = updated.splice(from, 1)
+    updated.splice(idx, 0, moved)
+    setSteps(updated.map((s, i) => ({ ...s, order: i + 1 })))
+    setStepsCustomized(true)
+    dragSourceIdx.current = null
+    setDragOverIdx(null)
+  }
+
+  function handleDragEnd() {
+    dragSourceIdx.current = null
+    setDragOverIdx(null)
   }
 
   function handleRegenerate() {
@@ -1129,8 +1153,23 @@ export default function WorkflowBuilder({
             if (step.kind !== 'custom') return null
             const prev = idx > 0 ? steps[idx - 1] : null
             const next = idx < steps.length - 1 ? steps[idx + 1] : null
+            const isDragOver = dragOverIdx === idx
             return (
-              <div key={step.statusCode} className="bg-white border border-emerald-200 rounded-xl p-3 flex items-center gap-3">
+              <div
+                key={step.statusCode}
+                draggable
+                onDragStart={() => handleDragStart(idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDrop={() => handleDrop(idx)}
+                onDragEnd={handleDragEnd}
+                className={`bg-white border rounded-xl p-3 flex items-center gap-3 transition cursor-grab active:cursor-grabbing select-none ${
+                  isDragOver
+                    ? 'border-[#0C6780] bg-[#0C6780]/5 shadow-md scale-[1.01]'
+                    : 'border-emerald-200 hover:border-emerald-300 hover:shadow-sm'
+                }`}
+              >
+                {/* Drag handle */}
+                <FiMenu className="text-gray-300 hover:text-gray-500 flex-shrink-0 w-4 h-4" title="Drag to reorder" />
                 <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || '📋'}</span>
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm text-gray-900">{step.label}</div>

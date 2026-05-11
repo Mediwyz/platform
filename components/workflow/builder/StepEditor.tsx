@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { FiTrash2, FiChevronDown, FiChevronUp, FiPlus, FiMenu, FiZap } from 'react-icons/fi'
 import StepFlagToggles, { type StepFlags } from './StepFlagToggles'
 import { STEP_ICON_EMOJI, STEP_ICON_LABEL, inferStepIcon, type StepIcon as RegistryStepIcon } from '../stepIconRegistry'
@@ -56,10 +56,37 @@ interface StepEditorProps {
   isLast: boolean
 }
 
+const NOTIF_PLACEHOLDERS = [
+  '{{patientName}}', '{{providerName}}', '{{providerType}}',
+  '{{serviceName}}', '{{scheduledAt}}', '{{amount}}',
+  '{{status}}', '{{bookingId}}', '{{actionBy}}', '{{eta}}',
+]
+
 export default function StepEditor({ step, allStatusCodes, onChange, onRemove, isFirst }: StepEditorProps) {
   const [expanded, setExpanded] = useState(false)
   const [autoFillLoading, setAutoFillLoading] = useState(false)
   const [autoFillHint, setAutoFillHint] = useState<string | null>(null)
+  const [focusedNotifField, setFocusedNotifField] = useState<string | null>(null)
+  const notifRefs = useRef<Record<string, HTMLInputElement | null>>({})
+
+  function insertPlaceholder(placeholder: string) {
+    const ref = focusedNotifField && notifRefs.current[focusedNotifField]
+    if (!ref) return
+    const start = ref.selectionStart ?? ref.value.length
+    const end   = ref.selectionEnd   ?? ref.value.length
+    const newVal = ref.value.slice(0, start) + placeholder + ref.value.slice(end)
+    // Parse field key: '<role>-<field>'
+    const [roleKey, fieldKey] = focusedNotifField.split('-') as [string, 'title' | 'message']
+    const dataKey = roleKey === 'patient' ? 'notifyPatient' : 'notifyProvider'
+    const existing = step[dataKey] ?? { title: '', message: '' }
+    onChange({ ...step, [dataKey]: { ...existing, [fieldKey]: newVal } })
+    // Restore focus + cursor after render
+    requestAnimationFrame(() => {
+      ref.focus()
+      const pos = start + placeholder.length
+      ref.setSelectionRange(pos, pos)
+    })
+  }
 
   function updateField<K extends keyof WorkflowStep>(key: K, value: WorkflowStep[K]) {
     onChange({ ...step, [key]: value })
@@ -277,20 +304,66 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
 
             if (!isActive) return null
 
+            const roleKey = role === 'Patient' ? 'patient' : 'provider'
+            const titleKey  = `${roleKey}-title`
+            const msgKey    = `${roleKey}-message`
+            const isTitleFocused = focusedNotifField === titleKey
+            const isMsgFocused   = focusedNotifField === msgKey
+            const showPicker = isTitleFocused || isMsgFocused
+
             return (
               <div key={role} className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
                 <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wider mb-2">Notification to {role}</p>
                 {notif && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-xs text-indigo-600 mb-0.5 block">Title</label>
-                      <input type="text" value={notif.title} onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, title: e.target.value } as never)} placeholder="e.g. Consultation confirmee" className="w-full border border-indigo-200 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal bg-white" />
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-xs text-indigo-600 mb-0.5 block">Title</label>
+                        <input
+                          ref={el => { notifRefs.current[titleKey] = el }}
+                          type="text"
+                          value={notif.title}
+                          onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, title: e.target.value } as never)}
+                          onFocus={() => setFocusedNotifField(titleKey)}
+                          placeholder="e.g. Consultation confirmée"
+                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-white transition ${
+                            isTitleFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-indigo-600 mb-0.5 block">Message</label>
+                        <input
+                          ref={el => { notifRefs.current[msgKey] = el }}
+                          type="text"
+                          value={notif.message}
+                          onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, message: e.target.value } as never)}
+                          onFocus={() => setFocusedNotifField(msgKey)}
+                          placeholder="e.g. Bonjour {{patientName}}, votre rendez-vous…"
+                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-white transition ${
+                            isMsgFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
+                          }`}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-xs text-indigo-600 mb-0.5 block">Message</label>
-                      <input type="text" value={notif.message} onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, message: e.target.value } as never)} placeholder="e.g. {{patientName}} a reserve..." className="w-full border border-indigo-200 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal bg-white" />
+                    {/* Tag picker — appears when a notification field has focus */}
+                    <div className={`transition-all overflow-hidden ${showPicker ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+                      <p className="text-[10px] text-indigo-500 mb-1">
+                        Insert into <span className="font-semibold">{isTitleFocused ? 'Title' : 'Message'}</span>:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {NOTIF_PLACEHOLDERS.map(p => (
+                          <button
+                            key={p}
+                            type="button"
+                            onMouseDown={(e) => { e.preventDefault(); insertPlaceholder(p) }}
+                            className="text-[10px] font-mono bg-white border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-400 text-indigo-700 rounded px-1.5 py-0.5 transition"
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-[10px] text-indigo-400 col-span-full">Use: {'{{patientName}}, {{providerName}}, {{serviceName}}, {{amount}}, {{scheduledAt}}'}</p>
                   </div>
                 )}
               </div>
