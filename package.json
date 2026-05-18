@@ -35,7 +35,7 @@
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/splash-screen": "^8.0.1",
     "@google-cloud/secret-manager": "^6.1.0",
-    "@google-cloud/storage": "^7.17.1",
+    "@google-cloud/storage": "^7.19.0",
     "@google-cloud/vertexai": "^1.10.0",
     "@heroicons/react": "^2.2.0",
     "@iconify-json/healthicons": "^1.2.12",
