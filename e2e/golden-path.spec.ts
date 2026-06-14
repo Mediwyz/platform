@@ -18,7 +18,7 @@ test.describe('Golden path — service discovery funnel', () => {
     // Hero + static sections always present
     await expect(page.locator('text=/Healthcare.*Reimagined|HealthTech/i').first()).toBeVisible({ timeout: 10_000 })
     await expect(page.locator('text=/How it works/i').first()).toBeVisible()
-    await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible()
+    await expect(page.locator('text=/Why MediWyz/i').first()).toBeVisible()
 
     // CategoryNavigator loads after hydration (level-1 entity cards are the default)
     await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })

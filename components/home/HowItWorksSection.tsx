@@ -26,33 +26,48 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <div className="bg-white border-b border-gray-100 py-9 sm:py-12">
+    <section className="bg-white border-b border-gray-100 py-14 sm:py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-7 text-center">
-          How it works
-        </p>
+        {/* Header */}
+        <div className="text-center mb-10 sm:mb-14">
+          <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
+            How it works
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
+            Care in three simple steps
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-lg mx-auto">
+            From finding the right provider to your consultation — the whole journey takes minutes.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 relative">
           {/* Connector line on desktop */}
-          <div className="hidden sm:block absolute top-5 left-[calc(16.67%+12px)] right-[calc(16.67%+12px)] h-px bg-gray-200" aria-hidden="true" />
+          <div className="hidden sm:block absolute top-12 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-[#0C6780]/20 via-[#0C6780]/40 to-[#0C6780]/20" aria-hidden="true" />
 
           {STEPS.map(s => (
-            <div key={s.title} className="flex items-start gap-4 sm:flex-col sm:items-center sm:text-center relative">
+            <div
+              key={s.title}
+              className="group relative flex flex-col items-center text-center bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 px-6 py-8"
+            >
+              {/* Step number badge */}
+              <span className="absolute top-4 right-4 text-xs font-black text-gray-200 group-hover:text-[#0C6780]/30 transition-colors">
+                {s.step}
+              </span>
+
               <div
-                className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 z-10"
+                className="w-14 h-14 rounded-2xl flex items-center justify-center z-10 mb-4 shadow-md transition-transform group-hover:scale-105"
                 style={{ backgroundColor: s.color }}
               >
-                <s.icon className="text-white text-lg" />
+                <s.icon className="text-white text-xl" />
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 mb-0.5 sm:mt-3">{s.step}</p>
-                <p className="text-base font-bold text-gray-900 mb-1">{s.title}</p>
-                <p className="text-sm text-gray-500 leading-snug">{s.desc}</p>
-              </div>
+
+              <h3 className="text-lg font-bold text-[#001E40] mb-1.5">{s.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

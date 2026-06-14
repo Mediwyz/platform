@@ -34,9 +34,9 @@ test.describe('Home Page', () => {
     await expect(page.locator('text=/Trusted by companies/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('TestimonialsSection shows patient quotes', async ({ page }) => {
+  test('Final CTA section is visible', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('text=/Ready to take care of your health/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('Discover category navigator shows the entity cards', async ({ page }) => {

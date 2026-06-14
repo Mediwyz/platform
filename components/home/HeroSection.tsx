@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useAppConfig } from '@/hooks/useAppConfig'
-import { FaRobot, FaVideo, FaHome, FaPills } from 'react-icons/fa'
+import { FaRobot, FaVideo, FaHome, FaPills, FaGooglePlay, FaApple } from 'react-icons/fa'
 
 interface HeroStats {
   providers: number
@@ -144,11 +144,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
 
   return (
     <section
-      className="overflow-hidden"
-      style={{ background: '#001E40', minHeight: 320 }}
+      className="relative overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 320 }}
     >
+      {/* Decorative backdrop · soft sky/teal glows + faint grid (pure CSS, no extra assets) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-30 blur-3xl"
+             style={{ background: 'radial-gradient(circle, #9AE1FF 0%, transparent 70%)' }} />
+        <div className="absolute -bottom-32 right-1/4 w-[28rem] h-[28rem] rounded-full opacity-20 blur-3xl"
+             style={{ background: 'radial-gradient(circle, #0C6780 0%, transparent 70%)' }} />
+        <div className="absolute inset-0 opacity-[0.04]"
+             style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
+      </div>
+
       {/* ── 2-column flex row ─────────────────────────────────────── */}
-      <div className="flex flex-col lg:flex-row lg:items-stretch" style={{ minHeight: 'inherit' }}>
+      <div className="relative flex flex-col lg:flex-row lg:items-stretch" style={{ minHeight: 'inherit' }}>
 
         {/* ── COL 1: Platform description (left, ~58%) ─────────────── */}
         <motion.div
@@ -157,17 +167,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="lg:flex-[58] flex flex-col justify-center
             px-6 sm:px-10 lg:px-12 xl:px-16
-            py-5 sm:py-7 lg:py-8"
+            py-7 sm:py-9 lg:py-12"
         >
           {/* Country flag + platform badge */}
-          <div className="inline-flex self-start items-center bg-white/10 rounded-lg px-3 py-1.5 mb-5 border border-white/20">
-            <CountryFlag countryCode={countryCode} className="mr-2" />
-            <span className="text-xs font-semibold text-brand-sky tracking-wide uppercase">
+          <div className="inline-flex self-start items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-3.5 py-1.5 mb-6 border border-white/20 shadow-sm">
+            <CountryFlag countryCode={countryCode} />
+            <span className="text-[11px] font-semibold text-brand-sky tracking-wide uppercase">
               {content?.platformBadge || config.platformDescription || "Africa's #1 HealthTech Platform"}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold mb-3 leading-[1.08] text-white">
+          <h1 className="text-2xl sm:text-3xl xl:text-[2.6rem] font-bold mb-4 leading-[1.12] tracking-tight text-white">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -176,20 +186,46 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             ))}
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-lg mb-4">
+          <p className="text-sm sm:text-[15px] text-gray-300/90 leading-relaxed max-w-lg mb-6">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
           </p>
 
+          {/* App download badges */}
+          <div className="flex flex-wrap items-center gap-3 mb-7">
+            <a
+              href="/MediWyz-v3.0.0-debug.apk"
+              className="inline-flex items-center gap-2 rounded-xl bg-white text-[#001E40] pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              aria-label="Get it on Google Play"
+            >
+              <FaGooglePlay className="text-lg" />
+              <span className="flex flex-col leading-none">
+                <span className="text-[8px] uppercase tracking-wide text-gray-500">Get it on</span>
+                <span className="text-xs font-bold">Google Play</span>
+              </span>
+            </a>
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white pl-3 pr-4 py-2 backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              aria-label="Download on the App Store (coming soon)"
+            >
+              <FaApple className="text-lg" />
+              <span className="flex flex-col leading-none">
+                <span className="text-[8px] uppercase tracking-wide text-white/60">Coming soon</span>
+                <span className="text-xs font-bold">App Store</span>
+              </span>
+            </a>
+          </div>
+
           {/* Feature pills — clickable, scroll to the relevant section */}
-          <div className="flex flex-wrap gap-2 mb-5">
+          <div className="flex flex-wrap gap-2 mb-7">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
               { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'discover-section' },
               { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'discover-section' },
               { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'discover-section' },
             ].map(f => {
-              const cls = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-[11px] font-medium text-white hover:bg-white/25 transition-colors cursor-pointer"
+              const cls = "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 border border-white/20 text-[11px] font-medium text-white hover:bg-white/20 hover:border-brand-sky/50 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               if ('href' in f) return (
                 <a key={f.label} href={f.href} className={cls}>{f.icon} {f.label}</a>
               )
@@ -203,18 +239,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             })}
           </div>
 
-          {/* Trust stats — dynamic from DB */}
-          <div className="flex flex-wrap gap-5 sm:gap-7">
+          {/* Trust stats — dynamic from DB · subtle glass stat cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 max-w-xl">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
               { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'across Africa' },
               { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
             ].map(stat => (
-              <div key={stat.label} className="flex flex-col">
+              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.06] border border-white/10 px-3 py-2.5 backdrop-blur-sm">
                 <span className="text-xl sm:text-2xl font-black text-white leading-none">{stat.value}</span>
-                <span className="text-xs font-semibold text-white/80 mt-0.5">{stat.label}</span>
-                <span className="text-[10px] text-white/40 mt-0.5">{stat.sub}</span>
+                <span className="text-[11px] font-semibold text-white/85 mt-1">{stat.label}</span>
+                <span className="text-[9px] text-white/45 mt-0.5 leading-tight">{stat.sub}</span>
               </div>
             ))}
           </div>
@@ -259,8 +295,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             </div>
           </div>
 
-          {/* Desktop full-height image carousel */}
-          <div className="hidden lg:block absolute inset-0">
+          {/* Desktop image carousel — smaller rounded card with vertical margin spacing */}
+          <div className="hidden lg:block absolute inset-y-10 inset-x-8 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/15">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentImageIndex}
