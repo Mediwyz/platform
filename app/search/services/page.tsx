@@ -17,6 +17,7 @@ interface ServiceItem {
   duration: number | null
   providerCount: number
   imageUrl?: string | null
+  iconKey?: string | null
   sampleProviders: { id: string; name: string; profileImage: string | null; price: number }[]
 }
 
@@ -253,8 +254,8 @@ export default function ServicesSearchPage() {
                         category={svc.category}
                         providerType={svc.providerType}
                         imageUrl={svc.imageUrl}
-                        size={20}
-                        color={color}
+                        iconKey={svc.iconKey}
+                        size={24}
                       />
                     </div>
 
