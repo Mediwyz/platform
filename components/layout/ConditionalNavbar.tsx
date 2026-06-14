@@ -9,7 +9,10 @@ import Navbar from './Navbar'
 const ALWAYS_SHOW = new Set(['/', '/login', '/signup'])
 
 // These path prefixes always show the navbar — even when authenticated.
-const PUBLIC_SHOW_PREFIXES = ['/search/', '/about', '/contact']
+// NOTE: '/search/' is intentionally excluded — those pages are wrapped by
+// SearchDashboardWrapper, which renders its own header. Showing the global
+// Navbar too produced two stacked headers.
+const PUBLIC_SHOW_PREFIXES = ['/about', '/contact']
 
 const DASHBOARD_PREFIXES = [
   // Role-prefix routes
