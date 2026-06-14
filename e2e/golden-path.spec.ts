@@ -20,8 +20,8 @@ test.describe('Golden path — service discovery funnel', () => {
     await expect(page.locator('text=/How it works/i').first()).toBeVisible()
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible()
 
-    // Unified DiscoverSection loads after hydration (Services tab is default)
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
+    // CategoryNavigator loads after hydration (level-1 entity cards are the default)
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })
 
     // Filter out known non-fatal errors: ResizeObserver and React #418 (ssr:false Suspense hydration)
     const fatalErrors = errors.filter(e =>
@@ -33,17 +33,18 @@ test.describe('Golden path — service discovery funnel', () => {
     expect(fatalErrors).toHaveLength(0)
   })
 
-  test('DiscoverSection shows Services tab by default', async ({ page }) => {
+  test('CategoryNavigator shows the entity cards by default', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('button', { hasText: /Services/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('DiscoverSection Providers tab is accessible', async ({ page }) => {
+  test('CategoryNavigator drills into the Providers entity', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
-    // Click the Providers tab pill — button text includes emoji so use partial match
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })
+    // Click the Providers entity card → level 2 shows the breadcrumb back to "All categories"
     await page.locator('button', { hasText: /Providers/i }).first().click()
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible()
+    await expect(page.locator('text=/All categories/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('search/services page loads and shows a search input', async ({ page }) => {

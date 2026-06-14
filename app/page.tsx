@@ -7,8 +7,8 @@ import CompanyTrustBar from '@/components/home/CompanyTrustBar'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import StickyCTABar from '@/components/home/StickyCTABar'
 
-const DiscoverSection = dynamic(() => import('@/components/home/DiscoverSection'), { ssr: false })
-const CommunityPosts  = dynamic(() => import('@/components/home/CommunityPosts'),  { ssr: false })
+const CategoryNavigator = dynamic(() => import('@/components/home/CategoryNavigator'), { ssr: false })
+const CommunityPosts    = dynamic(() => import('@/components/home/CommunityPosts'),    { ssr: false })
 
 export default function HomePage() {
   return (
@@ -25,8 +25,10 @@ export default function HomePage() {
       {/* 3 — Trust: partner logos + key stats marquee */}
       <CompanyTrustBar />
 
-      {/* 4 — Discover: tabbed (Providers / Services / Health Shop) with live Google Map */}
-      <DiscoverSection />
+      {/* 4 — Discover: lightweight 3-level category navigator.
+             The heavy provider/service lists + live Google Map now live on the
+             dedicated /search/* pages (reached at the final step). */}
+      <CategoryNavigator />
 
       {/* 5 — Community posts */}
       <div id="community-section">

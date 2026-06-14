@@ -39,17 +39,19 @@ test.describe('Home Page', () => {
     await expect(page.locator('text=/Trusted by patients/i').first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('DiscoverSection is visible with tab navigation', async ({ page }) => {
+  test('Discover category navigator shows the entity cards', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
+    // The landing now uses the lightweight 3-level CategoryNavigator instead of the
+    // old tabbed DiscoverSection. Assert on its static level-1 content (no API needed).
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })
     await expect(page.locator('button', { hasText: /Services/i }).first()).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('button', { hasText: /Health Shop/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('DiscoverSection has a search input', async ({ page }) => {
+  test('Discover navigator links to the full services catalogue', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('text=/Everything You Need/i').first()).toBeVisible({ timeout: 15_000 })
-    const searchInput = page.locator('#discover-section input').first()
-    await expect(searchInput).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('text=/What are you looking for/i').first()).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('button', { hasText: /Browse the full catalogue/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('hero feature pills are visible', async ({ page }) => {

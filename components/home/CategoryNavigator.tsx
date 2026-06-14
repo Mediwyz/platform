@@ -1,0 +1,400 @@
+'use client'
+
+/**
+ * CategoryNavigator — the lightweight 3-level entry point that replaces the old
+ * 1,200-line DiscoverSection on the landing page.
+ *
+ * Flow:
+ *   Level 1  Entity      → Services | Providers | Organisations | Health Shop
+ *   Level 2  Sub-group   → provider roles (Services/Providers) · org types · shop categories
+ *   Level 3  Category     → service categories for the chosen role (Services path only)
+ *
+ * The final click routes to an existing /search/* page with query params. The
+ * Google-Maps "find nearest" experience lives on those search pages (the last step),
+ * never on the landing — keeping the home page fast and uncluttered.
+ */
+
+import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import type { IconType } from 'react-icons'
+import {
+  MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
+  MdArrowBack, MdArrowForward, MdChevronRight,
+} from 'react-icons/md'
+import {
+  TbStethoscope, TbHeartRateMonitor, TbDental, TbEye,
+  TbBabyCarriage, TbActivity, TbPill, TbAmbulance, TbFlask,
+  TbApple, TbNurse, TbBuildingHospital, TbMicroscope,
+} from 'react-icons/tb'
+
+const TEAL = '#0C6780'
+
+// ── Level 1 · entities ──────────────────────────────────────────────────────
+type EntityKey = 'services' | 'providers' | 'organisations' | 'shop'
+
+interface Entity {
+  key: EntityKey
+  label: string
+  blurb: string
+  Icon: IconType
+}
+
+const ENTITIES: Entity[] = [
+  { key: 'services',      label: 'Services',      blurb: 'Consultations & treatments',     Icon: MdMedicalServices },
+  { key: 'providers',     label: 'Providers',     blurb: 'Qualified professionals',         Icon: MdPeople },
+  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals & labs',       Icon: MdLocalHospital },
+  { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart },
+]
+
+// ── Provider role icon mapping (by role code) ───────────────────────────────
+const ROLE_ICON: Record<string, IconType> = {
+  DOCTOR: TbStethoscope,
+  NURSE: TbNurse,
+  NANNY: TbBabyCarriage,
+  PHARMACIST: TbPill,
+  LAB_TECHNICIAN: TbFlask,
+  EMERGENCY_WORKER: TbAmbulance,
+  CAREGIVER: TbHeartRateMonitor,
+  PHYSIOTHERAPIST: TbActivity,
+  DENTIST: TbDental,
+  OPTOMETRIST: TbEye,
+  NUTRITIONIST: TbApple,
+}
+
+// ── Level 2 · organisation types (redirect to /search/organizations) ────────
+const ORG_TYPES: { value: string; label: string; Icon: IconType }[] = [
+  { value: 'clinic',     label: 'Clinics',    Icon: TbBuildingHospital },
+  { value: 'hospital',   label: 'Hospitals',  Icon: MdLocalHospital },
+  { value: 'laboratory', label: 'Labs',       Icon: TbMicroscope },
+  { value: 'pharmacy',   label: 'Pharmacies', Icon: TbPill },
+]
+
+// ── Level 2 · shop categories (redirect to /search/health-shop) ─────────────
+const SHOP_CATEGORIES: { key: string; label: string; Icon: IconType }[] = [
+  { key: 'medication',      label: 'Medications',   Icon: TbPill },
+  { key: 'vitamins',        label: 'Vitamins',      Icon: TbApple },
+  { key: 'first_aid',       label: 'First Aid',     Icon: MdMedicalServices },
+  { key: 'personal_care',   label: 'Personal Care', Icon: TbActivity },
+  { key: 'dental_care',     label: 'Dental',        Icon: TbDental },
+  { key: 'baby_care',       label: 'Baby Care',     Icon: TbBabyCarriage },
+  { key: 'nutrition',       label: 'Nutrition',     Icon: TbApple },
+  { key: 'eyewear',         label: 'Eyewear',       Icon: TbEye },
+  { key: 'medical_devices', label: 'Devices',       Icon: TbHeartRateMonitor },
+]
+
+interface RoleData {
+  code: string
+  label: string
+  slug: string
+  color: string
+}
+
+export default function CategoryNavigator() {
+  const router = useRouter()
+
+  const [entity, setEntity] = useState<EntityKey | null>(null)
+  const [roles, setRoles] = useState<RoleData[]>([])
+  const [rolesLoaded, setRolesLoaded] = useState(false)
+  const [role, setRole] = useState<RoleData | null>(null)
+  const [categories, setCategories] = useState<string[]>([])
+  const [loadingCats, setLoadingCats] = useState(false)
+
+  // Lazily load provider roles the first time the user enters Services or Providers.
+  const ensureRoles = useCallback(async () => {
+    if (rolesLoaded) return
+    try {
+      const res = await fetch('/api/roles?searchEnabled=true')
+      const json = await res.json()
+      if (json?.success && Array.isArray(json.data)) setRoles(json.data)
+    } catch {
+      /* network errors leave the role grid empty — the entity card still works as a direct link */
+    } finally {
+      setRolesLoaded(true)
+    }
+  }, [rolesLoaded])
+
+  const pickEntity = useCallback(async (key: EntityKey) => {
+    setEntity(key)
+    setRole(null)
+    setCategories([])
+    if (key === 'services' || key === 'providers') await ensureRoles()
+  }, [ensureRoles])
+
+  // Services path · choosing a role loads that role's service categories (level 3).
+  const pickServiceRole = useCallback(async (r: RoleData) => {
+    setRole(r)
+    setLoadingCats(true)
+    try {
+      const res = await fetch(`/api/search/services?type=${encodeURIComponent(r.code)}&limit=200`)
+      const json = await res.json()
+      const cats = new Set<string>()
+      if (json?.success && Array.isArray(json.data)) {
+        for (const s of json.data) if (s.category) cats.add(s.category as string)
+      }
+      setCategories(Array.from(cats).sort())
+    } catch {
+      setCategories([])
+    } finally {
+      setLoadingCats(false)
+    }
+  }, [])
+
+  // ── Redirect helpers (all targets are existing /search/* pages) ───────────
+  const goServicesCategory = (r: RoleData, cat?: string) =>
+    router.push(`/search/services?type=${encodeURIComponent(r.code)}${cat ? `&category=${encodeURIComponent(cat)}` : ''}`)
+  const goProviderRole = (r: RoleData) => router.push(`/search/${r.slug}`)
+  const goOrg = (type: string) => router.push(`/search/organizations?type=${encodeURIComponent(type)}`)
+  const goShop = (cat: string) => router.push(`/search/health-shop?category=${encodeURIComponent(cat)}`)
+
+  const reset = () => { setEntity(null); setRole(null); setCategories([]) }
+  const backToRoles = () => { setRole(null); setCategories([]) }
+
+  const activeEntity = ENTITIES.find(e => e.key === entity) ?? null
+
+  return (
+    <section id="discover-section" className="relative py-14 sm:py-20 bg-gradient-to-b from-white to-[#F4FBFF]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-10">
+          <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
+            Discover
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
+            What are you looking for?
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
+            Pick a category to jump straight to a focused search — find the nearest provider on a live map at the final step.
+          </p>
+        </div>
+
+        {/* Breadcrumb */}
+        {entity && (
+          <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 mb-5 text-sm">
+            <button
+              onClick={reset}
+              className="font-medium text-[#0C6780] hover:text-[#001E40] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
+            >
+              All categories
+            </button>
+            <MdChevronRight className="text-gray-300" aria-hidden />
+            <button
+              onClick={backToRoles}
+              disabled={!role}
+              className={`font-medium rounded px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40
+                ${role ? 'text-[#0C6780] hover:text-[#001E40]' : 'text-gray-700 cursor-default'}`}
+            >
+              {activeEntity?.label}
+            </button>
+            {role && (
+              <>
+                <MdChevronRight className="text-gray-300" aria-hidden />
+                <span className="font-medium text-gray-700 px-1">{role.label}</span>
+              </>
+            )}
+          </nav>
+        )}
+
+        {/* ── Level 1 · Entities ─────────────────────────────────────────── */}
+        {!entity && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {ENTITIES.map(e => {
+              const Icon = e.Icon
+              return (
+                <button
+                  key={e.key}
+                  onClick={() => pickEntity(e.key)}
+                  className="group flex flex-col items-start text-left p-5 rounded-2xl bg-white border border-gray-100
+                    shadow-sm hover:shadow-lg hover:border-[#0C6780]/30 hover:-translate-y-0.5 transition-all duration-200
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer min-h-[44px]"
+                >
+                  <span
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors"
+                    style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}
+                  >
+                    <Icon size={24} aria-hidden />
+                  </span>
+                  <span className="text-base font-bold text-[#001E40]">{e.label}</span>
+                  <span className="text-xs text-gray-500 mt-0.5">{e.blurb}</span>
+                  <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#0C6780] group-hover:gap-2 transition-all">
+                    Browse <MdArrowForward size={12} aria-hidden />
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* ── Level 2 · Services or Providers → role grid ────────────────── */}
+        {(entity === 'services' || entity === 'providers') && !role && (
+          <RoleGrid
+            roles={roles}
+            loaded={rolesLoaded}
+            onPick={entity === 'services' ? pickServiceRole : goProviderRole}
+            cta={entity === 'services' ? 'See categories' : 'Find providers'}
+          />
+        )}
+
+        {/* ── Level 2 · Organisations ────────────────────────────────────── */}
+        {entity === 'organisations' && (
+          <TileGrid
+            items={ORG_TYPES.map(o => ({ id: o.value, label: o.label, Icon: o.Icon }))}
+            onPick={goOrg}
+          />
+        )}
+
+        {/* ── Level 2 · Health Shop ──────────────────────────────────────── */}
+        {entity === 'shop' && (
+          <TileGrid
+            items={SHOP_CATEGORIES.map(c => ({ id: c.key, label: c.label, Icon: c.Icon }))}
+            onPick={goShop}
+          />
+        )}
+
+        {/* ── Level 3 · Service categories for the chosen role ───────────── */}
+        {entity === 'services' && role && (
+          <div>
+            <button
+              onClick={backToRoles}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] hover:text-[#001E40] mb-4
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
+            >
+              <MdArrowBack size={16} aria-hidden /> Back to provider types
+            </button>
+
+            {loadingCats ? (
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="h-9 w-28 rounded-full bg-gray-100 animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {/* "All" shortcut */}
+                <button
+                  onClick={() => goServicesCategory(role)}
+                  className="px-4 py-2 rounded-full text-sm font-semibold text-white transition-transform hover:scale-[1.02]
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
+                  style={{ background: role.color || TEAL }}
+                >
+                  All {role.label} services
+                </button>
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => goServicesCategory(role, cat)}
+                    className="px-4 py-2 rounded-full text-sm font-medium capitalize bg-white border border-gray-200 text-gray-700
+                      hover:border-[#0C6780] hover:text-[#0C6780] transition-colors
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 cursor-pointer"
+                  >
+                    {cat.replace(/_/g, ' ')}
+                  </button>
+                ))}
+                {categories.length === 0 && (
+                  <p className="text-sm text-gray-400 py-2">
+                    No sub-categories yet — <button onClick={() => goServicesCategory(role)} className="text-[#0C6780] font-medium underline">browse all {role.label} services</button>.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Footer link to the full catalogue (the heavy list now lives here) */}
+        <div className="text-center mt-10">
+          <button
+            onClick={() => router.push('/search/services')}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] hover:text-[#001E40]
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-2 py-1 cursor-pointer"
+          >
+            Or browse the full catalogue <MdArrowForward size={14} aria-hidden />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── Role grid (Level 2 for Services / Providers) ────────────────────────────
+function RoleGrid({
+  roles, loaded, onPick, cta,
+}: {
+  roles: RoleData[]
+  loaded: boolean
+  onPick: (r: RoleData) => void
+  cta: string
+}) {
+  if (!loaded) {
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-28 rounded-2xl bg-gray-100 animate-pulse" />
+        ))}
+      </div>
+    )
+  }
+  if (roles.length === 0) {
+    return <p className="text-sm text-gray-400 py-6 text-center">No provider types available right now.</p>
+  }
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {roles.map(r => {
+        const Icon = ROLE_ICON[r.code] ?? MdMedicalServices
+        const color = r.color || TEAL
+        return (
+          <button
+            key={r.code}
+            onClick={() => onPick(r)}
+            className="group flex flex-col items-start text-left p-4 rounded-2xl bg-white border border-gray-100
+              shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
+            style={{ borderTopWidth: 3, borderTopColor: color }}
+          >
+            <span
+              className="w-10 h-10 rounded-xl flex items-center justify-center mb-2"
+              style={{ background: `${color}1A`, color }}
+            >
+              <Icon size={20} aria-hidden />
+            </span>
+            <span className="text-sm font-bold text-[#001E40]">{r.label}</span>
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold group-hover:gap-2 transition-all" style={{ color }}>
+              {cta} <MdArrowForward size={11} aria-hidden />
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Generic tile grid (Level 2 for Organisations / Shop) ────────────────────
+function TileGrid({
+  items, onPick,
+}: {
+  items: { id: string; label: string; Icon: IconType }[]
+  onPick: (id: string) => void
+}) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {items.map(it => {
+        const Icon = it.Icon
+        return (
+          <button
+            key={it.id}
+            onClick={() => onPick(it.id)}
+            className="group flex flex-col items-start text-left p-4 rounded-2xl bg-white border border-gray-100
+              shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
+          >
+            <span className="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}>
+              <Icon size={20} aria-hidden />
+            </span>
+            <span className="text-sm font-bold text-[#001E40]">{it.label}</span>
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#0C6780] group-hover:gap-2 transition-all">
+              Browse <MdArrowForward size={11} aria-hidden />
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
