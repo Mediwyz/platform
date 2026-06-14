@@ -177,7 +177,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl xl:text-[2.6rem] font-bold mb-4 leading-[1.12] tracking-tight text-white">
+          <h1 className="text-4xl sm:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold mb-5 leading-[1.04] tracking-tight text-white">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -186,7 +186,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             ))}
           </h1>
 
-          <p className="text-sm sm:text-[15px] text-gray-300/90 leading-relaxed max-w-lg mb-6">
+          <p className="text-base sm:text-lg text-gray-300/90 leading-relaxed max-w-xl mb-7">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
           </p>
