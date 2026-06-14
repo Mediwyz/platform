@@ -1,12 +1,16 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import { Icon } from '@iconify/react'
 import {
   FaPlus, FaTrash, FaSearch, FaCheckCircle, FaTimes, FaEdit,
   FaConciergeBell, FaListAlt, FaArrowLeft, FaExclamationTriangle,
   FaCog, FaSave,
 } from 'react-icons/fa'
+import ServiceIcon from '@/components/shared/ServiceIcon'
+
+const HealthiconPicker = dynamic(() => import('@/components/shared/HealthiconPicker'), { ssr: false })
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -108,6 +112,9 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   const [createDescription, setCreateDescription] = useState('')
   const [createCategory, setCreateCategory] = useState('')
   const [createEmoji, setCreateEmoji] = useState('')
+  const [createIconKey, setCreateIconKey] = useState('')
+  const [createImageUrl, setCreateImageUrl] = useState('')
+  const [showIconPicker, setShowIconPicker] = useState(false)
   const [createPrice, setCreatePrice] = useState('')
   const [createDuration, setCreateDuration] = useState('')
 
@@ -202,6 +209,8 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           name: createName.trim(),
           description: createDescription.trim() || undefined,
           category: createCategory.trim() || undefined,
+          iconKey: createIconKey || undefined,
+          imageUrl: createImageUrl || undefined,
           emoji: createEmoji.trim() || undefined,
           price: createPrice ? Number(createPrice) : undefined,
           duration: createDuration ? Number(createDuration) : undefined,
@@ -210,6 +219,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
       const j = await res.json()
       if (!j.success) throw new Error(j.message)
       showToast('success', `"${createName}" created and added to your services`)
+      setCreateIconKey(''); setCreateImageUrl('')
       setPanel('list')
       fetchMyServices()
       fetchCatalog()
@@ -673,14 +683,25 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Emoji icon</label>
-                <input
-                  type="text"
-                  value={createEmoji}
-                  onChange={e => setCreateEmoji(e.target.value)}
-                  placeholder="🩺"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
-                />
+                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Service icon</label>
+                <button
+                  type="button"
+                  onClick={() => setShowIconPicker(true)}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm flex items-center gap-2.5 hover:border-[#0C6780] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                >
+                  <span className="w-9 h-9 rounded-lg bg-[#0C6780]/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <ServiceIcon
+                      serviceName={createName}
+                      category={createCategory}
+                      iconKey={createIconKey}
+                      imageUrl={createImageUrl}
+                      size={22}
+                    />
+                  </span>
+                  <span className="text-gray-500">
+                    {createImageUrl ? 'Custom image' : createIconKey ? createIconKey.split('/')[1]?.replace(/_/g, ' ') : 'Choose an icon'}
+                  </span>
+                </button>
               </div>
               <div>
                 <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Category</label>
@@ -693,6 +714,15 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                 />
               </div>
             </div>
+
+            {showIconPicker && (
+              <HealthiconPicker
+                value={createIconKey}
+                onSelectIcon={(p) => { setCreateIconKey(p); setCreateImageUrl('') }}
+                onSelectImage={(url) => { setCreateImageUrl(url); setCreateIconKey('') }}
+                onClose={() => setShowIconPicker(false)}
+              />
+            )}
 
             <div>
               <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Description</label>
