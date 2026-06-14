@@ -165,15 +165,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="lg:flex-[58] flex flex-col justify-center
-            px-6 sm:px-10 lg:px-12 xl:px-16
-            py-7 sm:py-9 lg:py-12"
+          className="lg:flex-[65] flex flex-col justify-center
+            px-6 sm:px-10 lg:px-14 xl:px-20
+            py-9 sm:py-12 lg:py-16"
         >
           {/* Country flag + platform badge */}
           <div className="inline-flex self-start items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-3.5 py-1.5 mb-6 border border-white/20 shadow-sm">
             <CountryFlag countryCode={countryCode} />
             <span className="text-[11px] font-semibold text-brand-sky tracking-wide uppercase">
-              {content?.platformBadge || config.platformDescription || "Africa's #1 HealthTech Platform"}
+              {content?.platformBadge || config.platformDescription || "Your all-in-one HealthTech Platform"}
             </span>
           </div>
 
@@ -188,7 +188,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
 
           <p className="text-base sm:text-lg text-gray-300/90 leading-relaxed max-w-xl mb-7">
             {content?.subtitle ||
-              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa — all in one secure platform."}
+              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India — all in one secure platform."}
           </p>
 
           {/* App download badges */}
@@ -244,7 +244,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
-              { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'across Africa' },
+              { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'Africa, Mauritius & India' },
               { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
             ].map(stat => (
               <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.06] border border-white/10 px-3 py-2.5 backdrop-blur-sm">
@@ -261,7 +261,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="lg:flex-[42] relative overflow-hidden min-h-[200px]"
+          className="lg:flex-[35] relative overflow-hidden min-h-[200px]"
         >
           {/* Mobile image strip */}
           <div className="lg:hidden relative h-44">

@@ -55,8 +55,10 @@ test.describe('Home Page', () => {
   })
 
   test('hero feature pills are visible', async ({ page }) => {
-    await page.goto('/')
-    await expect(page.locator('text=/HealthTech|Platform|Healthcare/i').first()).toBeVisible({ timeout: 10_000 })
+    // Generous timeout: the very first request right after a deploy hits a cold
+    // VPS that is still warming up, so the hero can take >10s to paint.
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await expect(page.locator('text=/HealthTech|Platform|Healthcare/i').first()).toBeVisible({ timeout: 30_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {

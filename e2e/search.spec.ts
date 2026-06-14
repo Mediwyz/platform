@@ -32,11 +32,14 @@ test.describe('Search Page', () => {
 
   test('can submit a search query', async ({ page }) => {
     const searchInput = page.locator(PAGE_SEARCH).first()
+    // Wait for the input to be ready before typing — on a cold VPS just after a
+    // deploy the page can still be hydrating when the test starts.
+    await expect(searchInput).toBeVisible({ timeout: 30_000 })
     await searchInput.fill('cardiologist')
     // Press Enter to submit — more reliable than clicking the submit button
     await searchInput.press('Enter')
-    // URL updates after the async fetchProviders resolves
-    await expect(page).toHaveURL(/q=cardiologist/i, { timeout: 15_000 })
+    // URL updates after the async fetchProviders resolves (generous for warmup)
+    await expect(page).toHaveURL(/q=cardiologist/i, { timeout: 30_000 })
   })
 
   test('displays a back to home link', async ({ page }) => {
