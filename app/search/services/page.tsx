@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { FaSearch, FaConciergeBell, FaClock, FaArrowRight, FaUsers } from 'react-icons/fa'
+import ServiceIcon from '@/components/shared/ServiceIcon'
 
 interface ServiceItem {
   id: string
@@ -15,6 +16,7 @@ interface ServiceItem {
   currency: string
   duration: number | null
   providerCount: number
+  imageUrl?: string | null
   sampleProviders: { id: string; name: string; profileImage: string | null; price: number }[]
 }
 
@@ -232,7 +234,6 @@ export default function ServicesSearchPage() {
               const color = info?.color ?? '#0C6780'
               const slug = info?.slug ?? svc.providerType.toLowerCase()
               const iconBg = hex2rgba(color, 0.10)
-              const emoji = resolveCategoryEmoji(svc.category, svc.providerType)
 
               return (
                 <Link
@@ -244,10 +245,17 @@ export default function ServicesSearchPage() {
                 >
                   <div className="p-3 sm:p-4 flex-1 flex flex-col">
                     <div
-                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-2 flex-shrink-0"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-2 flex-shrink-0 overflow-hidden"
                       style={{ background: iconBg }}
                     >
-                      <span className="text-lg leading-none">{emoji}</span>
+                      <ServiceIcon
+                        serviceName={svc.serviceName}
+                        category={svc.category}
+                        providerType={svc.providerType}
+                        imageUrl={svc.imageUrl}
+                        size={20}
+                        color={color}
+                      />
                     </div>
 
                     <h3
