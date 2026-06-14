@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: false })
 import { FaSearch, FaMapMarkerAlt, FaPhone, FaGlobe, FaBriefcaseMedical, FaHospital, FaFlask, FaTooth, FaEye, FaHeart } from 'react-icons/fa'
 import { MdVerified } from 'react-icons/md'
 
@@ -249,6 +252,9 @@ export default function OrganizationsSearchPage() {
 
       {/* Results */}
       <div className="max-w-5xl mx-auto px-4 py-6">
+        {/* Find nearest with geolocation — the final-step map */}
+        <NearbyMap mode="entities" type={selectedType || undefined} noun="organisations" accentColor="#0C6780" />
+
         {!loading && entities.length > 0 && (
           <p className="text-sm text-gray-500 mb-4">{total} result{total !== 1 ? 's' : ''}</p>
         )}

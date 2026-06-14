@@ -16,6 +16,7 @@ import {
 } from 'react-icons/fa'
 
 const CreateBookingModal = dynamic(() => import('@/components/shared/CreateBookingModal'), { ssr: false })
+const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: false })
 
 interface Provider {
  id: string
@@ -287,8 +288,13 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  </div>
  </div>
 
+ {/* Find nearest with geolocation — the final-step map */}
+ <div className="mt-6">
+ <NearbyMap mode="providers" type={config.providerType} noun={`${config.singularLabel.toLowerCase()}s`} accentColor="#0C6780" />
+ </div>
+
  {/* Results */}
- <div className="flex-1 min-w-0 mt-8">
+ <div className="flex-1 min-w-0 mt-2">
  {isLoading ? (
  <SearchResultsSkeleton />
  ) : searchResults.length > 0 ? (
