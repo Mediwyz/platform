@@ -42,48 +42,6 @@ function useHeroStats(): HeroStats {
   return stats
 }
 
-// ─── Flag mini-icons ──────────────────────────────────────────────────────────
-
-const flags: Record<string, React.ReactNode> = {
-  MU: (
-    <div className="inline-flex flex-col rounded-sm overflow-hidden">
-      <div className="h-1.5 w-6 bg-red-600" />
-      <div className="h-1.5 w-6 bg-brand-navy" />
-      <div className="h-1.5 w-6 bg-yellow-400" />
-      <div className="h-1.5 w-6 bg-green-600" />
-    </div>
-  ),
-  MG: (
-    <div className="inline-flex rounded-sm overflow-hidden">
-      <div className="w-2 h-6 bg-white" />
-      <div className="inline-flex flex-col">
-        <div className="h-3 w-4 bg-red-600" />
-        <div className="h-3 w-4 bg-green-600" />
-      </div>
-    </div>
-  ),
-  KE: (
-    <div className="inline-flex flex-col rounded-sm overflow-hidden">
-      <div className="h-1.5 w-6 bg-black" />
-      <div className="h-0.5 w-6 bg-white" />
-      <div className="h-1.5 w-6 bg-red-600" />
-      <div className="h-0.5 w-6 bg-white" />
-      <div className="h-1.5 w-6 bg-green-700" />
-    </div>
-  ),
-  FR: (
-    <div className="inline-flex rounded-sm overflow-hidden">
-      <div className="w-2 h-6 bg-blue-700" />
-      <div className="w-2 h-6 bg-white" />
-      <div className="w-2 h-6 bg-red-600" />
-    </div>
-  ),
-}
-
-function CountryFlag({ countryCode, className = '' }: { countryCode: string; className?: string }) {
-  return <div className={className}>{flags[countryCode] || flags.MU}</div>
-}
-
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface HeroSectionProps {
@@ -113,7 +71,7 @@ const imageVariants = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode = 'MU' }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const { config } = useAppConfig()
   const stats = useHeroStats()
@@ -169,15 +127,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             px-6 sm:px-10 lg:px-14 xl:px-20
             py-9 sm:py-12 lg:py-16"
         >
-          {/* Country flag + platform badge */}
-          <div className="inline-flex self-start items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-3.5 py-1.5 mb-6 border border-white/20 shadow-sm">
-            <CountryFlag countryCode={countryCode} />
+          {/* Platform badge */}
+          <div className="inline-flex self-start items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-7 border border-white/20 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
             <span className="text-[11px] font-semibold text-brand-sky tracking-wide uppercase">
               {content?.platformBadge || config.platformDescription || "Your all-in-one HealthTech Platform"}
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold mb-5 leading-[1.04] tracking-tight text-white">
+          <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold mb-6 leading-[1.02] tracking-tight text-white">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -186,7 +144,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
             ))}
           </h1>
 
-          <p className="text-base sm:text-lg text-gray-300/90 leading-relaxed max-w-xl mb-7">
+          <p className="text-lg sm:text-xl xl:text-2xl text-gray-300/90 leading-relaxed max-w-2xl mb-8">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India — all in one secure platform."}
           </p>
@@ -240,17 +198,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides, countryCode 
           </div>
 
           {/* Trust stats — dynamic from DB · subtle glass stat cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 max-w-xl">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
               { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'Africa, Mauritius & India' },
               { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
             ].map(stat => (
-              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.06] border border-white/10 px-3 py-2.5 backdrop-blur-sm">
-                <span className="text-xl sm:text-2xl font-black text-white leading-none">{stat.value}</span>
-                <span className="text-[11px] font-semibold text-white/85 mt-1">{stat.label}</span>
-                <span className="text-[9px] text-white/45 mt-0.5 leading-tight">{stat.sub}</span>
+              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.06] border border-white/10 px-4 py-3.5 backdrop-blur-sm">
+                <span className="text-2xl sm:text-3xl font-black text-white leading-none">{stat.value}</span>
+                <span className="text-xs font-semibold text-white/85 mt-1.5">{stat.label}</span>
+                <span className="text-[10px] text-white/45 mt-0.5 leading-tight">{stat.sub}</span>
               </div>
             ))}
           </div>

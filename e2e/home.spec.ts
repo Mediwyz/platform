@@ -4,7 +4,10 @@ test.describe('Home Page', () => {
   test('loads and shows the hero section', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveTitle(/MediWyz/i)
-    await expect(page.locator('text=/HealthTech|Platform/i').first()).toBeVisible({ timeout: 10_000 })
+    // The hero <h1> is always the first heading and is always visible — target it
+    // directly rather than a loose text regex (which can match hidden section
+    // headings like "Healthcare Services" further down the page).
+    await expect(page.locator('h1').first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('has a navigation bar and footer', async ({ page }) => {
@@ -58,7 +61,10 @@ test.describe('Home Page', () => {
     // Generous timeout: the very first request right after a deploy hits a cold
     // VPS that is still warming up, so the hero can take >10s to paint.
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await expect(page.locator('text=/HealthTech|Platform|Healthcare/i').first()).toBeVisible({ timeout: 30_000 })
+    // Assert on an actual hero pill — specific and always visible. A loose
+    // /Healthcare/ regex used to match a hidden "Healthcare Services" heading.
+    await expect(page.getByText('AI Health Assistant', { exact: true }).first())
+      .toBeVisible({ timeout: 30_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {

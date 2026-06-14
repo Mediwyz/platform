@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { productImage } from './_product-images'
 
 export async function seedWallets(prisma: PrismaClient) {
   console.log('  Seeding wallets for users without one...')
@@ -616,7 +617,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       name: item.name,
       category: item.category,
       description: item.description,
-      imageUrl: getProductImage(item.category),
+      imageUrl: productImage(item.name, getProductImage(item.category)),
       price: item.price,
       currency: item.currency,
       quantity: item.quantity,

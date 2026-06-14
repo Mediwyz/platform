@@ -1,5 +1,6 @@
 import { PrismaClient, UserType } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { productImage } from './_product-images'
 
 /**
  * Seed #42 — Expanded Providers & Health Shop Inventory
@@ -144,6 +145,7 @@ export async function seedExpandedProvidersInventory(prismaArg?: PrismaClient) {
           genericName: item.genericName,
           description: item.description,
           category: item.category,
+          imageUrl: productImage(item.name),
           price: item.price,
           currency: 'MUR',
           quantity: item.quantity,

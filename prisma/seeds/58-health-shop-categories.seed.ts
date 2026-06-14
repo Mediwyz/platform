@@ -6,6 +6,7 @@
  */
 
 import { PrismaClient } from '@prisma/client'
+import { productImage } from './_product-images'
 
 export async function seedHealthShopCategories(prisma: PrismaClient) {
   console.log('  Seeding health shop categories & products...')
@@ -556,6 +557,7 @@ export async function seedHealthShopCategories(prisma: PrismaClient) {
           name: item.name,
           category: item.category,
           description: item.description,
+          imageUrl: productImage(item.name),
           price: item.price,
           currency: item.currency,
           quantity: item.quantity,

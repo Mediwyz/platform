@@ -1,5 +1,6 @@
 import { PrismaClient, UserType } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { productImage } from './_product-images'
 
 /**
  * Seed 40 — Expanded provider data
@@ -253,7 +254,7 @@ export async function seedExpandedInventory(prisma: PrismaClient) {
       name: item.name,
       category: item.category,
       description: item.description,
-      imageUrl: getImg(item.category),
+      imageUrl: productImage(item.name, getImg(item.category)),
       price: item.price,
       currency: 'MUR',
       quantity: item.quantity,
