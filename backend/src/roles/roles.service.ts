@@ -98,7 +98,7 @@ export class RolesService {
     const regionFilter = opts.regionCode
       ? { OR: [{ regionCode: opts.regionCode }, { regionCode: null }] }
       : {};
-    const roles = await this.prisma.providerRole.findMany({
+    const rolesRaw = await this.prisma.providerRole.findMany({
       where: {
         ...(!opts.includeAll ? { isActive: true } : {}),
         ...(opts.searchOnly ? { searchEnabled: true } : {}),
@@ -111,6 +111,16 @@ export class RolesService {
       },
       orderBy: { displayOrder: 'asc' },
     });
+
+    // Drop runtime-created test roles. Roles made via the admin "create role" tool
+    // during testing carry a trailing millisecond timestamp in their code
+    // (e.g. REFLEXOLOGIST_1777756939877, PLATEFORMTEST_1777758975585, TEST_ROLE_...).
+    // Real roles use clean codes (DOCTOR, NURSE, ...). includeAll bypasses the filter
+    // so admin CRUD can still see/clean them.
+    const JUNK_CODE = /_\d{10,}$/;
+    const roles = opts.includeAll
+      ? rolesRaw
+      : rolesRaw.filter(r => !JUNK_CODE.test(r.code) && !/^TEST_ROLE/i.test(r.code));
 
     // Provider counts per type
     const providerCounts = await this.prisma.user.groupBy({
