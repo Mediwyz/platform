@@ -123,7 +123,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
   try {
   const meRes = await fetch('/api/auth/me', { credentials: 'include' })
   const meJson = await meRes.json()
-  // `/api/auth/me` returns `{ success, user: {...} }` — joining the
+  // `/api/auth/me` returns `{ success, user: {...} }` - joining the
   // `user:{userId}` room is what actually wires up real-time updates.
   const uid = meJson?.user?.id ?? meJson?.data?.id
   if (meJson?.success && uid) {
@@ -185,7 +185,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  // Find the latest video call ID from timeline
  const latestVideoCallId = [...timeline].reverse().find(s => s.triggeredVideoCallId)?.triggeredVideoCallId
 
- // Derive call mode from booking service mode — the engine fires video or audio
+ // Derive call mode from booking service mode - the engine fires video or audio
  // rooms automatically based on this; no per-step flag needed.
  const callMode: 'video' | 'audio' = state.serviceMode === 'video' ? 'video' : 'audio'
 
@@ -233,7 +233,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  {/* Video / Audio Call Banner */}
  <WorkflowVideoCallBanner videoCallId={latestVideoCallId} currentStatus={state.currentStatus} callMode={callMode} isTerminal={state.isCompleted || state.isCancelled} />
 
- {/* Session Progress — recurrent programmes (physio, mental health, nutrition…) */}
+ {/* Session Progress - recurrent programmes (physio, mental health, nutrition…) */}
  {isRecurrent && maxSessions > 0 && (
   <SessionProgress
    programName={state.templateName}

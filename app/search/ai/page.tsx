@@ -64,7 +64,7 @@ export default function PublicAIAssistantPage() {
           <ul className="space-y-3 text-sm text-gray-700">
             <li className="flex gap-3">
               <span className="text-[#0C6780] flex-shrink-0">•</span>
-              <span>Conversations grounded in <strong>your real profile</strong> — allergies, medications, goals, recent activity.</span>
+              <span>Conversations grounded in <strong>your real profile</strong> - allergies, medications, goals, recent activity.</span>
             </li>
             <li className="flex gap-3">
               <span className="text-[#0C6780] flex-shrink-0">•</span>
@@ -72,14 +72,14 @@ export default function PublicAIAssistantPage() {
             </li>
             <li className="flex gap-3">
               <span className="text-[#0C6780] flex-shrink-0">•</span>
-              <span>Booking, medication, and emergency guidance — all in one place.</span>
+              <span>Booking, medication, and emergency guidance - all in one place.</span>
             </li>
           </ul>
 
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-3">
             <FaShieldAlt className="text-amber-600 mt-0.5 flex-shrink-0" />
             <p className="text-xs text-amber-900 leading-relaxed">
-              For medical emergencies, call <strong>114</strong> immediately. The assistant provides general guidance only — never diagnoses.
+              For medical emergencies, call <strong>114</strong> immediately. The assistant provides general guidance only - never diagnoses.
             </p>
           </div>
 

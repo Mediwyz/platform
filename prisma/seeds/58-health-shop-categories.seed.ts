@@ -1,5 +1,5 @@
 /**
- * Seed 58 — Health Shop categories & products
+ * Seed 58 - Health Shop categories & products
  *
  * Creates ~30 inventory items spread across the new extended category set.
  * Uses upsert-by-name+provider to be idempotent.
@@ -275,7 +275,7 @@ export async function seedHealthShopCategories(prisma: PrismaClient) {
     {
       providerUserId: 'PHARM001',
       providerType: 'PHARMACIST',
-      name: 'Whey Protein Isolate — Vanilla',
+      name: 'Whey Protein Isolate - Vanilla',
       category: 'fitness_wellness',
       description: 'High-quality whey protein for muscle recovery. 25g protein per serving. 1kg bag.',
       price: 850,
@@ -328,7 +328,7 @@ export async function seedHealthShopCategories(prisma: PrismaClient) {
       providerType: 'PHARMACIST',
       name: 'Resistance Bands Set',
       category: 'fitness_wellness',
-      description: 'Set of 5 latex resistance bands — light to extra-heavy. For home workouts.',
+      description: 'Set of 5 latex resistance bands - light to extra-heavy. For home workouts.',
       price: 350,
       currency: 'MUR',
       quantity: 40,
@@ -343,7 +343,7 @@ export async function seedHealthShopCategories(prisma: PrismaClient) {
     {
       providerUserId: 'PHARM001',
       providerType: 'PHARMACIST',
-      name: 'Foam Roller — Deep Tissue',
+      name: 'Foam Roller - Deep Tissue',
       category: 'fitness_wellness',
       description: 'High-density foam roller for muscle recovery and myofascial release. 60cm.',
       price: 280,

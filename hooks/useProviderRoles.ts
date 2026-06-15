@@ -21,7 +21,7 @@ let cachedRoles: ProviderRole[] | null = null
 /**
  * Hook to fetch provider roles from the database.
  * Only returns bookable provider roles (excludes Patient, Admin, etc.)
- * Cached — only fetches once per page load.
+ * Cached - only fetches once per page load.
  */
 export function useProviderRoles() {
   const [roles, setRoles] = useState<ProviderRole[]>(cachedRoles || [])

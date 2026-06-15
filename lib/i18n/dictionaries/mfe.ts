@@ -1,7 +1,7 @@
 import type { MessageKey } from './en'
 
 /**
- * Mauritian Creole (Kreol Morisien) translations — seed set.
+ * Mauritian Creole (Kreol Morisien) translations - seed set.
  * Covers only the highest-visibility workflow strings for now; other keys
  * fall back to English. Grow this file as strings are translated.
  */
@@ -19,7 +19,7 @@ export const mfe: Partial<Record<MessageKey, string>> = {
   'workflow.category.danger': 'Anile',
   'workflow.category.waiting': 'Pe atann',
 
-  'role.request.trigger': 'Mo pa trouv mo rol — propoz enn nouvo',
+  'role.request.trigger': 'Mo pa trouv mo rol - propoz enn nouvo',
   'role.request.modal.title': 'Propoz enn nouvo rol',
   'role.request.submit': 'Avoye demann',
   'role.request.cancel': 'Anile',

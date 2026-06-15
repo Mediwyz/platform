@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * ServiceIcon — renders the Healthicons illustration for a service.
+ * ServiceIcon - renders the Healthicons illustration for a service.
  *
  * Priority:
  *   1. provider-uploaded image (PlatformService.imageUrl)        → real picture
@@ -11,7 +11,7 @@
  *   4. provider-type fallback healthicon
  *
  * Icons are the Healthicons set shipped under /public/healthicons/<category>/<id>.svg
- * (740 health-specific icons). Providers pick one of these — or upload custom —
+ * (740 health-specific icons). Providers pick one of these - or upload custom - 
  * when creating a service; see HealthiconPicker.
  */
 

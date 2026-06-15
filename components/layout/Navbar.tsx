@@ -173,7 +173,7 @@ const Navbar: React.FC = () => {
 
  const isLoggedIn = !!authUser
 
- // Search pages are public — never prepend user slug
+ // Search pages are public - never prepend user slug
  const getServiceHref = (href: string) => href
 
  return (
@@ -210,7 +210,7 @@ const Navbar: React.FC = () => {
  <span className="text-sm font-medium">Home</span>
  </Link>
 
- {/* Services Dropdown — hidden when logged in (accessible from dashboard sidebar) */}
+ {/* Services Dropdown - hidden when logged in (accessible from dashboard sidebar) */}
  {!isLoggedIn && (
  <div className="relative group">
  <button
@@ -343,7 +343,7 @@ const Navbar: React.FC = () => {
  <span className="font-medium">Home</span>
  </Link>
 
- {/* Mobile: Icon grid — hidden when logged in */}
+ {/* Mobile: Icon grid - hidden when logged in */}
  {!isLoggedIn && (
  <div className="sm:hidden grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-gray-100">
  {Object.values(serviceCategories).flat().map((service) => (
@@ -363,7 +363,7 @@ const Navbar: React.FC = () => {
  </div>
  )}
 
- {/* Tablet+: Expandable categories — hidden when logged in */}
+ {/* Tablet+: Expandable categories - hidden when logged in */}
  {!isLoggedIn && (
  <div className="hidden sm:block">
  {Object.entries(serviceCategories).map(([category, services]) => (

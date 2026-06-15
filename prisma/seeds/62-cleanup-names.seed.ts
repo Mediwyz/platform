@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 /**
- * Seed 62 — One-time cleanup: replace real company/entity names with mock names.
+ * Seed 62 - One-time cleanup: replace real company/entity names with mock names.
  *
  * Problem: previous seeds used "find-then-skip" patterns that don't update
  * existing records. When we renamed companies to avoid legal risk, old names
@@ -41,7 +41,7 @@ export async function seedCleanupNames(prisma: PrismaClient) {
 
   // ── 1. Remove old healthcare entities ────────────────────────────────────
   // seed 60 already upserted new mock-name entities. The old real-name records
-  // are orphans — cascade delete removes their ProviderWorkplace links.
+  // are orphans - cascade delete removes their ProviderWorkplace links.
   const oldEntities = await (prisma.healthcareEntity as any).findMany({
     where: { name: { in: OLD_ENTITY_NAMES } },
     select: { id: true, name: true },
@@ -118,6 +118,6 @@ export async function seedCleanupNames(prisma: PrismaClient) {
   }
 
   console.log(
-    `  Name-cleanup done — entities: ${entityDeleted}, companies renamed: ${companyUpdated}, duplicates removed: ${duplicateDeleted}`,
+    `  Name-cleanup done - entities: ${entityDeleted}, companies renamed: ${companyUpdated}, duplicates removed: ${duplicateDeleted}`,
   )
 }

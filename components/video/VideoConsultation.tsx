@@ -34,7 +34,7 @@ interface VideoConsultationUser {
 }
 
 interface VideoConsultationProps {
- /** Generic current user — works for any user type (patient, doctor, nurse, nanny, etc.) */
+ /** Generic current user - works for any user type (patient, doctor, nurse, nanny, etc.) */
  currentUser?: VideoConsultationUser
  /** @deprecated Use currentUser instead */
  patientData?: VideoConsultationUser

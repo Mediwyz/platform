@@ -79,9 +79,17 @@ function SearchGuestLayout({
           >
             <FaBars className="text-gray-600" />
           </button>
-          <HealthwyzLogo height={36} />
+          <Link href="/" aria-label="MediWyz home" className="flex items-center rounded-lg hover:opacity-80 transition">
+            <HealthwyzLogo height={36} />
+          </Link>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition"
+          >
+            <FaHome className="text-xs" /> Home
+          </Link>
           <Link
             href="/login"
             className="px-4 py-2 text-sm font-medium text-[#0C6780] hover:bg-teal-50 rounded-lg transition"

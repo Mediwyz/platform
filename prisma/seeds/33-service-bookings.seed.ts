@@ -16,7 +16,7 @@ export async function seedServiceBookings(prisma: PrismaClient) {
   })
 
   if (patients.length === 0 || providers.length === 0) {
-    console.log('  Skipping — no patients or new providers found')
+    console.log('  Skipping - no patients or new providers found')
     return
   }
 
@@ -40,7 +40,7 @@ export async function seedServiceBookings(prisma: PrismaClient) {
 
   const serviceData: Record<string, { services: string[]; prices: number[]; specialties: string[] }> = {
     CAREGIVER: {
-      services: ['Elder Daily Care — Half Day', 'Dementia Companion', 'Post-Surgery Home Aide', 'Overnight Care', 'Disability Support', 'Palliative Care Support'],
+      services: ['Elder Daily Care - Half Day', 'Dementia Companion', 'Post-Surgery Home Aide', 'Overnight Care', 'Disability Support', 'Palliative Care Support'],
       prices: [600, 800, 700, 1200, 650, 900],
       specialties: ['Elder Care', 'Dementia Care', 'Post-Surgery', 'Overnight', 'Disability', 'Palliative'],
     },

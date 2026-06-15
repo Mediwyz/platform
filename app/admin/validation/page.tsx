@@ -62,7 +62,7 @@ export default function AccountValidation() {
  setAccounts(prev => prev.filter(a => a.id !== userId))
  }
  } catch {
- // Silently ignore — account list will refresh on next filter change
+ // Silently ignore - account list will refresh on next filter change
  } finally {
  setActionLoading(null)
  }
@@ -216,7 +216,7 @@ export default function AccountValidation() {
  <span className="text-sm text-gray-700">{formatUserType(account.userType)}</span>
  </td>
  <td className="p-4">
- <span className="text-sm text-gray-700">{account.phone || '—'}</span>
+ <span className="text-sm text-gray-700">{account.phone || ' - '}</span>
  </td>
  <td className="p-4">
  <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${

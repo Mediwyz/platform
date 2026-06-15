@@ -24,7 +24,7 @@ export async function seedSupportingData(prisma: PrismaClient) {
   ]
   await prisma.nutritionAnalysis.createMany({ data: nutritionEntries })
 
-  // Billing info (last 4 digits only — no sensitive data)
+  // Billing info (last 4 digits only - no sensitive data)
   // BillingInfo now references User IDs, not PatientProfile IDs
   const billingInfo = [
     { userId: 'PAT001', type: 'credit_card', lastFour: '4567', cardHolder: 'Emma Johnson', expiryDate: '12/26', isDefault: true },
@@ -33,7 +33,7 @@ export async function seedSupportingData(prisma: PrismaClient) {
   ]
   await prisma.billingInfo.createMany({ data: billingInfo })
 
-  // Notifications — now uses single userId field referencing User IDs
+  // Notifications - now uses single userId field referencing User IDs
   const notifications = [
     { userId: 'PAT001', type: 'appointment', title: 'Upcoming Appointment', message: 'You have a video consultation with Dr. Johnson tomorrow.', createdAt: new Date() },
     { userId: 'PAT001', type: 'prescription', title: 'Prescription Refill', message: 'Your Metformin prescription is due for refill on Feb 15.', createdAt: new Date(Date.now() - 86400000) },

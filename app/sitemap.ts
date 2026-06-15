@@ -86,7 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.6,
     },
-    // Auth pages (low priority — crawlable for discoverability)
+    // Auth pages (low priority - crawlable for discoverability)
     {
       url: `${BASE_URL}/login`,
       lastModified: now,

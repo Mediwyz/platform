@@ -463,7 +463,7 @@ export function useWebRTC({
         if (prev.some(p => p.socketId === participant.socketId)) return prev
         return [...prev, participant]
       })
-      // Create a non-initiator peer — the joining user will send the offer
+      // Create a non-initiator peer - the joining user will send the offer
       if (!peersRef.current.has(participant.socketId)) {
         setTimeout(() => createPeer(participant.socketId, participant.userId, participant.userName, participant.userType, false), 200)
       }
@@ -478,7 +478,7 @@ export function useWebRTC({
     const handleUserDisconnected = ({ socketId: discSocketId, reason, canReconnect }: { socketId: string; userId: string; reason: string; canReconnect: boolean }) => {
       if (canReconnect) {
         setRoomParticipants(prev => prev.map(p => p.socketId === discSocketId ? { ...p, connected: false } : p))
-        // Don't remove peer yet — give them time to reconnect
+        // Don't remove peer yet - give them time to reconnect
       } else {
         removePeer(discSocketId, reason === 'leave_room')
         setRoomParticipants(prev => prev.filter(p => p.socketId !== discSocketId))

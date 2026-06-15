@@ -10,14 +10,14 @@ const FAQS = [
   },
   {
     q: 'How does the Health Shop work?',
-    a: 'Any provider with inventory can sell items. Browse the Health Shop, add items to the cart, and checkout — stock and prescription requirements are enforced automatically.',
+    a: 'Any provider with inventory can sell items. Browse the Health Shop, add items to the cart, and checkout - stock and prescription requirements are enforced automatically.',
   },
   {
     q: 'How do video calls work?',
     a: 'When a video booking is accepted, a room is automatically created. Click "Join call" on your dashboard when it\'s time.',
   },
   {
-    q: 'I forgot my password — how do I reset it?',
+    q: 'I forgot my password - how do I reset it?',
     a: 'On the sign-in screen click "Forgot password?". Answer the security question you set at signup and you\'ll be taken straight to the reset form.',
   },
   {
@@ -29,7 +29,7 @@ const FAQS = [
     a: 'Every user has an Account Balance in MUR that powers bookings, subscriptions and insurance premiums. Top up from Billing; bookings and shop orders are debited automatically. Provider earnings and insurance reimbursements are credited back to the same balance.',
   },
   {
-    q: 'I\'m a provider — how do I manage my services and workflow?',
+    q: 'I\'m a provider - how do I manage my services and workflow?',
     a: 'Open "My Services" to list the services you offer and "Workflows" to customise the status steps patients see for each booking.',
   },
 ]

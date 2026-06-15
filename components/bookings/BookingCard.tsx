@@ -87,7 +87,7 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
 
   const hasVideoCall = data.currentStepFlags?.triggers_video_call || data.serviceMode === 'video'
 
-  /** Avatar initials — other party */
+  /** Avatar initials - other party */
   const initials = data.patientName
     ? data.patientName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
     : '?'

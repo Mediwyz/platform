@@ -20,7 +20,7 @@ export function useUserAsPatient(): { patientData: Patient | null; loading: bool
     const userId = getUserId() || (user as any).id || ''
 
     // Build a minimal Patient-compatible object.
-    // Components fetch their own domain data via API — they just need user identification.
+    // Components fetch their own domain data via API - they just need user identification.
     const adapted: Patient = {
       id: userId,
       firstName: (user as any).firstName || '',

@@ -24,7 +24,7 @@ export default function AvailabilityPage({ params }: { params: Promise<{ slug: s
         </div>
       </div>
 
-      {/* Scheduler — shown only once the user ID is loaded */}
+      {/* Scheduler - shown only once the user ID is loaded */}
       {user?.id ? (
         <AvailabilityScheduler providerId={user.id} />
       ) : (

@@ -50,7 +50,7 @@ export default function AdminSystemTemplatesPage() {
         <Link href="/admin/workflows" className="p-2 hover:bg-gray-100 rounded-lg text-gray-500"><FiArrowLeft className="w-4 h-4" /></Link>
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2"><FiLayers className="text-violet-600" /> System Templates</h1>
-          <p className="text-sm text-gray-500 mt-0.5">All workflow templates across all regions. Read-only — edit via regional dashboards.</p>
+          <p className="text-sm text-gray-500 mt-0.5">All workflow templates across all regions. Read-only - edit via regional dashboards.</p>
         </div>
       </div>
 

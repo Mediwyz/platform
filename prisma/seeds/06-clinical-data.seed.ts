@@ -21,10 +21,10 @@ export async function seedClinicalData(prisma: PrismaClient) {
 
     // ── 5 additional prescriptions ──────────────────────────────────────────
     { id: 'PRE011', patientId: 'PPROF002', doctorId: 'DPROF001', date: new Date('2025-01-08'), diagnosis: 'Migraine with aura', isActive: true, nextRefill: new Date('2025-04-08'), notes: 'Sumatriptan for acute attacks; propranolol for prevention' },
-    { id: 'PRE012', patientId: 'PPROF004', doctorId: 'DPROF001', date: new Date('2025-01-12'), diagnosis: 'Essential hypertension — ongoing management', isActive: true, nextRefill: new Date('2025-04-12'), notes: 'Monitor BP weekly. Reduce sodium intake.' },
+    { id: 'PRE012', patientId: 'PPROF004', doctorId: 'DPROF001', date: new Date('2025-01-12'), diagnosis: 'Essential hypertension - ongoing management', isActive: true, nextRefill: new Date('2025-04-12'), notes: 'Monitor BP weekly. Reduce sodium intake.' },
     { id: 'PRE013', patientId: 'PPROF005', doctorId: 'DPROF002', date: new Date('2025-01-15'), diagnosis: 'Vitamin D deficiency', isActive: true, nextRefill: new Date('2025-04-15'), notes: 'High-dose weekly loading then daily maintenance' },
-    { id: 'PRE014', patientId: 'PPROF003', doctorId: 'DPROF002', date: new Date('2025-01-20'), diagnosis: 'NSAID-induced gastritis — maintenance', isActive: true, nextRefill: new Date('2025-02-20'), notes: 'Continue PPI cover while on NSAIDs for back pain' },
-    { id: 'PRE015', patientId: 'PPROF002', doctorId: 'DPROF003', date: new Date('2025-01-22'), diagnosis: 'Cardiac palpitations — rate control', isActive: true, nextRefill: new Date('2025-04-22'), notes: 'Low-dose beta blocker. Monitor heart rate. Avoid caffeine.' },
+    { id: 'PRE014', patientId: 'PPROF003', doctorId: 'DPROF002', date: new Date('2025-01-20'), diagnosis: 'NSAID-induced gastritis - maintenance', isActive: true, nextRefill: new Date('2025-02-20'), notes: 'Continue PPI cover while on NSAIDs for back pain' },
+    { id: 'PRE015', patientId: 'PPROF002', doctorId: 'DPROF003', date: new Date('2025-01-22'), diagnosis: 'Cardiac palpitations - rate control', isActive: true, nextRefill: new Date('2025-04-22'), notes: 'Low-dose beta blocker. Monitor heart rate. Avoid caffeine.' },
   ]
   await prisma.prescription.createMany({ data: prescriptions })
 

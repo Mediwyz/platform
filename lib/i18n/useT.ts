@@ -15,7 +15,7 @@ import type { MessageKey } from './dictionaries/en'
  *   <p>{t('booking.toast.statusUpdated', { status: stepLabel })}</p>
  *
  * Falls back silently to English on first render + before the user
- * preference resolves — no flicker, no provider boilerplate.
+ * preference resolves - no flicker, no provider boilerplate.
  */
 export function useT() {
   const [locale, setLocale] = useState<Locale>('en')

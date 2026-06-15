@@ -108,7 +108,7 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
           const status: ConnStatus = statuses[user.id] ?? 'none'
           return (
             <div key={user.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              {/* Avatar — links to profile */}
+              {/* Avatar - links to profile */}
               <Link href={`/profile/${user.id}`} className="flex-shrink-0 mb-2">
                 <Image
                   src={avatarSrc(user.profileImage, user.firstName, user.lastName)}
@@ -120,7 +120,7 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
                 />
               </Link>
 
-              {/* Name — links to profile */}
+              {/* Name - links to profile */}
               <Link
                 href={`/profile/${user.id}`}
                 className="text-sm font-medium text-gray-900 hover:text-blue-600 transition leading-tight line-clamp-2 mb-0.5"

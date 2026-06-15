@@ -98,7 +98,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
         setLoading(false)
         loadExtraData(parsed)
       } else {
-        // Redirect silently — don't show error state during logout
+        // Redirect silently - don't show error state during logout
         router.push('/login')
       }
     }, [hookUser, userLoading, router, loadExtraData])
@@ -140,7 +140,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     // Filter sidebar items based on role feature config (admin-configurable)
     finalSidebarItems = filterSidebarByFeatures(finalSidebarItems, featureConfig)
 
-    // Inject "My Profile" near the TOP of the sidebar — right after the
+    // Inject "My Profile" near the TOP of the sidebar - right after the
     // Dashboard/overview item. User explicitly asked for top placement;
     // profile is a primary-navigation target, not a Search & Browse
     // afterthought.
@@ -161,7 +161,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       ]
     }
 
-    // Inject "My Company" entry for any user with corporate-admin capability —
+    // Inject "My Company" entry for any user with corporate-admin capability - 
     // capability, not role: granted by buying a corporate/enterprise plan or owning a company.
     if (hasCorporateCapability && !finalSidebarItems.some(i => i.id === 'my-company')) {
       finalSidebarItems = [
@@ -180,7 +180,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       ]
     }
 
-    // Notifications — every user should have this. Fallback inject if the
+    // Notifications - every user should have this. Fallback inject if the
     // sidebar config missed it or the feature-config filter stripped it.
     if (hookUser?.id && !finalSidebarItems.some(i => i.id === 'notifications')) {
       finalSidebarItems = [
@@ -189,7 +189,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       ]
     }
 
-    // "Invite friends" — every authenticated user has a referral code and
+    // "Invite friends" - every authenticated user has a referral code and
     // earns wallet credit per successful signup. Injected here so sidebar
     // configs don't need to remember to add it (regional / admin were
     // missing it; user flagged it).
@@ -200,7 +200,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       ]
     }
 
-    // Dedupe by id — a couple of sidebar helpers (`getSearchItems` +
+    // Dedupe by id - a couple of sidebar helpers (`getSearchItems` +
     // `getSearchItemsFromRoles`) can both emit a 'search-insurance' entry
     // when combined, which triggered React's "unique key" warning on login.
     // Keep the first occurrence, drop any subsequent collisions.

@@ -261,7 +261,7 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  </div>
  </div>
 
- {/* Paginated suggestions grid — all users including MEMBER */}
+ {/* Paginated suggestions grid - all users including MEMBER */}
  <SuggestionsGrid currentUserId={userId} />
  </div>
  )

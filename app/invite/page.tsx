@@ -20,7 +20,7 @@ interface Dashboard {
 }
 
 /**
- * Invite-friends page — every user lands here from the "Invite friends"
+ * Invite-friends page - every user lands here from the "Invite friends"
  * sidebar entry. Shows their unique referral code, quick copy/share, +
  * how much they've earned so far. Backend lazy-provisions a code on
  * first access so there's never a blank state.
@@ -56,7 +56,7 @@ export default function InviteFriendsPage() {
       try {
         await (navigator as any).share({
           title: 'Join me on MediWyz',
-          text: 'I\'ve been using MediWyz for my health — join me and we both earn credit.',
+          text: 'I\'ve been using MediWyz for my health - join me and we both earn credit.',
           url: shareUrl,
         })
       } catch { /* user cancelled */ }
@@ -107,7 +107,7 @@ export default function InviteFriendsPage() {
             <ol className="space-y-2 text-sm text-gray-700 list-decimal list-inside">
               <li>Share your code or link with a friend.</li>
               <li>They sign up and enter your code during registration.</li>
-              <li>You both get wallet credit — instant, no waiting period.</li>
+              <li>You both get wallet credit - instant, no waiting period.</li>
             </ol>
           </div>
 

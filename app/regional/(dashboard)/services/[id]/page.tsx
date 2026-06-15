@@ -87,7 +87,7 @@ export default function EditServicePage() {
       if (json.success) router.push('/regional/services')
       else setError(json.message || 'Failed to update')
     } catch {
-      setError('Network error — please try again')
+      setError('Network error - please try again')
     } finally {
       setSaving(false)
     }
@@ -234,10 +234,10 @@ export default function EditServicePage() {
               onChange={e => set('currency', e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
             >
-              <option value="MUR">MUR — Mauritian Rupee</option>
-              <option value="MGA">MGA — Malagasy Ariary</option>
-              <option value="KES">KES — Kenyan Shilling</option>
-              <option value="EUR">EUR — Euro</option>
+              <option value="MUR">MUR - Mauritian Rupee</option>
+              <option value="MGA">MGA - Malagasy Ariary</option>
+              <option value="KES">KES - Kenyan Shilling</option>
+              <option value="EUR">EUR - Euro</option>
             </select>
           </div>
         </div>

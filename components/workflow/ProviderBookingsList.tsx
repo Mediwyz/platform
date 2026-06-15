@@ -258,7 +258,7 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
         </Link>
       </div>
 
-      {/* Action buttons — the main point: one-click advance to next status */}
+      {/* Action buttons - the main point: one-click advance to next status */}
       {inst.actionsForProvider.length > 0 && !inst.isCompleted && !inst.isCancelled && (
         <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
           {inst.actionsForProvider.map(action => (

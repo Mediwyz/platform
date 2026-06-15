@@ -1,5 +1,5 @@
 /**
- * Seed 50 — Complete Domain Workflow Templates
+ * Seed 50 - Complete Domain Workflow Templates
  *
  * Adds 12 comprehensive workflow templates covering the healthcare domains
  * that the standard seed 34 only partially addressed:
@@ -61,14 +61,14 @@ const templates: Template[] = [
         actionsForProvider: [{ action: 'dispatch', label: 'Dispatch responder', targetStatus: 'confirmed', style: 'primary' }],
         actionsForPatient: [],
         notifyPatient: { title: 'Emergency call received', message: 'Your emergency call has been received. A responder is being dispatched, {{patientName}}.' },
-        notifyProvider: { title: 'New emergency call', message: 'Emergency call from {{patientName}} — dispatch now.' },
+        notifyProvider: { title: 'New emergency call', message: 'Emergency call from {{patientName}} - dispatch now.' },
         expectedDurationMinutes: 2,
       },
       {
         order: 2, statusCode: 'confirmed', label: 'Responder Dispatched',
         actionsForProvider: [{ action: 'en_route', label: 'En Route', targetStatus: 'en_route', style: 'primary' }],
         actionsForPatient: [],
-        notifyPatient: { title: 'Responder dispatched', message: 'Emergency responder dispatched. Stay calm — help is on the way.' },
+        notifyPatient: { title: 'Responder dispatched', message: 'Emergency responder dispatched. Stay calm - help is on the way.' },
         expectedDurationMinutes: 3,
       },
       {
@@ -228,7 +228,7 @@ const templates: Template[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // 3. Mental Health Therapy — Recurrent
+  // 3. Mental Health Therapy - Recurrent
   // ═══════════════════════════════════════════════════════════════════
   {
     slug: 'mental-health-therapy-recurrent',
@@ -366,7 +366,7 @@ const templates: Template[] = [
       },
       {
         order: 5, statusCode: 'procedure_in_progress', label: 'Procedure In Progress',
-        actionsForProvider: [{ action: 'post_care', label: 'Done — give post-care advice', targetStatus: 'post_care_given', style: 'primary' }],
+        actionsForProvider: [{ action: 'post_care', label: 'Done - give post-care advice', targetStatus: 'post_care_given', style: 'primary' }],
         actionsForPatient: [],
         expectedDurationMinutes: 60,
       },
@@ -471,11 +471,11 @@ const templates: Template[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // 6. Health Shop — Delivery Order
+  // 6. Health Shop - Delivery Order
   // ═══════════════════════════════════════════════════════════════════
   {
     slug: 'health-shop-delivery-order',
-    name: 'Health Shop — Delivery',
+    name: 'Health Shop - Delivery',
     description: 'Order placement → optional prescription check → preparation → delivery.',
     providerType: 'PHARMACIST',
     serviceMode: 'delivery',
@@ -505,7 +505,7 @@ const templates: Template[] = [
         order: 2, statusCode: 'prescription_validation', label: 'Prescription Validation',
         flags: { requires_prescription: true },
         actionsForProvider: [
-          { action: 'validate', label: 'Prescription valid — proceed', targetStatus: 'order_confirmed', style: 'primary' },
+          { action: 'validate', label: 'Prescription valid - proceed', targetStatus: 'order_confirmed', style: 'primary' },
           { action: 'reject', label: 'Invalid prescription', targetStatus: 'order_cancelled', style: 'danger' },
         ],
         actionsForPatient: [],
@@ -551,11 +551,11 @@ const templates: Template[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // 7. Health Shop — Pickup Order
+  // 7. Health Shop - Pickup Order
   // ═══════════════════════════════════════════════════════════════════
   {
     slug: 'health-shop-pickup-order',
-    name: 'Health Shop — Click & Collect',
+    name: 'Health Shop - Click & Collect',
     description: 'Order online, collect at the provider pharmacy or clinic.',
     providerType: 'PHARMACIST',
     serviceMode: 'office',
@@ -642,7 +642,7 @@ const templates: Template[] = [
         order: 3, statusCode: 'pre_vaccination_check', label: 'Pre-Vaccination Check',
         actionsForProvider: [
           { action: 'administer', label: 'Administer vaccine', targetStatus: 'vaccine_administered', style: 'primary' },
-          { action: 'defer', label: 'Defer — contraindicated', targetStatus: 'cancelled', style: 'secondary' },
+          { action: 'defer', label: 'Defer - contraindicated', targetStatus: 'cancelled', style: 'secondary' },
         ],
         actionsForPatient: [],
         expectedDurationMinutes: 10,
@@ -670,7 +670,7 @@ const templates: Template[] = [
           { action: 'emergency', label: 'Refer to emergency', targetStatus: 'completed', style: 'danger' },
         ],
         actionsForPatient: [],
-        notifyPatient: { title: 'Reaction observed — nurse attending', message: 'A nurse is attending to an adverse reaction. You are in good hands.' },
+        notifyPatient: { title: 'Reaction observed - nurse attending', message: 'A nurse is attending to an adverse reaction. You are in good hands.' },
       },
       {
         order: 7, statusCode: 'vaccination_complete', label: 'Vaccination Complete',
@@ -774,7 +774,7 @@ const templates: Template[] = [
         order: 2, statusCode: 'rx_received', label: 'Prescription Received',
         actionsForProvider: [
           { action: 'verify', label: 'Verify prescription', targetStatus: 'rx_verified', style: 'primary' },
-          { action: 'reject', label: 'Reject — invalid', targetStatus: 'cancelled', style: 'danger' },
+          { action: 'reject', label: 'Reject - invalid', targetStatus: 'cancelled', style: 'danger' },
         ],
         actionsForPatient: [],
         notifyPatient: { title: 'Prescription received', message: 'The pharmacy has received your prescription and is verifying it.' },
@@ -863,7 +863,7 @@ const templates: Template[] = [
       },
       {
         order: 5, statusCode: 'session_in_progress', label: 'Care Session In Progress',
-        actionsForProvider: [{ action: 'end', label: 'End session — write notes', targetStatus: 'writing_notes', style: 'primary' }],
+        actionsForProvider: [{ action: 'end', label: 'End session - write notes', targetStatus: 'writing_notes', style: 'primary' }],
         actionsForPatient: [],
         expectedDurationMinutes: 45,
       },
@@ -961,11 +961,11 @@ const templates: Template[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // 13. Caregiver — Recurrent Home Support
+  // 13. Caregiver - Recurrent Home Support
   // ═══════════════════════════════════════════════════════════════════
   {
     slug: 'caregiver-recurrent-home',
-    name: 'Caregiver — Recurrent Home Support',
+    name: 'Caregiver - Recurrent Home Support',
     description: 'Multi-session home care program: assessment → protocol → recurring visits → discharge.',
     providerType: 'CAREGIVER',
     serviceMode: 'home',

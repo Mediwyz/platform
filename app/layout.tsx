@@ -34,7 +34,7 @@ export const metadata: Metadata = {
  template: '%s | MediWyz',
  },
  description:
- 'A digital health platform connecting patients in Mauritius with trusted healthcare providers — doctors, nurses, pharmacies, and emergency services — through one seamless app.',
+ 'A digital health platform connecting patients in Mauritius with trusted healthcare providers - doctors, nurses, pharmacies, and emergency services - through one seamless app.',
  keywords: [
  'healthcare',
  'doctors',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
  siteName: 'MediWyz',
  title: 'MediWyz - Digital Health Platform',
  description:
- 'A digital health platform connecting patients in Mauritius with trusted healthcare providers — doctors, nurses, pharmacies, and emergency services.',
+ 'A digital health platform connecting patients in Mauritius with trusted healthcare providers - doctors, nurses, pharmacies, and emergency services.',
  images: [
  {
  url: '/images/og-banner.png',
@@ -106,7 +106,7 @@ const jsonLd = {
  logo: `${appUrl}/images/logo.png`,
  image: `${appUrl}/images/og-banner.png`,
  description:
- 'A digital health platform connecting patients in Mauritius with trusted healthcare providers — doctors, nurses, pharmacies, and emergency services — through one seamless app.',
+ 'A digital health platform connecting patients in Mauritius with trusted healthcare providers - doctors, nurses, pharmacies, and emergency services - through one seamless app.',
  address: {
  '@type': 'PostalAddress',
  addressCountry: 'MU',
@@ -190,7 +190,7 @@ export default function RootLayout({
  <ConditionalFooter />
  <ToastProvider />
  <DesktopModeWarning />
- {/* Floating elements — visible everywhere */}
+ {/* Floating elements - visible everywhere */}
  <FloatingAuthFAB />
  <FloatingBookingCart />
  <FloatingCart />

@@ -6,7 +6,7 @@ const STEPS = [
     color: '#0C6780',
     step: '01',
     title: 'Search',
-    desc: 'Find the right specialist or service for your health need — by type, specialty, or location.',
+    desc: 'Find the right specialist or service for your health need - by type, specialty, or location.',
   },
   {
     icon: FaCalendarCheck,
@@ -20,7 +20,7 @@ const STEPS = [
     color: '#0a5c73',
     step: '03',
     title: 'Consult',
-    desc: 'Meet in-person, by video call, or at home — your schedule, your choice.',
+    desc: 'Meet in-person, by video call, or at home - your schedule, your choice.',
   },
 ]
 
@@ -37,7 +37,7 @@ export default function HowItWorksSection() {
             Care in three simple steps
           </h2>
           <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
-            From finding the right provider to your consultation — the whole journey takes minutes.
+            From finding the right provider to your consultation - the whole journey takes minutes.
           </p>
         </div>
 

@@ -144,7 +144,7 @@ export default function WorkplaceStep({ onContinue, onSkip }: WorkplaceStepProps
         {query.length >= 2 && !searching && results.length === 0 && !selected && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-30 px-4 py-4 text-center">
             <p className="text-sm text-gray-500">No organizations found for &quot;{query}&quot;</p>
-            <p className="text-xs text-gray-400 mt-1">Your entity may not be on MediWyz yet — you can request it later.</p>
+            <p className="text-xs text-gray-400 mt-1">Your entity may not be on MediWyz yet - you can request it later.</p>
           </div>
         )}
       </div>

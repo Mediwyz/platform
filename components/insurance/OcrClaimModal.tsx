@@ -94,7 +94,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
         <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <div>
             <h2 className="text-base font-bold text-gray-900">File a claim</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Upload your receipt — we&apos;ll pre-fill the details</p>
+            <p className="text-xs text-gray-500 mt-0.5">Upload your receipt - we&apos;ll pre-fill the details</p>
           </div>
           <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400">
             <FaTimes />
@@ -139,7 +139,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 onClick={() => setStep('review')}
                 className="w-full text-sm text-gray-500 hover:text-gray-700 py-2"
               >
-                Skip scan — fill in manually
+                Skip scan - fill in manually
               </button>
             </div>
           )}
@@ -196,7 +196,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 </div>
                 {ocr?.amount && amount !== String(ocr.amount) && (
                   <p className="text-xs text-amber-600 mt-1">
-                    OCR read {format(ocr.amount)} — you&apos;ve changed this
+                    OCR read {format(ocr.amount)} - you&apos;ve changed this
                   </p>
                 )}
               </div>

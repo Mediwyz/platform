@@ -65,7 +65,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
       <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#001E40] to-[#0C6780] flex items-center justify-center">
        <FaRobot className="text-white text-xs" />
       </div>
-      <span className="text-sm font-bold text-[#001E40]">Wyzo — Health AI</span>
+      <span className="text-sm font-bold text-[#001E40]">Wyzo - Health AI</span>
      </div>
     </div>
     <div className="flex-1 min-h-0">
@@ -84,7 +84,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
       <FaRobot className="text-white text-2xl" />
      </div>
      <div>
-      <p className="font-bold text-lg">Wyzo — Your Health AI</p>
+      <p className="font-bold text-lg">Wyzo - Your Health AI</p>
       <div className="flex items-center gap-1.5 mt-0.5">
        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
        <span className="text-white/70 text-xs">Online • Responds instantly</span>

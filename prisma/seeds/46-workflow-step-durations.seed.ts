@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client'
  * The field drives "Usually ready within X" UX copy on booking detail screens.
  *
  * Keyed by `statusCode` so the same durations apply across every template
- * using that status — a regional admin can still override per-template by
+ * using that status - a regional admin can still override per-template by
  * editing the step JSON directly.
  */
 const DEFAULT_DURATIONS: Record<string, number> = {

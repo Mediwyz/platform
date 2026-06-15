@@ -11,7 +11,7 @@ interface AnalyticsData {
 }
 
 /**
- * Owner analytics card — embedded on the My Company page. Shows member
+ * Owner analytics card - embedded on the My Company page. Shows member
  * counts, expected monthly revenue, and claims by status. Graceful empty
  * state if the caller does not own a company.
  */
@@ -42,7 +42,7 @@ export default function CompanyAnalytics() {
   return (
     <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 mb-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-gray-900">Analytics — {company.name}</h2>
+        <h2 className="font-bold text-gray-900">Analytics - {company.name}</h2>
         {company.isInsuranceCompany && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
             <FaShieldAlt /> Insurance

@@ -8,15 +8,15 @@ import { useT } from '@/lib/i18n/useT'
 /**
  * Shared Audio Calls list page. Mirrors the video-call list but filters to
  * `mode=audio` rooms only. Audio rooms are created by workflow steps with
- * `triggers_audio_call: true` — mostly emergency dispatch today, but any
+ * `triggers_audio_call: true` - mostly emergency dispatch today, but any
  * template author can opt in via the flag toggles.
  *
  * Audio rooms are created automatically (Tier 2 / Tier 3 systematic trigger):
  *   - Tier 2: when a booking's serviceMode === 'audio' and it is accepted
  *   - Tier 3: when the workflow step type is AUDIO_CALL_READY or AUDIO_CALL_ACTIVE
- * No manual flag toggle is needed — the engine fires the room creation.
+ * No manual flag toggle is needed - the engine fires the room creation.
  *
- * Reuses the existing `/video/{roomCode}` join path — that page negotiates
+ * Reuses the existing `/video/{roomCode}` join path - that page negotiates
  * media based on the room's `mode` field.
  */
 interface Room {
@@ -92,7 +92,7 @@ export default function AudioCallListPage() {
                 <FaPlay className="w-3 h-3" /> {t('audio.action.join')}
               </Link>
             ) : (
-              <span className="text-xs text-gray-400">—</span>
+              <span className="text-xs text-gray-400"> - </span>
             )}
           </div>
         ))}

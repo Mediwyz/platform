@@ -1,7 +1,7 @@
 import { PrismaClient, UserType } from '@prisma/client'
 
 /**
- * Seeds PlatformService — the unified service catalog.
+ * Seeds PlatformService - the unified service catalog.
  * These are "default" services that get auto-assigned to new providers on registration.
  * Providers can later add custom services which also become PlatformService entries
  * (with createdByProviderId set and isDefault=false).
@@ -32,8 +32,8 @@ export async function seedPlatformServices(prisma: PrismaClient) {
     { providerType: UserType.NURSE, serviceName: 'IV Therapy', category: 'Medication', description: 'Intravenous fluid administration and IV medication management.', defaultPrice: 1500, duration: 90 },
 
     // ── Nanny / Child Care Services ──────────────────────────────────────
-    { providerType: UserType.NANNY, serviceName: 'Childcare — Half Day', category: 'Daily Care', description: 'Half-day childcare with meals, activities, and supervision.', defaultPrice: 500, duration: 240 },
-    { providerType: UserType.NANNY, serviceName: 'Childcare — Full Day', category: 'Daily Care', description: 'Full-day childcare with meals, educational activities, and nap supervision.', defaultPrice: 900, duration: 480 },
+    { providerType: UserType.NANNY, serviceName: 'Childcare - Half Day', category: 'Daily Care', description: 'Half-day childcare with meals, activities, and supervision.', defaultPrice: 500, duration: 240 },
+    { providerType: UserType.NANNY, serviceName: 'Childcare - Full Day', category: 'Daily Care', description: 'Full-day childcare with meals, educational activities, and nap supervision.', defaultPrice: 900, duration: 480 },
     { providerType: UserType.NANNY, serviceName: 'Homework Help', category: 'Educational', description: 'Academic support and homework assistance for school-age children.', defaultPrice: 400, duration: 60 },
     { providerType: UserType.NANNY, serviceName: 'Arts & Crafts Session', category: 'Creative', description: 'Creative activities to develop fine motor skills and artistic expression.', defaultPrice: 350, duration: 60 },
     { providerType: UserType.NANNY, serviceName: 'Safety & First Aid', category: 'Health & Safety', description: 'Comprehensive child safety supervision with certified first aid training.', defaultPrice: 600, duration: 60 },
@@ -43,7 +43,7 @@ export async function seedPlatformServices(prisma: PrismaClient) {
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Complete Blood Count (CBC)', category: 'Blood', description: 'Measures red blood cells, white blood cells, hemoglobin, hematocrit, and platelets.', defaultPrice: 500, duration: null },
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Lipid Panel', category: 'Blood', description: 'Cholesterol levels including HDL, LDL, triglycerides, and total cholesterol.', defaultPrice: 800, duration: null },
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'HbA1c (Glycated Hemoglobin)', category: 'Blood', description: 'Average blood sugar levels over the past 2-3 months.', defaultPrice: 650, duration: null },
-    { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Liver Function Test (LFT)', category: 'Blood', description: 'Liver health assessment — enzymes, proteins, and bilirubin.', defaultPrice: 900, duration: null },
+    { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Liver Function Test (LFT)', category: 'Blood', description: 'Liver health assessment - enzymes, proteins, and bilirubin.', defaultPrice: 900, duration: null },
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Thyroid Panel (TSH, T3, T4)', category: 'Blood', description: 'Comprehensive thyroid function assessment.', defaultPrice: 1200, duration: null },
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Urinalysis', category: 'Urine', description: 'Complete urine analysis for kidney function and infections.', defaultPrice: 350, duration: null },
     { providerType: UserType.LAB_TECHNICIAN, serviceName: 'Allergy Panel (IgE)', category: 'Blood', description: 'IgE antibodies for common allergens.', defaultPrice: 2500, duration: null },
@@ -62,8 +62,8 @@ export async function seedPlatformServices(prisma: PrismaClient) {
     { providerType: UserType.EMERGENCY_WORKER, serviceName: 'Medical Event Coverage', category: 'Event Coverage', description: 'On-site medical support for events and gatherings.', defaultPrice: 8000, duration: null },
 
     // ── Caregiver Services ───────────────────────────────────────────
-    { providerType: UserType.CAREGIVER, serviceName: 'Elder Daily Care — Half Day', category: 'Daily Care', description: 'Morning or afternoon elder care with meals and activities.', defaultPrice: 600, duration: 240 },
-    { providerType: UserType.CAREGIVER, serviceName: 'Elder Daily Care — Full Day', category: 'Daily Care', description: 'Full-day elder companionship, meals, and mobility assistance.', defaultPrice: 1000, duration: 480 },
+    { providerType: UserType.CAREGIVER, serviceName: 'Elder Daily Care - Half Day', category: 'Daily Care', description: 'Morning or afternoon elder care with meals and activities.', defaultPrice: 600, duration: 240 },
+    { providerType: UserType.CAREGIVER, serviceName: 'Elder Daily Care - Full Day', category: 'Daily Care', description: 'Full-day elder companionship, meals, and mobility assistance.', defaultPrice: 1000, duration: 480 },
     { providerType: UserType.CAREGIVER, serviceName: 'Overnight Care', category: 'Overnight', description: 'Night-time monitoring and assistance for elderly or disabled.', defaultPrice: 1200, duration: 600 },
     { providerType: UserType.CAREGIVER, serviceName: 'Post-Surgery Home Aide', category: 'Recovery', description: 'Daily assistance during post-surgical recovery.', defaultPrice: 800, duration: 240 },
     { providerType: UserType.CAREGIVER, serviceName: 'Dementia Companion', category: 'Specialized', description: 'Specialized companionship for dementia patients.', defaultPrice: 900, duration: 240 },

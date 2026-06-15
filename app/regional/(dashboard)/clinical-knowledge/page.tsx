@@ -106,7 +106,7 @@ export default function ClinicalKnowledgePage() {
             <h1 className="text-2xl font-bold text-gray-900">AI Clinical Knowledge</h1>
             <p className="text-sm text-gray-600 mt-1">
               One-line dietary / wellness guidance the AI injects when a user has the matching condition.
-              Keep lines under 200 chars — prompt has a 4KB soft budget.
+              Keep lines under 200 chars - prompt has a 4KB soft budget.
             </p>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default function ClinicalKnowledgePage() {
       )}
 
       <footer className="text-[11px] text-gray-500 pt-1">
-        Changes apply on the next AI chat — the service cache refreshes automatically.
+        Changes apply on the next AI chat - the service cache refreshes automatically.
       </footer>
     </div>
   )

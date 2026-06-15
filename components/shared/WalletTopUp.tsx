@@ -147,7 +147,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  </button>
 
  <p className="text-xs text-gray-400 text-center mt-2">
- Simulated payment — no real charge applied
+ Simulated payment - no real charge applied
  </p>
  </div>
  )

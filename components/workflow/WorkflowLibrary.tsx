@@ -36,12 +36,12 @@ interface LibraryTemplate {
 interface WorkflowLibraryProps {
   /** Where "Edit" and "Clone & use" should land after the action. Default: auto-detect from pathname. */
   builderPathBase?: string
-  /** Current user id (from /api/auth/me) — enables "Mine / Others" quick filter. */
+  /** Current user id (from /api/auth/me) - enables "Mine / Others" quick filter. */
   currentUserId?: string
 }
 
 /**
- * Shared library page — BOTH regional admins and providers see every active
+ * Shared library page - BOTH regional admins and providers see every active
  * template (system defaults + admin-authored + provider-authored) and can
  * clone any into their own workspace to customise.
  *
@@ -78,7 +78,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
       .finally(() => setLoading(false))
   }, [search, filterRole, filterMode, filterSource, filterContainsStatus])
 
-  // Extract unique filter options from loaded data — fully DB-driven, no hardcoding
+  // Extract unique filter options from loaded data - fully DB-driven, no hardcoding
   const roleOptions = useMemo(
     () => Array.from(new Set(templates.map(t => t.providerType).filter(Boolean))).sort(),
     [templates]
@@ -111,7 +111,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
       })
       const j = await res.json()
       if (j.success) {
-        toast.success('Cloned — opening editor...')
+        toast.success('Cloned - opening editor...')
         const base = builderPathBase ?? (typeof window !== 'undefined' && window.location.pathname.startsWith('/regional')
           ? '/regional/workflows'
           : '/provider/doctors/workflows') // fallback; ideally caller passes builderPathBase
@@ -141,7 +141,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Workflow Library</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Browse every workflow on the platform — system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point.
+            Browse every workflow on the platform - system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point.
           </p>
         </div>
       </div>

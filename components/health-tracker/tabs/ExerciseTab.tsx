@@ -374,7 +374,7 @@ export default function ExerciseTab() {
         disabled={submitting}
         className="w-full py-3 bg-[#001E40] text-white rounded-xl font-medium hover:bg-[#0C6780] transition-colors disabled:opacity-50"
        >
-        {submitting ? 'Saving...' : `Log ${formExerciseType} — ${estimatedCal} kcal`}
+        {submitting ? 'Saving...' : `Log ${formExerciseType} - ${estimatedCal} kcal`}
        </button>
       </div>
      </div>

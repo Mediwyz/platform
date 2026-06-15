@@ -103,7 +103,7 @@ export default function SupportPage() {
                 />
               </div>
 
-              {/* Honeypot — real users never see or fill this field */}
+              {/* Honeypot - real users never see or fill this field */}
               <input
                 type="text"
                 name="website"

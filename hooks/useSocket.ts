@@ -24,7 +24,7 @@ export const useSocket = () => {
   const socketRef = useRef<Socket | null>(null)
 
   useEffect(() => {
-    // Determine socket URL — points to NestJS backend
+    // Determine socket URL - points to NestJS backend
     let socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001'
 
     if (typeof window !== 'undefined') {

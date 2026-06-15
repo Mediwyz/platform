@@ -13,7 +13,7 @@ import {
  * verified checkmark, quick stats row, and a primary CTA (Edit or Contact
  * depending on `isSelf`).
  *
- * The cover photo is optional — falls back to a teal brand gradient that
+ * The cover photo is optional - falls back to a teal brand gradient that
  * uses the design tokens from `.claude/rules/flutter-design-tokens.md` so
  * web ↔ Flutter stay visually aligned.
  */
@@ -59,7 +59,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
     try {
       await onCoverUpload?.(file)
     } catch {
-      setCoverError('Upload failed — try again')
+      setCoverError('Upload failed - try again')
     } finally {
       setUploadingCover(false)
       if (coverInputRef.current) coverInputRef.current.value = ''

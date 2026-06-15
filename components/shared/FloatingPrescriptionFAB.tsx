@@ -121,14 +121,14 @@ export default function FloatingPrescriptionFAB() {
     setSavingToProfile(true)
     try {
       // Save extracted prescription to user's clinical record via the prescriptions endpoint
-      // The endpoint expects a doctorId but we allow self-entry — use a note to signal AI extraction
+      // The endpoint expects a doctorId but we allow self-entry - use a note to signal AI extraction
       const res = await fetch(`/api/users/${userId}/prescriptions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           diagnosis: detailed.prescriber ? `Prescribed by: ${detailed.prescriber}` : 'AI-extracted prescription',
           notes: `Prescription date: ${detailed.date || 'unknown'}. Extracted via AI from uploaded image.`,
-          medicines: [], // medicines require medicineId — save as notes instead
+          medicines: [], // medicines require medicineId - save as notes instead
           isAiExtracted: true,
           prescriptionImageUrl: preview,
           extractedText: detailed.rawText,
@@ -145,7 +145,7 @@ export default function FloatingPrescriptionFAB() {
         }, 1500)
       }
     } catch {
-      // Non-critical — prescription context is already updated
+      // Non-critical - prescription context is already updated
     } finally {
       setSavingToProfile(false)
     }
@@ -324,7 +324,7 @@ export default function FloatingPrescriptionFAB() {
                   )}
 
                   {prescription.medicines.length === 0 && (
-                    <p className="text-xs text-gray-500 mb-4">No medicines were extracted — the AI may need a clearer image.</p>
+                    <p className="text-xs text-gray-500 mb-4">No medicines were extracted - the AI may need a clearer image.</p>
                   )}
 
                   {isLoggedIn && (
@@ -426,7 +426,7 @@ export default function FloatingPrescriptionFAB() {
         </div>
       )}
 
-      {/* FAB — slot 2: above Wyzo AI */}
+      {/* FAB - slot 2: above Wyzo AI */}
       <button
         onClick={() => setOpen(v => !v)}
         aria-label="Prescription"

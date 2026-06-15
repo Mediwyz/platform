@@ -74,8 +74,8 @@ export default function MemberPaymentsPage() {
         m.name, m.email,
         new Date(m.joinedAt).toLocaleDateString(),
         m.paidThisMonth ? 'Yes' : 'No',
-        m.lastContributionMonth ?? '—',
-        m.lastContributionAt ? new Date(m.lastContributionAt).toLocaleDateString() : '—',
+        m.lastContributionMonth ?? ' - ',
+        m.lastContributionAt ? new Date(m.lastContributionAt).toLocaleDateString() : ' - ',
       ]),
     ]
     const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n')

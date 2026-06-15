@@ -33,14 +33,14 @@ const PAYMENT_TIMING_OPTIONS = [
 ]
 
 const SAMPLE_OPTIONS = [
-  { value: 'none',     label: 'None — no sample needed' },
+  { value: 'none',     label: 'None - no sample needed' },
   { value: 'home',     label: 'Home collection (provider brings kit)' },
   { value: 'office',   label: 'Office collection (patient attends)' },
   { value: 'self_kit', label: 'Self-collection kit (patient mails sample)' },
 ]
 
 const OUTPUT_OPTIONS = [
-  { value: 'none',           label: 'None — advice / procedure only' },
+  { value: 'none',           label: 'None - advice / procedure only' },
   { value: 'prescription',   label: 'Prescription (medication)' },
   { value: 'lab_result',     label: 'Lab result' },
   { value: 'exam_report',    label: 'Examination report' },
@@ -58,7 +58,7 @@ const CUSTOM_STEP_EMOJIS = [
   '🏃','🛏️','📦','🔑','🌟','🎯','📱','✍️',
 ]
 
-// Status codes that the engine auto-generates — used to classify legacy steps on load.
+// Status codes that the engine auto-generates - used to classify legacy steps on load.
 const KNOWN_SYSTEM_CODES = new Set([
   'pending','submitted','confirmed','in_progress','session_active','session_notes_pending',
   'video_call_active','audio_call_active','at_location','travelling','en_route','on_scene',
@@ -94,7 +94,7 @@ function derivePaymentTiming(mode: string): string {
 
 type PartialStep = Omit<WorkflowStep, 'order'>
 
-// All template-defined steps are system steps — locked in the builder UI.
+// All template-defined steps are system steps - locked in the builder UI.
 const T = (s: PartialStep): PartialStep => ({ kind: 'system', ...s })
 
 const PENDING = T({ statusCode: 'pending', label: 'Request sent', flags: {},
@@ -272,7 +272,7 @@ function deriveStepsFromConfig(mode: string, sample: string, output: string): Wo
 
   // Sample collection inserted before terminal steps
   if (sample !== 'none') {
-    // For lab_result output, sample steps already include results_ready — skip separate output
+    // For lab_result output, sample steps already include results_ready - skip separate output
     SAMPLE_STEPS.forEach(s => base.push({ ...s }))
   }
 
@@ -346,7 +346,7 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
               <div className={`relative flex flex-col items-center text-center rounded-xl border-2 px-2.5 py-2 w-[90px] shrink-0 ${bg} ${border}`}>
                 {/* System indicator */}
                 {!isCustom && (
-                  <span className="absolute top-1 right-1 text-[9px] leading-none text-gray-300" title="System step — auto-generated, locked">⚙️</span>
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-gray-300" title="System step - auto-generated, locked">⚙️</span>
                 )}
                 {/* Custom milestone indicator */}
                 {isCustom && (
@@ -461,7 +461,7 @@ export default function WorkflowBuilder({
   const [configSample,      setConfigSample]      = useState('none')
   const [configOutput,      setConfigOutput]      = useState('none')
 
-  // Steps — if initialData provided, classify legacy steps; otherwise derive from mode
+  // Steps - if initialData provided, classify legacy steps; otherwise derive from mode
   const [steps, setSteps] = useState<WorkflowStep[]>(() => {
     if (initialData?.steps?.length) return classifyInitialSteps(initialData.steps)
     return deriveStepsFromConfig('office', 'none', 'none')
@@ -551,7 +551,7 @@ export default function WorkflowBuilder({
         for (const g of groups) {
           if (!Array.isArray(g?.services)) continue
           for (const r of g.services) {
-            list.push({ id: r.id, name: r.serviceName, providerType: (g.category?.split(' — ')[0]) || providerType, defaultPrice: r.defaultPrice ?? null })
+            list.push({ id: r.id, name: r.serviceName, providerType: (g.category?.split(' - ')[0]) || providerType, defaultPrice: r.defaultPrice ?? null })
           }
         }
         setServices(list)
@@ -594,15 +594,15 @@ export default function WorkflowBuilder({
       if (!s.label) out.push({ key: `s-${i}-label`, message: `Step ${i + 1}: missing label.`, stepIdx: i })
       const isTerminal = s.statusCode === 'completed' || s.statusCode === 'cancelled'
       const hasAction = (s.actionsForPatient ?? []).length + (s.actionsForProvider ?? []).length > 0
-      // Custom milestones get auto-generated proceed actions before save — skip stuck check
+      // Custom milestones get auto-generated proceed actions before save - skip stuck check
       if (!isTerminal && !hasAction && s.kind !== 'custom') {
-        out.push({ key: `s-${i}-stuck`, message: `Step ${i + 1} ("${s.label || s.statusCode}") has no actions — bookings will get stuck here.`, stepIdx: i })
+        out.push({ key: `s-${i}-stuck`, message: `Step ${i + 1} ("${s.label || s.statusCode}") has no actions - bookings will get stuck here.`, stepIdx: i })
       }
       const allActions = [...(s.actionsForPatient ?? []), ...(s.actionsForProvider ?? [])]
       for (const a of allActions) {
         if (!a.targetStatus) out.push({ key: `s-${i}-a-${a.action}-target`, message: `Step ${i + 1} action "${a.action || 'unnamed'}" has no target status.`, stepIdx: i })
         else if (!steps.some(t => t.statusCode === a.targetStatus)) {
-          out.push({ key: `s-${i}-a-${a.action}-unknown`, message: `Step ${i + 1} action "${a.action}" points to "${a.targetStatus}" — no such step.`, stepIdx: i })
+          out.push({ key: `s-${i}-a-${a.action}-unknown`, message: `Step ${i + 1} action "${a.action}" points to "${a.targetStatus}" - no such step.`, stepIdx: i })
         }
       }
     })
@@ -768,7 +768,7 @@ export default function WorkflowBuilder({
     try {
       await handleSave()
       const id = initialData?.id
-      if (!id) { setPublishing(false); return } // new template — handleSave created it, user can publish after
+      if (!id) { setPublishing(false); return } // new template - handleSave created it, user can publish after
       const res  = await fetch(`/api/workflow/templates/${id}/publish`, {
         method: 'POST', credentials: 'include',
       })
@@ -816,7 +816,7 @@ export default function WorkflowBuilder({
             <button
               onClick={handlePublish}
               disabled={saving || publishing || issues.length > 0}
-              title={isDraft ? 'Publish — makes this template active for new bookings' : 'Re-publish with latest changes'}
+              title={isDraft ? 'Publish - makes this template active for new bookings' : 'Re-publish with latest changes'}
               className="bg-[#0C6780] hover:bg-[#001E40] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
               {publishing ? 'Publishing…' : isDraft ? 'Publish' : 'Update & Publish'}
             </button>
@@ -835,7 +835,7 @@ export default function WorkflowBuilder({
 
       {error   && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">{error}</div>}
       {success && <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-3 text-sm">
-        {isDraft ? 'Draft saved successfully.' : 'Workflow published — it is now active for new bookings.'}
+        {isDraft ? 'Draft saved successfully.' : 'Workflow published - it is now active for new bookings.'}
       </div>}
 
       {/* In-flight warning: editing a published template that has active bookings */}
@@ -926,7 +926,7 @@ export default function WorkflowBuilder({
             services.length > 0 ? (
               <select value={platformServiceId} onChange={(e) => setPlatformServiceId(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
-                <option value="">— All {providerType.replace(/_/g, ' ')} services (default) —</option>
+                <option value=""> - All {providerType.replace(/_/g, ' ')} services (default) - </option>
                 {services.filter(s => !s.serviceMode || s.serviceMode === serviceMode).map(s => (
                   <option key={s.id} value={s.id}>{s.name}{s.defaultPrice != null ? ` · Rs ${s.defaultPrice}` : ''}</option>
                 ))}
@@ -954,7 +954,7 @@ export default function WorkflowBuilder({
           <div className="flex items-center justify-between mb-3">
             <div>
               <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Clinical Configuration</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Steps are auto-generated from these options — no manual step editing needed.</p>
+              <p className="text-xs text-gray-400 mt-0.5">Steps are auto-generated from these options - no manual step editing needed.</p>
             </div>
             {stepsCustomized && (
               <button
@@ -1038,7 +1038,7 @@ export default function WorkflowBuilder({
               <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Step Flow</h2>
               <p className="text-xs text-gray-400 mt-0.5">
                 {stepsCustomized
-                  ? 'Manually customised — click "Reset to config" to regenerate'
+                  ? 'Manually customised - click "Reset to config" to regenerate'
                   : 'Auto-generated from your configuration above'}
               </p>
             </div>
@@ -1099,7 +1099,7 @@ export default function WorkflowBuilder({
               {/* Emoji picker */}
               <div>
                 <label className="text-xs font-medium text-gray-500 block mb-2">
-                  Icon <span className="font-normal text-gray-400">— click to choose</span>
+                  Icon <span className="font-normal text-gray-400"> - click to choose</span>
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {CUSTOM_STEP_EMOJIS.map(em => (
@@ -1144,7 +1144,7 @@ export default function WorkflowBuilder({
             <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
               <p className="text-sm text-gray-500">No custom milestones yet.</p>
               <p className="text-xs text-gray-400 mt-1">
-                System steps cover the full flow — add milestones to create named checkpoints visible to provider and member.
+                System steps cover the full flow - add milestones to create named checkpoints visible to provider and member.
               </p>
             </div>
           )}
@@ -1174,7 +1174,7 @@ export default function WorkflowBuilder({
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm text-gray-900">{step.label}</div>
                   <div className="text-xs text-gray-400 mt-0.5">
-                    <span>After: <span className="text-gray-600">{prev?.label || '—'}</span></span>
+                    <span>After: <span className="text-gray-600">{prev?.label || ' - '}</span></span>
                     {next && (
                       <> · <span>Before: <span className="text-gray-600">{next.label}</span></span></>
                     )}
@@ -1244,7 +1244,7 @@ export default function WorkflowBuilder({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2"><FiZap className="text-[#0C6780]" /><h3 className="text-base font-bold text-gray-900">Draft with AI</h3></div>
-                <p className="text-xs text-gray-500 mt-1">Describe the workflow in plain words. We&apos;ll draft the steps, actions, and notifications — you review before saving. This <strong>replaces</strong> your current steps.</p>
+                <p className="text-xs text-gray-500 mt-1">Describe the workflow in plain words. We&apos;ll draft the steps, actions, and notifications - you review before saving. This <strong>replaces</strong> your current steps.</p>
               </div>
               <button onClick={() => setAiOpen(false)} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500"><FiX /></button>
             </div>

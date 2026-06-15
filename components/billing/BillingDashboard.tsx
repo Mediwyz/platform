@@ -13,7 +13,7 @@ export default function BillingDashboard({ userId }: BillingDashboardProps) {
  <div className="space-y-6">
  <h1 className="text-2xl font-bold text-gray-900">Billing & Account Balance</h1>
 
- {/* Subscription Plan — current plan + change */}
+ {/* Subscription Plan - current plan + change */}
  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
  <SubscriptionTab userId={userId} />
  </div>

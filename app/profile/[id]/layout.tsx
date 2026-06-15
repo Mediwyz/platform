@@ -21,8 +21,8 @@ import { ADMIN_SIDEBAR_ITEMS, getActiveSectionFromPath as adminActive } from '..
 import { getDynamicProviderSidebarItems, getActiveSectionFromPath as providerActive } from '../../provider/[slug]/(dashboard)/sidebar-config'
 
 /**
- * The unified `/profile/[id]` page is a top-level route — not inside any
- * role's `(dashboard)` group — so it would render bare without a sidebar.
+ * The unified `/profile/[id]` page is a top-level route - not inside any
+ * role's `(dashboard)` group - so it would render bare without a sidebar.
  * This layout picks the matching sidebar config for the CURRENT user's
  * role and wraps the page in the standard dashboard shell. That way a
  * user clicking their avatar still sees the same nav they were using.

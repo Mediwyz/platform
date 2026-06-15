@@ -5,7 +5,7 @@ import { FiActivity, FiCheckCircle, FiAlertTriangle, FiTrendingUp } from 'react-
 import { useT } from '@/lib/i18n/useT'
 
 /**
- * Regional Admin — Workflow Analytics
+ * Regional Admin - Workflow Analytics
  *
  * Visualises the per-template stats already computed server-side at
  * `/api/workflow/templates/stats`. Each template shows:

@@ -1,5 +1,5 @@
 /**
- * Central app configuration — driven by environment variables.
+ * Central app configuration - driven by environment variables.
  * Change APP_NAME, APP_DOMAIN etc. in .env to rebrand without touching code.
  */
 

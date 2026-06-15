@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { FaEnvelope } from 'react-icons/fa'
 
 // Maps the mediwyz_userType cookie value to the user's chat URL segment
-// All roles use /messages clean URL — middleware rewrites to correct folder
+// All roles use /messages clean URL - middleware rewrites to correct folder
 const USER_TYPE_CHAT_ROUTES: Record<string, string> = {
  patient: '/messages',
  doctor: '/messages',

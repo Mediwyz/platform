@@ -12,7 +12,7 @@ import { useUser } from '@/hooks/useUser'
 import ProfileHero from '@/components/profile/ProfileHero'
 
 /**
- * Unified profile page — the SINGLE source of truth for user profile info.
+ * Unified profile page - the SINGLE source of truth for user profile info.
  * Inspired by Facebook + LinkedIn: public hero + tabs for About / Posts /
  * Reviews (all publicly visible for SEO) plus self-only private tabs for
  * Health Goals / Documents / Settings.
@@ -21,7 +21,7 @@ import ProfileHero from '@/components/profile/ProfileHero'
  * profile fields across the AI Health tab, the Health Tracker "Profile &
  * Goals" tab, the Settings page's documents tab, etc.
  *
- * Route: /profile/[id] — same URL whether it's your own or someone else's.
+ * Route: /profile/[id] - same URL whether it's your own or someone else's.
  * Privacy gating happens client-side based on `currentUser.id === id`.
  */
 
@@ -46,7 +46,7 @@ interface ProfileData {
   userType: string
   verified: boolean
   createdAt: string
-  // Profile-specific (enriched by backend — may be partial)
+  // Profile-specific (enriched by backend - may be partial)
   bio?: string | null
   specialty?: string | null
   rating?: number | null

@@ -85,7 +85,7 @@ export default function BasicInfoStep({
  onProfileImageChange?.(result.data.url)
  }
  } catch {
- // Silently fail — user can try again
+ // Silently fail - user can try again
  } finally {
  setUploadingImage(false)
  }

@@ -79,7 +79,7 @@ export default function FloatingChatWidget() {
             aria-hidden="true"
           />
 
-          {/* Chat panel — fills most of the screen, comfortable reading width */}
+          {/* Chat panel - fills most of the screen, comfortable reading width */}
           <div
             className="fixed inset-0 sm:inset-2 md:inset-4 lg:inset-6 xl:inset-10 z-50
               flex flex-col bg-white rounded-none sm:rounded-3xl
@@ -87,7 +87,7 @@ export default function FloatingChatWidget() {
               overflow-hidden"
             role="dialog"
             aria-modal="true"
-            aria-label="Wyzo — Health AI Assistant"
+            aria-label="Wyzo - Health AI Assistant"
           >
             {/* Header */}
             <div className="flex items-center gap-4 px-6 sm:px-10 py-5 sm:py-6 bg-gradient-to-r from-brand-navy via-[#0a3d62] to-brand-teal flex-shrink-0">
@@ -95,7 +95,7 @@ export default function FloatingChatWidget() {
                 <Image src="/images/logo-icon.png" alt="MediWyz" width={44} height={44} className="rounded-xl" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white font-bold text-lg sm:text-xl">Wyzo — Health AI Assistant</p>
+                <p className="text-white font-bold text-lg sm:text-xl">Wyzo - Health AI Assistant</p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
                   <p className="text-white/80 text-sm sm:text-base">En ligne • Réponses instantanées</p>
@@ -145,7 +145,7 @@ export default function FloatingChatWidget() {
               <div ref={bottomRef} />
             </div>
 
-            {/* Suggested questions — first turn only */}
+            {/* Suggested questions - first turn only */}
             {turns.length === 1 && (
               <div className="px-5 sm:px-10 py-4 flex flex-wrap gap-2.5 border-t border-gray-100 bg-white flex-shrink-0">
                 <p className="w-full text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Questions fréquentes</p>
@@ -189,11 +189,11 @@ export default function FloatingChatWidget() {
         </>
       )}
 
-      {/* ─── Floating trigger — pill button, slot 1 (lowest) ────────── */}
+      {/* ─── Floating trigger - pill button, slot 1 (lowest) ────────── */}
       <button
         onClick={() => setOpen(v => !v)}
-        title={open ? 'Close Wyzo' : 'Wyzo — Health AI Assistant'}
-        aria-label={open ? 'Close Wyzo' : 'Wyzo — Health AI Assistant'}
+        title={open ? 'Close Wyzo' : 'Wyzo - Health AI Assistant'}
+        aria-label={open ? 'Close Wyzo' : 'Wyzo - Health AI Assistant'}
         className={`fixed bottom-24 sm:bottom-5 right-4 sm:right-5 z-[150]
           h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
           flex items-center gap-2.5 text-sm font-semibold text-white

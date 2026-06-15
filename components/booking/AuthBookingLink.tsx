@@ -31,7 +31,7 @@ export default function AuthBookingLink({ type, providerId, children, className 
  return
  }
 
- // Use clean URLs — middleware rewrites to correct folder
+ // Use clean URLs - middleware rewrites to correct folder
  const bookingPath = type === 'emergency'
  ? '/book/emergency'
  : `/book/${type}/${providerId}`

@@ -1,6 +1,6 @@
 import { Stat, WhyChooseReason } from '@/types'
 
-// SERVICES and SPECIALTIES constants removed — now fetched dynamically
+// SERVICES and SPECIALTIES constants removed - now fetched dynamically
 // from /api/roles and /api/search/health-shop (ProviderMarketplace + HealthShopMarketplace)
 
 export const STATS: Stat[] = [
@@ -51,7 +51,7 @@ export const DEFAULT_PRICES = {
 /** Human-readable labels for each UserType enum value. */
 export const USER_TYPE_LABELS: Record<string, string> = {
   MEMBER: 'Member',
-  PATIENT: 'Member', // legacy alias — MEMBER is the canonical key
+  PATIENT: 'Member', // legacy alias - MEMBER is the canonical key
   DOCTOR: 'Doctor',
   NURSE: 'Nurse',
   NANNY: 'Nanny',

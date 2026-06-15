@@ -492,7 +492,7 @@ const ChildcareServices: React.FC<Props> = ({ onVideoCall }) => {
  <div><span className="text-gray-500">Nanny:</span> <span className="font-medium">{selectedNanny?.name}</span></div>
  <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{careType} Care</span></div>
  {selectedServiceId && nannyServices.find(s => s.id === selectedServiceId) && (
- <div><span className="text-gray-500">Service:</span> <span className="font-medium">{nannyServices.find(s => s.id === selectedServiceId)?.serviceName} — {nannyServices.find(s => s.id === selectedServiceId)?.currency} {nannyServices.find(s => s.id === selectedServiceId)?.price}</span></div>
+ <div><span className="text-gray-500">Service:</span> <span className="font-medium">{nannyServices.find(s => s.id === selectedServiceId)?.serviceName} - {nannyServices.find(s => s.id === selectedServiceId)?.currency} {nannyServices.find(s => s.id === selectedServiceId)?.price}</span></div>
  )}
  <div className="col-span-2"><span className="text-gray-500">Slots ({selectedSlots.length}):</span>{' '}
  <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join(' • ')}</span>

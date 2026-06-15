@@ -10,7 +10,7 @@ import WorkflowStepper from '../WorkflowStepper'
 
 /**
  * Renders a workflow template the way each SIDE will actually see it at
- * runtime — not a dev-facing debug view. Patient tab shows the patient's
+ * runtime - not a dev-facing debug view. Patient tab shows the patient's
  * booking card chrome with the action buttons that step surfaces to them;
  * Provider tab shows the provider dashboard card. Placeholders in
  * notifications ({{patientName}}, …) get filled with demo data so admins
@@ -87,7 +87,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
 
   return (
     <div className="space-y-4">
-      {/* Visual stepper — the whole happy path at a glance */}
+      {/* Visual stepper - the whole happy path at a glance */}
       <div className="bg-white rounded-xl border border-gray-200 p-3">
         <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Flow at a glance</p>
         <WorkflowStepper
@@ -120,7 +120,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
             <FaUserMd /> Provider view
           </button>
         </div>
-        <span className="text-[11px] text-gray-500">Previewing with demo data — <em>{DEMO.patientName}</em>, <em>{DEMO.providerName}</em></span>
+        <span className="text-[11px] text-gray-500">Previewing with demo data - <em>{DEMO.patientName}</em>, <em>{DEMO.providerName}</em></span>
       </div>
 
       {/* Step navigator */}
@@ -185,7 +185,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
               <div className="text-xs text-gray-500 italic">
                 No notification to {side} at this step.
                 {step.actionsForProvider.length === 0 && step.actionsForPatient.length === 0 && (
-                  <> This is a terminal state — that&apos;s fine.</>
+                  <> This is a terminal state - that&apos;s fine.</>
                 )}
               </div>
             )}
@@ -238,7 +238,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
 function StepWarnings({ step }: { step: WorkflowStep }) {
   const issues: string[] = []
   if (!step.notifyPatient && !step.notifyProvider && (step.actionsForPatient.length + step.actionsForProvider.length) > 0) {
-    issues.push('Silent step — nobody gets a notification on this status change.')
+    issues.push('Silent step - nobody gets a notification on this status change.')
   }
   const allTargets = [...step.actionsForPatient, ...step.actionsForProvider].map((a) => a.targetStatus)
   for (const t of allTargets) {

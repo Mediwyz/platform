@@ -5,7 +5,7 @@
  * admins (`sample_collected`, `eye_test_done`, anything). Hardcoding badge
  * colours keyed by status code means every new template author paints the
  * workflow grey. Categories (`pending | active | success | danger | waiting`)
- * are a small, closed set — safe to hardcode.
+ * are a small, closed set - safe to hardcode.
  *
  * The engine derives a category per step; clients never pattern-match on
  * status code. If you find yourself writing `if (status === 'pending')`,
@@ -33,7 +33,7 @@ export const CATEGORY_DOT: Record<StepCategory, string> = {
 /**
  * Client-side fallback: when the engine didn't tag a category (old data,
  * mid-migration), derive one from signals available on the client. Never
- * pattern-matches on the literal status code — uses generic signals only.
+ * pattern-matches on the literal status code - uses generic signals only.
  */
 export function categoryFromLegacyStatus(
   status: string,
@@ -42,7 +42,7 @@ export function categoryFromLegacyStatus(
   if (opts?.isCancelled) return 'danger'
   if (opts?.isCompleted) return 'success'
   const s = (status || '').toLowerCase()
-  // Terminal signals by convention — the engine's derivation is the authority;
+  // Terminal signals by convention - the engine's derivation is the authority;
   // this is just the "we lost the category" lifeboat.
   if (s === 'cancelled' || s === 'denied' || s === 'refunded') return 'danger'
   if (s === 'completed' || s === 'resolved') return 'success'

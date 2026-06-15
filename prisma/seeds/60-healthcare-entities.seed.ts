@@ -1,5 +1,5 @@
 /**
- * Seed 60 — Healthcare Entities (clinics, hospitals, labs, etc.)
+ * Seed 60 - Healthcare Entities (clinics, hospitals, labs, etc.)
  *
  * Creates representative healthcare entities in Mauritius (and one per
  * other supported region) and links existing seeded providers to them
@@ -40,7 +40,7 @@ const ENTITIES = [
   {
     name: 'Sunset Bay Medical Centre',
     type: 'clinic',
-    description: 'Full-service medical centre in the north of Mauritius — GP consultations, specialist referrals, and preventive health screening.',
+    description: 'Full-service medical centre in the north of Mauritius - GP consultations, specialist referrals, and preventive health screening.',
     address: 'Royal Road, Grand Baie',
     city: 'Grand Baie',
     country: 'MU',

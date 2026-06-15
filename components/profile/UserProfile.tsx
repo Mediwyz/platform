@@ -126,7 +126,7 @@ interface TabConfig {
 }
 
 // Role types that do NOT act as providers (no reviews, no posts feed authoring).
-// Everyone else is treated as a provider — aligned with dynamic-roles principle.
+// Everyone else is treated as a provider - aligned with dynamic-roles principle.
 const NON_PROVIDER_TYPES = new Set(['MEMBER', 'REGIONAL_ADMIN', 'CORPORATE_ADMIN', 'INSURANCE_REP', 'REFERRAL_PARTNER'])
 
 function getTabsForUserType(userType: string): TabConfig[] {
@@ -141,7 +141,7 @@ function getTabsForUserType(userType: string): TabConfig[] {
  tabs.push({ id: 'info', label: 'Professional Info', icon: FaBriefcaseMedical })
  }
 
- // All provider roles get reviews + posts — no role-specific gating.
+ // All provider roles get reviews + posts - no role-specific gating.
  if (!NON_PROVIDER_TYPES.has(userType)) {
  tabs.push({ id: 'reviews', label: 'Reviews', icon: FaStar })
  tabs.push({ id: 'posts', label: 'Posts', icon: FaPenFancy })
@@ -336,7 +336,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- // Document file upload handler — name and type included so the backend creates
+ // Document file upload handler - name and type included so the backend creates
  // the document record with the correct metadata in a single request.
  const handleDocumentFileUpload = async (file: File, name?: string, type?: string) => {
  const fd = new FormData()
@@ -389,7 +389,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  setProfileFieldsByCode(map)
  })
- .catch(() => { /* fall back to empty — form shows user-level fields only */ })
+ .catch(() => { /* fall back to empty - form shows user-level fields only */ })
  }, [])
 
  /* ─── Initialize edit state when entering edit mode ────────────────────── */
@@ -644,7 +644,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </div>
  </div>
 
- {/* Required documents checklist — always visible */}
+ {/* Required documents checklist - always visible */}
  {(() => {
   const uploadedNames = new Set(documents.map(d => d.name.toLowerCase().trim()))
   const checklist = requiredDocs.map(rd => ({
@@ -718,7 +718,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
 
  return (
  <div className="space-y-6">
- {/* Required documents checklist — always visible */}
+ {/* Required documents checklist - always visible */}
  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
   <div className="flex items-center justify-between mb-3">
    <div>

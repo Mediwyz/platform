@@ -3,7 +3,7 @@ import { PrismaClient, UserType } from '@prisma/client'
 export async function seedProviderSpecialties(prisma: PrismaClient) {
   console.log('  Seeding provider specialties...')
 
-  // Emoji icons for specialties — applied during seeding
+  // Emoji icons for specialties - applied during seeding
   const ICONS: Record<string, string> = {
     'General Practice': '🩺', 'Family Medicine': '👨‍👩‍👧‍👦', 'Internal Medicine': '🫀',
     'Cardiology': '❤️', 'Dermatology': '🧴', 'Endocrinology': '🦠',

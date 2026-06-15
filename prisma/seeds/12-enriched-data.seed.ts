@@ -190,16 +190,16 @@ export async function seedEnrichedData(prisma: PrismaClient) {
   // ─── Prescription Medicines (8 entries for PRE006–PRE010) ──────────────────
 
   const prescriptionMedicines = [
-    // PRE006 — iron deficiency anemia
+    // PRE006 - iron deficiency anemia
     { prescriptionId: 'PRE006', medicineId: 'MED007', dosage: '500mg', frequency: 'Twice daily', duration: '3 months', instructions: 'Take with orange juice for better iron absorption' },
-    // PRE007 — hypertension
+    // PRE007 - hypertension
     { prescriptionId: 'PRE007', medicineId: 'MED002', dosage: '10mg', frequency: 'Once daily', duration: 'Ongoing', instructions: 'Take in the morning' },
     { prescriptionId: 'PRE007', medicineId: 'MED004', dosage: '5mg', frequency: 'Once daily', duration: 'Ongoing', instructions: 'Take in the evening' },
-    // PRE008 — gastritis
+    // PRE008 - gastritis
     { prescriptionId: 'PRE008', medicineId: 'MED005', dosage: '20mg', frequency: 'Once daily', duration: '4 weeks', instructions: 'Take 30 minutes before breakfast' },
-    // PRE009 — hypothyroidism (using paracetamol as placeholder — levothyroxine not in MED list)
+    // PRE009 - hypothyroidism (using paracetamol as placeholder - levothyroxine not in MED list)
     { prescriptionId: 'PRE009', medicineId: 'MED007', dosage: '25mcg', frequency: 'Once daily', duration: '6 months', instructions: 'Take on empty stomach, 30 min before breakfast. Do not take with calcium or iron supplements.' },
-    // PRE010 — lower back pain
+    // PRE010 - lower back pain
     { prescriptionId: 'PRE010', medicineId: 'MED008', dosage: '400mg', frequency: 'Three times daily', duration: '5 days', instructions: 'Take with food to reduce stomach irritation' },
     { prescriptionId: 'PRE010', medicineId: 'MED007', dosage: '1000mg', frequency: 'Every 6 hours as needed', duration: '7 days', instructions: 'Do not exceed 4g per day' },
     { prescriptionId: 'PRE010', medicineId: 'MED009', dosage: '10mg', frequency: 'Once daily at bedtime', duration: '5 days', instructions: 'May cause drowsiness' },
@@ -209,28 +209,28 @@ export async function seedEnrichedData(prisma: PrismaClient) {
   // ─── 3. Vital Signs (15 entries, Oct–Dec 2024) ─────────────────────────────
 
   const vitalSigns = [
-    // PPROF001 — diabetic patient, slightly elevated BP trend
+    // PPROF001 - diabetic patient, slightly elevated BP trend
     { patientId: 'PPROF001', recordedAt: new Date('2024-10-01T09:00:00'), systolicBP: 138, diastolicBP: 88, heartRate: 78, temperature: 36.7, weight: 69.2, height: 165, oxygenSaturation: 97, glucose: 132, cholesterol: 205, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF001', recordedAt: new Date('2024-10-15T10:30:00'), systolicBP: 134, diastolicBP: 86, heartRate: 74, temperature: 36.6, weight: 68.8, height: 165, oxygenSaturation: 98, glucose: 118, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF001', recordedAt: new Date('2024-11-01T08:45:00'), systolicBP: 132, diastolicBP: 84, heartRate: 72, temperature: 36.5, weight: 68.5, height: 165, oxygenSaturation: 98, glucose: 115, cholesterol: 198, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF001', recordedAt: new Date('2024-12-01T09:15:00'), systolicBP: 128, diastolicBP: 82, heartRate: 70, temperature: 36.6, weight: 68.0, height: 165, oxygenSaturation: 98, glucose: 108, cholesterol: 190, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
 
-    // PPROF002 — asthma patient, generally healthy vitals
+    // PPROF002 - asthma patient, generally healthy vitals
     { patientId: 'PPROF002', recordedAt: new Date('2024-10-10T11:00:00'), systolicBP: 118, diastolicBP: 76, heartRate: 72, temperature: 36.5, weight: 74.5, height: 178, oxygenSaturation: 98, facility: 'Rose Hill Medical Clinic', recordedBy: 'Lab Tech Mark' },
     { patientId: 'PPROF002', recordedAt: new Date('2024-11-08T10:30:00'), systolicBP: 122, diastolicBP: 78, heartRate: 68, temperature: 36.6, weight: 75.2, height: 178, oxygenSaturation: 99, facility: 'Rose Hill Medical Clinic', recordedBy: 'Lab Tech Mark' },
     { patientId: 'PPROF002', recordedAt: new Date('2024-12-12T14:00:00'), systolicBP: 120, diastolicBP: 75, heartRate: 70, temperature: 37.1, weight: 74.8, height: 178, oxygenSaturation: 97, facility: 'Rose Hill Medical Clinic', recordedBy: 'Lab Tech Mark' },
 
-    // PPROF003 — anemia patient, lower BP, improving over time
+    // PPROF003 - anemia patient, lower BP, improving over time
     { patientId: 'PPROF003', recordedAt: new Date('2024-10-05T09:30:00'), systolicBP: 110, diastolicBP: 70, heartRate: 88, temperature: 36.4, weight: 61.0, height: 160, oxygenSaturation: 97, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF003', recordedAt: new Date('2024-11-05T10:00:00'), systolicBP: 112, diastolicBP: 72, heartRate: 84, temperature: 36.5, weight: 61.5, height: 160, oxygenSaturation: 98, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF003', recordedAt: new Date('2024-12-15T11:00:00'), systolicBP: 116, diastolicBP: 74, heartRate: 78, temperature: 36.5, weight: 62.5, height: 160, oxygenSaturation: 99, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
 
-    // PPROF004 — hypertension + cholesterol patient
+    // PPROF004 - hypertension + cholesterol patient
     { patientId: 'PPROF004', recordedAt: new Date('2024-10-12T08:00:00'), systolicBP: 148, diastolicBP: 94, heartRate: 80, temperature: 36.7, weight: 83.0, height: 175, oxygenSaturation: 97, cholesterol: 252, facility: 'Cardiac Care Center', recordedBy: 'Lab Tech Sarah' },
     { patientId: 'PPROF004', recordedAt: new Date('2024-11-18T09:00:00'), systolicBP: 142, diastolicBP: 90, heartRate: 76, temperature: 36.6, weight: 82.5, height: 175, oxygenSaturation: 98, cholesterol: 240, facility: 'Cardiac Care Center', recordedBy: 'Lab Tech Sarah' },
     { patientId: 'PPROF004', recordedAt: new Date('2024-12-20T08:30:00'), systolicBP: 136, diastolicBP: 86, heartRate: 74, temperature: 36.5, weight: 81.5, height: 175, oxygenSaturation: 98, cholesterol: 228, facility: 'Cardiac Care Center', recordedBy: 'Lab Tech Sarah' },
 
-    // PPROF005 — generally healthy patient
+    // PPROF005 - generally healthy patient
     { patientId: 'PPROF005', recordedAt: new Date('2024-10-20T13:00:00'), systolicBP: 116, diastolicBP: 74, heartRate: 66, temperature: 36.4, weight: 70.0, height: 172, oxygenSaturation: 99, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
     { patientId: 'PPROF005', recordedAt: new Date('2024-12-18T14:00:00'), systolicBP: 118, diastolicBP: 76, heartRate: 68, temperature: 36.5, weight: 70.2, height: 172, oxygenSaturation: 99, facility: 'City Medical Center', recordedBy: 'Lab Tech Lisa' },
   ]
@@ -247,7 +247,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
     { id: 'LT007', patientId: 'PPROF003', testName: 'Thyroid Function Panel', category: 'Endocrinology', orderedAt: new Date('2024-12-15'), completedAt: new Date('2024-12-16'), status: 'completed', facility: 'City Medical Center', orderedBy: 'Dr. Sarah Johnson', notes: 'Evaluate thyroid function due to fatigue' },
     // Full lipid panel for PPROF004
     { id: 'LT008', patientId: 'PPROF004', testName: 'Advanced Lipid Panel', category: 'Cardiology', orderedAt: new Date('2024-12-20'), completedAt: new Date('2024-12-21'), status: 'completed', facility: 'Cardiac Care Center', orderedBy: 'Dr. Marie Dupont', notes: 'Follow-up cholesterol management' },
-    // CBC for PPROF005 — pending
+    // CBC for PPROF005 - pending
     { id: 'LT009', patientId: 'PPROF005', testName: 'Complete Blood Count', category: 'Hematology', orderedAt: new Date('2024-12-22'), status: 'in_progress', facility: 'City Medical Center', orderedBy: 'Dr. Raj Patel', notes: 'Routine annual screening' },
     // Vitamin D for PPROF004
     { id: 'LT010', patientId: 'PPROF004', testName: 'Vitamin D, 25-Hydroxy', category: 'Endocrinology', orderedAt: new Date('2024-12-20'), completedAt: new Date('2024-12-21'), status: 'completed', facility: 'Cardiac Care Center', orderedBy: 'Dr. Raj Patel', notes: 'Evaluate vitamin D status' },
@@ -255,26 +255,26 @@ export async function seedEnrichedData(prisma: PrismaClient) {
   await prisma.labTest.createMany({ data: labTests, skipDuplicates: true })
 
   const labTestResults = [
-    // LT005 — Comprehensive Metabolic Panel results
+    // LT005 - Comprehensive Metabolic Panel results
     { labTestId: 'LT005', parameter: 'Fasting Glucose', value: '112', unit: 'mg/dL', referenceMin: '70', referenceMax: '100', isAbnormal: true },
     { labTestId: 'LT005', parameter: 'Creatinine', value: '0.9', unit: 'mg/dL', referenceMin: '0.6', referenceMax: '1.2', isAbnormal: false },
     { labTestId: 'LT005', parameter: 'BUN', value: '18', unit: 'mg/dL', referenceMin: '7', referenceMax: '20', isAbnormal: false },
 
-    // LT006 — Iron Studies
+    // LT006 - Iron Studies
     { labTestId: 'LT006', parameter: 'Serum Iron', value: '35', unit: 'mcg/dL', referenceMin: '60', referenceMax: '170', isAbnormal: true },
     { labTestId: 'LT006', parameter: 'Ferritin', value: '8', unit: 'ng/mL', referenceMin: '12', referenceMax: '150', isAbnormal: true },
     { labTestId: 'LT006', parameter: 'TIBC', value: '450', unit: 'mcg/dL', referenceMin: '250', referenceMax: '370', isAbnormal: true },
 
-    // LT007 — Thyroid Function Panel
+    // LT007 - Thyroid Function Panel
     { labTestId: 'LT007', parameter: 'TSH', value: '8.2', unit: 'mIU/L', referenceMin: '0.4', referenceMax: '4.0', isAbnormal: true },
     { labTestId: 'LT007', parameter: 'Free T4', value: '0.9', unit: 'ng/dL', referenceMin: '0.8', referenceMax: '1.8', isAbnormal: false },
 
-    // LT008 — Advanced Lipid Panel
+    // LT008 - Advanced Lipid Panel
     { labTestId: 'LT008', parameter: 'Total Cholesterol', value: '228', unit: 'mg/dL', referenceMin: '0', referenceMax: '200', isAbnormal: true },
     { labTestId: 'LT008', parameter: 'LDL Cholesterol', value: '142', unit: 'mg/dL', referenceMin: '0', referenceMax: '100', isAbnormal: true },
     { labTestId: 'LT008', parameter: 'HDL Cholesterol', value: '48', unit: 'mg/dL', referenceMin: '40', referenceMax: '60', isAbnormal: false },
 
-    // LT010 — Vitamin D
+    // LT010 - Vitamin D
     { labTestId: 'LT010', parameter: 'Vitamin D, 25-Hydroxy', value: '12', unit: 'ng/mL', referenceMin: '30', referenceMax: '100', isAbnormal: true },
   ]
   await prisma.labTestResult.createMany({ data: labTestResults, skipDuplicates: true })
@@ -282,7 +282,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
   // ─── 5. Nutrition Analyses (8 entries) ─────────────────────────────────────
 
   const nutritionAnalyses = [
-    // PPROF001 — diabetic diet tracking
+    // PPROF001 - diabetic diet tracking
     {
       patientId: 'PPROF001',
       foodName: 'Oatmeal with Berries and Almonds',
@@ -313,7 +313,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       nutritionalBenefits: ['High protein', 'Complete amino acids', 'Rich in vitamins'],
       mealType: 'lunch',
     },
-    // PPROF002 — general health
+    // PPROF002 - general health
     {
       patientId: 'PPROF002',
       foodName: 'Butter Chicken with Naan',
@@ -344,7 +344,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       nutritionalBenefits: ['Probiotics', 'High calcium', 'Protein-rich'],
       mealType: 'snack',
     },
-    // PPROF003 — iron-rich diet recommended
+    // PPROF003 - iron-rich diet recommended
     {
       patientId: 'PPROF003',
       foodName: 'Spinach and Lentil Soup',
@@ -375,7 +375,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       nutritionalBenefits: ['Heme iron source', 'Complete protein', 'High fiber'],
       mealType: 'dinner',
     },
-    // PPROF004 — heart-healthy diet
+    // PPROF004 - heart-healthy diet
     {
       patientId: 'PPROF004',
       foodName: 'Salmon with Steamed Vegetables',
@@ -391,7 +391,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       nutritionalBenefits: ['Rich in omega-3', 'Heart-healthy fats', 'High protein'],
       mealType: 'dinner',
     },
-    // PPROF005 — general wellness
+    // PPROF005 - general wellness
     {
       patientId: 'PPROF005',
       foodName: 'Avocado Toast with Poached Eggs',
@@ -413,7 +413,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
   // ─── 6. Appointments (APT009–APT023) ───────────────────────────────────────
 
   const appointments = [
-    // November 2024 — completed appointments
+    // November 2024 - completed appointments
     {
       id: 'APT009',
       patientId: 'PPROF001',
@@ -492,7 +492,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       notes: 'Patient cancelled due to scheduling conflict. Rescheduled.',
     },
 
-    // December 2024 — mix of statuses
+    // December 2024 - mix of statuses
     {
       id: 'APT015',
       patientId: 'PPROF002',
@@ -557,7 +557,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       notes: 'ECG normal. Echo recommended for comprehensive evaluation.',
     },
 
-    // January 2025 — upcoming/scheduled
+    // January 2025 - upcoming/scheduled
     {
       id: 'APT020',
       patientId: 'PPROF001',
@@ -578,7 +578,7 @@ export async function seedEnrichedData(prisma: PrismaClient) {
       type: 'video',
       status: 'upcoming',
       specialty: 'Endocrinology',
-      reason: 'Thyroid recheck — 6-week follow-up',
+      reason: 'Thyroid recheck - 6-week follow-up',
       duration: 20,
       notes: 'Recheck TSH after levothyroxine initiation.',
     },

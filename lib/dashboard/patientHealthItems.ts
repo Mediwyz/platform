@@ -16,7 +16,7 @@ export function getPatientHealthItems(base: string): SidebarItem[] {
 }
 
 /**
- * Icon map for dynamic roles — maps icon name strings to React icon components.
+ * Icon map for dynamic roles - maps icon name strings to React icon components.
  */
 const ICON_MAP: Record<string, typeof FaSearch> = {
   FaUserMd, FaUserNurse, FaBaby, FaFlask, FaAmbulance, FaCapsules,
@@ -93,7 +93,7 @@ export function getSearchItemsFromRoles(
 }
 
 /**
- * "My Company" sidebar entry — any user may own/belong to one or more
+ * "My Company" sidebar entry - any user may own/belong to one or more
  * companies now that CORPORATE_ADMIN is a capability, not a role.
  */
 export function getMyCompanyItem(base: string): SidebarItem {
@@ -109,11 +109,11 @@ export function getMyCompanyItem(base: string): SidebarItem {
 }
 
 /**
- * "Invite friends" entry — every user has a referral code and earns
+ * "Invite friends" entry - every user has a referral code and earns
  * wallet credit for every signup via their link. Capability, not role.
  */
 export function getInviteFriendsItem(_base?: string): SidebarItem {
-  // Top-level /invite page — shared across every dashboard. Backend
+  // Top-level /invite page - shared across every dashboard. Backend
   // auto-provisions a referral code on first visit, so the page works
   // for any authenticated user regardless of role.
   return {

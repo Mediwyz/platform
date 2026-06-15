@@ -31,7 +31,7 @@ export default function AppDownloadSection() {
             Your health, in your pocket
           </h2>
           <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed max-w-lg mb-7">
-            Download the MediWyz app and carry your entire care network with you — book, consult and manage your health from anywhere in Mauritius and beyond.
+            Download the MediWyz app and carry your entire care network with you - book, consult and manage your health from anywhere in Mauritius and beyond.
           </p>
 
           <ul className="space-y-2.5 mb-8">
@@ -69,7 +69,7 @@ export default function AppDownloadSection() {
           </div>
         </div>
 
-        {/* Phone mockup (pure CSS — no asset) */}
+        {/* Phone mockup (pure CSS - no asset) */}
         <div className="hidden lg:flex justify-center">
           <div className="relative w-64 h-[34rem] rounded-[2.5rem] bg-[#0A1A33] border-[10px] border-[#0a2547] shadow-2xl ring-1 ring-white/10 overflow-hidden">
             {/* notch */}

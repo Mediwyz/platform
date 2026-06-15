@@ -5,7 +5,7 @@ import { useUser } from '@/hooks/useUser'
 
 /**
  * Returns whether the current user has corporate-admin capability.
- * Capability — not role — is granted when the user owns a company OR has
+ * Capability - not role - is granted when the user owns a company OR has
  * an active corporate/enterprise subscription.
  *
  * Used to conditionally show "My Company" sidebar entry, "Post as company"

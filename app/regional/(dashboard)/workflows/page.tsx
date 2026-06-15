@@ -86,7 +86,7 @@ export default function RegionalWorkflowsPage() {
       const json = await res.json()
       if (json.success) setLibrary(json.data || [])
     } catch {
-      // Silent — modal shows empty state.
+      // Silent - modal shows empty state.
     }
   }
 
@@ -300,7 +300,7 @@ export default function RegionalWorkflowsPage() {
                       </div>
                     </div>
 
-                    {/* Always-visible stepper preview — admins can see each
+                    {/* Always-visible stepper preview - admins can see each
                         template's shape at a glance without expanding. */}
                     <div className="px-4 pb-3 -mt-1">
                       <WorkflowStepper
@@ -397,7 +397,7 @@ export default function RegionalWorkflowsPage() {
             <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-gray-900">Start from a template</h2>
-                <p className="text-xs text-gray-500 mt-0.5">Pick a vetted starter — we&apos;ll clone it into edit mode so you can customise the steps, actions and notifications.</p>
+                <p className="text-xs text-gray-500 mt-0.5">Pick a vetted starter - we&apos;ll clone it into edit mode so you can customise the steps, actions and notifications.</p>
               </div>
               <button onClick={() => setLibraryOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500">
                 <FiX />

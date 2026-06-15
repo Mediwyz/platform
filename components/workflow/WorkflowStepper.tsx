@@ -24,7 +24,7 @@ interface WorkflowStepperProps {
 
 /**
  * Numbered stepper with per-step emoji indicating what happens at that step.
- * Works for ANY workflow — custom status codes get a sensible icon inferred
+ * Works for ANY workflow - custom status codes get a sensible icon inferred
  * from their flags + label keywords (see `stepIconRegistry.inferStepIcon`).
  *
  * Compact variant: single-line horizontal scroll, 28px dots. For list cards.
@@ -38,7 +38,7 @@ export default function WorkflowStepper({
   }
 
   // Hide terminal-danger (cancelled) from the happy-path view. It's still
-  // reachable via danger actions but clutters the stepper — show as a
+  // reachable via danger actions but clutters the stepper - show as a
   // separate badge on the side.
   const ordered = [...steps].sort((a, b) => a.order - b.order)
   const happyPath = ordered.filter(s => {
@@ -69,7 +69,7 @@ export default function WorkflowStepper({
           const dotColor = CATEGORY_DOT[category]
 
           return (
-            // Key combines order + status — some seeded/cloned templates
+            // Key combines order + status - some seeded/cloned templates
             // duplicate status codes (e.g. two "pending" steps during edit),
             // and a non-unique key triggers a React warning.
             <div key={`${step.order}-${step.statusCode}-${idx}`} className="flex items-center gap-1 flex-shrink-0">
@@ -79,7 +79,7 @@ export default function WorkflowStepper({
                     ? 'bg-white border-brand-teal ring-2 ring-brand-teal/20'
                     : 'bg-gray-50 border-gray-200'
                 }`}
-                title={`${idx + 1}. ${step.label} — ${label}`}
+                title={`${idx + 1}. ${step.label} - ${label}`}
               >
                 <span className={`w-4 h-4 rounded-full ${dotColor} flex items-center justify-center text-[9px] text-white font-bold`}>
                   {idx + 1}
@@ -106,7 +106,7 @@ export default function WorkflowStepper({
     )
   }
 
-  // Full variant — vertical list
+  // Full variant - vertical list
   return (
     <ol className="space-y-2">
       {ordered.map((step, idx) => {

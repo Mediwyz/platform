@@ -83,7 +83,7 @@ describe('useInsuranceCapability', () => {
     ))
   })
 
-  it('capability check is independent per user — MEMBER can own insurance', async () => {
+  it('capability check is independent per user - MEMBER can own insurance', async () => {
     mockUseUser.mockReturnValue(makeUser('MEMBER001'))
     mockFetch.mockResolvedValue({
       json: () => Promise.resolve({ data: { hasCapability: true } }),
@@ -92,7 +92,7 @@ describe('useInsuranceCapability', () => {
     const { result } = renderHook(() => useInsuranceCapability())
 
     await waitFor(() => expect(result.current.loading).toBe(false))
-    // Capability is not tied to userType — any user can own an insurance company
+    // Capability is not tied to userType - any user can own an insurance company
     expect(result.current.has).toBe(true)
   })
 })

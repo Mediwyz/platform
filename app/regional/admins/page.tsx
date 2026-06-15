@@ -31,7 +31,7 @@ function mapToAdmin(raw: RawAdminRecord): Admin {
  name: `${raw.firstName} ${raw.lastName}`,
  email: raw.email,
  role: raw.regionalAdminProfile
- ? `Regional Admin — ${raw.regionalAdminProfile.region}, ${raw.regionalAdminProfile.country}`
+ ? `Regional Admin - ${raw.regionalAdminProfile.region}, ${raw.regionalAdminProfile.country}`
  : 'Regional Admin',
  status: raw.accountStatus === 'active'
  ? 'active'
@@ -39,7 +39,7 @@ function mapToAdmin(raw: RawAdminRecord): Admin {
  ? 'suspended'
  : 'pending',
  joinDate: new Date(raw.createdAt).toLocaleDateString(),
- lastLogin: '—',
+ lastLogin: ' - ',
  avatar: avatarSrc(raw.profileImage as string | null, raw.firstName as string, raw.lastName as string),
  permissions: {
  canManageCMS: false,

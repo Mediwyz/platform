@@ -96,7 +96,7 @@ export default function CommunityPosts() {
   return (
     <section className="py-8 sm:py-12 bg-white">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14">
-        {/* Sticky header — pinned to the top of the viewport while the user
+        {/* Sticky header - pinned to the top of the viewport while the user
             scrolls past the community grid. Negative horizontal margins +
             matching padding give it an edge-to-edge backdrop. */}
         <div className="sticky top-0 z-20 -mx-4 sm:-mx-6 lg:-mx-10 xl:-mx-14 px-4 sm:px-6 lg:px-10 xl:px-14 py-4 mb-6 bg-white/95 backdrop-blur-sm border-b border-gray-100">
@@ -104,7 +104,7 @@ export default function CommunityPosts() {
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">From the Community</h2>
               <p className="text-sm sm:text-base text-gray-600 mt-0.5">
-                Most reacted posts on MediWyz — browse freely, no account needed
+                Most reacted posts on MediWyz - browse freely, no account needed
               </p>
             </div>
             <Link

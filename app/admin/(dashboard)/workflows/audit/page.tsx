@@ -71,13 +71,13 @@ export default function AdminWorkflowAuditPage() {
                 <tr key={log.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">{new Date(log.startedAt || log.createdAt).toLocaleString()}</td>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-gray-900 text-xs">{log.template?.name ?? '—'}</div>
-                    <div className="text-[10px] text-gray-400">{log.template?.providerType?.replace(/_/g,' ') ?? '—'}</div>
+                    <div className="font-medium text-gray-900 text-xs">{log.template?.name ?? ' - '}</div>
+                    <div className="text-[10px] text-gray-400">{log.template?.providerType?.replace(/_/g,' ') ?? ' - '}</div>
                   </td>
                   <td className="px-4 py-3">
                     <code className="text-xs bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded">{log.currentStatus}</code>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-500">{log.bookingType ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500">{log.bookingType ?? ' - '}</td>
                 </tr>
               ))}
               {!loading && logs.length === 0 && (

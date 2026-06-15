@@ -44,7 +44,7 @@ export default function UnifiedPracticePage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-  // Multi-select for bulk actions — morning routines typically batch-accept
+  // Multi-select for bulk actions - morning routines typically batch-accept
   // several bookings at once. Keyed by booking.id so we don't lose selection
   // across refetches.
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -134,7 +134,7 @@ export default function UnifiedPracticePage() {
         }
       }
 
-      toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)} — done`)
+      toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)} - done`)
     } catch {
       toast.error('Action failed. Please try again.')
     } finally {
@@ -245,7 +245,7 @@ export default function UnifiedPracticePage() {
         <h1 className="text-2xl font-bold text-gray-900">My Practice</h1>
       </div>
 
-      {/* Needs-Action Rail — surfaces actionable bookings across all statuses */}
+      {/* Needs-Action Rail - surfaces actionable bookings across all statuses */}
       {needsActionBookings.length > 0 && (
         <div className="rounded-xl bg-gradient-to-r from-brand-navy to-brand-teal p-4 text-white shadow-sm">
           <div className="flex items-center justify-between flex-wrap gap-3">
@@ -270,7 +270,7 @@ export default function UnifiedPracticePage() {
         </div>
       )}
 
-      {/* Bulk Action Bar — appears when bookings are selected */}
+      {/* Bulk Action Bar - appears when bookings are selected */}
       {selected.size > 0 && (
         <div className="sticky top-0 z-40 rounded-xl bg-amber-50 border border-amber-200 p-3 shadow-sm flex items-center justify-between flex-wrap gap-2">
           <span className="text-sm font-medium text-amber-900">
@@ -452,7 +452,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
                       <p className="text-xs text-gray-400">{new Date(b.scheduledAt!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     </>
                   ) : (
-                    <p className="text-xs text-gray-400">{b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : '—'}</p>
+                    <p className="text-xs text-gray-400">{b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : ' - '}</p>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -499,7 +499,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
             </div>
             <p className="text-sm text-gray-700">{b.serviceName || 'Consultation'}</p>
             <div className="flex items-center justify-between text-xs text-gray-400">
-              <span>{b.scheduledAt ? `${new Date(b.scheduledAt).toLocaleDateString('en-GB')} at ${new Date(b.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : (b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : '—')}</span>
+              <span>{b.scheduledAt ? `${new Date(b.scheduledAt).toLocaleDateString('en-GB')} at ${new Date(b.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : (b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : ' - ')}</span>
               {b.price != null && b.price > 0 && <span className="font-medium text-gray-600">Rs {b.price.toLocaleString()}</span>}
             </div>
             <div className="flex items-center gap-2 pt-1">

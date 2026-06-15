@@ -376,7 +376,7 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  <h4 className="font-semibold text-gray-800 mb-2 text-sm">Booking Summary</h4>
  <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
  <div><span className="text-gray-500">Nurse:</span> <span className="font-medium">{selectedNurse?.name}</span></div>
- <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService}{nurseServices.find(s => s.serviceName === selectedService)?.price ? ` — ${nurseServices.find(s => s.serviceName === selectedService)?.currency} ${nurseServices.find(s => s.serviceName === selectedService)?.price}` : ''}</span></div>
+ <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService}{nurseServices.find(s => s.serviceName === selectedService)?.price ? ` - ${nurseServices.find(s => s.serviceName === selectedService)?.currency} ${nurseServices.find(s => s.serviceName === selectedService)?.price}` : ''}</span></div>
  <div className="col-span-2"><span className="text-gray-500">Slots ({selectedSlots.length}):</span>{' '}
  <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join(' • ')}</span>
  </div>

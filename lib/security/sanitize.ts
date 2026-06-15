@@ -76,7 +76,7 @@ export function sanitizeEmail(input: string): string | null {
 }
 
 /**
- * Sanitize a phone number — keep digits, +, -, spaces, and parentheses.
+ * Sanitize a phone number - keep digits, +, -, spaces, and parentheses.
  */
 export function sanitizePhone(input: string): string {
   return input.replace(/[^0-9+\-() ]/g, '').trim()

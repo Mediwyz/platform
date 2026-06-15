@@ -1,5 +1,5 @@
 /**
- * Seed 37 — Workflow Instances
+ * Seed 37 - Workflow Instances
  *
  * 1. Attaches WorkflowInstance to every existing booking that does not have one yet
  * 2. Creates 5 new cross-provider ServiceBookings with workflow instances at various statuses
@@ -62,7 +62,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
   }) {
     const template = await findTemplate(opts.providerType, opts.serviceMode)
     if (!template) {
-      console.log(`    ⚠ No template for ${opts.providerType}/${opts.serviceMode} — skipping ${opts.bookingId}`)
+      console.log(`    ⚠ No template for ${opts.providerType}/${opts.serviceMode} - skipping ${opts.bookingId}`)
       return
     }
 
@@ -218,7 +218,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
 
     for (const lb of labBookings) {
       if (!lb.labTechId || !lb.labTech) {
-        console.log(`    ⚠ Lab booking ${lb.id} has no lab tech — skipping`)
+        console.log(`    ⚠ Lab booking ${lb.id} has no lab tech - skipping`)
         continue
       }
       await migrateBooking({
@@ -253,7 +253,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
 
     for (const eb of emergencyBookings) {
       if (!eb.responderId || !eb.responder) {
-        console.log(`    ⚠ Emergency booking ${eb.id} has no responder — skipping`)
+        console.log(`    ⚠ Emergency booking ${eb.id} has no responder - skipping`)
         continue
       }
       await migrateBooking({
@@ -286,9 +286,9 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
       },
     })
 
-    // Need patient userIds — ServiceBooking.patientId references User.id directly
+    // Need patient userIds - ServiceBooking.patientId references User.id directly
     // Actually patientId on ServiceBooking is a user ID (not profile ID)
-    // Let's verify by checking the schema — it's just a string, no relation
+    // Let's verify by checking the schema - it's just a string, no relation
     for (const sb of serviceBookings) {
       await migrateBooking({
         bookingId: sb.id,
@@ -317,7 +317,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
     select: { id: true, firstName: true, lastName: true },
   })
   if (!patient) {
-    console.log('  ⚠ PAT001 not found — skipping new cross-provider bookings')
+    console.log('  ⚠ PAT001 not found - skipping new cross-provider bookings')
     return
   }
 
@@ -343,7 +343,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
       servicePrice: 800,
       scheduledAt: new Date(now.getTime() + 2 * DAY),
       type: 'in_person',
-      reason: 'Elder companion care — morning routine assistance',
+      reason: 'Elder companion care - morning routine assistance',
     },
     {
       providerId: 'PHYSIO001',
@@ -355,7 +355,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
       servicePrice: 1200,
       scheduledAt: new Date(now.getTime() + 5 * DAY),
       type: 'home_visit',
-      reason: 'Post-knee-surgery rehab — home visit',
+      reason: 'Post-knee-surgery rehab - home visit',
     },
     {
       providerId: 'DENT001',
@@ -367,7 +367,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
       servicePrice: 600,
       scheduledAt: new Date(now.getTime() + 7 * DAY),
       type: 'video',
-      reason: 'Persistent toothache — initial video assessment',
+      reason: 'Persistent toothache - initial video assessment',
     },
     {
       providerId: 'OPT001',
@@ -391,7 +391,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
       servicePrice: 900,
       scheduledAt: new Date(now.getTime() + 13 * DAY),
       type: 'video',
-      reason: 'Diabetes diet plan — initial assessment',
+      reason: 'Diabetes diet plan - initial assessment',
     },
   ]
 
@@ -403,14 +403,14 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
         select: { id: true, firstName: true, lastName: true },
       })
       if (!provider) {
-        console.log(`    ⚠ Provider ${nb.providerId} not found — skipping`)
+        console.log(`    ⚠ Provider ${nb.providerId} not found - skipping`)
         continue
       }
 
       // Find the workflow template
       const template = await findTemplate(nb.providerType, nb.serviceMode)
       if (!template) {
-        console.log(`    ⚠ No template for ${nb.providerType}/${nb.serviceMode} — skipping`)
+        console.log(`    ⚠ No template for ${nb.providerType}/${nb.serviceMode} - skipping`)
         continue
       }
 
@@ -456,7 +456,7 @@ export async function seedWorkflowInstances(prisma: PrismaClient) {
               actionByUserId: nb.workflowStatus === 'pending' ? patient.id : provider.id,
               actionByRole: nb.workflowStatus === 'pending' ? 'patient' : 'provider',
               label,
-              message: `Booking created — ${nb.serviceName}`,
+              message: `Booking created - ${nb.serviceName}`,
             },
           },
         },

@@ -389,7 +389,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
             {panel === 'edit-price'       && 'Edit Price'}
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
-            {panel === 'list'             && `${activeConfigs.length} service${activeConfigs.length !== 1 ? 's' : ''} — patients see these when booking`}
+            {panel === 'list'             && `${activeConfigs.length} service${activeConfigs.length !== 1 ? 's' : ''} - patients see these when booking`}
             {panel === 'add-catalog'      && 'Pick any service from the catalog and choose which appointment types you offer'}
             {panel === 'create-service'   && 'Create a new service template shared with all providers of your type'}
             {panel === 'manage-workflows' && `Appointment types patients can choose for "${managingConfig?.platformService.serviceName}"`}
@@ -486,7 +486,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                   {filteredCatalog.map(group => (
                     <div key={group.category}>
                       <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-1">
-                        {group.category.replace(/^[A-Z_]+\s—\s/, '')}
+                        {group.category.replace(/^[A-Z_]+\s - \s/, '')}
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {group.services.map(svc => {
@@ -890,7 +890,7 @@ function ServiceCard({
               onClick={onManageWorkflows}
               className="flex items-center gap-1.5 text-xs text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg hover:bg-amber-100 transition-colors w-full justify-center"
             >
-              <FaExclamationTriangle className="text-[10px]" /> No appointment types — tap to set
+              <FaExclamationTriangle className="text-[10px]" /> No appointment types - tap to set
             </button>
           ) : (
             <div className="flex flex-wrap gap-1.5">
@@ -1011,7 +1011,7 @@ function WorkflowSelector({
                     </div>
                   </div>
 
-                  {/* Steps timeline — visible when selected */}
+                  {/* Steps timeline - visible when selected */}
                   {selected && steps.length > 0 && (
                     <div className="px-4 pb-3 pt-1 bg-gray-50 border-t border-gray-100">
                       <div className="flex items-center gap-2 overflow-x-auto pb-0.5">

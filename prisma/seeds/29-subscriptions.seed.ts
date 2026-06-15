@@ -11,7 +11,7 @@ const REGION_CURRENCIES: Record<string, { currency: string; countryCode: string 
   RW: { currency: 'RWF', countryCode: 'RW' },
 }
 
-// Base plans defined in MUR — will be converted per region
+// Base plans defined in MUR - will be converted per region
 interface QuotaEntry {
   role: string
   specialty?: string | null

@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * NearbyMap — the "find nearest with geolocation" experience for the final
+ * NearbyMap - the "find nearest with geolocation" experience for the final
  * search step. Lives on /search/{role} (mode="providers") and the
  * organisations search (mode="entities"). It is collapsed by default; the user
  * clicks "Find near me", we read their browser geolocation, query the geo API
@@ -96,7 +96,7 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
   const panTo = (it: NearbyItem) => mapRef.current?.panTo({ lat: it.latitude, lng: it.longitude })
 
   if (!apiKey) {
-    // Graceful fallback when the maps key isn't configured — never crash the search page.
+    // Graceful fallback when the maps key isn't configured - never crash the search page.
     return null
   }
 

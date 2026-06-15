@@ -211,7 +211,7 @@ function ProviderBookingsList({ providerType, title }: { providerType: string; t
  </div>
  </div>
 
- {/* Action buttons for completed bookings — available to every provider role */}
+ {/* Action buttons for completed bookings - available to every provider role */}
  {b.status === 'completed' && (
  <div className="mt-2 flex flex-wrap gap-2">
  <button
@@ -322,7 +322,7 @@ export default function MyHealthSidebar() {
  {/* Backdrop */}
  {sidebarOpen && <div className="sm:hidden fixed inset-0 bg-black/30 z-50" onClick={() => setSidebarOpen(false)} />}
 
- {/* Sidebar — right side */}
+ {/* Sidebar - right side */}
  <div className={`
  fixed sm:sticky top-0 right-0 z-50 sm:z-auto
  h-full w-64 sm:w-52 lg:w-60

@@ -21,7 +21,7 @@ export const CURRENCIES: Record<string, CurrencyInfo> = {
 
 /**
  * Rough exchange rates from MUR for seeding purposes.
- * NOT for live conversions — just approximate equivalents.
+ * NOT for live conversions - just approximate equivalents.
  */
 const SEED_RATES_FROM_MUR: Record<string, number> = {
   MUR: 1,

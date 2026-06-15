@@ -116,7 +116,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  const [submitting, setSubmitting] = useState(false)
  const [error, setError] = useState<string | null>(null)
 
- // Show BOTH this week AND next week on screen at once — 14 days visible
+ // Show BOTH this week AND next week on screen at once - 14 days visible
  // so the user doesn't have to navigate with chevrons to find a free slot.
  const twoWeekDates = useMemo(
   () => [...getWeekDates(weekOffset), ...getWeekDates(weekOffset + 1)],
@@ -216,7 +216,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  return selectedRole.specialties || []
  }, [selectedRole])
 
- // Resolve the active workflow — auto-pick when exactly one exists, else use user's choice
+ // Resolve the active workflow - auto-pick when exactly one exists, else use user's choice
  const activeWorkflow = useMemo(() => {
  if (!selectedService) return null
  if (selectedWorkflowId) return selectedService.workflows.find(w => w.id === selectedWorkflowId) ?? null
@@ -224,7 +224,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  return null
  }, [selectedService, selectedWorkflowId])
 
- // Derive consultType from the selected workflow — no independent state needed
+ // Derive consultType from the selected workflow - no independent state needed
  const consultType = useMemo((): 'in_person' | 'home_visit' | 'video' => {
  if (!activeWorkflow) return 'in_person'
  return modeToConsultType(activeWorkflow.serviceMode)
@@ -236,7 +236,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  setError(null)
 
  try {
- // Universal booking endpoint — no role-specific branching
+ // Universal booking endpoint - no role-specific branching
  const endpoint = '/api/bookings'
 
  const body = (() => {
@@ -399,7 +399,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  </div>
  )}
 
- {/* Step 3: Choose service — consultation type derived from service workflows */}
+ {/* Step 3: Choose service - consultation type derived from service workflows */}
  {step === 3 && (
  <div>
  <h4 className="text-sm font-semibold text-gray-800 mb-3">Select a service</h4>
@@ -435,7 +435,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  })}
  </div>
  ) : (
- <p className="text-xs text-gray-400 mb-3">No specific services listed — general consultation will be booked.</p>
+ <p className="text-xs text-gray-400 mb-3">No specific services listed - general consultation will be booked.</p>
  )}
 
  {/* When there are multiple workflows, user must pick one */}
@@ -480,10 +480,10 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  <div>
  <h4 className="text-base font-semibold text-gray-800 mb-1">Choose date & time</h4>
  <p className="text-xs text-gray-500 mb-4">
-  Showing the next two weeks. Days with a green dot have open slots — already-booked times are hidden.
+  Showing the next two weeks. Days with a green dot have open slots - already-booked times are hidden.
  </p>
 
- {/* Two-week day grid — stacked, no chevron navigation needed */}
+ {/* Two-week day grid - stacked, no chevron navigation needed */}
  <div className="space-y-3 mb-5">
   {[0, 1].map(rowIdx => {
    const rowDays = twoWeekDates.slice(rowIdx * 7, rowIdx * 7 + 7)

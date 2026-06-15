@@ -9,7 +9,7 @@ export default function MyPrescriptions() {
  (data as { id: string; createdAt: string; isActive?: boolean; diagnosis?: string; doctor?: { user?: { firstName: string; lastName: string } }; medicines?: { medicine?: { name: string } }[] }[]).map(p => ({
  id: p.id,
  title: p.diagnosis || 'Prescription',
- subtitle: `Dr. ${p.doctor?.user?.firstName ?? ''} ${p.doctor?.user?.lastName ?? ''}`.trim() + (p.medicines?.length ? ` — ${p.medicines.map(m => m.medicine?.name).filter(Boolean).join(', ')}` : ''),
+ subtitle: `Dr. ${p.doctor?.user?.firstName ?? ''} ${p.doctor?.user?.lastName ?? ''}`.trim() + (p.medicines?.length ? ` - ${p.medicines.map(m => m.medicine?.name).filter(Boolean).join(', ')}` : ''),
  date: new Date(p.createdAt).toLocaleDateString(),
  status: p.isActive ? 'active' : 'completed',
  })), [])

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { productImage } from './_product-images'
 
 /**
- * Seed 40 — Expanded provider data
+ * Seed 40 - Expanded provider data
  *
  * Adds:
  * - More specialties for underrepresented provider types
@@ -227,7 +227,7 @@ export async function seedExpandedInventory(prisma: PrismaClient) {
   const validItems = items.filter(i => existingIds.has(i.providerUserId))
 
   if (validItems.length === 0) {
-    console.log('  No matching providers found — skipping expanded inventory')
+    console.log('  No matching providers found - skipping expanded inventory')
     return
   }
 

@@ -16,7 +16,7 @@ interface SessionProgressProps {
   programName: string
   totalSessions: number
   sessions: SessionEntry[]
-  /** Optional compact mode — shows only the progress bar + count, no session list */
+  /** Optional compact mode - shows only the progress bar + count, no session list */
   compact?: boolean
   /** Optional next session info */
   nextSessionAt?: string | null
@@ -86,7 +86,7 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
               <div className="flex-1 min-w-0">
                 <span className="text-sm text-gray-800">
                   Session {s.sessionNumber}
-                  {s.label && ` — ${s.label}`}
+                  {s.label && ` - ${s.label}`}
                 </span>
                 {s.completedAt && (
                   <span className="text-xs text-gray-400 ml-2">{formatDate(s.completedAt)}</span>

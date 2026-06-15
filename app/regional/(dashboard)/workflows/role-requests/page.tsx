@@ -5,10 +5,10 @@ import { toast } from 'react-toastify'
 import { FiCheckCircle, FiClock, FiUser, FiInbox } from 'react-icons/fi'
 
 /**
- * Regional Admin — Role Request Approval Queue
+ * Regional Admin - Role Request Approval Queue
  *
  * Lists every ProviderRole in `isActive: false` state (pending review)
- * and exposes an Activate action. Fully DB-driven — a new role submitted
+ * and exposes an Activate action. Fully DB-driven - a new role submitted
  * via the public signup endpoint lands here automatically.
  */
 interface PendingRole {
@@ -52,7 +52,7 @@ export default function RoleRequestsPage() {
       })
       const json = await res.json()
       if (json.success) {
-        toast.success('Role activated — now visible in public pickers')
+        toast.success('Role activated - now visible in public pickers')
         setPending(prev => prev.filter(r => r.id !== id))
       } else {
         toast.error(json.message || 'Activation failed')

@@ -18,7 +18,7 @@ interface WeeklySlotPickerProps {
  multiSelect?: boolean
  selectedSlots?: SelectedSlot[]
  onMultiSelect?: (slots: SelectedSlot[]) => void
- /** Service duration in minutes — used to block entire duration, not just the start */
+ /** Service duration in minutes - used to block entire duration, not just the start */
  serviceDuration?: number
 }
 
@@ -163,7 +163,7 @@ export default function WeeklySlotPicker({
    {durLabel && (
     <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
      <FaClock className="text-gray-400" />
-     Each slot reserves <strong className="text-gray-700">{durLabel}</strong> — only start times with the full block free are shown
+     Each slot reserves <strong className="text-gray-700">{durLabel}</strong> - only start times with the full block free are shown
     </div>
    )}
    {multiSelect && selectedSlots.length > 0 && (

@@ -51,7 +51,7 @@ export default function CallButton({ providerId, className = '' }: CallButtonPro
  }
 
  // Determine the user's video/call page route
- // All roles use /video clean URL — middleware rewrites to correct folder
+ // All roles use /video clean URL - middleware rewrites to correct folder
  const routeMap: Record<string, string> = {
  patient: '/video',
  doctor: '/video',

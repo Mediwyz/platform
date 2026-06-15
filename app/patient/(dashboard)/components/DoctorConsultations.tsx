@@ -93,7 +93,7 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  const [loadingServices, setLoadingServices] = useState(false)
  const [selectedServiceId, setSelectedServiceId] = useState('')
 
- // Fetch appointments — unified bookings (ServiceBooking + legacy Appointment)
+ // Fetch appointments - unified bookings (ServiceBooking + legacy Appointment)
  const fetchAppointments = useCallback(async () => {
  try {
  // Use unified endpoint which includes both ServiceBooking and legacy Appointment
@@ -170,7 +170,7 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  }
  }
  } catch {
- // Services are optional — doctor may not have configured any
+ // Services are optional - doctor may not have configured any
  } finally {
  setLoadingServices(false)
  }
@@ -430,7 +430,7 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  <div><span className="text-gray-500">Time:</span> <span className="font-medium">{scheduledTime}</span></div>
  <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
  {selectedService && (
- <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService.serviceName} — {selectedService.currency} {selectedService.price.toLocaleString()}</span></div>
+ <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService.serviceName} - {selectedService.currency} {selectedService.price.toLocaleString()}</span></div>
  )}
  <div><span className="text-gray-500">Reason:</span> <span className="font-medium">{reason}</span></div>
  </div>

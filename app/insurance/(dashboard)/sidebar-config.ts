@@ -10,7 +10,7 @@ export const INSURANCE_SIDEBAR_ITEMS: SidebarItem[] = [
   { id: 'overview', label: 'Dashboard', labelKey: 'nav.overview', icon: FaHome, color: 'text-blue-600', bgColor: 'bg-blue-50', href: base },
   // NOTE: "Analytics" + "Pre-auths" are owner-tier management screens and live
   // under /my-insurance-company/ (capability-gated, visible to ANY user with
-  // insurance-capability — not tied to the legacy INSURANCE_REP userType).
+  // insurance-capability - not tied to the legacy INSURANCE_REP userType).
   // `createDashboardLayout` injects a "My Insurance Company" entry here
   // automatically when the current user has the capability.
   { id: 'portfolio', label: 'My Portfolio', labelKey: 'nav.portfolio', icon: FaBriefcaseMedical, color: 'text-blue-600', bgColor: 'bg-blue-50', href: `${base}/portfolio` },

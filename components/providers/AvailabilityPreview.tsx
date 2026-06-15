@@ -15,7 +15,7 @@ interface AvailabilityRow {
 
 interface Props {
   providerId: string
-  roleSlug?: string  // e.g. "doctor", "nurse" — used for the booking CTA link
+  roleSlug?: string  // e.g. "doctor", "nurse" - used for the booking CTA link
 }
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

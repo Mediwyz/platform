@@ -1,4 +1,4 @@
-// AUTO-GENERATED — real product photos sourced from Wikimedia Commons,
+// AUTO-GENERATED - real product photos sourced from Wikimedia Commons,
 // downloaded to public/images/products/items/. Maps product name -> local image.
 // Regenerate via scripts; do not hand-edit individual entries.
 
@@ -53,7 +53,7 @@ export const PRODUCT_IMAGE_MAP: Record<string, string> = {
   "First Aid Kit": "/images/products/items/first-aid-kit.jpg",
   "Fluoride Mouthwash": "/images/products/items/fluoride-mouthwash.jpg",
   "Foam Roller": "/images/products/items/foam-roller.jpg",
-  "Foam Roller — Deep Tissue": "/images/products/items/foam-roller-deep-tissue.jpg",
+  "Foam Roller - Deep Tissue": "/images/products/items/foam-roller-deep-tissue.jpg",
   "Glucose Meter Kit": "/images/products/items/glucose-meter-kit.png",
   "Hand Sanitizer 500ml": "/images/products/items/hand-sanitizer-500ml.jpg",
   "Home Test Kit COVID": "/images/products/items/home-test-kit-covid.jpg",
@@ -119,7 +119,7 @@ export const PRODUCT_IMAGE_MAP: Record<string, string> = {
   "Warfarin 5mg": "/images/products/items/warfarin-5mg.jpg",
   "Weight Management Shake": "/images/products/items/weight-management-shake.jpg",
   "Wheelchair Cushion": "/images/products/items/wheelchair-cushion.jpg",
-  "Whey Protein Isolate — Vanilla": "/images/products/items/whey-protein-isolate-vanilla.jpg",
+  "Whey Protein Isolate - Vanilla": "/images/products/items/whey-protein-isolate-vanilla.jpg",
   "Wound Dressing Kit": "/images/products/items/wound-dressing-kit.jpg",
   "Wrist Splint": "/images/products/items/wrist-splint.jpg",
   "Zinc 50mg": "/images/products/items/zinc-50mg.jpg",

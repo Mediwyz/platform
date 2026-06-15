@@ -222,7 +222,7 @@ describe('Provider color to card style mapping', () => {
 
 // ─── Company Page Tests (LinkedIn Model) ────────────────────────────────────
 
-describe('Corporate company page — any user can create', () => {
+describe('Corporate company page - any user can create', () => {
   it('corporate admin is NOT in signup constants', async () => {
     const { userTypes } = await import('@/app/signup/constants')
     const ids = userTypes.map(t => t.id)

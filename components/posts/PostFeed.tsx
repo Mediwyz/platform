@@ -184,12 +184,12 @@ export default function PostFeed({
  setPosts((prev) => [newPost, ...prev])
  }
 
- // Any authenticated user may post — role-agnostic per dynamic-roles rule.
+ // Any authenticated user may post - role-agnostic per dynamic-roles rule.
  const showCreateForm = showCreateButton && !!currentUserType
 
  return (
  <div className="space-y-6">
- {/* Create post form — any logged-in user */}
+ {/* Create post form - any logged-in user */}
  {showCreateForm && <CreatePostForm onPostCreated={handlePostCreated} />}
 
  {/* Category filter tabs */}

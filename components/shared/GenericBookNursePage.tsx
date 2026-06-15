@@ -66,7 +66,7 @@ export default function GenericBookNursePage({ params }: { params: Promise<{ id:
  setServices(servicesData.data)
  }
  } catch {
- // Services are optional for display — booking will validate
+ // Services are optional for display - booking will validate
  }
 
  const userId = getUserId()

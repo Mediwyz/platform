@@ -73,45 +73,45 @@ export async function seedBillingAndVideo(prisma: PrismaClient) {
   ]
   await prisma.videoRoomParticipant.createMany({ data: participants, skipDuplicates: true })
 
-  // Video call sessions (2 per room — one per participant)
+  // Video call sessions (2 per room - one per participant)
   const sessions = [
-    // VR006: PAT001 + NUR001 — nurse home visit consultation, 25 min, good
+    // VR006: PAT001 + NUR001 - nurse home visit consultation, 25 min, good
     { roomId: 'VR006', userId: 'PAT001', startedAt: new Date('2024-11-18T09:00:00'), endedAt: new Date('2024-11-18T09:25:00'), duration: 25, callQuality: 'good', status: 'ended', notes: 'Nurse home visit consultation. Discussed wound dressing changes.' },
     { roomId: 'VR006', userId: 'NUR001', startedAt: new Date('2024-11-18T09:00:00'), endedAt: new Date('2024-11-18T09:25:00'), duration: 25, callQuality: 'good', status: 'ended', notes: 'Nurse home visit consultation. Discussed wound dressing changes.' },
 
-    // VR007: PAT002 + DOC002 — follow-up dermatology, 18 min, excellent
+    // VR007: PAT002 + DOC002 - follow-up dermatology, 18 min, excellent
     { roomId: 'VR007', userId: 'PAT002', startedAt: new Date('2024-11-22T14:30:00'), endedAt: new Date('2024-11-22T14:48:00'), duration: 18, callQuality: 'excellent', status: 'ended', notes: 'Dermatology follow-up. Skin condition improving with prescribed cream.' },
     { roomId: 'VR007', userId: 'DOC002', startedAt: new Date('2024-11-22T14:30:00'), endedAt: new Date('2024-11-22T14:48:00'), duration: 18, callQuality: 'excellent', status: 'ended', notes: 'Dermatology follow-up. Skin condition improving with prescribed cream.' },
 
-    // VR008: PAT003 + NAN001 — childcare check-in, 12 min, good
+    // VR008: PAT003 + NAN001 - childcare check-in, 12 min, good
     { roomId: 'VR008', userId: 'PAT003', startedAt: new Date('2024-11-25T10:00:00'), endedAt: new Date('2024-11-25T10:12:00'), duration: 12, callQuality: 'good', status: 'ended', notes: 'Childcare check-in. Child adapting well. No concerns.' },
     { roomId: 'VR008', userId: 'NAN001', startedAt: new Date('2024-11-25T10:00:00'), endedAt: new Date('2024-11-25T10:12:00'), duration: 12, callQuality: 'good', status: 'ended', notes: 'Childcare check-in. Child adapting well. No concerns.' },
 
-    // VR009: PAT001 + DOC001 — diabetes review, 30 min, excellent
+    // VR009: PAT001 + DOC001 - diabetes review, 30 min, excellent
     { roomId: 'VR009', userId: 'PAT001', startedAt: new Date('2024-12-02T11:00:00'), endedAt: new Date('2024-12-02T11:30:00'), duration: 30, callQuality: 'excellent', status: 'ended', notes: 'Diabetes review. HbA1c stable. Medication unchanged.' },
     { roomId: 'VR009', userId: 'DOC001', startedAt: new Date('2024-12-02T11:00:00'), endedAt: new Date('2024-12-02T11:30:00'), duration: 30, callQuality: 'excellent', status: 'ended', notes: 'Diabetes review. HbA1c stable. Medication unchanged.' },
 
-    // VR010: PAT004 + DOC003 — cardiology, 22 min, good
+    // VR010: PAT004 + DOC003 - cardiology, 22 min, good
     { roomId: 'VR010', userId: 'PAT004', startedAt: new Date('2024-12-05T15:00:00'), endedAt: new Date('2024-12-05T15:22:00'), duration: 22, callQuality: 'good', status: 'ended', notes: 'Cardiology consultation. Blood pressure under control. Continue current meds.' },
     { roomId: 'VR010', userId: 'DOC003', startedAt: new Date('2024-12-05T15:00:00'), endedAt: new Date('2024-12-05T15:22:00'), duration: 22, callQuality: 'good', status: 'ended', notes: 'Cardiology consultation. Blood pressure under control. Continue current meds.' },
 
-    // VR011: PAT005 + NUR002 — wound care follow-up, 15 min, fair
+    // VR011: PAT005 + NUR002 - wound care follow-up, 15 min, fair
     { roomId: 'VR011', userId: 'PAT005', startedAt: new Date('2024-12-08T08:30:00'), endedAt: new Date('2024-12-08T08:45:00'), duration: 15, callQuality: 'fair', status: 'ended', notes: 'Wound care follow-up. Healing progressing but slower than expected.' },
     { roomId: 'VR011', userId: 'NUR002', startedAt: new Date('2024-12-08T08:30:00'), endedAt: new Date('2024-12-08T08:45:00'), duration: 15, callQuality: 'fair', status: 'ended', notes: 'Wound care follow-up. Healing progressing but slower than expected.' },
 
-    // VR012: PAT002 + PHARM001 — medication consultation, 10 min, good
+    // VR012: PAT002 + PHARM001 - medication consultation, 10 min, good
     { roomId: 'VR012', userId: 'PAT002', startedAt: new Date('2024-12-10T16:00:00'), endedAt: new Date('2024-12-10T16:10:00'), duration: 10, callQuality: 'good', status: 'ended', notes: 'Medication consultation. Reviewed potential drug interactions.' },
     { roomId: 'VR012', userId: 'PHARM001', startedAt: new Date('2024-12-10T16:00:00'), endedAt: new Date('2024-12-10T16:10:00'), duration: 10, callQuality: 'good', status: 'ended', notes: 'Medication consultation. Reviewed potential drug interactions.' },
 
-    // VR013: DOC001 + NUR001 — care coordination, 20 min, excellent
+    // VR013: DOC001 + NUR001 - care coordination, 20 min, excellent
     { roomId: 'VR013', userId: 'DOC001', startedAt: new Date('2024-12-12T13:00:00'), endedAt: new Date('2024-12-12T13:20:00'), duration: 20, callQuality: 'excellent', status: 'ended', notes: 'Care coordination for shared patients. Updated treatment plans.' },
     { roomId: 'VR013', userId: 'NUR001', startedAt: new Date('2024-12-12T13:00:00'), endedAt: new Date('2024-12-12T13:20:00'), duration: 20, callQuality: 'excellent', status: 'ended', notes: 'Care coordination for shared patients. Updated treatment plans.' },
 
-    // VR014: PAT003 + DOC002 — pediatric checkup, failed
+    // VR014: PAT003 + DOC002 - pediatric checkup, failed
     { roomId: 'VR014', userId: 'PAT003', startedAt: new Date('2024-12-15T10:00:00'), endedAt: null, duration: null, callQuality: null, status: 'failed', notes: 'Connection failed. Patient could not establish video link.' },
     { roomId: 'VR014', userId: 'DOC002', startedAt: new Date('2024-12-15T10:00:00'), endedAt: null, duration: null, callQuality: null, status: 'failed', notes: 'Connection failed. Patient could not establish video link.' },
 
-    // VR015: PAT001 + EMW001 — emergency follow-up, 8 min, good
+    // VR015: PAT001 + EMW001 - emergency follow-up, 8 min, good
     { roomId: 'VR015', userId: 'PAT001', startedAt: new Date('2024-12-18T17:00:00'), endedAt: new Date('2024-12-18T17:08:00'), duration: 8, callQuality: 'good', status: 'ended', notes: 'Emergency follow-up. Patient stable after ER visit.' },
     { roomId: 'VR015', userId: 'EMW001', startedAt: new Date('2024-12-18T17:00:00'), endedAt: new Date('2024-12-18T17:08:00'), duration: 8, callQuality: 'good', status: 'ended', notes: 'Emergency follow-up. Patient stable after ER visit.' },
   ]
@@ -152,7 +152,7 @@ export async function seedBillingAndVideo(prisma: PrismaClient) {
   ]
   await prisma.notification.createMany({ data: notifications, skipDuplicates: true })
 
-  // ─── 4. Additional Video Rooms (VR016–VR023) — mixed provider pairings ──────
+  // ─── 4. Additional Video Rooms (VR016–VR023) - mixed provider pairings ──────
 
   const extraVideoRooms = [
     { id: 'VR016', roomCode: 'ROOM-NUR001-PAT002', name: 'Nurse Ramgoolam - Jean Pierre (Asthma Home Visit)', creatorId: 'NUR001', status: 'ended' },
@@ -202,28 +202,28 @@ export async function seedBillingAndVideo(prisma: PrismaClient) {
   await prisma.videoRoomParticipant.createMany({ data: extraParticipants, skipDuplicates: true })
 
   const extraSessions = [
-    // VR016: PAT002 + NUR001 — asthma home visit, 20 min, good
+    // VR016: PAT002 + NUR001 - asthma home visit, 20 min, good
     { roomId: 'VR016', userId: 'PAT002', startedAt: new Date('2025-01-05T10:00:00'), endedAt: new Date('2025-01-05T10:20:00'), duration: 20, callQuality: 'good', status: 'ended', notes: 'Nurse reviewed asthma action plan. Peak flow readings acceptable.' },
     { roomId: 'VR016', userId: 'NUR001', startedAt: new Date('2025-01-05T10:00:00'), endedAt: new Date('2025-01-05T10:20:00'), duration: 20, callQuality: 'good', status: 'ended', notes: 'Nurse reviewed asthma action plan. Peak flow readings acceptable.' },
-    // VR017: PAT004 + NAN001 — childcare consult, 15 min, excellent
+    // VR017: PAT004 + NAN001 - childcare consult, 15 min, excellent
     { roomId: 'VR017', userId: 'PAT004', startedAt: new Date('2025-01-08T14:00:00'), endedAt: new Date('2025-01-08T14:15:00'), duration: 15, callQuality: 'excellent', status: 'ended', notes: 'Childcare routine discussion. Children settling well with nanny.' },
     { roomId: 'VR017', userId: 'NAN001', startedAt: new Date('2025-01-08T14:00:00'), endedAt: new Date('2025-01-08T14:15:00'), duration: 15, callQuality: 'excellent', status: 'ended', notes: 'Childcare routine discussion. Children settling well with nanny.' },
-    // VR018: PAT001 + LAB001 — pre-test instructions, 10 min, good
+    // VR018: PAT001 + LAB001 - pre-test instructions, 10 min, good
     { roomId: 'VR018', userId: 'PAT001', startedAt: new Date('2025-01-10T08:00:00'), endedAt: new Date('2025-01-10T08:10:00'), duration: 10, callQuality: 'good', status: 'ended', notes: 'Fasting instructions confirmed. Appointment details reviewed with patient.' },
     { roomId: 'VR018', userId: 'LAB001', startedAt: new Date('2025-01-10T08:00:00'), endedAt: new Date('2025-01-10T08:10:00'), duration: 10, callQuality: 'good', status: 'ended', notes: 'Fasting instructions confirmed. Appointment details reviewed with patient.' },
-    // VR019: PAT004 + NUR002 — hypertension monitoring, 25 min, excellent
+    // VR019: PAT004 + NUR002 - hypertension monitoring, 25 min, excellent
     { roomId: 'VR019', userId: 'PAT004', startedAt: new Date('2025-01-12T09:30:00'), endedAt: new Date('2025-01-12T09:55:00'), duration: 25, callQuality: 'excellent', status: 'ended', notes: 'BP log reviewed. Readings improving on Lisinopril. Continue current dose.' },
     { roomId: 'VR019', userId: 'NUR002', startedAt: new Date('2025-01-12T09:30:00'), endedAt: new Date('2025-01-12T09:55:00'), duration: 25, callQuality: 'excellent', status: 'ended', notes: 'BP log reviewed. Readings improving on Lisinopril. Continue current dose.' },
-    // VR020: PAT003 + NAN002 — childcare review, 18 min, fair
+    // VR020: PAT003 + NAN002 - childcare review, 18 min, fair
     { roomId: 'VR020', userId: 'PAT003', startedAt: new Date('2025-01-15T11:00:00'), endedAt: new Date('2025-01-15T11:18:00'), duration: 18, callQuality: 'fair', status: 'ended', notes: 'Routine check-in. Minor audio issues but call completed successfully.' },
     { roomId: 'VR020', userId: 'NAN002', startedAt: new Date('2025-01-15T11:00:00'), endedAt: new Date('2025-01-15T11:18:00'), duration: 18, callQuality: 'fair', status: 'ended', notes: 'Routine check-in. Minor audio issues but call completed successfully.' },
-    // VR021: PAT004 + EMW001 — emergency follow-up, 12 min, good
+    // VR021: PAT004 + EMW001 - emergency follow-up, 12 min, good
     { roomId: 'VR021', userId: 'PAT004', startedAt: new Date('2025-01-18T16:00:00'), endedAt: new Date('2025-01-18T16:12:00'), duration: 12, callQuality: 'good', status: 'ended', notes: 'Post-hypertensive crisis follow-up. Patient stable. Referred to GP for ongoing management.' },
     { roomId: 'VR021', userId: 'EMW001', startedAt: new Date('2025-01-18T16:00:00'), endedAt: new Date('2025-01-18T16:12:00'), duration: 12, callQuality: 'good', status: 'ended', notes: 'Post-hypertensive crisis follow-up. Patient stable. Referred to GP for ongoing management.' },
-    // VR022: PAT005 + DOC002 — active session (no end time)
+    // VR022: PAT005 + DOC002 - active session (no end time)
     { roomId: 'VR022', userId: 'PAT005', startedAt: new Date(Date.now() - 600000), endedAt: null, duration: null, callQuality: null, status: 'active', notes: 'Back pain consultation in progress.' },
     { roomId: 'VR022', userId: 'DOC002', startedAt: new Date(Date.now() - 600000), endedAt: null, duration: null, callQuality: null, status: 'active', notes: 'Back pain consultation in progress.' },
-    // VR023: PAT003 + PHARM002 — active session (no end time)
+    // VR023: PAT003 + PHARM002 - active session (no end time)
     { roomId: 'VR023', userId: 'PAT003', startedAt: new Date(Date.now() - 300000), endedAt: null, duration: null, callQuality: null, status: 'active', notes: 'Medication query call in progress.' },
     { roomId: 'VR023', userId: 'PHARM002', startedAt: new Date(Date.now() - 300000), endedAt: null, duration: null, callQuality: null, status: 'active', notes: 'Medication query call in progress.' },
   ]

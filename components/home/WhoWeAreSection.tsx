@@ -58,7 +58,7 @@ const WhoWeAreSection: React.FC = () => {
  </p>
  
  <p className="text-gray-600 leading-relaxed">
- To bring the best services to our users, we are constantly innovating. There is no typical day at MediWyz—and that&apos;s part of the fun! We are looking for driven individuals excited by what the future of healthcare could look like.
+ To bring the best services to our users, we are constantly innovating. There is no typical day at MediWyz - and that&apos;s part of the fun! We are looking for driven individuals excited by what the future of healthcare could look like.
  </p>
  </div>
 

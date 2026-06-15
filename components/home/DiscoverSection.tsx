@@ -474,7 +474,7 @@ export default function DiscoverSection() {
             Everything You Need, <span className="text-[#9AE1FF]">All In One Place</span>
           </h2>
           <p className="text-sm text-white/50 mt-1.5 max-w-lg mx-auto">
-            Find services, browse qualified providers, and shop health products — with live map to locate anyone near you.
+            Find services, browse qualified providers, and shop health products - with live map to locate anyone near you.
           </p>
         </div>
 
@@ -667,7 +667,7 @@ export default function DiscoverSection() {
               )}
             </div>
 
-            {/* Nearest sidebar — compact list */}
+            {/* Nearest sidebar - compact list */}
             <div className="flex-shrink-0 border-t border-white/10 max-h-48 overflow-y-auto">
               {nearestSidebar.length === 0 ? (
                 <div className="px-4 py-6 text-center">
@@ -875,7 +875,7 @@ export default function DiscoverSection() {
                   <div className="text-center py-12">
                     <FaConciergeBell className="text-4xl text-gray-200 mx-auto mb-3" />
                     {servicesError
-                      ? <p className="text-sm text-gray-500">Could not load services — ensure the backend is running.</p>
+                      ? <p className="text-sm text-gray-500">Could not load services - ensure the backend is running.</p>
                       : <><p className="text-sm text-gray-500">No services match your search.</p>
                         <button onClick={() => { setSvcSearch(''); setTabServiceRole('ALL') }} className="mt-2 text-xs text-[#0C6780] hover:underline">Clear filters</button></>
                     }
@@ -997,7 +997,7 @@ export default function DiscoverSection() {
                       <FaShoppingBag className="text-[#0C6780] text-lg" />
                       Health Shop
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5">Medicines, vitamins, devices &amp; more — from verified providers</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Medicines, vitamins, devices &amp; more - from verified providers</p>
                   </div>
                   <Link href="/search/health-shop" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />

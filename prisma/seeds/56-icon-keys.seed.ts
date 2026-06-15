@@ -1,10 +1,10 @@
 /**
- * Seed 56 — Icon keys for ProviderRole + PlatformService
+ * Seed 56 - Icon keys for ProviderRole + PlatformService
  *
  * Strategy:
  *   - ProviderRole  → iconKey (healthicons library, confirmed working)
  *   - PlatformService → emoji ONLY (iconKey = null)
- *     Emojis render everywhere with zero CDN dependency — critical for investor demos.
+ *     Emojis render everywhere with zero CDN dependency - critical for investor demos.
  *
  * Re-runnable: safe to run multiple times (upsert-style updates).
  */
@@ -13,7 +13,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// ─── Provider role icon keys — all verified against @iconify-json/healthicons ──
+// ─── Provider role icon keys - all verified against @iconify-json/healthicons ──
 // Validation: node -e "const d=require('@iconify-json/healthicons/icons.json'); console.log(Boolean(d.icons['KEY']))"
 const ROLE_ICONS: Record<string, string> = {
   DOCTOR:            'healthicons:doctor',
@@ -35,7 +35,7 @@ const ROLE_ICONS: Record<string, string> = {
 
 // ─── Service emoji resolver ───────────────────────────────────────────────────
 // Returns only an emoji (iconKey is intentionally null for all services).
-// Emoji renders on every device/browser without a CDN call — critical for demos.
+// Emoji renders on every device/browser without a CDN call - critical for demos.
 function resolveServiceEmoji(name: string, category: string, providerType: string): string {
   const t = `${name} ${category}`.toLowerCase();
 

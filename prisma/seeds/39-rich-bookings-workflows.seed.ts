@@ -1,5 +1,5 @@
 /**
- * Seed 39 — Rich Bookings & Workflows
+ * Seed 39 - Rich Bookings & Workflows
  *
  * Creates ServiceBookings with attached WorkflowInstances at various statuses
  * for every provider type, plus VideoRoom records for video bookings.
@@ -88,7 +88,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
   }
 
   if (Object.keys(patients).length === 0) {
-    console.log('  Skipping — no patients found')
+    console.log('  Skipping - no patients found')
     return
   }
 
@@ -175,7 +175,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
     try {
       const patient = patients[def.patientId]
       if (!patient) {
-        console.log(`    Skipping — patient ${def.patientId} not found`)
+        console.log(`    Skipping - patient ${def.patientId} not found`)
         continue
       }
 
@@ -184,7 +184,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
         select: { id: true, firstName: true, lastName: true },
       })
       if (!provider) {
-        console.log(`    Skipping — provider ${def.providerId} not found`)
+        console.log(`    Skipping - provider ${def.providerId} not found`)
         continue
       }
 
@@ -207,7 +207,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
           status: def.status,
           serviceName,
           servicePrice: def.servicePrice,
-          reason: `${serviceName} — ${def.type === 'video' ? 'video consultation' : 'in-person visit'}`,
+          reason: `${serviceName} - ${def.type === 'video' ? 'video consultation' : 'in-person visit'}`,
         },
       })
       bookingCount++
@@ -216,7 +216,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
       const serviceMode = toServiceMode(def.type)
       const template = await findTemplate(def.providerType, serviceMode)
       if (!template) {
-        console.log(`    No template for ${def.providerType}/${serviceMode} — booking created without workflow`)
+        console.log(`    No template for ${def.providerType}/${serviceMode} - booking created without workflow`)
         continue
       }
 
@@ -275,7 +275,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
   console.log(`  ✓ ${bookingCount} service bookings, ${instanceCount} workflow instances, ${stepLogCount} step logs`)
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // VIDEO ROOMS — for video bookings and additional provider rooms
+  // VIDEO ROOMS - for video bookings and additional provider rooms
   // ═══════════════════════════════════════════════════════════════════════════
   console.log('  Seeding video rooms for workflow bookings...')
 
@@ -293,7 +293,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
     // 5 additional video rooms for providers with video-status bookings
     {
       roomCode: 'WF-DOC001-PAT001',
-      name: 'Dr. Consultation — Video',
+      name: 'Dr. Consultation - Video',
       creatorId: 'DOC001',
       status: 'active',
       participants: [
@@ -303,7 +303,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
     },
     {
       roomCode: 'WF-NUR001-PAT002',
-      name: 'Nurse Consultation — Video',
+      name: 'Nurse Consultation - Video',
       creatorId: 'NUR001',
       status: 'active',
       participants: [
@@ -313,7 +313,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
     },
     {
       roomCode: 'WF-CARE001-PAT001',
-      name: 'Caregiver Session — Video',
+      name: 'Caregiver Session - Video',
       creatorId: 'CARE001',
       status: 'ended',
       participants: [
@@ -323,7 +323,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
     },
     {
       roomCode: 'WF-DENT001-PAT003',
-      name: 'Dental Teleconsultation — Video',
+      name: 'Dental Teleconsultation - Video',
       creatorId: 'DENT001',
       status: 'active',
       participants: [
@@ -351,7 +351,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
         select: { id: true },
       })
       if (!creator) {
-        console.log(`    Skipping room ${roomDef.roomCode} — creator ${roomDef.creatorId} not found`)
+        console.log(`    Skipping room ${roomDef.roomCode} - creator ${roomDef.creatorId} not found`)
         continue
       }
 
@@ -360,7 +360,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
         where: { roomCode: roomDef.roomCode },
       })
       if (existing) {
-        console.log(`    Skipping room ${roomDef.roomCode} — already exists`)
+        console.log(`    Skipping room ${roomDef.roomCode} - already exists`)
         continue
       }
 
@@ -372,7 +372,7 @@ export async function seedRichBookingsAndWorkflows(prisma: PrismaClient) {
           select: { id: true },
         })
         if (!user) {
-          console.log(`    Skipping room ${roomDef.roomCode} — participant ${p.userId} not found`)
+          console.log(`    Skipping room ${roomDef.roomCode} - participant ${p.userId} not found`)
           allParticipantsExist = false
           break
         }

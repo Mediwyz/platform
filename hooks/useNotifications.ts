@@ -61,7 +61,7 @@ export function useNotifications(userId: string | undefined, limit = 15): UseNot
       setUnreadCount(json.meta?.unreadCount ?? mapped.filter(n => !n.isRead).length)
       lastFetchRef.current = Date.now()
     } catch {
-      // silent — bell gracefully shows stale data
+      // silent - bell gracefully shows stale data
     } finally {
       setLoading(false)
     }
@@ -132,7 +132,7 @@ export function useNotifications(userId: string | undefined, limit = 15): UseNot
         method: 'PATCH',
         credentials: 'include',
       })
-    } catch { /* silent — optimistic update stays */ }
+    } catch { /* silent - optimistic update stays */ }
   }, [userId])
 
   const markAllRead = useCallback(async () => {

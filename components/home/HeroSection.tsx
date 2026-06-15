@@ -146,7 +146,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
 
           <p className="text-lg sm:text-xl xl:text-2xl text-gray-300/90 leading-relaxed max-w-4xl mb-8">
             {content?.subtitle ||
-              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India — all in one secure platform."}
+              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India - all in one secure platform."}
           </p>
 
           {/* App download badges */}
@@ -175,7 +175,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             </a>
           </div>
 
-          {/* Feature pills — clickable, scroll to the relevant section */}
+          {/* Feature pills - clickable, scroll to the relevant section */}
           <div className="flex flex-wrap gap-2 mb-7">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
@@ -197,7 +197,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             })}
           </div>
 
-          {/* Trust stats — dynamic from DB · subtle glass stat cards · span full column */}
+          {/* Trust stats - dynamic from DB · subtle glass stat cards · span full column */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
@@ -253,7 +253,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             </div>
           </div>
 
-          {/* Desktop image carousel — smaller rounded card with vertical margin spacing */}
+          {/* Desktop image carousel - smaller rounded card with vertical margin spacing */}
           <div className="hidden lg:block absolute inset-y-10 inset-x-8 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/15">
             <AnimatePresence mode="wait">
               <motion.div

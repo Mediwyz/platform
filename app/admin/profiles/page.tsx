@@ -199,7 +199,7 @@ export default function ProfileManagement() {
  </div>
  <div className="flex items-center justify-between">
  <span className="text-gray-600">Phone:</span>
- <span className="font-medium">{account.phone || '—'}</span>
+ <span className="font-medium">{account.phone || ' - '}</span>
  </div>
  <div className="flex items-center justify-between">
  <span className="text-gray-600">Joined:</span>

@@ -81,7 +81,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
       .then(r => r.json())
       .then(json => {
         if (json.success && json.data?.length > 0) {
-          // Filter out CORPORATE_ADMIN — any user can create a company from their dashboard
+          // Filter out CORPORATE_ADMIN - any user can create a company from their dashboard
           const filtered = json.data.filter((r: RoleFromAPI) => r.code !== 'CORPORATE_ADMIN')
           const { types, docs } = mapAPIToUserTypes(filtered)
           if (types.length > 0) {
@@ -114,7 +114,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
               onChange={(e) => onUserTypeChange(e.target.value)}
               className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-base focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none transition-colors"
             >
-              <option value="">— Choose one —</option>
+              <option value=""> - Choose one - </option>
               {userTypes.map((type) => (
                 <option key={type.id} value={type.id}>
                   {type.label}
@@ -196,7 +196,7 @@ function RoleRequestTrigger({ onOpen }: { onOpen: () => void }) {
 
 /**
  * Modal for the "I don't see my role" path. Submits to
- * `POST /api/roles/request` — the public endpoint that creates a pending
+ * `POST /api/roles/request` - the public endpoint that creates a pending
  * ProviderRole. Regional admins approve it before it becomes public.
  */
 function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSubmitted: () => void }) {
@@ -222,7 +222,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
       if (!json.success) { setError(json.message || 'Request failed'); return }
       onSubmitted()
     } catch {
-      setError('Network error — try again.')
+      setError('Network error - try again.')
     } finally {
       setBusy(false)
     }

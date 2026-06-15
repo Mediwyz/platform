@@ -12,7 +12,7 @@ interface Streak {
 }
 
 /**
- * Streak tile for the health tracker Dashboard tab. One-tap check-in —
+ * Streak tile for the health tracker Dashboard tab. One-tap check-in - 
  * idempotent per day, backend extends streak if yesterday was logged.
  */
 export default function StreakTile() {

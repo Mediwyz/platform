@@ -11,7 +11,7 @@ import { FaCheck, FaChevronRight, FaTimes } from 'react-icons/fa'
  * the user taps the × once (preference persists via localStorage).
  *
  * Each item fires a GET against its "done?" endpoint, so progress is
- * derived from real state — nothing to reset, nothing to game.
+ * derived from real state - nothing to reset, nothing to game.
  */
 
 interface Step {
@@ -59,7 +59,7 @@ export default function OnboardingChecklist({ userId }: { userId: string }) {
     {
       id: 'first-booking',
       label: 'Book your first visit',
-      description: 'Video, home, or in-person — book in under 60 seconds.',
+      description: 'Video, home, or in-person - book in under 60 seconds.',
       href: '/search/doctors',
       check: async () => {
         try {

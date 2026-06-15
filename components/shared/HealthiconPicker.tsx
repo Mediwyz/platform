@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * HealthiconPicker — lets a provider choose a Healthicon for their service from
+ * HealthiconPicker - lets a provider choose a Healthicon for their service from
  * the full 740-icon set (browse by category + search by tag/title), or supply a
  * custom image URL. Returns the chosen healthicon path (e.g. "specialties/cardiology")
  * via onSelectIcon, or a custom image URL via onSelectImage.
@@ -154,7 +154,7 @@ export default function HealthiconPicker({ value, onSelectIcon, onSelectImage, o
             </div>
           )}
           {!loading && filtered.length >= 300 && (
-            <p className="text-center text-xs text-gray-400 mt-4">Showing first 300 — refine your search to see more.</p>
+            <p className="text-center text-xs text-gray-400 mt-4">Showing first 300 - refine your search to see more.</p>
           )}
         </div>
       </div>

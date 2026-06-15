@@ -11,7 +11,7 @@ export default function FloatingCart() {
 
   return (
     <>
-      {/* Floating button — slot 4: highest position */}
+      {/* Floating button - slot 4: highest position */}
       <button
         onClick={() => setOpen(!open)}
         title="Health Shop"
@@ -44,7 +44,7 @@ export default function FloatingCart() {
         </div>
       )}
 
-      {/* Cart panel — when items present */}
+      {/* Cart panel - when items present */}
       {open && totalItems > 0 && (
         <div className="fixed bottom-[404px] sm:bottom-[328px] right-4 sm:right-5 z-[150] w-[360px] max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
           {/* Header */}

@@ -145,7 +145,7 @@ export default function InsurancePreAuthsPage() {
 
           {approved.length > 0 && (
             <section>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-emerald-700 mb-2">Approved — waiting for provider to deliver</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-emerald-700 mb-2">Approved - waiting for provider to deliver</h2>
               <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
                 {approved.map((p) => <div key={p.id} className="p-4"><Row p={p} format={format} /></div>)}
               </div>

@@ -190,7 +190,7 @@ const mapApiMedicine = (item: ApiMedicine): MedicineUi => {
  price,
  originalPrice: price, // No fake markup
  discount: '',
- rating: 0, // No fake rating — should come from reviews API
+ rating: 0, // No fake rating - should come from reviews API
  reviews: 0,
  inStock: (item.inStock ?? false) && qty > 0,
  quantity: qty,

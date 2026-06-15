@@ -87,13 +87,13 @@ export default function MyCompanyPage() {
     try {
       // Look up the current user's region so we only show plans priced in
       // their currency. Without this filter, every region's plans appear
-      // (MUR + KES + XOF + RWF + MGA — creates the duplicate-plan illusion).
+      // (MUR + KES + XOF + RWF + MGA - creates the duplicate-plan illusion).
       let countryCode: string | null = null
       try {
         const meRes = await fetch('/api/auth/me', { credentials: 'include' })
         const meJson = await meRes.json()
         countryCode = meJson?.user?.regionCode ?? null
-      } catch { /* fall through — show plans anyway */ }
+      } catch { /* fall through - show plans anyway */ }
 
       const qs = new URLSearchParams({ type: 'corporate' })
       if (countryCode) qs.set('countryCode', countryCode)
@@ -417,7 +417,7 @@ export default function MyCompanyPage() {
 
       <CompanyAnalytics />
 
-      {/* Insurance members table — rendered only when this company is flagged as insurance. */}
+      {/* Insurance members table - rendered only when this company is flagged as insurance. */}
       <div className="mb-8">
         <InsuranceMembersTable />
       </div>

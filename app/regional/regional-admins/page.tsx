@@ -45,7 +45,7 @@ interface RegionalAdmin {
 function mapApiToAdmin(r: Record<string, unknown>, idx: number): RegionalAdmin {
  return {
  id: `RA${String(idx + 1).padStart(3, '0')}`,
- name: (r.adminName as string) || `Admin — ${r.region}`,
+ name: (r.adminName as string) || `Admin - ${r.region}`,
  email: (r.adminEmail as string) || '',
  region: r.region as string,
  country: (r.countryCode as string) || '',
@@ -248,7 +248,7 @@ export default function RegionalAdminsPage() {
  <p className="text-xs text-gray-600">Satisfaction</p>
  <div className="flex items-center gap-1">
  <FaStar className="text-yellow-500" />
- <span className="text-lg font-bold text-purple-600">{admin.performance.satisfactionScore || '—'}</span>
+ <span className="text-lg font-bold text-purple-600">{admin.performance.satisfactionScore || ' - '}</span>
  </div>
  </div>
  <div className="bg-orange-50 rounded-lg p-3">

@@ -56,7 +56,7 @@ export default function BloodPressureScanner() {
  await (track as unknown as { applyConstraints: (c: Record<string, unknown>) => Promise<void> })
  .applyConstraints({ advanced: [{ torch: true }] } as unknown as Record<string, unknown>)
  } catch {
- // Torch not supported — continue without it
+ // Torch not supported - continue without it
  }
  }
 
@@ -254,7 +254,7 @@ export default function BloodPressureScanner() {
  style={{ width: `${progress}%` }}
  />
  </div>
- <p className="text-white/60 text-xs text-center mt-2">{Math.round(progress)}% — {Math.round((100 - progress) / 10)}s remaining</p>
+ <p className="text-white/60 text-xs text-center mt-2">{Math.round(progress)}% - {Math.round((100 - progress) / 10)}s remaining</p>
  </div>
  )}
  </div>

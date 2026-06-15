@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 /**
- * Seeds ProviderRole.profileFields — the DB-driven profile form schema.
+ * Seeds ProviderRole.profileFields - the DB-driven profile form schema.
  * Replaces the hardcoded switch-case in `components/profile/UserProfile.tsx`
  * so new roles created via regional-admin CRUD don't need a code change.
  *

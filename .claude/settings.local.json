@@ -307,7 +307,16 @@
       "Bash(node_modules/.bin/eslint app *)",
       "Bash(Select-String *)",
       "Bash(cat \"C:\\\\Users\\\\TSANTA\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Github-Repositories-healthways-typescript\\\\1de510d1-35dd-4741-a58b-173feadd7102\\\\tasks\\\\blqavqwht.output\")",
-      "Bash(echo \"EXIT:$?\")"
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(ls mobile/lib/screens/)",
+      "Bash(ls mobile/lib/)",
+      "Bash(npm list *)",
+      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 5 --json status,conclusion,name,headSha,createdAt | ConvertFrom-Json | ForEach-Object { \"$\\($_.createdAt\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) $\\($_.headSha.Substring\\(0,8\\)\\)\" })",
+      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 3 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })",
+      "PowerShell(gh run *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Github Repositories\\\\healthways-typescript\\\\.github\\\\workflows\" -Name | Where-Object { $_ -match \"ci|deploy|test|build\" })",
+      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 4 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })",
+      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 5 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })"
     ]
   }
 }

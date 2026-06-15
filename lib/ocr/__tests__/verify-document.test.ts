@@ -43,7 +43,7 @@ function groqError(status: number, message: string) {
 }
 
 const FAKE_IMAGE_BUFFER = Buffer.from('fake-image-data-for-testing')
-const LARGE_BUFFER = Buffer.alloc(5 * 1024 * 1024) // 5MB — over 4MB limit
+const LARGE_BUFFER = Buffer.alloc(5 * 1024 * 1024) // 5MB - over 4MB limit
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
@@ -58,7 +58,7 @@ describe('verifyDocument', () => {
 
   describe('Image verification (VLM)', () => {
 
-    it('verifies name found in a PNG document — exact match', async () => {
+    it('verifies name found in a PNG document - exact match', async () => {
       mockFetch.mockResolvedValueOnce(groqResponse({
         name_found: true,
         confidence: 95,
@@ -116,7 +116,7 @@ describe('verifyDocument', () => {
 
     // ── Name mismatch tests ──────────────────────────────────────────────────
 
-    it('detects WRONG name — completely different person', async () => {
+    it('detects WRONG name - completely different person', async () => {
       mockFetch.mockResolvedValueOnce(groqResponse({
         name_found: false,
         confidence: 5,
@@ -137,7 +137,7 @@ describe('verifyDocument', () => {
       expect(result.matchDetails.missingParts).toContain('Dupont')
     })
 
-    it('detects PARTIAL name match — first name only', async () => {
+    it('detects PARTIAL name match - first name only', async () => {
       mockFetch.mockResolvedValueOnce(groqResponse({
         name_found: false,
         confidence: 40,
@@ -156,7 +156,7 @@ describe('verifyDocument', () => {
       expect(result.matchDetails.missingParts).toContain('Dupont')
     })
 
-    it('detects MISSPELLED name — close but not matching', async () => {
+    it('detects MISSPELLED name - close but not matching', async () => {
       mockFetch.mockResolvedValueOnce(groqResponse({
         name_found: false,
         confidence: 30,
@@ -445,7 +445,7 @@ describe('verifyDocument', () => {
   })
 
   // ────────────────────────────────────────────────────────────────────────────
-  // NAME VARIATION TESTS — Different formats and edge cases
+  // NAME VARIATION TESTS - Different formats and edge cases
   // ────────────────────────────────────────────────────────────────────────────
 
   describe('Name variations', () => {

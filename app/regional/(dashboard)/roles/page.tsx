@@ -350,7 +350,7 @@ export default function RolesManagementPage() {
                     {form.iconKey ? (
                       <Icon icon={form.iconKey} width={22} height={22} color={form.color || '#0C6780'} />
                     ) : (
-                      <span className="text-xs text-gray-400">—</span>
+                      <span className="text-xs text-gray-400"> - </span>
                     )}
                   </div>
                   <button
@@ -407,7 +407,7 @@ export default function RolesManagementPage() {
                       <div key={i} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg text-sm">
                         <div>
                           <span className="font-medium">{doc.documentName}</span>
-                          {doc.description && <span className="text-gray-400 ml-2">— {doc.description}</span>}
+                          {doc.description && <span className="text-gray-400 ml-2"> - {doc.description}</span>}
                           {doc.isRequired && <span className="text-red-500 ml-1">*</span>}
                         </div>
                         <button type="button" onClick={() => removeDoc(i)} className="text-red-400 hover:text-red-600"><FaTimes /></button>

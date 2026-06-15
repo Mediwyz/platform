@@ -6,14 +6,14 @@ import { FaShareAlt, FaCopy, FaGift } from 'react-icons/fa'
 import { useT } from '@/lib/i18n/useT'
 
 /**
- * MediWyz treats every user — including MEMBER — as a "provider of money"
+ * MediWyz treats every user - including MEMBER - as a "provider of money"
  * via referrals. Every authenticated user auto-provisions a
  * `ReferralPartnerProfile` on first use, with a unique code that earns
  * wallet credit on successful signup attribution.
  *
  * This card surfaces the referral pillar on the member dashboard so the
  * platform's core loop (book → refer → earn) is visible, not buried in a
- * hidden menu. Other provider roles have this too — it's universal.
+ * hidden menu. Other provider roles have this too - it's universal.
  */
 interface ReferralPillarCardProps {
   userId: string
@@ -59,19 +59,19 @@ export default function ReferralPillarCard({ userId }: ReferralPillarCardProps) 
       await navigator.clipboard.writeText(url)
       toast.success(t('referral.copied'))
     } catch {
-      toast.error('Could not copy — select and copy manually')
+      toast.error('Could not copy - select and copy manually')
     }
   }
 
   async function shareNative() {
     if (!state?.referralCode) return
     const url = `${window.location.origin}/signup?ref=${state.referralCode}`
-    const text = 'Join MediWyz — your health, simplified.'
+    const text = 'Join MediWyz - your health, simplified.'
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({ title: 'MediWyz', text, url })
       } catch {
-        // User cancelled — no-op
+        // User cancelled - no-op
       }
     } else {
       copyLink()
@@ -85,7 +85,7 @@ export default function ReferralPillarCard({ userId }: ReferralPillarCardProps) 
   }
 
   if (!state?.referralCode) {
-    // User hasn't been provisioned yet (rare — auto-provisioned on first /me hit)
+    // User hasn't been provisioned yet (rare - auto-provisioned on first /me hit)
     return null
   }
 

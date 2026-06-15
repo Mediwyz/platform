@@ -30,7 +30,7 @@ const TABS = [
  { id: 'progress', label: 'Progress', icon: FaChartLine },
  { id: 'meal-plan', label: 'Meal Plan', icon: FaCalendarAlt },
  // Profile & goals moved to the centralised profile page (`/profile/[id]` →
- // 🔒 Health Goals tab). One canonical destination — per
+ // 🔒 Health Goals tab). One canonical destination - per
  // `.claude/rules/…/feedback_centralised_profile.md`. The health tracker
  // now focuses on daily-logging surfaces (food, exercise, sleep, BP).
  { id: 'bp-check', label: 'BP Check', icon: FaHeartbeat },
@@ -83,7 +83,7 @@ export default function HealthTrackerTabs({ userName, healthScore }: HealthTrack
     {renderTab()}
    </div>
 
-   {/* Mobile: Bottom tabs — icon with label on active */}
+   {/* Mobile: Bottom tabs - icon with label on active */}
    <div className={`md:hidden fixed left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-end px-0.5 z-50 shadow-lg ${isCapacitor ? 'bottom-0 pt-2 pb-8' : 'bottom-0 py-1'}`}>
     {TABS.map((tab, index) => {
      const Icon = tab.icon

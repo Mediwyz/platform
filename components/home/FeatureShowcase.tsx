@@ -1,12 +1,12 @@
 'use client'
 
 /**
- * FeatureShowcase — a bento-grid section that surfaces every core capability of
+ * FeatureShowcase - a bento-grid section that surfaces every core capability of
  * the MediWyz platform (video/audio calls, chat, health shop, feed, emergency,
  * geolocation directory, provider workflow/services management, notifications).
  * Replaces the old "From the Community" block with something that actually shows
  * what the app does. Bento layout (varied card spans), brand navy/teal/sky,
- * soft shadows, glassmorphism accents, hover lift — per ui-ux-pro-max.
+ * soft shadows, glassmorphism accents, hover lift - per ui-ux-pro-max.
  */
 
 import Link from 'next/link'
@@ -21,7 +21,7 @@ const NAVY = '#001E40'
 const TEAL = '#0C6780'
 const SKY = '#9AE1FF'
 
-/** Engineering & design highlights — shows the craft behind the platform. */
+/** Engineering & design highlights - shows the craft behind the platform. */
 const CRAFT: { Icon: IconType; title: string; desc: string }[] = [
   { Icon: FaLock,             title: 'End-to-end encryption',   desc: 'WebRTC media & messaging secured in transit.' },
   { Icon: FaBolt,             title: 'Real-time everything',     desc: 'Live calls, bookings & alerts over Socket.IO.' },
@@ -46,7 +46,7 @@ const FEATURES: Feature[] = [
   {
     Icon: FaVideo,
     title: 'Video & audio consultations',
-    desc: 'Meet any provider over clinic-grade encrypted WebRTC video or audio — from home, at your scheduled time.',
+    desc: 'Meet any provider over clinic-grade encrypted WebRTC video or audio - from home, at your scheduled time.',
     href: '/search/doctors',
     span: 'lg:col-span-2 lg:row-span-2',
     dark: true,
@@ -80,7 +80,7 @@ const FEATURES: Feature[] = [
   {
     Icon: FaNewspaper,
     title: 'Community feed',
-    desc: 'Health tips, case studies and advice from real verified professionals — no login needed.',
+    desc: 'Health tips, case studies and advice from real verified professionals - no login needed.',
     href: '/community',
   },
   {
@@ -117,7 +117,7 @@ export default function FeatureShowcase() {
             Everything you can do on MediWyz
           </h2>
           <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
-            From a video consultation to ordering medicine, finding the nearest clinic, or running your practice — it all lives in one platform.
+            From a video consultation to ordering medicine, finding the nearest clinic, or running your practice - it all lives in one platform.
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export default function FeatureShowcase() {
               Built with the craft your health deserves
             </h3>
             <p className="mt-3 text-base sm:text-lg text-white/75">
-              A full-stack platform — secure real-time infrastructure wrapped in an accessible, carefully designed interface across web and mobile.
+              A full-stack platform - secure real-time infrastructure wrapped in an accessible, carefully designed interface across web and mobile.
             </p>
           </div>
 

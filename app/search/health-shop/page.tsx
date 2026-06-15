@@ -106,7 +106,7 @@ function HealthShopContent() {
       const data = await res.json()
       if (data.success) {
         // Backend returns { success, data: items[], total }. Older shape nested
-        // items+total+categories under `data` — support both defensively.
+        // items+total+categories under `data` - support both defensively.
         const rawItems = Array.isArray(data.data) ? data.data : data.data?.items ?? []
         const rawTotal = typeof data.total === 'number' ? data.total : data.data?.total ?? rawItems.length
         const cats = data.data?.categories ?? data.categories
@@ -129,7 +129,7 @@ function HealthShopContent() {
       <div className="bg-brand-navy text-white py-10 px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold mb-2">Health Shop</h1>
-          <p className="text-brand-sky text-lg">Browse products from all healthcare providers — add to cart and checkout</p>
+          <p className="text-brand-sky text-lg">Browse products from all healthcare providers - add to cart and checkout</p>
         </div>
       </div>
 

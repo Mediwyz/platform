@@ -24,7 +24,7 @@ const AboutSection: React.FC = () => {
  </p>
  
  <p className="text-gray-600 mb-8">
- Whether you&apos;re at home, at work, or on the move, MediWyz ensures you can connect with certified professionals and receive the care you need—without the hassle of hospital queues or geographic limitations.
+ Whether you&apos;re at home, at work, or on the move, MediWyz ensures you can connect with certified professionals and receive the care you need - without the hassle of hospital queues or geographic limitations.
  </p>
 
  {/* Key Features */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { FaToggleOn, FaToggleOff, FaSave, FaSpinner } from 'react-icons/fa'
 
-// Features list — kept static as these are code-level sidebar routes, not DB entities
+// Features list - kept static as these are code-level sidebar routes, not DB entities
 const ALL_FEATURES = [
  'feed', 'overview', 'profile', 'consultations', 'bookings',
  'prescriptions', 'health-records', 'ai-assistant', 'nurse-services',

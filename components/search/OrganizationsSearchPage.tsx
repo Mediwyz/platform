@@ -252,7 +252,7 @@ export default function OrganizationsSearchPage() {
 
       {/* Results */}
       <div className="max-w-5xl mx-auto px-4 py-6">
-        {/* Find nearest with geolocation — the final-step map */}
+        {/* Find nearest with geolocation - the final-step map */}
         <NearbyMap mode="entities" type={selectedType || undefined} noun="organisations" accentColor="#0C6780" />
 
         {!loading && entities.length > 0 && (

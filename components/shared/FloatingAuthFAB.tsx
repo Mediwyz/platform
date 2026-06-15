@@ -34,7 +34,7 @@ export default function FloatingAuthFAB() {
         setError(j.message || 'Incorrect email or password')
       }
     } catch {
-      setError('Connection error — please try again')
+      setError('Connection error - please try again')
     } finally {
       setLoading(false)
     }
@@ -74,7 +74,7 @@ export default function FloatingAuthFAB() {
                       <h3 className="text-sm font-bold text-white">Sign in to continue</h3>
                     </div>
                     <p className="text-[11px] text-white/60">
-                      Join MediWyz — Africa&apos;s #1 HealthTech Platform
+                      Join MediWyz - Africa&apos;s #1 HealthTech Platform
                     </p>
                   </div>
                   <button onClick={closeLoginModal} className="p-1.5 text-white/40 hover:text-white -mt-1 -mr-1 rounded-lg">

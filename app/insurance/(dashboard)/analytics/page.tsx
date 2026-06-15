@@ -9,7 +9,7 @@ import {
 import { useCurrency } from '@/hooks/useCurrency'
 
 /**
- * Insurance Owner Analytics — rich operational view that consumes
+ * Insurance Owner Analytics - rich operational view that consumes
  * `GET /api/corporate/insurance/dashboard` (backend endpoint shipped in
  * the April 2026 insurance-SaaS round). Loss ratio, treasury health,
  * pre-auth funnel, flagged claims count.
@@ -65,7 +65,7 @@ export default function InsuranceAnalyticsPage() {
   if (error) return (
     <div className="p-6">
       <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">
-        {error}. You may not own an insurance company yet — visit the <Link href="/insurance/plans" className="underline font-semibold">plans</Link> page.
+        {error}. You may not own an insurance company yet - visit the <Link href="/insurance/plans" className="underline font-semibold">plans</Link> page.
       </div>
     </div>
   )
@@ -82,7 +82,7 @@ export default function InsuranceAnalyticsPage() {
     <div className="p-4 sm:p-6 space-y-6">
       <header className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{data.company.name} — Analytics</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{data.company.name} - Analytics</h1>
           <p className="text-sm text-gray-600 mt-1">Operational KPIs for your insurance company.</p>
         </div>
         <button
@@ -98,7 +98,7 @@ export default function InsuranceAnalyticsPage() {
         <KpiCard
           icon={<FaChartLine className="text-indigo-600" />}
           label="Loss Ratio (12m)"
-          value={data.kpis.lossRatio == null ? '—' : `${(data.kpis.lossRatio * 100).toFixed(0)}%`}
+          value={data.kpis.lossRatio == null ? ' - ' : `${(data.kpis.lossRatio * 100).toFixed(0)}%`}
           footer={<span className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${lossRatioColor}`}>{data.kpis.lossRatioLabel}</span>}
           help="Payouts ÷ premiums collected. <60% healthy, 60–85% watch, >85% underwater."
         />
@@ -137,14 +137,14 @@ export default function InsuranceAnalyticsPage() {
       {/* Claims + Pre-auth funnels */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FunnelCard
-          title="Claims — last 12 months"
+          title="Claims - last 12 months"
           icon={<FaFileInvoiceDollar className="text-indigo-600" />}
           total={data.claims.last12Months}
           breakdown={data.claims.byStatus}
           statusColors={{ paid: 'bg-emerald-500', pending: 'bg-amber-500', denied: 'bg-red-400' }}
         />
         <FunnelCard
-          title="Pre-authorizations — last 12 months"
+          title="Pre-authorizations - last 12 months"
           icon={<FaHourglassHalf className="text-blue-600" />}
           total={data.preAuth.last12Months}
           breakdown={data.preAuth.byStatus}
@@ -153,7 +153,7 @@ export default function InsuranceAnalyticsPage() {
       </section>
 
       <footer className="text-[11px] text-gray-500 pt-2">
-        Ledger reconciliation runs nightly. If you see numbers that don&apos;t match your own records, do NOT write to the balance directly — file a ticket and wait for a compensating ledger row.
+        Ledger reconciliation runs nightly. If you see numbers that don&apos;t match your own records, do NOT write to the balance directly - file a ticket and wait for a compensating ledger row.
       </footer>
     </div>
   )
@@ -201,7 +201,7 @@ function FunnelCard({ title, icon, total, breakdown, statusColors }: {
         <span className="text-xs text-gray-500">{total} total</span>
       </div>
       {entries.length === 0 ? (
-        <div className="text-xs text-gray-500 py-4 text-center">No activity yet — claims will appear here as members submit them.</div>
+        <div className="text-xs text-gray-500 py-4 text-center">No activity yet - claims will appear here as members submit them.</div>
       ) : (
         <ul className="space-y-2">
           {entries.map(([status, count]) => (

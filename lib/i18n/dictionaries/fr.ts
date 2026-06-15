@@ -1,6 +1,6 @@
 import type { MessageKey } from './en'
 
-/** French translations — partial by design. Missing keys fall back to English. */
+/** French translations - partial by design. Missing keys fall back to English. */
 export const fr: Partial<Record<MessageKey, string>> = {
   'workflow.action.accept': 'Accepter',
   'workflow.action.decline': 'Refuser',
@@ -18,7 +18,7 @@ export const fr: Partial<Record<MessageKey, string>> = {
   'workflow.category.waiting': 'En attente',
 
   'library.title': 'Bibliothèque de workflows',
-  'library.subtitle': 'Parcourez tous les workflows — par défaut du système, modèles des admins régionaux, et personnalisations des prestataires. Clonez-en un pour partir sur une base existante.',
+  'library.subtitle': 'Parcourez tous les workflows - par défaut du système, modèles des admins régionaux, et personnalisations des prestataires. Clonez-en un pour partir sur une base existante.',
   'library.search.placeholder': 'Rechercher nom, slug, description...',
   'library.filter.allRoles': 'Tous les rôles',
   'library.filter.allModes': 'Tous les modes',
@@ -33,7 +33,7 @@ export const fr: Partial<Record<MessageKey, string>> = {
   'library.empty.title': 'Aucun workflow ne correspond à vos filtres',
   'library.empty.subtitle': 'Essayez d\'élargir la recherche ou de réinitialiser les filtres.',
 
-  'role.request.trigger': 'Je ne vois pas mon rôle — en proposer un nouveau',
+  'role.request.trigger': 'Je ne vois pas mon rôle - en proposer un nouveau',
   'role.request.modal.title': 'Proposer un nouveau rôle',
   'role.request.modal.subtitle': 'Votre demande est envoyée à un admin régional pour approbation. En attendant, vous pouvez finir l\'inscription en tant que patient.',
   'role.request.field.label': 'Nom du rôle',
@@ -48,7 +48,7 @@ export const fr: Partial<Record<MessageKey, string>> = {
   'referral.stat.earned': 'Gagné',
   'referral.code.label': 'Votre code',
   'referral.share': 'Partager votre lien',
-  'referral.copied': 'Lien copié — partagez-le où vous voulez',
+  'referral.copied': 'Lien copié - partagez-le où vous voulez',
 
   'booking.toast.statusUpdated': 'Statut mis à jour : {{status}}',
 
@@ -60,7 +60,7 @@ export const fr: Partial<Record<MessageKey, string>> = {
   'analytics.stat.dropOffRate': 'Taux d\'abandon',
 
   'audio.title': 'Appels audio',
-  'audio.subtitle': 'Appels voix uniquement — plus rapides à connecter sur les réseaux faibles et moins distrayants en urgence.',
+  'audio.subtitle': 'Appels voix uniquement - plus rapides à connecter sur les réseaux faibles et moins distrayants en urgence.',
   'audio.empty.title': 'Aucun appel audio',
   'audio.empty.subtitle': 'Un appel apparaît ici automatiquement lorsqu\'une étape de workflow ouvre une salle audio.',
   'audio.action.join': 'Rejoindre',

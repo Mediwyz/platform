@@ -17,7 +17,7 @@ interface WorkflowCurrentStepProps {
   userRole: 'patient' | 'provider'
   isCompleted: boolean
   isCancelled: boolean
-  /** Compact list of every status on the template — drives next-step labels
+  /** Compact list of every status on the template - drives next-step labels
    *  and per-status categorisation without a second round-trip. */
   allSteps?: Array<{ statusCode: string; label: string; category?: StepCategory }>
   /** Category of the current step, set by the engine. Falls back to a
@@ -25,10 +25,10 @@ interface WorkflowCurrentStepProps {
   currentStepCategory?: StepCategory
   /** Pre-formatted amount for confirmation copy (e.g. "Rs 500"). */
   amountLabel?: string
-  /** Booking service mode — passed to WorkflowActionButton for consequence copy
+  /** Booking service mode - passed to WorkflowActionButton for consequence copy
    *  ('video' → video room warning, 'audio' → audio room warning). */
   serviceMode?: string
-  /** Session tracking — populated for recurrent/multi-session services */
+  /** Session tracking - populated for recurrent/multi-session services */
   sessionNumber?: number
   maxSessions?: number
   onTransition?: (result: unknown) => void
@@ -52,7 +52,7 @@ export default function WorkflowCurrentStep({
     return allSteps?.find(s => s.statusCode === optimisticStatus)?.label ?? optimisticStatus
   }, [optimisticStatus, stepLabel, allSteps])
 
-  // Category-driven badge — never pattern-matches on the status code.
+  // Category-driven badge - never pattern-matches on the status code.
   // During an optimistic flip, borrow the target step's category so the pill
   // colour tracks the flip too.
   const displayCategory: StepCategory = useMemo(() => {

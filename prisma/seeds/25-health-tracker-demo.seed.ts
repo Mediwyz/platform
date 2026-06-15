@@ -144,7 +144,7 @@ export async function seedHealthTrackerDemo(prisma: PrismaClient) {
       { day: 0, type: 'dinner' as const, name: 'Salmon, Brown Rice & Roasted Broccoli', desc: 'A wholesome dinner with omega-3 rich salmon, fluffy brown rice, and oven-roasted broccoli.', cal: 650, p: 38, c: 64, f: 24 },
       { day: 1, type: 'breakfast' as const, name: 'Oatmeal with Banana & Almonds', desc: 'Hearty oatmeal topped with sliced banana, almonds, and a drizzle of honey.', cal: 380, p: 12, c: 58, f: 12 },
       { day: 1, type: 'lunch' as const, name: 'Dholl Puri with Chicken Curry', desc: 'Traditional Mauritian dholl puri stuffed with savory chicken curry and pickles.', cal: 520, p: 22, c: 60, f: 20 },
-      { day: 1, type: 'snack' as const, name: 'Fresh Mango Slices', desc: 'Sweet, juicy mango slices — a tropical Mauritian favorite.', cal: 135, p: 1, c: 35, f: 0.6 },
+      { day: 1, type: 'snack' as const, name: 'Fresh Mango Slices', desc: 'Sweet, juicy mango slices - a tropical Mauritian favorite.', cal: 135, p: 1, c: 35, f: 0.6 },
       { day: 1, type: 'dinner' as const, name: 'Cari Poisson with White Rice', desc: 'Authentic Mauritian fish curry served with fluffy steamed rice.', cal: 480, p: 28, c: 52, f: 16 },
     ]
 

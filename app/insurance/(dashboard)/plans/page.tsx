@@ -166,7 +166,7 @@ export default function InsurancePlansPage() {
  });
 
  const formatCurrency = (amount: number | null | undefined) => {
- if (amount == null) return '—';
+ if (amount == null) return ' - ';
  return `MUR ${amount.toLocaleString()}`;
  };
 

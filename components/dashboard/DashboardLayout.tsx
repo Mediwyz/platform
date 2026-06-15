@@ -60,11 +60,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  return () => window.removeEventListener('resize', handleResize)
  }, [])
 
- // Socket.IO singleton — ONE socket and ONE notification listener per
+ // Socket.IO singleton - ONE socket and ONE notification listener per
  // (tab, userId). Every time this effect runs (strict-mode, HMR, nav):
  //   • reuse the existing socket if one exists for this userId
  //   • ALWAYS re-attach the current `notification:new` handler using
- //     off() then on() — prevents stale listeners from old HMR modules
+ //     off() then on() - prevents stale listeners from old HMR modules
  //     from continuing to fire toasts alongside the new one.
  //
  // Seen-ids set lives on window so duplicate notifications (backend
@@ -74,7 +74,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  const w = window as any
  let cancelled = false
 
- // Fresh login under a different userId — drop the old socket first.
+ // Fresh login under a different userId - drop the old socket first.
  if (w.__mediwyzSocket && w.__mediwyzSocketUserId !== userId) {
   try { w.__mediwyzSocket.removeAllListeners(); w.__mediwyzSocket.disconnect() } catch {}
   w.__mediwyzSocket = null
@@ -85,7 +85,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  w.__mediwyzSeenNotifIds = seenIds
 
  const wireListeners = (socket: any) => {
-  // Detach every prior listener for these events — removes ghost
+  // Detach every prior listener for these events - removes ghost
   // listeners attached by HMR'd module instances and guarantees
   // exactly ONE handler is active per event.
   socket.off('connect')

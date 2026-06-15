@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { productImage } from './_product-images'
 
 /**
- * Seed #42 — Expanded Providers & Health Shop Inventory
+ * Seed #42 - Expanded Providers & Health Shop Inventory
  * Adds more providers for newer roles + rich inventory for each provider type.
  */
 export async function seedExpandedProvidersInventory(prismaArg?: PrismaClient) {
@@ -95,13 +95,13 @@ export async function seedExpandedProvidersInventory(prismaArg?: PrismaClient) {
     // Nutritionist items
     { providerUserId: 'NUT-MU-001', providerType: UserType.NUTRITIONIST, items: [
       { name: 'Meal Plan Guide (Diabetes)', genericName: 'Diabetic Meal Planning Book', category: 'Nutrition Guides', price: 800, quantity: 50, description: 'Comprehensive 12-week diabetic meal plan with local Mauritian recipes', requiresPrescription: false },
-      { name: 'Protein Supplement (Whey)', genericName: 'Whey Protein Isolate', category: 'Supplements', price: 1500, quantity: 30, description: 'Premium whey protein isolate 900g — vanilla', requiresPrescription: false },
+      { name: 'Protein Supplement (Whey)', genericName: 'Whey Protein Isolate', category: 'Supplements', price: 1500, quantity: 30, description: 'Premium whey protein isolate 900g - vanilla', requiresPrescription: false },
       { name: 'Multivitamin Complex', genericName: 'Adult Complete Multivitamin', category: 'Supplements', price: 600, quantity: 80, description: 'Daily multivitamin with iron, zinc, and B-complex', requiresPrescription: false },
       { name: 'Omega-3 Fish Oil', genericName: 'EPA/DHA 1000mg', category: 'Supplements', price: 700, quantity: 60, description: 'High-potency omega-3 fatty acids for heart health', requiresPrescription: false },
       { name: 'Probiotic Capsules', genericName: 'Lactobacillus Multi-Strain', category: 'Supplements', price: 550, quantity: 45, description: '10 billion CFU probiotic for digestive health', requiresPrescription: false },
     ]},
     { providerUserId: 'NUT-MU-002', providerType: UserType.NUTRITIONIST, items: [
-      { name: 'Weight Management Shake', genericName: 'Meal Replacement Shake', category: 'Supplements', price: 1200, quantity: 40, description: 'Low-calorie high-protein meal replacement — chocolate', requiresPrescription: false },
+      { name: 'Weight Management Shake', genericName: 'Meal Replacement Shake', category: 'Supplements', price: 1200, quantity: 40, description: 'Low-calorie high-protein meal replacement - chocolate', requiresPrescription: false },
       { name: 'Vitamin D3 Drops', genericName: 'Cholecalciferol 1000 IU', category: 'Supplements', price: 400, quantity: 70, description: 'Liquid vitamin D3 for bone health', requiresPrescription: false },
       { name: 'Collagen Powder', genericName: 'Hydrolyzed Marine Collagen', category: 'Supplements', price: 900, quantity: 35, description: 'Marine collagen peptides for skin and joints', requiresPrescription: false },
     ]},

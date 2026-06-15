@@ -82,7 +82,7 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
           <FiSend className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="font-medium text-gray-600">No suggestions yet</p>
           <p className="text-sm text-gray-400 mt-1 mb-4">
-            Suggest a custom workflow to your regional admin — they&apos;ll review and activate it for you.
+            Suggest a custom workflow to your regional admin - they&apos;ll review and activate it for you.
           </p>
           <Link
             href={`/provider/${slug}/workflows/suggest`}
@@ -117,7 +117,7 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
                       ))}
                     </div>
                     <p className="text-xs text-gray-400 mt-2">
-                      Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : '—'}
+                      Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : ' - '}
                     </p>
                   </div>
                 </div>

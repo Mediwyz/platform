@@ -26,7 +26,7 @@ function generateInsight(data: DashboardData): { text: string; emoji: string } {
     return { emoji: '☀️', text: "Start your day right! Log your first meal and a glass of water to get personalised insights." }
   }
   if (waterPct < 0.25) {
-    return { emoji: '💧', text: "You've had very little water today. Dehydration reduces focus — grab a glass now!" }
+    return { emoji: '💧', text: "You've had very little water today. Dehydration reduces focus - grab a glass now!" }
   }
   if (exPct >= 1 && waterPct >= 0.8) {
     return { emoji: '🎉', text: "Amazing! Exercise and hydration goals both hit. You're crushing it today!" }
@@ -35,7 +35,7 @@ function generateInsight(data: DashboardData): { text: string; emoji: string } {
     return { emoji: '⚖️', text: "You've gone over your calorie goal. A light walk can help balance the day." }
   }
   if (exPct < 0.3 && calPct > 0.6) {
-    return { emoji: '🏃', text: "You've fuelled up well — time to move! Even 15 minutes of walking counts." }
+    return { emoji: '🏃', text: "You've fuelled up well - time to move! Even 15 minutes of walking counts." }
   }
   if (waterPct >= 1) {
     return { emoji: '💦', text: "Hydration goal reached! Staying consistent will boost your energy all day." }

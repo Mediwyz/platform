@@ -204,7 +204,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
         setMessage({ type: 'error', text: json.message || 'Upload failed' })
       }
     } catch {
-      setMessage({ type: 'error', text: 'Image upload failed — check your connection' })
+      setMessage({ type: 'error', text: 'Image upload failed - check your connection' })
     } finally {
       setUploadingImage(false)
     }
@@ -604,7 +604,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                           <>
                             <FaImage className="text-2xl" />
                             <span className="text-xs font-medium">Click to upload image</span>
-                            <span className="text-[10px]">PNG, JPG, WebP — max 5MB</span>
+                            <span className="text-[10px]">PNG, JPG, WebP - max 5MB</span>
                           </>
                         )}
                       </button>
@@ -706,7 +706,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                         <option value="">Select a workflow...</option>
                         {availableWorkflows.map(w => (
                           <option key={w.id} value={w.id}>
-                            {w.name} — {MODE_LABELS[w.serviceMode] || w.serviceMode}
+                            {w.name} - {MODE_LABELS[w.serviceMode] || w.serviceMode}
                           </option>
                         ))}
                       </select>

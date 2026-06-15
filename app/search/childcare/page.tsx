@@ -16,7 +16,7 @@ interface NannyProps {
 }
 
 const NannyCard = ({ nanny }: NannyProps) => {
- // Defensive defaults — API may omit fields for nannies coming from the generic provider search
+ // Defensive defaults - API may omit fields for nannies coming from the generic provider search
  const ageGroups = Array.isArray(nanny.ageGroups) ? nanny.ageGroups : []
  const languages = Array.isArray(nanny.languages) ? nanny.languages : []
  const specialization = Array.isArray(nanny.specialization)

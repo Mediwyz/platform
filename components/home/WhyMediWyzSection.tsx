@@ -16,7 +16,7 @@ const FEATURES = [
   {
     Icon: FaVideo,
     title: 'Secure video care',
-    desc: 'Consult from home over encrypted WebRTC video — clinic-grade, end to end.',
+    desc: 'Consult from home over encrypted WebRTC video - clinic-grade, end to end.',
   },
   {
     Icon: FaMapMarkerAlt,
@@ -47,7 +47,7 @@ export default function WhyMediWyzSection() {
             Healthcare that actually works for you
           </h2>
           <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
-            One trusted platform for every kind of care — built around your time, your privacy and your peace of mind.
+            One trusted platform for every kind of care - built around your time, your privacy and your peace of mind.
           </p>
         </div>
 

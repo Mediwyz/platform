@@ -282,7 +282,7 @@ export default function PatientVideoCall() {
  callHistory.push(callData)
  localStorage.setItem('videoCallHistory', JSON.stringify(callHistory))
  } catch {
- // Corrupted localStorage — start fresh
+ // Corrupted localStorage - start fresh
  localStorage.setItem('videoCallHistory', JSON.stringify([callData]))
  }
 

@@ -1,7 +1,7 @@
 /**
  * Canonical icon registry for workflow steps.
  *
- * Icons are a closed set — authors pick from this registry (or let the
+ * Icons are a closed set - authors pick from this registry (or let the
  * engine infer one from step shape). Keeping it closed means:
  *   • the library renders consistently across all provider roles
  *   • we don't end up with 40 emojis for "the nurse arrived" because every
@@ -96,13 +96,13 @@ interface IconInferenceInput {
 
 /**
  * Derive an icon from the step's shape when the author didn't set one.
- * Order matters — most specific signals (flags) win over keyword matches.
+ * Order matters - most specific signals (flags) win over keyword matches.
  */
 export function inferStepIcon(step: IconInferenceInput): StepIcon {
   const flags = step.flags ?? {}
   const text = `${step.statusCode ?? ''} ${step.label ?? ''}`.toLowerCase()
 
-  // Flag-driven (most specific) — only the 4 flags that remain in StepFlags.
+  // Flag-driven (most specific) - only the 4 flags that remain in StepFlags.
   // Payment, refund, conversation, and review-request are now systematic Tier-2
   // triggers; their icons fall back to keyword matching below.
   if (flags.triggers_video_call) return 'video_call'

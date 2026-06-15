@@ -174,7 +174,7 @@ export default function BookingDrawer() {
     const { service, provider, role, organization, date, time } = options
 
     if (service && provider && (date || time)) {
-      // Hero widget fast-path: all key fields supplied — skip straight to confirm
+      // Hero widget fast-path: all key fields supplied - skip straight to confirm
       setSelectedOrg(null)
       setSelectedService(service)
       setSelectedProvider(provider)
@@ -205,7 +205,7 @@ export default function BookingDrawer() {
       setSelectedTime(time ?? null)
       setStep('providers')
       setStepHistory(['service', 'providers'])
-      fetchProviders(service, null) // org is null — passed explicitly to avoid stale closure
+      fetchProviders(service, null) // org is null - passed explicitly to avoid stale closure
     } else if (provider) {
       setSelectedOrg(null)
       setSelectedService(null)
@@ -312,7 +312,7 @@ export default function BookingDrawer() {
   }
 
   // currentOrg is passed explicitly so callers don't rely on a stale closure over
-  // selectedOrg — state updates are async so the value may not have settled yet
+  // selectedOrg - state updates are async so the value may not have settled yet
   // when fetchProviders is called in the same render cycle as setSelectedOrg.
   async function fetchProviders(service: DrawerService, currentOrg: DrawerOrganization | null) {
     setProvidersLoading(true)
@@ -410,7 +410,7 @@ export default function BookingDrawer() {
       setWorkflows(wfs)
       if (wfs.length === 0) {
         setError(`${selectedProvider.name} has not configured booking for ${service.serviceName} yet. Please choose a different provider.`)
-        // Stay on the providers step — don't advance
+        // Stay on the providers step - don't advance
         goTo('providers')
         return
       }
@@ -442,7 +442,7 @@ export default function BookingDrawer() {
       setWorkflows(wfs)
       if (wfs.length === 0) {
         setError(`${provider.name} has not configured booking for ${selectedService.serviceName} yet. Please choose a different provider.`)
-        // Stay on the providers step — don't advance
+        // Stay on the providers step - don't advance
         return
       }
       if (wfs.length > 1) {
@@ -549,7 +549,7 @@ export default function BookingDrawer() {
         setError(j.message ?? 'Booking failed')
         return
       }
-      // Booking created — close drawer and optionally navigate
+      // Booking created - close drawer and optionally navigate
       closeDrawer()
       // Navigate to the booking confirmation page
       const userType = document.cookie.split(';')
@@ -594,7 +594,7 @@ export default function BookingDrawer() {
             onClick={closeDrawer}
           />
 
-          {/* Panel — bottom sheet on mobile, right panel on ≥640px */}
+          {/* Panel - bottom sheet on mobile, right panel on ≥640px */}
           <motion.div
             key="panel"
             initial={{ y: '100%', opacity: 0 }}
@@ -885,7 +885,7 @@ function WorkflowStep({
 
   return (
     <div className="px-4 pt-3 pb-6 space-y-3">
-      <p className="text-xs text-gray-400">Choose how you&apos;d like this appointment — tap to see what happens at each step.</p>
+      <p className="text-xs text-gray-400">Choose how you&apos;d like this appointment - tap to see what happens at each step.</p>
       {workflows.map(wf => {
         const modeLabel = MODE_LABEL[wf.serviceMode] ?? wf.serviceMode
         const modeEmoji = MODE_EMOJI[wf.serviceMode] ?? '📋'
@@ -900,7 +900,7 @@ function WorkflowStep({
                 ? 'border-[#0C6780] shadow-md shadow-[#0C6780]/10'
                 : 'border-gray-200 hover:border-gray-300'}`}
           >
-            {/* Header row — always visible */}
+            {/* Header row - always visible */}
             <button
               onClick={() => {
                 setExpanded(prev => (prev === wf.id ? null : wf.id))
@@ -950,7 +950,7 @@ function WorkflowStep({
               </div>
             </button>
 
-            {/* Steps timeline — visible when expanded */}
+            {/* Steps timeline - visible when expanded */}
             {isExpanded && wf.steps.length > 0 && (
               <div className="px-4 pb-4 pt-1 bg-gray-50 border-t border-gray-100">
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2.5">What happens</p>
@@ -1121,7 +1121,7 @@ function AuthStep({
         </div>
         <div>
           <p className="text-sm font-semibold text-[#001E40]">Sign in to complete booking</p>
-          <p className="text-[11px] text-gray-400">Your appointment is ready — just log in</p>
+          <p className="text-[11px] text-gray-400">Your appointment is ready - just log in</p>
         </div>
       </div>
 
@@ -1275,7 +1275,7 @@ function ConfirmStep({
               Rs {walletBalance.toLocaleString()}
               {!canAfford && (
                 <span className="text-[11px] font-normal ml-1 text-red-500">
-                  — need Rs {(service.defaultPrice - walletBalance).toLocaleString()} more
+ - need Rs {(service.defaultPrice - walletBalance).toLocaleString()} more
                 </span>
               )}
             </p>

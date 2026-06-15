@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * CategoryNavigator — the lightweight 3-level entry point that replaces the old
+ * CategoryNavigator - the lightweight 3-level entry point that replaces the old
  * 1,200-line DiscoverSection on the landing page.
  *
  * Flow:
@@ -11,7 +11,7 @@
  *
  * The final click routes to an existing /search/* page with query params. The
  * Google-Maps "find nearest" experience lives on those search pages (the last step),
- * never on the landing — keeping the home page fast and uncluttered.
+ * never on the landing - keeping the home page fast and uncluttered.
  */
 
 import { useState, useCallback } from 'react'
@@ -107,7 +107,7 @@ export default function CategoryNavigator() {
       const json = await res.json()
       if (json?.success && Array.isArray(json.data)) setRoles(json.data)
     } catch {
-      /* network errors leave the role grid empty — the entity card still works as a direct link */
+      /* network errors leave the role grid empty - the entity card still works as a direct link */
     } finally {
       setRolesLoaded(true)
     }
@@ -125,7 +125,7 @@ export default function CategoryNavigator() {
     setRole(r)
     setLoadingCats(true)
     try {
-      const res = await fetch(`/api/search/services?type=${encodeURIComponent(r.code)}&limit=200`)
+      const res = await fetch(`/api/search/services?providerType=${encodeURIComponent(r.code)}&limit=200`)
       const json = await res.json()
       const cats = new Set<string>()
       if (json?.success && Array.isArray(json.data)) {
@@ -163,7 +163,7 @@ export default function CategoryNavigator() {
             What are you looking for?
           </h2>
           <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
-            Pick a category to jump straight to a focused search — find the nearest provider on a live map at the final step.
+            Pick a category to jump straight to a focused search - find the nearest provider on a live map at the final step.
           </p>
         </div>
 
@@ -269,12 +269,12 @@ export default function CategoryNavigator() {
               </div>
             ) : (
               <div className="flex flex-wrap gap-2">
-                {/* "All" shortcut */}
+                {/* "All" shortcut - outlined (not pre-selected); user picks a category or this */}
                 <button
                   onClick={() => goServicesCategory(role)}
-                  className="px-4 py-2 rounded-full text-sm font-semibold text-white transition-transform hover:scale-[1.02]
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
-                  style={{ background: role.color || TEAL }}
+                  className="px-4 py-2 rounded-full text-sm font-semibold bg-white border-2 transition-colors
+                    hover:bg-[#0C6780]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
+                  style={{ borderColor: role.color || TEAL, color: role.color || TEAL }}
                 >
                   All {role.label} services
                 </button>
@@ -291,7 +291,7 @@ export default function CategoryNavigator() {
                 ))}
                 {categories.length === 0 && (
                   <p className="text-sm text-gray-400 py-2">
-                    No sub-categories yet — <button onClick={() => goServicesCategory(role)} className="text-[#0C6780] font-medium underline">browse all {role.label} services</button>.
+                    No sub-categories yet - <button onClick={() => goServicesCategory(role)} className="text-[#0C6780] font-medium underline">browse all {role.label} services</button>.
                   </p>
                 )}
               </div>

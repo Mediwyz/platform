@@ -48,7 +48,7 @@ const Footer: React.FC = () => (
         <div className="col-span-2 lg:col-span-4">
           <span className="text-white font-bold text-2xl tracking-tight">MediWyz</span>
           <p className="mt-3 text-sm leading-relaxed text-gray-400 max-w-xs">
-            One secure platform for every kind of care — book providers, consult by video or audio, order medicines and manage your health across Africa, Mauritius &amp; India.
+            One secure platform for every kind of care - book providers, consult by video or audio, order medicines and manage your health across Africa, Mauritius &amp; India.
           </p>
 
           <ul className="mt-5 space-y-2 text-sm">

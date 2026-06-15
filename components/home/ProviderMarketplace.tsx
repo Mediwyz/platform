@@ -137,7 +137,7 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
       .finally(() => setLoading(false))
   }, [])
 
-  // Inlined class strings instead of a Wrapper subcomponent — defining a
+  // Inlined class strings instead of a Wrapper subcomponent - defining a
   // component inside the function body is a React anti-pattern (recreates
   // the component type every render and breaks children identity).
   const scrollbarClass = `[&::-webkit-scrollbar]:w-[3px]
@@ -233,12 +233,12 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
   if (embedded) {
     return (
       <>
-        {/* Header — sits above the scroll area, never moves */}
+        {/* Header - sits above the scroll area, never moves */}
         <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-white border-b border-gray-100">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Find Healthcare Providers</h2>
           <p className="text-sm sm:text-base text-gray-600">Browse by specialty across all provider types</p>
 
-          {/* Role quick-jump pills — scrollable strip with prev/next buttons */}
+          {/* Role quick-jump pills - scrollable strip with prev/next buttons */}
           <div className="flex items-center gap-1.5 mt-3">
             <button
               onClick={() => scrollRole('left')}

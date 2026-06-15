@@ -81,7 +81,7 @@ function generateSleepInsight(entry: SleepEntry, targetMin: number): { text: str
   return { emoji: '🌟', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
  }
  if (ratio < 0.6) {
-  return { emoji: '😴', text: `You slept ${formatDuration(entry.durationMin)} — well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
+  return { emoji: '😴', text: `You slept ${formatDuration(entry.durationMin)} - well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
  }
  if (entry.quality === 'terrible' || entry.quality === 'poor') {
   return { emoji: '💤', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
@@ -102,7 +102,7 @@ export default function SleepTab() {
  const [insight, setInsight] = useState<{ text: string; emoji: string } | null>(null)
  const [insightDismissed, setInsightDismissed] = useState(false)
 
- // Form state — bedtime/wake are the primary inputs
+ // Form state - bedtime/wake are the primary inputs
  const [formBedtime, setFormBedtime] = useState('22:30')
  const [formWakeTime, setFormWakeTime] = useState('06:30')
  const [formQuality, setFormQuality] = useState('good')
@@ -359,7 +359,7 @@ export default function SleepTab() {
      </p>
      <ul className="space-y-2">
       {[
-       "Keep a consistent bedtime — even on weekends",
+       "Keep a consistent bedtime - even on weekends",
        "Stop screens 45 min before bed for deeper sleep",
        "A cool, dark room helps you fall asleep faster",
        "Avoid caffeine after 2 PM",
@@ -372,19 +372,19 @@ export default function SleepTab() {
     </div>
    )}
 
-   {/* Add Sleep Modal — bedtime/wake as primary */}
+   {/* Add Sleep Modal - bedtime/wake as primary */}
    {showAddModal && (
     <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
      <div className="bg-white w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
        <div>
         <h3 className="text-base font-bold text-[#001E40]">Log Sleep</h3>
-        <p className="text-xs text-gray-400">Enter bedtime & wake time — duration is calculated automatically</p>
+        <p className="text-xs text-gray-400">Enter bedtime & wake time - duration is calculated automatically</p>
        </div>
        <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-gray-400 hover:text-gray-600">&times;</button>
       </div>
       <div className="p-4 space-y-5">
-       {/* Bedtime + Wake time — side by side */}
+       {/* Bedtime + Wake time - side by side */}
        <div className="grid grid-cols-2 gap-4">
         <div>
          <label className="block text-sm font-medium text-[#001E40] mb-1.5 flex items-center gap-1.5">

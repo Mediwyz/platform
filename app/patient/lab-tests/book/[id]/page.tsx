@@ -344,8 +344,8 @@ export default function LabTestingBooking() {
  if (data.success && Array.isArray(data.data)) {
  const apiTests: LabTest[] = []
  for (const group of data.data) {
- // group.category is "LAB_TECHNICIAN — <category>"
- const categoryParts = (group.category as string).split(' — ')
+ // group.category is "LAB_TECHNICIAN - <category>"
+ const categoryParts = (group.category as string).split(' - ')
  const category = categoryParts[1] || categoryParts[0]
   
  for (const svc of group.services as any[]) {

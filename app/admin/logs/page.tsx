@@ -59,7 +59,7 @@ function mapSecurityDataToLogs(data: SecurityData): LogEntry[] {
  level: user.accountStatus === 'suspended' ? 'warning' : 'info',
  action: 'User Registered',
  user: `${user.firstName} ${user.lastName} (${user.email})`,
- details: `User type: ${user.userType.replace(/_/g, ' ')} — Status: ${user.accountStatus}`,
+ details: `User type: ${user.userType.replace(/_/g, ' ')} - Status: ${user.accountStatus}`,
  })
  })
 
@@ -86,7 +86,7 @@ export default function AdminLogsPage() {
  }
  }
  } catch {
- // API unavailable — show empty state
+ // API unavailable - show empty state
  } finally {
  setLoading(false)
  }

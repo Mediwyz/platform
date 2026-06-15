@@ -208,7 +208,7 @@ export default function FloatingGeoFAB() {
                 Find Nearest Healthcare
               </h2>
               <p className="text-gray-500 text-xs mt-0.5 leading-snug">
-                Discover providers &amp; clinics near you — tap a pin for directions
+                Discover providers &amp; clinics near you - tap a pin for directions
               </p>
             </div>
             <button
@@ -290,7 +290,7 @@ export default function FloatingGeoFAB() {
               </div>
             )}
 
-            {/* Empty — no location yet */}
+            {/* Empty - no location yet */}
             {!loading && !error && pins.length === 0 && !userLoc && (
               <div className="text-center py-10">
                 <div className="text-4xl mb-2">📍</div>
@@ -301,7 +301,7 @@ export default function FloatingGeoFAB() {
               </div>
             )}
 
-            {/* Empty — location known but no results */}
+            {/* Empty - location known but no results */}
             {!loading && !error && pins.length === 0 && userLoc && (
               <div className="text-center py-8">
                 <div className="text-3xl mb-2">🔍</div>

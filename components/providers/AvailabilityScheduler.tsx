@@ -129,7 +129,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
         })
       )
     } catch {
-      // non-fatal — just show defaults
+      // non-fatal - just show defaults
     } finally {
       setLoading(false)
     }
@@ -334,7 +334,7 @@ function DayRow({
           </span>
         </div>
 
-        {/* Time pickers + duration — only shown when active */}
+        {/* Time pickers + duration - only shown when active */}
         {active ? (
           <>
             <div className="flex items-center gap-1.5 text-sm">

@@ -1,5 +1,5 @@
 // UI display constants for insurance dashboard components.
-// These are intentionally static — they represent display options and status labels,
+// These are intentionally static - they represent display options and status labels,
 // not data entities. Policy/claim data is fetched from API endpoints.
 
 import { InsuranceDashboardData } from './types'

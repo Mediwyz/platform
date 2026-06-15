@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 /**
- * Seed 41 — Company activity: enrollments + company posts in feed
+ * Seed 41 - Company activity: enrollments + company posts in feed
  *
  * Creates:
  * - Company page for DOC001 (existing doctor)
@@ -77,7 +77,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
       tags: ['partnership', 'pharmacy', 'delivery'],
     },
     {
-      content: 'Mental health matters. Our clinic now offers confidential counseling sessions every Wednesday. No referral needed — just book through MediWyz. Take the first step today.',
+      content: 'Mental health matters. Our clinic now offers confidential counseling sessions every Wednesday. No referral needed - just book through MediWyz. Take the first step today.',
       category: 'wellness',
       tags: ['mental-health', 'counseling', 'wellness'],
     },
@@ -105,7 +105,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
 
   // Also create some personal posts from various providers
   const personalPosts = [
-    { authorId: 'DOC002', content: 'Just completed a 12-hour surgery marathon. 3 successful procedures. The team was incredible. Remember — your health is your wealth.', category: 'wellness', tags: ['surgery', 'teamwork'] },
+    { authorId: 'DOC002', content: 'Just completed a 12-hour surgery marathon. 3 successful procedures. The team was incredible. Remember - your health is your wealth.', category: 'wellness', tags: ['surgery', 'teamwork'] },
     { authorId: 'NUR001', content: 'Tip: Always keep your vaccination records up to date. As a nurse, I see too many patients who forgot their boosters. Stay protected!', category: 'health_tips', tags: ['vaccination', 'prevention'] },
     { authorId: 'PHARM001', content: 'Important reminder: Never take antibiotics without a prescription. Antibiotic resistance is a growing global threat. Ask your pharmacist if you have questions.', category: 'health_tips', tags: ['antibiotics', 'pharmacy'] },
     { authorId: 'DENT001', content: 'Brushing twice a day is great, but are you flossing? Most cavities form between teeth where your toothbrush cannot reach. Start flossing today!', category: 'health_tips', tags: ['dental', 'flossing'] },

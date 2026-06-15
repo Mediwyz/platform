@@ -267,7 +267,7 @@ export const createSubscriptionPlanSchema = z.object({
   discounts: z.record(z.string(), z.number()).optional(),
   paidServices: z.record(z.string(), z.number()).optional(),
   features: z.array(z.string()).min(1, 'At least one feature is required'),
-  // Service links — services and groups included in this plan
+  // Service links - services and groups included in this plan
   services: z.array(planServiceSchema).optional(),
 })
 

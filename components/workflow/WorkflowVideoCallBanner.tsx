@@ -7,15 +7,15 @@ interface WorkflowVideoCallBannerProps {
   videoCallId: string | null | undefined
   currentStatus: string
   /** 'video' renders the navy video banner; 'audio' renders a cyan audio banner.
-   *  Derived from the booking's serviceMode — the engine fires the correct room
+   *  Derived from the booking's serviceMode - the engine fires the correct room
    *  type automatically; no flag needed. */
   callMode?: 'video' | 'audio'
-  /** Pass true when the workflow is completed or cancelled — banner is hidden. */
+  /** Pass true when the workflow is completed or cancelled - banner is hidden. */
   isTerminal?: boolean
 }
 
 /** Shows once the engine has fired a video or audio room (videoCallId present)
- *  and the workflow is still live. The presence of a room id — not any step flag —
+ *  and the workflow is still live. The presence of a room id - not any step flag - 
  *  is the canonical signal. */
 export default function WorkflowVideoCallBanner({
   videoCallId, callMode = 'video', isTerminal,

@@ -4,19 +4,19 @@
  * Creates ~59 system-default workflow templates covering all provider types
  * and all 3 service modes (office, home, video).
  *
- * Step flags (only 4 remain — all others are SYSTEMATIC engine behaviors):
- *   triggers_video_call   — set by VIDEO_CALL_READY/VIDEO_CALL_ACTIVE step type; also auto on acceptance for video serviceMode
- *   triggers_audio_call   — set by AUDIO_CALL_READY/AUDIO_CALL_ACTIVE step type
- *   requires_content      — set by step type defaultFlags (RESULTS_READY, EXAM_COMPLETE, CARE_NOTES, etc.)
- *   requires_prescription — set by step type defaultFlags (MEDICATION_REVIEW, etc.)
+ * Step flags (only 4 remain - all others are SYSTEMATIC engine behaviors):
+ *   triggers_video_call - set by VIDEO_CALL_READY/VIDEO_CALL_ACTIVE step type; also auto on acceptance for video serviceMode
+ *   triggers_audio_call - set by AUDIO_CALL_READY/AUDIO_CALL_ACTIVE step type
+ *   requires_content - set by step type defaultFlags (RESULTS_READY, EXAM_COMPLETE, CARE_NOTES, etc.)
+ *   requires_prescription - set by step type defaultFlags (MEDICATION_REVIEW, etc.)
  *
  * The following used to be per-step flags but are now SYSTEMATIC (fired by the engine without any flag):
- *   payment      — ON_ACCEPTANCE or ON_COMPLETION based on template paymentTiming
- *   refund       — any cancel/deny/decline/reject action
- *   conversation — on acceptance
- *   review_request — on terminal success step
- *   stock_check  — serviceConfig.stock.checkOnAcceptance = true
- *   stock_subtract — serviceConfig.stock.subtractOnCompletion = true
+ *   payment - ON_ACCEPTANCE or ON_COMPLETION based on template paymentTiming
+ *   refund - any cancel/deny/decline/reject action
+ *   conversation - on acceptance
+ *   review_request - on terminal success step
+ *   stock_check - serviceConfig.stock.checkOnAcceptance = true
+ *   stock_subtract - serviceConfig.stock.subtractOnCompletion = true
  */
 import { PrismaClient } from '@prisma/client'
 

@@ -53,7 +53,7 @@ export default function AuditLogPage() {
           <FaShieldAlt className="text-[#0C6780]" /> Admin audit log
         </h1>
         <p className="text-sm text-gray-500 mt-1">
-          Every mutation performed by an admin — approvals, suspensions, role changes.
+          Every mutation performed by an admin - approvals, suspensions, role changes.
         </p>
       </div>
 

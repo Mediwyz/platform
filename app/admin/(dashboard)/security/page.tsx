@@ -33,7 +33,7 @@ export default function AdminSecurityPage() {
 
  const fetchSecurityData = async () => {
  try {
- // Fetch recent login attempts from API (placeholder — no endpoint yet)
+ // Fetch recent login attempts from API (placeholder - no endpoint yet)
  // When a security audit API is implemented, replace this with a real fetch
  setLoginAttempts([])
  } catch (error) {

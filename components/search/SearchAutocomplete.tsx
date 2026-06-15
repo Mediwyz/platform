@@ -41,7 +41,7 @@ interface RoleFromApi {
  icon: string
 }
 
-// Static tabs that aren't provider roles — kept around the dynamic role list.
+// Static tabs that aren't provider roles - kept around the dynamic role list.
 const STATIC_LEAD_TAB: CategoryTab = { id: 'all', label: 'All', icon: FaSearch }
 const STATIC_TAIL_TAB: CategoryTab = { id: 'medicines', label: 'Medicines', icon: FaPills }
 
@@ -88,7 +88,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  const router = useRouter()
 
  // Load provider roles from the DB so the filter chips always reflect the
- // current ProviderRole table — Regional Admins can add roles and they show
+ // current ProviderRole table - Regional Admins can add roles and they show
  // up here automatically with no code change.
  useEffect(() => {
   let cancelled = false
@@ -124,7 +124,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  }
  }
  } catch {
- // Silently fail — user will see empty results
+ // Silently fail - user will see empty results
  } finally {
  setLoading(false)
  }
@@ -184,7 +184,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
 
  return (
  <div ref={containerRef} className={`relative ${isHero ? 'w-full max-w-2xl mx-auto lg:mx-0' : 'w-full'}`}>
- {/* Category Tabs (hero variant only) — populated from /api/roles?searchEnabled=true */}
+ {/* Category Tabs (hero variant only) - populated from /api/roles?searchEnabled=true */}
  {isHero && (
  <div className="flex flex-wrap gap-1.5 mb-3 justify-center lg:justify-start">
  {categories.map((cat) => {

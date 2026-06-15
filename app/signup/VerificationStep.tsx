@@ -100,7 +100,7 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  {allVerified && !requiresManualApproval && verifyingCount === 0 && documents.filter(d => d.skipped).length === 0 && (
  <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-4 text-sm">
  <FaCheckCircle />
- <span>All required documents verified — your account will be activated immediately!</span>
+ <span>All required documents verified - your account will be activated immediately!</span>
  </div>
  )}
  {(failedCount > 0 || errorCount > 0) && verifyingCount === 0 && (

@@ -93,7 +93,7 @@ export default function AdminRegionalAdminsPage() {
  <FaGlobeAmericas className="text-2xl text-teal-600" />
  <h1 className="text-2xl font-bold text-gray-900">Regional Admins</h1>
  </div>
- <p className="text-gray-600">Manage regional administrator accounts — approve, suspend, or review profiles</p>
+ <p className="text-gray-600">Manage regional administrator accounts - approve, suspend, or review profiles</p>
  </div>
 
  {/* Filters */}

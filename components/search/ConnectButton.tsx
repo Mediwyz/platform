@@ -109,7 +109,7 @@ export default function ConnectButton({ providerId, className = '' }: ConnectBut
  setConnectionStatus(status === 'accepted' ? 'accepted' : 'pending')
  }
  } catch {
- // Silently fail — user can retry
+ // Silently fail - user can retry
  } finally {
  setActing(false)
  }

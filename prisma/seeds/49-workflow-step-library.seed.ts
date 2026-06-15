@@ -23,7 +23,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'CONFIRMED',
       label: 'Confirmed',
-      description: 'Provider accepted — conversation and video/audio room created automatically.',
+      description: 'Provider accepted - conversation and video/audio room created automatically.',
       category: 'generic',
       defaultFlags: {},
       defaultActionsProvider: [],
@@ -373,7 +373,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'SESSION_COMPLETE',
       label: 'Session Complete',
-      description: 'Session ended — notes or follow-up may be required.',
+      description: 'Session ended - notes or follow-up may be required.',
       category: 'consultation',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -496,7 +496,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'SESSION_NOTES_PENDING',
       label: 'Session Notes Pending',
-      description: 'Session done — provider must submit notes before closing.',
+      description: 'Session done - provider must submit notes before closing.',
       category: 'recurrent',
       defaultFlags: { requires_content: 'care_notes' },
       defaultActionsProvider: [
@@ -568,7 +568,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'TREATMENT_PLANNED',
       label: 'Treatment Planned',
-      description: 'Treatment plan created — patient has reviewed and agreed.',
+      description: 'Treatment plan created - patient has reviewed and agreed.',
       category: 'dental',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -588,7 +588,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
       category: 'dental',
       defaultFlags: {},
       defaultActionsProvider: [
-        { action: 'post_care', label: 'Procedure done — give post-care advice', targetStatus: 'post_care_given', style: 'primary' },
+        { action: 'post_care', label: 'Procedure done - give post-care advice', targetStatus: 'post_care_given', style: 'primary' },
       ],
       defaultActionsPatient: [],
       isTerminal: false,
@@ -746,7 +746,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
       category: 'vaccination',
       defaultFlags: {},
       defaultActionsProvider: [
-        { action: 'clear', label: 'Clear — no reaction', targetStatus: 'vaccination_complete', style: 'primary' },
+        { action: 'clear', label: 'Clear - no reaction', targetStatus: 'vaccination_complete', style: 'primary' },
         { action: 'reaction', label: 'Adverse reaction observed', targetStatus: 'reaction_observed', style: 'danger' },
       ],
       defaultActionsPatient: [],
@@ -800,7 +800,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'SCREENING_IN_PROGRESS',
       label: 'Screening In Progress',
-      description: 'Employees being screened — biometrics, ECG, blood draw, etc.',
+      description: 'Employees being screened - biometrics, ECG, blood draw, etc.',
       category: 'corporate',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -874,13 +874,13 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'SUBSTITUTION_PROPOSED',
       label: 'Substitution Proposed',
-      description: 'Pharmacist suggests a generic or equivalent — awaiting patient consent.',
+      description: 'Pharmacist suggests a generic or equivalent - awaiting patient consent.',
       category: 'pharmacy',
       defaultFlags: {},
       defaultActionsProvider: [],
       defaultActionsPatient: [
         { action: 'accept', label: 'Accept substitution', targetStatus: 'medication_ready', style: 'primary' },
-        { action: 'decline', label: 'Decline — keep original', targetStatus: 'rx_verified', style: 'secondary' },
+        { action: 'decline', label: 'Decline - keep original', targetStatus: 'rx_verified', style: 'secondary' },
       ],
       isTerminal: false,
       isCancellation: false,
@@ -920,7 +920,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'CRISIS_ASSESSMENT',
       label: 'Crisis Assessment',
-      description: 'Urgent mental health triage — risk level and immediate care plan determined.',
+      description: 'Urgent mental health triage - risk level and immediate care plan determined.',
       category: 'mental_health',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -939,7 +939,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
       category: 'mental_health',
       defaultFlags: { triggers_video_call: true },
       defaultActionsProvider: [
-        { action: 'end', label: 'End session — write notes', targetStatus: 'session_notes_pending', style: 'primary' },
+        { action: 'end', label: 'End session - write notes', targetStatus: 'session_notes_pending', style: 'primary' },
       ],
       defaultActionsPatient: [],
       isTerminal: false,
@@ -980,7 +980,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'ORDER_PLACED',
       label: 'Order Placed',
-      description: 'Patient has placed a health shop order — awaiting provider confirmation.',
+      description: 'Patient has placed a health shop order - awaiting provider confirmation.',
       category: 'shop',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -1001,7 +1001,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
       category: 'shop',
       defaultFlags: { requires_prescription: true },
       defaultActionsProvider: [
-        { action: 'validate', label: 'Prescription valid — proceed', targetStatus: 'order_confirmed', style: 'primary' },
+        { action: 'validate', label: 'Prescription valid - proceed', targetStatus: 'order_confirmed', style: 'primary' },
         { action: 'reject', label: 'Invalid prescription', targetStatus: 'order_cancelled', style: 'danger' },
       ],
       defaultActionsPatient: [],
@@ -1052,7 +1052,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'PRE_AUTH_SUBMITTED',
       label: 'Pre-Authorization Submitted',
-      description: 'Insurance pre-authorization request filed — awaiting insurer response.',
+      description: 'Insurance pre-authorization request filed - awaiting insurer response.',
       category: 'insurance',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -1081,7 +1081,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'PRE_AUTH_APPROVED',
       label: 'Pre-Authorization Approved',
-      description: 'Insurance approved — treatment or service can proceed.',
+      description: 'Insurance approved - treatment or service can proceed.',
       category: 'insurance',
       defaultFlags: {},
       defaultActionsProvider: [
@@ -1095,7 +1095,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'PRE_AUTH_DENIED',
       label: 'Pre-Authorization Denied',
-      description: 'Insurance declined the pre-authorization — treatment cannot proceed under this claim.',
+      description: 'Insurance declined the pre-authorization - treatment cannot proceed under this claim.',
       category: 'insurance',
       defaultFlags: {},
       defaultActionsProvider: [],
@@ -1141,7 +1141,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'PRESCRIPTION_WRITTEN',
       label: 'Prescription Written',
-      description: 'Optometrist (or provider) has written the eye / specialist prescription — must attach it.',
+      description: 'Optometrist (or provider) has written the eye / specialist prescription - must attach it.',
       category: 'consultation',
       defaultFlags: { requires_content: 'eye_prescription' },
       defaultActionsProvider: [
@@ -1185,7 +1185,7 @@ export async function seedWorkflowStepLibrary(prisma: PrismaClient) {
     {
       code: 'PROGRAM_ASSESSMENT',
       label: 'Initial Program Assessment',
-      description: 'First visit — provider assesses patient and designs treatment / care protocol.',
+      description: 'First visit - provider assesses patient and designs treatment / care protocol.',
       category: 'recurrent',
       defaultFlags: { requires_content: 'care_notes' },
       defaultActionsProvider: [

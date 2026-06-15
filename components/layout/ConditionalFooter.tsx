@@ -12,7 +12,7 @@ const COUNTRY_HOME_CODES = new Set([
 
 function isHomePage(pathname: string): boolean {
   if (pathname === '/') return true
-  // Match `/MU`, `/KE`, `/MU/`, etc. — single-segment uppercase ISO-2 codes.
+  // Match `/MU`, `/KE`, `/MU/`, etc. - single-segment uppercase ISO-2 codes.
   const match = pathname.match(/^\/([A-Z]{2})\/?$/i)
   return !!match && COUNTRY_HOME_CODES.has(match[1].toUpperCase())
 }

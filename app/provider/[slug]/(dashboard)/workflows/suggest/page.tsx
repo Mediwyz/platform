@@ -209,7 +209,7 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
                   onChange={e => applyStepType(idx, e.target.value)}
                   className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
                 >
-                  <option value="">— Custom —</option>
+                  <option value=""> - Custom - </option>
                   {Object.entries(grouped).map(([cat, types]) => (
                     <optgroup key={cat} label={cat.replace(/_/g, ' ')}>
                       {types.map(t => <option key={t.code} value={t.code}>{t.label}</option>)}

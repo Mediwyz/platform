@@ -1,5 +1,5 @@
 // ─── Document Verification via Groq LLM / VLM ───────────────────────────────
-// ALL verification is done by the AI model — no regex, no manual name matching.
+// ALL verification is done by the AI model - no regex, no manual name matching.
 //
 // - Images (PNG, JPG, WEBP, etc.) → VLM (Llama 4 Scout) analyzes visually
 // - PDFs → extract text via pdfjs-dist → send text to LLM for analysis
@@ -65,7 +65,7 @@ Respond ONLY with a valid JSON object (no markdown, no code blocks, no extra tex
   "missing_parts": ["list", "of", "missing", "name", "parts"],
   "document_type_detected": "e.g. National ID, Passport, Medical License, Business Plan, etc.",
   "reasoning": "brief one-line summary",
-  "detailed_analysis": "Write a thorough 4-8 sentence analysis report. Start with: 'AI Document Scan Report — [Document Type Detected]'. Then describe: (1) what type of document was detected and its key visual/textual elements (headers, logos, stamps, signatures, fields), (2) whether the registrant's name '${fullName}' was found in the document and where exactly (which field/section), (3) if the document type matches what was expected ('${documentType}') and why, (4) any concerns or reasons the document may not be compliant (wrong document type, name mismatch, low quality, missing elements), (5) your final verdict: COMPLIANT or NEEDS MANUAL REVIEW, with a clear explanation. Be specific and descriptive so the user understands exactly what the AI analyzed."
+  "detailed_analysis": "Write a thorough 4-8 sentence analysis report. Start with: 'AI Document Scan Report - [Document Type Detected]'. Then describe: (1) what type of document was detected and its key visual/textual elements (headers, logos, stamps, signatures, fields), (2) whether the registrant's name '${fullName}' was found in the document and where exactly (which field/section), (3) if the document type matches what was expected ('${documentType}') and why, (4) any concerns or reasons the document may not be compliant (wrong document type, name mismatch, low quality, missing elements), (5) your final verdict: COMPLIANT or NEEDS MANUAL REVIEW, with a clear explanation. Be specific and descriptive so the user understands exactly what the AI analyzed."
 }`
 }
 
@@ -79,7 +79,7 @@ async function verifyImageWithVLM(
 ): Promise<GroqVerificationResponse | null> {
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
-    console.error('GROQ_API_KEY not set — VLM verification unavailable')
+    console.error('GROQ_API_KEY not set - VLM verification unavailable')
     return null
   }
 
@@ -141,7 +141,7 @@ async function verifyTextWithLLM(
 ): Promise<GroqVerificationResponse | null> {
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
-    console.error('GROQ_API_KEY not set — LLM verification unavailable')
+    console.error('GROQ_API_KEY not set - LLM verification unavailable')
     return null
   }
 
@@ -254,7 +254,7 @@ function buildResult(
  * - PDF scanned → fallback (manual review)
  * - Word (.docx) → extract text → LLM text analysis
  *
- * All name matching is done by the AI model — no regex or manual matching.
+ * All name matching is done by the AI model - no regex or manual matching.
  */
 export async function verifyDocument(
   buffer: Buffer,
@@ -270,8 +270,8 @@ export async function verifyDocument(
     nameFound: false,
     matchDetails: { searchedParts: nameParts, foundParts: [], missingParts: nameParts },
     method: 'fallback',
-    extractedTextPreview: '(verification unavailable — manual review required)',
-    analysisReport: 'AI Document Scan Report — Automated verification was not possible for this document. The document will be queued for manual review by the MediWyz compliance team. This may take 2-5 business days. You can proceed with registration and your account will be activated once the review is complete.',
+    extractedTextPreview: '(verification unavailable - manual review required)',
+    analysisReport: 'AI Document Scan Report - Automated verification was not possible for this document. The document will be queued for manual review by the MediWyz compliance team. This may take 2-5 business days. You can proceed with registration and your account will be activated once the review is complete.',
   }
 
   // ── PDF ──────────────────────────────────────────────────────────────────
@@ -282,7 +282,7 @@ export async function verifyDocument(
       if (result) return buildResult(result, 'llm-text', nameParts)
     }
     // Scanned PDF with no extractable text
-    return { ...fallbackResult, extractedTextPreview: '(scanned PDF — no text extracted, manual review required)' }
+    return { ...fallbackResult, extractedTextPreview: '(scanned PDF - no text extracted, manual review required)' }
   }
 
   // ── Word (.docx) ─────────────────────────────────────────────────────────
@@ -294,17 +294,17 @@ export async function verifyDocument(
       const result = await verifyTextWithLLM(wordText, fullName, documentType)
       if (result) return buildResult(result, 'llm-text', nameParts)
     }
-    return { ...fallbackResult, extractedTextPreview: '(Word document — could not extract text)' }
+    return { ...fallbackResult, extractedTextPreview: '(Word document - could not extract text)' }
   }
 
   // ── Images (PNG, JPG, WEBP, BMP, TIFF, GIF, etc.) ───────────────────────
   if (mimeType.startsWith('image/')) {
     if (buffer.length > 4 * 1024 * 1024) {
-      return { ...fallbackResult, extractedTextPreview: '(image too large for VLM — max 4MB)' }
+      return { ...fallbackResult, extractedTextPreview: '(image too large for VLM - max 4MB)' }
     }
     const result = await verifyImageWithVLM(buffer, mimeType, fullName, documentType)
     if (result) return buildResult(result, 'vlm', nameParts)
-    return { ...fallbackResult, extractedTextPreview: '(VLM service unavailable — manual review required)' }
+    return { ...fallbackResult, extractedTextPreview: '(VLM service unavailable - manual review required)' }
   }
 
   // ── Unsupported type ─────────────────────────────────────────────────────

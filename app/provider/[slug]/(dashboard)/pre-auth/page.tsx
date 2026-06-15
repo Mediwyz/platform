@@ -73,7 +73,7 @@ export default function ProviderPreAuthPage() {
   async function submit() {
     setSubmitting(true); setError(null)
     try {
-      // Backend accepts memberEmail directly — no separate lookup needed.
+      // Backend accepts memberEmail directly - no separate lookup needed.
       const res = await fetch('/api/corporate/insurance/pre-auth', {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ export default function ProviderPreAuthPage() {
   }
 
   async function markUsed(id: string) {
-    if (!confirm('Mark this pre-authorization as used? This triggers direct billing — funds move from the insurer to your Account Balance.')) return
+    if (!confirm('Mark this pre-authorization as used? This triggers direct billing - funds move from the insurer to your Account Balance.')) return
     setUsingId(id)
     try {
       const res = await fetch(`/api/corporate/insurance/pre-auth/${id}/use`, { method: 'POST', credentials: 'include' })
@@ -194,7 +194,7 @@ export default function ProviderPreAuthPage() {
       ) : (
         <>
           {approved.length > 0 && (
-            <Group title="Approved — ready to deliver" tint="emerald">
+            <Group title="Approved - ready to deliver" tint="emerald">
               {approved.map((p) => (
                 <Row key={p.id} p={p} format={format}>
                   <button onClick={() => markUsed(p.id)} disabled={usingId === p.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg disabled:opacity-50">

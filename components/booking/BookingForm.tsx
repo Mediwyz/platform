@@ -59,7 +59,7 @@ export interface ServiceOption {
  description: string
  price: number
  duration?: number
- /** All linked workflow templates — patient picks one when there are multiple */
+ /** All linked workflow templates - patient picks one when there are multiple */
  workflows: WorkflowOption[]
 }
 
@@ -86,7 +86,7 @@ const MODE_COLORS: Record<string, string> = {
  video: 'bg-purple-100 text-purple-700',
 }
 
-// Intentionally static — standard emergency classification categories
+// Intentionally static - standard emergency classification categories
 const EMERGENCY_TYPES = [
  'Medical',
  'Accident',
@@ -95,7 +95,7 @@ const EMERGENCY_TYPES = [
  'Other',
 ]
 
-// Intentionally static — standard triage priority levels used across all emergency services
+// Intentionally static - standard triage priority levels used across all emergency services
 const PRIORITY_OPTIONS = [
  { value: 'low', label: 'Low', color: 'text-green-600 bg-green-50 border-green-200' },
  { value: 'medium', label: 'Medium', color: 'text-yellow-600 bg-yellow-50 border-yellow-200' },
@@ -361,7 +361,7 @@ export default function BookingForm({
 
  // ── JSX ─────────────────────────────────────────────────────────────────────
 
- // Auth gate — show sign-in prompt if not authenticated
+ // Auth gate - show sign-in prompt if not authenticated
  if (!authLoading && !user) {
   return (
    <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-md mx-auto text-center space-y-5">
@@ -485,7 +485,7 @@ export default function BookingForm({
  : 'Select a Service'}
  </h2>
 
- {/* Doctor / Nurse / Nanny — service selection (required) */}
+ {/* Doctor / Nurse / Nanny - service selection (required) */}
  {(providerType === 'doctor' || providerType === 'nurse' || providerType === 'nanny') && (
  <div className="space-y-5">
   {!services || services.length === 0 ? (
@@ -507,7 +507,7 @@ export default function BookingForm({
          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
        }`}
       >
-       {/* Service header row — clickable to select */}
+       {/* Service header row - clickable to select */}
        <button
         type="button"
         onClick={() => {
@@ -523,7 +523,7 @@ export default function BookingForm({
            <p className={`font-semibold text-sm ${isSelected ? 'text-[#0C6780]' : 'text-gray-900'}`}>
             {svc.serviceName}
            </p>
-           {/* Mode badges — one per workflow */}
+           {/* Mode badges - one per workflow */}
            {svc.workflows.map(wf => (
             <span key={wf.id} className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[wf.serviceMode] || 'bg-gray-100 text-gray-600'}`}>
              {MODE_LABELS[wf.serviceMode] || wf.serviceMode}
@@ -546,7 +546,7 @@ export default function BookingForm({
        {isSelected && (
         <div className="px-4 pb-4 space-y-3 border-t border-[#0C6780]/10 pt-3">
 
-         {/* Workflow step timeline — show for the active / first workflow */}
+         {/* Workflow step timeline - show for the active / first workflow */}
          {primaryWorkflow && primaryWorkflow.steps.length > 0 && (
           <div>
            <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-2">
@@ -620,7 +620,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/* Lab-test — test name and sample type inputs */}
+ {/* Lab-test - test name and sample type inputs */}
  {providerType === 'lab-test' && (
  <div className="space-y-5">
  <div>
@@ -650,7 +650,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/* Emergency — emergency type, location, contact, priority */}
+ {/* Emergency - emergency type, location, contact, priority */}
  {providerType === 'emergency' && (
  <div className="space-y-5">
  <div>
@@ -721,7 +721,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/* ── Step 2 — Schedule ─────────────────────────────────────────────── */}
+ {/* ── Step 2 - Schedule ─────────────────────────────────────────────── */}
  {step === 2 && (
  <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
  <h2 className="text-xl font-bold text-gray-900 mb-6">Schedule Appointment</h2>
@@ -837,7 +837,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/* ── Step 3 — Review & Submit ──────────────────────────────────────── */}
+ {/* ── Step 3 - Review & Submit ──────────────────────────────────────── */}
  {step === 3 && (
  <div className="space-y-6">
  {/* Summary card */}

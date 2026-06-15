@@ -156,7 +156,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  )}
  </Link>
 
- {/* Network / Connections — hidden on very small mobile */}
+ {/* Network / Connections - hidden on very small mobile */}
  {networkHref && (
  <Link
  href={networkHref}
@@ -177,12 +177,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  <NotificationBell userId={userId} profileHref={profileHref} />
  )}
 
- {/* Language switcher — hidden on small mobile to save space */}
+ {/* Language switcher - hidden on small mobile to save space */}
  <div className="hidden sm:block">
  <LanguageSwitcher variant="header" />
  </div>
 
- {/* Home button — always visible, returns to landing page */}
+ {/* Home button - always visible, returns to landing page */}
  <Link
    href="/"
    className="p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-100 hover:bg-sky-100 text-gray-600 hover:text-brand-teal flex items-center gap-1.5 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"

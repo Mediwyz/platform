@@ -22,7 +22,7 @@ export default function FinalCtaSection() {
               Ready to take care of your health?
             </h2>
             <p className="text-sm sm:text-base text-gray-300/90 max-w-xl mx-auto mb-8">
-              Join thousands of patients across Africa, Mauritius & India booking trusted care on MediWyz — it is free to get started.
+              Join thousands of patients across Africa, Mauritius & India booking trusted care on MediWyz - it is free to get started.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

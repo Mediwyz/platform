@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa'
 import { getPatientHealthItems, getSearchItems } from '@/lib/dashboard/patientHealthItems'
 
-// Static sidebar items — ALL possible items for any role
+// Static sidebar items - ALL possible items for any role
 // The createDashboardLayout adds dynamic search items via dynamicSearchBasePath
 function getAllSidebarItems(base: string): SidebarItem[] {
   return [

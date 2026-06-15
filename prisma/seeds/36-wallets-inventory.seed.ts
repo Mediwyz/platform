@@ -10,7 +10,7 @@ export async function seedWallets(prisma: PrismaClient) {
   })
 
   if (usersWithoutWallet.length === 0) {
-    console.log('  All users already have wallets — skipping')
+    console.log('  All users already have wallets - skipping')
     return
   }
 
@@ -49,7 +49,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
     strength?: string
     dosageForm?: string
   }[] = [
-    // PHARM001 — Pharmacist
+    // PHARM001 - Pharmacist
     {
       providerUserId: 'PHARM001',
       providerType: 'PHARMACIST',
@@ -132,7 +132,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // DOC001 — Doctor
+    // DOC001 - Doctor
     {
       providerUserId: 'DOC001',
       providerType: 'DOCTOR',
@@ -179,7 +179,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // NUR001 — Nurse
+    // NUR001 - Nurse
     {
       providerUserId: 'NUR001',
       providerType: 'NURSE',
@@ -226,7 +226,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // DENT001 — Dentist
+    // DENT001 - Dentist
     {
       providerUserId: 'DENT001',
       providerType: 'DENTIST',
@@ -273,7 +273,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // OPT001 — Optometrist
+    // OPT001 - Optometrist
     {
       providerUserId: 'OPT001',
       providerType: 'OPTOMETRIST',
@@ -320,7 +320,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'bottle',
     },
 
-    // NUTR001 — Nutritionist
+    // NUTR001 - Nutritionist
     {
       providerUserId: 'NUTR001',
       providerType: 'NUTRITIONIST',
@@ -367,7 +367,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'bottle',
     },
 
-    // PHYSIO001 — Physiotherapist
+    // PHYSIO001 - Physiotherapist
     {
       providerUserId: 'PHYSIO001',
       providerType: 'PHYSIOTHERAPIST',
@@ -414,7 +414,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // CARE001 — Caregiver
+    // CARE001 - Caregiver
     {
       providerUserId: 'CARE001',
       providerType: 'CAREGIVER',
@@ -461,7 +461,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'pair',
     },
 
-    // NAN001 — Nanny
+    // NAN001 - Nanny
     {
       providerUserId: 'NAN001',
       providerType: 'NANNY',
@@ -508,7 +508,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'unit',
     },
 
-    // LAB001 — Lab Tech
+    // LAB001 - Lab Tech
     {
       providerUserId: 'LAB001',
       providerType: 'LAB_TECHNICIAN',
@@ -540,7 +540,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
       unitOfMeasure: 'bottle',
     },
 
-    // EMW001 — Emergency Worker
+    // EMW001 - Emergency Worker
     {
       providerUserId: 'EMW001',
       providerType: 'EMERGENCY_WORKER',
@@ -584,7 +584,7 @@ export async function seedInventoryItems(prisma: PrismaClient) {
   const validItems = items.filter((item) => existingIds.has(item.providerUserId))
 
   if (validItems.length === 0) {
-    console.log('  No matching providers found — skipping inventory items')
+    console.log('  No matching providers found - skipping inventory items')
     return
   }
 

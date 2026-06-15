@@ -413,7 +413,7 @@ export default function EnhancedRegistrationForm() {
  </button>
  )
  })}
- {/* "Other — propose a new role" tile. Submits a ProviderRole
+ {/* "Other - propose a new role" tile. Submits a ProviderRole
   request in `isActive:false` state; regional admin reviews.
   Keeps the platform open for roles we don't ship by default
   (osteopath, audiologist, homeopath, …) without a code change. */}
@@ -1092,7 +1092,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
   }
   onSubmitted()
  } catch {
-  setError('Network error — try again.')
+  setError('Network error - try again.')
  } finally {
   setBusy(false)
  }

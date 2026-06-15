@@ -23,7 +23,7 @@ const MissionVisionSection: React.FC = () => {
  </h4>
  
  <p className="text-gray-700 leading-relaxed mb-4">
- Driven by our tech-led and holistic approach to healthcare—and a mission to simplify and improve access to quality care—we&apos;ve evolved beyond telemedicine into a comprehensive healthtech company.
+ Driven by our tech-led and holistic approach to healthcare - and a mission to simplify and improve access to quality care - we&apos;ve evolved beyond telemedicine into a comprehensive healthtech company.
  </p>
  
  <p className="text-gray-600 mb-4">

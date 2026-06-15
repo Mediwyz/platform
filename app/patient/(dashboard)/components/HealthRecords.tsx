@@ -884,7 +884,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
 
- {/* Content — always visible */}
+ {/* Content - always visible */}
  <div className="p-4 md:p-6 pb-20 sm:pb-6">
  {activeTab === 'records' && renderRecords()}
  {activeTab === 'vitals' && renderVitals()}

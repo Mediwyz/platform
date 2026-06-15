@@ -38,7 +38,7 @@ function generateFoodInsight(data: FoodDayData): { text: string; emoji: string }
  const totalProtein = data.entries.reduce((s, e) => s + (e.protein ?? 0), 0)
  if (data.entries.length === 0) return null
  if (pct > 1.15) return { emoji: '⚠️', text: `You've exceeded your calorie target by ${Math.round((pct - 1) * 100)}%. Consider a lighter dinner or an extra workout.` }
- if (pct > 0.85) return { emoji: '✅', text: "You're close to your calorie goal for today. Great balance — finish with a nutritious dinner!" }
+ if (pct > 0.85) return { emoji: '✅', text: "You're close to your calorie goal for today. Great balance - finish with a nutritious dinner!" }
  if (totalProtein < 30 && data.entries.length >= 2) return { emoji: '💪', text: "Your protein intake looks low. Add a high-protein snack like eggs, Greek yogurt, or legumes." }
  if (pct < 0.4) return { emoji: '🥗', text: "You're well under your calorie target. Make sure you're eating enough to fuel your body." }
  return { emoji: '📝', text: "Keep logging your meals to get a complete picture of your nutrition today." }

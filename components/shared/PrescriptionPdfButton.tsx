@@ -5,7 +5,7 @@ import { FaFilePdf } from 'react-icons/fa'
 /**
  * Opens the print-ready HTML in a new tab. User presses browser "Save as
  * PDF" from the floating "Print" button on the rendered page. Keeps the
- * server tiny — no Chromium or PDF library required.
+ * server tiny - no Chromium or PDF library required.
  */
 export default function PrescriptionPdfButton({
   userId,

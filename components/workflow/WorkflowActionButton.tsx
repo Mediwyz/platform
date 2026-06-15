@@ -12,7 +12,7 @@ export interface StepAction {
   confirmationRequired?: boolean
 }
 
-/** Only the flags that are still meaningful per-step — set by step-type defaultFlags, never placed manually. */
+/** Only the flags that are still meaningful per-step - set by step-type defaultFlags, never placed manually. */
 export interface StepFlags {
   requires_content?: string
   requires_prescription?: boolean
@@ -29,9 +29,9 @@ interface WorkflowActionButtonProps {
   stepFlags?: StepFlags
   /** Status-code → label on this template, used to render "→ next: X". */
   nextStepLabel?: string
-  /** Pre-formatted price string, e.g. "Rs 500" — used in confirmation copy. */
+  /** Pre-formatted price string, e.g. "Rs 500" - used in confirmation copy. */
   amountLabel?: string
-  /** Booking service mode — drives "video room will be opened" copy. */
+  /** Booking service mode - drives "video room will be opened" copy. */
   serviceMode?: string
   onOptimisticStart?: (targetStatus: string) => void
   onOptimisticRollback?: () => void
@@ -90,7 +90,7 @@ function buildAriaLabel(action: StepAction, stepFlags: StepFlags, serviceMode?: 
     if (serviceMode === 'audio' || stepFlags.triggers_audio_call) effects.push('will open audio room')
   }
   if (action.style === 'danger') effects.push('destructive action')
-  return effects.length > 0 ? `${action.label} — ${effects.join(', ')}` : action.label
+  return effects.length > 0 ? `${action.label} - ${effects.join(', ')}` : action.label
 }
 
 export default function WorkflowActionButton({
@@ -166,7 +166,7 @@ export default function WorkflowActionButton({
       })
       const data = await res.json()
       if (data.success) {
-        toast.success(nextStepLabel ? `Moved to "${nextStepLabel}"` : `${action.label} — done`)
+        toast.success(nextStepLabel ? `Moved to "${nextStepLabel}"` : `${action.label} - done`)
         setShowConfirm(false)
         setContentText('')
         setAttachedFileName(null)
@@ -178,7 +178,7 @@ export default function WorkflowActionButton({
       }
     } catch {
       onOptimisticRollback?.()
-      toast.error('Network error — try again.')
+      toast.error('Network error - try again.')
     } finally {
       setLoading(false)
     }
@@ -234,7 +234,7 @@ export default function WorkflowActionButton({
             {needsContent && (
               <div className="mt-4 space-y-2">
                 <label className="block text-xs font-medium text-gray-700">
-                  {String(stepFlags.requires_content).replace(/_/g, ' ')} — notes
+                  {String(stepFlags.requires_content).replace(/_/g, ' ')} - notes
                 </label>
                 <textarea
                   value={contentText}

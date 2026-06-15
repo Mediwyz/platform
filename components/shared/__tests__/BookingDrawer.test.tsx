@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/re
 import React from 'react'
 import { BookingDrawerProvider, useBookingDrawer } from '@/lib/contexts/booking-drawer-context'
 
-// Bypass framer-motion animations — they depend on rAF/WAAPI which jsdom doesn't run
+// Bypass framer-motion animations - they depend on rAF/WAAPI which jsdom doesn't run
 vi.mock('framer-motion', async () => {
   const R = await import('react')
   const MotionDiv = R.forwardRef(
@@ -142,7 +142,7 @@ describe('BookingDrawerProvider', () => {
 
 // ── Entry from service card ────────────────────────────────────────────────────
 
-describe('BookingDrawer — entry from service card', () => {
+describe('BookingDrawer - entry from service card', () => {
   it('starts at providers step and calls filtered provider fetch', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
@@ -203,7 +203,7 @@ describe('BookingDrawer — entry from service card', () => {
 
 // ── Entry from provider card ───────────────────────────────────────────────────
 
-describe('BookingDrawer — entry from provider card', () => {
+describe('BookingDrawer - entry from provider card', () => {
   it('starts at service step and fetches provider services', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const provider = { id: 'prov1', name: 'Dr. Marie Dupont', userType: 'DOCTOR' }
@@ -242,7 +242,7 @@ describe('BookingDrawer — entry from provider card', () => {
 
 // ── Entry from hero widget ─────────────────────────────────────────────────────
 
-describe('BookingDrawer — entry from hero widget (role + date + time)', () => {
+describe('BookingDrawer - entry from hero widget (role + date + time)', () => {
   it('starts at service step and fetches services for the role', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const role = { code: 'DOCTOR', label: 'Doctors', singularLabel: 'Doctor', slug: 'doctors', color: '#0C6780' }
@@ -265,7 +265,7 @@ describe('BookingDrawer — entry from hero widget (role + date + time)', () => 
 
 // ── Workflow step ──────────────────────────────────────────────────────────────
 
-describe('BookingDrawer — workflow step', () => {
+describe('BookingDrawer - workflow step', () => {
   it('shows workflow options when provider has multiple workflows', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
@@ -289,7 +289,7 @@ describe('BookingDrawer — workflow step', () => {
 
 // ── Slot step ──────────────────────────────────────────────────────────────────
 
-describe('BookingDrawer — slot step', () => {
+describe('BookingDrawer - slot step', () => {
   it('shows date strip and loads time slots after selecting a workflow', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     // Pre-fill date so the slot step shows slots without a separate date-click
@@ -316,7 +316,7 @@ describe('BookingDrawer — slot step', () => {
 
 // ── Auth step ─────────────────────────────────────────────────────────────────
 
-describe('BookingDrawer — auth step', () => {
+describe('BookingDrawer - auth step', () => {
   it('shows auth step when not logged in after selecting a slot', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
@@ -380,7 +380,7 @@ describe('BookingDrawer — auth step', () => {
 
 // ── Close ──────────────────────────────────────────────────────────────────────
 
-describe('BookingDrawer — close', () => {
+describe('BookingDrawer - close', () => {
   it('X button closes the drawer', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR' }
@@ -401,9 +401,9 @@ describe('BookingDrawer — close', () => {
   })
 })
 
-// ── Hero widget pre-filled — skip slot step ────────────────────────────────────
+// ── Hero widget pre-filled - skip slot step ────────────────────────────────────
 
-describe('BookingDrawer — hero widget pre-filled date/time skips slot step', () => {
+describe('BookingDrawer - hero widget pre-filled date/time skips slot step', () => {
   it('goes to confirm directly after workflow selection when date+time are pre-filled and user is logged in', async () => {
     Object.defineProperty(document, 'cookie', {
       value: 'mediwyz_userType=doctor; mediwyz_user_id=u1',

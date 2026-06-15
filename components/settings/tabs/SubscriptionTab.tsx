@@ -57,7 +57,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  setLoading(true)
  try {
  // Step 1: Get user info (region) + corporate capability check.
- // Capability — not role — so any user who owns a company / has a
+ // Capability - not role - so any user who owns a company / has a
  // corporate subscription sees corporate plans here.
  const [userRes, capRes] = await Promise.all([
  fetch(`/api/users/${userId}`, { credentials: 'include' }),
@@ -201,7 +201,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  )}
  </div>
 
- {/* Usage summary — dynamic from quotas */}
+ {/* Usage summary - dynamic from quotas */}
  {current.usage?.quotas && ((current.usage as unknown as { quotas: { key: string; label: string; used: number; limit: number }[] }).quotas).length > 0 && (
  <div className="mt-3 pt-3 border-t border-blue-200 grid grid-cols-2 sm:grid-cols-3 gap-2">
  {((current.usage as unknown as { quotas: { key: string; label: string; used: number; limit: number }[] }).quotas).map(q => (
@@ -223,7 +223,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  </div>
  )}
 
- {/* MediWyz For You — Individual Plans */}
+ {/* MediWyz For You - Individual Plans */}
  {individualPlans.length > 0 && (
  <div className="mb-8">
  <div className="mb-4">
@@ -241,7 +241,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  </div>
  )}
 
- {/* MediWyz For Business — only visible to Corporate Admins */}
+ {/* MediWyz For Business - only visible to Corporate Admins */}
  {corporatePlans.length > 0 && (
  <div>
  <div className="mb-4">
@@ -251,7 +251,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  </span>
  MediWyz For Business
  </h3>
- <p className="text-sm text-gray-500 mt-1">Corporate wellness plans — employer pays per employee</p>
+ <p className="text-sm text-gray-500 mt-1">Corporate wellness plans - employer pays per employee</p>
  </div>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
  {corporatePlans.map((plan) => renderPlanCard(plan, currentPlanId))}

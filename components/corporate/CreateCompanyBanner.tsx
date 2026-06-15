@@ -177,7 +177,7 @@ export default function CreateCompanyBanner({
                   onChange={e => setForm(s => ({ ...s, subscriptionPlanId: e.target.value }))}
                   className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
                 >
-                  <option value="">— No group plan —</option>
+                  <option value=""> - No group plan - </option>
                   {plans.map(p => (
                     <option key={p.id} value={p.id}>
                       {p.name} ({p.currency} {p.price}/member)

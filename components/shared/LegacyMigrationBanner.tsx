@@ -21,8 +21,8 @@ export default function LegacyMigrationBanner({
     ? 'Insurance has moved'
     : 'Company management has moved'
   const subtitle = feature === 'insurance'
-    ? 'Insurance-company owners now manage members + contributions from "My Company". Anyone can create an insurance scheme — it is no longer a separate role.'
-    : 'Company admins manage everything from "My Company" on any dashboard. Any user can create a company — it is no longer a separate role.'
+    ? 'Insurance-company owners now manage members + contributions from "My Company". Anyone can create an insurance scheme - it is no longer a separate role.'
+    : 'Company admins manage everything from "My Company" on any dashboard. Any user can create a company - it is no longer a separate role.'
 
   return (
     <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 mb-6">

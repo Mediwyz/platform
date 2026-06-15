@@ -96,13 +96,13 @@ export default function PatientOverviewPage() {
  </div>
  </div>
 
- {/* Activation checklist — hidden once all steps are done or the user dismisses */}
+ {/* Activation checklist - hidden once all steps are done or the user dismisses */}
  <OnboardingChecklist userId={patientData.id} />
 
  {/* Wallet Balance */}
  <WalletBalanceCard userId={patientData.id} />
 
- {/* Refer + earn pillar — every member is a "money provider" via referrals */}
+ {/* Refer + earn pillar - every member is a "money provider" via referrals */}
  <ReferralPillarCard userId={patientData.id} />
 
  {/* Health Score Card */}

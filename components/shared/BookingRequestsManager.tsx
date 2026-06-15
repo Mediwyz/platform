@@ -62,7 +62,7 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  setMessage(null)
 
  try {
- // Route through the workflow transition — notifies member automatically.
+ // Route through the workflow transition - notifies member automatically.
  // Falls back to legacy /api/bookings/action for bookings without a workflow.
  const wfRes = await fetch('/api/workflow/transition', {
  method: 'POST',
@@ -89,7 +89,7 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  setBookings((prev) => prev.filter((b) => (b as { id: string }).id !== bookingId))
  setMessage({
  type: 'success',
- text: action === 'accept' ? 'Booking accepted — member notified' : 'Booking declined — member notified',
+ text: action === 'accept' ? 'Booking accepted - member notified' : 'Booking declined - member notified',
  })
  } catch {
  setMessage({ type: 'error', text: 'Something went wrong' })

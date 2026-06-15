@@ -6,18 +6,18 @@ export async function seedCatalogData(prisma: PrismaClient) {
   // ── Doctor Service Catalog ────────────────────────────────────────────────
 
   const doctorServices = [
-    // Dr. DOC001 — GP (DPROF001)
+    // Dr. DOC001 - GP (DPROF001)
     { doctorId: 'DPROF001', serviceName: 'General Consultation', category: 'Consultation', description: 'Standard GP consultation for common illnesses, check-ups, and referrals.', price: 800, duration: 30 },
     { doctorId: 'DPROF001', serviceName: 'Video Consultation', category: 'Consultation', description: 'Remote video consultation for non-emergency conditions.', price: 600, duration: 20 },
     { doctorId: 'DPROF001', serviceName: 'Annual Health Screening', category: 'Screening', description: 'Comprehensive annual health check with lab work and physical exam.', price: 3500, duration: 60 },
     { doctorId: 'DPROF001', serviceName: 'Travel Medicine Consultation', category: 'Consultation', description: 'Pre-travel health advice, vaccinations, and prophylaxis prescriptions.', price: 1200, duration: 30 },
     { doctorId: 'DPROF001', serviceName: 'Chronic Disease Management', category: 'Consultation', description: 'Follow-up consultations for diabetes, hypertension, and other chronic conditions.', price: 700, duration: 30 },
-    // Dr. DOC002 — Specialist (DPROF002)
+    // Dr. DOC002 - Specialist (DPROF002)
     { doctorId: 'DPROF002', serviceName: 'Cardiology Consultation', category: 'Specialist Consultation', description: 'Specialist heart and cardiovascular assessment.', price: 2000, duration: 45 },
     { doctorId: 'DPROF002', serviceName: 'ECG Interpretation', category: 'Procedure', description: 'Electrocardiogram reading and interpretation.', price: 1500, duration: 30 },
     { doctorId: 'DPROF002', serviceName: 'Stress Test', category: 'Screening', description: 'Cardiac stress test to evaluate heart function during exercise.', price: 4000, duration: 60 },
     { doctorId: 'DPROF002', serviceName: 'Echocardiogram', category: 'Procedure', description: 'Ultrasound imaging of the heart structure and function.', price: 5000, duration: 45 },
-    // Dr. DOC003 — Specialist (DPROF003)
+    // Dr. DOC003 - Specialist (DPROF003)
     { doctorId: 'DPROF003', serviceName: 'Dermatology Consultation', category: 'Specialist Consultation', description: 'Skin, hair, and nail condition assessment and treatment.', price: 1800, duration: 30 },
     { doctorId: 'DPROF003', serviceName: 'Skin Biopsy', category: 'Procedure', description: 'Minor skin biopsy for diagnostic purposes.', price: 3000, duration: 30 },
     { doctorId: 'DPROF003', serviceName: 'Cryotherapy', category: 'Procedure', description: 'Liquid nitrogen treatment for warts, skin tags, and lesions.', price: 2000, duration: 20 },

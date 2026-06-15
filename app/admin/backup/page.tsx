@@ -49,7 +49,7 @@ export default function AdminBackupPage() {
  const inProgressEntry: BackupEntry = {
  id: `bkp-${Date.now()}`,
  date: new Date().toISOString(),
- size: '—',
+ size: ' - ',
  type: 'manual',
  status: 'in-progress',
  }

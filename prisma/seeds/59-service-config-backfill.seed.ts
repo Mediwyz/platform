@@ -1,5 +1,5 @@
 /**
- * Seed 59 — ProviderServiceConfig backfill + realistic workflow attachment
+ * Seed 59 - ProviderServiceConfig backfill + realistic workflow attachment
  *
  * Responsibilities:
  * 1. Ensure every active isDefault PlatformService has a ProviderServiceConfig
@@ -26,7 +26,7 @@ import { PrismaClient } from '@prisma/client'
 function inferModes(serviceName: string, category: string): string[] {
   const text = (serviceName + ' ' + category).toLowerCase()
 
-  // ── Emergency — responder always goes TO the patient ────────────────────
+  // ── Emergency - responder always goes TO the patient ────────────────────
   if (text.match(/\bemergency|urgence|ambulance|secours|rescue|first aid|premiers secours\b/))
     return ['home']
 
@@ -48,27 +48,27 @@ function inferModes(serviceName: string, category: string): string[] {
   if (text.match(/\bdental checkup|teeth cleaning|dental exam|tooth|wisdom|orthodont|braces\b/))
     return ['office']
 
-  // ── Lab / sample collection — in clinic OR nurse comes home ────────────
+  // ── Lab / sample collection - in clinic OR nurse comes home ────────────
   if (text.match(/\bblood test|urine test|sample|prelevement|specimen|collection|lab test|analyse|lipid|cbc|complete blood|glucose|hba1c|thyroid|creatinine\b/))
     return ['office', 'home']
 
-  // ── Physical therapy / rehabilitation — clinic or home session ─────────
+  // ── Physical therapy / rehabilitation - clinic or home session ─────────
   if (text.match(/\bphysio|physiotherapy|kine|rehab|rehabilitation|sports rehab|massage|manipulation|osteopath\b/))
     return ['office', 'home']
 
-  // ── Caregiver / elderly care — always at patient's location ────────────
+  // ── Caregiver / elderly care - always at patient's location ────────────
   if (text.match(/\belderly|senior care|post.surgery|recovery care|personal care|palliative|respite\b/))
     return ['home']
 
-  // ── Consultation with prescription / follow-up — office or video ───────
+  // ── Consultation with prescription / follow-up - office or video ───────
   if (text.match(/\bprescription|ordonnance|medication|refill|renewal|follow.?up|follow up|consultation générale|general consult|initial consult\b/))
     return ['office', 'video']
 
-  // ── Nutrition / mental health / coaching — office or video ─────────────
+  // ── Nutrition / mental health / coaching - office or video ─────────────
   if (text.match(/\bnutrition|diet consult|meal plan|dietary|weight loss|nutritional|mental health|psychology|psychiatry|counseling|therapy session|coaching\b/))
     return ['office', 'video']
 
-  // ── Pharmacy / medication dispensing — office (pickup) or home (delivery)
+  // ── Pharmacy / medication dispensing - office (pickup) or home (delivery)
   if (text.match(/\bpharmacy|medicine|drug|dispensing|delivery|medication order\b/))
     return ['office', 'home']
 
@@ -207,7 +207,7 @@ export async function seedServiceConfigBackfill(prisma: PrismaClient) {
     const svcId = config.platformServiceId
     const meta = serviceMeta.get(svcId)
 
-    // Priority 1: service-specific templates (most relevant — linked to this exact service)
+    // Priority 1: service-specific templates (most relevant - linked to this exact service)
     const specificIds = svcSpecificMap.get(svcId) ?? []
     if (specificIds.length > 0) {
       for (const tplId of specificIds) {

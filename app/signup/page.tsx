@@ -379,7 +379,7 @@ export default function RegistrationForm() {
  </div>
  )}
 
- {/* Navigation Buttons — only on step 1 and step 2 basic info */}
+ {/* Navigation Buttons - only on step 1 and step 2 basic info */}
  {currentStep <= 2 && subStep === 'basic' && (
  <NavigationButtons
  currentStep={currentStep}

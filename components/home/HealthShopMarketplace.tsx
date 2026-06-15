@@ -137,7 +137,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
     router.push(`/search/health-shop?category=${item.category}`)
   }
 
-  // Inlined class strings instead of a Wrapper subcomponent — defining a
+  // Inlined class strings instead of a Wrapper subcomponent - defining a
   // component inside the function body is a React anti-pattern (recreates
   // the component type every render and breaks children identity).
   const scrollbarClass = `[&::-webkit-scrollbar]:w-[3px]
@@ -346,14 +346,14 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
   if (embedded) {
     return (
       <>
-        {/* Header — sits above the scroll area, never moves */}
+        {/* Header - sits above the scroll area, never moves */}
         <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-white border-b border-gray-100">
           <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
             <FaShoppingCart className="text-xl sm:text-2xl text-[#0C6780]" />
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Shop</h2>
           </div>
           <p className="text-sm sm:text-base text-gray-600">Order medicines, supplements &amp; health products from verified providers</p>
-          {/* Category quick links — scrollable strip with prev/next buttons */}
+          {/* Category quick links - scrollable strip with prev/next buttons */}
           <div className="flex items-center gap-1.5 mt-3">
             <button
               onClick={() => scrollCat('left')}

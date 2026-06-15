@@ -1,9 +1,9 @@
 /**
- * Seed 38 — Inventory Orders, Notification Templates, Notifications
+ * Seed 38 - Inventory Orders, Notification Templates, Notifications
  *
- * 1. seedInventoryOrders    — 5 sample orders from patients to providers
- * 2. seedNotificationTemplates — Custom WorkflowNotificationTemplate for providers/admins
- * 3. seedNotifications      — 20+ notifications for various users and types
+ * 1. seedInventoryOrders - 5 sample orders from patients to providers
+ * 2. seedNotificationTemplates - Custom WorkflowNotificationTemplate for providers/admins
+ * 3. seedNotifications - 20+ notifications for various users and types
  */
 import { PrismaClient } from '@prisma/client'
 
@@ -32,7 +32,7 @@ export async function seedInventoryOrders(prisma: PrismaClient) {
   })
 
   if (pharmItems.length === 0 && dentItems.length === 0 && optItems.length === 0) {
-    console.log('  Skipping inventory orders — no inventory items found')
+    console.log('  Skipping inventory orders - no inventory items found')
     return
   }
 
@@ -591,7 +591,7 @@ export async function seedNotifications(prisma: PrismaClient) {
     })
 
     if (!userExists) {
-      console.log(`    Skipping notification for ${notif.userId} — user not found`)
+      console.log(`    Skipping notification for ${notif.userId} - user not found`)
       continue
     }
 

@@ -169,7 +169,7 @@ export default function RegionalUsersPage() {
      <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
     </div>
     <p className="text-gray-600">
-     Manage user accounts — approve, suspend, or message users
+     Manage user accounts - approve, suspend, or message users
      {pendingCount > 0 && (
       <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
        {pendingCount} pending

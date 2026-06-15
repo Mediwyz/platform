@@ -7,7 +7,7 @@ import { FiRefreshCw, FiList, FiClock, FiActivity, FiCheckCircle, FiXCircle } fr
 import BookingCard, { type BookingCardData } from './BookingCard'
 
 export interface BookingsDashboardProps {
-  /** User's ID — used to fetch patient names for provider view (lazy) */
+  /** User's ID - used to fetch patient names for provider view (lazy) */
   userId: string
   /** Which side of each booking this user is on */
   role: 'patient' | 'provider'

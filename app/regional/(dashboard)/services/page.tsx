@@ -56,7 +56,7 @@ export default function RegionalServicesPage() {
         if (!json.success || !Array.isArray(json.data)) return
         const flat: PlatformService[] = []
         for (const group of json.data as Array<{ category: string; services: PlatformService[] }>) {
-          const parts = (group.category as string).split(' — ')
+          const parts = (group.category as string).split(' - ')
           const pt = parts[0] || ''
           const cat = parts[1] || group.category
           for (const svc of group.services || []) {

@@ -15,31 +15,31 @@ const CategoryNavigator = dynamic(() => import('@/components/home/CategoryNaviga
 export default function HomePage() {
   return (
     <>
-      {/* 1 — Hook: hero + image carousel + app badges */}
+      {/* 1 - Hook: hero + image carousel + app badges */}
       <HeroSection />
 
-      {/* Sticky "Book Now / Find Provider" bar — appears after scrolling past hero */}
+      {/* Sticky "Book Now / Find Provider" bar - appears after scrolling past hero */}
       <StickyCTABar />
 
-      {/* 2 — Discover first: it's what users come to do — 3-level category navigator → /search/* (live map at final step) */}
+      {/* 2 - Discover first: it's what users come to do - 3-level category navigator → /search/* (live map at final step) */}
       <CategoryNavigator />
 
-      {/* 3 — Explain: 3-step "Search → Book → Consult" */}
+      {/* 3 - Explain: 3-step "Search → Book → Consult" */}
       <HowItWorksSection />
 
-      {/* 4 — Feature showcase: every capability of the platform (bento grid) */}
+      {/* 4 - Feature showcase: every capability of the platform (bento grid) */}
       <FeatureShowcase />
 
-      {/* 5 — Value props: why choose MediWyz */}
+      {/* 5 - Value props: why choose MediWyz */}
       <WhyMediWyzSection />
 
-      {/* 6 — Trust: partner logos + key stats marquee */}
+      {/* 6 - Trust: partner logos + key stats marquee */}
       <CompanyTrustBar />
 
-      {/* 7 — Mobile app download */}
+      {/* 7 - Mobile app download */}
       <AppDownloadSection />
 
-      {/* 8 — Final conversion CTA */}
+      {/* 8 - Final conversion CTA */}
       <FinalCtaSection />
     </>
   )

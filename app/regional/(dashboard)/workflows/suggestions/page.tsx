@@ -150,7 +150,7 @@ export default function WorkflowSuggestionsPage() {
                   )}
                   <p className="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
                     <FiUser className="w-3 h-3" />
-                    Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : '—'}
+                    Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : ' - '}
                   </p>
                   {s.suggestionNote && (
                     <p className="text-xs text-gray-500 mt-1 italic">Note: {s.suggestionNote}</p>

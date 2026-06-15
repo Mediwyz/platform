@@ -1,5 +1,5 @@
 /**
- * English message dictionary — the source of truth for user-facing strings
+ * English message dictionary - the source of truth for user-facing strings
  * in the workflow UI. Every new string starts here; translations in fr/mfe
  * reference the same keys. Missing keys fall back to English automatically.
  *
@@ -30,7 +30,7 @@ export const en = {
 
   // Library page
   'library.title': 'Workflow Library',
-  'library.subtitle': 'Browse every workflow on the platform — system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point.',
+  'library.subtitle': 'Browse every workflow on the platform - system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point.',
   'library.search.placeholder': 'Search name, slug, description...',
   'library.filter.allRoles': 'All provider roles',
   'library.filter.allModes': 'All service modes',
@@ -46,7 +46,7 @@ export const en = {
   'library.empty.subtitle': 'Try widening the search or resetting the filters.',
 
   // Role request (signup)
-  'role.request.trigger': 'I don\'t see my role — propose a new one',
+  'role.request.trigger': 'I don\'t see my role - propose a new one',
   'role.request.modal.title': 'Propose a new provider role',
   'role.request.modal.subtitle': 'Your request goes to a regional admin for approval. While you wait, you can complete signup as a patient and switch later.',
   'role.request.field.label': 'Role name',
@@ -62,7 +62,7 @@ export const en = {
   'referral.stat.earned': 'Earned',
   'referral.code.label': 'Your code',
   'referral.share': 'Share your link',
-  'referral.copied': 'Link copied — share it anywhere',
+  'referral.copied': 'Link copied - share it anywhere',
 
   // Booking status change toast
   'booking.toast.statusUpdated': 'Status updated: {{status}}',
@@ -77,7 +77,7 @@ export const en = {
 
   // Audio call
   'audio.title': 'Audio Calls',
-  'audio.subtitle': 'Voice-only calls — faster to connect on weak networks and less distracting in emergencies.',
+  'audio.subtitle': 'Voice-only calls - faster to connect on weak networks and less distracting in emergencies.',
   'audio.empty.title': 'No audio calls yet',
   'audio.empty.subtitle': 'A call appears here automatically when a workflow step opens an audio room.',
   'audio.action.join': 'Join',

@@ -82,7 +82,7 @@ export default function PostCard({
  const [expanded, setExpanded] = useState(false)
  // Defensive fallback: a freshly-created post occasionally arrives without
  // its `author` relation (caller bug). Render a stub so the feed doesn't
- // crash — the next refetch will fill it in properly.
+ // crash - the next refetch will fill it in properly.
  const author = post.author ?? {
   id: '', firstName: 'Unknown', lastName: '', profileImage: null, userType: 'MEMBER', verified: false,
  }
@@ -110,7 +110,7 @@ export default function PostCard({
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
  <span className="font-semibold text-gray-900 text-sm sm:text-base">
- {/* Only prefix "Dr." for users with a doctorProfile — MEMBERs and other roles get their real name. */}
+ {/* Only prefix "Dr." for users with a doctorProfile - MEMBERs and other roles get their real name. */}
  {post.company ? post.company.companyName
   : author.doctorProfile ? `Dr. ${author.firstName} ${author.lastName}`
   : `${author.firstName} ${author.lastName}`}

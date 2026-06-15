@@ -90,7 +90,7 @@ export default function FindCompanyPage() {
       })
       const json = await res.json()
       setToast(json.success
-        ? { type: 'ok', msg: `Joined ${c.companyName} — first contribution deducted from wallet` }
+        ? { type: 'ok', msg: `Joined ${c.companyName} - first contribution deducted from wallet` }
         : { type: 'err', msg: json.message || 'Failed to join' })
     } catch {
       setToast({ type: 'err', msg: 'Network error' })

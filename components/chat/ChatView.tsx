@@ -1,6 +1,6 @@
 // components/chat/ChatView.tsx
 // Shared chat component for the unified digital health platform.
-// Used by ALL user types — patients, doctors, nurses, nannies, pharmacists, etc.
+// Used by ALL user types - patients, doctors, nurses, nannies, pharmacists, etc.
 
 'use client'
 
@@ -191,7 +191,7 @@ function ConversationListItem({ conversation, currentUserId, isSelected, onSelec
  const isNewConnection = conversation.isNewConnection === true
 
  const preview = isNewConnection
- ? 'New connection — click to start chatting'
+ ? 'New connection - click to start chatting'
  : conversation.lastMessage
  ? truncate(conversation.lastMessage.content, 50)
  : 'No messages yet'
@@ -420,7 +420,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  setConversations([aiEntry, ...existingConversations, ...newConnectionEntries])
  }
  } catch {
- // Network error — silently ignore
+ // Network error - silently ignore
  } finally {
  if (!cancelled) setLoadingConversations(false)
  }
@@ -511,7 +511,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  useEffect(() => {
  if (!selectedId) return
 
- // AI Assistant — no server-side conversation; just seed a greeting once.
+ // AI Assistant - no server-side conversation; just seed a greeting once.
  if (selectedId === 'ai-assistant') {
  setMessages((prev) => prev.length > 0 && prev[0].conversationId === 'ai-assistant' ? prev : [{
  id: 'ai-welcome',
@@ -519,7 +519,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  senderId: 'ai-assistant',
  senderName: 'AI Health Assistant',
  senderType: 'AI_ASSISTANT',
- content: 'Hi! I\'m your AI health assistant. Ask me anything — nutrition, symptoms, exercise, sleep, or general wellbeing.',
+ content: 'Hi! I\'m your AI health assistant. Ask me anything - nutrition, symptoms, exercise, sleep, or general wellbeing.',
  createdAt: new Date().toISOString(),
  }])
  setLoadingMessages(false)
@@ -697,7 +697,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  senderId: 'ai-assistant',
  senderName: 'AI Health Assistant',
  senderType: 'AI_ASSISTANT',
- content: 'AI is unavailable right now — please try again in a moment.',
+ content: 'AI is unavailable right now - please try again in a moment.',
  createdAt: new Date().toISOString(),
  }))
  }
@@ -764,21 +764,21 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  const [creatingConversation, setCreatingConversation] = useState(false)
 
  const handleSelectConversation = useCallback(async (id: string) => {
- // AI Assistant — stay inside the chat UI and talk to the bot inline.
+ // AI Assistant - stay inside the chat UI and talk to the bot inline.
  if (id === 'ai-assistant') {
    setSelectedId('ai-assistant')
    setMobileShowMessages(true)
    return
  }
 
- // Regular conversation — select immediately
+ // Regular conversation - select immediately
  if (!id.startsWith('connection:')) {
  setSelectedId(id)
  setMobileShowMessages(true)
  return
  }
 
- // New connection — create the real conversation first, then select it
+ // New connection - create the real conversation first, then select it
  const syntheticConv = conversationsRef.current.find((c) => c.id === id)
  if (!syntheticConv) return
  const otherId = syntheticConv.participants[0]?.userId
@@ -845,7 +845,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  return (
  <div className="flex h-[calc(100vh-8rem)] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
  {/* ----------------------------------------------------------------- */}
- {/* LEFT PANEL — Conversation List */}
+ {/* LEFT PANEL - Conversation List */}
  {/* ----------------------------------------------------------------- */}
  <div
  className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-white ${
@@ -943,7 +943,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  </div>
 
  {/* ----------------------------------------------------------------- */}
- {/* RIGHT PANEL — Message View */}
+ {/* RIGHT PANEL - Message View */}
  {/* ----------------------------------------------------------------- */}
  <div
  className={`flex-1 flex flex-col bg-gray-50 ${
@@ -1051,7 +1051,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  </div>
  </>
  ) : (
- /* Empty state — no conversation selected */
+ /* Empty state - no conversation selected */
  <div className="flex-1 flex items-center justify-center">
  <div className="text-center px-4">
  <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center">

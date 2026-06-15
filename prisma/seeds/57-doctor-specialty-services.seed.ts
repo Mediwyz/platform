@@ -1,5 +1,5 @@
 /**
- * Seed 57 — Comprehensive doctor specialty services + enhanced other-role services
+ * Seed 57 - Comprehensive doctor specialty services + enhanced other-role services
  *
  * Strategy:
  *   - Each doctor specialty gets 5-8 services with its verified healthicons:* iconKey
@@ -73,8 +73,8 @@ const DOCTOR_SERVICES: Array<{
       { name: 'General Consultation', desc: 'Standard GP consultation for common illnesses, check-ups, and referrals.', price: 800, dur: 30 },
       { name: 'Annual Health Screening', desc: 'Comprehensive annual health check with physical examination and lab referrals.', price: 3500, dur: 60 },
       { name: 'Follow-up Consultation', desc: 'Review and follow-up after initial diagnosis or treatment.', price: 600, dur: 20 },
-      { name: 'Home Visit — General', desc: 'Doctor visits patient at home for general care or elderly patients.', price: 2500, dur: 60 },
-      { name: 'Video Consultation — GP', desc: 'Remote video consultation for non-emergency general conditions.', price: 600, dur: 20 },
+      { name: 'Home Visit - General', desc: 'Doctor visits patient at home for general care or elderly patients.', price: 2500, dur: 60 },
+      { name: 'Video Consultation - GP', desc: 'Remote video consultation for non-emergency general conditions.', price: 600, dur: 20 },
       { name: 'Sick Note & Certificate', desc: 'Medical certificate for work, school, or insurance purposes.', price: 400, dur: 15 },
     ],
   },
@@ -214,7 +214,7 @@ const DOCTOR_SERVICES: Array<{
       { name: 'Spine Assessment', desc: 'Back and neck pain evaluation including disc herniation and scoliosis.', price: 2000, dur: 45 },
       { name: 'Sports Injury Evaluation', desc: 'Ligament, tendon, and cartilage injury assessment and return-to-sport planning.', price: 1800, dur: 45 },
       { name: 'Osteoporosis Management', desc: 'Bone density assessment, DEXA scan review, and anti-osteoporosis therapy.', price: 1800, dur: 45 },
-      { name: 'Surgical Consultation — Orthopedics', desc: 'Pre-surgical assessment for joint replacement or orthopedic procedure.', price: 2500, dur: 60 },
+      { name: 'Surgical Consultation - Orthopedics', desc: 'Pre-surgical assessment for joint replacement or orthopedic procedure.', price: 2500, dur: 60 },
     ],
   },
 
@@ -231,7 +231,7 @@ const DOCTOR_SERVICES: Array<{
       { name: 'Child Nutrition Counseling', desc: 'Dietary assessment and feeding guidance for healthy child growth.', price: 1000, dur: 30 },
       { name: 'Adolescent Health Consultation', desc: 'Health assessment, mental health screening, and guidance for teenagers.', price: 1200, dur: 45 },
       { name: 'Pediatric Asthma Management', desc: 'Assessment and management of childhood asthma and respiratory conditions.', price: 1200, dur: 30 },
-      { name: 'ADHD Evaluation — Pediatric', desc: 'Attention deficit assessment, diagnosis, and management plan for children.', price: 2000, dur: 60 },
+      { name: 'ADHD Evaluation - Pediatric', desc: 'Attention deficit assessment, diagnosis, and management plan for children.', price: 2000, dur: 60 },
     ],
   },
 
@@ -243,8 +243,8 @@ const DOCTOR_SERVICES: Array<{
     services: [
       { name: 'Psychiatric Assessment', desc: 'Comprehensive mental health evaluation and diagnosis by a psychiatrist.', price: 2500, dur: 60 },
       { name: 'Depression & Anxiety Treatment', desc: 'Medication management and therapy planning for depression and anxiety disorders.', price: 1800, dur: 45 },
-      { name: 'ADHD Evaluation — Adult', desc: 'Adult ADHD assessment, diagnosis, and treatment initiation.', price: 2500, dur: 60 },
-      { name: 'Medication Management — Psychiatry', desc: 'Psychiatric medication review, dose adjustment, and side effect monitoring.', price: 1500, dur: 30 },
+      { name: 'ADHD Evaluation - Adult', desc: 'Adult ADHD assessment, diagnosis, and treatment initiation.', price: 2500, dur: 60 },
+      { name: 'Medication Management - Psychiatry', desc: 'Psychiatric medication review, dose adjustment, and side effect monitoring.', price: 1500, dur: 30 },
       { name: 'Bipolar Disorder Management', desc: 'Mood stabiliser review and management of bipolar spectrum disorders.', price: 2000, dur: 45 },
       { name: 'Psychosis Assessment', desc: 'Evaluation and management of psychotic disorders including schizophrenia.', price: 2500, dur: 60 },
       { name: 'Stress & Burnout Consultation', desc: 'Occupational stress assessment and management strategies for burnout.', price: 1800, dur: 45 },
@@ -306,7 +306,7 @@ const DOCTOR_SERVICES: Array<{
       { name: 'Hearing Assessment', desc: 'Audiogram and hearing loss evaluation including tinnitus management.', price: 1500, dur: 30 },
       { name: 'Sinus & Allergy Treatment', desc: 'Chronic sinusitis, nasal polyps, and allergic rhinitis management.', price: 1500, dur: 30 },
       { name: 'Throat & Tonsil Evaluation', desc: 'Assessment of sore throat, tonsillitis, and tonsillectomy candidacy.', price: 1200, dur: 30 },
-      { name: 'Sleep-Disordered Breathing — ENT', desc: 'Snoring and obstructive sleep apnea surgical consultation.', price: 2000, dur: 45 },
+      { name: 'Sleep-Disordered Breathing - ENT', desc: 'Snoring and obstructive sleep apnea surgical consultation.', price: 2000, dur: 45 },
       { name: 'Voice & Larynx Assessment', desc: 'Laryngoscopy and voice disorder evaluation.', price: 2000, dur: 30 },
     ],
   },
@@ -387,7 +387,7 @@ const DOCTOR_SERVICES: Array<{
       { name: 'Hernia Assessment', desc: 'Evaluation of inguinal, umbilical, and incisional hernias with surgical plan.', price: 1800, dur: 30 },
       { name: 'Gallbladder & Appendix Consultation', desc: 'Assessment for cholecystectomy and appendectomy candidacy.', price: 2000, dur: 45 },
       { name: 'Post-Surgery Follow-up', desc: 'Wound check, suture removal, and recovery review after surgical procedures.', price: 1200, dur: 30 },
-      { name: 'Minor Procedure — Lump & Lesion', desc: 'Excision biopsy or removal of benign skin lumps and lipomas.', price: 3000, dur: 45 },
+      { name: 'Minor Procedure - Lump & Lesion', desc: 'Excision biopsy or removal of benign skin lumps and lipomas.', price: 3000, dur: 45 },
     ],
   },
 
@@ -429,7 +429,7 @@ const DOCTOR_SERVICES: Array<{
       { name: 'Sports Medicine Consultation', desc: 'Musculoskeletal and sports injury assessment by a sports medicine specialist.', price: 1800, dur: 45 },
       { name: 'Athletic Performance Assessment', desc: 'Sports-specific physical evaluation and performance optimisation plan.', price: 2000, dur: 60 },
       { name: 'Return to Sport Clearance', desc: 'Medical clearance and graded return-to-play programme after injury.', price: 1500, dur: 45 },
-      { name: 'Sports Nutrition Consultation — Medical', desc: 'Evidence-based nutritional strategy for athletic performance and recovery.', price: 1800, dur: 45 },
+      { name: 'Sports Nutrition Consultation - Medical', desc: 'Evidence-based nutritional strategy for athletic performance and recovery.', price: 1800, dur: 45 },
     ],
   },
 
@@ -479,12 +479,12 @@ const LAB_EXTRA: Array<{ name: string; category: string; desc: string; price: nu
   { name: 'COVID-19 PCR Test', category: 'Molecular', iconKey: 'healthicons:virus', emoji: null, desc: 'Nasopharyngeal swab PCR for SARS-CoV-2 detection.', price: 1500, dur: 15 },
   { name: 'Vitamin D & B12 Panel', category: 'Clinical Chemistry', iconKey: 'healthicons:dna', emoji: null, desc: 'Vitamin D3, B12, and folate levels for nutritional assessment.', price: 1200, dur: 15 },
   { name: 'Renal Function Panel', category: 'Clinical Chemistry', iconKey: null, emoji: '🔬', desc: 'Creatinine, eGFR, urea, and electrolytes for kidney function.', price: 800, dur: 15 },
-  { name: 'Hormone Panel — Female', category: 'Endocrinology', iconKey: 'healthicons:endocrinology', emoji: null, desc: 'FSH, LH, oestradiol, progesterone, and prolactin levels.', price: 2000, dur: 15 },
+  { name: 'Hormone Panel - Female', category: 'Endocrinology', iconKey: 'healthicons:endocrinology', emoji: null, desc: 'FSH, LH, oestradiol, progesterone, and prolactin levels.', price: 2000, dur: 15 },
   { name: 'Testosterone & PSA', category: 'Endocrinology', iconKey: 'healthicons:urology', emoji: null, desc: 'Total testosterone and prostate-specific antigen for male health.', price: 1500, dur: 15 },
   { name: 'COVID-19 Rapid Antigen Test', category: 'Rapid Tests', iconKey: 'healthicons:virus', emoji: null, desc: 'Rapid antigen test with result in 15–30 minutes.', price: 500, dur: 15 },
   { name: 'Malaria Rapid Test', category: 'Rapid Tests', iconKey: 'healthicons:malaria-testing', emoji: null, desc: 'Rapid diagnostic test for Plasmodium falciparum and vivax.', price: 600, dur: 15 },
   { name: 'Home Blood Collection', category: 'Sample Collection', iconKey: 'healthicons:blood-drop', emoji: null, desc: 'Trained phlebotomist visits home for blood sample collection.', price: 400, dur: 30 },
-  { name: 'INR / PT — Anticoagulation Monitoring', category: 'Hematology', iconKey: 'healthicons:blood-cells', emoji: null, desc: 'Prothrombin time and INR for warfarin dose management.', price: 500, dur: 15 },
+  { name: 'INR / PT - Anticoagulation Monitoring', category: 'Hematology', iconKey: 'healthicons:blood-cells', emoji: null, desc: 'Prothrombin time and INR for warfarin dose management.', price: 500, dur: 15 },
 ];
 
 const PHYSIO_EXTRA: Array<{ name: string; category: string; desc: string; price: number; dur: number | null; iconKey: string | null; emoji: string | null }> = [
@@ -494,7 +494,7 @@ const PHYSIO_EXTRA: Array<{ name: string; category: string; desc: string; price:
   { name: 'Neurological Rehabilitation', category: 'Neurological', iconKey: 'healthicons:neurology', emoji: null, desc: 'Physiotherapy for stroke, Parkinson\'s, and neurological conditions.', price: 1200, dur: 60 },
   { name: 'Pelvic Floor Rehabilitation', category: 'Pelvic Health', iconKey: null, emoji: '🧘', desc: 'Assessment and treatment of pelvic floor dysfunction and incontinence.', price: 1500, dur: 45 },
   { name: 'Paediatric Physiotherapy', category: 'Pediatric', iconKey: 'healthicons:pediatrics', emoji: null, desc: 'Age-appropriate physiotherapy for developmental delays and paediatric conditions.', price: 1200, dur: 45 },
-  { name: 'Ergonomic Assessment — Home/Office', category: 'Ergonomics', iconKey: null, emoji: '🪑', desc: 'Workstation assessment and ergonomic advice to prevent musculoskeletal injuries.', price: 2000, dur: 60 },
+  { name: 'Ergonomic Assessment - Home/Office', category: 'Ergonomics', iconKey: null, emoji: '🪑', desc: 'Workstation assessment and ergonomic advice to prevent musculoskeletal injuries.', price: 2000, dur: 60 },
 ];
 
 const DENTIST_EXTRA: Array<{ name: string; category: string; desc: string; price: number; dur: number | null; iconKey: string | null; emoji: string | null }> = [

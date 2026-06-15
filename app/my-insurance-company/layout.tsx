@@ -8,7 +8,7 @@ import { useInsuranceCapability } from '@/hooks/useInsuranceCapability'
 
 /**
  * Capability-gated layout for insurance-company owners. Accessible to ANY
- * user with `insurance-capability`, regardless of their `userType` —
+ * user with `insurance-capability`, regardless of their `userType` - 
  * members, providers, admins who have created an insurance company can all
  * manage it here. Redirects everyone else away.
  */

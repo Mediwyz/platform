@@ -1,9 +1,9 @@
 /**
- * Seed 61 — User GPS Coordinates (Mauritius)
+ * Seed 61 - User GPS Coordinates (Mauritius)
  *
  * Assigns real lat/lng positions across Mauritius to every seeded provider
  * and member. Coordinates reflect realistic practice locations in their
- * stated city/address. Safe to re-run — uses update with upsert semantics.
+ * stated city/address. Safe to re-run - uses update with upsert semantics.
  *
  * Mauritius bounding box: lat -20.52…-19.97, lng 57.30…57.80
  */

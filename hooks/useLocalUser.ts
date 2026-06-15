@@ -32,7 +32,7 @@ export function useLocalUser() {
         setUser(JSON.parse(stored))
       }
     } catch {
-      // Corrupted localStorage — leave user as null
+      // Corrupted localStorage - leave user as null
     } finally {
       setLoading(false)
     }

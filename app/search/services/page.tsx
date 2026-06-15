@@ -239,7 +239,7 @@ export default function ServicesSearchPage() {
               return (
                 <Link
                   key={svc.id}
-                  href={`/search/${slug}`}
+                  href={`/search/${slug}?serviceId=${svc.id}&serviceName=${encodeURIComponent(svc.serviceName)}`}
                   className="group flex flex-col bg-white rounded-2xl border border-gray-100
                     hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
                   style={{ borderTopWidth: 3, borderTopColor: color }}

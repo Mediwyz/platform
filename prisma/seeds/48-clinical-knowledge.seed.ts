@@ -6,7 +6,7 @@ import prisma from '../../lib/db'
  * into the AI system prompt when a user has that condition on file.
  *
  * Regional admins can later edit / add / deactivate rows via the admin
- * UI without touching code. Keep the guidance short (< 200 chars) — the
+ * UI without touching code. Keep the guidance short (< 200 chars) - the
  * prompt has a 4KB soft budget and long lines eat it fast.
  */
 export async function seedClinicalKnowledge() {

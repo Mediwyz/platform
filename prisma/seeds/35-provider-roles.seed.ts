@@ -1,5 +1,5 @@
 /**
- * Seed 35 — Provider Role Configuration
+ * Seed 35 - Provider Role Configuration
  *
  * Populates the ProviderRole table with all 17 existing user types
  * and their metadata (label, icon, color, slug, verification docs).
@@ -127,7 +127,7 @@ const ROLES: RoleDef[] = [
     slug: 'doctors',
     icon: 'FaUserMd',
     color: '#0C6780',
-    description: 'Book certified GPs and specialists for in-clinic visits, video consultations, or home visits. Get prescriptions, referrals, and chronic disease management — all in one place.',
+    description: 'Book certified GPs and specialists for in-clinic visits, video consultations, or home visits. Get prescriptions, referrals, and chronic disease management - all in one place.',
     isProvider: true,
     searchEnabled: true,
     bookingEnabled: true,
@@ -208,7 +208,7 @@ const ROLES: RoleDef[] = [
     slug: 'lab-technicians',
     icon: 'FaFlask',
     color: '#7C3AED',
-    description: 'Home sample collection and fast results for blood tests, urinalysis, thyroid panels, and more. No clinic queues — certified lab technicians come to you.',
+    description: 'Home sample collection and fast results for blood tests, urinalysis, thyroid panels, and more. No clinic queues - certified lab technicians come to you.',
     isProvider: true,
     searchEnabled: true,
     bookingEnabled: true,
@@ -268,7 +268,7 @@ const ROLES: RoleDef[] = [
     slug: 'physiotherapists',
     icon: 'FaWalking',
     color: '#2563EB',
-    description: 'Restore mobility and relieve pain with evidence-based physiotherapy. Sessions for sports injuries, post-surgery rehab, and chronic conditions — at clinic or home.',
+    description: 'Restore mobility and relieve pain with evidence-based physiotherapy. Sessions for sports injuries, post-surgery rehab, and chronic conditions - at clinic or home.',
     isProvider: true,
     searchEnabled: true,
     bookingEnabled: true,

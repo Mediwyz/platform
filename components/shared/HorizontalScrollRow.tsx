@@ -87,7 +87,7 @@ export default function HorizontalScrollRow({
         never bleeding into the button columns. No absolute positioning needed.
       */}
       <div className="flex items-center gap-2">
-        {/* LEFT button — always rendered, dimmed at start */}
+        {/* LEFT button - always rendered, dimmed at start */}
         <button
           onClick={() => scroll('left')}
           disabled={!canScrollLeft}
@@ -103,11 +103,11 @@ export default function HorizontalScrollRow({
           <FaChevronLeft className="text-xs" />
         </button>
 
-        {/* Scroll zone — flex-1 takes remaining width; overflow-hidden
+        {/* Scroll zone - flex-1 takes remaining width; overflow-hidden
             clips any card that partially exits the viewport so edges look
             clean instead of showing half-cards */}
         <div className="flex-1 min-w-0 overflow-hidden relative">
-          {/* Subtle fade gradient at right edge — shows there's more content */}
+          {/* Subtle fade gradient at right edge - shows there's more content */}
           {canScrollRight && (
             <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
               style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.9))' }} />
@@ -124,7 +124,7 @@ export default function HorizontalScrollRow({
           </div>
         </div>
 
-        {/* RIGHT button — always rendered, dimmed at end */}
+        {/* RIGHT button - always rendered, dimmed at end */}
         <button
           onClick={() => scroll('right')}
           disabled={!canScrollRight}

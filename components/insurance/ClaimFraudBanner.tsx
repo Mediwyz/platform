@@ -10,7 +10,7 @@ import { FaExclamationTriangle, FaExclamationCircle, FaCheckCircle } from 'react
  *
  * Designed to be dropped into any claim-review surface. Silent while
  * loading so the UI doesn't flash; shows nothing if the endpoint errors
- * (the reviewer can still approve/deny — fraud signals are advisory).
+ * (the reviewer can still approve/deny - fraud signals are advisory).
  */
 interface FraudFlag {
   code: string
@@ -43,7 +43,7 @@ export default function ClaimFraudBanner({ claimId }: { claimId: string }) {
         })
         const json = await res.json()
         if (!cancelled && json.success) setSignals(json.data)
-      } catch { /* advisory — hide on error */ }
+      } catch { /* advisory - hide on error */ }
       finally { if (!cancelled) setLoading(false) }
     }
     load()
@@ -74,7 +74,7 @@ export default function ClaimFraudBanner({ claimId }: { claimId: string }) {
       <div className="flex items-center gap-2 font-semibold text-sm mb-2">
         <Icon />
         <span>
-          {signals.riskLevel === 'high' ? 'High-risk claim — manual review required' :
+          {signals.riskLevel === 'high' ? 'High-risk claim - manual review required' :
            signals.riskLevel === 'medium' ? 'Review recommended before approval' :
            'Minor risk flags'}
         </span>

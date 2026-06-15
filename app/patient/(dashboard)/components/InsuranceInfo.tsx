@@ -80,7 +80,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  setRealClaims(claimsData.data)
  }
  } catch {
- // Non-critical — show empty state
+ // Non-critical - show empty state
  } finally {
  setClaimsLoading(false)
  }

@@ -36,7 +36,7 @@ export interface WorkflowStep {
    *  step's shape (first → pending, terminal → success/danger, else active).
    *  Authors only need to set this to override the derived value. */
   category?: StepCategory
-  /** Optional explicit icon — authors pick from a closed set when the
+  /** Optional explicit icon - authors pick from a closed set when the
    *  auto-inferred icon doesn't match (e.g. a `confirmed` step that should
    *  really render as a surgery icon). If omitted, engine infers. */
   icon?: StepIcon
@@ -154,7 +154,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
         <div className="w-7 h-7 bg-brand-navy text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
           {step.order}
         </div>
-        {/* Inferred (or explicit) emoji — makes the flow visual at a glance */}
+        {/* Inferred (or explicit) emoji - makes the flow visual at a glance */}
         <span className="text-lg leading-none flex-shrink-0" aria-hidden="true" title={STEP_ICON_LABEL[(step.icon as RegistryStepIcon) ?? inferStepIcon({ statusCode: step.statusCode, label: step.label, flags: step.flags as Record<string, unknown>, category: step.category, hasActions: (step.actionsForPatient?.length ?? 0) + (step.actionsForProvider?.length ?? 0) > 0 })]}>
           {STEP_ICON_EMOJI[(step.icon as RegistryStepIcon) ?? inferStepIcon({ statusCode: step.statusCode, label: step.label, flags: step.flags as Record<string, unknown>, category: step.category, hasActions: (step.actionsForPatient?.length ?? 0) + (step.actionsForProvider?.length ?? 0) > 0 })]}
         </span>
@@ -222,11 +222,11 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
             </div>
           </div>
 
-          {/* Icon picker — override the auto-inferred icon if needed */}
+          {/* Icon picker - override the auto-inferred icon if needed */}
           <div>
             <label className="text-xs font-medium text-gray-500 block mb-1">
               Visual icon
-              <span className="ml-1 text-gray-400 font-normal">(auto-inferred — override if needed)</span>
+              <span className="ml-1 text-gray-400 font-normal">(auto-inferred - override if needed)</span>
             </label>
             <div className="flex flex-wrap gap-1.5">
               <button
@@ -286,7 +286,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
             </div>
           ))}
 
-          {/* Notifications — auto-shown when notify_patient or notify_provider flags are toggled */}
+          {/* Notifications - auto-shown when notify_patient or notify_provider flags are toggled */}
           {(['Patient', 'Provider'] as const).map(role => {
             const flagKey = role === 'Patient' ? 'notify_patient' : 'notify_provider'
             const dataKey = role === 'Patient' ? 'notifyPatient' : 'notifyProvider'
@@ -346,7 +346,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                         />
                       </div>
                     </div>
-                    {/* Tag picker — appears when a notification field has focus */}
+                    {/* Tag picker - appears when a notification field has focus */}
                     <div className={`transition-all overflow-hidden ${showPicker ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
                       <p className="text-[10px] text-indigo-500 mb-1">
                         Insert into <span className="font-semibold">{isTitleFocused ? 'Title' : 'Message'}</span>:

@@ -2,7 +2,7 @@ import { PrismaClient, UserType } from '@prisma/client'
 import bcrypt from 'bcrypt'
 
 /**
- * Seed #44 — Expanded Workflows, Services, Statuses & Triggerable Methods
+ * Seed #44 - Expanded Workflows, Services, Statuses & Triggerable Methods
  *
  * Creates comprehensive test data to verify:
  * 1. Dynamic role management (regional admin CRUD)
@@ -48,7 +48,7 @@ export async function seedExpandedWorkflowsServices(prisma: PrismaClient) {
     }
   }
 
-  // ─── 2. Extra providers — skipped (use existing seeded providers) ──────
+  // ─── 2. Extra providers - skipped (use existing seeded providers) ──────
 
   // ─── 3. Provider availability for slot checking ──────────────────────────
 

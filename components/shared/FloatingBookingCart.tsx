@@ -144,7 +144,7 @@ export default function FloatingBookingCart() {
         )}
       </AnimatePresence>
 
-      {/* ── FAB button — slot 3 ──────────────────────────────────── */}
+      {/* ── FAB button - slot 3 ──────────────────────────────────── */}
       {hasSelection ? (
         <motion.button
           initial={{ scale: 0, opacity: 0 }}

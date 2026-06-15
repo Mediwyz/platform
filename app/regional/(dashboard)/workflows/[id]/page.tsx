@@ -22,7 +22,7 @@ export default function EditWorkflowPage({ params }: { params: Promise<{ id: str
   if (loading) return <DashboardLoadingState />
   if (!template) return <div className="p-8 text-center text-gray-500">Template not found</div>
 
-  // Normalise steps defensively — old seeded templates can have missing
+  // Normalise steps defensively - old seeded templates can have missing
   // action arrays / flags, which used to crash the builder with
   // "Cannot read properties of undefined (reading 'map')".
   const rawSteps = Array.isArray(template.steps) ? template.steps as any[] : []

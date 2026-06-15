@@ -16,7 +16,7 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
     where: { email: 'sarah.johnson@mediwyz.com' },
     select: { id: true },
   })
-  if (!owner) { console.log('  (skipped — owner email not seeded)'); return }
+  if (!owner) { console.log('  (skipped - owner email not seeded)'); return }
 
   let company = await prisma.corporateAdminProfile.findFirst({
     where: { userId: owner.id, companyName: 'Flamingo Health Co' },
@@ -132,7 +132,7 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
   }
   console.log(`  ✓ Created starter favourites for ${patients.length} patients`)
 
-  // ── 5. Health streaks — seed a healthy distribution ──────────────────────
+  // ── 5. Health streaks - seed a healthy distribution ──────────────────────
   const streakSeeds: Array<{ idx: number; current: number; longest: number }> = [
     { idx: 0, current: 12, longest: 12 },
     { idx: 1, current: 3,  longest: 8 },

@@ -48,7 +48,7 @@ export interface ServiceBookingConfig {
  defaultStatus?: string
  /** Category filter options (optional) */
  categories?: { value: string; label: string }[]
- /** Action buttons config — determines what actions appear per row */
+ /** Action buttons config - determines what actions appear per row */
  actions: ActionButton[]
  /** Map booking data to display columns */
  columns: ColumnDef[]

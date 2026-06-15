@@ -41,7 +41,7 @@ export default function SubscriptionStep({
  const [loading, setLoading] = useState(true)
 
  // Corporate-admin is a capability acquired AFTER signup (by creating a
- // company). Signup only ever picks an individual plan — users can upgrade
+ // company). Signup only ever picks an individual plan - users can upgrade
  // via the Settings → Subscription tab once they have a company.
  const isCorporate = false
 
@@ -49,7 +49,7 @@ export default function SubscriptionStep({
  async function fetchPlans() {
  setLoading(true)
  try {
- // Fetch plans — use countryCode from regionId if available
+ // Fetch plans - use countryCode from regionId if available
  let countryParam = ''
  if (regionId) {
  const regionRes = await fetch(`/api/regions/${regionId}`)
@@ -73,7 +73,7 @@ export default function SubscriptionStep({
  }
  }
  } catch {
- // Plans will be empty — user can skip
+ // Plans will be empty - user can skip
  } finally {
  setLoading(false)
  }
@@ -184,7 +184,7 @@ export default function SubscriptionStep({
  }}
  className="text-sm text-gray-500 hover:text-gray-700 underline"
  >
- Skip for now — choose a plan later
+ Skip for now - choose a plan later
  </button>
  </div>
  </div>

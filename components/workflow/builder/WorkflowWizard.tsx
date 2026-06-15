@@ -363,12 +363,12 @@ function ReviewStep({
   const outputOpt = OUTPUT_OPTIONS.find(o => o.value === state.outputType)
 
   const summaryItems = [
-    { label: 'Location',   value: locationOpt?.title ?? '—', emoji: locationOpt?.emoji ?? '📍' },
+    { label: 'Location',   value: locationOpt?.title ?? ' - ', emoji: locationOpt?.emoji ?? '📍' },
     { label: 'Recurrence', value: state.recurrenceType === 'once' ? 'One-time' : `Recurring (${state.recurrenceFrequency})`, emoji: state.recurrenceType === 'once' ? '1️⃣' : '🔄' },
-    { label: 'Sample',     value: sampleOpt?.title ?? '—',  emoji: sampleOpt?.emoji ?? '🧪' },
-    { label: 'Care model', value: careOpt?.title ?? '—',    emoji: careOpt?.emoji ?? '👤' },
-    { label: 'Urgency',    value: urgencyOpt?.title ?? '—', emoji: urgencyOpt?.emoji ?? '⏱️' },
-    { label: 'Output',     value: outputOpt?.title ?? '—',  emoji: outputOpt?.emoji ?? '📄' },
+    { label: 'Sample',     value: sampleOpt?.title ?? ' - ',  emoji: sampleOpt?.emoji ?? '🧪' },
+    { label: 'Care model', value: careOpt?.title ?? ' - ',    emoji: careOpt?.emoji ?? '👤' },
+    { label: 'Urgency',    value: urgencyOpt?.title ?? ' - ', emoji: urgencyOpt?.emoji ?? '⏱️' },
+    { label: 'Output',     value: outputOpt?.title ?? ' - ',  emoji: outputOpt?.emoji ?? '📄' },
     ...(state.requiresPrescription ? [{ label: 'Requires', value: 'Prescription gate', emoji: '💊' }] : []),
     ...(state.isHealthShop ? [{ label: 'Mode', value: 'Health Shop order', emoji: '🛒' }] : []),
     { label: 'Payment',    value: state.paymentTimingOverride === 'auto' ? 'Auto-detect' : state.paymentTimingOverride === 'ON_ACCEPTANCE' ? 'On acceptance' : 'On completion', emoji: '💳' },

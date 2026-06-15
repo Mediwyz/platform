@@ -126,7 +126,7 @@ export default function UserStatistics() {
  <span className="text-gray-600 text-sm">Total Users</span>
  <FaUsers className="text-blue-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">{metrics?.users.total.toLocaleString() ?? '—'}</p>
+ <p className="text-2xl font-bold text-gray-900">{metrics?.users.total.toLocaleString() ?? ' - '}</p>
  <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
  <FaArrowUp /> {metrics?.recentActivity.newUsersThisWeek ?? 0} new this week
  </p>
@@ -136,7 +136,7 @@ export default function UserStatistics() {
  <span className="text-gray-600 text-sm">Active Users</span>
  <FaUsers className="text-green-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">{metrics?.users.active.toLocaleString() ?? '—'}</p>
+ <p className="text-2xl font-bold text-gray-900">{metrics?.users.active.toLocaleString() ?? ' - '}</p>
  <p className="text-sm text-gray-600 mt-2">
  {metrics ? Math.round((metrics.users.active / metrics.users.total) * 100) : 0}% of total
  </p>
@@ -146,7 +146,7 @@ export default function UserStatistics() {
  <span className="text-gray-600 text-sm">Total Bookings</span>
  <FaCalendarAlt className="text-purple-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">{metrics?.bookings.total.toLocaleString() ?? '—'}</p>
+ <p className="text-2xl font-bold text-gray-900">{metrics?.bookings.total.toLocaleString() ?? ' - '}</p>
  <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
  <FaArrowUp /> {metrics?.recentActivity.bookingsThisWeek ?? 0} this week
  </p>

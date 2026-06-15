@@ -20,12 +20,12 @@ export async function seedAppointments(prisma: PrismaClient) {
     { id: 'APT008', patientId: 'PPROF002', doctorId: 'DPROF002', scheduledAt: lastWeek, type: 'in-person', status: 'completed', specialty: 'General Medicine', reason: 'Flu symptoms', duration: 20, location: 'Rose Hill Medical Clinic' },
 
     // ── 5 additional doctor appointments ────────────────────────────────────
-    // Upcoming — spread across next 2 weeks
+    // Upcoming - spread across next 2 weeks
     { id: 'APT024', patientId: 'PPROF002', doctorId: 'DPROF001', scheduledAt: new Date(now.getTime() + 2 * 86400000), type: 'video', status: 'upcoming', specialty: 'Endocrinology', reason: 'Migraine prophylaxis review', duration: 20, roomId: 'ROOM-DOC001-PAT002', notes: 'Review propranolol efficacy and headache diary' },
     { id: 'APT025', patientId: 'PPROF004', doctorId: 'DPROF001', scheduledAt: new Date(now.getTime() + 4 * 86400000), type: 'in-person', status: 'upcoming', specialty: 'Endocrinology', reason: 'Blood pressure and vitamin D check-in', duration: 30, location: 'City Medical Center', notes: 'Recheck BP after 4 weeks of Lisinopril' },
     { id: 'APT026', patientId: 'PPROF005', doctorId: 'DPROF002', scheduledAt: new Date(now.getTime() + 9 * 86400000), type: 'in-person', status: 'upcoming', specialty: 'General Medicine', reason: 'Back pain follow-up', duration: 20, location: 'Rose Hill Medical Clinic', notes: 'Assess recovery from acute low back pain episode' },
-    // Completed — past 2 weeks
-    { id: 'APT027', patientId: 'PPROF003', doctorId: 'DPROF003', scheduledAt: new Date(now.getTime() - 3 * 86400000), type: 'video', status: 'completed', specialty: 'Cardiology', reason: 'Iron deficiency anemia — cardiac clearance', duration: 20, notes: 'Cardiac evaluation clear. Continue iron supplementation.' },
+    // Completed - past 2 weeks
+    { id: 'APT027', patientId: 'PPROF003', doctorId: 'DPROF003', scheduledAt: new Date(now.getTime() - 3 * 86400000), type: 'video', status: 'completed', specialty: 'Cardiology', reason: 'Iron deficiency anemia - cardiac clearance', duration: 20, notes: 'Cardiac evaluation clear. Continue iron supplementation.' },
     { id: 'APT028', patientId: 'PPROF002', doctorId: 'DPROF003', scheduledAt: new Date(now.getTime() - 10 * 86400000), type: 'in-person', status: 'completed', specialty: 'Cardiology', reason: 'Palpitation evaluation', duration: 30, location: 'Cardiac Care Center', notes: 'Holter monitor results reviewed. No significant arrhythmia.' },
 
     // ── 10 more appointments for richer data ─────────────────────────────────
@@ -39,7 +39,7 @@ export async function seedAppointments(prisma: PrismaClient) {
     { id: 'APT034', patientId: 'PPROF002', doctorId: 'DPROF001', scheduledAt: new Date(now.getTime() - 25 * 86400000), type: 'in-person', status: 'completed', specialty: 'Endocrinology', reason: 'Diabetes risk assessment', duration: 30, location: 'City Medical Center', notes: 'Fasting glucose borderline. Lifestyle counseling provided.' },
     { id: 'APT035', patientId: 'PPROF005', doctorId: 'DPROF002', scheduledAt: new Date(now.getTime() - 17 * 86400000), type: 'video', status: 'completed', specialty: 'General Medicine', reason: 'Chronic fatigue evaluation', duration: 30, notes: 'Iron studies and thyroid panel ordered.' },
     // Cancelled
-    { id: 'APT036', patientId: 'PPROF004', doctorId: 'DPROF001', scheduledAt: new Date(now.getTime() - 2 * 86400000), type: 'video', status: 'cancelled', specialty: 'Endocrinology', reason: 'Blood sugar review', duration: 20, notes: 'Patient cancelled — rescheduling for next week.' },
+    { id: 'APT036', patientId: 'PPROF004', doctorId: 'DPROF001', scheduledAt: new Date(now.getTime() - 2 * 86400000), type: 'video', status: 'cancelled', specialty: 'Endocrinology', reason: 'Blood sugar review', duration: 20, notes: 'Patient cancelled - rescheduling for next week.' },
     { id: 'APT037', patientId: 'PPROF003', doctorId: 'DPROF002', scheduledAt: new Date(now.getTime() + 1 * 86400000), type: 'in-person', status: 'pending', specialty: 'General Medicine', reason: 'Skin rash evaluation', duration: 20, location: 'Rose Hill Medical Clinic' },
     { id: 'APT038', patientId: 'PPROF001', doctorId: 'DPROF002', scheduledAt: new Date(now.getTime() + 14 * 86400000), type: 'video', status: 'upcoming', specialty: 'General Medicine', reason: 'Quarterly health review', duration: 30, roomId: 'ROOM-DOC002-PAT001' },
   ]
@@ -53,11 +53,11 @@ export async function seedAppointments(prisma: PrismaClient) {
 
     // ── 3 additional nurse bookings ──────────────────────────────────────────
     { patientId: 'PPROF002', nurseId: 'NPROF001', scheduledAt: new Date(now.getTime() + 6 * 86400000), duration: 30, type: 'home_visit', status: 'upcoming', notes: 'Asthma management check and peak flow measurement' },
-    { patientId: 'PPROF004', nurseId: 'NPROF002', scheduledAt: new Date(now.getTime() - 5 * 86400000), duration: 60, type: 'home_visit', status: 'completed', notes: 'Hypertension home monitoring — BP log reviewed and medication compliance checked' },
+    { patientId: 'PPROF004', nurseId: 'NPROF002', scheduledAt: new Date(now.getTime() - 5 * 86400000), duration: 60, type: 'home_visit', status: 'completed', notes: 'Hypertension home monitoring - BP log reviewed and medication compliance checked' },
     { patientId: 'PPROF005', nurseId: 'NPROF001', scheduledAt: new Date(now.getTime() - 11 * 86400000), duration: 45, type: 'clinic_visit', status: 'completed', notes: 'Post-injury wound assessment and dressing change' },
     // Additional nurse bookings for more data
     { patientId: 'PPROF001', nurseId: 'NPROF002', scheduledAt: new Date(now.getTime() + 9 * 86400000), duration: 60, type: 'home_visit', status: 'pending', notes: 'Weekly insulin injection assistance and glucose monitoring' },
-    { patientId: 'PPROF003', nurseId: 'NPROF001', scheduledAt: new Date(now.getTime() - 15 * 86400000), duration: 30, type: 'clinic_visit', status: 'completed', notes: 'Post-surgical check-up — wound healing well' },
+    { patientId: 'PPROF003', nurseId: 'NPROF001', scheduledAt: new Date(now.getTime() - 15 * 86400000), duration: 30, type: 'clinic_visit', status: 'completed', notes: 'Post-surgical check-up - wound healing well' },
     { patientId: 'PPROF002', nurseId: 'NPROF002', scheduledAt: new Date(now.getTime() + 12 * 86400000), duration: 45, type: 'home_visit', status: 'upcoming', notes: 'Nebulizer treatment and respiratory assessment' },
     { patientId: 'PPROF004', nurseId: 'NPROF001', scheduledAt: new Date(now.getTime() + 3 * 86400000), duration: 30, type: 'home_visit', status: 'pending', notes: 'Blood pressure monitoring follow-up' },
   ]
@@ -71,7 +71,7 @@ export async function seedAppointments(prisma: PrismaClient) {
     // ── 3 additional childcare bookings ─────────────────────────────────────
     { patientId: 'PPROF002', nannyId: 'NAPROF001', scheduledAt: new Date(now.getTime() + 8 * 86400000), duration: 300, type: 'regular', children: ['Lucas Pierre'], status: 'upcoming', specialInstructions: 'Lucas is lactose intolerant. Check snack labels.' },
     { patientId: 'PPROF004', nannyId: 'NAPROF002', scheduledAt: new Date(now.getTime() - 4 * 86400000), duration: 480, type: 'regular', children: ['Ananya Doorgakant', 'Rishi Doorgakant'], status: 'completed', specialInstructions: 'After-school pickup at 15:30 from Floreal Primary School' },
-    { patientId: 'PPROF005', nannyId: 'NAPROF001', scheduledAt: new Date(now.getTime() - 9 * 86400000), duration: 240, type: 'emergency', children: ['Mia Soobramanien'], status: 'completed', specialInstructions: 'Emergency booking — parent hospitalised. Child needs dinner and bedtime routine.' },
+    { patientId: 'PPROF005', nannyId: 'NAPROF001', scheduledAt: new Date(now.getTime() - 9 * 86400000), duration: 240, type: 'emergency', children: ['Mia Soobramanien'], status: 'completed', specialInstructions: 'Emergency booking - parent hospitalised. Child needs dinner and bedtime routine.' },
   ]
   await prisma.childcareBooking.createMany({ data: childcareBookings, skipDuplicates: true })
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useUser } from '@/hooks/useUser'
 
 /**
- * Returns whether the current user owns an insurance company — regardless
+ * Returns whether the current user owns an insurance company - regardless
  * of their `userType`. A MEMBER, DOCTOR, or any other user who created a
  * `CorporateAdminProfile` with `isInsuranceCompany: true` has this
  * capability; the legacy `INSURANCE_REP` userType also grants it for

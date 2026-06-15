@@ -115,8 +115,12 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
 
  const initialQuery = searchParams.get('q') || ''
  const initialSpecialty = searchParams.get('specialty') || ''
+ const initialServiceId = searchParams.get('serviceId') || ''
+ const initialServiceName = searchParams.get('serviceName') || ''
 
  const [searchQuery, setSearchQuery] = useState(initialQuery)
+ const [serviceId, setServiceId] = useState(initialServiceId)
+ const [serviceName, setServiceName] = useState(initialServiceName)
  const [isLoading, setIsLoading] = useState(true)
  const [searchResults, setSearchResults] = useState<Provider[]>([])
  const [allProviders, setAllProviders] = useState<Provider[]>([])
@@ -127,6 +131,8 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
    const q = searchParams.get('q') || ''
    setSearchQuery(q)
    setHasSearched(!!q)
+   setServiceId(searchParams.get('serviceId') || '')
+   setServiceName(searchParams.get('serviceName') || '')
  }, [searchParams])
  const [showHistory, setShowHistory] = useState(false)
 
@@ -136,16 +142,17 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
 
  const { history, addToHistory, removeFromHistory, clearHistory } = useSearchHistory()
 
- const fetchProviders = useCallback(async (query = '') => {
+ const fetchProviders = useCallback(async (query = '', svcId = '') => {
  const params = new URLSearchParams({ type: config.providerType })
  if (query) params.set('q', query)
+ if (svcId) params.set('serviceId', svcId)
  const res = await fetch(`/api/search/providers?${params.toString()}`)
  const json = await res.json()
  return json.success ? json.data : []
  }, [config.providerType])
 
  useEffect(() => {
- fetchProviders(initialQuery).then((data: Provider[]) => {
+ fetchProviders(initialQuery, initialServiceId).then((data: Provider[]) => {
  setAllProviders(data)
  let filtered = data
  if (initialSpecialty) {
@@ -176,7 +183,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  setHasSearched(true)
  setShowHistory(false)
 
- const data = await fetchProviders(searchQuery)
+ const data = await fetchProviders(searchQuery, serviceId)
  setAllProviders(data)
  const filtered = applyFilters(data, searchQuery)
  setSearchResults(filtered)
@@ -184,6 +191,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
 
  const params = new URLSearchParams()
  if (searchQuery) params.set('q', searchQuery)
+ if (serviceId) { params.set('serviceId', serviceId); if (serviceName) params.set('serviceName', serviceName) }
  const qs = params.toString()
  router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
 
@@ -197,6 +205,21 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  setSearchResults(allProviders)
  setHasSearched(false)
  router.replace(pathname, { scroll: false })
+ }
+
+ // Remove the active service filter and reload the full provider list.
+ const clearServiceFilter = async () => {
+ setServiceId('')
+ setServiceName('')
+ setIsLoading(true)
+ const data = await fetchProviders(searchQuery)
+ setAllProviders(data)
+ setSearchResults(applyFilters(data, searchQuery))
+ setIsLoading(false)
+ const params = new URLSearchParams()
+ if (searchQuery) params.set('q', searchQuery)
+ const qs = params.toString()
+ router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
  }
 
  const handleHistoryClick = (entry: { query: string }) => {
@@ -245,7 +268,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  </button>
  </div>
  {history.map((entry, i) => (
- // Outer div (not button) — HTML forbids button-in-button. Click is
+ // Outer div (not button) - HTML forbids button-in-button. Click is
  // still keyboard-accessible via role + tabIndex, and the inner
  // "remove" button no longer causes a hydration error.
  <div
@@ -288,7 +311,23 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  </div>
  </div>
 
- {/* Find nearest with geolocation — the final-step map */}
+ {/* Active service filter banner - carried over from the Services page */}
+ {serviceId && (
+ <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#0C6780]/20 bg-[#0C6780]/5 px-4 py-3">
+ <p className="text-sm text-gray-700">
+ Showing {config.singularLabel.toLowerCase()}s who offer
+ {serviceName ? <span className="font-semibold text-[#0C6780]"> {serviceName}</span> : ' the selected service'}
+ </p>
+ <button
+ onClick={clearServiceFilter}
+ className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] hover:text-[#001E40] cursor-pointer"
+ >
+ <FaTimes className="text-[10px]" /> Clear service filter
+ </button>
+ </div>
+ )}
+
+ {/* Find nearest with geolocation - the final-step map */}
  <div className="mt-6">
  <NearbyMap mode="providers" type={config.providerType} noun={`${config.singularLabel.toLowerCase()}s`} accentColor="#0C6780" />
  </div>
@@ -321,13 +360,13 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  ))}
  </div>
  </>
- ) : hasSearched ? (
- <NoResults query={searchQuery} onClear={handleClearFilters} />
+ ) : (hasSearched || serviceId) ? (
+ <NoResults query={searchQuery || serviceName} onClear={serviceId ? clearServiceFilter : handleClearFilters} />
  ) : null}
  </div>
  </div>
 
- {/* Booking Modal — opens with provider pre-selected */}
+ {/* Booking Modal - opens with provider pre-selected */}
  {bookingModalOpen && bookingProvider && (
  <CreateBookingModal
  isOpen={bookingModalOpen}

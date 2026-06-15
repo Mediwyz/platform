@@ -61,7 +61,7 @@ export default function InsuranceMembersTable() {
           <FaShieldAlt className="text-indigo-600" />
         </div>
         <div className="flex-1">
-          <h2 className="font-bold text-gray-900">Insurance members — {company.name}</h2>
+          <h2 className="font-bold text-gray-900">Insurance members - {company.name}</h2>
           <p className="text-xs text-gray-500">
             Fixed monthly contribution: <strong>MUR {company.monthlyContribution.toLocaleString()}</strong> · Period: {currentMonth}
           </p>
@@ -103,7 +103,7 @@ export default function InsuranceMembersTable() {
                 <td className="py-2 px-3 text-xs text-gray-500">
                   {m.lastContributionAt
                     ? `${m.lastContributionMonth} · ${new Date(m.lastContributionAt).toLocaleDateString()}`
-                    : '—'}
+                    : ' - '}
                 </td>
                 <td className="py-2 px-3 text-right">
                   {m.paidThisMonth ? (

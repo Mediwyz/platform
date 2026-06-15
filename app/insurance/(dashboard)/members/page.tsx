@@ -185,7 +185,7 @@ export default function InsuranceMembersPage() {
                     <td className="px-6 py-4">
                       <p className="font-medium text-gray-900">{m.policyHolderName}</p>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.patient?.user?.email || '—'}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{m.patient?.user?.email || ' - '}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {m.plan ? (
                         <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-medium">
@@ -194,7 +194,7 @@ export default function InsuranceMembersPage() {
                       ) : <span className="text-gray-400">No plan</span>}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {m.submittedDate ? new Date(m.submittedDate).toLocaleDateString() : '—'}
+                      {m.submittedDate ? new Date(m.submittedDate).toLocaleDateString() : ' - '}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>

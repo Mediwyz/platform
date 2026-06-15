@@ -11,13 +11,13 @@ const DICTS: Record<Locale, Partial<Record<MessageKey, string>>> = {
 }
 
 /**
- * Pure translate function — usable in server code, tests, and components.
+ * Pure translate function - usable in server code, tests, and components.
  *
  * Resolution order: requested locale → English → the key itself.
  * Placeholders like `{{name}}` get filled from `vars`.
  *
  * Keeping this a plain function (no hook, no context) means we can call it
- * from anywhere — including server components and cron jobs — without
+ * from anywhere - including server components and cron jobs - without
  * wrestling with React provider trees.
  */
 export function translate(

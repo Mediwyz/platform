@@ -2,7 +2,7 @@ import { PrismaClient, UserType } from '@prisma/client'
 import bcrypt from 'bcrypt'
 
 /**
- * Seed 55 — Sarah Johnson + provider service config backfill
+ * Seed 55 - Sarah Johnson + provider service config backfill
  *
  * Two responsibilities:
  * 1. Create Dr. Sarah Johnson (DOC004, email sarah.johnson@mediwyz.com) who is
@@ -72,7 +72,7 @@ export async function seedSarahJohnsonAndServices(prisma: PrismaClient) {
     })
     console.log('  ✓ Created Dr. Sarah Johnson (DOC004 / sarah.johnson@mediwyz.com)')
   } else {
-    console.log('  · Dr. Sarah Johnson already exists — skipping creation')
+    console.log('  · Dr. Sarah Johnson already exists - skipping creation')
   }
 
   // ── 2. Backfill ProviderServiceConfig for all providers ────────────────────

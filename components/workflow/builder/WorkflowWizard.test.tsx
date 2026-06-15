@@ -129,7 +129,7 @@ afterEach(() => {
 describe('WorkflowWizard', () => {
   // ── Step 1: Location ────────────────────────────────────────────────────────
 
-  it('1. renders step 1 on mount — all 5 location cards visible', () => {
+  it('1. renders step 1 on mount - all 5 location cards visible', () => {
     renderWizard()
     expect(screen.getByText('Where does the service take place?')).toBeInTheDocument()
     expect(screen.getByText('Home Visit')).toBeInTheDocument()
@@ -164,7 +164,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 2: Recurrence ─────────────────────────────────────────────────────
 
-  it('4. recurrence toggle — default is One-time, clicking Recurring shows frequency options', async () => {
+  it('4. recurrence toggle - default is One-time, clicking Recurring shows frequency options', async () => {
     renderWizard()
 
     fireEvent.click(screen.getByText('Home Visit'))
@@ -184,7 +184,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 3: Sample ─────────────────────────────────────────────────────────
 
-  it('5. Back navigation — on step 2, clicking Back returns to step 1 with selection preserved', async () => {
+  it('5. Back navigation - on step 2, clicking Back returns to step 1 with selection preserved', async () => {
     renderWizard()
 
     fireEvent.click(screen.getByText('Home Visit'))
@@ -197,7 +197,7 @@ describe('WorkflowWizard', () => {
     expect(screen.getByText('Next →')).not.toBeDisabled()
   })
 
-  it('5b. step 3 — all 4 sample options visible', async () => {
+  it('5b. step 3 - all 4 sample options visible', async () => {
     await navigateToStep(3)
     expect(screen.getByText('Does this service require a biological sample?')).toBeInTheDocument()
     expect(screen.getByText('No Sample')).toBeInTheDocument()
@@ -208,7 +208,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 4: Care Model ─────────────────────────────────────────────────────
 
-  it('5c. step 4 — all 4 care model options visible', async () => {
+  it('5c. step 4 - all 4 care model options visible', async () => {
     await navigateToStep(4)
     expect(screen.getByText('Who delivers the service?')).toBeInTheDocument()
     expect(screen.getByText('Single Provider')).toBeInTheDocument()
@@ -219,7 +219,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 5: Urgency ────────────────────────────────────────────────────────
 
-  it('5d. step 5 — all 3 urgency options visible', async () => {
+  it('5d. step 5 - all 3 urgency options visible', async () => {
     await navigateToStep(5)
     expect(screen.getByText('What is the booking urgency?')).toBeInTheDocument()
     expect(screen.getByText('Scheduled')).toBeInTheDocument()
@@ -229,7 +229,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 6: Output Type ────────────────────────────────────────────────────
 
-  it('6. full navigation to step 6 — output type page shows 8 options', async () => {
+  it('6. full navigation to step 6 - output type page shows 8 options', async () => {
     await navigateToStep(6)
     expect(screen.getByText('What does this service produce?')).toBeInTheDocument()
     expect(screen.getByText('General Consultation')).toBeInTheDocument()
@@ -242,7 +242,7 @@ describe('WorkflowWizard', () => {
     expect(screen.getByText('Meal Plan')).toBeInTheDocument()
   })
 
-  it('6b. step 6 Next is always enabled — outputType defaults to "none"', async () => {
+  it('6b. step 6 Next is always enabled - outputType defaults to "none"', async () => {
     await navigateToStep(6)
     expect(screen.getByText('Next →')).not.toBeDisabled()
   })
@@ -266,7 +266,7 @@ describe('WorkflowWizard', () => {
 
   // ── Step 7: Payment & Access ───────────────────────────────────────────────
 
-  it('7. step 7 — access restriction toggles and payment radio visible', async () => {
+  it('7. step 7 - access restriction toggles and payment radio visible', async () => {
     await navigateToStep(7)
     expect(screen.getByText('Access & payment settings')).toBeInTheDocument()
     expect(screen.getByText('Requires existing prescription')).toBeInTheDocument()
@@ -276,7 +276,7 @@ describe('WorkflowWizard', () => {
     expect(screen.getByText('Charge on completion')).toBeInTheDocument()
   })
 
-  it('7b. step 7 Next is always enabled — all settings have defaults', async () => {
+  it('7b. step 7 Next is always enabled - all settings have defaults', async () => {
     await navigateToStep(7)
     expect(screen.getByText('Next →')).not.toBeDisabled()
   })
@@ -300,12 +300,12 @@ describe('WorkflowWizard', () => {
 
   // ── Step 8: Review ─────────────────────────────────────────────────────────
 
-  it('8. full navigation to review — all 8 steps traversed', async () => {
+  it('8. full navigation to review - all 8 steps traversed', async () => {
     await navigateToStep(8)
     expect(screen.getByText('Review your workflow configuration')).toBeInTheDocument()
   })
 
-  it('9. API call on review — fetch called with correct payload', async () => {
+  it('9. API call on review - fetch called with correct payload', async () => {
     const fetchSpy = vi.fn(() =>
       Promise.resolve(new Response(JSON.stringify({ success: true, data: MOCK_GENERATED }), { status: 200 }))
     )
@@ -383,7 +383,7 @@ describe('WorkflowWizard', () => {
     void onCancel
   })
 
-  it('10. loading state — "Generating template..." shown while fetch pending', async () => {
+  it('10. loading state - "Generating template..." shown while fetch pending', async () => {
     let resolveGenerate!: (v: Response) => void
     const slowFetch = vi.fn(
       () => new Promise<Response>(resolve => { resolveGenerate = resolve })
@@ -399,7 +399,7 @@ describe('WorkflowWizard', () => {
     })
   })
 
-  it('11. error state — when fetch fails, error banner and Retry button shown', async () => {
+  it('11. error state - when fetch fails, error banner and Retry button shown', async () => {
     vi.stubGlobal('fetch', vi.fn(() =>
       Promise.resolve(new Response(JSON.stringify({ success: false, message: 'Server error' }), { status: 500 }))
     ))
@@ -436,7 +436,7 @@ describe('WorkflowWizard', () => {
     expect(onCancel).toHaveBeenCalledTimes(1)
   })
 
-  // ── Review step — summary grid content ────────────────────────────────────
+  // ── Review step - summary grid content ────────────────────────────────────
 
   it('14. review step shows summary items for all axes', async () => {
     await navigateToStep(8)

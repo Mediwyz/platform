@@ -116,7 +116,7 @@ export default function SubscriptionsManagementPage() {
  }
  // Include service details (free, discount %, name)
  const serviceDetails = form.serviceLinks.map(sl => {
- if (sl.isFree) return `${sl.serviceName} (FREE — included)`
+ if (sl.isFree) return `${sl.serviceName} (FREE - included)`
  if (sl.discountPercent > 0) return `${sl.serviceName} (${sl.discountPercent}% discount)`
  if (sl.adminPrice) return `${sl.serviceName} (fixed price: ${sl.adminPrice})`
  return sl.serviceName
@@ -371,8 +371,8 @@ export default function SubscriptionsManagementPage() {
  </div>
  ) : (
  <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
- {renderPlanTable(individualPlans, 'MediWyz For You — Individual Plans')}
- {renderPlanTable(corporatePlans, 'MediWyz For Business — Corporate Plans')}
+ {renderPlanTable(individualPlans, 'MediWyz For You - Individual Plans')}
+ {renderPlanTable(corporatePlans, 'MediWyz For Business - Corporate Plans')}
  </div>
  )}
 
@@ -467,7 +467,7 @@ export default function SubscriptionsManagementPage() {
  <div className="space-y-2 max-h-48 overflow-y-auto">
  {form.quotas.map((q, i) => (
  <div key={i} className="flex items-center gap-2 text-sm">
- <span className="flex-1 text-gray-700 text-xs">{q.specialty ? `${q.role} — ${q.specialty}` : q.role}</span>
+ <span className="flex-1 text-gray-700 text-xs">{q.specialty ? `${q.role} - ${q.specialty}` : q.role}</span>
  <input
  type="number"
  value={q.limit}
@@ -496,7 +496,7 @@ export default function SubscriptionsManagementPage() {
  <optgroup key={r.role} label={r.role}>
  <option value={`${r.role}:`}>{r.role} (any specialty)</option>
  {r.specialties.map(s => (
- <option key={`${r.role}:${s.name}`} value={`${r.role}:${s.name}`}>{r.role} — {s.name}</option>
+ <option key={`${r.role}:${s.name}`} value={`${r.role}:${s.name}`}>{r.role} - {s.name}</option>
  ))}
  </optgroup>
  ))}
@@ -518,7 +518,7 @@ export default function SubscriptionsManagementPage() {
  </div>
 
  <div className="border-t pt-4">
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Discounts (%) — by role, specialty, or service category</h4>
+ <h4 className="text-sm font-semibold text-gray-800 mb-3">Discounts (%) - by role, specialty, or service category</h4>
  <p className="text-xs text-gray-500 mb-3">Set discount % off provider market price. Applies when quota is exhausted.</p>
  <div className="space-y-2 max-h-48 overflow-y-auto">
  {Object.entries(form.discounts).filter(([k]) => !k.startsWith('volume_')).map(([key, val]) => (
@@ -565,7 +565,7 @@ export default function SubscriptionsManagementPage() {
  <optgroup key={r.role} label={r.role}>
  <option value={r.role}>{r.role} (any)</option>
  {r.specialties.map(s => (
- <option key={`${r.role}:${s.name}`} value={`${r.role}:${s.name}`}>{r.role} — {s.name}</option>
+ <option key={`${r.role}:${s.name}`} value={`${r.role}:${s.name}`}>{r.role} - {s.name}</option>
  ))}
  </optgroup>
  ))}
@@ -744,7 +744,7 @@ export default function SubscriptionsManagementPage() {
  )}
  </div>
 
- {/* Features — generated from all config above */}
+ {/* Features - generated from all config above */}
  <div className="border-t pt-4">
  <div className="flex items-center justify-between mb-3">
  <h4 className="text-sm font-semibold text-gray-800">Features (Display Text)</h4>

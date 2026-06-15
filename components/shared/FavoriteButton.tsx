@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { FaStar, FaRegStar } from 'react-icons/fa'
 
 /**
- * Star toggle on provider cards. Optimistic update — reverts on API failure.
+ * Star toggle on provider cards. Optimistic update - reverts on API failure.
  * Reads initial state on mount if not supplied.
  */
 export default function FavoriteButton({

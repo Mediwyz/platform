@@ -24,7 +24,7 @@ export async function seedProviderAvailability(prisma: PrismaClient) {
   })
 
   if (providers.length === 0) {
-    console.log('  No provider users found — skipping availability seeding')
+    console.log('  No provider users found - skipping availability seeding')
     return
   }
 

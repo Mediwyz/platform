@@ -303,7 +303,7 @@ export default function PublicFeedPage() {
           <FaFire className="text-orange-500" />
           <div>
             <h1 className="text-lg font-bold text-gray-900">Community Health Feed</h1>
-            <p className="text-xs text-gray-500">Most reacted posts — no account needed to browse</p>
+            <p className="text-xs text-gray-500">Most reacted posts - no account needed to browse</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <Link

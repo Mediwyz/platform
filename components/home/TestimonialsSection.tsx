@@ -28,7 +28,7 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     role: 'Patient, Madagascar',
     avatar: '/images/hero/doctor-1.png',
     rating: 5,
-    quote: "Finding a trusted nurse for my father's home visits used to be stressful. Now it's a few taps and done — with verified professionals.",
+    quote: "Finding a trusted nurse for my father's home visits used to be stressful. Now it's a few taps and done - with verified professionals.",
     countryCode: 'MG',
   },
   {
