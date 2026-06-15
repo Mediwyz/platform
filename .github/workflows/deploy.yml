@@ -551,6 +551,17 @@ jobs:
             if [ "$HTTP" = "200" ] || [ "$HTTP" = "301" ] || [ "$HTTP" = "302" ]; then
               echo "reachable=true" >> $GITHUB_OUTPUT
               echo "App ready (HTTP $HTTP)"
+              # Warm every route the smoke tests navigate to, so the FIRST
+              # Playwright goto isn't the cold-compile/cold-DB request (which can
+              # otherwise exceed the per-test timeout on a freshly-restarted VPS).
+              # Two passes per route: pass 1 triggers SSR + chunk + DB-pool warmup
+              # (may be slow), pass 2 confirms it is now fast.
+              for path in / /login /search/doctors /search/services; do
+                for i in 1 2; do
+                  WARM=$(curl -o /dev/null -s -w "%{http_code}" --max-time 90 "$BASE_URL$path" 2>/dev/null || echo "000")
+                  echo "warm $path (pass $i) — HTTP $WARM"
+                done
+              done
               # Extra pause so Next.js hydration stabilises after cold start
               sleep 10
               exit 0

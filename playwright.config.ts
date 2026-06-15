@@ -5,10 +5,13 @@ export default defineConfig({
   testMatch: '**/*.spec.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 0,
+  retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : undefined,
-  timeout: process.env.CI ? 60_000 : 30_000,
-  globalTimeout: process.env.CI ? 15 * 60 * 1000 : undefined,
+  // Per-test timeout MUST exceed navigationTimeout below, otherwise a slow
+  // first cold-start navigation (allowed up to 90s) is killed by the test
+  // timeout before it can finish. 150s leaves headroom for nav + assertions.
+  timeout: process.env.CI ? 150_000 : 30_000,
+  globalTimeout: process.env.CI ? 20 * 60 * 1000 : undefined,
   reporter: process.env.CI ? 'github' : 'html',
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
