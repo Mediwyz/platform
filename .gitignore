@@ -72,3 +72,6 @@ icons/
 *.aab
 *.traineddata
 error.txt
+
+# Local Healthicons source library (only public/healthicons/ is used by the app)
+healthicons/

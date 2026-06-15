@@ -125,7 +125,7 @@ export default function CategoryNavigator() {
     setRole(r)
     setLoadingCats(true)
     try {
-      const res = await fetch(`/api/search/services?providerType=${encodeURIComponent(r.code)}&limit=200`)
+      const res = await fetch(`/api/search/services?providerType=${encodeURIComponent(r.code)}&limit=500`)
       const json = await res.json()
       const cats = new Set<string>()
       if (json?.success && Array.isArray(json.data)) {

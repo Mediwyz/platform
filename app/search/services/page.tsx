@@ -72,7 +72,7 @@ export default function ServicesSearchPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/search/services?limit=200').then(r => r.json()),
+      fetch('/api/search/services?limit=1000').then(r => r.json()),
       fetch('/api/roles?searchEnabled=true').then(r => r.json()),
     ]).then(([svcJson, rolesJson]) => {
       if (svcJson.success && svcJson.data) setServices(svcJson.data)

@@ -286,7 +286,10 @@ export class SearchService {
   }
 
   async searchServices(q?: string, providerType?: string, category?: string, limit?: number) {
-    const take = Math.min(limit || 30, 100);
+    // The catalogue holds 250+ services; the Services page loads them all and
+    // filters client-side, so the cap must comfortably exceed the total or
+    // category filters silently miss services beyond the first page.
+    const take = Math.min(limit || 30, 1000);
     const where: any = { isActive: true };
     if (q) {
       where.OR = [
