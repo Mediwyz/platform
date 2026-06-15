@@ -152,17 +152,17 @@ export default function CategoryNavigator() {
   const activeEntity = ENTITIES.find(e => e.key === entity) ?? null
 
   return (
-    <section id="discover-section" className="relative py-14 sm:py-20 bg-gradient-to-b from-white to-[#F4FBFF]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="discover-section" className="relative py-16 sm:py-24 bg-gradient-to-b from-white to-[#F4FBFF]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-10">
-          <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
+        <div className="text-center mb-10 sm:mb-14">
+          <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             Discover
           </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             What are you looking for?
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
             Pick a category to jump straight to a focused search — find the nearest provider on a live map at the final step.
           </p>
         </div>
@@ -196,27 +196,27 @@ export default function CategoryNavigator() {
 
         {/* ── Level 1 · Entities ─────────────────────────────────────────── */}
         {!entity && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {ENTITIES.map(e => {
               const Icon = e.Icon
               return (
                 <button
                   key={e.key}
                   onClick={() => pickEntity(e.key)}
-                  className="group flex flex-col items-start text-left p-5 rounded-2xl bg-white border border-gray-100
-                    shadow-sm hover:shadow-lg hover:border-[#0C6780]/30 hover:-translate-y-0.5 transition-all duration-200
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer min-h-[44px]"
+                  className="group flex flex-col items-start text-left p-7 rounded-3xl bg-white border border-gray-100
+                    shadow-sm hover:shadow-xl hover:border-[#0C6780]/30 hover:-translate-y-1 transition-all duration-200
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
                 >
                   <span
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors"
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-colors group-hover:scale-105"
                     style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}
                   >
-                    <Icon size={24} aria-hidden />
+                    <Icon size={32} aria-hidden />
                   </span>
-                  <span className="text-base font-bold text-[#001E40]">{e.label}</span>
-                  <span className="text-xs text-gray-500 mt-0.5">{e.blurb}</span>
-                  <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#0C6780] group-hover:gap-2 transition-all">
-                    Browse <MdArrowForward size={12} aria-hidden />
+                  <span className="text-lg sm:text-xl font-bold text-[#001E40]">{e.label}</span>
+                  <span className="text-sm text-gray-500 mt-1">{e.blurb}</span>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] group-hover:gap-2.5 transition-all">
+                    Browse <MdArrowForward size={14} aria-hidden />
                   </span>
                 </button>
               )
@@ -300,13 +300,13 @@ export default function CategoryNavigator() {
         )}
 
         {/* Footer link to the full catalogue (the heavy list now lives here) */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-12">
           <button
             onClick={() => router.push('/search/services')}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] hover:text-[#001E40]
+            className="inline-flex items-center gap-2 text-base font-semibold text-[#0C6780] hover:text-[#001E40]
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-2 py-1 cursor-pointer"
           >
-            Or browse the full catalogue <MdArrowForward size={14} aria-hidden />
+            Or browse the full catalogue <MdArrowForward size={16} aria-hidden />
           </button>
         </div>
       </div>

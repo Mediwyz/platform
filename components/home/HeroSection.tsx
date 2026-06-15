@@ -123,8 +123,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="lg:flex-[65] flex flex-col justify-center
-            px-6 sm:px-10 lg:px-14 xl:px-20
+          className="lg:flex-[68] flex flex-col justify-center
+            px-6 sm:px-10 lg:px-14 xl:pl-20 xl:pr-12
             py-9 sm:py-12 lg:py-16"
         >
           {/* Platform badge */}
@@ -144,7 +144,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl xl:text-2xl text-gray-300/90 leading-relaxed max-w-2xl mb-8">
+          <p className="text-lg sm:text-xl xl:text-2xl text-gray-300/90 leading-relaxed max-w-4xl mb-8">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India — all in one secure platform."}
           </p>
@@ -183,7 +183,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
               { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'discover-section' },
               { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'discover-section' },
             ].map(f => {
-              const cls = "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 border border-white/20 text-[11px] font-medium text-white hover:bg-white/20 hover:border-brand-sky/50 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              const cls = "inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 border border-white/20 text-sm font-medium text-white hover:bg-white/20 hover:border-brand-sky/50 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               if ('href' in f) return (
                 <a key={f.label} href={f.href} className={cls}>{f.icon} {f.label}</a>
               )
@@ -197,8 +197,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             })}
           </div>
 
-          {/* Trust stats — dynamic from DB · subtle glass stat cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
+          {/* Trust stats — dynamic from DB · subtle glass stat cards · span full column */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
@@ -219,7 +219,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="lg:flex-[35] relative overflow-hidden min-h-[200px]"
+          className="lg:flex-[32] relative overflow-hidden min-h-[200px]"
         >
           {/* Mobile image strip */}
           <div className="lg:hidden relative h-44">

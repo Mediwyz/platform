@@ -26,44 +26,44 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="bg-white border-b border-gray-100 py-14 sm:py-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white border-b border-gray-100 py-16 sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-10 sm:mb-14">
-          <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
+        <div className="text-center mb-12 sm:mb-16">
+          <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             How it works
           </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             Care in three simple steps
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-lg mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
             From finding the right provider to your consultation — the whole journey takes minutes.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 relative">
           {/* Connector line on desktop */}
-          <div className="hidden sm:block absolute top-12 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-[#0C6780]/20 via-[#0C6780]/40 to-[#0C6780]/20" aria-hidden="true" />
+          <div className="hidden sm:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-[#0C6780]/20 via-[#0C6780]/40 to-[#0C6780]/20" aria-hidden="true" />
 
           {STEPS.map(s => (
             <div
               key={s.title}
-              className="group relative flex flex-col items-center text-center bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 px-6 py-8"
+              className="group relative flex flex-col items-center text-center bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-200 px-8 py-12"
             >
               {/* Step number badge */}
-              <span className="absolute top-4 right-4 text-xs font-black text-gray-200 group-hover:text-[#0C6780]/30 transition-colors">
+              <span className="absolute top-5 right-6 text-2xl font-black text-gray-100 group-hover:text-[#0C6780]/20 transition-colors">
                 {s.step}
               </span>
 
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center z-10 mb-4 shadow-md transition-transform group-hover:scale-105"
+                className="w-20 h-20 rounded-3xl flex items-center justify-center z-10 mb-6 shadow-lg transition-transform group-hover:scale-105"
                 style={{ backgroundColor: s.color }}
               >
-                <s.icon className="text-white text-xl" />
+                <s.icon className="text-white text-3xl" />
               </div>
 
-              <h3 className="text-lg font-bold text-[#001E40] mb-1.5">{s.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#001E40] mb-2.5">{s.title}</h3>
+              <p className="text-base text-gray-500 leading-relaxed max-w-xs">{s.desc}</p>
             </div>
           ))}
         </div>
