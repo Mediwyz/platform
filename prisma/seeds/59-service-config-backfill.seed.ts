@@ -1,9 +1,14 @@
 /**
- * Seed 59 - ProviderServiceConfig backfill + realistic workflow attachment
+ * Seed 59 - Unique service ownership + realistic workflow attachment
  *
  * Responsibilities:
- * 1. Ensure every active isDefault PlatformService has a ProviderServiceConfig
- *    row for every provider of the matching type (runs AFTER seed 57/58).
+ * 0. Top up providers per type so there are enough to give every service an
+ *    owner under the "<=3 services/provider, no service shared" rule
+ *    (generates searchable, map-located mock providers where a type is short).
+ * 1. Assign each active isDefault PlatformService to EXACTLY ONE provider of the
+ *    matching type, with at most 3 services per provider. This makes the service
+ *    filter meaningful (one service -> one provider) instead of every provider
+ *    offering every service. Runs AFTER seed 57/58.
  * 2. For every ProviderServiceConfig, attach ONLY the workflow templates whose
  *    serviceMode is clinically appropriate for that service:
  *
@@ -18,6 +23,37 @@
  */
 
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
+
+// ─── Mock provider generation pools (Step 0) ───────────────────────────────────
+const FIRST_NAMES = [
+  'Aanya', 'Bilal', 'Chloe', 'Devan', 'Elodie', 'Farouk', 'Gita', 'Hugo', 'Ishani', 'Jordan',
+  'Kavi', 'Lina', 'Mathis', 'Nisha', 'Oscar', 'Priya', 'Rayan', 'Sasha', 'Tarun', 'Uma',
+  'Vimal', 'Wendy', 'Xena', 'Yannick', 'Zara', 'Ayaan', 'Bianca', 'Cedric', 'Diya', 'Emeric',
+  'Fanny', 'Girish', 'Hema', 'Imran', 'Jaya', 'Karan', 'Laetitia', 'Mira', 'Naveen', 'Owen',
+]
+const LAST_NAMES = [
+  'Appadoo', 'Bhola', 'Curpen', 'Dookhy', 'Emrith', 'Fokeer', 'Gungah', 'Hurloll', 'Issur', 'Jhuboo',
+  'Khodabux', 'Luchmun', 'Mungroo', 'Nababsing', 'Oozeer', 'Peerbaccus', 'Quirin', 'Ramphul', 'Seeruttun', 'Teeluck',
+  'Unmole', 'Veerapen', 'Woograsing', 'Yerriah', 'Zafer', 'Beeharry', 'Callychurn', 'Dhondee', 'Elahee', 'Foolchand',
+]
+const CITIES = [
+  { name: 'Port Louis', lat: -20.1609, lng: 57.4977 },
+  { name: 'Curepipe', lat: -20.3173, lng: 57.5259 },
+  { name: 'Quatre Bornes', lat: -20.2648, lng: 57.4759 },
+  { name: 'Vacoas', lat: -20.2985, lng: 57.4786 },
+  { name: 'Rose Hill', lat: -20.2342, lng: 57.4617 },
+  { name: 'Beau Bassin', lat: -20.2267, lng: 57.4684 },
+  { name: 'Grand Baie', lat: -20.0130, lng: 57.5820 },
+  { name: 'Mahebourg', lat: -20.4072, lng: 57.7020 },
+  { name: 'Flacq', lat: -20.1908, lng: 57.7150 },
+  { name: 'Moka', lat: -20.2366, lng: 57.4960 },
+]
+const TYPE_ABBR: Record<string, string> = {
+  DOCTOR: 'GDOC', NURSE: 'GNUR', NANNY: 'GNAN', PHARMACIST: 'GPHA', LAB_TECHNICIAN: 'GLAB',
+  EMERGENCY_WORKER: 'GEMR', CAREGIVER: 'GCAR', PHYSIOTHERAPIST: 'GPHY', DENTIST: 'GDEN',
+  OPTOMETRIST: 'GOPT', NUTRITIONIST: 'GNUT',
+}
 
 // ─── Mode inference ───────────────────────────────────────────────────────────
 // Returns which serviceModes are clinically appropriate for a given service.
@@ -107,32 +143,123 @@ export async function seedServiceConfigBackfill(prisma: PrismaClient) {
     servicesByType.set(s.providerType, list)
   }
 
-  // ── Step 1: Ensure ProviderServiceConfig rows ──────────────────────────────
+  // Group providers by type (mutated below as Step 0 tops up short-staffed types).
+  const providersByType = new Map<string, typeof providers>()
+  for (const p of providers) {
+    const list = providersByType.get(p.userType) ?? []
+    list.push(p)
+    providersByType.set(p.userType, list)
+  }
+
+  const MAX_PER_PROVIDER = 3
+
+  // ── Step 0: Top up providers so EVERY service can have its own owner ────────
+  // With "<=3 services/provider and no service shared", a type needs at least
+  // ceil(services / 3) providers to give every service a provider. Where a type
+  // is short, generate searchable, map-located mock providers to cover the gap.
+  const genHash = await bcrypt.hash('Provider123!', 10)
+  const regionMU = await prisma.region.findFirst({ where: { countryCode: 'MU' } })
+
+  let generated = 0
+  let gIdx = 0 // global name cursor (keeps names varied across types)
+  for (const type of providerTypes) {
+    const svcCount = (servicesByType.get(type) ?? []).length
+    if (!providersByType.has(type)) providersByType.set(type, [])
+    const have = providersByType.get(type)!.length
+    const needed = Math.ceil(svcCount / MAX_PER_PROVIDER)
+    const deficit = Math.max(0, needed - have)
+
+    for (let k = 0; k < deficit; k++) {
+      const idx = gIdx++
+      const first = FIRST_NAMES[idx % FIRST_NAMES.length]
+      const last = LAST_NAMES[(idx * 7 + k) % LAST_NAMES.length]
+      const city = CITIES[idx % CITIES.length]
+      const abbr = TYPE_ABBR[type] ?? 'GEN'
+      const id = `${abbr}-${String(k + 1).padStart(3, '0')}`
+      const email = `${abbr.toLowerCase()}.${k + 1}.${first.toLowerCase()}@mediwyz.com`
+      // small deterministic offsets so map markers do not stack on one point
+      const lat = city.lat + (((idx % 5) - 2) * 0.004)
+      const lng = city.lng + (((k % 5) - 2) * 0.004)
+      try {
+        await prisma.user.create({
+          data: {
+            id, firstName: first, lastName: last, email,
+            password: genHash, phone: `+2305${String(7000000 + idx).slice(0, 7)}`,
+            userType: type as any, accountStatus: 'active', verified: true,
+            address: `${city.name}, Mauritius`, gender: idx % 2 === 0 ? 'Male' : 'Female',
+            regionId: regionMU?.id, latitude: lat, longitude: lng,
+          },
+        })
+        await prisma.userWallet.create({
+          data: { userId: id, balance: 5000, currency: 'MUR', initialCredit: 5000 },
+        }).catch(() => {})
+        const newP = { id, userType: type } as (typeof providers)[number]
+        providers.push(newP)
+        providersByType.get(type)!.push(newP)
+        generated++
+      } catch {
+        // id/email already exists (re-run on a non-wiped DB) — existing provider covers the slot
+      }
+    }
+  }
+  console.log(`  ✓ Step 0: generated ${generated} providers so every service can have an owner`)
+
+  // ── Step 1: Assign services UNIQUELY to providers ──────────────────────────
+  // Each provider offers AT MOST 3 services, every service is offered by EXACTLY
+  // ONE provider, and (thanks to Step 0) every service gets an owner. This makes
+  // the service filter meaningful: picking a service returns the single provider
+  // who offers it. (The schema still allows sharing; this is how we seed demo data.)
+
+  // Idempotent reset: drop any previously-assigned configs (and their workflow
+  // links) for these providers so a re-run reproduces the same unique mapping.
+  const providerIds = providers.map((p: any) => p.id)
+  const existingCfgs = await (prisma.providerServiceConfig as any).findMany({
+    where: { providerUserId: { in: providerIds } }, select: { id: true },
+  })
+  if (existingCfgs.length) {
+    await (prisma.providerServiceWorkflow as any).deleteMany({
+      where: { providerServiceConfigId: { in: existingCfgs.map((c: any) => c.id) } },
+    })
+    await (prisma.providerServiceConfig as any).deleteMany({
+      where: { providerUserId: { in: providerIds } },
+    })
+  }
 
   let configsUpserted = 0
-  for (const provider of providers) {
-    const svcs = servicesByType.get(provider.userType) ?? []
-    for (const svc of svcs) {
-      await (prisma.providerServiceConfig as any).upsert({
-        where: {
-          platformServiceId_providerUserId: {
-            platformServiceId: svc.id,
-            providerUserId: provider.id,
-          },
-        },
-        update: {},
-        create: {
-          platformServiceId: svc.id,
-          providerUserId: provider.id,
-          priceOverride: null,
-          isActive: true,
-        },
+  let servicesUnassigned = 0
+  for (const type of providerTypes) {
+    const typeProviders = [...(providersByType.get(type) ?? [])].sort((a: any, b: any) => a.id.localeCompare(b.id))
+    const typeServices  = [...(servicesByType.get(type) ?? [])].sort((a: any, b: any) => a.id.localeCompare(b.id))
+    if (typeProviders.length === 0 || typeServices.length === 0) {
+      servicesUnassigned += typeServices.length
+      continue
+    }
+
+    // Round-robin so each provider gets one service before any gets a second,
+    // capping at MAX_PER_PROVIDER. Services beyond total capacity stay unoffered.
+    const counts = new Map<string, number>(typeProviders.map((p: any) => [p.id, 0]))
+    let pIdx = 0
+    for (const svc of typeServices) {
+      let tries = 0
+      while (tries < typeProviders.length && (counts.get(typeProviders[pIdx].id) ?? 0) >= MAX_PER_PROVIDER) {
+        pIdx = (pIdx + 1) % typeProviders.length
+        tries++
+      }
+      if ((counts.get(typeProviders[pIdx].id) ?? 0) >= MAX_PER_PROVIDER) {
+        servicesUnassigned++ // every provider of this type is full
+        continue
+      }
+      const provider = typeProviders[pIdx]
+      await (prisma.providerServiceConfig as any).create({
+        data: { platformServiceId: svc.id, providerUserId: provider.id, priceOverride: null, isActive: true },
       })
+      counts.set(provider.id, (counts.get(provider.id) ?? 0) + 1)
+      pIdx = (pIdx + 1) % typeProviders.length
       configsUpserted++
     }
   }
 
-  console.log(`  ✓ ${configsUpserted} ProviderServiceConfig rows ensured (${providers.length} providers)`)
+  console.log(`  ✓ ${configsUpserted} unique ProviderServiceConfig rows (<=${MAX_PER_PROVIDER}/provider, 1 provider/service); ${servicesUnassigned} services left unoffered`)
 
   // ── Step 2: Build template maps ────────────────────────────────────────────
   // Fetch ALL system/admin templates. Build:
