@@ -8,6 +8,7 @@ import {
   FaCheckDouble, FaFlask, FaHeartbeat, FaBoxOpen, FaFilter,
 } from 'react-icons/fa'
 import { type NotificationItem } from '@/hooks/useNotifications'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -164,26 +165,20 @@ export default function NotificationsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      {/* Page header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-          {unreadCount > 0 && (
-            <p className="text-sm text-gray-500 mt-0.5">{unreadCount} unread</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {unreadCount > 0 && (
-            <button
-              onClick={handleMarkAllRead}
-              className="flex items-center gap-1.5 text-sm text-brand-teal hover:text-brand-navy font-medium px-3 py-2 rounded-lg hover:bg-sky-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
-            >
-              <FaCheckDouble className="text-xs" aria-hidden="true" />
-              Mark all read
-            </button>
-          )}
-        </div>
-      </div>
+      <DashboardPageHeader
+        icon={FaBell}
+        title="Notifications"
+        description={unreadCount > 0 ? `${unreadCount} unread` : undefined}
+        actions={unreadCount > 0 ? (
+          <button
+            onClick={handleMarkAllRead}
+            className="flex items-center gap-1.5 text-sm text-brand-teal hover:text-brand-navy font-medium px-3 py-2 rounded-lg hover:bg-sky-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+          >
+            <FaCheckDouble className="text-xs" aria-hidden="true" />
+            Mark all read
+          </button>
+        ) : undefined}
+      />
 
       {/* Tab strip */}
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1" role="tablist" aria-label="Filter notifications">

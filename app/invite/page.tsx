@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { FaGift, FaCopy, FaShareAlt, FaArrowLeft, FaCheckCircle } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import { FaGift, FaCopy, FaShareAlt, FaCheckCircle } from 'react-icons/fa'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 interface Dashboard {
   stats: {
@@ -26,6 +27,7 @@ interface Dashboard {
  * first access so there's never a blank state.
  */
 export default function InviteFriendsPage() {
+  const router = useRouter()
   const [data, setData] = useState<Dashboard | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -67,12 +69,12 @@ export default function InviteFriendsPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-6 px-4 space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/" className="text-gray-400 hover:text-gray-600"><FaArrowLeft /></Link>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <FaGift className="text-pink-500" /> Invite friends, earn credit
-        </h1>
-      </div>
+      <DashboardPageHeader
+        icon={FaGift}
+        title="Invite friends, earn credit"
+        description="Share your code — you both earn wallet credit when they sign up."
+        back={{ label: 'Home', onClick: () => router.push('/') }}
+      />
 
       {loading ? (
         <div className="py-12 text-center text-gray-400 text-sm">Loading your code…</div>

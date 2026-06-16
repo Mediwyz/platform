@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { FaPhone, FaClock, FaSpinner, FaPlay } from 'react-icons/fa'
 import { useT } from '@/lib/i18n/useT'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 /**
  * Shared Audio Calls list page. Mirrors the video-call list but filters to
@@ -45,12 +46,7 @@ export default function AudioCallListPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <FaPhone className="text-brand-teal" /> {t('audio.title')}
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">{t('audio.subtitle')}</p>
-      </div>
+      <DashboardPageHeader icon={FaPhone} title={t('audio.title')} description={t('audio.subtitle')} />
 
       {loading && (
         <div className="h-24 bg-white rounded-xl border border-gray-200 flex items-center justify-center">
