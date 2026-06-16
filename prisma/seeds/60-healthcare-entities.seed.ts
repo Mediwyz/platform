@@ -104,6 +104,18 @@ const ENTITIES = [
     latitude: -20.2370,
     longitude: 57.5060,
   },
+  {
+    name: 'GoodHealth Pharmacy',
+    type: 'pharmacy',
+    description: 'Community pharmacy dispensing prescription and over-the-counter medicines, with home delivery across the central plateau.',
+    address: 'Royal Road, Curepipe',
+    city: 'Curepipe',
+    country: 'MU',
+    phone: '+230 670 3030',
+    email: 'contact@goodhealthpharmacy.mu',
+    latitude: -20.3155,
+    longitude: 57.5270,
+  },
   // ── Madagascar ────────────────────────────────────────────────────────────
   {
     name: 'Clinique Bonne Humeur',
@@ -182,6 +194,7 @@ export async function seedHealthcareEntities(prisma: PrismaClient) {
     'FourEyes Optical Centre': 'lisa.optom@mediwyz.com',
     'BendRight Rehab Centre': 'carlos.physio@mediwyz.com',
     'Dr Johnson Family Practice': 'sarah.johnson@mediwyz.com',
+    'GoodHealth Pharmacy': 'pharma.jean@mediwyz.com',
   }
 
   let founded = 0

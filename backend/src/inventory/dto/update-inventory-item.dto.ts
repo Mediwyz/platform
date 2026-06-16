@@ -48,4 +48,9 @@ export class UpdateInventoryItemDto {
   @IsOptional()
   @IsBoolean()
   isFeatured?: boolean;
+
+  // Move the item under an organisation, or empty string to sell as individual.
+  @IsOptional()
+  @IsString()
+  healthcareEntityId?: string;
 }

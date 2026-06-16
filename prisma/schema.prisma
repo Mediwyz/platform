@@ -2883,6 +2883,12 @@ model ProviderInventoryItem {
   providerUserId String // any provider's User.id
   providerType   String // PHARMACIST, OPTOMETRIST, DENTIST, NANNY, etc.
 
+  // Optional: the organisation (e.g. a pharmacy) this item is sold under. Null
+  // means the provider sells it as an individual. When set, the provider must
+  // be an active member/founder of that entity.
+  healthcareEntityId String?
+  healthcareEntity   HealthcareEntity? @relation("EntityInventory", fields: [healthcareEntityId], references: [id], onDelete: SetNull)
+
   // Product info
   name        String
   genericName String? // for medicines
@@ -2925,6 +2931,7 @@ model ProviderInventoryItem {
   @@index([category])
   @@index([inStock])
   @@index([name])
+  @@index([healthcareEntityId])
 }
 
 // ─── Inventory Order (patient orders from any provider's inventory) ──────────
@@ -3016,6 +3023,9 @@ model HealthcareEntity {
   // Providers affiliated with this entity
   providers     ProviderWorkplace[]
   invitations   WorkplaceInvitation[]
+
+  // Health Shop items sold under this organisation (e.g. a pharmacy's stock)
+  inventoryItems ProviderInventoryItem[] @relation("EntityInventory")
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

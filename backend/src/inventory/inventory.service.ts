@@ -21,13 +21,41 @@ export class InventoryService {
     return this.prisma.providerInventoryItem.findMany({
       where: { providerUserId, isActive: true },
       orderBy: { name: 'asc' },
+      include: { healthcareEntity: { select: { id: true, name: true, type: true } } },
     });
+  }
+
+  /**
+   * Verify the provider may sell under `healthcareEntityId` — they must be the
+   * founder or an active member (ProviderWorkplace) of that entity. Throws
+   * otherwise. A null/empty id means "sell as an individual" and is always OK.
+   */
+  private async resolveEntityForSeller(
+    providerUserId: string,
+    healthcareEntityId?: string | null,
+  ): Promise<string | null> {
+    if (!healthcareEntityId) return null;
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id: healthcareEntityId },
+      select: { id: true, founderUserId: true },
+    });
+    if (!entity) throw new NotFoundException('Organisation not found');
+    if (entity.founderUserId === providerUserId) return entity.id;
+    const membership = await (this.prisma.providerWorkplace as any).findUnique({
+      where: { providerUserId_healthcareEntityId: { providerUserId, healthcareEntityId } },
+      select: { status: true, isActive: true },
+    });
+    if (!membership || !membership.isActive || membership.status !== 'active') {
+      throw new ForbiddenException('You can only sell under an organisation you belong to.');
+    }
+    return entity.id;
   }
 
   async createItem(providerUserId: string, providerType: string, data: {
     name: string; genericName?: string; description?: string; category: string;
     price: number; unitOfMeasure?: string; quantity?: number; minStockAlert?: number;
-    requiresPrescription?: boolean; imageUrl?: string;
+    requiresPrescription?: boolean; imageUrl?: string; isFeatured?: boolean;
+    healthcareEntityId?: string;
   }) {
     const provider = await this.prisma.user.findUnique({
       where: { id: providerUserId },
@@ -36,14 +64,17 @@ export class InventoryService {
     if (!provider?.verified) {
       throw new ForbiddenException('Your account must be verified before you can list items on the Health Shop.');
     }
+    const entityId = await this.resolveEntityForSeller(providerUserId, data.healthcareEntityId);
     return this.prisma.providerInventoryItem.create({
       data: {
         providerUserId, providerType: providerType as any,
+        healthcareEntityId: entityId,
         name: data.name, genericName: data.genericName, description: data.description,
         category: data.category, price: data.price,
         unitOfMeasure: data.unitOfMeasure || 'unit',
         quantity: data.quantity ?? 0, minStockAlert: data.minStockAlert ?? 5,
         requiresPrescription: data.requiresPrescription ?? false,
+        isFeatured: data.isFeatured ?? false,
         imageUrl: data.imageUrl, inStock: (data.quantity ?? 0) > 0, isActive: true,
       },
     });
@@ -57,6 +88,10 @@ export class InventoryService {
     const update: Record<string, any> = {};
     for (const key of ['name', 'genericName', 'description', 'category', 'price', 'unitOfMeasure', 'quantity', 'minStockAlert', 'requiresPrescription', 'imageUrl', 'inStock', 'isFeatured']) {
       if (data[key] !== undefined) update[key] = data[key];
+    }
+    // Move the item under an organisation, or back to individual (empty string).
+    if (data.healthcareEntityId !== undefined) {
+      update.healthcareEntityId = await this.resolveEntityForSeller(userId, data.healthcareEntityId || null);
     }
     return this.prisma.providerInventoryItem.update({ where: { id }, data: update });
   }
@@ -341,23 +376,38 @@ export class InventoryService {
     }
 
     const [items, total] = await Promise.all([
-      this.prisma.providerInventoryItem.findMany({
+      (this.prisma.providerInventoryItem as any).findMany({
         where, take: opts.limit || 20, skip: opts.offset || 0,
         orderBy: [{ isFeatured: 'desc' }, { name: 'asc' }],
+        include: { healthcareEntity: { select: { id: true, name: true, type: true } } },
       }),
       this.prisma.providerInventoryItem.count({ where }),
     ]);
 
-    // Annotate items with isRecommended and sort recommended ones to the top
-    const annotated = items.map((item) => {
-      const itemText = `${item.name} ${(item as any).genericName ?? ''}`.toLowerCase();
+    // Resolve the individual-seller name for items NOT sold under an org
+    // (one batched query, no N+1).
+    const soloSellerIds = [...new Set(items.filter((i: any) => !i.healthcareEntityId).map((i: any) => i.providerUserId))];
+    const sellers = soloSellerIds.length
+      ? await this.prisma.user.findMany({
+          where: { id: { in: soloSellerIds } },
+          select: { id: true, firstName: true, lastName: true },
+        })
+      : [];
+    const sellerById = new Map(sellers.map((s) => [s.id, `${s.firstName} ${s.lastName}`]));
+
+    // Annotate items with isRecommended + seller info, sort recommended to top
+    const annotated = items.map((item: any) => {
+      const itemText = `${item.name} ${item.genericName ?? ''}`.toLowerCase();
       const isRecommended = prescriptionMedNames.length > 0
         && prescriptionMedNames.some((med) => {
           if (itemText.includes(med)) return true;
           // Word-level partial match (word > 3 chars)
           return med.split(/\s+/).some((word) => word.length > 3 && itemText.includes(word));
         });
-      return { ...item, isRecommended };
+      const { healthcareEntity, ...rest } = item;
+      const sellerName = healthcareEntity?.name ?? sellerById.get(item.providerUserId) ?? null;
+      const sellerType = healthcareEntity ? 'organisation' : 'provider';
+      return { ...rest, isRecommended, sellerName, sellerType, sellerEntityId: healthcareEntity?.id ?? null };
     });
 
     // Stable sort: recommended first, then featured, then alphabetical

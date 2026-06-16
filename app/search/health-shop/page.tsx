@@ -46,6 +46,8 @@ interface ShopItem {
   requiresPrescription: boolean
   isFeatured: boolean
   isRecommended?: boolean
+  sellerName?: string | null
+  sellerType?: 'organisation' | 'provider'
 }
 
 interface ShopCategory {

@@ -5,6 +5,12 @@ Web changes that still need a matching Flutter implementation. See
 
 ## Pending
 
+- **Inventory "Sell as" selector** — web My Inventory now lets a provider sell a
+  Health Shop item under a pharmacy/organisation they belong to or as
+  themselves (`healthcareEntityId` on the item; options from
+  `GET /api/organizations/mine`). The Health Shop card shows "Sold by <seller>".
+  Mirror the selector + the seller label on mobile.
+
 - **Provider card service modes** — web provider search cards now show the real
   modes a provider offers (At Office / At Home / Video / …) derived from
   `GET /api/search/providers` `serviceModes[]`, and the profile Services tab

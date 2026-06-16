@@ -21,7 +21,12 @@ const mockPrisma: any = {
     create: jest.fn(),
     update: jest.fn(),
   },
-  user: { findUnique: jest.fn().mockResolvedValue({ id: 'PROV001', verified: true }) },
+  user: {
+    findUnique: jest.fn().mockResolvedValue({ id: 'PROV001', verified: true }),
+    findMany: jest.fn().mockResolvedValue([]),
+  },
+  healthcareEntity: { findUnique: jest.fn() },
+  providerWorkplace: { findUnique: jest.fn() },
   patientProfile: { findUnique: jest.fn() },
   prescription: { findFirst: jest.fn() },
   userWallet: { findUnique: jest.fn(), update: jest.fn() },
@@ -86,6 +91,30 @@ describe('InventoryService', () => {
           isActive: true,
         }),
       });
+    });
+
+    it('should sell under an organisation the provider founded', async () => {
+      mockPrisma.healthcareEntity.findUnique.mockResolvedValue({ id: 'ENT1', founderUserId: 'PHARM001' });
+      mockPrisma.providerInventoryItem.create.mockResolvedValue({ id: 'ITEM003' });
+
+      await service.createItem('PHARM001', 'PHARMACIST', {
+        name: 'Paracetamol', category: 'Medicines', price: 50, healthcareEntityId: 'ENT1',
+      });
+
+      expect(mockPrisma.providerInventoryItem.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({ healthcareEntityId: 'ENT1' }),
+      });
+    });
+
+    it('should reject selling under an organisation the provider does not belong to', async () => {
+      mockPrisma.healthcareEntity.findUnique.mockResolvedValue({ id: 'ENT1', founderUserId: 'SOMEONE_ELSE' });
+      mockPrisma.providerWorkplace.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.createItem('PHARM001', 'PHARMACIST', {
+          name: 'Paracetamol', category: 'Medicines', price: 50, healthcareEntityId: 'ENT1',
+        }),
+      ).rejects.toThrow(ForbiddenException);
     });
 
     it('should set inStock to false when quantity is 0', async () => {
@@ -389,7 +418,12 @@ describe('InventoryService', () => {
 
       const result = await service.searchShop({ query: 'vitamin' });
 
-      expect(result.items).toEqual(items);
+      expect(result.items).toHaveLength(1);
+      // searchShop now annotates each item with seller info (org name or the
+      // individual provider) and isRecommended.
+      expect(result.items[0]).toEqual(
+        expect.objectContaining({ id: 'I1', name: 'Vitamin C', sellerType: 'provider' }),
+      );
       expect(result.total).toBe(1);
       expect(mockPrisma.providerInventoryItem.findMany).toHaveBeenCalledWith(
         expect.objectContaining({

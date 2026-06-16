@@ -32,6 +32,8 @@ interface Product {
   inStock: boolean
   requiresPrescription: boolean
   isFeatured: boolean
+  sellerName?: string | null
+  sellerType?: 'organisation' | 'provider'
 }
 
 export default function ShopItemCard({ product, rxMatch = false }: { product: Product; rxMatch?: boolean }) {
@@ -103,6 +105,9 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 text-sm truncate">{product.name}</h3>
             {product.genericName && <p className="text-xs text-gray-400 truncate">{product.genericName}</p>}
+            {product.sellerName && (
+              <p className="text-[11px] text-[#0C6780] font-medium truncate">Sold by {product.sellerName}</p>
+            )}
           </div>
           <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
             {rxMatch && (

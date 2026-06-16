@@ -27,14 +27,18 @@ interface InventoryItem {
   requiresPrescription: boolean
   isFeatured: boolean
   sideEffects: string[]
+  healthcareEntityId?: string | null
+  healthcareEntity?: { id: string; name: string; type: string } | null
 }
 
-type FormData = Omit<InventoryItem, 'id' | 'inStock'>
+interface MyOrg { id: string; name: string; type: string }
+
+type FormData = Omit<InventoryItem, 'id' | 'inStock' | 'healthcareEntity'>
 
 const defaultForm: FormData = {
   name: '', genericName: '', category: '', description: '', unitOfMeasure: 'unit',
   strength: '', dosageForm: '', price: 0, quantity: 0, minStockAlert: 5,
-  requiresPrescription: false, isFeatured: false, sideEffects: [],
+  requiresPrescription: false, isFeatured: false, sideEffects: [], healthcareEntityId: '',
 }
 
 export default function ProviderInventoryManager() {
@@ -47,6 +51,7 @@ export default function ProviderInventoryManager() {
   const [form, setForm] = useState<FormData>(defaultForm)
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [myOrgs, setMyOrgs] = useState<MyOrg[]>([])
 
   const fetchItems = useCallback(async () => {
     try {
@@ -57,7 +62,25 @@ export default function ProviderInventoryManager() {
     finally { setLoading(false) }
   }, [])
 
-  useEffect(() => { fetchItems() }, [fetchItems])
+  // Organisations this provider can sell under (owned + member-of). The form's
+  // "Sell as" selector lets them attribute an item to a pharmacy/clinic they
+  // belong to, or to themselves as an individual.
+  const fetchMyOrgs = useCallback(async () => {
+    try {
+      const res = await fetch('/api/organizations/mine', { credentials: 'include' })
+      const data = await res.json()
+      if (data.success) {
+        const owned: MyOrg[] = (data.data.owned ?? []).map((o: any) => ({ id: o.id, name: o.name, type: o.type }))
+        const member: MyOrg[] = (data.data.member ?? []).map((o: any) => ({ id: o.id, name: o.name, type: o.type }))
+        // Dedupe by id (a founder is also a member)
+        const byId = new Map<string, MyOrg>()
+        for (const o of [...owned, ...member]) byId.set(o.id, o)
+        setMyOrgs(Array.from(byId.values()))
+      }
+    } catch { /* selector simply omits orgs on failure */ }
+  }, [])
+
+  useEffect(() => { fetchItems(); fetchMyOrgs() }, [fetchItems, fetchMyOrgs])
 
   if (!user) return <DashboardLoadingState />
 
@@ -77,7 +100,7 @@ export default function ProviderInventoryManager() {
 
   function openEdit(item: InventoryItem) {
     setEditId(item.id)
-    setForm({ ...item })
+    setForm({ ...item, healthcareEntityId: item.healthcareEntityId ?? '' })
     setShowModal(true)
   }
 
@@ -175,6 +198,9 @@ export default function ProviderInventoryManager() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 text-sm truncate">{item.name}</h3>
                   <span className="text-xs text-gray-500">{item.category}</span>
+                  {item.healthcareEntity && (
+                    <span className="block text-[11px] text-brand-teal font-medium truncate">via {item.healthcareEntity.name}</span>
+                  )}
                 </div>
                 <div className="flex gap-1 ml-2">
                   <button onClick={() => openEdit(item)} className="p-1.5 text-gray-400 hover:text-brand-teal rounded transition"><FiEdit2 className="w-4 h-4" /></button>
@@ -247,6 +273,24 @@ export default function ProviderInventoryManager() {
                   <label className="text-xs font-medium text-gray-600 block mb-1">Description</label>
                   <textarea value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal" />
                 </div>
+                {myOrgs.length > 0 && (
+                  <div className="col-span-2">
+                    <label className="text-xs font-medium text-gray-600 block mb-1">Sell as</label>
+                    <select
+                      value={form.healthcareEntityId || ''}
+                      onChange={(e) => setForm({ ...form, healthcareEntityId: e.target.value })}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal"
+                    >
+                      <option value="">Myself ({user.firstName} {user.lastName})</option>
+                      {myOrgs.map(o => (
+                        <option key={o.id} value={o.id}>{o.name}</option>
+                      ))}
+                    </select>
+                    <p className="text-[11px] text-gray-400 mt-1">
+                      The Health Shop shows this item as sold by the chosen seller.
+                    </p>
+                  </div>
+                )}
                 <div className="col-span-2 flex gap-4">
                   <label className="flex items-center gap-2 text-sm">
                     <input type="checkbox" checked={form.requiresPrescription} onChange={(e) => setForm({ ...form, requiresPrescription: e.target.checked })} className="rounded border-gray-300 text-brand-teal focus:ring-brand-teal" />

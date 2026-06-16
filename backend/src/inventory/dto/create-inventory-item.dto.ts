@@ -37,4 +37,14 @@ export class CreateInventoryItemDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  // Optional: sell this item under an organisation (e.g. a pharmacy) the
+  // provider belongs to. Omit / null = sell as an individual.
+  @IsOptional()
+  @IsString()
+  healthcareEntityId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 }
