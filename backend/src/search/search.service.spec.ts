@@ -11,6 +11,9 @@ const mockPrisma = {
   providerSpecialty: {
     findMany: jest.fn().mockResolvedValue([]),
   },
+  providerServiceConfig: {
+    findMany: jest.fn().mockResolvedValue([]),
+  },
 };
 
 describe('SearchService', () => {
@@ -26,8 +29,9 @@ describe('SearchService', () => {
 
     service = module.get<SearchService>(SearchService);
     jest.clearAllMocks();
-    // Restore default for providerSpecialty
+    // Restore defaults cleared by clearAllMocks
     mockPrisma.providerSpecialty.findMany.mockResolvedValue([]);
+    mockPrisma.providerServiceConfig.findMany.mockResolvedValue([]);
   });
 
   it('should be defined', () => {
@@ -91,6 +95,47 @@ describe('SearchService', () => {
 
       expect(result.data[0].specializations).toEqual(['ICU', 'Pediatrics']);
       expect(result.data[0].experience).toBe(8);
+    });
+
+    it('should derive serviceModes from the providers linked service workflows', async () => {
+      mockPrisma.user.findMany.mockResolvedValue([
+        {
+          id: 'DOC001', firstName: 'John', lastName: 'Doc', profileImage: null,
+          address: null, phone: null, verified: true, userType: 'DOCTOR', gender: 'male',
+          doctorProfile: { id: 'DP001', specialty: [], rating: 0, consultationFee: 0 },
+        },
+      ]);
+      mockPrisma.user.count.mockResolvedValue(1);
+      mockPrisma.providerServiceConfig.findMany.mockResolvedValue([
+        {
+          providerUserId: 'DOC001',
+          workflowTemplates: [
+            { workflowTemplate: { serviceMode: 'office', isActive: true } },
+            { workflowTemplate: { serviceMode: 'video', isActive: true } },
+            { workflowTemplate: { serviceMode: 'office', isActive: true } }, // duplicate → deduped
+            { workflowTemplate: { serviceMode: 'home', isActive: false } },  // inactive → excluded
+          ],
+        },
+      ]);
+
+      const result = await service.searchProviders('DOCTOR');
+
+      expect(result.data[0].serviceModes.sort()).toEqual(['office', 'video']);
+    });
+
+    it('should return empty serviceModes when the provider has no service configs', async () => {
+      mockPrisma.user.findMany.mockResolvedValue([
+        {
+          id: 'DOC001', firstName: 'John', lastName: 'Doc', profileImage: null,
+          address: null, phone: null, verified: true, userType: 'DOCTOR', gender: 'male',
+          doctorProfile: { id: 'DP001', specialty: [], rating: 0, consultationFee: 0 },
+        },
+      ]);
+      mockPrisma.user.count.mockResolvedValue(1);
+
+      const result = await service.searchProviders('DOCTOR');
+
+      expect(result.data[0].serviceModes).toEqual([]);
     });
 
     it('should uppercase the type parameter', async () => {
