@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
-import { FiSearch, FiCopy, FiEdit2, FiFilter, FiX, FiUser, FiShield, FiServer } from 'react-icons/fi'
+import { FiSearch, FiCopy, FiEdit2, FiFilter, FiX, FiUser, FiShield, FiServer, FiBookOpen } from 'react-icons/fi'
 import WorkflowStepper from './WorkflowStepper'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 interface LibraryTemplate {
   id: string
@@ -137,14 +138,11 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
 
   return (
     <div className="space-y-5">
-      <div className="flex items-start justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Workflow Library</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Browse every workflow on the platform - system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point.
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        icon={FiBookOpen}
+        title="Workflow Library"
+        description="Browse every workflow on the platform — system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point."
+      />
 
       {/* Filter bar */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">

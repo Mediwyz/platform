@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { use } from 'react'
-import { FiSend, FiPlus, FiTrash2, FiArrowLeft, FiCheckCircle } from 'react-icons/fi'
+import { FiSend, FiPlus, FiTrash2, FiCheckCircle } from 'react-icons/fi'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 interface StepType {
   code: string
@@ -28,6 +30,7 @@ interface SuggestedStep {
 
 export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
+  const router = useRouter()
 
   const [stepTypes, setStepTypes] = useState<StepType[]>([])
   const [name, setName] = useState('')
@@ -129,15 +132,12 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href={`/provider/${slug}/workflows`} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
-          <FiArrowLeft className="w-4 h-4" />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Suggest a Workflow</h1>
-          <p className="text-sm text-gray-500">Describe a custom booking flow. Your regional admin will review and activate it.</p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        icon={FiSend}
+        title="Suggest a Workflow"
+        description="Describe a custom booking flow. Your regional admin will review and activate it."
+        back={{ label: 'Back to Workflows', onClick: () => router.push(`/provider/${slug}/workflows`) }}
+      />
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>

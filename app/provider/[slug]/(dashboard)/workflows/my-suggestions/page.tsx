@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import { use } from 'react'
 import Link from 'next/link'
-import { FiArrowLeft, FiSend, FiCheckCircle, FiXCircle, FiClock, FiPlus } from 'react-icons/fi'
+import { useRouter } from 'next/navigation'
+import { FiSend, FiCheckCircle, FiXCircle, FiClock, FiPlus, FiInbox } from 'react-icons/fi'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
 interface Suggestion {
   id: string
@@ -24,6 +26,7 @@ const STATUS_CONFIG = {
 
 export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
+  const router = useRouter()
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'PENDING' | 'APPROVED' | 'REJECTED' | ''>('')
@@ -40,21 +43,20 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href={`/provider/${slug}/workflows`} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
-          <FiArrowLeft className="w-4 h-4" />
-        </Link>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">My Suggestions</h1>
-          <p className="text-sm text-gray-500">Track the status of workflows you submitted for admin review.</p>
-        </div>
-        <Link
-          href={`/provider/${slug}/workflows/suggest`}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium"
-        >
-          <FiPlus className="w-4 h-4" /> New suggestion
-        </Link>
-      </div>
+      <DashboardPageHeader
+        icon={FiInbox}
+        title="My Suggestions"
+        description="Track the status of workflows you submitted for admin review."
+        back={{ label: 'Back to Workflows', onClick: () => router.push(`/provider/${slug}/workflows`) }}
+        actions={
+          <Link
+            href={`/provider/${slug}/workflows/suggest`}
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium"
+          >
+            <FiPlus className="w-4 h-4" /> New suggestion
+          </Link>
+        }
+      />
 
       {/* Filter */}
       <div className="flex gap-2">
