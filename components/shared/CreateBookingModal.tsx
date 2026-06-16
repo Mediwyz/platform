@@ -231,7 +231,14 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  }, [activeWorkflow])
 
  const handleSubmit = async () => {
- if (!user || !selectedProvider || !selectedDate || !selectedTime) return
+ // NOTE: `user` is intentionally NOT required here — the booking is
+ // authenticated server-side via the JWT cookie (@CurrentUser), and `user`
+ // (from localStorage) can legitimately be null when the modal is opened
+ // outside a dashboard layout. Requiring it made Confirm a silent no-op.
+ if (!selectedProvider || !selectedDate || !selectedTime) {
+ setError('Please pick a provider, date and time before confirming.')
+ return
+ }
  setSubmitting(true)
  setError(null)
 
@@ -248,7 +255,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
    type: consultType,
  }
  if (reason) b.reason = reason
- if (selectedService?.id) b.serviceId = selectedService.id
+ if (selectedService?.id) b.platformServiceId = selectedService.id
  if (selectedService?.serviceName) b.serviceName = selectedService.serviceName
  if (selectedService?.price != null) b.servicePrice = selectedService.price
  if (activeWorkflow?.id) b.workflowTemplateId = activeWorkflow.id
