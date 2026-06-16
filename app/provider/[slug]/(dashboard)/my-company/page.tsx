@@ -9,6 +9,7 @@ import {
 import InsuranceMembersTable from '@/components/corporate/InsuranceMembersTable'
 import CompanyAnalytics from '@/components/corporate/CompanyAnalytics'
 import CompanyDangerZone from '@/components/corporate/CompanyDangerZone'
+import MyOrganisationsOverview from '@/components/corporate/MyOrganisationsOverview'
 
 interface Company {
   id: string
@@ -182,10 +183,12 @@ export default function MyCompanyPage() {
     )
   }
 
-  // No company yet: show creation form
+  // No corporate/insurance company yet: still show the user's healthcare
+  // organisations (clinics/hospitals/…) overview, then the company creation form.
   if (!company) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
+        <MyOrganisationsOverview />
         <div className="flex items-center gap-3 mb-2">
           <FaBuilding className="text-2xl text-[#0C6780]" />
           <h1 className="text-2xl font-bold text-gray-900">Create a Company Page</h1>
@@ -363,6 +366,9 @@ export default function MyCompanyPage() {
           {message.text}
         </div>
       )}
+
+      {/* All organisations the user owns or belongs to, grouped by category */}
+      <MyOrganisationsOverview />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">

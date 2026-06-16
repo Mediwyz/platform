@@ -93,6 +93,17 @@ const ENTITIES = [
     latitude: -20.2353,
     longitude: 57.4674,
   },
+  {
+    name: 'Dr Johnson Family Practice',
+    type: 'self_employed',
+    description: 'Independent solo practice run by Dr Sarah Johnson — general consultations, follow-ups, and home visits.',
+    address: 'Royal Road, Moka',
+    city: 'Moka',
+    country: 'MU',
+    phone: '+230 605 2020',
+    latitude: -20.2370,
+    longitude: 57.5060,
+  },
   // ── Madagascar ────────────────────────────────────────────────────────────
   {
     name: 'Clinique Bonne Humeur',
@@ -156,6 +167,50 @@ export async function seedHealthcareEntities(prisma: PrismaClient) {
   }
 
   console.log(`  ✓ ${created} healthcare entities upserted`)
+
+  // ── Assign a founder (owner) to each entity ───────────────────────────────
+  // Without a founder, no one "owns" the org and the My Company overview shows
+  // nothing under "owned". Make the primary seeded provider the founder so the
+  // demo shows owned organisations across categories (and Dr Johnson owns a
+  // hospital + clinic + self-employed practice for a rich multi-org demo).
+  const founders: Record<string, string> = {
+    'BlueLagoon Clinic': 'aisha.patel@mediwyz.com',
+    'Mount Olympus Hospital': 'sarah.johnson@mediwyz.com',
+    'Sunset Bay Medical Centre': 'sarah.johnson@mediwyz.com',
+    'QuirkLab Analysis': 'raj.labtech@mediwyz.com',
+    'ToothFairy Dental Clinic': 'david.dentist@mediwyz.com',
+    'FourEyes Optical Centre': 'lisa.optom@mediwyz.com',
+    'BendRight Rehab Centre': 'carlos.physio@mediwyz.com',
+    'Dr Johnson Family Practice': 'sarah.johnson@mediwyz.com',
+  }
+
+  let founded = 0
+  for (const [entityName, founderEmail] of Object.entries(founders)) {
+    const entityId = entityIds[entityName]
+    if (!entityId) continue
+    const founder = await prisma.user.findUnique({ where: { email: founderEmail }, select: { id: true } })
+    if (!founder) continue
+
+    await (prisma.healthcareEntity as any).update({
+      where: { id: entityId },
+      data: { founderUserId: founder.id },
+    })
+    // Founder is also an active member with the Founder role.
+    await (prisma.providerWorkplace as any).upsert({
+      where: { providerUserId_healthcareEntityId: { providerUserId: founder.id, healthcareEntityId: entityId } },
+      update: { role: 'Founder', isPrimary: true, isActive: true, status: 'active' },
+      create: {
+        providerUserId: founder.id,
+        healthcareEntityId: entityId,
+        role: 'Founder',
+        isPrimary: true,
+        isActive: true,
+        status: 'active',
+      },
+    })
+    founded++
+  }
+  console.log(`  ✓ ${founded} entity founders assigned`)
 
   // ── Link existing providers to entities ──────────────────────────────────
   // Find providers by email (seeded in earlier seeds), link to an appropriate entity

@@ -45,6 +45,17 @@ export class OrganizationsController {
     return { success: true, data: result };
   }
 
+  // ─── My organisations (owned + member-of) ──────────────────────────────
+  // MUST be declared before `@Get(':id')` or the literal path is captured by
+  // the `:id` param route.
+
+  @Get('mine')
+  @ApiOperation({ summary: "List the current user's organisations (owned + member-of)" })
+  async myOrganisations(@CurrentUser() user: JwtPayload) {
+    const data = await this.organizationsService.getMyOrganisations(user.sub);
+    return { success: true, data };
+  }
+
   // ─── Create a new healthcare entity ────────────────────────────────────
 
   @Post()

@@ -151,6 +151,71 @@ export class OrganizationsService {
     return { entities: mapped, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
+  // ─── My organisations (owned + member-of), for the "My Company" overview ──
+  //
+  // Returns every healthcare entity the user founded (owned) plus every entity
+  // they are an active member of. The frontend groups these by `type`
+  // (clinic / hospital / laboratory / pharmacy / self_employed / …) and shows a
+  // create + invite affordance per category. Insurance/employer companies live
+  // in the corporate subsystem and are surfaced separately on the same page.
+
+  async getMyOrganisations(userId: string) {
+    const entitySelect = {
+      id: true,
+      name: true,
+      type: true,
+      city: true,
+      country: true,
+      logoUrl: true,
+      isVerified: true,
+    };
+
+    const [ownedRaw, memberships] = await Promise.all([
+      (this.prisma.healthcareEntity as any).findMany({
+        where: { founderUserId: userId, isActive: true },
+        select: entitySelect,
+        orderBy: { name: 'asc' },
+      }),
+      (this.prisma.providerWorkplace as any).findMany({
+        where: { providerUserId: userId, isActive: true, status: 'active' },
+        select: {
+          role: true,
+          isPrimary: true,
+          entity: { select: { ...entitySelect, founderUserId: true, isActive: true } },
+        },
+      }),
+    ]);
+
+    // Active-member counts for the owned entities (one grouped query, no N+1).
+    const ownedIds: string[] = ownedRaw.map((e: any) => e.id);
+    const countRows: any[] = ownedIds.length
+      ? await (this.prisma.providerWorkplace as any).groupBy({
+          by: ['healthcareEntityId'],
+          where: { healthcareEntityId: { in: ownedIds }, status: 'active', isActive: true },
+          _count: { _all: true },
+        })
+      : [];
+    const memberCountByEntity = new Map<string, number>(
+      countRows.map((r: any) => [r.healthcareEntityId, r._count?._all ?? 0]),
+    );
+
+    const owned = ownedRaw.map((e: any) => ({
+      ...e,
+      isOwner: true,
+      memberCount: memberCountByEntity.get(e.id) ?? 0,
+    }));
+
+    // Entities the user belongs to but did NOT found (exclude owned to avoid dupes).
+    const member = memberships
+      .filter((m: any) => m.entity && m.entity.isActive && m.entity.founderUserId !== userId)
+      .map((m: any) => {
+        const { founderUserId, isActive, ...rest } = m.entity;
+        return { ...rest, isOwner: false, role: m.role, isPrimary: m.isPrimary };
+      });
+
+    return { owned, member };
+  }
+
   // ─── Single entity (public) ───────────────────────────────────────────────
 
   async findOne(id: string) {
