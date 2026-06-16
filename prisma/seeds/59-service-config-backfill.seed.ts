@@ -16,7 +16,7 @@
  *      "Home Nursing Visit"     → home only      (explicitly home-based)
  *      "Video Consultation"     → video only     (explicitly remote)
  *      "Blood Test"             → office + home  (can collect in clinic or at home)
- *      "General Consultation"   → office + video (most outpatient services)
+ *      "General Consultation"   → office + video + home (most outpatient services)
  *      "Emergency Dispatch"     → home/emergency (responder goes to patient)
  *
  * Safe to re-run: deletes all auto-attached links and reapplies with correct logic.
@@ -96,20 +96,23 @@ function inferModes(serviceName: string, category: string): string[] {
   if (text.match(/\belderly|senior care|post.surgery|recovery care|personal care|palliative|respite\b/))
     return ['home']
 
-  // ── Consultation with prescription / follow-up - office or video ───────
+  // ── Consultation with prescription / follow-up - office, video OR home ──
+  // (the provider can also travel to the patient for a routine follow-up)
   if (text.match(/\bprescription|ordonnance|medication|refill|renewal|follow.?up|follow up|consultation générale|general consult|initial consult\b/))
-    return ['office', 'video']
+    return ['office', 'video', 'home']
 
-  // ── Nutrition / mental health / coaching - office or video ─────────────
+  // ── Nutrition / mental health / coaching - office, video OR home ───────
   if (text.match(/\bnutrition|diet consult|meal plan|dietary|weight loss|nutritional|mental health|psychology|psychiatry|counseling|therapy session|coaching\b/))
-    return ['office', 'video']
+    return ['office', 'video', 'home']
 
   // ── Pharmacy / medication dispensing - office (pickup) or home (delivery)
   if (text.match(/\bpharmacy|medicine|drug|dispensing|delivery|medication order\b/))
     return ['office', 'home']
 
-  // ── Default: general outpatient consultation (office + video) ──────────
-  return ['office', 'video']
+  // ── Default: general outpatient consultation (office + video + home) ───
+  // Home visit is a first-class mode everywhere except equipment/procedure
+  // services, which are filtered to office-only by the earlier branches.
+  return ['office', 'video', 'home']
 }
 
 // ─── Main seed function ───────────────────────────────────────────────────────
