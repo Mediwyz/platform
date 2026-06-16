@@ -191,7 +191,7 @@ export default function MyCompanyPage() {
         <MyOrganisationsOverview />
         <div className="flex items-center gap-3 mb-2">
           <FaBuilding className="text-2xl text-[#0C6780]" />
-          <h1 className="text-2xl font-bold text-gray-900">Create a Company Page</h1>
+          <h1 className="text-2xl font-bold text-[#001E40]">Create a Company Page</h1>
         </div>
         <p className="text-gray-600 mb-8">
           Create a company page to manage employee wellness programs, enroll team members in corporate health plans, and post updates as your organization.
@@ -353,7 +353,7 @@ export default function MyCompanyPage() {
           <FaBuilding className="text-xl text-[#0C6780]" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{company.companyName}</h1>
+          <h1 className="text-2xl font-bold text-[#001E40]">{company.companyName}</h1>
           <p className="text-sm text-gray-500">
             {company.industry && `${company.industry} · `}
             {company.registrationNumber && `Reg: ${company.registrationNumber}`}

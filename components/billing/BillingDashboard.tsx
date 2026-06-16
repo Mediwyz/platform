@@ -3,6 +3,8 @@
 import WalletBalanceCard from '@/components/shared/WalletBalanceCard'
 import PaymentMethodForm from '@/components/shared/PaymentMethodForm'
 import SubscriptionTab from '@/components/settings/tabs/SubscriptionTab'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
+import { FaMoneyBillWave } from 'react-icons/fa'
 
 interface BillingDashboardProps {
  userId: string
@@ -11,7 +13,11 @@ interface BillingDashboardProps {
 export default function BillingDashboard({ userId }: BillingDashboardProps) {
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900">Billing & Account Balance</h1>
+ <DashboardPageHeader
+ icon={FaMoneyBillWave}
+ title="Billing & Account Balance"
+ description="Your plan, wallet balance and payment methods."
+ />
 
  {/* Subscription Plan - current plan + change */}
  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
