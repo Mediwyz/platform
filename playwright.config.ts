@@ -9,8 +9,10 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   // Per-test timeout MUST exceed navigationTimeout below, otherwise a slow
   // first cold-start navigation (allowed up to 90s) is killed by the test
-  // timeout before it can finish. 150s leaves headroom for nav + assertions.
-  timeout: process.env.CI ? 150_000 : 30_000,
+  // timeout before it can finish. Some tests (golden-path provider→profile)
+  // chain TWO cold navigations in one test, so the timeout must clear 2×
+  // navigationTimeout (180s) plus assertions — 200s leaves headroom.
+  timeout: process.env.CI ? 200_000 : 30_000,
   globalTimeout: process.env.CI ? 20 * 60 * 1000 : undefined,
   reporter: process.env.CI ? 'github' : 'html',
   use: {

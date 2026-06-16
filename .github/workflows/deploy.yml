@@ -556,7 +556,7 @@ jobs:
               # otherwise exceed the per-test timeout on a freshly-restarted VPS).
               # Two passes per route: pass 1 triggers SSR + chunk + DB-pool warmup
               # (may be slow), pass 2 confirms it is now fast.
-              for path in / /login /search/doctors /search/services; do
+              for path in / /login /search/doctors /search/services "/search/providers?type=DOCTOR&limit=1"; do
                 for i in 1 2; do
                   WARM=$(curl -o /dev/null -s -w "%{http_code}" --max-time 90 "$BASE_URL$path" 2>/dev/null || echo "000")
                   echo "warm $path (pass $i) — HTTP $WARM"
