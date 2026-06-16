@@ -57,7 +57,7 @@ export default function AdminSecurityPage() {
  <div className="mb-8">
  <div className="flex items-center gap-3 mb-2">
  <FaShieldAlt className="text-2xl text-red-600" />
- <h1 className="text-2xl font-bold text-gray-900">Security</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">Security</h1>
  </div>
  <p className="text-gray-600">Monitor login activity and configure security settings</p>
  </div>

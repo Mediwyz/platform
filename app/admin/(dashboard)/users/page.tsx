@@ -88,7 +88,7 @@ export default function AdminUsersPage() {
  <div className="mb-6">
  <div className="flex items-center gap-3 mb-2">
  <FaUsers className="text-2xl text-purple-600" />
- <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">User Management</h1>
  </div>
  <p className="text-gray-600">View and manage all platform users</p>
  </div>

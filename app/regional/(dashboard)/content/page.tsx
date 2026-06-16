@@ -275,7 +275,7 @@ export default function ContentManagementPage() {
  <>
  {/* Header */}
  <div className="mb-6">
- <h1 className="text-2xl font-bold text-gray-900">Content Management {countryCode && <span className="text-blue-600">({countryCode})</span>}</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">Content Management {countryCode && <span className="text-blue-600">({countryCode})</span>}</h1>
  <p className="text-gray-600 mt-1">Manage your region&apos;s landing page sections, hero slides, and testimonials{countryCode && <> &mdash; visible at <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm">/{countryCode}</code></>}</p>
  </div>
 

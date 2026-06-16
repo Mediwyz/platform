@@ -103,7 +103,7 @@ export default function ClinicalKnowledgePage() {
         <div className="flex items-center gap-3">
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><FaBook /></div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">AI Clinical Knowledge</h1>
+            <h1 className="text-2xl font-bold text-[#001E40]">AI Clinical Knowledge</h1>
             <p className="text-sm text-gray-600 mt-1">
               One-line dietary / wellness guidance the AI injects when a user has the matching condition.
               Keep lines under 200 chars - prompt has a 4KB soft budget.

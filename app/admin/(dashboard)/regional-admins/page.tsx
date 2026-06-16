@@ -91,7 +91,7 @@ export default function AdminRegionalAdminsPage() {
  <div className="mb-6">
  <div className="flex items-center gap-3 mb-2">
  <FaGlobeAmericas className="text-2xl text-teal-600" />
- <h1 className="text-2xl font-bold text-gray-900">Regional Admins</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">Regional Admins</h1>
  </div>
  <p className="text-gray-600">Manage regional administrator accounts - approve, suspend, or review profiles</p>
  </div>

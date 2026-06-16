@@ -128,7 +128,7 @@ export default function RegionalValidationPage() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
           <FaClipboardCheck className="text-2xl text-amber-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Document Validation</h1>
+          <h1 className="text-2xl font-bold text-[#001E40]">Document Validation</h1>
         </div>
         <p className="text-gray-600 text-sm">
           Review uploaded documents and approve or reject provider registrations

@@ -70,7 +70,7 @@ export default function RoleRequestsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-[#001E40] flex items-center gap-2">
           <FiInbox className="text-brand-teal" />
           Role Requests
         </h1>

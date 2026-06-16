@@ -52,7 +52,7 @@ export default function SuperAdminSecurityPage() {
 
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+ <h1 className="text-2xl font-bold text-[#001E40] flex items-center gap-2">
  <FaShieldAlt className="text-red-500" /> Security Overview
  </h1>
 
@@ -67,7 +67,7 @@ export default function SuperAdminSecurityPage() {
  <div className="flex items-center justify-between">
  <div>
  <p className="text-gray-600 text-sm">{stat.title}</p>
- <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+ <p className="text-2xl font-bold text-[#001E40] mt-1">{stat.value}</p>
  </div>
  <div className={`p-3 rounded-full ${stat.color}`}>
  <stat.icon className="text-white text-xl" />

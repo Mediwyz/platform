@@ -335,7 +335,7 @@ export default function AdminContentManagementPage() {
  <>
  {/* Header */}
  <div className="mb-6">
- <h1 className="text-2xl font-bold text-gray-900">Content Management</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">Content Management</h1>
  <p className="text-gray-600 mt-1">
  Manage landing page content for your country
  <span className="ml-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">

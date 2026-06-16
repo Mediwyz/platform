@@ -223,7 +223,7 @@ export default function RolesManagementPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FaUsersCog className="text-2xl text-violet-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Provider Roles</h1>
+          <h1 className="text-2xl font-bold text-[#001E40]">Provider Roles</h1>
         </div>
         <button onClick={openCreate} className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
           <FaPlus /> Create Role

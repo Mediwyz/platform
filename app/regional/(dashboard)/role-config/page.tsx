@@ -97,7 +97,7 @@ export default function RoleConfigPage() {
  <div className="p-6 max-w-full">
  <div className="flex items-center justify-between mb-6">
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Role Feature Configuration</h1>
+ <h1 className="text-2xl font-bold text-[#001E40]">Role Feature Configuration</h1>
  <p className="text-gray-600 mt-1">Toggle which features are visible for each user role</p>
  </div>
  <button
