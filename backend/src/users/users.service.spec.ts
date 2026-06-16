@@ -117,4 +117,41 @@ describe('UsersService', () => {
       await expect(service.topUpWallet('user-1', -100)).rejects.toThrow(BadRequestException);
     });
   });
+
+  describe('resetWallet', () => {
+    // resetWallet uses the callback form of $transaction — make the mock run it.
+    const runCallbackTx = () =>
+      mockPrisma.$transaction.mockImplementation(async (cb: any) =>
+        cb({ userWallet: { update: jest.fn() }, walletTransaction: { create: jest.fn() } }),
+      );
+
+    it('restores a usable default when initialCredit is 0', async () => {
+      mockPrisma.userWallet.findUnique.mockResolvedValue({
+        id: 'w1', balance: 0, currency: 'MUR', initialCredit: 0,
+      });
+      runCallbackTx();
+
+      const result = await service.resetWallet('user-1');
+
+      expect(result.balance).toBe(5000);
+    });
+
+    it('restores the initial trial credit when it is set', async () => {
+      mockPrisma.userWallet.findUnique.mockResolvedValue({
+        id: 'w1', balance: 100, currency: 'MUR', initialCredit: 4500,
+      });
+      runCallbackTx();
+
+      const result = await service.resetWallet('user-1');
+
+      expect(result.balance).toBe(4500);
+    });
+
+    it('rejects a reset amount above the cap', async () => {
+      mockPrisma.userWallet.findUnique.mockResolvedValue({
+        id: 'w1', balance: 0, currency: 'MUR', initialCredit: 0,
+      });
+      await expect(service.resetWallet('user-1', 99999)).rejects.toThrow(BadRequestException);
+    });
+  });
 });

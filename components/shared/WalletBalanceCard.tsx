@@ -36,6 +36,8 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  const [error, setError] = useState<string | null>(null)
  const [showAllTransactions, setShowAllTransactions] = useState(false)
  const [resetting, setResetting] = useState(false)
+ const [showReset, setShowReset] = useState(false)
+ const [customReset, setCustomReset] = useState('')
 
  const fetchWallet = useCallback(async () => {
  try {
@@ -59,20 +61,29 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  fetchWallet()
  }, [userId, fetchWallet])
 
- const handleResetTrial = async () => {
- if (!confirm('Reset your trial balance to the initial credit amount?')) return
+ // Reset credit via the gateway-free /wallet/reset endpoint. Passing no amount
+ // restores the trial credit (server falls back to a usable default if the
+ // account had none); an explicit amount sets the balance directly.
+ const handleReset = async (amount?: number) => {
  try {
  setResetting(true)
- const res = await fetch(`/api/users/${userId}/wallet/reset`, { method: 'POST', credentials: 'include' })
+ const res = await fetch(`/api/users/${userId}/wallet/reset`, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify(amount != null ? { amount } : {}),
+ credentials: 'include',
+ })
  const json = await res.json()
  if (json.success) {
  await fetchWallet()
- toast.success('Trial balance reset successfully')
+ setShowReset(false)
+ setCustomReset('')
+ toast.success('Credit reset successfully')
  } else {
- toast.error(json.message || 'Failed to reset trial')
+ toast.error(json.message || 'Failed to reset credit')
  }
  } catch {
- toast.error('Failed to reset trial')
+ toast.error('Failed to reset credit')
  } finally {
  setResetting(false)
  }
@@ -142,14 +153,59 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  {percentage}% remaining of {symbol} {wallet.initialCredit.toLocaleString()}
  </p>
  <button
- onClick={handleResetTrial}
+ onClick={() => setShowReset((s) => !s)}
  disabled={resetting}
  className="text-xs px-3 py-1 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg font-medium transition-colors flex items-center gap-1.5"
  >
  <FaRedo className={`text-[10px] ${resetting ? 'animate-spin' : ''}`} />
- {resetting ? 'Resetting...' : 'Reset Trial'}
+ {resetting ? 'Resetting...' : 'Reset credit'}
  </button>
  </div>
+
+ {/* Reset credit panel — pick a preset, restore the trial, or set a custom
+     amount. Uses the reliable reset endpoint (no payment gateway). */}
+ {showReset && (
+ <div className="mt-3 bg-white/10 rounded-xl p-3">
+ <p className="text-xs text-white/80 mb-2">Reset your balance to:</p>
+ <div className="flex flex-wrap gap-2 mb-2">
+ <button
+ onClick={() => handleReset()}
+ disabled={resetting}
+ className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/20 hover:bg-white/30 disabled:opacity-50 transition-colors"
+ >
+ Restore trial
+ </button>
+ {[1000, 5000, 10000].map((amt) => (
+ <button
+ key={amt}
+ onClick={() => handleReset(amt)}
+ disabled={resetting}
+ className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/20 hover:bg-white/30 disabled:opacity-50 transition-colors"
+ >
+ {symbol} {amt.toLocaleString()}
+ </button>
+ ))}
+ </div>
+ <div className="flex gap-2">
+ <input
+ type="number"
+ min={0}
+ max={50000}
+ value={customReset}
+ onChange={(e) => setCustomReset(e.target.value)}
+ placeholder="Custom amount"
+ className="flex-1 px-3 py-1.5 rounded-lg text-xs text-gray-900 placeholder-gray-400 outline-none"
+ />
+ <button
+ onClick={() => { const a = parseFloat(customReset); if (a >= 0) handleReset(a) }}
+ disabled={resetting || customReset === ''}
+ className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-brand-navy hover:bg-white/90 disabled:opacity-50 transition-colors"
+ >
+ Set
+ </button>
+ </div>
+ </div>
+ )}
 
  {/* Recent Transactions Mini-List */}
  {recentTransactions.length > 0 && (

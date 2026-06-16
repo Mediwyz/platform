@@ -5,6 +5,11 @@ Web changes that still need a matching Flutter implementation. See
 
 ## Pending
 
+- **Reset credit control (Billing)** — web billing wallet card now has a "Reset
+  credit" panel (Restore trial / preset amounts / custom) calling
+  `POST /api/users/:id/wallet/reset` (gateway-free). Mirror on the mobile
+  billing/wallet screen.
+
 - **Inventory "Sell as" selector** — web My Inventory now lets a provider sell a
   Health Shop item under a pharmacy/organisation they belong to or as
   themselves (`healthcareEntityId` on the item; options from

@@ -225,7 +225,15 @@ export class UsersService {
   async resetWallet(userId: string, customAmount?: number) {
     const wallet = await this.prisma.userWallet.findUnique({ where: { userId } });
     if (!wallet) throw new NotFoundException('Wallet not found');
-    const resetAmount = customAmount ?? wallet.initialCredit;
+    if (customAmount !== undefined && (customAmount < 0 || customAmount > 50000)) {
+      throw new BadRequestException('Reset amount must be between 0 and 50000');
+    }
+    // When no amount is given, restore the trial credit. If the account was
+    // created with no initial credit, fall back to a usable default so the
+    // reset always leaves a balance the member can actually book with.
+    const DEFAULT_TRIAL_CREDIT = 5000;
+    const fallback = wallet.initialCredit > 0 ? wallet.initialCredit : DEFAULT_TRIAL_CREDIT;
+    const resetAmount = customAmount ?? fallback;
     const delta = resetAmount - wallet.balance;
     if (delta === 0) return { balance: wallet.balance, initialCredit: wallet.initialCredit };
 
