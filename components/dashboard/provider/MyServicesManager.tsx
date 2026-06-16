@@ -11,6 +11,8 @@ import {
 import ServiceIcon from '@/components/shared/ServiceIcon'
 
 const HealthiconPicker = dynamic(() => import('@/components/shared/HealthiconPicker'), { ssr: false })
+const WorkflowWizard = dynamic(() => import('@/components/workflow/builder/WorkflowWizard'), { ssr: false })
+import type { GeneratedTemplate } from '@/components/workflow/builder/WorkflowWizard'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +91,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   const [toast, setToast] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   // Panel views
-  type Panel = 'list' | 'add-catalog' | 'create-service' | 'manage-workflows' | 'edit-price'
+  type Panel = 'list' | 'add-catalog' | 'create-service' | 'create-wizard' | 'manage-workflows' | 'edit-price'
   const [panel, setPanel] = useState<Panel>('list')
 
   // Catalog add flow
@@ -197,7 +199,15 @@ export default function MyServicesManager({ providerType }: { providerType: stri
     setPanel('create-service')
   }
 
-  async function handleCreateService() {
+  function resetCreateForm() {
+    setCreateName(''); setCreateDescription(''); setCreateCategory('')
+    setCreateEmoji(''); setCreateIconKey(''); setCreateImageUrl('')
+    setCreatePrice(''); setCreateDuration('')
+  }
+
+  // Final step: persist the service together with the wizard-generated workflow
+  // so it's published, linked and instantly bookable.
+  async function handleCreateService(workflow: GeneratedTemplate) {
     if (!createName.trim()) { showToast('error', 'Service name is required'); return }
     setSaving(true)
     try {
@@ -214,12 +224,21 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           emoji: createEmoji.trim() || undefined,
           price: createPrice ? Number(createPrice) : undefined,
           duration: createDuration ? Number(createDuration) : undefined,
+          workflow: {
+            name: workflow.name,
+            description: workflow.description,
+            serviceMode: workflow.serviceMode,
+            paymentTiming: workflow.paymentTiming,
+            steps: workflow.steps,
+            transitions: workflow.transitions,
+            serviceConfig: workflow.serviceConfig,
+          },
         }),
       })
       const j = await res.json()
       if (!j.success) throw new Error(j.message)
-      showToast('success', `"${createName}" created and added to your services`)
-      setCreateIconKey(''); setCreateImageUrl('')
+      showToast('success', `"${createName}" created and ready to book`)
+      resetCreateForm()
       setPanel('list')
       fetchMyServices()
       fetchCatalog()
@@ -760,22 +779,47 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           </div>
 
           <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-            <button onClick={() => setPanel('list')} className="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
+            <button onClick={() => { resetCreateForm(); setPanel('list') }} className="px-4 py-2.5 text-sm text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
               Cancel
             </button>
             <button
-              onClick={handleCreateService}
-              disabled={saving || !createName.trim()}
+              onClick={() => { if (!createName.trim()) { showToast('error', 'Service name is required'); return } setPanel('create-wizard') }}
+              disabled={!createName.trim()}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-purple-600 text-white rounded-xl text-sm font-semibold
                 hover:bg-purple-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {saving ? (
-                <span className="flex gap-1">{[0,1,2].map(i => <span key={i} className="w-1.5 h-1.5 rounded-full bg-white/70 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}</span>
-              ) : (
-                <><FaPlus className="text-xs" /> Create &amp; Add to My Services</>
-              )}
+              Next: appointment type →
             </button>
           </div>
+          <p className="text-xs text-gray-400 text-center">Step 1 of 2 · next you&apos;ll set how this service is delivered</p>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      {/* PANEL: CREATE SERVICE — STEP 2, WORKFLOW WIZARD                    */}
+      {/* The provider configures the appointment type; the wizard generates */}
+      {/* a workflow that is published + linked when the service is created.  */}
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      {panel === 'create-wizard' && (
+        <div className="space-y-4">
+          <button
+            onClick={() => setPanel('create-service')}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-[#0C6780] transition-colors"
+          >
+            <FaArrowLeft className="text-xs" /> Back to service details
+          </button>
+          <div className="px-4 py-3 bg-purple-50 border border-purple-100 rounded-xl">
+            <p className="text-sm font-semibold text-[#001E40]">{createName || 'New service'}</p>
+            <p className="text-xs text-gray-500">Step 2 of 2 · configure how patients book and what happens at each stage</p>
+          </div>
+          <WorkflowWizard
+            providerType={providerType}
+            saveLabel="Create service"
+            hideBuilderButton
+            onCancel={() => setPanel('create-service')}
+            onComplete={() => { /* builder button hidden in this flow */ }}
+            onSave={async (generated) => { await handleCreateService(generated) }}
+          />
         </div>
       )}
 

@@ -5,6 +5,12 @@ Web changes that still need a matching Flutter implementation. See
 
 ## Pending
 
+- **Self-serve service creation wizard** — web: creating a custom service is now
+  a 2-step flow (details → 8-step appointment-type wizard) that generates +
+  publishes + links a provider-owned workflow in one `POST /api/services/custom`
+  call (body includes `workflow`). No regional-admin pre-authoring needed.
+  Mirror the wizard-driven service creation on mobile.
+
 - **Reset credit control (Billing)** — web billing wallet card now has a "Reset
   credit" panel (Restore trial / preset amounts / custom) calling
   `POST /api/users/:id/wallet/reset` (gateway-free). Mirror on the mobile

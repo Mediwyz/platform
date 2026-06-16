@@ -184,39 +184,77 @@ export class ServicesService {
       throw new ForbiddenException('Members cannot create services. Providers and admins can.');
     }
 
-    const templateExists = await this.prisma.workflowTemplate.findFirst({
-      where: { providerType: dbUser.userType, isActive: true },
-      select: { id: true },
-    });
-    if (!templateExists) {
-      throw new ForbiddenException(
-        `No workflow template exists for provider type "${dbUser.userType}". ` +
-        `A regional admin must create a workflow template for this role before services can be added.`,
-      );
+    // Self-serve wizard supplies its own workflow, so the service is bookable
+    // immediately. Only require a pre-existing template on the legacy path
+    // (no workflow provided) — otherwise a provider whose role has no admin
+    // template yet could never add their first service.
+    if (!dto.workflow) {
+      const templateExists = await this.prisma.workflowTemplate.findFirst({
+        where: { providerType: dbUser.userType, isActive: true },
+        select: { id: true },
+      });
+      if (!templateExists) {
+        throw new ForbiddenException(
+          `No workflow template exists for provider type "${dbUser.userType}". ` +
+          `Configure an appointment type with the wizard, or ask a regional admin to add one.`,
+        );
+      }
     }
 
-    const service = await this.prisma.platformService.create({
-      data: {
-        serviceName: dto.name,
-        // description is required by the schema but optional in the form — default
-        // to an empty string so an omitted description doesn't break the create.
-        description: dto.description ?? '',
-        providerType: dbUser.userType as any,
-        category: dto.category || 'custom',
-        defaultPrice: dto.price || 0,
-        duration: dto.duration || 30,
-        isDefault: false,
-        isActive: true,
-        createdByProviderId: userId,
-        iconKey: dto.iconKey || null,
-        emoji: dto.emoji || null,
-        imageUrl: dto.imageUrl || null,
-      },
+    const serviceData = {
+      serviceName: dto.name,
+      // description is required by the schema but optional in the form — default
+      // to an empty string so an omitted description doesn't break the create.
+      description: dto.description ?? '',
+      providerType: dbUser.userType as any,
+      category: dto.category || 'custom',
+      defaultPrice: dto.price || 0,
+      duration: dto.duration || 30,
+      isDefault: false,
+      isActive: true,
+      createdByProviderId: userId,
+      iconKey: dto.iconKey || null,
+      emoji: dto.emoji || null,
+      imageUrl: dto.imageUrl || null,
+    };
+
+    // Create service + config (+ wizard workflow) atomically.
+    return this.prisma.$transaction(async (tx) => {
+      const service = await tx.platformService.create({ data: serviceData });
+      const config = await tx.providerServiceConfig.create({
+        data: { platformServiceId: service.id, providerUserId: userId, isActive: true },
+      });
+
+      if (dto.workflow) {
+        const wf = dto.workflow;
+        const paymentTiming = wf.paymentTiming === 'ON_COMPLETION' ? 'ON_COMPLETION' : 'ON_ACCEPTANCE';
+        // Slug must be unique — scope it to this provider + service + mode.
+        const slug = `provider-${userId.slice(0, 8)}-${service.id.slice(0, 8)}-${wf.serviceMode}`.toLowerCase();
+        const template = await tx.workflowTemplate.create({
+          data: {
+            name: wf.name || dto.name,
+            slug,
+            description: wf.description ?? '',
+            providerType: dbUser.userType as any,
+            serviceMode: wf.serviceMode,
+            steps: (wf.steps ?? []) as any,
+            transitions: (wf.transitions ?? []) as any,
+            serviceConfig: (wf.serviceConfig ?? {}) as any,
+            paymentTiming: paymentTiming as any,
+            isDefault: false,
+            isDraft: false, // published — the engine resolves it for bookings
+            isActive: true,
+            createdByProviderId: userId,
+            platformServiceId: service.id,
+          },
+        });
+        await tx.providerServiceWorkflow.create({
+          data: { providerServiceConfigId: config.id, workflowTemplateId: template.id },
+        });
+      }
+
+      return service;
     });
-    await this.prisma.providerServiceConfig.create({
-      data: { platformServiceId: service.id, providerUserId: userId, isActive: true },
-    });
-    return service;
   }
 
   async updateCustomService(userId: string, id: string, dto: CreateCustomServiceDto) {

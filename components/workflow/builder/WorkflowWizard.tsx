@@ -57,6 +57,11 @@ export interface WorkflowWizardProps {
   onSave?: (generated: GeneratedTemplate) => Promise<void>
   providerType?: string
   platformServiceId?: string
+  /** Override the primary save button label (e.g. "Create service"). */
+  saveLabel?: string
+  /** Hide the secondary "Build Template →" button — for contexts (like service
+   *  creation) where there's no builder to fall back to. */
+  hideBuilderButton?: boolean
 }
 
 // ── Option card data ──────────────────────────────────────────────────────────
@@ -332,7 +337,7 @@ function PaymentStep({ state, setState }: { state: WizardState; setState: (s: Wi
 }
 
 function ReviewStep({
-  state, generated, loading, error, onRetry, onComplete, onSave,
+  state, generated, loading, error, onRetry, onComplete, onSave, saveLabel, hideBuilderButton,
 }: {
   state: WizardState
   generated: GeneratedTemplate | null
@@ -341,6 +346,8 @@ function ReviewStep({
   onRetry: () => void
   onComplete: () => void
   onSave?: () => Promise<void>
+  saveLabel?: string
+  hideBuilderButton?: boolean
 }) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -444,17 +451,19 @@ function ReviewStep({
                     Saving...
                   </>
                 ) : (
-                  '✓ Save & Publish'
+                  saveLabel ?? '✓ Save & Publish'
                 )}
               </button>
             )}
-            <button
-              type="button"
-              onClick={onComplete}
-              className={`w-full font-semibold text-sm py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${onSave ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' : 'bg-[#001E40] hover:bg-[#0C6780] text-white'}`}
-            >
-              {onSave ? 'Customize in Builder →' : 'Build Template →'}
-            </button>
+            {!hideBuilderButton && (
+              <button
+                type="button"
+                onClick={onComplete}
+                className={`w-full font-semibold text-sm py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${onSave ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' : 'bg-[#001E40] hover:bg-[#0C6780] text-white'}`}
+              >
+                {onSave ? 'Customize in Builder →' : 'Build Template →'}
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -495,7 +504,7 @@ function isStepComplete(step: number, state: WizardState): boolean {
 }
 
 export default function WorkflowWizard({
-  onComplete, onCancel, onSave, providerType, platformServiceId,
+  onComplete, onCancel, onSave, providerType, platformServiceId, saveLabel, hideBuilderButton,
 }: WorkflowWizardProps) {
   const [currentStep, setCurrentStep] = useState(1)
   const [direction, setDirection] = useState<1 | -1>(1)
@@ -644,6 +653,8 @@ export default function WorkflowWizard({
                 onRetry={handleRetry}
                 onComplete={() => generated && onComplete(generated)}
                 onSave={onSave && generated ? () => onSave(generated) : undefined}
+                saveLabel={saveLabel}
+                hideBuilderButton={hideBuilderButton}
               />
             )}
           </motion.div>
