@@ -11,9 +11,22 @@ import { SearchResultsSkeleton, NoResults } from '@/components/search/SearchResu
 import { useSearchHistory } from '@/hooks/useSearchHistory'
 import {
  FaSearch, FaMapMarkerAlt, FaCheckCircle,
- FaVideo, FaHome, FaClock,
+ FaVideo, FaHome, FaHospital, FaPhone, FaAmbulance, FaBoxOpen,
  FaHistory, FaTimes, FaTrash,
 } from 'react-icons/fa'
+import type { IconType } from 'react-icons'
+
+// How a provider can be seen — derived from the serviceMode of the workflows
+// linked to their services (the same source the booking modal reads). Only the
+// modes a provider actually offers are shown on their card.
+const MODE_META: Record<string, { label: string; Icon: IconType; cls: string }> = {
+ office:    { label: 'At Office', Icon: FaHospital,  cls: 'bg-sky-50 text-sky-700 border-sky-200' },
+ home:      { label: 'At Home',   Icon: FaHome,      cls: 'bg-orange-50 text-orange-700 border-orange-200' },
+ video:     { label: 'Video',     Icon: FaVideo,     cls: 'bg-purple-50 text-purple-700 border-purple-200' },
+ audio:     { label: 'Phone',     Icon: FaPhone,     cls: 'bg-teal-50 text-teal-700 border-teal-200' },
+ emergency: { label: 'Emergency', Icon: FaAmbulance, cls: 'bg-red-50 text-red-700 border-red-200' },
+ delivery:  { label: 'Delivery',  Icon: FaBoxOpen,   cls: 'bg-amber-50 text-amber-700 border-amber-200' },
+}
 
 const CreateBookingModal = dynamic(() => import('@/components/shared/CreateBookingModal'), { ssr: false })
 const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: false })
@@ -26,6 +39,7 @@ interface Provider {
  address: string | null
  verified: boolean
  specializations: string[]
+ serviceModes?: string[]
 }
 
 interface ProviderSearchPageConfig {
@@ -74,17 +88,21 @@ const ProviderCard = ({ provider, slug, accentColor, onBook }: { provider: Provi
  </span>
  )}
  </div>
+ {/* Real modes this provider offers, derived from their services' workflows */}
+ {provider.serviceModes && provider.serviceModes.length > 0 && (
  <div className="flex flex-wrap items-center gap-1.5">
- <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200">
- <FaHome className="text-[8px]" /> In-Person
+ {provider.serviceModes.map(mode => {
+ const meta = MODE_META[mode]
+ if (!meta) return null
+ const Icon = meta.Icon
+ return (
+ <span key={mode} className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${meta.cls}`}>
+ <Icon className="text-[8px]" /> {meta.label}
  </span>
- <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
- <FaVideo className="text-[8px]" /> Video
- </span>
- <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
- <FaClock className="text-[8px]" /> Available
- </span>
+ )
+ })}
  </div>
+ )}
  </div>
  </div>
 

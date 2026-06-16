@@ -301,6 +301,7 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
 interface ServiceConfig {
   id: string
   priceOverride: number | null
+  serviceModes?: string[]
   platformService: {
     id: string
     serviceName: string
@@ -310,6 +311,12 @@ interface ServiceConfig {
     duration: number | null
     providerType: string
   }
+}
+
+// Booking modes a service supports, derived from its linked workflows.
+const SERVICE_MODE_LABELS: Record<string, string> = {
+  office: 'At Office', home: 'At Home', video: 'Video', audio: 'Phone',
+  emergency: 'Emergency', delivery: 'Delivery',
 }
 
 function ProfileServicesTab({ userId, userType }: { userId: string; userType: string }) {
@@ -364,6 +371,13 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-gray-900">{svc.serviceName}</span>
+                      {(cfg.serviceModes ?? []).map(mode => (
+                        SERVICE_MODE_LABELS[mode] ? (
+                          <span key={mode} className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-[#0C6780]/10 text-[#0C6780]">
+                            {SERVICE_MODE_LABELS[mode]}
+                          </span>
+                        ) : null
+                      ))}
                     </div>
                     {svc.description && (
                       <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{svc.description}</p>

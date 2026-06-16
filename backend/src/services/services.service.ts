@@ -39,7 +39,7 @@ export class ServicesService {
   }
 
   async getProviderPublicServices(userId: string) {
-    return this.prisma.providerServiceConfig.findMany({
+    const configs: any[] = await (this.prisma.providerServiceConfig as any).findMany({
       where: { providerUserId: userId, isActive: true },
       include: {
         platformService: {
@@ -48,8 +48,26 @@ export class ServicesService {
             description: true, defaultPrice: true, duration: true, providerType: true,
           },
         },
+        workflowTemplates: {
+          select: { workflowTemplate: { select: { serviceMode: true, isActive: true } } },
+        },
       },
       orderBy: [{ platformService: { category: 'asc' } }],
+    });
+    // Surface the modes each service supports (office / home / video / …),
+    // derived from the linked workflows — so the profile shows how a member
+    // can book each service.
+    return configs.map((c: any) => {
+      const { workflowTemplates, ...rest } = c;
+      const serviceModes = Array.from(
+        new Set(
+          (workflowTemplates ?? [])
+            .map((l: any) => l.workflowTemplate)
+            .filter((wt: any) => wt?.isActive && wt.serviceMode)
+            .map((wt: any) => wt.serviceMode as string),
+        ),
+      );
+      return { ...rest, serviceModes };
     });
   }
 

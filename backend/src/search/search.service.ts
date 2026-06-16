@@ -200,6 +200,33 @@ export class SearchService {
       select: { name: true, icon: true },
     });
 
+    // Available service modes (office / home / video / …) per provider, derived
+    // from the serviceMode of the workflow templates linked to their active
+    // services. This is the single source of truth for "how can I see this
+    // provider?" — the booking modal and the provider card read the same data.
+    // One batched query for all returned providers (no N+1).
+    const providerIds = users.map((u: any) => u.id);
+    const modesByProvider = new Map<string, Set<string>>();
+    if (providerIds.length) {
+      const cfgs = await this.prisma.providerServiceConfig.findMany({
+        where: { providerUserId: { in: providerIds }, isActive: true },
+        select: {
+          providerUserId: true,
+          workflowTemplates: {
+            select: { workflowTemplate: { select: { serviceMode: true, isActive: true } } },
+          },
+        },
+      });
+      for (const c of cfgs as any[]) {
+        const set = modesByProvider.get(c.providerUserId) ?? new Set<string>();
+        for (const link of c.workflowTemplates ?? []) {
+          const wt = link.workflowTemplate;
+          if (wt?.isActive && wt.serviceMode) set.add(wt.serviceMode as string);
+        }
+        modesByProvider.set(c.providerUserId, set);
+      }
+    }
+
     // Flatten profile data into top-level for frontend compatibility
     const data = users.map((u: any) => {
       const profileRelation = userTypeToProfileRelation[uType];
@@ -218,6 +245,8 @@ export class SearchService {
         rating: profile?.rating || 0,
         consultationFee: profile?.consultationFee || 0,
         bio: profile?.bio || '',
+        // Modes this provider actually offers (derived from linked workflows).
+        serviceModes: Array.from(modesByProvider.get(u.id) ?? []),
       };
     });
 
