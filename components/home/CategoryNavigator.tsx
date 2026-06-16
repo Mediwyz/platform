@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation'
 import type { IconType } from 'react-icons'
 import {
   MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
-  MdArrowBack, MdArrowForward, MdChevronRight,
+  MdArrowBack, MdArrowForward, MdChevronRight, MdHealthAndSafety,
 } from 'react-icons/md'
 import {
   TbStethoscope, TbHeartRateMonitor, TbDental, TbEye,
@@ -42,7 +42,7 @@ interface Entity {
 const ENTITIES: Entity[] = [
   { key: 'services',      label: 'Services',      blurb: 'Consultations & treatments',     Icon: MdMedicalServices },
   { key: 'providers',     label: 'Providers',     blurb: 'Qualified professionals',         Icon: MdPeople },
-  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals & labs',       Icon: MdLocalHospital },
+  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals, labs & insurers', Icon: MdLocalHospital },
   { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart },
 ]
 
@@ -67,6 +67,7 @@ const ORG_TYPES: { value: string; label: string; Icon: IconType }[] = [
   { value: 'hospital',   label: 'Hospitals',  Icon: MdLocalHospital },
   { value: 'laboratory', label: 'Labs',       Icon: TbMicroscope },
   { value: 'pharmacy',   label: 'Pharmacies', Icon: TbPill },
+  { value: 'insurance',  label: 'Insurance',  Icon: MdHealthAndSafety },
 ]
 
 // ── Level 2 · shop categories (redirect to /search/health-shop) ─────────────
@@ -143,7 +144,13 @@ export default function CategoryNavigator() {
   const goServicesCategory = (r: RoleData, cat?: string) =>
     router.push(`/search/services?type=${encodeURIComponent(r.code)}${cat ? `&category=${encodeURIComponent(cat)}` : ''}`)
   const goProviderRole = (r: RoleData) => router.push(`/search/${r.slug}`)
-  const goOrg = (type: string) => router.push(`/search/organizations?type=${encodeURIComponent(type)}`)
+  // Insurance companies live in their own discovery page (they are
+  // CorporateAdminProfile rows, not HealthcareEntity records), so route
+  // there instead of the healthcare-entity organisations search.
+  const goOrg = (type: string) =>
+    type === 'insurance'
+      ? router.push('/search/insurance-companies')
+      : router.push(`/search/organizations?type=${encodeURIComponent(type)}`)
   const goShop = (cat: string) => router.push(`/search/health-shop?category=${encodeURIComponent(cat)}`)
 
   const reset = () => { setEntity(null); setRole(null); setCategories([]) }
@@ -195,28 +202,30 @@ export default function CategoryNavigator() {
         )}
 
         {/* ── Level 1 · Entities ─────────────────────────────────────────── */}
+        {/* First thing a new user sees: 2×2 grid of large cards (was a single
+            cramped row of 4). Bigger tap targets + more breathing room. */}
         {!entity && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
             {ENTITIES.map(e => {
               const Icon = e.Icon
               return (
                 <button
                   key={e.key}
                   onClick={() => pickEntity(e.key)}
-                  className="group flex flex-col items-start text-left p-7 rounded-3xl bg-white border border-gray-100
+                  className="group flex flex-col items-start text-left p-8 sm:p-10 rounded-3xl bg-white border border-gray-100
                     shadow-sm hover:shadow-xl hover:border-[#0C6780]/30 hover:-translate-y-1 transition-all duration-200
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
                 >
                   <span
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-colors group-hover:scale-105"
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 transition-colors group-hover:scale-105"
                     style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}
                   >
-                    <Icon size={32} aria-hidden />
+                    <Icon size={40} aria-hidden />
                   </span>
-                  <span className="text-lg sm:text-xl font-bold text-[#001E40]">{e.label}</span>
-                  <span className="text-sm text-gray-500 mt-1">{e.blurb}</span>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] group-hover:gap-2.5 transition-all">
-                    Browse <MdArrowForward size={14} aria-hidden />
+                  <span className="text-xl sm:text-2xl font-bold text-[#001E40]">{e.label}</span>
+                  <span className="text-base text-gray-500 mt-1.5">{e.blurb}</span>
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-[#0C6780] group-hover:gap-2.5 transition-all">
+                    Browse <MdArrowForward size={16} aria-hidden />
                   </span>
                 </button>
               )
