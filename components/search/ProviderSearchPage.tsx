@@ -197,24 +197,29 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
 
  const handleSearch = async (e?: React.FormEvent) => {
  e?.preventDefault()
- setIsLoading(true)
  setHasSearched(true)
  setShowHistory(false)
 
- const data = await fetchProviders(searchQuery, serviceId)
- setAllProviders(data)
- const filtered = applyFilters(data, searchQuery)
- setSearchResults(filtered)
- setIsLoading(false)
-
+ // Update the URL FIRST, synchronously — the query must be reflected in the
+ // address bar immediately (shareable/back-button correct) and must not be
+ // gated behind the results fetch, which can be slow on a cold start.
  const params = new URLSearchParams()
  if (searchQuery) params.set('q', searchQuery)
  if (serviceId) { params.set('serviceId', serviceId); if (serviceName) params.set('serviceName', serviceName) }
  const qs = params.toString()
  router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+ if (searchQuery.trim()) addToHistory(searchQuery, config.slug)
 
- if (searchQuery.trim()) {
- addToHistory(searchQuery, config.slug)
+ // Then fetch results — a slow or failing request must not break the URL update.
+ setIsLoading(true)
+ try {
+ const data = await fetchProviders(searchQuery, serviceId)
+ setAllProviders(data)
+ setSearchResults(applyFilters(data, searchQuery))
+ } catch {
+ setSearchResults([])
+ } finally {
+ setIsLoading(false)
  }
  }
 
