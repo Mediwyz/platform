@@ -198,7 +198,9 @@ export class ServicesService {
     const service = await this.prisma.platformService.create({
       data: {
         serviceName: dto.name,
-        description: dto.description,
+        // description is required by the schema but optional in the form — default
+        // to an empty string so an omitted description doesn't break the create.
+        description: dto.description ?? '',
         providerType: dbUser.userType as any,
         category: dto.category || 'custom',
         defaultPrice: dto.price || 0,

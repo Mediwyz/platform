@@ -90,12 +90,12 @@ export default function ServiceWorkflowLinker({ serviceId, providerType, createW
             <button onClick={() => unlink(w.id)} className="text-gray-400 hover:text-red-500"><FiX className="w-3 h-3" /></button>
           </div>
           <div className="flex items-center flex-wrap gap-px">
-            {w.steps.sort((a, b) => a.order - b.order).map((s, i) => (
+            {[...(w.steps ?? [])].sort((a, b) => a.order - b.order).map((s, i, arr) => (
               <div key={s.statusCode} className="flex items-center">
                 <span className="px-1 py-px bg-white border border-gray-200 rounded text-[8px] text-gray-600 whitespace-nowrap">
-                  {s.label}{Object.entries(s.flags).filter(([,v])=>v).map(([f])=>FLAG_ICONS[f]||'').join('')}
+                  {s.label}{Object.entries(s.flags ?? {}).filter(([,v])=>v).map(([f])=>FLAG_ICONS[f]||'').join('')}
                 </span>
-                {i < w.steps.length - 1 && <FiArrowRight className="w-2 h-2 text-brand-teal mx-px flex-shrink-0" />}
+                {i < arr.length - 1 && <FiArrowRight className="w-2 h-2 text-brand-teal mx-px flex-shrink-0" />}
               </div>
             ))}
           </div>

@@ -202,7 +202,7 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
             </span>
           )}
           <span className="font-medium text-gray-900 text-sm">{tpl.name}</span>
-          <span className="text-xs text-gray-400">{tpl.steps.length} steps</span>
+          <span className="text-xs text-gray-400">{(tpl.steps ?? []).length} steps</span>
           {editable && <span className="text-xs bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded">Custom</span>}
         </div>
         <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
         <div className="border-t border-gray-100 p-4 bg-gray-50">
           <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><FiList className="inline w-3 h-3 mr-1" />Steps & Flags</h4>
           <div className="space-y-2">
-            {tpl.steps.sort((a, b) => a.order - b.order).map((step, idx) => (
+            {[...(tpl.steps ?? [])].sort((a, b) => a.order - b.order).map((step, idx) => (
               <div key={step.statusCode} className="flex items-start gap-3 bg-white rounded-lg p-3 border border-gray-100">
                 <div className="w-7 h-7 bg-brand-navy text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">{idx + 1}</div>
                 <div className="flex-1 min-w-0">
@@ -228,9 +228,9 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
                     <span className="font-medium text-sm text-gray-900">{step.label}</span>
                     <code className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">{step.statusCode}</code>
                   </div>
-                  {Object.entries(step.flags).filter(([, v]) => v).length > 0 && (
+                  {Object.entries(step.flags ?? {}).filter(([, v]) => v).length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
-                      {Object.entries(step.flags).filter(([, v]) => v).map(([flag, val]) => (
+                      {Object.entries(step.flags ?? {}).filter(([, v]) => v).map(([flag, val]) => (
                         <span key={flag} className="px-1.5 py-0.5 bg-brand-teal/10 text-brand-teal text-xs rounded font-medium">
                           {FLAG_LABELS[flag] || flag}{typeof val === 'string' ? `: ${val}` : ''}
                         </span>
@@ -238,15 +238,15 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
                     </div>
                   )}
                   <div className="flex flex-wrap gap-1 mt-1.5">
-                    {step.actionsForProvider.map(a => <span key={a.action} className="px-1.5 py-0.5 bg-brand-navy/10 text-brand-navy text-xs rounded">Provider: {a.label}</span>)}
-                    {step.actionsForPatient.map(a => <span key={a.action} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">Patient: {a.label}</span>)}
+                    {(step.actionsForProvider ?? []).map(a => <span key={a.action} className="px-1.5 py-0.5 bg-brand-navy/10 text-brand-navy text-xs rounded">Provider: {a.label}</span>)}
+                    {(step.actionsForPatient ?? []).map(a => <span key={a.action} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">Patient: {a.label}</span>)}
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
-            {tpl.transitions.map((tr, i) => (
+            {(tpl.transitions ?? []).map((tr, i) => (
               <span key={i} className="text-xs bg-white border border-gray-200 rounded px-2 py-1 text-gray-600">
                 {tr.from} <span className="text-brand-teal font-bold mx-1">&rarr;</span> {tr.to}
                 <span className="text-gray-400 ml-1">({tr.action})</span>

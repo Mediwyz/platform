@@ -320,7 +320,7 @@ function TemplateCard({
 
       {/* Stepper preview */}
       <WorkflowStepper
-        steps={tpl.steps.map(s => ({
+        steps={(tpl.steps ?? []).map(s => ({
           order: s.order,
           statusCode: s.statusCode,
           label: s.label,
