@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { DashboardLoadingState } from '@/components/dashboard'
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX, FiPackage, FiAlertTriangle } from 'react-icons/fi'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 const SHOP_CATEGORIES = [
   { key: 'medicines', label: 'Medicines' }, { key: 'supplements', label: 'Supplements' },
   { key: 'equipment', label: 'Equipment' }, { key: 'personal_care', label: 'Personal Care' },
@@ -142,16 +143,16 @@ export default function ProviderInventoryManager() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Inventory</h1>
-          <p className="text-sm text-gray-500 mt-1">{items.length} items &middot; Sell products to patients via the Health Shop</p>
-        </div>
-        <button onClick={openCreate} className="bg-brand-navy hover:bg-brand-teal text-white px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
-          <FiPlus className="w-4 h-4" /> Add Item
-        </button>
-      </div>
+      <DashboardPageHeader
+        icon={FiPackage}
+        title="My Inventory"
+        description={`${items.length} item${items.length !== 1 ? 's' : ''} · sell products to patients via the Health Shop`}
+        actions={
+          <button onClick={openCreate} className="bg-brand-navy hover:bg-brand-teal text-white px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
+            <FiPlus className="w-4 h-4" /> Add Item
+          </button>
+        }
+      />
 
       {msg && (
         <div className={`p-3 rounded-lg text-sm ${msg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>

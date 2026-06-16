@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { DashboardLoadingState } from '@/components/dashboard'
 import { FiChevronDown, FiChevronUp, FiCheckCircle, FiPlus, FiList, FiTrash2, FiBookOpen, FiSend, FiInbox } from 'react-icons/fi'
+import { FaProjectDiagram as FiProjectDiagram } from 'react-icons/fa'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 import Link from 'next/link'
 
 interface WorkflowTemplate {
@@ -106,37 +108,36 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Workflows</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage how bookings progress through status steps. {myTemplates.length} custom + {defaultTemplates.length} default templates.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href={createHref.replace('/create', '/library')}
-            className="bg-white hover:bg-gray-50 border border-gray-200 text-brand-navy px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
-          >
-            <FiBookOpen className="w-4 h-4" /> Browse library
-          </Link>
-          <Link
-            href={createHref.replace('/create', '/my-suggestions')}
-            className="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
-          >
-            <FiInbox className="w-4 h-4" /> My suggestions
-          </Link>
-          <Link
-            href={createHref.replace('/create', '/suggest')}
-            className="bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
-          >
-            <FiSend className="w-4 h-4" /> Suggest to admin
-          </Link>
-          <Link href={createHref} className="bg-brand-navy hover:bg-brand-teal text-white px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
-            <FiPlus className="w-4 h-4" /> Create workflow
-          </Link>
-        </div>
-      </div>
+      <DashboardPageHeader
+        icon={FiProjectDiagram}
+        title="My Workflows"
+        description={`Manage how bookings progress through status steps. ${myTemplates.length} custom + ${defaultTemplates.length} default templates.`}
+        actions={
+          <>
+            <Link
+              href={createHref.replace('/create', '/library')}
+              className="bg-white hover:bg-gray-50 border border-gray-200 text-brand-navy px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+            >
+              <FiBookOpen className="w-4 h-4" /> Browse library
+            </Link>
+            <Link
+              href={createHref.replace('/create', '/my-suggestions')}
+              className="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+            >
+              <FiInbox className="w-4 h-4" /> My suggestions
+            </Link>
+            <Link
+              href={createHref.replace('/create', '/suggest')}
+              className="bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+            >
+              <FiSend className="w-4 h-4" /> Suggest to admin
+            </Link>
+            <Link href={createHref} className="bg-brand-navy hover:bg-brand-teal text-white px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
+              <FiPlus className="w-4 h-4" /> Create workflow
+            </Link>
+          </>
+        }
+      />
 
       {pendingSuggestions > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between">
