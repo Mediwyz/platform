@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import Image from 'next/image'
-import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { useProviderRoles, ProviderRole } from '@/hooks/useProviderRoles'
 import { FaTimes, FaSpinner, FaCalendarAlt, FaChevronLeft } from 'react-icons/fa'
 
@@ -94,7 +93,6 @@ function getWeekDates(weekOffset: number): { date: string; dayName: string; dayN
 }
 
 export default function CreateBookingModal({ isOpen, onClose, onCreated, defaultProviderType, defaultProvider }: CreateBookingModalProps) {
- const user = useDashboardUser()
  const { roles } = useProviderRoles()
 
  // Steps: 1=role, 2=specialty+provider, 3=service+type, 4=date/time, 5=confirm
