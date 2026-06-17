@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, IsObject } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsObject, IsArray } from 'class-validator';
 
 /** Wizard-generated workflow attached to a new service (self-serve flow). */
 export class ServiceWorkflowDto {
@@ -66,4 +66,11 @@ export class CreateCustomServiceDto {
   @IsOptional()
   @IsObject()
   workflow?: ServiceWorkflowDto;
+
+  // Alternative to `workflow`: link the new service to EXISTING workflow
+  // templates the provider picked (appointment types) instead of generating one.
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  workflowTemplateIds?: string[];
 }

@@ -119,6 +119,8 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   const [showIconPicker, setShowIconPicker] = useState(false)
   const [createPrice, setCreatePrice] = useState('')
   const [createDuration, setCreateDuration] = useState('')
+  // Appointment-type step: build a new workflow with the wizard, or pick existing.
+  const [createMode, setCreateMode] = useState<'wizard' | 'pick'>('wizard')
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
 
@@ -239,6 +241,44 @@ export default function MyServicesManager({ providerType }: { providerType: stri
       if (!j.success) throw new Error(j.message)
       showToast('success', `"${createName}" created and ready to book`)
       resetCreateForm()
+      setPanel('list')
+      fetchMyServices()
+      fetchCatalog()
+    } catch (e) {
+      showToast('error', e instanceof Error ? e.message : 'Failed to create service')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Alternative to the wizard: create the service linked to EXISTING workflows
+  // the provider picked (one or more appointment types).
+  async function handleCreateServiceWithExisting() {
+    if (!createName.trim()) { showToast('error', 'Service name is required'); return }
+    if (newWorkflowIds.size === 0) { showToast('error', 'Pick at least one appointment type'); return }
+    setSaving(true)
+    try {
+      const res = await fetch('/api/services/custom', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: createName.trim(),
+          description: createDescription.trim() || undefined,
+          category: createCategory.trim() || undefined,
+          iconKey: createIconKey || undefined,
+          imageUrl: createImageUrl || undefined,
+          emoji: createEmoji.trim() || undefined,
+          price: createPrice ? Number(createPrice) : undefined,
+          duration: createDuration ? Number(createDuration) : undefined,
+          workflowTemplateIds: [...newWorkflowIds],
+        }),
+      })
+      const j = await res.json()
+      if (!j.success) throw new Error(j.message)
+      showToast('success', `"${createName}" created and ready to book`)
+      resetCreateForm()
+      setNewWorkflowIds(new Set())
       setPanel('list')
       fetchMyServices()
       fetchCatalog()
@@ -810,16 +850,53 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           </button>
           <div className="px-4 py-3 bg-purple-50 border border-purple-100 rounded-xl">
             <p className="text-sm font-semibold text-[#001E40]">{createName || 'New service'}</p>
-            <p className="text-xs text-gray-500">Step 2 of 2 · configure how patients book and what happens at each stage</p>
+            <p className="text-xs text-gray-500">Step 2 of 2 · choose how patients book this service</p>
           </div>
-          <WorkflowWizard
-            providerType={providerType}
-            saveLabel="Create service"
-            hideBuilderButton
-            onCancel={() => setPanel('create-service')}
-            onComplete={() => { /* builder button hidden in this flow */ }}
-            onSave={async (generated) => { await handleCreateService(generated) }}
-          />
+
+          {/* Mode toggle: build a fresh workflow with the wizard, or reuse existing ones */}
+          <div className="inline-flex p-1 bg-gray-100 rounded-xl">
+            <button
+              onClick={() => setCreateMode('wizard')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${createMode === 'wizard' ? 'bg-white text-[#0C6780] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Configure with wizard
+            </button>
+            <button
+              onClick={() => setCreateMode('pick')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${createMode === 'pick' ? 'bg-white text-[#0C6780] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Pick existing workflow
+            </button>
+          </div>
+
+          {createMode === 'wizard' ? (
+            <WorkflowWizard
+              providerType={providerType}
+              saveLabel="Create service"
+              hideBuilderButton
+              onCancel={() => setPanel('create-service')}
+              onComplete={() => { /* builder button hidden in this flow */ }}
+              onSave={async (generated) => { await handleCreateService(generated) }}
+            />
+          ) : (
+            <div className="space-y-4">
+              <p className="text-sm text-gray-500">
+                Choose one or more appointment types (workflows) patients can book for this service.
+              </p>
+              <WorkflowSelector
+                templates={availableTemplates}
+                selectedIds={newWorkflowIds}
+                onToggle={toggleNewWorkflow}
+              />
+              <button
+                onClick={handleCreateServiceWithExisting}
+                disabled={saving || newWorkflowIds.size === 0}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-[#0C6780] text-white rounded-xl text-sm font-semibold hover:bg-[#0a5568] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {saving ? 'Creating…' : `Create service${newWorkflowIds.size > 0 ? ` (${newWorkflowIds.size} type${newWorkflowIds.size !== 1 ? 's' : ''})` : ''}`}
+              </button>
+            </div>
+          )}
         </div>
       )}
 

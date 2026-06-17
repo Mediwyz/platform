@@ -184,11 +184,10 @@ export class ServicesService {
       throw new ForbiddenException('Members cannot create services. Providers and admins can.');
     }
 
-    // Self-serve wizard supplies its own workflow, so the service is bookable
-    // immediately. Only require a pre-existing template on the legacy path
-    // (no workflow provided) — otherwise a provider whose role has no admin
-    // template yet could never add their first service.
-    if (!dto.workflow) {
+    // Self-serve wizard supplies its own workflow, OR the provider picked
+    // existing templates — either way the service is bookable immediately. Only
+    // require a pre-existing template on the bare legacy path (neither given).
+    if (!dto.workflow && !dto.workflowTemplateIds?.length) {
       const templateExists = await this.prisma.workflowTemplate.findFirst({
         where: { providerType: dbUser.userType, isActive: true },
         select: { id: true },
@@ -251,6 +250,14 @@ export class ServicesService {
         await tx.providerServiceWorkflow.create({
           data: { providerServiceConfigId: config.id, workflowTemplateId: template.id },
         });
+      } else if (dto.workflowTemplateIds?.length) {
+        // Provider picked existing workflow templates (appointment types) — link
+        // each to this service's config. De-duped against accidental repeats.
+        for (const tplId of [...new Set(dto.workflowTemplateIds)]) {
+          await tx.providerServiceWorkflow.create({
+            data: { providerServiceConfigId: config.id, workflowTemplateId: tplId },
+          });
+        }
       }
 
       return service;
