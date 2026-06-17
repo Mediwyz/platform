@@ -32,8 +32,8 @@ export default function DashboardPageHeader({ title, description, icon: Icon, ac
           <span aria-hidden>←</span> {back.label}
         </button>
       )}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3 min-w-0">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-start gap-3 min-w-[200px] flex-1">
           {Icon && (
             <span className="w-11 h-11 rounded-xl bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center flex-shrink-0">
               <Icon className="text-xl" />
@@ -44,7 +44,7 @@ export default function DashboardPageHeader({ title, description, icon: Icon, ac
             {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
           </div>
         </div>
-        {actions && <div className="flex-shrink-0 flex items-center gap-2">{actions}</div>}
+        {actions && <div className="flex items-center gap-2 flex-wrap">{actions}</div>}
       </div>
     </div>
   )

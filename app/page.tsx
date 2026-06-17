@@ -5,6 +5,7 @@ import HowItWorksSection from '@/components/home/HowItWorksSection'
 import CompanyTrustBar from '@/components/home/CompanyTrustBar'
 import WhyMediWyzSection from '@/components/home/WhyMediWyzSection'
 import FeatureShowcase from '@/components/home/FeatureShowcase'
+import ProductTour from '@/components/home/ProductTour'
 import AppDownloadSection from '@/components/home/AppDownloadSection'
 import FinalCtaSection from '@/components/home/FinalCtaSection'
 import StickyCTABar from '@/components/home/StickyCTABar'
@@ -29,6 +30,9 @@ export default function HomePage() {
 
       {/* 4 - Feature showcase: every capability of the platform (bento grid) */}
       <FeatureShowcase />
+
+      {/* 4b - Product tour: real screenshots of the live app (member + provider) */}
+      <ProductTour />
 
       {/* 5 - Value props: why choose MediWyz */}
       <WhyMediWyzSection />
