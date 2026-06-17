@@ -69,6 +69,10 @@ const nextConfig: NextConfig = {
       {
         pathname: '/icons/**',
       },
+      {
+        // Landing-page product-tour screenshots (scripts/capture-showcase.mjs)
+        pathname: '/showcase/**',
+      },
     ],
     remotePatterns: [
       {
