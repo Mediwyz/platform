@@ -3,9 +3,22 @@
 import { useState, useEffect, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { FaShieldAlt, FaTimes, FaUser, FaChevronRight, FaPlus, FaFlask, FaPills, FaSearch, FaExternalLinkAlt } from 'react-icons/fa'
+import {
+ FaShieldAlt, FaTimes, FaUser, FaPlus, FaFlask, FaPills, FaSearch, FaExternalLinkAlt,
+ FaHeartbeat, FaArrowLeft, FaUserMd, FaUserNurse, FaBaby, FaAmbulance,
+ FaHandHoldingHeart, FaWalking, FaTooth, FaEye, FaAppleAlt, FaCapsules, FaCalendarAlt,
+} from 'react-icons/fa'
+import type { IconType } from 'react-icons'
 import { useProviderRoles } from '@/hooks/useProviderRoles'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
+import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
+
+// Icon per provider role code — falls back to a generic user icon.
+const ROLE_ICON: Record<string, IconType> = {
+ DOCTOR: FaUserMd, NURSE: FaUserNurse, NANNY: FaBaby, PHARMACIST: FaCapsules,
+ LAB_TECHNICIAN: FaFlask, EMERGENCY_WORKER: FaAmbulance, CAREGIVER: FaHandHoldingHeart,
+ PHYSIOTHERAPIST: FaWalking, DENTIST: FaTooth, OPTOMETRIST: FaEye, NUTRITIONIST: FaAppleAlt,
+}
 
 const InsuranceContent = dynamic(() => import('@/components/health/MyInsurance'), { ssr: false, loading: () => <Loading /> })
 const CreateBookingModal = dynamic(() => import('@/components/shared/CreateBookingModal'), { ssr: false })
@@ -254,11 +267,7 @@ function ProviderBookingsList({ providerType, title }: { providerType: string; t
  )
 }
 
-// ─── Sidebar ────────────────────────────────────────────────────────────────
-
-const FIXED_SECTIONS = [
- { id: 'insurance', label: 'Insurance', icon: FaShieldAlt, color: 'text-indigo-600', bgColor: 'bg-indigo-50' },
-]
+// ─── My Health (card grid → detail) ──────────────────────────────────────────
 
 const COLOR_MAP: Record<string, { text: string; bg: string }> = {
  blue: { text: 'text-blue-600', bg: 'bg-blue-50' },
@@ -276,129 +285,65 @@ const COLOR_MAP: Record<string, { text: string; bg: string }> = {
 }
 
 export default function MyHealthSidebar() {
+ // null = show the card grid; otherwise the selected section's detail view.
  const [activeSection, setActiveSection] = useState<string | null>(null)
- const [sidebarOpen, setSidebarOpen] = useState(false)
  const [showBookingModal, setShowBookingModal] = useState(false)
  const { roles } = useProviderRoles()
 
- // Auto-select first provider role when loaded
+ // Booking counts per role, so the cards show real activity (not an empty page).
+ const [countByRole, setCountByRole] = useState<Record<string, number>>({})
  useEffect(() => {
- if (!activeSection && roles.length > 0) {
- setActiveSection(`role:${roles[0].role}`)
+ fetch('/api/bookings/unified?role=patient', { credentials: 'include' })
+ .then(r => r.json())
+ .then(json => {
+ if (json.success && Array.isArray(json.data)) {
+ const counts: Record<string, number> = {}
+ for (const b of json.data as Record<string, unknown>[]) {
+ const key = (b.providerRole || b.providerType) as string
+ if (key) counts[key] = (counts[key] || 0) + 1
  }
- }, [roles, activeSection])
+ setCountByRole(counts)
+ }
+ })
+ .catch(() => {})
+ }, [])
 
- const allSections = useMemo(() => {
- const dynamic = roles.map(r => ({
- id: `role:${r.role}`,
- label: r.label,
- icon: FaUser,
- color: COLOR_MAP[r.color]?.text || 'text-gray-600',
- bgColor: COLOR_MAP[r.color]?.bg || 'bg-gray-50',
- providerType: r.role,
- }))
- return [
- ...dynamic,
- ...FIXED_SECTIONS.map(s => ({ ...s, providerType: undefined as string | undefined })),
- ]
- }, [roles])
+ const activeItem = useMemo(() => {
+ if (!activeSection) return null
+ if (activeSection === 'insurance') return { label: 'Insurance', providerType: undefined as string | undefined }
+ const code = activeSection.replace('role:', '')
+ const r = roles.find(x => x.role === code)
+ return { label: r?.label || 'Provider', providerType: code }
+ }, [activeSection, roles])
 
- const activeItem = allSections.find(s => s.id === activeSection) || allSections[0]
- const isProviderSection = (activeSection || '').startsWith('role:')
- const activeProviderType = isProviderSection ? (activeSection || '').replace('role:', '') : null
+ const activeProviderType = activeItem?.providerType ?? null
+ const isProviderSection = !!activeProviderType
 
+ // ── DETAIL VIEW ─────────────────────────────────────────────────────────
+ if (activeSection) {
+ const Icon = activeProviderType ? (ROLE_ICON[activeProviderType] || FaUser) : FaShieldAlt
  return (
- <div className="flex h-full flex-row-reverse">
- {/* Mobile: floating button to open sidebar */}
- <button
- onClick={() => setSidebarOpen(true)}
- className={`sm:hidden fixed bottom-20 right-3 z-40 flex items-center gap-2 px-3 py-2.5 rounded-full shadow-lg text-sm font-medium ${activeItem?.bgColor} ${activeItem?.color} border border-gray-200`}
- >
- <FaUser className="text-xs" />
- <span className="max-w-[120px] truncate">{activeItem?.label}</span>
- <FaChevronRight className="text-[8px] opacity-60" />
- </button>
-
- {/* Backdrop */}
- {sidebarOpen && <div className="sm:hidden fixed inset-0 bg-black/30 z-50" onClick={() => setSidebarOpen(false)} />}
-
- {/* Sidebar - right side */}
- <div className={`
- fixed sm:sticky top-0 right-0 z-50 sm:z-auto
- h-full w-64 sm:w-52 lg:w-60
- bg-white border-l border-gray-200 overflow-y-auto
- transform transition-transform duration-150 sm:transform-none
- ${sidebarOpen ? 'translate-x-0' : 'translate-x-full sm:translate-x-0'}
- `}>
- <div className="flex items-center justify-between p-3 sm:hidden">
- <span className="text-sm font-bold text-gray-900">My Health</span>
- <button onClick={() => setSidebarOpen(false)} className="p-1 text-gray-400"><FaTimes /></button>
- </div>
-
- {/* Provider Services (all roles) */}
- <div className="px-2 pt-2">
- <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-wider px-2 mb-1">Provider Services</p>
- <nav className="space-y-0.5">
- {roles.map(r => {
- const sectionId = `role:${r.role}`
- const colors = COLOR_MAP[r.color] || COLOR_MAP.gray
- return (
- <button key={sectionId} onClick={() => { setActiveSection(sectionId); setSidebarOpen(false) }}
- className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-xs transition ${
- activeSection === sectionId ? `${colors.bg} ${colors.text} font-semibold` : 'text-gray-600 hover:bg-gray-50'
- }`}>
- <FaUser className="text-xs flex-shrink-0" /> {r.label}
- {r.providerCount > 0 && <span className="ml-auto text-[9px] text-gray-400">{r.providerCount}</span>}
- </button>
- )
- })}
- </nav>
- </div>
-
- {/* Other sections */}
- <div className="px-2 pt-3">
- <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-wider px-2 mb-1">Other</p>
- <nav className="space-y-0.5 pb-20">
- {FIXED_SECTIONS.map(s => (
- <button key={s.id} onClick={() => { setActiveSection(s.id); setSidebarOpen(false) }}
- className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-xs transition ${
- activeSection === s.id ? `${s.bgColor} ${s.color} font-semibold` : 'text-gray-600 hover:bg-gray-50'
- }`}>
- <s.icon className="text-xs flex-shrink-0" /> {s.label}
- </button>
- ))}
- </nav>
- </div>
- </div>
-
- {/* Content area */}
- <div className="flex-1 min-w-0 pb-24 sm:pb-0">
- {/* Header with Book button (for provider role sections) */}
- {isProviderSection && (
- <div className="flex items-center justify-between p-4 pb-0">
- <h2 className="text-lg font-bold text-gray-900">{activeItem?.label || 'Services'}</h2>
+ <div className="max-w-3xl mx-auto">
+ <DashboardPageHeader
+ icon={Icon}
+ title={activeItem?.label || 'My Health'}
+ description={isProviderSection ? 'Your visits, results and prescriptions with this provider type.' : 'Your insurance cover, contributions and claims.'}
+ back={{ label: 'All of my health', onClick: () => setActiveSection(null) }}
+ actions={isProviderSection ? (
  <button
  onClick={() => setShowBookingModal(true)}
- className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
+ className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0C6780] text-white rounded-lg text-sm font-semibold hover:bg-[#0a5568] transition"
  >
- <FaPlus className="text-xs" /> Book
+ <FaPlus className="text-xs" /> Book new
  </button>
- </div>
- )}
-
- <div className="p-4">
- {activeSection === 'insurance' && <InsuranceContent />}
- {/* Provider role sections with enhanced action buttons */}
- {isProviderSection && activeProviderType && (
- <ProviderBookingsList
- providerType={activeProviderType}
- title={activeItem?.label || 'Services'}
+ ) : undefined}
  />
- )}
- </div>
- </div>
 
- {/* Booking modal */}
+ {activeSection === 'insurance' && <InsuranceContent />}
+ {isProviderSection && activeProviderType && (
+ <ProviderBookingsList providerType={activeProviderType} title={activeItem?.label || 'Services'} />
+ )}
+
  {showBookingModal && activeProviderType && (
  <CreateBookingModal
  isOpen={showBookingModal}
@@ -407,6 +352,62 @@ export default function MyHealthSidebar() {
  defaultProviderType={activeProviderType}
  />
  )}
+ </div>
+ )
+ }
+
+ // ── GRID VIEW (default) ─────────────────────────────────────────────────
+ return (
+ <div className="max-w-5xl mx-auto">
+ <DashboardPageHeader
+ icon={FaHeartbeat}
+ title="My Health"
+ description="Your care across every provider — pick a category to see your visits, results and prescriptions, or book a new appointment."
+ />
+
+ <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+ {roles.map(r => {
+ const colors = COLOR_MAP[r.color] || COLOR_MAP.gray
+ const Icon = ROLE_ICON[r.role] || FaUser
+ const visits = countByRole[r.role] || 0
+ return (
+ <button
+ key={r.role}
+ onClick={() => setActiveSection(`role:${r.role}`)}
+ className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
+ hover:shadow-lg hover:-translate-y-0.5 hover:border-[#0C6780]/30 transition-all duration-200
+ focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]"
+ >
+ <span className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 ${colors.bg} ${colors.text}`}>
+ <Icon className="text-xl" />
+ </span>
+ <span className="text-sm font-bold text-[#001E40] leading-tight">{r.label}</span>
+ <span className="text-[11px] text-gray-400 mt-0.5">{r.providerCount} available</span>
+ <span className={`mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold ${visits > 0 ? colors.text : 'text-gray-400'}`}>
+ {visits > 0 ? `${visits} visit${visits !== 1 ? 's' : ''}` : 'No visits yet'}
+ <FaCalendarAlt className="text-[9px]" />
+ </span>
+ </button>
+ )
+ })}
+
+ {/* Insurance card */}
+ <button
+ onClick={() => setActiveSection('insurance')}
+ className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
+ hover:shadow-lg hover:-translate-y-0.5 hover:border-indigo-300 transition-all duration-200
+ focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+ >
+ <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 bg-indigo-50 text-indigo-600">
+ <FaShieldAlt className="text-xl" />
+ </span>
+ <span className="text-sm font-bold text-[#001E40] leading-tight">Insurance</span>
+ <span className="text-[11px] text-gray-400 mt-0.5">Cover & claims</span>
+ <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-600">
+ Manage <FaArrowLeft className="text-[9px] rotate-180" />
+ </span>
+ </button>
+ </div>
  </div>
  )
 }
