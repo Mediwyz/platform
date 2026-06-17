@@ -76,6 +76,7 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  const json = await res.json()
  if (json.success) {
  await fetchWallet()
+ if (typeof window !== 'undefined') window.dispatchEvent(new Event('mediwyz:wallet-changed'))
  setShowReset(false)
  setCustomReset('')
  toast.success('Credit reset successfully')

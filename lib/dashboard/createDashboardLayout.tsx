@@ -9,7 +9,7 @@ import { useDynamicSearchItems } from '@/hooks/useDynamicSearchItems'
 import { useRoleFeatureConfig, filterSidebarByFeatures } from '@/hooks/useRoleFeatureConfig'
 import { useCorporateCapability } from '@/hooks/useCorporateCapability'
 import { useInsuranceCapability } from '@/hooks/useInsuranceCapability'
-import { FaBuilding, FaShieldAlt, FaUserCircle, FaGift, FaBell } from 'react-icons/fa'
+import { FaBuilding, FaShieldAlt, FaGift, FaBell } from 'react-icons/fa'
 
 interface UserData {
   id: string
@@ -140,25 +140,19 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     // Filter sidebar items based on role feature config (admin-configurable)
     finalSidebarItems = filterSidebarByFeatures(finalSidebarItems, featureConfig)
 
-    // Inject "My Profile" near the TOP of the sidebar - right after the
-    // Dashboard/overview item. User explicitly asked for top placement;
-    // profile is a primary-navigation target, not a Search & Browse
-    // afterthought.
-    if (hookUser?.id && !finalSidebarItems.some(i => i.id === 'my-profile')) {
-      const profileItem = {
-        id: 'my-profile', label: 'My Profile', icon: FaUserCircle,
-        color: 'text-[#0C6780]', bgColor: 'bg-sky-50',
-        href: `/profile/${hookUser.id}`,
+    // My Profile is NOT a sidebar item — it lives in the header (avatar +
+    // name link to the profile). Remove it if any sidebar config still emits it.
+    finalSidebarItems = finalSidebarItems.filter((i) => i.id !== 'my-profile')
+
+    // Promote "My Health" to the top — it's a primary member surface, so it
+    // belongs in the first few items (right after Dashboard), not buried mid-list.
+    {
+      const mhIdx = finalSidebarItems.findIndex((i) => i.id === 'my-health')
+      if (mhIdx > -1) {
+        const [mh] = finalSidebarItems.splice(mhIdx, 1)
+        const overviewIdx = finalSidebarItems.findIndex((i) => i.id === 'overview')
+        finalSidebarItems.splice(overviewIdx >= 0 ? overviewIdx + 1 : 0, 0, mh)
       }
-      const overviewIdx = finalSidebarItems.findIndex((i) => i.id === 'overview')
-      const insertAt = overviewIdx >= 0
-        ? overviewIdx + 1
-        : Math.min(1, finalSidebarItems.length)
-      finalSidebarItems = [
-        ...finalSidebarItems.slice(0, insertAt),
-        profileItem,
-        ...finalSidebarItems.slice(insertAt),
-      ]
     }
 
     // Inject "My Company" entry for any user with corporate-admin capability - 
@@ -213,6 +207,10 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       })
     }
 
+    // Billing link for the header wallet pill — derived from the sidebar's
+    // billing item so it works for any role's base path.
+    const billingHref = finalSidebarItems.find((i) => i.id === 'billing')?.href
+
     const content = (
       <DashboardLayout
         userName={displayName}
@@ -223,6 +221,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
         notificationCount={0}
         profileHref={profileHref || settingsHref}
         networkHref={networkHref}
+        billingHref={billingHref}
         onLogout={handleLogout}
       >
         {children}

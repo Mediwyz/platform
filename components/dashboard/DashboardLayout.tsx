@@ -19,6 +19,7 @@ interface DashboardLayoutProps {
  settingsHref?: string
  profileHref?: string
  networkHref?: string
+ billingHref?: string
  onLogout: () => void
  sidebarFooter?: React.ReactNode
  /** Extra classes applied to the <main> scroll container (e.g. "!p-0" for full-bleed pages). */
@@ -36,6 +37,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  settingsHref,
  profileHref,
  networkHref,
+ billingHref,
  onLogout,
  sidebarFooter,
  mainClassName,
@@ -169,6 +171,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  notificationCount={notificationCount}
  profileHref={resolvedProfileHref}
  networkHref={networkHref}
+ billingHref={billingHref}
  sidebarOpen={sidebarOpen}
  onToggleSidebar={handleToggleSidebar}
  onLogout={onLogout}

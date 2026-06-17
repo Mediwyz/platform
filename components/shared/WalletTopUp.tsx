@@ -44,6 +44,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  if (json.success) {
  setShowForm(false)
  setAmount('')
+ if (typeof window !== 'undefined') window.dispatchEvent(new Event('mediwyz:wallet-changed'))
  onSuccess()
  } else {
  setError(json.message || 'Top-up failed')

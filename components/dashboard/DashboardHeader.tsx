@@ -10,7 +10,9 @@ import {
  FaSignOutAlt,
  FaUserFriends,
  FaHome,
+ FaWallet,
 } from 'react-icons/fa'
+import { getCurrencySymbol } from '@/lib/currency'
 import HealthwyzLogo from '@/components/ui/HealthwyzLogo'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import { useTranslation } from '@/lib/i18n'
@@ -26,6 +28,7 @@ interface DashboardHeaderProps {
  notificationCount: number
  profileHref: string
  networkHref?: string
+ billingHref?: string
  sidebarOpen: boolean
  onToggleSidebar: () => void
  onLogout: () => void
@@ -39,6 +42,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  userSubtitle,
  profileHref,
  networkHref,
+ billingHref,
  sidebarOpen,
  onToggleSidebar,
  onLogout,
@@ -47,6 +51,22 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  const { t } = useTranslation()
  const [planLabel, setPlanLabel] = useState<string | null>(null)
  const [pendingConnectionCount, setPendingConnectionCount] = useState(0)
+ const [wallet, setWallet] = useState<{ balance: number; currency: string } | null>(null)
+
+ // Wallet balance — shown in the header so the member is always aware of their
+ // available credit. Refetched when a wallet movement happens (Socket.IO event).
+ useEffect(() => {
+ if (!userId) return
+ let cancelled = false
+ const load = () => fetch(`/api/users/${userId}/wallet`, { credentials: 'include' })
+ .then(r => r.json())
+ .then(j => { if (!cancelled && j.success && j.data) setWallet({ balance: j.data.balance, currency: j.data.currency }) })
+ .catch(() => {})
+ load()
+ const onWallet = () => load()
+ if (typeof window !== 'undefined') window.addEventListener('mediwyz:wallet-changed', onWallet)
+ return () => { cancelled = true; if (typeof window !== 'undefined') window.removeEventListener('mediwyz:wallet-changed', onWallet) }
+ }, [userId])
 
  // Fetch user's subscription plan label
  useEffect(() => {
@@ -155,6 +175,19 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  </div>
  )}
  </Link>
+
+ {/* Wallet balance — always-visible billing awareness, links to billing */}
+ {wallet && (
+ <Link
+ href={billingHref || '#'}
+ className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+ aria-label={`Wallet balance ${getCurrencySymbol(wallet.currency)} ${wallet.balance.toLocaleString()}`}
+ title="Your account balance"
+ >
+ <FaWallet className="text-sm" aria-hidden="true" />
+ <span className="text-xs sm:text-sm font-bold whitespace-nowrap">{getCurrencySymbol(wallet.currency)} {wallet.balance.toLocaleString()}</span>
+ </Link>
+ )}
 
  {/* Network / Connections - hidden on very small mobile */}
  {networkHref && (
