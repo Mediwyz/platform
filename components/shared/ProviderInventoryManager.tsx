@@ -5,6 +5,7 @@ import { useDashboardUser } from '@/hooks/useDashboardUser'
 import { DashboardLoadingState } from '@/components/dashboard'
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX, FiPackage, FiAlertTriangle } from 'react-icons/fi'
 import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
+import CmsImageUpload from '@/components/shared/CmsImageUpload'
 const SHOP_CATEGORIES = [
   { key: 'medicines', label: 'Medicines' }, { key: 'supplements', label: 'Supplements' },
   { key: 'equipment', label: 'Equipment' }, { key: 'personal_care', label: 'Personal Care' },
@@ -28,6 +29,7 @@ interface InventoryItem {
   requiresPrescription: boolean
   isFeatured: boolean
   sideEffects: string[]
+  imageUrl?: string | null
   healthcareEntityId?: string | null
   healthcareEntity?: { id: string; name: string; type: string } | null
 }
@@ -39,7 +41,7 @@ type FormData = Omit<InventoryItem, 'id' | 'inStock' | 'healthcareEntity'>
 const defaultForm: FormData = {
   name: '', genericName: '', category: '', description: '', unitOfMeasure: 'unit',
   strength: '', dosageForm: '', price: 0, quantity: 0, minStockAlert: 5,
-  requiresPrescription: false, isFeatured: false, sideEffects: [], healthcareEntityId: '',
+  requiresPrescription: false, isFeatured: false, sideEffects: [], imageUrl: '', healthcareEntityId: '',
 }
 
 export default function ProviderInventoryManager() {
@@ -273,6 +275,16 @@ export default function ProviderInventoryManager() {
                 <div className="col-span-2">
                   <label className="text-xs font-medium text-gray-600 block mb-1">Description</label>
                   <textarea value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal" />
+                </div>
+                <div className="col-span-2">
+                  <CmsImageUpload
+                    value={form.imageUrl || ''}
+                    onChange={(url) => setForm({ ...form, imageUrl: url })}
+                    label="Product photo"
+                  />
+                  <p className="text-[11px] text-gray-400 mt-1">
+                    Upload a real photo of the product (the box, bottle or device). Shown on the Health Shop card.
+                  </p>
                 </div>
                 {myOrgs.length > 0 && (
                   <div className="col-span-2">
