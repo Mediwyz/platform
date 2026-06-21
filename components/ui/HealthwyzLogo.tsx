@@ -6,13 +6,16 @@ interface HealthwyzLogoProps {
   height?: number
   className?: string
   showText?: boolean
+  /** Use white text (for dark / navy backgrounds). */
+  light?: boolean
 }
 
 const HealthwyzLogo: React.FC<HealthwyzLogoProps> = ({
   width = 200,
   height = 60,
   className = "",
-  showText = true
+  showText = true,
+  light = false,
 }) => {
   // Font size determines the visual height of text
   const fontSize = Math.max(height * 0.4, 16)
@@ -32,7 +35,7 @@ const HealthwyzLogo: React.FC<HealthwyzLogoProps> = ({
       {showText && (
         <span
           style={{ fontSize, letterSpacing: '-0.5px', lineHeight: 1 }}
-          className="font-bold text-brand-navy whitespace-nowrap"
+          className={`font-bold whitespace-nowrap ${light ? 'text-white' : 'text-brand-navy'}`}
         >
           MediWyz
         </span>

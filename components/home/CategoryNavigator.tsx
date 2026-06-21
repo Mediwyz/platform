@@ -16,6 +16,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import type { IconType } from 'react-icons'
 import {
   MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
@@ -37,13 +38,14 @@ interface Entity {
   label: string
   blurb: string
   Icon: IconType
+  img: string
 }
 
 const ENTITIES: Entity[] = [
-  { key: 'services',      label: 'Services',      blurb: 'Consultations & treatments',     Icon: MdMedicalServices },
-  { key: 'providers',     label: 'Providers',     blurb: 'Qualified professionals',         Icon: MdPeople },
-  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals, labs & insurers', Icon: MdLocalHospital },
-  { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart },
+  { key: 'services',      label: 'Services',      blurb: 'Consultations & treatments',     Icon: MdMedicalServices, img: 'video_consult.jpg' },
+  { key: 'providers',     label: 'Providers',     blurb: 'Qualified professionals',         Icon: MdPeople,          img: 'doctor_team.jpg' },
+  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals, labs & insurers', Icon: MdLocalHospital, img: 'hospital.jpg' },
+  { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart,    img: 'pharmacy.jpg' },
 ]
 
 // ── Provider role icon mapping (by role code) ───────────────────────────────
@@ -212,19 +214,25 @@ export default function CategoryNavigator() {
                 <button
                   key={e.key}
                   onClick={() => pickEntity(e.key)}
-                  className="group flex flex-col items-start text-left p-8 sm:p-10 rounded-3xl bg-white border border-gray-100
-                    shadow-sm hover:shadow-xl hover:border-[#0C6780]/30 hover:-translate-y-1 transition-all duration-200
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
+                  className="group relative overflow-hidden flex flex-col items-start justify-end text-left min-h-[230px] p-8 sm:p-9 rounded-3xl text-white
+                    shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-200
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
                 >
-                  <span
-                    className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 transition-colors group-hover:scale-105"
-                    style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}
-                  >
-                    <Icon size={40} aria-hidden />
+                  <Image
+                    src={`/images/landing/${e.img}`}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#001E40] via-[#001E40]/60 to-[#001E40]/15" />
+                  <span aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+                  <span className="relative w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-5 transition-transform group-hover:scale-105">
+                    <Icon size={34} aria-hidden className="text-white" />
                   </span>
-                  <span className="text-xl sm:text-2xl font-bold text-[#001E40]">{e.label}</span>
-                  <span className="text-base text-gray-500 mt-1.5">{e.blurb}</span>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-[#0C6780] group-hover:gap-2.5 transition-all">
+                  <span className="relative text-xl sm:text-2xl font-bold drop-shadow-sm">{e.label}</span>
+                  <span className="relative text-base text-white/80 mt-1.5">{e.blurb}</span>
+                  <span className="relative mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-brand-sky group-hover:gap-2.5 transition-all">
                     Browse <MdArrowForward size={16} aria-hidden />
                   </span>
                 </button>

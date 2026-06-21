@@ -179,10 +179,10 @@ const Navbar: React.FC = () => {
  return (
  <nav role="navigation" aria-label="Main navigation" className="sticky top-0 z-50">
  {/* Spacer for Android status bar in Capacitor WebView */}
- {isCapacitor && <div className="bg-white h-14" />}
+ {isCapacitor && <div className="bg-brand-navy h-14" />}
  {/* Brand gradient accent line */}
  <div className="h-1 bg-brand-teal " />
- <div className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 py-1.5">
+ <div className="bg-brand-navy/95 backdrop-blur-md shadow-md border-b border-white/10 py-1.5">
  {/* Skip to content link */}
  <a
  href="#main-content"
@@ -197,6 +197,7 @@ const Navbar: React.FC = () => {
  <HealthwyzLogo
  width={isMobile ? 120 : 150}
  height={isMobile ? 34 : 40}
+ light
  />
  </Link>
 
@@ -204,7 +205,7 @@ const Navbar: React.FC = () => {
  <div className="hidden xl:flex items-center space-x-6">
  <Link
  href="/"
- className="flex items-center space-x-1 text-gray-700 hover:text-brand-teal transition-colors duration-200 px-2 py-1 rounded-md hover:bg-sky-50"
+ className="flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1 rounded-md hover:bg-white/10"
  >
  <FaHome className="text-sm" />
  <span className="text-sm font-medium">Home</span>
@@ -214,7 +215,7 @@ const Navbar: React.FC = () => {
  {!isLoggedIn && (
  <div className="relative group">
  <button
- className="flex items-center space-x-1 text-gray-700 hover:text-brand-teal transition-colors duration-200 px-2 py-1 rounded-md hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+ className="flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
  aria-haspopup="true"
  aria-label="Services menu"
  >
@@ -254,7 +255,7 @@ const Navbar: React.FC = () => {
 
  <Link
  href="/about"
- className="flex items-center space-x-1 text-gray-700 hover:text-brand-teal transition-colors duration-200 px-2 py-1 rounded-md hover:bg-sky-50"
+ className="flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1 rounded-md hover:bg-white/10"
  >
  <FaInfoCircle className="text-sm" />
  <span className="text-sm font-medium">About</span>
@@ -262,7 +263,7 @@ const Navbar: React.FC = () => {
 
  <Link
  href="/contact"
- className="flex items-center space-x-1 text-gray-700 hover:text-brand-teal transition-colors duration-200 px-2 py-1 rounded-md hover:bg-sky-50"
+ className="flex items-center space-x-1 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1 rounded-md hover:bg-white/10"
  >
  <FaPhone className="text-sm" />
  <span className="text-sm font-medium">Contact</span>
@@ -281,7 +282,7 @@ const Navbar: React.FC = () => {
  <>
  <Link
  href={profileHref}
- className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-brand-teal hover:bg-sky-50 rounded-lg transition-colors text-sm font-medium"
+ className="flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium"
  >
  <FaUser className="text-sm" />
  <span>My Profile</span>
@@ -298,7 +299,7 @@ const Navbar: React.FC = () => {
  <>
  <Link
  href="/login"
- className="px-4 py-2.5 border-2 border-brand-teal text-brand-teal rounded-full hover:bg-sky-50 transition-all duration-200 font-medium text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2"
+ className="px-4 py-2.5 border-2 border-white/50 text-white rounded-full hover:bg-white/10 transition-all duration-200 font-medium text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2"
  >
  Sign In
  </Link>
@@ -315,7 +316,7 @@ const Navbar: React.FC = () => {
  {/* Mobile Menu Button */}
  <button
  onClick={() => setIsMenuOpen(!isMenuOpen)}
- className="xl:hidden text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+ className="xl:hidden text-white p-2 rounded-md hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
  aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
  aria-expanded={isMenuOpen}
  >
@@ -326,7 +327,7 @@ const Navbar: React.FC = () => {
  {/* Mobile/Tablet Menu */}
  {isMenuOpen && (
  <div className="xl:hidden">
- <div className="py-4 border-t border-gray-200">
+ <div className="py-4 border-t border-white/10">
  {/* Mobile Search */}
  <div className="px-2 mb-4">
  <SearchAutocomplete variant="navbar" placeholder="Search doctors, medicines..." />
@@ -336,10 +337,10 @@ const Navbar: React.FC = () => {
  <div className="space-y-2 px-2">
  <Link
  href="/"
- className="flex items-center space-x-3 text-gray-700 py-3 px-3 rounded-lg transition-colors"
+ className="flex items-center space-x-3 text-white/90 py-3 px-3 rounded-lg transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
- <FaHome className="text-brand-teal" />
+ <FaHome className="text-brand-sky" />
  <span className="font-medium">Home</span>
  </Link>
 
@@ -350,14 +351,14 @@ const Navbar: React.FC = () => {
  <Link
  key={service.href}
  href={getServiceHref(service.href)}
- className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 hover:bg-sky-50 transition-colors"
+ className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 hover:bg-white/10 transition-colors"
  onClick={() => setIsMenuOpen(false)}
  aria-label={service.label}
  >
  <div className={`w-10 h-10 rounded-xl ${service.color} flex items-center justify-center shadow-sm`}>
  <service.icon className="text-white text-sm" />
  </div>
- <span className="text-[11px] font-medium text-gray-700 text-center leading-tight">{service.label}</span>
+ <span className="text-[11px] font-medium text-white/90 text-center leading-tight">{service.label}</span>
  </Link>
  ))}
  </div>
@@ -367,10 +368,10 @@ const Navbar: React.FC = () => {
  {!isLoggedIn && (
  <div className="hidden sm:block">
  {Object.entries(serviceCategories).map(([category, services]) => (
- <div key={category} className="border-b border-gray-100 pb-3 mb-3">
+ <div key={category} className="border-b border-white/10 pb-3 mb-3">
  <button
  onClick={() => toggleDropdown(category)}
- className="flex items-center justify-between w-full text-left py-2 px-3 text-gray-800 font-semibold hover:bg-gray-50 rounded-lg transition-colors"
+ className="flex items-center justify-between w-full text-left py-2 px-3 text-white font-semibold hover:bg-white/10 rounded-lg transition-colors"
  >
  <span className="text-sm">{category}</span>
  <FaChevronDown
@@ -386,10 +387,10 @@ const Navbar: React.FC = () => {
  <Link
  key={service.href}
  href={getServiceHref(service.href)}
- className="flex items-center space-x-3 py-2.5 px-3 text-gray-600 rounded-lg transition-colors"
+ className="flex items-center space-x-3 py-2.5 px-3 text-white/80 rounded-lg transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
- <service.icon className="text-brand-teal" />
+ <service.icon className="text-brand-sky" />
  <span>{service.label}</span>
  </Link>
  ))}
@@ -402,19 +403,19 @@ const Navbar: React.FC = () => {
 
  <Link
  href="/about"
- className="flex items-center space-x-3 text-gray-700 py-3 px-3 rounded-lg transition-colors"
+ className="flex items-center space-x-3 text-white/90 py-3 px-3 rounded-lg transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
- <FaInfoCircle className="text-brand-teal" />
+ <FaInfoCircle className="text-brand-sky" />
  <span className="font-medium">About</span>
  </Link>
 
  <Link
  href="/contact"
- className="flex items-center space-x-3 text-gray-700 py-3 px-3 rounded-lg transition-colors"
+ className="flex items-center space-x-3 text-white/90 py-3 px-3 rounded-lg transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
- <FaPhone className="text-brand-teal" />
+ <FaPhone className="text-brand-sky" />
  <span className="font-medium">Contact</span>
  </Link>
  </div>
@@ -425,12 +426,12 @@ const Navbar: React.FC = () => {
  </div>
 
  {/* Mobile Auth Buttons */}
- <div className="pt-4 px-2 space-y-3 border-t border-gray-200 mt-4">
+ <div className="pt-4 px-2 space-y-3 border-t border-white/10 mt-4">
  {isLoggedIn ? (
  <>
  <Link
  href={profileHref}
- className="flex items-center justify-center gap-2 py-3 border-2 border-brand-teal text-brand-teal rounded-full font-medium hover:bg-sky-50 transition-colors"
+ className="flex items-center justify-center gap-2 py-3 border-2 border-white/50 text-white rounded-full font-medium hover:bg-white/10 transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
  <FaUser /> My Profile
@@ -446,7 +447,7 @@ const Navbar: React.FC = () => {
  <>
  <Link
  href="/login"
- className="block text-center py-3 border-2 border-brand-teal text-brand-teal rounded-full font-medium hover:bg-sky-50 transition-colors"
+ className="block text-center py-3 border-2 border-white/50 text-white rounded-full font-medium hover:bg-white/10 transition-colors"
  onClick={() => setIsMenuOpen(false)}
  >
  Sign In
