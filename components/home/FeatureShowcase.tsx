@@ -10,6 +10,7 @@
  */
 
 import Link from 'next/link'
+import Image from 'next/image'
 import type { IconType } from 'react-icons'
 import {
   FaVideo, FaComments, FaShoppingBag, FaNewspaper, FaAmbulance,
@@ -36,10 +37,10 @@ interface Feature {
   title: string
   desc: string
   href: string
+  /** Background photo (under /public/images/landing/). */
+  img: string
   /** Tailwind column/row span classes for the bento layout (lg+). */
   span?: string
-  /** Render as a dark feature tile (navy gradient) for visual rhythm. */
-  dark?: boolean
 }
 
 const FEATURES: Feature[] = [
@@ -48,14 +49,15 @@ const FEATURES: Feature[] = [
     title: 'Video & audio consultations',
     desc: 'Meet any provider over clinic-grade encrypted WebRTC video or audio - from home, at your scheduled time.',
     href: '/search/doctors',
+    img: 'video_consult.jpg',
     span: 'lg:col-span-2 lg:row-span-2',
-    dark: true,
   },
   {
     Icon: FaMapMarkedAlt,
     title: 'Find care near you',
     desc: 'A live Google map locates the nearest doctors, clinics, labs, pharmacies, organisations and insurers around you.',
     href: '/search/organizations',
+    img: 'find_care_map.jpg',
     span: 'lg:col-span-2',
   },
   {
@@ -63,31 +65,36 @@ const FEATURES: Feature[] = [
     title: 'Health Shop',
     desc: 'Order medicines, vitamins, devices & personal care from verified pharmacies.',
     href: '/search/health-shop',
+    img: 'pharmacy.jpg',
   },
   {
     Icon: FaComments,
     title: 'Secure chat',
     desc: 'Message your providers directly with end-to-end private conversations.',
     href: '/search/doctors',
+    img: 'secure_chat.jpg',
   },
   {
     Icon: FaAmbulance,
     title: 'Emergency response',
     desc: 'Dispatch an ambulance and reach emergency responders the moment it matters.',
     href: '/search/emergency',
-    dark: true,
+    img: 'ambulance.jpg',
+    span: 'lg:col-span-2',
   },
   {
     Icon: FaNewspaper,
     title: 'Community feed',
     desc: 'Health tips, case studies and advice from real verified professionals - no login needed.',
     href: '/community',
+    img: 'community.jpg',
   },
   {
     Icon: FaProjectDiagram,
     title: 'Provider workflows & services',
     desc: 'Providers build custom workflows, manage their service catalogue, bookings and stock from one dashboard.',
     href: '/signup?type=provider',
+    img: 'provider_work.jpg',
     span: 'lg:col-span-2',
   },
   {
@@ -95,12 +102,14 @@ const FEATURES: Feature[] = [
     title: 'Status & notifications',
     desc: 'Real-time booking status and instant notifications keep everyone in sync.',
     href: '/signup',
+    img: 'notifications.jpg',
   },
   {
     Icon: FaShieldAlt,
     title: 'Insurance & organisations',
     desc: 'Browse insurers, clinics, hospitals and labs across the region in one directory.',
     href: '/search/insurance',
+    img: 'hospital.jpg',
   },
 ]
 
@@ -125,44 +134,28 @@ export default function FeatureShowcase() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(172px,auto)] gap-5">
           {FEATURES.map(f => {
             const Icon = f.Icon
-            if (f.dark) {
-              return (
-                <Link
-                  key={f.title}
-                  href={f.href}
-                  className={`group relative overflow-hidden rounded-3xl p-6 flex flex-col justify-between text-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] ${f.span ?? ''}`}
-                  style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${TEAL} 130%)` }}
-                >
-                  {/* glow */}
-                  <span aria-hidden className="pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-30"
-                        style={{ background: `radial-gradient(circle, ${SKY} 0%, transparent 70%)` }} />
-                  <span className="relative w-12 h-12 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center mb-4">
-                    <Icon className="text-xl text-white" />
-                  </span>
-                  <div className="relative">
-                    <h3 className="text-lg font-bold mb-1.5">{f.title}</h3>
-                    <p className="text-sm text-white/75 leading-relaxed">{f.desc}</p>
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-sky group-hover:gap-2.5 transition-all">
-                      Explore <FaArrowRight className="text-[10px]" />
-                    </span>
-                  </div>
-                </Link>
-              )
-            }
             return (
               <Link
                 key={f.title}
                 href={f.href}
-                className={`group relative overflow-hidden rounded-3xl p-6 flex flex-col justify-between bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] ${f.span ?? ''}`}
+                className={`group relative overflow-hidden rounded-3xl min-h-[200px] flex flex-col justify-end p-6 text-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] ${f.span ?? ''}`}
               >
-                <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-                      style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}>
-                  <Icon className="text-xl" />
+                <Image
+                  src={`/images/landing/${f.img}`}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#001E40] via-[#001E40]/65 to-[#001E40]/10" />
+                <span aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+                <span className="relative self-start w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-3">
+                  <Icon className="text-xl text-white" />
                 </span>
-                <div>
-                  <h3 className="text-lg font-bold text-[#001E40] mb-1.5">{f.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] group-hover:gap-2.5 transition-all">
+                <div className="relative">
+                  <h3 className="text-lg font-bold mb-1.5 drop-shadow-sm">{f.title}</h3>
+                  <p className="text-sm text-white/85 leading-relaxed line-clamp-3">{f.desc}</p>
+                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-sky group-hover:gap-2.5 transition-all">
                     Explore <FaArrowRight className="text-[10px]" />
                   </span>
                 </div>

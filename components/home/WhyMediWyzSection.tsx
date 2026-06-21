@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import {
   FaUserShield, FaBolt, FaVideo, FaMapMarkerAlt, FaLock, FaHeadset,
 } from 'react-icons/fa'
@@ -7,31 +8,37 @@ const FEATURES = [
     Icon: FaUserShield,
     title: 'Verified professionals',
     desc: 'Every provider is licence-checked and verified before they can offer care on MediWyz.',
+    img: 'doctor_portrait.jpg',
   },
   {
     Icon: FaBolt,
     title: 'Same-day booking',
     desc: 'Skip the waiting room. Find an available slot and confirm in just a few taps.',
+    img: 'booking.jpg',
   },
   {
     Icon: FaVideo,
     title: 'Secure video care',
     desc: 'Consult from home over encrypted WebRTC video - clinic-grade, end to end.',
+    img: 'telemedicine.jpg',
   },
   {
     Icon: FaMapMarkerAlt,
     title: 'Care near you',
     desc: 'A live map finds the nearest doctor, clinic, lab or pharmacy around your location.',
+    img: 'clinic.jpg',
   },
   {
     Icon: FaLock,
     title: 'Private by design',
     desc: 'Your records and conversations are encrypted and never shared without your consent.',
+    img: 'medical_team.jpg',
   },
   {
     Icon: FaHeadset,
     title: 'Real human support',
     desc: 'Our team is one message away whenever you need help with a booking or your account.',
+    img: 'nurse.jpg',
   },
 ]
 
@@ -57,14 +64,22 @@ export default function WhyMediWyzSection() {
             return (
               <div
                 key={f.title}
-                className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-6"
+                className="group relative overflow-hidden rounded-2xl min-h-[200px] flex flex-col justify-end p-5 text-white shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors"
-                     style={{ background: 'rgba(12,103,128,0.10)', color: '#0C6780' }}>
-                  <Icon className="text-xl" />
-                </div>
-                <h3 className="text-base font-bold text-[#001E40] mb-1.5">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                <Image
+                  src={`/images/landing/${f.img}`}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#001E40] via-[#001E40]/60 to-[#001E40]/10" />
+                <span aria-hidden className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+                <span className="relative self-start w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-3">
+                  <Icon className="text-xl text-white" />
+                </span>
+                <h3 className="relative text-base font-bold mb-1 drop-shadow-sm">{f.title}</h3>
+                <p className="relative text-sm text-white/85 leading-relaxed line-clamp-2">{f.desc}</p>
               </div>
             )
           })}

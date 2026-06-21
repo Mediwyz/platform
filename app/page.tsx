@@ -9,6 +9,9 @@ import ProductTour from '@/components/home/ProductTour'
 import AppDownloadSection from '@/components/home/AppDownloadSection'
 import FinalCtaSection from '@/components/home/FinalCtaSection'
 import StickyCTABar from '@/components/home/StickyCTABar'
+import StatsBand from '@/components/home/StatsBand'
+import ForProvidersSection from '@/components/home/ForProvidersSection'
+import TrustSecuritySection from '@/components/home/TrustSecuritySection'
 import dynamic from 'next/dynamic'
 
 const CategoryNavigator = dynamic(() => import('@/components/home/CategoryNavigator'), { ssr: false })
@@ -28,6 +31,9 @@ export default function HomePage() {
       {/* 3 - Explain: 3-step "Search → Book → Consult" */}
       <HowItWorksSection />
 
+      {/* 3b - Impact stats band (animated counters) */}
+      <StatsBand />
+
       {/* 4 - Feature showcase: every capability of the platform (bento grid) */}
       <FeatureShowcase />
 
@@ -37,11 +43,17 @@ export default function HomePage() {
       {/* 5 - Value props: why choose MediWyz */}
       <WhyMediWyzSection />
 
+      {/* 5b - For providers: grow your practice (supply side) */}
+      <ForProvidersSection />
+
       {/* 6 - Trust: partner logos + key stats marquee */}
       <CompanyTrustBar />
 
       {/* 7 - Mobile app download */}
       <AppDownloadSection />
+
+      {/* 7b - Trust & security + FAQ */}
+      <TrustSecuritySection />
 
       {/* 8 - Final conversion CTA */}
       <FinalCtaSection />
