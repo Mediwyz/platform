@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Icon } from '@iconify/react'
 import IconPicker from '@/components/shared/IconPicker'
+import CmsImageUpload from '@/components/shared/CmsImageUpload'
 import {
   FaPlus, FaEdit, FaTrash, FaTimes, FaSpinner,
   FaUsersCog, FaEye, FaEyeSlash, FaFileAlt,
@@ -64,6 +65,7 @@ const emptyForm = {
   icon: 'FaUserMd',
   iconKey: '',
   color: '#0C6780',
+  cardImage: '',
   description: '',
   searchEnabled: true,
   bookingEnabled: true,
@@ -131,6 +133,7 @@ export default function RolesManagementPage() {
       icon: role.icon,
       iconKey: role.iconKey || '',
       color: role.color,
+      cardImage: role.cardImage || '',
       description: role.description || '',
       searchEnabled: role.searchEnabled,
       bookingEnabled: role.bookingEnabled,
@@ -178,6 +181,7 @@ export default function RolesManagementPage() {
             icon: form.icon,
             iconKey: form.iconKey || undefined,
             color: form.color,
+            cardImage: form.cardImage || undefined,
             description: form.description || undefined,
             searchEnabled: form.searchEnabled,
             bookingEnabled: form.bookingEnabled,
@@ -340,6 +344,16 @@ export default function RolesManagementPage() {
                       className="flex-1 px-3 py-2 border rounded-lg text-sm font-mono focus:ring-2 focus:ring-[#0C6780] outline-none" />
                   </div>
                 </div>
+              </div>
+
+              {/* Card illustration image · shown as the background of the provider-type cards on the public landing page */}
+              <div>
+                <CmsImageUpload
+                  value={form.cardImage || ''}
+                  onChange={(url) => setForm(f => ({ ...f, cardImage: url }))}
+                  label="Card image (illustration on the landing page)"
+                />
+                <p className="mt-1 text-xs text-gray-400">Optional — a realistic photo shown behind this provider type on the home page. If left empty, a default healthcare illustration is used.</p>
               </div>
 
               {/* Iconify icon picker (replaces legacy FA picker for richer healthcare icons) */}

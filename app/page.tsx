@@ -12,6 +12,7 @@ import StickyCTABar from '@/components/home/StickyCTABar'
 import StatsBand from '@/components/home/StatsBand'
 import ForProvidersSection from '@/components/home/ForProvidersSection'
 import TrustSecuritySection from '@/components/home/TrustSecuritySection'
+import ProviderMarquee from '@/components/home/ProviderMarquee'
 import dynamic from 'next/dynamic'
 
 const CategoryNavigator = dynamic(() => import('@/components/home/CategoryNavigator'), { ssr: false })
@@ -42,6 +43,9 @@ export default function HomePage() {
 
       {/* 5 - Value props: why choose MediWyz */}
       <WhyMediWyzSection />
+
+      {/* 5a - Provider categories marquee (dynamic from DB, admin-managed images) */}
+      <ProviderMarquee />
 
       {/* 5b - For providers: grow your practice (supply side) */}
       <ForProvidersSection />

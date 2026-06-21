@@ -24,6 +24,17 @@
   100% { transform: translate(0px, 0px) scale(1); }
 }
 
+/* Horizontal provider-category marquee (ProviderMarquee.tsx) */
+@keyframes mwMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.mw-marquee-track { animation: mwMarquee 50s linear infinite; width: max-content; }
+.mw-marquee:hover .mw-marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .mw-marquee-track { animation: none; }
+}
+
 /* Prevent horizontal overflow on mobile */
 html, body {
   overflow-x: hidden;

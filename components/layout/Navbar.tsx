@@ -182,7 +182,10 @@ const Navbar: React.FC = () => {
  {isCapacitor && <div className="bg-brand-navy h-14" />}
  {/* Brand gradient accent line */}
  <div className="h-1 bg-brand-teal " />
- <div className="bg-brand-navy/95 backdrop-blur-md shadow-md border-b border-white/10 py-1.5">
+ <div
+ className="backdrop-blur-md shadow-md border-b border-white/10 py-1.5"
+ style={{ background: 'linear-gradient(135deg, rgba(0,30,64,0.96) 0%, rgba(12,103,128,0.96) 140%)' }}
+ >
  {/* Skip to content link */}
  <a
  href="#main-content"

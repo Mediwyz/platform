@@ -90,7 +90,20 @@ interface RoleData {
   label: string
   slug: string
   color: string
+  /** Admin-managed illustrative image URL (falls back to a bundled default by code). */
+  cardImage?: string | null
 }
+
+// Default realistic illustration per provider-type code (under /public/images/landing/roles).
+// Used when a regional admin has not uploaded a custom cardImage yet.
+const ROLE_IMG: Record<string, string> = {
+  DOCTOR: 'doctor', NURSE: 'nurse', NANNY: 'nanny', PHARMACIST: 'pharmacist',
+  LAB_TECHNICIAN: 'lab', EMERGENCY_WORKER: 'emergency', CAREGIVER: 'caregiver',
+  PHYSIOTHERAPIST: 'physiotherapist', DENTIST: 'dentist', OPTOMETRIST: 'optometrist',
+  NUTRITIONIST: 'nutritionist',
+}
+const roleImg = (r: RoleData) =>
+  r.cardImage && r.cardImage.trim() ? r.cardImage : `/images/landing/roles/${ROLE_IMG[r.code] || 'generic'}.jpg`
 
 export default function CategoryNavigator() {
   const router = useRouter()
@@ -361,19 +374,24 @@ function RoleGrid({
           <button
             key={r.code}
             onClick={() => onPick(r)}
-            className="group flex flex-col items-start text-left p-4 rounded-2xl bg-white border border-gray-100
-              shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
-            style={{ borderTopWidth: 3, borderTopColor: color }}
+            className="group relative overflow-hidden flex flex-col justify-end text-left min-h-[150px] p-4 rounded-2xl text-white
+              shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
           >
-            <span
-              className="w-10 h-10 rounded-xl flex items-center justify-center mb-2"
-              style={{ background: `${color}1A`, color }}
-            >
-              <Icon size={20} aria-hidden />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={roleImg(r)}
+              alt=""
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#001E40] via-[#001E40]/55 to-[#001E40]/10" />
+            <span aria-hidden className="absolute left-0 top-0 h-full w-1" style={{ background: color }} />
+            <span className="relative w-9 h-9 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-2">
+              <Icon size={18} aria-hidden className="text-white" />
             </span>
-            <span className="text-sm font-bold text-[#001E40]">{r.label}</span>
-            <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold group-hover:gap-2 transition-all" style={{ color }}>
+            <span className="relative text-sm font-bold drop-shadow-sm">{r.label}</span>
+            <span className="relative mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-sky group-hover:gap-2 transition-all">
               {cta} <MdArrowForward size={11} aria-hidden />
             </span>
           </button>

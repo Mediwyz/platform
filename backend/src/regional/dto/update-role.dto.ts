@@ -31,6 +31,10 @@ export class UpdateRoleDto {
 
   @IsOptional()
   @IsString()
+  cardImage?: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
 
   @IsOptional()
