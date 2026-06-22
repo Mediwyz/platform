@@ -60,6 +60,15 @@ const KEYWORD_ICONS: [RegExp, string][] = [
   [/autoimmune|thyroid|adrenal|endocrin|hormone/i, 'specialties/endocrinology'],
   [/wheelchair|disab|paraly/i, 'devices/wheelchair'],
   [/nursing|\bnurse\b|wound|bandage|catheter|dressing|compression/i, 'people/nurse'],
+  // Specialty *names* (the resolver above is tuned for service names; these
+  // catch the bare specialty labels used as category tiles).
+  [/cardiolog|\bvascular\b/i, 'specialties/cardiology'],
+  [/op?hthalmolog/i, 'specialties/opthalmology'],
+  [/orthop(a)?edic|orthopaedic/i, 'specialties/orthopaedics'],
+  [/pulmonolog/i, 'body/lungs'],
+  [/gyn(a)?ecolog/i, 'specialties/gynecology'],
+  [/urolog|bladder|prostate/i, 'body/kidneys'],
+  [/haematolog|hematolog/i, 'specialties/hematology'],
   [/consult|general|follow-?up|\bgp\b|examination|appointment|check-?up|assessment|review|monitor|annual/i, 'devices/stethoscope'],
 ]
 

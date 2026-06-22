@@ -18,6 +18,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import type { IconType } from 'react-icons'
+import CategoryTile from './CategoryTile'
 import {
   MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
   MdArrowBack, MdArrowForward, MdChevronRight, MdHealthAndSafety,
@@ -292,36 +293,34 @@ export default function CategoryNavigator() {
             </button>
 
             {loadingCats ? (
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="h-9 w-28 rounded-full bg-gray-100 animate-pulse" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <div key={i} className="aspect-square rounded-2xl bg-subtle animate-pulse" />
                 ))}
               </div>
             ) : (
-              <div className="flex flex-wrap gap-2">
-                {/* "All" shortcut - outlined (not pre-selected); user picks a category or this */}
-                <button
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                {/* "All" shortcut tile */}
+                <CategoryTile
+                  label={`All ${role.label}`}
+                  category="general consultation"
+                  providerType={role.code}
+                  color={role.color}
                   onClick={() => goServicesCategory(role)}
-                  className="px-4 py-2 rounded-full text-sm font-semibold bg-white border-2 transition-colors
-                    hover:bg-[#0C6780]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] cursor-pointer"
-                  style={{ borderColor: role.color || TEAL, color: role.color || TEAL }}
-                >
-                  All {role.label} services
-                </button>
+                />
                 {categories.map(cat => (
-                  <button
+                  <CategoryTile
                     key={cat}
+                    label={cat}
+                    category={cat}
+                    providerType={role.code}
+                    color={role.color}
                     onClick={() => goServicesCategory(role, cat)}
-                    className="px-4 py-2 rounded-full text-sm font-medium capitalize bg-white border border-gray-200 text-gray-700
-                      hover:border-[#0C6780] hover:text-[#0C6780] transition-colors
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 cursor-pointer"
-                  >
-                    {cat.replace(/_/g, ' ')}
-                  </button>
+                  />
                 ))}
                 {categories.length === 0 && (
-                  <p className="text-sm text-gray-400 py-2">
-                    No sub-categories yet - <button onClick={() => goServicesCategory(role)} className="text-[#0C6780] font-medium underline">browse all {role.label} services</button>.
+                  <p className="col-span-full text-sm text-faint py-2">
+                    No sub-categories yet - <button onClick={() => goServicesCategory(role)} className="text-[#0C6780] dark:text-accent font-medium underline">browse all {role.label} services</button>.
                   </p>
                 )}
               </div>
