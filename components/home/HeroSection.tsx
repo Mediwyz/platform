@@ -61,81 +61,96 @@ interface HeroSectionProps {
   countryCode?: string
 }
 
-// ─── Image animation variants ─────────────────────────────────────────────────
-
-const imageVariants = {
-  enter:  { opacity: 0, scale: 1.06 },
-  center: { opacity: 1, scale: 1, transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] as const } },
-  exit:   { opacity: 0, scale: 0.97, transition: { duration: 0.5, ease: [0.55, 0.085, 0.68, 0.53] as const } },
-}
+// ─── Full-bleed background slides ──────────────────────────────────────────────
+// Wide, HD, real healthcare scenes that sit BEHIND the hero content under a dark
+// scrim. Curated from the redesign image set (all on-brand blue/teal tones).
+const DEFAULT_BG = [
+  '/images/landing/medical_team.jpg',
+  '/images/landing/telemedicine.jpg',
+  '/images/landing/hospital.jpg',
+  '/images/landing/clinic.jpg',
+]
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [index, setIndex] = useState(0)
   const { config } = useAppConfig()
   const stats = useHeroStats()
 
-  const defaultHeroImages = [
-    { src: '/images/hero/gemini-doctor-3-removebg-1.png', alt: 'Specialist Medical Doctor',  title: 'Medical Specialists',      description: 'Consult verified specialists across 15+ fields' },
-    { src: '/images/hero/medicine-1.png',                 alt: 'Buy medicines online',        title: 'Medicine Store',           description: 'Order prescriptions & wellness products online' },
-    { src: '/images/hero/doctor-1.png',                   alt: 'Professional Doctor',         title: 'Expert Medical Care',      description: 'Qualified professionals at your service' },
-    { src: '/images/hero/ambulance-1.png',                alt: 'Emergency Ambulance',         title: 'Emergency Services',       description: 'Rapid response when every second counts' },
-    { src: '/images/hero/insurance-1.png',                alt: 'Health Insurance',            title: 'Insurance Protection',     description: 'Coverage plans for individuals & families' },
-    { src: '/images/hero/nurse-1.png',                    alt: 'Professional Nurse',          title: 'Nursing Excellence',       description: 'Home visits & ongoing health monitoring' },
-    { src: '/images/hero/doctor-2.png',                   alt: 'Experienced Doctor',          title: 'Healthcare Professionals', description: 'Trusted providers verified by MediWyz' },
-    { src: '/images/hero/patient-1.png',                  alt: 'Patient Care',                title: 'Patient-Centered Care',   description: 'Your health journey, our commitment' },
-  ]
-
-  const heroImages = slides
-    ? slides.map(s => ({ src: s.imageUrl, alt: s.subtitle || s.title, title: s.title, description: s.subtitle ?? undefined }))
-    : defaultHeroImages
+  // A `slides` prop (admin-managed) overrides the bundled backgrounds.
+  const bgImages = slides && slides.length ? slides.map(s => s.imageUrl) : DEFAULT_BG
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex(prev => (prev + 1) % heroImages.length)
-    }, 5000)
+      setIndex(prev => (prev + 1) % bgImages.length)
+    }, 6000)
     return () => clearInterval(interval)
-  }, [heroImages.length])
+  }, [bgImages.length])
 
   const titleParts = (content?.mainTitle || config.heroTitle || 'Healthcare, Reimagined').split(',')
 
   return (
     <section
-      className="relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 320 }}
+      className="relative overflow-hidden isolate"
+      style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 560 }}
     >
-      {/* Decorative backdrop · soft sky/teal glows + faint grid (pure CSS, no extra assets) */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-30 blur-3xl"
+      {/* ── Full-bleed background slider (Ken-Burns cross-fade) ─────────── */}
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <AnimatePresence>
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: 1, transition: { opacity: { duration: 1.4 }, scale: { duration: 6.5, ease: 'linear' } } }}
+            exit={{ opacity: 0, transition: { duration: 1.4 } }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={bgImages[index]}
+              alt=""
+              fill
+              priority={index === 0}
+              className="object-cover object-center"
+              sizes="100vw"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ── Dark scrim for text legibility (stronger on the left) ───────── */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10"
+        style={{ background: 'linear-gradient(100deg, rgba(0,16,36,0.94) 0%, rgba(0,22,48,0.82) 48%, rgba(6,58,88,0.58) 100%)' }}
+      />
+      {/* bottom darken so the stats band stays readable */}
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-48 -z-10"
+           style={{ background: 'linear-gradient(to top, rgba(0,14,32,0.85), transparent)' }} />
+      {/* subtle brand glow + grid, kept faint over the photo */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-20 blur-3xl"
              style={{ background: 'radial-gradient(circle, #9AE1FF 0%, transparent 70%)' }} />
-        <div className="absolute -bottom-32 right-1/4 w-[28rem] h-[28rem] rounded-full opacity-20 blur-3xl"
-             style={{ background: 'radial-gradient(circle, #0C6780 0%, transparent 70%)' }} />
-        <div className="absolute inset-0 opacity-[0.04]"
+        <div className="absolute inset-0 opacity-[0.03]"
              style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
-      {/* ── 2-column flex row ─────────────────────────────────────── */}
-      <div className="relative flex flex-col lg:flex-row lg:items-stretch" style={{ minHeight: 'inherit' }}>
-
-        {/* ── COL 1: Platform description (left, ~58%) ─────────────── */}
+      {/* ── Content (single column over the photo) ─────────────────────── */}
+      <div className="relative flex items-center" style={{ minHeight: 'inherit' }}>
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="lg:flex-[68] flex flex-col justify-center
-            px-6 sm:px-10 lg:px-14 xl:pl-20 xl:pr-12
-            py-9 sm:py-12 lg:py-16"
+          className="w-full max-w-5xl px-6 sm:px-10 lg:px-14 xl:pl-20 py-12 sm:py-16 lg:py-20"
         >
           {/* Platform badge */}
           <div className="inline-flex self-start items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-7 border border-white/20 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-sky animate-pulse" />
             <span className="text-[11px] font-semibold text-brand-sky tracking-wide uppercase">
               {content?.platformBadge || config.platformDescription || "Your all-in-one HealthTech Platform"}
             </span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold mb-6 leading-[1.02] tracking-tight text-white">
+          <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold mb-6 leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -144,7 +159,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl xl:text-2xl text-gray-300/90 leading-relaxed max-w-4xl mb-8">
+          <p className="text-lg sm:text-xl xl:text-2xl text-white/80 leading-relaxed max-w-3xl mb-8">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India - all in one secure platform."}
           </p>
@@ -176,7 +191,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           </div>
 
           {/* Feature pills - clickable, scroll to the relevant section */}
-          <div className="flex flex-wrap gap-2 mb-7">
+          <div className="flex flex-wrap gap-2 mb-8">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
               { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'discover-section' },
@@ -197,134 +212,34 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             })}
           </div>
 
-          {/* Trust stats - dynamic from DB · subtle glass stat cards · span full column */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full">
+          {/* Trust stats - dynamic from DB · subtle glass stat cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
               { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'Africa, Mauritius & India' },
               { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
             ].map(stat => (
-              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.06] border border-white/10 px-4 py-3.5 backdrop-blur-sm">
+              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.08] border border-white/15 px-4 py-3.5 backdrop-blur-md">
                 <span className="text-2xl sm:text-3xl font-black text-white leading-none">{stat.value}</span>
                 <span className="text-xs font-semibold text-white/85 mt-1.5">{stat.label}</span>
-                <span className="text-[10px] text-white/45 mt-0.5 leading-tight">{stat.sub}</span>
+                <span className="text-[10px] text-white/50 mt-0.5 leading-tight">{stat.sub}</span>
               </div>
             ))}
           </div>
         </motion.div>
+      </div>
 
-        {/* ── COL 2: Image carousel (right, ~42%) ──────────────────── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.3 }}
-          className="lg:flex-[32] relative overflow-hidden min-h-[200px]"
-        >
-          {/* Mobile image strip */}
-          <div className="lg:hidden relative h-44">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`mobile-${currentImageIndex}`}
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1, transition: { duration: 0.8 } }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={heroImages[currentImageIndex].src}
-                  alt={heroImages[currentImageIndex].alt}
-                  fill
-                  className="object-cover object-center"
-                  sizes="100vw"
-                />
-              </motion.div>
-            </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#001E40]/80 to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5">
-              <div className="w-0.5 h-6 rounded-full bg-[#9AE1FF] flex-shrink-0" />
-              <p className="text-xs font-bold text-white leading-tight">{heroImages[currentImageIndex].title}</p>
-            </div>
-            <div className="absolute top-3 right-3 flex gap-1">
-              {heroImages.map((_, i) => (
-                <button key={i} onClick={() => setCurrentImageIndex(i)} aria-label={`Slide ${i + 1}`}
-                  className={`h-1 rounded-full transition-all duration-300 ${i === currentImageIndex ? 'bg-white w-4' : 'bg-white/40 w-1'}`} />
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop image carousel - smaller rounded card with vertical margin spacing */}
-          <div className="hidden lg:block absolute inset-y-10 inset-x-8 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/15">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentImageIndex}
-                variants={imageVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="absolute inset-0"
-              >
-                <Image
-                  src={heroImages[currentImageIndex].src}
-                  alt={heroImages[currentImageIndex].alt}
-                  fill
-                  className="object-cover object-center"
-                  sizes="42vw"
-                  priority={currentImageIndex === 0}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Bottom gradient for caption legibility */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none z-10"
-              style={{ background: 'linear-gradient(to top, rgba(0,10,30,0.95) 0%, rgba(0,10,30,0.5) 60%, transparent 100%)' }}
-            />
-
-            {/* Image caption */}
-            <div className="absolute bottom-0 left-0 right-0 px-5 pb-10 z-20">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`caption-${currentImageIndex}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.4 }}
-                  className="flex items-start gap-2"
-                >
-                  <div className="w-0.5 h-8 rounded-full bg-brand-sky flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-bold text-white leading-tight">
-                      {heroImages[currentImageIndex].title}
-                    </p>
-                    {heroImages[currentImageIndex].description && (
-                      <p className="text-[11px] text-white/60 mt-0.5 leading-relaxed">
-                        {heroImages[currentImageIndex].description}
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Carousel dots */}
-              <div className="flex gap-1.5 mt-3">
-                {heroImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    aria-label={`Slide ${index + 1}`}
-                    className={`h-1 rounded-full transition-all duration-300 ${
-                      index === currentImageIndex
-                        ? 'bg-white w-5'
-                        : 'bg-white/30 hover:bg-white/50 w-1'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
+      {/* slider position dots */}
+      <div className="absolute bottom-5 right-6 z-10 flex gap-1.5">
+        {bgImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            aria-label={`Background ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'bg-brand-sky w-6' : 'bg-white/40 hover:bg-white/60 w-1.5'}`}
+          />
+        ))}
       </div>
     </section>
   )
