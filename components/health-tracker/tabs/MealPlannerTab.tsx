@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaPlus, FaSpinner, FaCalendarDay, FaUtensils, FaRobot, FaTimes } from 'react-icons/fa'
@@ -57,7 +57,7 @@ function MealCard({
  const badgeClass = MEAL_TYPE_BADGES[meal.mealType] ?? 'bg-[#0C6780]/10 text-[#0C6780]'
 
  return (
-  <div className={`bg-white rounded-xl shadow-sm p-3.5 border-l-4 ${borderColor}`}>
+  <div className={`bg-surface rounded-xl shadow-sm p-3.5 border-l-4 ${borderColor}`}>
    <div className="flex items-start justify-between gap-2">
     <div className="flex-1 min-w-0">
      <div className="flex items-center gap-2 flex-wrap">
@@ -67,13 +67,13 @@ function MealCard({
       </span>
      </div>
      {meal.description && (
-      <p className="text-xs text-gray-500 mt-1 line-clamp-2">{meal.description}</p>
+      <p className="text-xs text-soft mt-1 line-clamp-2">{meal.description}</p>
      )}
      <div className="flex items-center gap-3 mt-2">
       <span className="text-sm font-bold text-[#001E40]">{meal.calories} cal</span>
-      <span className="text-xs text-gray-400">P:{meal.protein}g</span>
-      <span className="text-xs text-gray-400">C:{meal.carbs}g</span>
-      <span className="text-xs text-gray-400">F:{meal.fat}g</span>
+      <span className="text-xs text-faint">P:{meal.protein}g</span>
+      <span className="text-xs text-faint">C:{meal.carbs}g</span>
+      <span className="text-xs text-faint">F:{meal.fat}g</span>
      </div>
     </div>
     <button
@@ -176,7 +176,7 @@ export default function MealPlannerTab() {
     return { day: name, meals, totalCalories, totalProtein: meals.reduce((s, x) => s + x.protein, 0), totalCarbs: meals.reduce((s, x) => s + x.carbs, 0), totalFat: meals.reduce((s, x) => s + x.fat, 0) }
    })
    setData({ days, targetCalories: d?.targetCalories ?? 2000 })
-   setInsight("✨ AI-generated meal plan ready! Tap + on any meal to log it in your food diary.")
+   setInsight("âœ¨ AI-generated meal plan ready! Tap + on any meal to log it in your food diary.")
    setInsightDismissed(false)
   } catch (err) {
    setError(err instanceof Error ? err.message : 'Failed to generate')
@@ -209,10 +209,10 @@ export default function MealPlannerTab() {
  if (loading) {
   return (
    <div className="p-4 space-y-4">
-    <div className="h-12 bg-gray-200 rounded-xl animate-pulse" />
-    <div className="flex gap-1.5">{DAYS_OF_WEEK.map(d => <div key={d} className="h-10 flex-1 bg-gray-200 rounded-lg animate-pulse" />)}</div>
-    <div className="h-20 bg-gray-200 rounded-xl animate-pulse" />
-    {[1, 2, 3].map(i => <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse" />)}
+    <div className="h-12 bg-line rounded-xl animate-pulse" />
+    <div className="flex gap-1.5">{DAYS_OF_WEEK.map(d => <div key={d} className="h-10 flex-1 bg-line rounded-lg animate-pulse" />)}</div>
+    <div className="h-20 bg-line rounded-xl animate-pulse" />
+    {[1, 2, 3].map(i => <div key={i} className="h-24 bg-line rounded-xl animate-pulse" />)}
    </div>
   )
  }
@@ -251,7 +251,7 @@ export default function MealPlannerTab() {
    )}
 
    {/* Day Tabs */}
-   <div className="flex gap-1 bg-white rounded-xl shadow-sm p-1 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+   <div className="flex gap-1 bg-surface rounded-xl shadow-sm p-1 overflow-x-auto [&::-webkit-scrollbar]:hidden">
     {DAYS_OF_WEEK.map((day, index) => {
      const dayData = data?.days?.[index]
      const hasMeals = dayData && dayData.meals.length > 0
@@ -260,7 +260,7 @@ export default function MealPlannerTab() {
        key={day}
        onClick={() => setSelectedDay(index)}
        className={`flex-1 flex flex-col items-center py-2 text-xs font-medium rounded-lg transition-colors min-w-[40px] ${
-        selectedDay === index ? 'bg-[#001E40] text-white' : 'text-gray-600 hover:bg-gray-100'
+        selectedDay === index ? 'bg-[#001E40] text-white' : 'text-soft hover:bg-subtle'
        }`}
       >
        {day}
@@ -274,24 +274,24 @@ export default function MealPlannerTab() {
 
    {/* Selected Day Macros */}
    {currentDay && currentDay.meals.length > 0 && (
-    <div className="bg-white rounded-xl shadow-sm p-4">
-     <p className="text-xs text-gray-400 mb-2 font-medium">{currentDay.day}&apos;s totals</p>
+    <div className="bg-surface rounded-xl shadow-sm p-4">
+     <p className="text-xs text-faint mb-2 font-medium">{currentDay.day}&apos;s totals</p>
      <div className="grid grid-cols-4 gap-2 text-center">
       <div>
        <p className="text-lg font-bold text-[#001E40]">{currentDay.totalCalories}</p>
-       <p className="text-[10px] text-gray-400">cal</p>
+       <p className="text-[10px] text-faint">cal</p>
       </div>
       <div>
        <p className="text-lg font-bold text-[#0C6780]">{currentDay.totalProtein}g</p>
-       <p className="text-[10px] text-gray-400">protein</p>
+       <p className="text-[10px] text-faint">protein</p>
       </div>
       <div>
        <p className="text-lg font-bold text-amber-600">{currentDay.totalCarbs}g</p>
-       <p className="text-[10px] text-gray-400">carbs</p>
+       <p className="text-[10px] text-faint">carbs</p>
       </div>
       <div>
        <p className="text-lg font-bold text-pink-600">{currentDay.totalFat}g</p>
-       <p className="text-[10px] text-gray-400">fat</p>
+       <p className="text-[10px] text-faint">fat</p>
       </div>
      </div>
     </div>
@@ -308,7 +308,7 @@ export default function MealPlannerTab() {
     }`}
    >
     {generating ? (
-     <><FaSpinner className="w-4 h-4 animate-spin" />Generating AI meal plan…</>
+     <><FaSpinner className="w-4 h-4 animate-spin" />Generating AI meal planâ€¦</>
     ) : (
      <><FaRobot className="w-4 h-4" />{hasPlan ? 'Regenerate Plan' : 'Generate AI Meal Plan'}</>
     )}
@@ -322,8 +322,8 @@ export default function MealPlannerTab() {
      <div className="w-16 h-16 bg-[#001E40]/5 rounded-full flex items-center justify-center mx-auto mb-3">
       <FaUtensils className="w-8 h-8 text-[#0C6780]/40" />
      </div>
-     <p className="text-sm font-medium text-gray-500 mb-1">No plan for {DAYS_OF_WEEK[selectedDay]}</p>
-     <p className="text-xs text-gray-400">Generate an AI meal plan above or pick a different day.</p>
+     <p className="text-sm font-medium text-soft mb-1">No plan for {DAYS_OF_WEEK[selectedDay]}</p>
+     <p className="text-xs text-faint">Generate an AI meal plan above or pick a different day.</p>
     </div>
    ) : (
     <div className="space-y-3">

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -37,11 +37,11 @@ function generateFoodInsight(data: FoodDayData): { text: string; emoji: string }
  const pct = data.targetCalories > 0 ? data.totalCalories / data.targetCalories : 0
  const totalProtein = data.entries.reduce((s, e) => s + (e.protein ?? 0), 0)
  if (data.entries.length === 0) return null
- if (pct > 1.15) return { emoji: '⚠️', text: `You've exceeded your calorie target by ${Math.round((pct - 1) * 100)}%. Consider a lighter dinner or an extra workout.` }
- if (pct > 0.85) return { emoji: '✅', text: "You're close to your calorie goal for today. Great balance - finish with a nutritious dinner!" }
- if (totalProtein < 30 && data.entries.length >= 2) return { emoji: '💪', text: "Your protein intake looks low. Add a high-protein snack like eggs, Greek yogurt, or legumes." }
- if (pct < 0.4) return { emoji: '🥗', text: "You're well under your calorie target. Make sure you're eating enough to fuel your body." }
- return { emoji: '📝', text: "Keep logging your meals to get a complete picture of your nutrition today." }
+ if (pct > 1.15) return { emoji: 'âš ï¸', text: `You've exceeded your calorie target by ${Math.round((pct - 1) * 100)}%. Consider a lighter dinner or an extra workout.` }
+ if (pct > 0.85) return { emoji: 'âœ…', text: "You're close to your calorie goal for today. Great balance - finish with a nutritious dinner!" }
+ if (totalProtein < 30 && data.entries.length >= 2) return { emoji: 'ðŸ’ª', text: "Your protein intake looks low. Add a high-protein snack like eggs, Greek yogurt, or legumes." }
+ if (pct < 0.4) return { emoji: 'ðŸ¥—', text: "You're well under your calorie target. Make sure you're eating enough to fuel your body." }
+ return { emoji: 'ðŸ“', text: "Keep logging your meals to get a complete picture of your nutrition today." }
 }
 
 export default function FoodDiaryTab() {
@@ -171,10 +171,10 @@ export default function FoodDiaryTab() {
    )}
 
    {/* Date Selector */}
-   <div className="flex items-center justify-between bg-white rounded-xl shadow-sm p-3">
+   <div className="flex items-center justify-between bg-surface rounded-xl shadow-sm p-3">
     <button
      onClick={() => changeDate(-1)}
-     className="p-2 text-gray-500 hover:text-[#0C6780] transition-colors rounded-lg hover:bg-gray-100"
+     className="p-2 text-soft hover:text-[#0C6780] transition-colors rounded-lg hover:bg-subtle"
      aria-label="Previous day"
     >
      <FaChevronLeft className="w-4 h-4" />
@@ -182,7 +182,7 @@ export default function FoodDiaryTab() {
     <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
     <button
      onClick={() => changeDate(1)}
-     className="p-2 text-gray-500 hover:text-[#0C6780] transition-colors rounded-lg hover:bg-gray-100"
+     className="p-2 text-soft hover:text-[#0C6780] transition-colors rounded-lg hover:bg-subtle"
      aria-label="Next day"
     >
      <FaChevronRight className="w-4 h-4" />
@@ -191,21 +191,21 @@ export default function FoodDiaryTab() {
 
    {/* Calorie summary */}
    {data && (
-    <div className="bg-white rounded-xl shadow-sm p-4">
+    <div className="bg-surface rounded-xl shadow-sm p-4">
      <div className="flex items-end justify-between mb-2">
       <div>
-       <p className="text-xs text-gray-500">Calories today</p>
+       <p className="text-xs text-soft">Calories today</p>
        <p className="text-2xl font-bold text-[#001E40]">
         {data.totalCalories}
-        <span className="text-sm font-normal text-gray-400"> / {data.targetCalories}</span>
+        <span className="text-sm font-normal text-faint"> / {data.targetCalories}</span>
        </p>
       </div>
       <div className="text-right">
-       <p className="text-xs text-gray-400">{Math.round(calPct)}% of goal</p>
+       <p className="text-xs text-faint">{Math.round(calPct)}% of goal</p>
       </div>
      </div>
      {/* Progress bar */}
-     <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-3">
+     <div className="h-2 bg-subtle rounded-full overflow-hidden mb-3">
       <div
        className={`h-full rounded-full transition-all duration-500 ${calPct > 100 ? 'bg-red-500' : 'bg-[#0C6780]'}`}
        style={{ width: `${calPct}%` }}
@@ -215,15 +215,15 @@ export default function FoodDiaryTab() {
      <div className="flex gap-2">
       <span className="flex-1 text-center text-xs py-1.5 bg-blue-50 rounded-lg">
        <span className="font-bold text-[#001E40]">{totalProtein}g</span>
-       <span className="text-gray-400 ml-1">Protein</span>
+       <span className="text-faint ml-1">Protein</span>
       </span>
       <span className="flex-1 text-center text-xs py-1.5 bg-amber-50 rounded-lg">
        <span className="font-bold text-[#001E40]">{totalCarbs}g</span>
-       <span className="text-gray-400 ml-1">Carbs</span>
+       <span className="text-faint ml-1">Carbs</span>
       </span>
       <span className="flex-1 text-center text-xs py-1.5 bg-pink-50 rounded-lg">
        <span className="font-bold text-[#001E40]">{totalFat}g</span>
-       <span className="text-gray-400 ml-1">Fat</span>
+       <span className="text-faint ml-1">Fat</span>
       </span>
      </div>
     </div>
@@ -243,9 +243,9 @@ export default function FoodDiaryTab() {
    {loading && (
     <div className="space-y-4">
      {[1, 2, 3, 4].map((i) => (
-      <div key={i} className="bg-white rounded-xl p-4 animate-pulse">
-       <div className="h-5 bg-gray-200 rounded w-1/3 mb-3" />
-       <div className="h-12 bg-gray-200 rounded" />
+      <div key={i} className="bg-surface rounded-xl p-4 animate-pulse">
+       <div className="h-5 bg-line rounded w-1/3 mb-3" />
+       <div className="h-12 bg-line rounded" />
       </div>
      ))}
     </div>
@@ -267,8 +267,8 @@ export default function FoodDiaryTab() {
     const Icon = meal.icon
 
     return (
-     <div key={meal.key} className={`bg-white rounded-xl shadow-sm overflow-hidden border-l-4 ${meal.borderColor}`}>
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
+     <div key={meal.key} className={`bg-surface rounded-xl shadow-sm overflow-hidden border-l-4 ${meal.borderColor}`}>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line">
        <div className="flex items-center gap-2">
         <div className={`w-8 h-8 rounded-lg ${meal.bgColor} flex items-center justify-center`}>
          <Icon className={`w-4 h-4 ${meal.color}`} />
@@ -276,7 +276,7 @@ export default function FoodDiaryTab() {
         <div>
          <span className="text-sm font-semibold text-[#001E40]">{meal.label}</span>
          {mealCals > 0 && (
-          <span className="ml-2 text-xs text-gray-400">{mealCals} cal</span>
+          <span className="ml-2 text-xs text-faint">{mealCals} cal</span>
          )}
         </div>
        </div>
@@ -292,7 +292,7 @@ export default function FoodDiaryTab() {
        {entries.length === 0 ? (
         <button
          onClick={() => openAddModal(meal.key)}
-         className="w-full py-3 text-sm text-gray-400 text-center hover:text-[#0C6780] transition-colors border border-dashed border-gray-200 rounded-lg hover:border-[#0C6780]/40"
+         className="w-full py-3 text-sm text-faint text-center hover:text-[#0C6780] transition-colors border border-dashed border-line rounded-lg hover:border-[#0C6780]/40"
         >
          + Log {meal.label.toLowerCase()}
         </button>
@@ -319,12 +319,12 @@ export default function FoodDiaryTab() {
    {/* Add Food Modal */}
    {showAddModal && (
     <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
-     <div className="bg-white w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
+     <div className="bg-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
        <h3 className="text-base font-bold text-[#001E40]">
         Add {MEAL_TYPES.find((m) => m.key === addMealType)?.label || 'Food'}
        </h3>
-       <button onClick={() => setShowAddModal(false)} className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+       <button onClick={() => setShowAddModal(false)} className="p-2 text-faint hover:text-soft transition-colors">
         &times;
        </button>
       </div>
@@ -338,7 +338,7 @@ export default function FoodDiaryTab() {
           className={`px-3 py-1.5 text-xs rounded-full font-medium whitespace-nowrap transition-colors ${
            addMealType === meal.key
            ? 'bg-[#001E40] text-white'
-           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+           : 'bg-subtle text-soft hover:bg-line'
           }`}
          >
           {meal.label}
@@ -347,13 +347,13 @@ export default function FoodDiaryTab() {
        </div>
 
        {/* Search / AI Scan tabs */}
-       <div className="flex border-b border-gray-200 mb-4">
+       <div className="flex border-b border-line mb-4">
         <button
          onClick={() => setAddTab('search')}
          className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
           addTab === 'search'
           ? 'text-[#0C6780] border-b-2 border-[#0C6780]'
-          : 'text-gray-500 hover:text-gray-700'
+          : 'text-soft hover:text-soft'
          }`}
         >
          <FaPlus className="inline mr-1.5 text-xs" />
@@ -364,7 +364,7 @@ export default function FoodDiaryTab() {
          className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
           addTab === 'scan'
           ? 'text-[#0C6780] border-b-2 border-[#0C6780]'
-          : 'text-gray-500 hover:text-gray-700'
+          : 'text-soft hover:text-soft'
          }`}
         >
          <FaCamera className="inline mr-1.5 text-xs" />

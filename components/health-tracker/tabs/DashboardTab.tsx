@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaUtensils, FaDumbbell, FaTint, FaSync, FaTimes, FaFire } from 'react-icons/fa'
@@ -23,27 +23,27 @@ function generateInsight(data: DashboardData): { text: string; emoji: string } {
   const exPct = data.exercise.targetMinutes > 0 ? data.exercise.minutes / data.exercise.targetMinutes : 0
 
   if (data.calories.consumed === 0 && data.water.consumed === 0 && data.exercise.minutes === 0) {
-    return { emoji: '☀️', text: "Start your day right! Log your first meal and a glass of water to get personalised insights." }
+    return { emoji: 'â˜€ï¸', text: "Start your day right! Log your first meal and a glass of water to get personalised insights." }
   }
   if (waterPct < 0.25) {
-    return { emoji: '💧', text: "You've had very little water today. Dehydration reduces focus - grab a glass now!" }
+    return { emoji: 'ðŸ’§', text: "You've had very little water today. Dehydration reduces focus - grab a glass now!" }
   }
   if (exPct >= 1 && waterPct >= 0.8) {
-    return { emoji: '🎉', text: "Amazing! Exercise and hydration goals both hit. You're crushing it today!" }
+    return { emoji: 'ðŸŽ‰', text: "Amazing! Exercise and hydration goals both hit. You're crushing it today!" }
   }
   if (calPct > 1.1) {
-    return { emoji: '⚖️', text: "You've gone over your calorie goal. A light walk can help balance the day." }
+    return { emoji: 'âš–ï¸', text: "You've gone over your calorie goal. A light walk can help balance the day." }
   }
   if (exPct < 0.3 && calPct > 0.6) {
-    return { emoji: '🏃', text: "You've fuelled up well - time to move! Even 15 minutes of walking counts." }
+    return { emoji: 'ðŸƒ', text: "You've fuelled up well - time to move! Even 15 minutes of walking counts." }
   }
   if (waterPct >= 1) {
-    return { emoji: '💦', text: "Hydration goal reached! Staying consistent will boost your energy all day." }
+    return { emoji: 'ðŸ’¦', text: "Hydration goal reached! Staying consistent will boost your energy all day." }
   }
   if (calPct < 0.4 && data.calories.consumed > 0) {
-    return { emoji: '🥗', text: "You've logged only a fraction of your daily calories. Make sure to eat enough to fuel your body." }
+    return { emoji: 'ðŸ¥—', text: "You've logged only a fraction of your daily calories. Make sure to eat enough to fuel your body." }
   }
-  return { emoji: '📊', text: "You're on track! Keep logging meals, water, and activity to close out the day strong." }
+  return { emoji: 'ðŸ“Š', text: "You're on track! Keep logging meals, water, and activity to close out the day strong." }
 }
 
 export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
@@ -101,14 +101,14 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
   if (loading) {
     return (
       <div className="p-4 space-y-4">
-        <div className="h-20 bg-gray-200 rounded-xl animate-pulse" />
+        <div className="h-20 bg-line rounded-xl animate-pulse" />
         <div className="flex justify-center">
-          <div className="w-48 h-48 bg-gray-200 rounded-full animate-pulse" />
+          <div className="w-48 h-48 bg-line rounded-full animate-pulse" />
         </div>
-        <div className="h-24 bg-gray-200 rounded-xl animate-pulse" />
+        <div className="h-24 bg-line rounded-xl animate-pulse" />
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-10 bg-gray-200 rounded-lg animate-pulse" />
+            <div key={i} className="h-10 bg-line rounded-lg animate-pulse" />
           ))}
         </div>
       </div>
@@ -158,7 +158,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
         <h2 className="text-lg font-bold text-[#001E40]">Today&apos;s Summary</h2>
         <button
           onClick={fetchData}
-          className="p-2 text-gray-400 hover:text-[#0C6780] transition-colors rounded-lg hover:bg-gray-100"
+          className="p-2 text-faint hover:text-[#0C6780] transition-colors rounded-lg hover:bg-subtle"
           aria-label="Refresh dashboard"
         >
           <FaSync className="w-4 h-4" />
@@ -175,24 +175,24 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
           />
         </div>
         <div className="hidden sm:flex flex-col gap-3 flex-1 w-full">
-          <div className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-[#0C6780]">
+          <div className="flex items-center gap-3 p-3 bg-surface rounded-xl shadow-sm border-l-4 border-[#0C6780]">
             <FaFire className="text-orange-500 text-xl flex-shrink-0" />
             <div>
-              <p className="text-xs text-gray-500">Net Calories</p>
+              <p className="text-xs text-soft">Net Calories</p>
               <p className="text-lg font-bold text-[#001E40]">{netCalories}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-emerald-500">
+          <div className="flex items-center gap-3 p-3 bg-surface rounded-xl shadow-sm border-l-4 border-emerald-500">
             <FaDumbbell className="text-emerald-500 text-xl flex-shrink-0" />
             <div>
-              <p className="text-xs text-gray-500">Exercise</p>
+              <p className="text-xs text-soft">Exercise</p>
               <p className="text-lg font-bold text-[#001E40]">{data.exercise.minutes} min</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border-l-4 border-sky-400">
+          <div className="flex items-center gap-3 p-3 bg-surface rounded-xl shadow-sm border-l-4 border-sky-400">
             <FaTint className="text-sky-500 text-xl flex-shrink-0" />
             <div>
-              <p className="text-xs text-gray-500">Remaining today</p>
+              <p className="text-xs text-soft">Remaining today</p>
               <p className="text-lg font-bold text-[#001E40]">{remaining} cal left</p>
             </div>
           </div>
@@ -201,15 +201,15 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
 
       {/* Mobile stat pills */}
       <div className="flex gap-2 sm:hidden overflow-x-auto [&::-webkit-scrollbar]:hidden pb-1">
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaFire className="text-orange-500 text-xs" />
           <span className="text-xs font-semibold text-[#001E40]">{netCalories} net cal</span>
         </div>
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaDumbbell className="text-emerald-500 text-xs" />
           <span className="text-xs font-semibold text-[#001E40]">{data.exercise.minutes} min</span>
         </div>
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaTint className="text-sky-500 text-xs" />
           <span className="text-xs font-semibold text-[#001E40]">{data.water.consumed}ml water</span>
         </div>
@@ -223,7 +223,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
       />
 
       {/* Goal Progress */}
-      <div className="bg-white rounded-xl shadow-sm p-4 space-y-4">
+      <div className="bg-surface rounded-xl shadow-sm p-4 space-y-4">
         <h3 className="text-sm font-semibold text-[#001E40]">Goal Progress</h3>
         <GoalProgressBar
           label="Calories"
@@ -249,7 +249,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-surface rounded-xl shadow-sm p-4">
         <h3 className="text-sm font-semibold text-[#001E40] mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-3">
           <button

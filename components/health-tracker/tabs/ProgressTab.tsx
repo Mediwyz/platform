@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaFire, FaDumbbell, FaTint, FaBalanceScale, FaTimes, FaArrowUp, FaArrowDown, FaMinus } from 'react-icons/fa'
@@ -40,10 +40,10 @@ function WeeklyBarChart({
  const avg = values.length > 0 ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : 0
 
  return (
-  <div className="bg-white rounded-xl shadow-sm p-4">
+  <div className="bg-surface rounded-xl shadow-sm p-4">
    <div className="flex items-center justify-between mb-4">
     <h3 className="text-sm font-semibold text-[#001E40]">{label}</h3>
-    <span className="text-xs text-gray-400">avg {avg} {unit}</span>
+    <span className="text-xs text-faint">avg {avg} {unit}</span>
    </div>
    <div className="flex items-end gap-1.5 h-28">
     {data.map((entry, i) => {
@@ -52,9 +52,9 @@ function WeeklyBarChart({
      return (
       <div key={i} className="flex-1 flex flex-col items-center gap-1">
        {entry[dataKey] > 0 && (
-        <span className="text-[9px] text-gray-500 font-medium">{entry[dataKey]}</span>
+        <span className="text-[9px] text-soft font-medium">{entry[dataKey]}</span>
        )}
-       <div className="w-full bg-gray-100 rounded-t-lg relative" style={{ height: '90px' }}>
+       <div className="w-full bg-subtle rounded-t-lg relative" style={{ height: '90px' }}>
         <div
          className={`absolute bottom-0 w-full rounded-t-lg transition-all duration-700 ${isToday ? color : color + '/60'}`}
          style={{ height: `${Math.max(height, entry[dataKey] > 0 ? 4 : 0)}%` }}
@@ -63,7 +63,7 @@ function WeeklyBarChart({
          <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-current" style={{ color: 'transparent', borderTop: '3px solid #0C6780' }} />
         )}
        </div>
-       <span className={`text-[9px] font-medium ${isToday ? 'text-[#001E40]' : 'text-gray-400'}`}>{entry.day}</span>
+       <span className={`text-[9px] font-medium ${isToday ? 'text-[#001E40]' : 'text-faint'}`}>{entry.day}</span>
       </div>
      )
     })}
@@ -76,15 +76,15 @@ function generateProgressInsight(data: ProgressData): { text: string; emoji: str
  if (data.weeklyData.every(d => d.calories === 0)) return null
  const activeDays = data.weeklyData.filter(d => d.exerciseMinutes > 0).length
  const totalDays = data.weeklyData.length
- if (activeDays === totalDays) return { emoji: '🏆', text: "You've been active every day this week. Consistency is the most powerful health habit you can build." }
- if (activeDays === 0) return { emoji: '💡', text: "No exercise logged this week. Even a 15-minute walk each day would make a meaningful difference." }
- if (data.weeklyNetCalories < -1000) return { emoji: '⚖️', text: "Your net calories are very low this week. Make sure you're eating enough to sustain your energy and muscle mass." }
- if (activeDays >= 4) return { emoji: '💪', text: `${activeDays} active days this week - well done! Aim for one more session to hit your full weekly target.` }
- return { emoji: '📈', text: `You've been active ${activeDays} days this week. Building a consistent routine is the key to lasting results.` }
+ if (activeDays === totalDays) return { emoji: 'ðŸ†', text: "You've been active every day this week. Consistency is the most powerful health habit you can build." }
+ if (activeDays === 0) return { emoji: 'ðŸ’¡', text: "No exercise logged this week. Even a 15-minute walk each day would make a meaningful difference." }
+ if (data.weeklyNetCalories < -1000) return { emoji: 'âš–ï¸', text: "Your net calories are very low this week. Make sure you're eating enough to sustain your energy and muscle mass." }
+ if (activeDays >= 4) return { emoji: 'ðŸ’ª', text: `${activeDays} active days this week - well done! Aim for one more session to hit your full weekly target.` }
+ return { emoji: 'ðŸ“ˆ', text: `You've been active ${activeDays} days this week. Building a consistent routine is the key to lasting results.` }
 }
 
 function TrendBadge({ value, positive = true }: { value: number; positive?: boolean }) {
- if (value === 0) return <FaMinus className="text-gray-300 text-xs" />
+ if (value === 0) return <FaMinus className="text-faint text-xs" />
  const isGood = positive ? value > 0 : value < 0
  return value > 0
   ? <FaArrowUp className={`text-xs ${isGood ? 'text-emerald-500' : 'text-red-500'}`} />
@@ -145,12 +145,12 @@ export default function ProgressTab() {
  if (loading) {
   return (
    <div className="p-4 space-y-4">
-    <div className="h-10 bg-gray-200 rounded-xl animate-pulse" />
+    <div className="h-10 bg-line rounded-xl animate-pulse" />
     <div className="grid grid-cols-2 gap-3">
-     {[1, 2, 3, 4].map((i) => <div key={i} className="h-20 bg-gray-200 rounded-xl animate-pulse" />)}
+     {[1, 2, 3, 4].map((i) => <div key={i} className="h-20 bg-line rounded-xl animate-pulse" />)}
     </div>
-    <div className="h-48 bg-gray-200 rounded-xl animate-pulse" />
-    <div className="h-48 bg-gray-200 rounded-xl animate-pulse" />
+    <div className="h-48 bg-line rounded-xl animate-pulse" />
+    <div className="h-48 bg-line rounded-xl animate-pulse" />
    </div>
   )
  }
@@ -169,13 +169,13 @@ export default function ProgressTab() {
  return (
   <div className="p-4 space-y-4">
    {/* Period Toggle */}
-   <div className="flex bg-white rounded-xl shadow-sm p-1 gap-1">
+   <div className="flex bg-surface rounded-xl shadow-sm p-1 gap-1">
     {(['week', 'month'] as const).map((p) => (
      <button
       key={p}
       onClick={() => setPeriod(p)}
       className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors capitalize ${
-       period === p ? 'bg-[#001E40] text-white' : 'text-gray-600 hover:bg-gray-100'
+       period === p ? 'bg-[#001E40] text-white' : 'text-soft hover:bg-subtle'
       }`}
      >
       This {p}
@@ -202,13 +202,13 @@ export default function ProgressTab() {
      { icon: FaTint, label: "Water", value: `${data.todayWater}`, sub: "ml drank", color: 'text-sky-500', border: 'border-l-sky-400' },
      { icon: FaBalanceScale, label: "Net calories", value: `${data.todayNetCalories}`, sub: "net today", color: 'text-emerald-500', border: 'border-l-emerald-400' },
     ].map(({ icon: Icon, label, value, sub, color, border }) => (
-     <div key={label} className={`bg-white rounded-xl shadow-sm p-3 border-l-4 ${border}`}>
+     <div key={label} className={`bg-surface rounded-xl shadow-sm p-3 border-l-4 ${border}`}>
       <div className="flex items-center gap-1.5 mb-1">
        <Icon className={`w-3.5 h-3.5 ${color}`} />
-       <span className="text-xs text-gray-500">{label}</span>
+       <span className="text-xs text-soft">{label}</span>
       </div>
       <p className={`text-xl font-bold ${color}`}>{value}</p>
-      <p className="text-[10px] text-gray-400">{sub}</p>
+      <p className="text-[10px] text-faint">{sub}</p>
      </div>
     ))}
    </div>
@@ -232,9 +232,9 @@ export default function ProgressTab() {
    />
 
    {/* Weekly Insights table */}
-   <div className="bg-white rounded-xl shadow-sm p-4">
+   <div className="bg-surface rounded-xl shadow-sm p-4">
     <h3 className="text-sm font-semibold text-[#001E40] mb-3">Summary</h3>
-    <div className="space-y-3 divide-y divide-gray-50">
+    <div className="space-y-3 divide-y divide-line">
      {[
       { label: `Avg. daily calories`, value: `${data.weeklyAvgCalories} cal`, icon: FaFire, color: 'text-[#0C6780]', trend: 0, positiveUp: false },
       { label: `Total burned`, value: `${data.weeklyTotalBurned} cal`, icon: FaDumbbell, color: 'text-orange-500', trend: 1, positiveUp: true },
@@ -244,7 +244,7 @@ export default function ProgressTab() {
       <div key={label} className="flex items-center justify-between pt-2.5 first:pt-0">
        <div className="flex items-center gap-2">
         <Icon className={`w-3.5 h-3.5 ${color}`} />
-        <span className="text-sm text-gray-600">{label}</span>
+        <span className="text-sm text-soft">{label}</span>
        </div>
        <div className="flex items-center gap-1.5">
         <span className={`text-sm font-semibold ${color}`}>{value}</span>

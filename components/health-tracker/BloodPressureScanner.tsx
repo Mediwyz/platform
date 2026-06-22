@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -139,8 +139,8 @@ export default function BloodPressureScanner() {
  <FaHeartbeat className="text-white text-lg" />
  </div>
  <div className="text-left">
- <p className="font-semibold text-gray-900 text-sm">Blood Pressure Check</p>
- <p className="text-xs text-gray-500">Place finger on camera + flash to measure</p>
+ <p className="font-semibold text-fg text-sm">Blood Pressure Check</p>
+ <p className="text-xs text-soft">Place finger on camera + flash to measure</p>
  </div>
  </button>
  )
@@ -210,12 +210,12 @@ export default function BloodPressureScanner() {
  <div className="flex items-center justify-center gap-6 mb-4">
  <div className="text-center">
  <p className="text-4xl font-bold">{result.systolic}</p>
- <p className="text-xs text-gray-500 mt-1">Systolic</p>
+ <p className="text-xs text-soft mt-1">Systolic</p>
  </div>
- <span className="text-2xl text-gray-300">/</span>
+ <span className="text-2xl text-faint">/</span>
  <div className="text-center">
  <p className="text-4xl font-bold">{result.diastolic}</p>
- <p className="text-xs text-gray-500 mt-1">Diastolic</p>
+ <p className="text-xs text-soft mt-1">Diastolic</p>
  </div>
  </div>
 
@@ -231,7 +231,7 @@ export default function BloodPressureScanner() {
  <p className="text-xs mt-1 opacity-80">{result.message}</p>
  </div>
 
- <p className="text-[10px] text-gray-400 text-center mt-3">
+ <p className="text-[10px] text-faint text-center mt-3">
  This is an estimate using camera-based PPG. For accurate readings, use a medical-grade device.
  </p>
 

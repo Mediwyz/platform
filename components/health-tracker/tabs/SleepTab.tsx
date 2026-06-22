@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -20,11 +20,11 @@ interface SleepDayData {
 }
 
 const QUALITIES = [
- { value: 'terrible', label: '😫 Terrible', activeClass: 'bg-red-500 text-white' },
- { value: 'poor', label: '😕 Poor', activeClass: 'bg-orange-500 text-white' },
- { value: 'fair', label: '😐 Fair', activeClass: 'bg-yellow-500 text-white' },
- { value: 'good', label: '😊 Good', activeClass: 'bg-green-500 text-white' },
- { value: 'excellent', label: '😄 Excellent', activeClass: 'bg-emerald-500 text-white' },
+ { value: 'terrible', label: 'ðŸ˜« Terrible', activeClass: 'bg-red-500 text-white' },
+ { value: 'poor', label: 'ðŸ˜• Poor', activeClass: 'bg-orange-500 text-white' },
+ { value: 'fair', label: 'ðŸ˜ Fair', activeClass: 'bg-yellow-500 text-white' },
+ { value: 'good', label: 'ðŸ˜Š Good', activeClass: 'bg-green-500 text-white' },
+ { value: 'excellent', label: 'ðŸ˜„ Excellent', activeClass: 'bg-emerald-500 text-white' },
 ]
 
 const qualityBgMap: Record<string, string> = {
@@ -36,7 +36,7 @@ const qualityBgMap: Record<string, string> = {
 }
 
 const qualityEmoji: Record<string, string> = {
- terrible: '😫', poor: '😕', fair: '😐', good: '😊', excellent: '😄',
+ terrible: 'ðŸ˜«', poor: 'ðŸ˜•', fair: 'ðŸ˜', good: 'ðŸ˜Š', excellent: 'ðŸ˜„',
 }
 
 function formatDuration(totalMin: number): string {
@@ -78,18 +78,18 @@ function getSleepScoreColor(durationMin: number, targetMin: number): string {
 function generateSleepInsight(entry: SleepEntry, targetMin: number): { text: string; emoji: string } {
  const ratio = entry.durationMin / targetMin
  if (entry.quality === 'excellent' && ratio >= 0.9) {
-  return { emoji: '🌟', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
+  return { emoji: 'ðŸŒŸ', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
  }
  if (ratio < 0.6) {
-  return { emoji: '😴', text: `You slept ${formatDuration(entry.durationMin)} - well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
+  return { emoji: 'ðŸ˜´', text: `You slept ${formatDuration(entry.durationMin)} - well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
  }
  if (entry.quality === 'terrible' || entry.quality === 'poor') {
-  return { emoji: '💤', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
+  return { emoji: 'ðŸ’¤', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
  }
  if (ratio >= 0.9) {
-  return { emoji: '✅', text: `You hit your sleep target (${formatDuration(entry.durationMin)}). Consistent sleep timing is one of the best things for your health.` }
+  return { emoji: 'âœ…', text: `You hit your sleep target (${formatDuration(entry.durationMin)}). Consistent sleep timing is one of the best things for your health.` }
  }
- return { emoji: '🌙', text: "Good effort! Aim to go to bed 30 minutes earlier tonight to reach your full sleep target." }
+ return { emoji: 'ðŸŒ™', text: "Good effort! Aim to go to bed 30 minutes earlier tonight to reach your full sleep target." }
 }
 
 export default function SleepTab() {
@@ -214,12 +214,12 @@ export default function SleepTab() {
    )}
 
    {/* Date Selector */}
-   <div className="flex items-center justify-between bg-white rounded-xl shadow-sm p-3">
-    <button onClick={() => changeDate(-1)} className="p-2 text-gray-500 hover:text-[#0C6780] rounded-lg hover:bg-gray-100" aria-label="Previous day">
+   <div className="flex items-center justify-between bg-surface rounded-xl shadow-sm p-3">
+    <button onClick={() => changeDate(-1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Previous day">
      <FaChevronLeft className="w-4 h-4" />
     </button>
     <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
-    <button onClick={() => changeDate(1)} className="p-2 text-gray-500 hover:text-[#0C6780] rounded-lg hover:bg-gray-100" aria-label="Next day">
+    <button onClick={() => changeDate(1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Next day">
      <FaChevronRight className="w-4 h-4" />
     </button>
    </div>
@@ -237,7 +237,7 @@ export default function SleepTab() {
 
    {loading && (
     <div className="space-y-3">
-     {[1, 2].map((i) => <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse" />)}
+     {[1, 2].map((i) => <div key={i} className="h-24 bg-line rounded-xl animate-pulse" />)}
     </div>
    )}
    {error && (
@@ -255,8 +255,8 @@ export default function SleepTab() {
        <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
         <FaMoon className="w-10 h-10 text-indigo-300" />
        </div>
-       <p className="text-sm font-medium text-gray-500 mb-1">No sleep logged</p>
-       <p className="text-xs text-gray-400">Track your bedtime and wake time for personalised insights.</p>
+       <p className="text-sm font-medium text-soft mb-1">No sleep logged</p>
+       <p className="text-xs text-faint">Track your bedtime and wake time for personalised insights.</p>
       </div>
      ) : (
       <>
@@ -286,7 +286,7 @@ export default function SleepTab() {
 
         {/* Sleep arc progress bar */}
         <div className="mb-3">
-         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+         <div className="h-2 bg-surface/10 rounded-full overflow-hidden">
           <div
            className={`h-full rounded-full transition-all duration-700 ${
             entry.durationMin / targetMin >= 0.9 ? 'bg-emerald-400' :
@@ -353,7 +353,7 @@ export default function SleepTab() {
 
    {/* Sleep tips when no entry */}
    {!loading && !entry && (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-surface rounded-xl p-4 shadow-sm">
      <p className="text-xs font-semibold text-[#001E40] mb-3 flex items-center gap-1.5">
       <FaStar className="text-amber-400" /> Sleep tips
      </p>
@@ -364,8 +364,8 @@ export default function SleepTab() {
        "A cool, dark room helps you fall asleep faster",
        "Avoid caffeine after 2 PM",
       ].map((tip, i) => (
-       <li key={i} className="text-xs text-gray-500 flex items-start gap-2">
-        <span className="text-indigo-300 mt-0.5">•</span>{tip}
+       <li key={i} className="text-xs text-soft flex items-start gap-2">
+        <span className="text-indigo-300 mt-0.5">â€¢</span>{tip}
        </li>
       ))}
      </ul>
@@ -375,13 +375,13 @@ export default function SleepTab() {
    {/* Add Sleep Modal - bedtime/wake as primary */}
    {showAddModal && (
     <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
-     <div className="bg-white w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
+     <div className="bg-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
        <div>
         <h3 className="text-base font-bold text-[#001E40]">Log Sleep</h3>
-        <p className="text-xs text-gray-400">Enter bedtime & wake time - duration is calculated automatically</p>
+        <p className="text-xs text-faint">Enter bedtime & wake time - duration is calculated automatically</p>
        </div>
-       <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-gray-400 hover:text-gray-600">&times;</button>
+       <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-faint hover:text-soft">&times;</button>
       </div>
       <div className="p-4 space-y-5">
        {/* Bedtime + Wake time - side by side */}
@@ -394,7 +394,7 @@ export default function SleepTab() {
           type="time"
           value={formBedtime}
           onChange={(e) => setFormBedtime(e.target.value)}
-          className="w-full px-3 py-3 border-2 border-gray-200 rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
          />
         </div>
         <div>
@@ -405,7 +405,7 @@ export default function SleepTab() {
           type="time"
           value={formWakeTime}
           onChange={(e) => setFormWakeTime(e.target.value)}
-          className="w-full px-3 py-3 border-2 border-gray-200 rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
          />
         </div>
        </div>
@@ -415,14 +415,14 @@ export default function SleepTab() {
         <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-xl">
          <FaBed className="text-indigo-500 text-lg flex-shrink-0" />
          <div>
-          <p className="text-xs text-gray-500">Sleep duration</p>
+          <p className="text-xs text-soft">Sleep duration</p>
           <p className="text-2xl font-black text-[#001E40]">{formatDuration(derivedDuration)}</p>
          </div>
          {derivedDuration < 360 && (
           <p className="text-xs text-amber-600 ml-auto text-right">Less than 6 hours<br/>Consider an earlier bedtime</p>
          )}
          {derivedDuration >= 420 && (
-          <p className="text-xs text-emerald-600 ml-auto text-right">✓ Good duration</p>
+          <p className="text-xs text-emerald-600 ml-auto text-right">âœ“ Good duration</p>
          )}
         </div>
        )}
@@ -436,7 +436,7 @@ export default function SleepTab() {
            key={q.value}
            onClick={() => setFormQuality(q.value)}
            className={`py-2 text-[11px] rounded-xl font-medium text-center transition-all leading-tight ${
-            formQuality === q.value ? q.activeClass : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            formQuality === q.value ? q.activeClass : 'bg-subtle text-soft hover:bg-line'
            }`}
           >
            {q.label}
@@ -453,7 +453,7 @@ export default function SleepTab() {
          onChange={(e) => setFormNotes(e.target.value)}
          placeholder="Vivid dreams? Woke up during the night? Note anything unusual."
          rows={2}
-         className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/40 resize-none"
+         className="w-full px-3 py-2 border border-line rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/40 resize-none"
         />
        </div>
 

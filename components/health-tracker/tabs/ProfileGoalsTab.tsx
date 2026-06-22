@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { FaSave, FaWeight, FaRulerVertical, FaBell } from 'react-icons/fa'
@@ -168,7 +168,7 @@ export default function ProfileGoalsTab() {
  return (
  <div className="p-4 space-y-4">
  {[1, 2, 3, 4, 5].map((i) => (
- <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
+ <div key={i} className="h-16 bg-line rounded-lg animate-pulse" />
  ))}
  </div>
  )
@@ -176,7 +176,7 @@ export default function ProfileGoalsTab() {
 
  return (
  <div className="p-4 space-y-6 pb-8">
- <h2 className="text-lg font-bold text-gray-800">Health Profile &amp; Goals</h2>
+ <h2 className="text-lg font-bold text-fg">Health Profile &amp; Goals</h2>
 
  {/* Success / Error Messages */}
  {success && (
@@ -191,27 +191,27 @@ export default function ProfileGoalsTab() {
  )}
 
  {/* Basic Info */}
- <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
- <h3 className="text-sm font-semibold text-gray-700">Basic Information</h3>
+ <div className="bg-surface rounded-lg shadow-sm p-4 space-y-4">
+ <h3 className="text-sm font-semibold text-soft">Basic Information</h3>
 
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Age</label>
+ <label className="block text-sm font-medium text-soft mb-1">Age</label>
  <input
  type="number"
  value={age}
  onChange={(e) => setAge(Number(e.target.value))}
  min={1}
  max={120}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Gender</label>
+ <label className="block text-sm font-medium text-soft mb-1">Gender</label>
  <select
  value={gender}
  onChange={(e) => setGender(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  <option value="male">Male</option>
  <option value="female">Female</option>
@@ -222,7 +222,7 @@ export default function ProfileGoalsTab() {
 
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  <FaRulerVertical className="inline w-3 h-3 mr-1" />
  Height (cm)
  </label>
@@ -232,11 +232,11 @@ export default function ProfileGoalsTab() {
  onChange={(e) => setHeightCm(Number(e.target.value))}
  min={50}
  max={300}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  <FaWeight className="inline w-3 h-3 mr-1" />
  Weight (kg)
  </label>
@@ -246,17 +246,17 @@ export default function ProfileGoalsTab() {
  onChange={(e) => setWeightKg(Number(e.target.value))}
  min={20}
  max={500}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Activity Level</label>
+ <label className="block text-sm font-medium text-soft mb-1">Activity Level</label>
  <select
  value={activityLevel}
  onChange={(e) => setActivityLevel(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  {ACTIVITY_LEVELS.map((l) => (
  <option key={l.value} value={l.value}>{l.label}</option>
@@ -265,11 +265,11 @@ export default function ProfileGoalsTab() {
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Weight Goal</label>
+ <label className="block text-sm font-medium text-soft mb-1">Weight Goal</label>
  <select
  value={weightGoal}
  onChange={(e) => setWeightGoal(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  {WEIGHT_GOALS.map((g) => (
  <option key={g.value} value={g.value}>{g.label}</option>
@@ -281,24 +281,24 @@ export default function ProfileGoalsTab() {
  {/* BMI & TDEE Display */}
  {tdeeResult && (
  <div className="grid grid-cols-2 gap-3">
- <div className="bg-white rounded-lg shadow-sm p-4 text-center">
- <p className="text-xs text-gray-500 mb-1">BMI</p>
- <p className="text-2xl font-bold text-gray-800">{tdeeResult.bmi}</p>
+ <div className="bg-surface rounded-lg shadow-sm p-4 text-center">
+ <p className="text-xs text-soft mb-1">BMI</p>
+ <p className="text-2xl font-bold text-fg">{tdeeResult.bmi}</p>
  {bmiCategory && (
  <p className={`text-xs font-medium ${bmiCategory.color}`}>{bmiCategory.label}</p>
  )}
  </div>
- <div className="bg-white rounded-lg shadow-sm p-4 text-center">
- <p className="text-xs text-gray-500 mb-1">TDEE</p>
- <p className="text-2xl font-bold text-gray-800">{tdeeResult.tdee}</p>
- <p className="text-xs text-gray-400">cal/day maintenance</p>
+ <div className="bg-surface rounded-lg shadow-sm p-4 text-center">
+ <p className="text-xs text-soft mb-1">TDEE</p>
+ <p className="text-2xl font-bold text-fg">{tdeeResult.tdee}</p>
+ <p className="text-xs text-faint">cal/day maintenance</p>
  </div>
  </div>
  )}
 
  {/* Dietary Preferences */}
- <div className="bg-white rounded-lg shadow-sm p-4">
- <h3 className="text-sm font-semibold text-gray-700 mb-3">Dietary Preferences</h3>
+ <div className="bg-surface rounded-lg shadow-sm p-4">
+ <h3 className="text-sm font-semibold text-soft mb-3">Dietary Preferences</h3>
  <div className="flex flex-wrap gap-2">
  {DIETARY_OPTIONS.map((option) => {
  const isSelected = dietaryPreferences.includes(option)
@@ -309,7 +309,7 @@ export default function ProfileGoalsTab() {
  className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${
  isSelected
  ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {option}
@@ -320,8 +320,8 @@ export default function ProfileGoalsTab() {
  </div>
 
  {/* Allergen Settings */}
- <div className="bg-white rounded-lg shadow-sm p-4">
- <h3 className="text-sm font-semibold text-gray-700 mb-3">Allergen Settings</h3>
+ <div className="bg-surface rounded-lg shadow-sm p-4">
+ <h3 className="text-sm font-semibold text-soft mb-3">Allergen Settings</h3>
  <div className="flex flex-wrap gap-2">
  {ALLERGEN_OPTIONS.map((option) => {
  const isSelected = allergens.includes(option)
@@ -332,7 +332,7 @@ export default function ProfileGoalsTab() {
  className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors ${
  isSelected
  ? 'bg-red-600 text-white'
- : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {option}
@@ -343,12 +343,12 @@ export default function ProfileGoalsTab() {
  </div>
 
  {/* Targets */}
- <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
- <h3 className="text-sm font-semibold text-gray-700">Daily Targets</h3>
+ <div className="bg-surface rounded-lg shadow-sm p-4 space-y-4">
+ <h3 className="text-sm font-semibold text-soft">Daily Targets</h3>
 
  <div>
  <div className="flex items-center justify-between mb-1">
- <label className="text-sm font-medium text-gray-600">Target Calories</label>
+ <label className="text-sm font-medium text-soft">Target Calories</label>
  {suggestedCalories !== targetCalories && (
  <button
  onClick={() => setTargetCalories(suggestedCalories)}
@@ -364,12 +364,12 @@ export default function ProfileGoalsTab() {
  onChange={(e) => setTargetCalories(Number(e.target.value))}
  min={800}
  max={10000}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Target Water (ml)</label>
+ <label className="block text-sm font-medium text-soft mb-1">Target Water (ml)</label>
  <input
  type="number"
  value={targetWater}
@@ -377,41 +377,41 @@ export default function ProfileGoalsTab() {
  min={500}
  max={10000}
  step={250}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Target Exercise (minutes)</label>
+ <label className="block text-sm font-medium text-soft mb-1">Target Exercise (minutes)</label>
  <input
  type="number"
  value={targetExerciseMinutes}
  onChange={(e) => setTargetExerciseMinutes(Number(e.target.value))}
  min={0}
  max={480}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
  </div>
 
  {/* Notifications */}
- <div className="bg-white rounded-lg shadow-sm p-4">
- <h3 className="text-sm font-semibold text-gray-700 mb-3">Notifications</h3>
+ <div className="bg-surface rounded-lg shadow-sm p-4">
+ <h3 className="text-sm font-semibold text-soft mb-3">Notifications</h3>
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
  <FaBell className="w-4 h-4 text-blue-500" />
- <span className="text-sm text-gray-600">Water Reminders</span>
+ <span className="text-sm text-soft">Water Reminders</span>
  </div>
  <button
  onClick={() => setWaterReminders(!waterReminders)}
  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
- waterReminders ? 'bg-blue-600' : 'bg-gray-300'
+ waterReminders ? 'bg-blue-600' : 'bg-line'
  }`}
  role="switch"
  aria-checked={waterReminders}
  >
  <span
- className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+ className={`inline-block h-4 w-4 transform rounded-full bg-surface transition-transform ${
  waterReminders ? 'translate-x-6' : 'translate-x-1'
  }`}
  />
