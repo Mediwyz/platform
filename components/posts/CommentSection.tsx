@@ -140,14 +140,14 @@ export default function CommentSection({
  }
 
  return (
- <div className="mt-4 pt-3 border-t border-gray-100">
+ <div className="px-4 sm:px-5 py-3 bg-subtle/40">
  {/* Comments list */}
  {loading && comments.length === 0 ? (
  <div className="flex items-center justify-center py-4">
- <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+ <div className="w-5 h-5 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
  </div>
  ) : comments.length === 0 ? (
- <p className="text-gray-400 text-sm text-center py-3">No comments yet. Be the first to comment!</p>
+ <p className="text-faint text-sm text-center py-3">No comments yet. Be the first to comment!</p>
  ) : (
  <div className="space-y-3">
  {comments.map((comment) => (
@@ -161,13 +161,14 @@ export default function CommentSection({
  className="w-8 h-8 rounded-full object-cover flex-shrink-0"
  />
  ) : (
- <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-medium text-xs flex-shrink-0">
+ <div className="w-8 h-8 rounded-full bg-subtle text-soft flex items-center justify-center font-medium text-xs flex-shrink-0">
  {getInitials(comment.author.firstName, comment.author.lastName)}
  </div>
  )}
  <div className="flex-1 min-w-0">
+ <div className="bg-surface border border-line rounded-2xl px-3 py-2">
  <div className="flex items-center gap-2 flex-wrap">
- <span className="font-medium text-gray-900 text-sm">
+ <span className="font-medium text-fg text-sm">
  {comment.author.firstName} {comment.author.lastName}
  </span>
  <span
@@ -177,11 +178,12 @@ export default function CommentSection({
  >
  {userTypeLabels[comment.author.userType] || comment.author.userType}
  </span>
- <span className="text-gray-400 text-xs">
+ <span className="text-faint text-xs">
  {getRelativeTime(comment.createdAt)}
  </span>
  </div>
- <p className="text-gray-700 text-sm mt-0.5">{comment.content}</p>
+ <p className="text-soft text-sm mt-0.5">{comment.content}</p>
+ </div>
  </div>
  </div>
  ))}
@@ -191,9 +193,9 @@ export default function CommentSection({
  <button
  onClick={handleLoadMore}
  disabled={loading}
- className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium py-2 disabled:opacity-50"
+ className="w-full text-center text-sm text-[#0C6780] dark:text-accent hover:underline font-medium py-2 disabled:opacity-50"
  >
- {loading ? 'Loading...' : `Load more comments (${total - comments.length} remaining)`}
+ {loading ? 'Loading…' : `Load more comments (${total - comments.length} remaining)`}
  </button>
  )}
  </div>
@@ -206,20 +208,20 @@ export default function CommentSection({
  type="text"
  value={newComment}
  onChange={(e) => setNewComment(e.target.value)}
- placeholder="Add a comment..."
- className="flex-1 text-sm border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ placeholder="Add a comment…"
+ className="flex-1 text-sm bg-surface text-fg border border-line rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
  disabled={submitting}
  />
  <button
  type="submit"
  disabled={submitting || !newComment.trim()}
- className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+ className="flex items-center justify-center w-9 h-9 rounded-full bg-[#0C6780] hover:bg-[#001E40] dark:bg-accent dark:text-[#04121f] text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
  >
  <FaPaperPlane className="text-xs" />
  </button>
  </form>
  ) : (
- <p className="text-gray-400 text-xs text-center mt-3">
+ <p className="text-faint text-xs text-center mt-3">
  Sign in to leave a comment
  </p>
  )}

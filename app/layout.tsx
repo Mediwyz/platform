@@ -17,6 +17,7 @@ import FloatingGeoFAB from '@/components/shared/FloatingGeoFAB'
 import { PrescriptionProvider } from '@/lib/contexts/prescription-context'
 import { BookingDrawerProvider } from '@/lib/contexts/booking-drawer-context'
 import BookingDrawer from '@/components/shared/BookingDrawer'
+import { ThemeProvider, themeScript } from '@/components/ui/theme/ThemeProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -161,8 +162,10 @@ export default function RootLayout({
  children: React.ReactNode
 }) {
  return (
- <html lang="en">
+ <html lang="en" suppressHydrationWarning>
  <head>
+ {/* No-flash theme: set .dark before paint based on stored choice / OS. */}
+ <script dangerouslySetInnerHTML={{ __html: themeScript }} />
  <meta name="theme-color" content="#2563eb" />
  <meta name="apple-mobile-web-app-capable" content="yes" />
  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -178,6 +181,7 @@ export default function RootLayout({
  />
  </head>
  <body className={inter.className}>
+ <ThemeProvider>
  <HealthShopCartProvider>
  <PrescriptionProvider>
  <CartProvider>
@@ -203,6 +207,7 @@ export default function RootLayout({
  </CartProvider>
  </PrescriptionProvider>
  </HealthShopCartProvider>
+ </ThemeProvider>
  <script
  dangerouslySetInnerHTML={{
  __html: `

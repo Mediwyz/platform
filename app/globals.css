@@ -1,4 +1,8 @@
 ﻿@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Noto+Sans:wght@300;400;500;600;700&display=swap');
+
+/* Class-based dark mode: toggled by adding `.dark` to <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-brand-navy: #001E40;
@@ -10,11 +14,57 @@
   --color-primary-teal: #0C6780;
   --color-secondary-green: #0C6780;
 
+  /* ── Semantic, theme-aware tokens (light/dark via vars below) ──────────
+     Use these for all redesigned surfaces so dark mode "just works":
+       bg-canvas  page background      bg-surface  cards/panels
+       bg-subtle  muted/hover surface  border-line borders
+       text-fg    primary text         text-soft   secondary text
+       text-faint tertiary text        text-accent interactive accent  */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-soft: var(--soft);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+
+  /* Type system (ui-ux-pro-max: Figtree display + Noto Sans body) */
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Figtree', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
   /* xs breakpoint (was tailwind.config.ts extend.screens) */
   --breakpoint-xs: 375px;
 
   /* blob animation (used in components) */
   --animate-blob: blob 7s infinite;
+}
+
+/* Theme variable values — light is the default :root, dark overrides. */
+:root {
+  --canvas: #f4f7fb;
+  --surface: #ffffff;
+  --subtle: #f1f5f9;
+  --line: #e5e9f0;
+  --fg: #0f172a;
+  --soft: #475569;
+  --faint: #94a3b8;
+  --accent: #0C6780;      /* interactive accent (teal) */
+  --accent-ink: #001E40;  /* deep brand navy */
+}
+
+.dark {
+  color-scheme: dark;
+  --canvas: #0a0f1a;
+  --surface: #111a2b;
+  --subtle: #1a2438;
+  --line: #243149;
+  --fg: #e8eef7;
+  --soft: #a9b6c8;
+  --faint: #7688a0;
+  --accent: #38b6d9;      /* lighter teal reads on dark */
+  --accent-ink: #9AE1FF;
 }
 
 @keyframes blob {
@@ -78,8 +128,15 @@ body.capacitor-app .fixed.inset-0 [class*="max-h-"][class*="overflow-y-auto"] {
 
 @layer base {
   body {
-    background-color: #f9fafb;
-    color: #1f2937;
+    background-color: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
   }
 
   /* Global focus-visible styling for keyboard navigation */

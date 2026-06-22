@@ -203,8 +203,8 @@ export default function PostFeed({
  onClick={() => setActiveCategory(tab.value)}
  className={`px-3 sm:px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
  activeCategory === tab.value
- ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+ ? 'bg-[#0C6780] text-white dark:bg-accent dark:text-[#04121f]'
+ : 'bg-subtle text-soft hover:text-fg hover:bg-line'
  }`}
  title={tab.label}
  >
@@ -220,26 +220,26 @@ export default function PostFeed({
  {loading ? (
  <div className="space-y-4">
  {[1, 2, 3].map((i) => (
- <div key={i} className="bg-white rounded-xl shadow p-6 animate-pulse">
+ <div key={i} className="bg-surface border border-line rounded-2xl shadow-sm p-5 animate-pulse">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-full bg-gray-200" />
+ <div className="w-10 h-10 rounded-full bg-subtle" />
  <div className="flex-1">
- <div className="h-4 bg-gray-200 rounded w-32" />
- <div className="h-3 bg-gray-200 rounded w-24 mt-1" />
+ <div className="h-4 bg-subtle rounded w-32" />
+ <div className="h-3 bg-subtle rounded w-24 mt-1.5" />
  </div>
  </div>
- <div className="mt-3 space-y-2">
- <div className="h-3 bg-gray-200 rounded w-full" />
- <div className="h-3 bg-gray-200 rounded w-3/4" />
+ <div className="mt-4 space-y-2">
+ <div className="h-3 bg-subtle rounded w-full" />
+ <div className="h-3 bg-subtle rounded w-3/4" />
  </div>
  </div>
  ))}
  </div>
  ) : posts.length === 0 ? (
- <div className="bg-white rounded-xl shadow p-12 text-center">
- <FaPenFancy className="text-4xl text-gray-300 mx-auto mb-3" />
- <h3 className="text-lg font-semibold text-gray-500">No posts yet</h3>
- <p className="text-gray-400 text-sm mt-1">
+ <div className="bg-surface border border-line rounded-2xl shadow-sm p-12 text-center">
+ <FaPenFancy className="text-4xl text-faint mx-auto mb-3" />
+ <h3 className="text-lg font-semibold text-soft">No posts yet</h3>
+ <p className="text-faint text-sm mt-1">
  {activeCategory
  ? 'No posts in this category. Try a different filter.'
  : 'Be the first to share something with the community!'}
@@ -272,12 +272,12 @@ export default function PostFeed({
  <button
  onClick={handleLoadMore}
  disabled={loadingMore}
- className="px-6 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
+ className="px-6 py-2.5 bg-surface border border-line rounded-xl text-sm font-semibold text-soft hover:text-fg hover:bg-subtle disabled:opacity-50 transition-colors shadow-sm"
  >
  {loadingMore ? (
  <span className="flex items-center gap-2">
- <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
- Loading...
+ <div className="w-4 h-4 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
+ Loading…
  </span>
  ) : (
  'Load More'

@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa'
 import { getCurrencySymbol } from '@/lib/currency'
 import HealthwyzLogo from '@/components/ui/HealthwyzLogo'
+import ThemeToggle from '@/components/ui/theme/ThemeToggle'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import { useTranslation } from '@/lib/i18n'
 import { useCapacitor } from '@/hooks/useCapacitor'
@@ -111,7 +112,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  <div className="bg-white h-14" />
  )}
  <div className="h-0.5 bg-brand-teal " />
- <div className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+ <div className="bg-white/95 dark:bg-surface/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-line">
  <div className="px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-2.5">
  <div className="flex items-center justify-between gap-1">
  {/* Left: mobile toggle + logo + user info */}
@@ -136,11 +137,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
  <div className="hidden sm:flex items-center gap-2 sm:gap-3 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-gray-200">
  <div>
- <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 truncate max-w-[150px] sm:max-w-[200px] md:max-w-none">
+ <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-fg truncate max-w-[150px] sm:max-w-[200px] md:max-w-none">
  {userName}
  </h1>
  <div className="flex items-center gap-1.5">
- <p className="text-[10px] sm:text-xs text-gray-500">
+ <p className="text-[10px] sm:text-xs text-gray-500 dark:text-soft">
  {userSubtitle}
  </p>
  {planLabel && (
@@ -209,6 +210,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  {userId && (
  <NotificationBell userId={userId} profileHref={profileHref} />
  )}
+
+ {/* Theme toggle - light/dark */}
+ <ThemeToggle />
 
  {/* Language switcher - hidden on small mobile to save space */}
  <div className="hidden sm:block">
