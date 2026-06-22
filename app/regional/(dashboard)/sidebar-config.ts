@@ -26,11 +26,14 @@ export const REGIONAL_ADMIN_SIDEBAR_ITEMS: SidebarItem[] = [
   { id: 'org-categories', label: 'Organisation Categories', icon: FaBuilding, color: 'text-cyan-600', bgColor: 'bg-cyan-50', href: `${base}/org-categories` },
   { id: 'role-requests', label: 'Role Requests', labelKey: 'nav.roleRequests', icon: FaInbox, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/role-requests` },
 
+  // ── Service Flows (services + what happens after a booking) ───────────────
+  { id: 'service-flows-header', label: 'Service Flows', icon: FaSitemap, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '#', divider: true },
+  { id: 'services', label: 'Services', labelKey: 'nav.services', icon: FaTag, color: 'text-brand-navy', bgColor: 'bg-sky-50', href: `${base}/services` },
+  { id: 'workflows', label: 'After Booking', labelKey: 'nav.workflows', icon: FaSitemap, color: 'text-brand-teal', bgColor: 'bg-sky-50', href: `${base}/workflows` },
+  { id: 'workflow-suggestions', label: 'Provider Requests', icon: FaInbox, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/workflows/suggestions` },
+
   // ── Platform ─────────────────────────────────────────────────────────────
   { id: 'platform-header', label: 'Platform', icon: FaTag, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '#', divider: true },
-  { id: 'services', label: 'Services & Workflows', labelKey: 'nav.services', icon: FaTag, color: 'text-brand-navy', bgColor: 'bg-sky-50', href: `${base}/services` },
-  { id: 'workflows', label: 'Workflow Templates', labelKey: 'nav.workflows', icon: FaSitemap, color: 'text-brand-teal', bgColor: 'bg-sky-50', href: `${base}/workflows` },
-  { id: 'workflow-suggestions', label: 'Workflow Suggestions', icon: FaInbox, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/workflows/suggestions` },
   { id: 'clinical-knowledge', label: 'AI Knowledge', labelKey: 'nav.clinicalKnowledge', icon: FaBook, color: 'text-indigo-600', bgColor: 'bg-indigo-50', href: `${base}/clinical-knowledge` },
   { id: 'billing', label: 'Billing', labelKey: 'nav.billing', icon: FaMoneyBillWave, color: 'text-emerald-600', bgColor: 'bg-emerald-50', href: `${base}/billing` },
 

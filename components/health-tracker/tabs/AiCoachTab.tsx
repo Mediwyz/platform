@@ -54,10 +54,10 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
  if (showChat) {
   return (
    <div className="h-full flex flex-col">
-    <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100">
+    <div className="flex items-center gap-3 px-4 py-3 bg-surface border-b border-line">
      <button
       onClick={() => setShowChat(false)}
-      className="text-xs text-[#0C6780] hover:text-[#001E40] font-medium"
+      className="text-xs text-[#0C6780] dark:text-accent hover:underline font-medium"
      >
       ← Back
      </button>
@@ -65,7 +65,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
       <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#001E40] to-[#0C6780] flex items-center justify-center">
        <FaRobot className="text-white text-xs" />
       </div>
-      <span className="text-sm font-bold text-[#001E40]">Wyzo - Health AI</span>
+      <span className="text-sm font-bold text-fg">Wyzo - Health AI</span>
      </div>
     </div>
     <div className="flex-1 min-h-0">
@@ -106,29 +106,29 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
 
    {/* Today's snapshot */}
    {snapshot && (
-    <div className="bg-white rounded-xl shadow-sm p-4">
-     <p className="text-xs font-semibold text-[#001E40] mb-3 uppercase tracking-wide">Today&apos;s snapshot (Wyzo sees this)</p>
+    <div className="bg-surface border border-line rounded-2xl shadow-sm p-4">
+     <p className="text-xs font-semibold text-fg mb-3 uppercase tracking-wide">Today&apos;s snapshot (Wyzo sees this)</p>
      <div className="grid grid-cols-3 gap-3">
       <div className="text-center">
-       <div className="w-10 h-10 rounded-xl bg-[#001E40]/5 flex items-center justify-center mx-auto mb-1">
-        <FaUtensils className="text-[#0C6780] text-sm" />
+       <div className="w-10 h-10 rounded-xl bg-[#0C6780]/10 dark:bg-accent/15 flex items-center justify-center mx-auto mb-1">
+        <FaUtensils className="text-[#0C6780] dark:text-accent text-sm" />
        </div>
-       <p className="text-xs font-bold text-[#001E40]">{snapshot.calories}</p>
-       <p className="text-[10px] text-gray-400">of {snapshot.targetCalories} cal</p>
+       <p className="text-xs font-bold text-fg">{snapshot.calories}</p>
+       <p className="text-[10px] text-faint">of {snapshot.targetCalories} cal</p>
       </div>
       <div className="text-center">
-       <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mx-auto mb-1">
+       <div className="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 flex items-center justify-center mx-auto mb-1">
         <FaTint className="text-sky-500 text-sm" />
        </div>
-       <p className="text-xs font-bold text-[#001E40]">{snapshot.waterMl}ml</p>
-       <p className="text-[10px] text-gray-400">of {snapshot.targetWaterMl}ml</p>
+       <p className="text-xs font-bold text-fg">{snapshot.waterMl}ml</p>
+       <p className="text-[10px] text-faint">of {snapshot.targetWaterMl}ml</p>
       </div>
       <div className="text-center">
-       <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mx-auto mb-1">
+       <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 flex items-center justify-center mx-auto mb-1">
         <FaDumbbell className="text-emerald-500 text-sm" />
        </div>
-       <p className="text-xs font-bold text-[#001E40]">{snapshot.exerciseMin} min</p>
-       <p className="text-[10px] text-gray-400">exercise</p>
+       <p className="text-xs font-bold text-fg">{snapshot.exerciseMin} min</p>
+       <p className="text-[10px] text-faint">exercise</p>
       </div>
      </div>
     </div>
@@ -136,29 +136,29 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
 
    {/* Quick prompts */}
    <div>
-    <p className="text-xs font-semibold text-[#001E40] mb-3 uppercase tracking-wide">Quick questions</p>
+    <p className="text-xs font-semibold text-fg mb-3 uppercase tracking-wide">Quick questions</p>
     <div className="grid grid-cols-2 gap-3">
      {QUICK_PROMPTS.map(({ label, prompt, icon: Icon }) => (
       <button
        key={label}
        onClick={() => { setShowChat(true); setTimeout(() => openWyzoWithMessage(prompt), 300) }}
-       className="flex flex-col items-start gap-2 p-3.5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 text-left border border-gray-100"
+       className="flex flex-col items-start gap-2 p-3.5 bg-surface rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 text-left border border-line"
       >
-       <div className="w-9 h-9 rounded-lg bg-[#001E40]/8 flex items-center justify-center">
-        <Icon className="text-[#0C6780] text-sm" />
+       <div className="w-9 h-9 rounded-lg bg-[#0C6780]/10 dark:bg-accent/15 flex items-center justify-center">
+        <Icon className="text-[#0C6780] dark:text-accent text-sm" />
        </div>
-       <p className="text-xs font-semibold text-[#001E40] leading-tight">{label}</p>
+       <p className="text-xs font-semibold text-fg leading-tight">{label}</p>
       </button>
      ))}
     </div>
    </div>
 
    {/* Open Wyzo floating widget tip */}
-   <div className="flex items-center gap-3 p-4 bg-indigo-50 rounded-xl">
-    <span className="text-2xl">💬</span>
+   <div className="flex items-center gap-3 p-4 bg-subtle rounded-xl">
+    <FaRobot className="text-2xl text-[#0C6780] dark:text-accent flex-shrink-0" />
     <div>
-     <p className="text-xs font-semibold text-[#001E40]">Also available as a floating widget</p>
-     <p className="text-xs text-gray-500 mt-0.5">Tap the Wyzo AI button at the bottom-right of any page for quick access.</p>
+     <p className="text-xs font-semibold text-fg">Also available as a floating widget</p>
+     <p className="text-xs text-soft mt-0.5">Tap the Wyzo AI button at the bottom-right of any page for quick access.</p>
     </div>
    </div>
   </div>

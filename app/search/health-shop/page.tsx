@@ -126,7 +126,7 @@ function HealthShopContent() {
   useEffect(() => { fetchItems() }, [fetchItems])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-canvas">
       {/* Header */}
       <div className="bg-brand-navy text-white py-10 px-4">
         <div className="max-w-6xl mx-auto">
@@ -139,12 +139,12 @@ function HealthShopContent() {
         {/* Search + Provider filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-4 h-4" />
             <input type="text" value={search} onChange={(e) => { setSearch(e.target.value); setOffset(0) }} placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none" />
+              className="w-full pl-10 pr-4 py-2.5 bg-surface text-fg border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none placeholder:text-faint" />
           </div>
           <select value={providerType} onChange={(e) => { setProviderType(e.target.value); setOffset(0) }}
-            className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-teal bg-white">
+            className="border border-line rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-teal bg-surface text-fg">
             <option value="">All Providers</option>
             {Object.entries(PROVIDER_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
@@ -154,7 +154,7 @@ function HealthShopContent() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
           <button
             onClick={() => { setCategory(''); setOffset(0) }}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === '' ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780]'}`}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === '' ? 'bg-[#0C6780] text-white border-[#0C6780] dark:bg-accent dark:text-[#04121f] dark:border-accent' : 'bg-surface text-soft border-line hover:border-[#0C6780] dark:hover:border-accent'}`}
           >
             All
           </button>
@@ -162,7 +162,7 @@ function HealthShopContent() {
             <button
               key={pill.key}
               onClick={() => { setCategory(pill.key); setOffset(0) }}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === pill.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780]'}`}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === pill.key ? 'bg-[#0C6780] text-white border-[#0C6780] dark:bg-accent dark:text-[#04121f] dark:border-accent' : 'bg-surface text-soft border-line hover:border-[#0C6780] dark:hover:border-accent'}`}
             >
               <span>{pill.emoji}</span>
               {pill.label}
@@ -175,17 +175,17 @@ function HealthShopContent() {
               <button
                 key={c.key}
                 onClick={() => { setCategory(c.key); setOffset(0) }}
-                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === c.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780]'}`}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === c.key ? 'bg-[#0C6780] text-white border-[#0C6780] dark:bg-accent dark:text-[#04121f] dark:border-accent' : 'bg-surface text-soft border-line hover:border-[#0C6780] dark:hover:border-accent'}`}
               >
                 {c.label}
               </button>
             ))}
         </div>
 
-        <p className="text-sm text-gray-500 mb-3">{total} product{total !== 1 ? 's' : ''} found</p>
+        <p className="text-sm text-soft mb-3">{total} product{total !== 1 ? 's' : ''} found</p>
 
         {prescription.medicines.length > 0 && (
-          <div className="mb-4 flex items-center gap-2 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+          <div className="mb-4 flex items-center gap-2 px-3 py-2.5 bg-amber-50 dark:bg-amber-500/15 border border-amber-200 dark:border-amber-500/30 rounded-xl text-sm text-amber-800 dark:text-amber-300">
             <FaFileMedical className="text-amber-500 flex-shrink-0" />
             <span>Results sorted by your prescription · <strong>{prescription.medicines.length}</strong> medicine{prescription.medicines.length !== 1 ? 's' : ''} detected</span>
           </div>
@@ -193,12 +193,12 @@ function HealthShopContent() {
 
         {/* Items grid */}
         {loading ? (
-          <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-teal" /></div>
+          <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-teal dark:border-accent" /></div>
         ) : items.length === 0 ? (
           <div className="text-center py-16">
-            <FiPackage className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-600">No products found</h3>
-            <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+            <FiPackage className="w-16 h-16 mx-auto text-faint mb-4" />
+            <h3 className="text-lg font-semibold text-soft">No products found</h3>
+            <p className="text-sm text-faint mt-1">Try adjusting your search or filters</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -223,10 +223,10 @@ function HealthShopContent() {
         {total > 20 && (
           <div className="flex justify-center gap-2 mt-8">
             <button disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 20))}
-              className="px-4 py-2 text-sm border border-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-50">Previous</button>
-            <span className="px-4 py-2 text-sm text-gray-500">{offset + 1}–{Math.min(offset + 20, total)} of {total}</span>
+              className="px-4 py-2 text-sm border border-line rounded-lg text-soft disabled:opacity-50 hover:bg-subtle">Previous</button>
+            <span className="px-4 py-2 text-sm text-soft">{offset + 1}–{Math.min(offset + 20, total)} of {total}</span>
             <button disabled={offset + 20 >= total} onClick={() => setOffset(offset + 20)}
-              className="px-4 py-2 text-sm border border-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-50">Next</button>
+              className="px-4 py-2 text-sm border border-line rounded-lg text-soft disabled:opacity-50 hover:bg-subtle">Next</button>
           </div>
         )}
       </div>

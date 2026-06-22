@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef, useState } from 'react'
 import {
   FaCheckCircle, FaStar, FaShieldAlt, FaCamera,
-  FaMapMarkerAlt, FaUser, FaSpinner,
+  FaMapMarkerAlt, FaUser, FaSpinner, FaLock,
 } from 'react-icons/fa'
 
 /**
@@ -80,7 +80,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
   }
 
   return (
-    <header className="bg-white rounded-b-2xl sm:rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+    <header className="bg-surface rounded-b-2xl sm:rounded-2xl shadow-sm overflow-hidden border border-line">
       {/* ─── Cover ───────────────────────────────────────────────────── */}
       <div className="relative h-40 sm:h-56 md:h-64 bg-gradient-to-br from-[#001E40] via-[#0C6780] to-[#9AE1FF]">
         {coverImage && (
@@ -122,11 +122,11 @@ export default function ProfileHero(props: ProfileHeroProps) {
       <div className="px-4 sm:px-6 pb-5 -mt-14 sm:-mt-16">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
           <div className="relative">
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-white bg-gray-100 overflow-hidden shadow">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-surface bg-subtle overflow-hidden shadow">
               {profileImage ? (
                 <Image src={profileImage} alt={fullName} width={128} height={128} className="object-cover w-full h-full" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="w-full h-full flex items-center justify-center text-faint">
                   <FaUser className="text-4xl" />
                 </div>
               )}
@@ -152,33 +152,33 @@ export default function ProfileHero(props: ProfileHeroProps) {
 
           <div className="flex-1 min-w-0 sm:pb-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{fullName}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-fg truncate">{fullName}</h1>
               {verified && (
-                <span title="Verified account" className="text-blue-600">
+                <span title="Verified account" className="text-[#0C6780] dark:text-accent">
                   <FaCheckCircle className="text-lg" />
                 </span>
               )}
             </div>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               {roleLabel && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-[#0C6780]/10 text-[#0C6780] border border-[#0C6780]/20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-[#0C6780]/10 text-[#0C6780] dark:text-accent border border-[#0C6780]/20 dark:border-accent/30">
                   {roleLabel}
                 </span>
               )}
               {typeof rating === 'number' && rating > 0 && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30">
                   <FaStar className="text-amber-500 text-[10px]" />
                   {rating.toFixed(1)}
                 </span>
               )}
               {location && (
-                <span className="inline-flex items-center gap-1 text-xs text-gray-500">
-                  <FaMapMarkerAlt className="text-gray-400 text-[10px]" /> {location}
+                <span className="inline-flex items-center gap-1 text-xs text-soft">
+                  <FaMapMarkerAlt className="text-faint text-[10px]" /> {location}
                 </span>
               )}
             </div>
             {bio && (
-              <p className="mt-2 text-sm text-gray-700 line-clamp-2 max-w-2xl">{bio}</p>
+              <p className="mt-2 text-sm text-soft line-clamp-2 max-w-2xl">{bio}</p>
             )}
           </div>
 
@@ -196,11 +196,11 @@ export default function ProfileHero(props: ProfileHeroProps) {
 
         {/* ─── Stats row (Posts / Followers / Years etc.) ─────────── */}
         {stats.length > 0 && (
-          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-gray-100 pt-4 text-sm">
+          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4 text-sm">
             {stats.map((s) => (
               <li key={s.label} className="flex items-baseline gap-1.5">
-                <span className="font-bold text-gray-900 text-base">{s.value}</span>
-                <span className="text-gray-500">{s.label}</span>
+                <span className="font-bold text-fg text-base">{s.value}</span>
+                <span className="text-soft">{s.label}</span>
               </li>
             ))}
           </ul>
@@ -208,9 +208,9 @@ export default function ProfileHero(props: ProfileHeroProps) {
 
         {/* ─── Privacy legend ────────────────────────────────────── */}
         {isSelf && (
-          <div className="mt-4 text-[11px] text-gray-500 flex items-center gap-2">
-            <FaShieldAlt className="text-gray-400" />
-            <span>Sections marked <span className="inline-block bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-medium">🔒 Private</span> are visible only to you and MediWyz admins.</span>
+          <div className="mt-4 text-[11px] text-soft flex items-center gap-2">
+            <FaShieldAlt className="text-faint" />
+            <span>Sections marked <span className="inline-flex items-center gap-1 bg-subtle text-soft px-1.5 py-0.5 rounded font-medium"><FaLock className="text-[9px]" /> Private</span> are visible only to you and MediWyz admins.</span>
           </div>
         )}
       </div>

@@ -203,27 +203,27 @@ function ConversationListItem({ conversation, currentUserId, isSelected, onSelec
  return (
  <button
  onClick={() => onSelect(conversation.id)}
- className={`w-full text-left px-4 py-3 border-b border-gray-100 transition-colors hover:bg-blue-50 focus:outline-none ${
- isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
- } ${isNewConnection ? 'bg-green-50 hover:bg-green-100' : ''}`}
+ className={`w-full text-left px-4 py-3 border-b border-line transition-colors hover:bg-subtle focus:outline-none ${
+ isSelected ? 'bg-[#0C6780]/10 border-l-4 border-l-[#0C6780] dark:border-l-accent' : ''
+ } ${isNewConnection ? 'bg-emerald-50 dark:bg-emerald-500/10 hover:bg-emerald-100 dark:hover:bg-emerald-500/20' : ''}`}
  >
  <div className="flex items-start justify-between gap-2">
  <div className="min-w-0 flex-1">
  <div className="flex items-center gap-2 mb-0.5">
- <span className="font-semibold text-sm text-gray-900 truncate">{displayName}</span>
+ <span className="font-semibold text-sm text-fg truncate">{displayName}</span>
  {primaryOther && <UserTypeBadge userType={primaryOther.userType} />}
  {isNewConnection && (
- <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 flex-shrink-0">
+ <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 flex-shrink-0">
  New
  </span>
  )}
  </div>
- <p className={`text-xs truncate ${isNewConnection ? 'text-green-600 italic' : 'text-gray-500'}`}>{preview}</p>
+ <p className={`text-xs truncate ${isNewConnection ? 'text-emerald-600 dark:text-emerald-400 italic' : 'text-soft'}`}>{preview}</p>
  </div>
  <div className="flex flex-col items-end gap-1 flex-shrink-0">
- {timeLabel && <span className="text-xs text-gray-400 whitespace-nowrap">{timeLabel}</span>}
+ {timeLabel && <span className="text-xs text-faint whitespace-nowrap">{timeLabel}</span>}
  {conversation.unreadCount > 0 && (
- <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-500 text-white text-xs font-bold">
+ <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0C6780] dark:bg-accent dark:text-[#04121f] text-white text-xs font-bold">
  {conversation.unreadCount > 9 ? '9+' : conversation.unreadCount}
  </span>
  )}
@@ -248,15 +248,15 @@ function MessageBubble({ message, isOwn }: MessageBubbleProps) {
  <div
  className={`max-w-[75%] sm:max-w-[65%] rounded-2xl px-4 py-2 ${
  isOwn
- ? 'bg-blue-500 text-white rounded-br-md'
- : 'bg-gray-100 text-gray-900 rounded-bl-md'
+ ? 'bg-[#0C6780] dark:bg-accent dark:text-[#04121f] text-white rounded-br-md'
+ : 'bg-subtle text-fg rounded-bl-md'
  }`}
  >
  {!isOwn && (
- <p className="text-xs font-semibold text-gray-600 mb-0.5">{message.senderName}</p>
+ <p className="text-xs font-semibold text-soft mb-0.5">{message.senderName}</p>
  )}
  <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
- <div className={`flex items-center justify-end gap-1 mt-1 ${isOwn ? 'text-blue-100' : 'text-gray-400'}`}>
+ <div className={`flex items-center justify-end gap-1 mt-1 ${isOwn ? 'text-white/70 dark:text-[#04121f]/60' : 'text-faint'}`}>
  <span className="text-[10px]">{formatTimestamp(message.createdAt)}</span>
  {isOwn && (
  message.readAt
@@ -276,9 +276,9 @@ function MessageBubble({ message, isOwn }: MessageBubbleProps) {
 function DateSeparator({ dateStr }: { dateStr: string }) {
  return (
  <div className="flex items-center gap-3 my-4">
- <div className="flex-1 h-px bg-gray-200" />
- <span className="text-xs text-gray-400 font-medium">{formatDateSeparator(dateStr)}</span>
- <div className="flex-1 h-px bg-gray-200" />
+ <div className="flex-1 h-px bg-line" />
+ <span className="text-xs text-faint font-medium">{formatDateSeparator(dateStr)}</span>
+ <div className="flex-1 h-px bg-line" />
  </div>
  )
 }
@@ -843,26 +843,26 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  // =========================================================================
 
  return (
- <div className="flex h-[calc(100vh-8rem)] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+ <div className="flex h-[calc(100vh-8rem)] bg-surface rounded-2xl shadow-sm border border-line overflow-hidden">
  {/* ----------------------------------------------------------------- */}
  {/* LEFT PANEL - Conversation List */}
  {/* ----------------------------------------------------------------- */}
  <div
- className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-white ${
+ className={`w-full md:w-80 lg:w-96 border-r border-line flex flex-col bg-surface ${
  mobileShowMessages ? 'hidden md:flex' : 'flex'
  }`}
  >
  {/* Header */}
- <div className="px-4 py-3 border-b border-gray-200">
- <h2 className="text-lg font-bold text-gray-900 mb-2">Messages</h2>
+ <div className="px-4 py-3 border-b border-line">
+ <h2 className="text-lg font-bold text-fg mb-2">Messages</h2>
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
  <input
  type="text"
- placeholder="Search conversations..."
+ placeholder="Search conversations…"
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400"
+ className="w-full pl-9 pr-3 py-2 text-sm bg-subtle text-fg border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
  />
  </div>
  </div>
@@ -870,17 +870,17 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  {/* Conversation list */}
  <div className="flex-1 overflow-y-auto relative">
  {creatingConversation && (
- <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center">
- <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+ <div className="absolute inset-0 bg-surface/60 z-10 flex items-center justify-center">
+ <div className="w-6 h-6 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
  </div>
  )}
  {loadingConversations ? (
  <div className="flex items-center justify-center py-12">
- <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+ <div className="w-6 h-6 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
  </div>
  ) : filteredConversations.length === 0 ? (
  <div className="text-center py-12 px-4">
- <p className="text-sm text-gray-500">
+ <p className="text-sm text-soft">
  {searchQuery ? 'No conversations match your search.' : 'No conversations yet.'}
  </p>
  </div>
@@ -898,10 +898,10 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
 
  {/* Platform user search results */}
  {searchQuery.length >= 2 && (userSearchResults.length > 0 || searchingUsers) && (
- <div className="border-t border-gray-200">
- <div className="px-4 py-2 bg-gray-50">
- <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
- {searchingUsers ? 'Searching users...' : 'Start a new conversation'}
+ <div className="border-t border-line">
+ <div className="px-4 py-2 bg-subtle">
+ <p className="text-xs font-semibold text-soft uppercase tracking-wide">
+ {searchingUsers ? 'Searching users…' : 'Start a new conversation'}
  </p>
  </div>
  {userSearchResults.map((user) => {
@@ -910,21 +910,21 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <button
  key={user.id}
  onClick={() => handleStartConversation(user.id)}
- className="w-full text-left px-4 py-3 border-b border-gray-100 transition-colors hover:bg-green-50 focus:outline-none"
+ className="w-full text-left px-4 py-3 border-b border-line transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-500/10 focus:outline-none"
  >
  <div className="flex items-center justify-between gap-2">
  <div className="min-w-0 flex-1">
  <div className="flex items-center gap-2 mb-0.5">
- <span className="font-semibold text-sm text-gray-900 truncate">
+ <span className="font-semibold text-sm text-fg truncate">
  {user.firstName} {user.lastName}
  </span>
  <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${bg} ${text}`}>
  {label}
  </span>
  </div>
- <p className="text-xs text-gray-500 truncate">{user.email}</p>
+ <p className="text-xs text-soft truncate">{user.email}</p>
  </div>
- <FaUserPlus className="text-green-500 flex-shrink-0" />
+ <FaUserPlus className="text-emerald-500 flex-shrink-0" />
  </div>
  </button>
  )
@@ -934,10 +934,10 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  </div>
 
  {/* Connection status */}
- <div className="px-4 py-2 border-t border-gray-100">
+ <div className="px-4 py-2 border-t border-line">
  <div className="flex items-center gap-1.5">
- <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-gray-400'}`} />
- <span className="text-xs text-gray-400">{connected ? 'Connected' : 'Reconnecting...'}</span>
+ <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-faint'}`} />
+ <span className="text-xs text-faint">{connected ? 'Connected' : 'Reconnecting…'}</span>
  </div>
  </div>
  </div>
@@ -946,24 +946,24 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  {/* RIGHT PANEL - Message View */}
  {/* ----------------------------------------------------------------- */}
  <div
- className={`flex-1 flex flex-col bg-gray-50 ${
+ className={`flex-1 flex flex-col bg-canvas ${
  !mobileShowMessages ? 'hidden md:flex' : 'flex'
  }`}
  >
  {selectedId && selectedConversation ? (
  <>
  {/* Conversation header */}
- <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200">
+ <div className="flex items-center gap-3 px-4 py-3 bg-surface border-b border-line">
  <button
  onClick={handleMobileBack}
- className="md:hidden text-gray-500 hover:text-gray-700 p-1"
+ className="md:hidden text-soft hover:text-fg p-1"
  aria-label="Back to conversations"
  >
  <FaArrowLeft className="w-4 h-4" />
  </button>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2">
- <h3 className="font-semibold text-gray-900 truncate">
+ <h3 className="font-semibold text-fg truncate">
  {selectedOthers.map(participantDisplayName).join(', ')}
  </h3>
  {selectedOthers.length === 1 && (
@@ -984,11 +984,11 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <div className="flex-1 overflow-y-auto px-4 py-4" aria-live="polite" aria-label="Chat messages">
  {loadingMessages ? (
  <div className="flex items-center justify-center h-full">
- <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+ <div className="w-6 h-6 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
  </div>
  ) : messages.length === 0 ? (
  <div className="flex items-center justify-center h-full">
- <p className="text-sm text-gray-400">No messages yet. Start the conversation!</p>
+ <p className="text-sm text-faint">No messages yet. Start the conversation!</p>
  </div>
  ) : (
  <>
@@ -1013,11 +1013,11 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  {activeTypingUsers.length > 0 && (
  <div className="flex items-center gap-2 mt-1 ml-1">
  <div className="flex gap-1">
- <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
- <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
- <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+ <span className="w-1.5 h-1.5 bg-faint rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+ <span className="w-1.5 h-1.5 bg-faint rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+ <span className="w-1.5 h-1.5 bg-faint rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
  </div>
- <span className="text-xs text-gray-400 italic">
+ <span className="text-xs text-faint italic">
  {activeTypingUsers.map((t) => t.userName).join(', ')}{' '}
  {activeTypingUsers.length === 1 ? 'is' : 'are'} typing...
  </span>
@@ -1028,21 +1028,21 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  </div>
 
  {/* Message input */}
- <div className="px-4 py-3 bg-white border-t border-gray-200">
+ <div className="px-4 py-3 bg-surface border-t border-line">
  <div className="flex items-center gap-2">
  <input
  ref={inputRef}
  type="text"
- placeholder="Type a message..."
+ placeholder="Type a message…"
  value={inputText}
  onChange={handleInputChange}
  onKeyDown={handleKeyDown}
- className="flex-1 px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400"
+ className="flex-1 px-4 py-2.5 text-sm bg-subtle text-fg border border-line rounded-full focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
  />
  <button
  onClick={handleSend}
  disabled={!inputText.trim()}
- className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+ className="flex items-center justify-center w-10 h-10 rounded-full bg-[#0C6780] hover:bg-[#001E40] dark:bg-accent dark:text-[#04121f] text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-brand-teal focus:ring-offset-2 dark:focus:ring-offset-canvas"
  aria-label="Send message"
  >
  <FaPaperPlane className="w-4 h-4" />
@@ -1054,11 +1054,11 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  /* Empty state - no conversation selected */
  <div className="flex-1 flex items-center justify-center">
  <div className="text-center px-4">
- <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center">
- <FaPaperPlane className="w-6 h-6 text-blue-400" />
+ <div className="w-16 h-16 mx-auto mb-4 bg-[#0C6780]/10 rounded-full flex items-center justify-center">
+ <FaPaperPlane className="w-6 h-6 text-[#0C6780] dark:text-accent" />
  </div>
- <h3 className="text-lg font-semibold text-gray-700 mb-1">Your Messages</h3>
- <p className="text-sm text-gray-400 max-w-xs">
+ <h3 className="text-lg font-semibold text-fg mb-1">Your Messages</h3>
+ <p className="text-sm text-faint max-w-xs">
  Select a conversation from the list to start chatting with your healthcare team.
  </p>
  </div>

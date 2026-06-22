@@ -116,7 +116,7 @@ export default function UnifiedProfilePage() {
   if (loading) return <ProfileSkeleton />
   if (error || !profile) return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">
+      <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl p-4 text-red-800 dark:text-red-300 text-sm">
         {error ?? 'Profile not found.'}
       </div>
     </div>
@@ -143,8 +143,8 @@ export default function UnifiedProfilePage() {
       />
 
       {/* ─── Tab bar (Facebook-style) ────────────────────────────── */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
-        <nav className="flex overflow-x-auto border-b border-gray-100 px-2">
+      <div className="bg-surface rounded-2xl shadow-sm border border-line">
+        <nav className="flex overflow-x-auto border-b border-line px-2">
           {tabs.map((t) => {
             const Icon = t.icon
             const active = activeTab === t.id
@@ -153,11 +153,11 @@ export default function UnifiedProfilePage() {
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
                 className={`flex-shrink-0 px-4 py-3 text-sm font-medium transition-colors relative flex items-center gap-2
-                  ${active ? 'text-[#0C6780]' : 'text-gray-600 hover:text-gray-900'}`}
+                  ${active ? 'text-[#0C6780] dark:text-accent' : 'text-soft hover:text-fg'}`}
               >
                 <Icon className="text-xs" /> {t.label}
-                {t.private && <FaLock className="text-[10px] text-gray-400" title="Visible only to you" />}
-                {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#0C6780] rounded-full" />}
+                {t.private && <FaLock className="text-[10px] text-faint" title="Visible only to you" />}
+                {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#0C6780] dark:bg-accent rounded-full" />}
               </button>
             )
           })}
@@ -221,16 +221,16 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
       <Section title="Intro">
         {!editingBio && (
           <>
-            <p className="text-sm text-gray-800 whitespace-pre-wrap">
+            <p className="text-sm text-fg/90 whitespace-pre-wrap">
               {profile.bio || (isSelf
-                ? <span className="text-gray-500 italic">Add a bio so members and providers know who you are.</span>
+                ? <span className="text-faint italic">Add a bio so members and providers know who you are.</span>
                 : 'No bio yet.'
               )}
             </p>
             {isSelf && (
               <button
                 onClick={() => { setDraft(profile.bio ?? ''); setEditingBio(true) }}
-                className="mt-2 text-xs font-semibold text-[#0C6780] hover:underline"
+                className="mt-2 text-xs font-semibold text-[#0C6780] dark:text-accent hover:underline"
               >
                 {profile.bio ? 'Edit bio' : 'Add bio'}
               </button>
@@ -244,15 +244,15 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
               onChange={(e) => setDraft(e.target.value)}
               rows={4}
               maxLength={500}
-              className="w-full text-sm border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#0C6780]"
+              className="w-full text-sm bg-surface text-fg border border-line rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#0C6780] placeholder:text-faint"
               placeholder="Tell members and providers a bit about yourself."
             />
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-500">{draft.length}/500</span>
+              <span className="text-faint">{draft.length}/500</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setEditingBio(false)}
-                  className="px-3 py-1.5 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  className="px-3 py-1.5 text-soft hover:bg-subtle rounded-lg"
                   disabled={saving}
                 >Cancel</button>
                 <button
@@ -291,7 +291,7 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
           )}
         </dl>
         {!isSelf && (
-          <p className="mt-3 text-[11px] text-gray-500">Contact details are kept private. Message through MediWyz to reach {profile.firstName}.</p>
+          <p className="mt-3 text-[11px] text-faint">Contact details are kept private. Message through MediWyz to reach {profile.firstName}.</p>
         )}
       </Section>
     </div>
@@ -333,15 +333,15 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
 
   if (loading) return (
     <div className="space-y-3">
-      {[1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />)}
+      {[1, 2, 3].map(i => <div key={i} className="h-16 bg-subtle rounded-xl animate-pulse" />)}
     </div>
   )
 
   if (configs.length === 0) return (
     <div className="text-center py-10">
-      <FaConciergeBell className="text-3xl text-gray-300 mx-auto mb-2" />
-      <p className="text-sm font-medium text-gray-600">No services listed yet.</p>
-      <p className="text-xs text-gray-400 mt-1">Ask this provider about their services directly.</p>
+      <FaConciergeBell className="text-3xl text-faint mx-auto mb-2" />
+      <p className="text-sm font-medium text-soft">No services listed yet.</p>
+      <p className="text-xs text-faint mt-1">Ask this provider about their services directly.</p>
     </div>
   )
 
@@ -359,7 +359,7 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
     <div className="space-y-6">
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category}>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3 capitalize">
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-soft mb-3 capitalize">
             {category.replace(/_/g, ' ')}
           </h4>
           <div className="space-y-2">
@@ -367,26 +367,26 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
               const svc = cfg.platformService
               const price = cfg.priceOverride ?? svc.defaultPrice
               return (
-                <div key={cfg.id} className="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-all">
+                <div key={cfg.id} className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-subtle transition-all">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-gray-900">{svc.serviceName}</span>
+                      <span className="text-sm font-semibold text-fg">{svc.serviceName}</span>
                       {(cfg.serviceModes ?? []).map(mode => (
                         SERVICE_MODE_LABELS[mode] ? (
-                          <span key={mode} className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-[#0C6780]/10 text-[#0C6780]">
+                          <span key={mode} className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-[#0C6780]/10 text-[#0C6780] dark:text-accent">
                             {SERVICE_MODE_LABELS[mode]}
                           </span>
                         ) : null
                       ))}
                     </div>
                     {svc.description && (
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{svc.description}</p>
+                      <p className="text-xs text-soft mt-0.5 line-clamp-2">{svc.description}</p>
                     )}
                   </div>
                   <div className="flex-shrink-0 text-right">
-                    <div className="text-sm font-bold text-gray-900">Rs {price.toLocaleString()}</div>
+                    <div className="text-sm font-bold text-fg">Rs {price.toLocaleString()}</div>
                     {svc.duration && (
-                      <div className="flex items-center gap-0.5 text-[11px] text-gray-400 justify-end mt-0.5">
+                      <div className="flex items-center gap-0.5 text-[11px] text-faint justify-end mt-0.5">
                         <FaClock className="text-[9px]" /> {svc.duration}m
                       </div>
                     )}
@@ -400,7 +400,7 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
       <div className="pt-2 text-center">
         <Link
           href={`/search/${roleSlug}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] hover:text-[#001E40] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] dark:text-accent hover:underline transition-colors"
         >
           Book this provider <FaArrowRight className="text-xs" />
         </Link>
@@ -412,10 +412,10 @@ function ProfileServicesTab({ userId, userType }: { userId: string; userType: st
 function PrivateSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <div className="flex items-center gap-2 mb-3 text-xs font-semibold text-gray-600">
-        <FaLock className="text-gray-400" />
+      <div className="flex items-center gap-2 mb-3 text-xs font-semibold text-soft">
+        <FaLock className="text-faint" />
         <span>{title}</span>
-        <span className="ml-auto text-[10px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Visible only to you</span>
+        <span className="ml-auto text-[10px] font-medium bg-subtle text-soft px-2 py-0.5 rounded-full">Visible only to you</span>
       </div>
       {children}
     </section>
@@ -425,7 +425,7 @@ function PrivateSection({ title, children }: { title: string; children: React.Re
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">{title}</h3>
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-soft mb-2">{title}</h3>
       {children}
     </section>
   )
@@ -434,8 +434,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col">
-      <dt className="text-[11px] font-semibold uppercase text-gray-500 tracking-wide">{label}</dt>
-      <dd className="text-gray-900">{value}</dd>
+      <dt className="text-[11px] font-semibold uppercase text-faint tracking-wide">{label}</dt>
+      <dd className="text-fg">{value}</dd>
     </div>
   )
 }
@@ -462,15 +462,15 @@ function humanizeRole(userType: string): string {
 function ProfileSkeleton() {
   return (
     <div className="w-full py-4 sm:py-6 space-y-4">
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="h-56 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
+      <div className="bg-surface rounded-2xl border border-line overflow-hidden">
+        <div className="h-56 bg-subtle animate-pulse" />
         <div className="p-6 -mt-16">
-          <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-white animate-pulse" />
-          <div className="mt-4 h-6 w-48 bg-gray-200 rounded animate-pulse" />
-          <div className="mt-2 h-4 w-32 bg-gray-200 rounded animate-pulse" />
+          <div className="w-32 h-32 rounded-full bg-subtle border-4 border-surface animate-pulse" />
+          <div className="mt-4 h-6 w-48 bg-subtle rounded animate-pulse" />
+          <div className="mt-2 h-4 w-32 bg-subtle rounded animate-pulse" />
         </div>
       </div>
-      <div className="h-48 bg-gray-100 rounded-2xl animate-pulse" />
+      <div className="h-48 bg-subtle rounded-2xl animate-pulse" />
     </div>
   )
 }

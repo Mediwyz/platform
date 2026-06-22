@@ -57,7 +57,7 @@ export default function HealthTrackerTabs({ userName, healthScore }: HealthTrack
  return (
   <div className="flex flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)]">
    {/* Desktop: Top tabs */}
-   <div className="hidden md:flex items-center gap-1 bg-white border-b px-4 py-2 overflow-x-auto">
+   <div className="hidden md:flex items-center gap-1 bg-surface border-b border-line px-4 py-2 overflow-x-auto">
     {TABS.map((tab, index) => {
      const Icon = tab.icon
      const isActive = activeTab === index
@@ -67,8 +67,8 @@ export default function HealthTrackerTabs({ userName, healthScore }: HealthTrack
        onClick={() => setActiveTab(index)}
        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
         isActive
-        ? 'bg-[#001E40] text-white'
-        : 'text-gray-600 hover:bg-gray-100 hover:text-[#001E40]'
+        ? 'bg-[#0C6780] text-white dark:bg-accent dark:text-[#04121f]'
+        : 'text-soft hover:bg-subtle hover:text-fg'
        }`}
       >
        <Icon className="w-4 h-4" />
@@ -79,12 +79,12 @@ export default function HealthTrackerTabs({ userName, healthScore }: HealthTrack
    </div>
 
    {/* Tab content */}
-   <div className={`flex-1 overflow-y-auto bg-gray-50 ${isCapacitor ? 'pb-32' : 'pb-20'} md:pb-4`}>
+   <div className={`flex-1 overflow-y-auto bg-canvas ${isCapacitor ? 'pb-32' : 'pb-20'} md:pb-4`}>
     {renderTab()}
    </div>
 
    {/* Mobile: Bottom tabs - icon with label on active */}
-   <div className={`md:hidden fixed left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-end px-0.5 z-50 shadow-lg ${isCapacitor ? 'bottom-0 pt-2 pb-8' : 'bottom-0 py-1'}`}>
+   <div className={`md:hidden fixed left-0 right-0 bg-surface border-t border-line flex justify-around items-end px-0.5 z-50 shadow-lg ${isCapacitor ? 'bottom-0 pt-2 pb-8' : 'bottom-0 py-1'}`}>
     {TABS.map((tab, index) => {
      const Icon = tab.icon
      const isActive = activeTab === index
@@ -94,10 +94,10 @@ export default function HealthTrackerTabs({ userName, healthScore }: HealthTrack
        onClick={() => setActiveTab(index)}
        className={`flex flex-col items-center justify-center px-1 pt-1 pb-0.5 min-w-[38px] min-h-[48px] transition-colors`}
       >
-       <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all ${isActive ? 'bg-[#001E40]/10' : ''}`}>
-        <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-[#0C6780]' : 'text-gray-400'}`} />
+       <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all ${isActive ? 'bg-[#0C6780]/10 dark:bg-accent/15' : ''}`}>
+        <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-[#0C6780] dark:text-accent' : 'text-faint'}`} />
        </div>
-       <span className={`text-[8px] font-bold mt-0.5 leading-tight text-center max-w-[42px] truncate transition-colors ${isActive ? 'text-[#001E40]' : 'text-gray-400'}`}>
+       <span className={`text-[8px] font-bold mt-0.5 leading-tight text-center max-w-[42px] truncate transition-colors ${isActive ? 'text-fg' : 'text-faint'}`}>
         {tab.label}
        </span>
       </button>
