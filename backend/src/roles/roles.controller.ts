@@ -35,6 +35,14 @@ export class RolesController {
     return { success: true, data };
   }
 
+  /** Public: GET /api/org-categories — active organisation categories (for org forms/filters). */
+  @Public()
+  @Get('org-categories')
+  async orgCategories() {
+    const data = await this.rolesService.getOrgCategories();
+    return { success: true, data };
+  }
+
   /**
    * POST /api/roles/request — open to unauthenticated signup requests.
    * Creates a ProviderRole in `isActive: false` state (pending admin review)

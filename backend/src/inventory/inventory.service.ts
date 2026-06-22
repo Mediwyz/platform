@@ -384,16 +384,16 @@ export class InventoryService {
       this.prisma.providerInventoryItem.count({ where }),
     ]);
 
-    // Resolve the individual-seller name for items NOT sold under an org
-    // (one batched query, no N+1).
-    const soloSellerIds = [...new Set(items.filter((i: any) => !i.healthcareEntityId).map((i: any) => i.providerUserId))];
-    const sellers = soloSellerIds.length
+    // Resolve EVERY seller's name (provider person) so a card can show both the
+    // provider AND their organisation. One batched query, no N+1.
+    const providerIds = [...new Set(items.map((i: any) => i.providerUserId))];
+    const sellers = providerIds.length
       ? await this.prisma.user.findMany({
-          where: { id: { in: soloSellerIds } },
+          where: { id: { in: providerIds } },
           select: { id: true, firstName: true, lastName: true },
         })
       : [];
-    const sellerById = new Map(sellers.map((s) => [s.id, `${s.firstName} ${s.lastName}`]));
+    const sellerById = new Map(sellers.map((s) => [s.id, `${s.firstName} ${s.lastName}`.trim()]));
 
     // Annotate items with isRecommended + seller info, sort recommended to top
     const annotated = items.map((item: any) => {
@@ -405,9 +405,17 @@ export class InventoryService {
           return med.split(/\s+/).some((word) => word.length > 3 && itemText.includes(word));
         });
       const { healthcareEntity, ...rest } = item;
-      const sellerName = healthcareEntity?.name ?? sellerById.get(item.providerUserId) ?? null;
+      const providerName = sellerById.get(item.providerUserId) ?? null;
+      // Every product belongs to a provider; their org defaults to "Self-employed".
+      const organisationName = healthcareEntity?.name ?? 'Self-employed';
+      const organisationType = healthcareEntity?.type ?? 'self_employed';
+      const sellerName = healthcareEntity?.name ?? providerName; // back-compat
       const sellerType = healthcareEntity ? 'organisation' : 'provider';
-      return { ...rest, isRecommended, sellerName, sellerType, sellerEntityId: healthcareEntity?.id ?? null };
+      return {
+        ...rest, isRecommended, sellerName, sellerType,
+        sellerEntityId: healthcareEntity?.id ?? null,
+        providerName, organisationName, organisationType,
+      };
     });
 
     // Stable sort: recommended first, then featured, then alphabetical

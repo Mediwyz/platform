@@ -78,4 +78,32 @@ export class RegionalService {
   async deactivateRole(id: string) {
     await this.prisma.providerRole.update({ where: { id }, data: { isActive: false } });
   }
+
+  // ── Organisation categories ───────────────────────────────────────────────
+  async listOrgCategories() {
+    return (this.prisma as any).organisationCategory.findMany({ orderBy: { displayOrder: 'asc' } });
+  }
+
+  async createOrgCategory(body: any) {
+    const key = (body.key || body.label || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '');
+    return (this.prisma as any).organisationCategory.create({
+      data: {
+        key, label: body.label, blurb: body.blurb || null,
+        icon: body.icon || 'FaBuilding', displayOrder: body.displayOrder ?? 100,
+        isActive: body.isActive ?? true,
+      },
+    });
+  }
+
+  async updateOrgCategory(id: string, body: any) {
+    const data: any = {};
+    for (const k of ['label', 'blurb', 'icon', 'displayOrder', 'isActive']) {
+      if (body[k] !== undefined) data[k] = body[k];
+    }
+    return (this.prisma as any).organisationCategory.update({ where: { id }, data });
+  }
+
+  async deactivateOrgCategory(id: string) {
+    await (this.prisma as any).organisationCategory.update({ where: { id }, data: { isActive: false } });
+  }
 }

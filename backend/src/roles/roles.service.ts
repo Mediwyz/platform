@@ -302,4 +302,12 @@ export class RolesService {
 
     await this.prisma.providerSpecialty.update({ where: { id }, data: { isActive: false } });
   }
+
+  /** Active organisation categories (pharmacy, clinic, hospital, lab, insurance, …). */
+  async getOrgCategories() {
+    return (this.prisma as any).organisationCategory.findMany({
+      where: { isActive: true },
+      orderBy: { displayOrder: 'asc' },
+    });
+  }
 }

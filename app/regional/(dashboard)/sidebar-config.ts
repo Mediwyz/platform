@@ -1,4 +1,4 @@
-import { FaHome, FaNewspaper, FaShieldAlt, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaSitemap, FaTag, FaUsersCog, FaBell, FaBook, FaInbox, FaUsers, FaClipboardCheck, FaFileAlt, FaToggleOn, FaClipboardList, FaCrown, FaCog } from 'react-icons/fa'
+import { FaHome, FaNewspaper, FaShieldAlt, FaComments, FaVideo, FaPhone, FaMoneyBillWave, FaSitemap, FaTag, FaUsersCog, FaBell, FaBook, FaInbox, FaUsers, FaClipboardCheck, FaFileAlt, FaToggleOn, FaClipboardList, FaCrown, FaCog, FaBuilding } from 'react-icons/fa'
 import type { SidebarItem } from '@/components/dashboard/DashboardSidebar'
 import { createGetActiveSectionFromPath } from '@/lib/dashboard/getActiveSectionFromPath'
 import { getPatientHealthItems, getSearchItems, getInviteFriendsItem } from '@/lib/dashboard/patientHealthItems'
@@ -23,6 +23,7 @@ export const REGIONAL_ADMIN_SIDEBAR_ITEMS: SidebarItem[] = [
   { id: 'providers-header', label: 'Providers', icon: FaUsersCog, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '#', divider: true },
   { id: 'validation', label: 'Validation', icon: FaClipboardCheck, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/validation` },
   { id: 'roles', label: 'Provider Roles', labelKey: 'nav.roles', icon: FaUsersCog, color: 'text-violet-600', bgColor: 'bg-violet-50', href: `${base}/roles` },
+  { id: 'org-categories', label: 'Organisation Categories', icon: FaBuilding, color: 'text-cyan-600', bgColor: 'bg-cyan-50', href: `${base}/org-categories` },
   { id: 'role-requests', label: 'Role Requests', labelKey: 'nav.roleRequests', icon: FaInbox, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/role-requests` },
 
   // ── Platform ─────────────────────────────────────────────────────────────

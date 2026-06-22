@@ -2995,10 +2995,27 @@ model InventoryOrderItem {
 // Represents a physical or virtual institution that providers work at.
 // Many providers can belong to many entities (join via ProviderWorkplace).
 
+// Organisation categories (pharmacy, clinic, hospital, lab, insurance, other...).
+// CRUD-managed by the regional admin; consumed by org create/edit forms + filters.
+model OrganisationCategory {
+  id           String   @id @default(uuid())
+  key          String   @unique           // machine value stored on HealthcareEntity.type
+  label        String                      // display label
+  blurb        String?                     // short description
+  icon         String   @default("FaBuilding")
+  displayOrder Int      @default(100)
+  isActive     Boolean  @default(true)
+  regionCode   String?                     // null = global
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive])
+}
+
 model HealthcareEntity {
   id          String  @id @default(uuid())
   name        String
-  type        String  // clinic, hospital, pharmacy, laboratory, wellness_center, dental_clinic, optical_center, other
+  type        String  // OrganisationCategory.key (pharmacy, clinic, hospital, laboratory, insurance, ...)
   description String?
   address     String?
   city        String?

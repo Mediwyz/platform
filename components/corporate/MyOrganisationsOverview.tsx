@@ -15,8 +15,15 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   FaHospital, FaBriefcaseMedical, FaFlask, FaPills, FaUserMd,
   FaPlus, FaUserPlus, FaCrown, FaSpinner, FaTimes,
+  FaBuilding, FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa,
 } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
+
+// Map stored FA icon names -> components (for admin-managed categories).
+const ICON_MAP: Record<string, IconType> = {
+  FaHospital, FaBriefcaseMedical, FaFlask, FaPills, FaUserMd, FaBuilding,
+  FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa,
+}
 
 interface Org {
   id: string
@@ -34,9 +41,13 @@ interface MineResponse {
   member: Org[]
 }
 
+type Category = { type: string; label: string; blurb: string; Icon: IconType }
+
 // The org categories surfaced as rows. `type` is the HealthcareEntity.type
-// string sent to POST /api/organizations — no enum/migration required.
-const CATEGORIES: { type: string; label: string; blurb: string; Icon: IconType }[] = [
+// string sent to POST /api/organizations. The live list is loaded from the
+// admin-managed /api/org-categories endpoint; this is the fallback used until
+// it resolves (or if the fetch fails).
+const FALLBACK_CATEGORIES: Category[] = [
   { type: 'clinic',        label: 'Clinics',        blurb: 'Private practices & medical centres', Icon: FaBriefcaseMedical },
   { type: 'hospital',      label: 'Hospitals',      blurb: 'Multi-department hospitals',           Icon: FaHospital },
   { type: 'laboratory',    label: 'Labs',           blurb: 'Diagnostic & pathology labs',          Icon: FaFlask },
@@ -55,6 +66,28 @@ export default function MyOrganisationsOverview() {
   const [inviteFor, setInviteFor] = useState<string | null>(null)
   const [inviteEmail, setInviteEmail] = useState('')
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [categories, setCategories] = useState<Category[]>(FALLBACK_CATEGORIES)
+
+  // Load the admin-managed organisation categories so this grid stays in sync
+  // with the regional admin's CRUD. Falls back to FALLBACK_CATEGORIES on error.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/org-categories', { credentials: 'include' })
+        const json = await res.json()
+        if (!cancelled && json.success && Array.isArray(json.data) && json.data.length) {
+          setCategories(json.data.map((c: { key: string; label: string; blurb?: string | null; icon?: string }) => ({
+            type: c.key,
+            label: c.label,
+            blurb: c.blurb || '',
+            Icon: ICON_MAP[c.icon || 'FaBuilding'] || FaBuilding,
+          })))
+        }
+      } catch { /* keep fallback */ }
+    })()
+    return () => { cancelled = true }
+  }, [])
 
   const fetchMine = useCallback(async () => {
     try {
@@ -157,7 +190,7 @@ export default function MyOrganisationsOverview() {
       )}
 
       <div className="space-y-3">
-        {CATEGORIES.map(cat => {
+        {categories.map(cat => {
           const orgs = orgsByType(cat.type)
           const Icon = cat.Icon
           return (

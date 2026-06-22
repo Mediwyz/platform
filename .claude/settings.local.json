@@ -316,7 +316,15 @@
       "PowerShell(gh run *)",
       "PowerShell(Get-ChildItem \"C:\\\\Github Repositories\\\\healthways-typescript\\\\.github\\\\workflows\" -Name | Where-Object { $_ -match \"ci|deploy|test|build\" })",
       "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 4 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })",
-      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 5 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })"
+      "PowerShell(cd \"C:\\\\Github Repositories\\\\healthways-typescript\"; gh run list --limit 5 --json databaseId,status,conclusion,name,headSha | ConvertFrom-Json | ForEach-Object { \"$\\($_.databaseId\\) [$\\($_.status\\)/$\\($_.conclusion\\)] $\\($_.name\\) sha=$\\($_.headSha.Substring\\(0,8\\)\\)\" })",
+      "Bash(ls app/search)",
+      "Bash(ls app/profile)",
+      "Bash(ls app/search/providers)",
+      "Bash(ls app/search/insurance-companies app/search/insurance app/search/organizations)",
+      "Bash(find app/search/insurance-companies -type f)",
+      "Bash(npx tsc *)",
+      "Read(//tmp/**)",
+      "Bash(SHOWCASE_BASE_URL=https://mediwyz.com node scripts/capture-showcase.mjs)"
     ]
   }
 }

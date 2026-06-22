@@ -81,4 +81,40 @@ export class RegionalController {
       return { success: true, message: 'Role deactivated' };
     } catch { return { success: false, message: 'Failed to deactivate role' }; }
   }
+
+  // ── Organisation categories (pharmacy / clinic / hospital / lab / insurance …) ──
+
+  /** GET /api/regional/org-categories */
+  @Get('org-categories')
+  async listOrgCategories() {
+    const cats = await this.regionalService.listOrgCategories();
+    return { success: true, data: cats };
+  }
+
+  /** POST /api/regional/org-categories */
+  @Post('org-categories')
+  async createOrgCategory(@Body() body: any) {
+    try {
+      const cat = await this.regionalService.createOrgCategory(body);
+      return { success: true, data: cat };
+    } catch { return { success: false, message: 'Failed to create category' }; }
+  }
+
+  /** PATCH /api/regional/org-categories/:id */
+  @Patch('org-categories/:id')
+  async updateOrgCategory(@Param('id') id: string, @Body() body: any) {
+    try {
+      const cat = await this.regionalService.updateOrgCategory(id, body);
+      return { success: true, data: cat };
+    } catch { return { success: false, message: 'Failed to update category' }; }
+  }
+
+  /** DELETE /api/regional/org-categories/:id — deactivate */
+  @Delete('org-categories/:id')
+  async deleteOrgCategory(@Param('id') id: string) {
+    try {
+      await this.regionalService.deactivateOrgCategory(id);
+      return { success: true, message: 'Category deactivated' };
+    } catch { return { success: false, message: 'Failed to deactivate category' }; }
+  }
 }
