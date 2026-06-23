@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaPlus, FaSpinner, FaCalendarDay, FaUtensils, FaRobot, FaTimes } from 'react-icons/fa'
@@ -26,6 +26,18 @@ interface MealPlanDay {
 interface MealPlanData {
  days: MealPlanDay[]
  targetCalories: number
+}
+
+// Persist the generated plan per week so it survives tab switches (the tab
+// unmounts when the user navigates away and remounts empty otherwise).
+const PLAN_STORAGE_KEY = 'mw-mealplan'
+function loadStoredPlan(weekStart: string): MealPlanData | null {
+ if (typeof window === 'undefined') return null
+ try { const raw = window.localStorage.getItem(`${PLAN_STORAGE_KEY}:${weekStart}`); return raw ? JSON.parse(raw) as MealPlanData : null } catch { return null }
+}
+function saveStoredPlan(weekStart: string, data: MealPlanData) {
+ if (typeof window === 'undefined') return
+ try { window.localStorage.setItem(`${PLAN_STORAGE_KEY}:${weekStart}`, JSON.stringify(data)) } catch { /* ignore quota */ }
 }
 
 const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -61,7 +73,7 @@ function MealCard({
    <div className="flex items-start justify-between gap-2">
     <div className="flex-1 min-w-0">
      <div className="flex items-center gap-2 flex-wrap">
-      <h4 className="text-sm font-bold text-[#001E40] truncate">{meal.name}</h4>
+      <h4 className="text-sm font-bold text-fg truncate">{meal.name}</h4>
       <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold capitalize whitespace-nowrap ${badgeClass}`}>
        {meal.mealType}
       </span>
@@ -70,7 +82,7 @@ function MealCard({
       <p className="text-xs text-soft mt-1 line-clamp-2">{meal.description}</p>
      )}
      <div className="flex items-center gap-3 mt-2">
-      <span className="text-sm font-bold text-[#001E40]">{meal.calories} cal</span>
+      <span className="text-sm font-bold text-fg">{meal.calories} cal</span>
       <span className="text-xs text-faint">P:{meal.protein}g</span>
       <span className="text-xs text-faint">C:{meal.carbs}g</span>
       <span className="text-xs text-faint">F:{meal.fat}g</span>
@@ -131,9 +143,18 @@ export default function MealPlannerTab() {
     const totals = d.dailyTotals?.[index] || { calories: 0, protein: 0, carbs: 0, fat: 0 }
     return { day: name, meals, totalCalories: totals.calories, totalProtein: totals.protein, totalCarbs: totals.carbs, totalFat: totals.fat }
    })
-   setData({ days, targetCalories: 2000 })
    const hasPlan = days.some(d => d.meals.length > 0)
-   if (hasPlan) setInsight("Your weekly meal plan is ready. Tap + on any meal to add it to today's food diary.")
+   if (hasPlan) {
+    const planData = { days, targetCalories: 2000 }
+    setData(planData)
+    saveStoredPlan(weekStart, planData)
+    setInsight("Your weekly meal plan is ready. Tap + on any meal to add it to today's food diary.")
+   } else {
+    // Backend has no saved plan - keep a locally-stored one so a generated
+    // plan survives tab switches even if the backend didn't persist it.
+    const stored = loadStoredPlan(weekStart)
+    setData(stored ?? { days, targetCalories: 2000 })
+   }
   } catch (err) {
    setError(err instanceof Error ? err.message : 'Something went wrong')
   } finally {
@@ -142,7 +163,11 @@ export default function MealPlannerTab() {
  }, [])
 
  useEffect(() => {
+  // Hydrate instantly from the last generated plan, then sync from backend.
+  const stored = loadStoredPlan(getWeekStart())
+  if (stored) { setData(stored); setLoading(false) }
   fetchData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [fetchData])
 
  const handleGenerate = async () => {
@@ -175,8 +200,10 @@ export default function MealPlannerTab() {
     const totalCalories = dayPlan?.totalCalories ?? meals.reduce((s, x) => s + x.calories, 0)
     return { day: name, meals, totalCalories, totalProtein: meals.reduce((s, x) => s + x.protein, 0), totalCarbs: meals.reduce((s, x) => s + x.carbs, 0), totalFat: meals.reduce((s, x) => s + x.fat, 0) }
    })
-   setData({ days, targetCalories: d?.targetCalories ?? 2000 })
-   setInsight("âœ¨ AI-generated meal plan ready! Tap + on any meal to log it in your food diary.")
+   const planData = { days, targetCalories: d?.targetCalories ?? 2000 }
+   setData(planData)
+   saveStoredPlan(getWeekStart(), planData)
+   setInsight("AI-generated meal plan ready! Tap + on any meal to log it in your food diary.")
    setInsightDismissed(false)
   } catch (err) {
    setError(err instanceof Error ? err.message : 'Failed to generate')
@@ -235,7 +262,7 @@ export default function MealPlannerTab() {
     <div className="flex items-center justify-between bg-[#001E40]/5 rounded-xl p-3 border border-[#001E40]/10">
      <div className="flex items-center gap-2">
       <FaCalendarDay className="w-4 h-4 text-[#0C6780]" />
-      <span className="text-sm font-medium text-[#001E40]">Daily calorie target</span>
+      <span className="text-sm font-medium text-fg">Daily calorie target</span>
      </div>
      <span className="text-sm font-bold text-[#0C6780]">{data.targetCalories} cal</span>
     </div>
@@ -278,7 +305,7 @@ export default function MealPlannerTab() {
      <p className="text-xs text-faint mb-2 font-medium">{currentDay.day}&apos;s totals</p>
      <div className="grid grid-cols-4 gap-2 text-center">
       <div>
-       <p className="text-lg font-bold text-[#001E40]">{currentDay.totalCalories}</p>
+       <p className="text-lg font-bold text-fg">{currentDay.totalCalories}</p>
        <p className="text-[10px] text-faint">cal</p>
       </div>
       <div>
@@ -308,7 +335,7 @@ export default function MealPlannerTab() {
     }`}
    >
     {generating ? (
-     <><FaSpinner className="w-4 h-4 animate-spin" />Generating AI meal planâ€¦</>
+     <><FaSpinner className="w-4 h-4 animate-spin" />Generating AI meal plan...</>
     ) : (
      <><FaRobot className="w-4 h-4" />{hasPlan ? 'Regenerate Plan' : 'Generate AI Meal Plan'}</>
     )}

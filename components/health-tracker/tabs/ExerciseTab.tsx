@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -53,10 +53,10 @@ function estimateCalories(type: string, durationMin: number, intensity: string):
 
 function generateExerciseInsight(data: ExerciseDayData): { text: string; emoji: string } | null {
  if (data.entries.length === 0) return null
- if (data.totalMinutes >= 60) return { emoji: 'ðŸ†', text: "Outstanding! Over an hour of exercise today. Your cardiovascular health and metabolism are loving this." }
- if (data.totalMinutes >= 30) return { emoji: 'ðŸ’ª', text: "Great workout session! 30+ minutes of exercise meets the daily recommended activity level." }
- if (data.totalBurned >= 300) return { emoji: 'ðŸ”¥', text: `You've burned ${data.totalBurned} calories. Keep adding short sessions to reach your full goal.` }
- return { emoji: 'ðŸ‘Ÿ', text: "Good start! Even short bouts of activity add up. Try adding another session or a quick walk." }
+ if (data.totalMinutes >= 60) return { emoji: '', text: "Outstanding! Over an hour of exercise today. Your cardiovascular health and metabolism are loving this." }
+ if (data.totalMinutes >= 30) return { emoji: '', text: "Great workout session! 30+ minutes of exercise meets the daily recommended activity level." }
+ if (data.totalBurned >= 300) return { emoji: '', text: `You've burned ${data.totalBurned} calories. Keep adding short sessions to reach your full goal.` }
+ return { emoji: '', text: "Good start! Even short bouts of activity add up. Try adding another session or a quick walk." }
 }
 
 export default function ExerciseTab() {
@@ -332,7 +332,7 @@ export default function ExerciseTab() {
          <button
           onClick={() => setFormDuration(d => Math.max(5, d - 5))}
           className="w-10 h-10 rounded-xl bg-subtle font-bold text-soft hover:bg-line text-lg leading-none"
-         >âˆ’</button>
+         >-</button>
          <input
           type="number"
           value={formDuration}

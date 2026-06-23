@@ -167,8 +167,8 @@ export default function FloatingGeoFAB() {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
-          h-12 w-40 pl-3 pr-5 rounded-full shadow-lg shadow-black/25
-          flex items-center gap-2.5 text-sm font-semibold text-white
+          h-12 w-12 justify-center rounded-full shadow-lg shadow-black/25
+          flex items-center text-sm font-semibold text-white
           bg-[#0C6780] hover:bg-[#0a5c73]
           transition-all hover:scale-105 active:scale-95"
         aria-label="Find nearest healthcare"
@@ -177,7 +177,6 @@ export default function FloatingGeoFAB() {
         <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">
           <FaLocationArrow className="text-base" />
         </span>
-        <span>Near Me</span>
       </button>
 
       {/* ── Backdrop ───────────────────────────────────────────────────────── */}

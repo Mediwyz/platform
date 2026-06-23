@@ -1,6 +1,6 @@
 'use client'
 
-import { FaGooglePlay, FaApple, FaCheckCircle } from 'react-icons/fa'
+import { FaGooglePlay, FaApple, FaCheckCircle, FaBell, FaSearch } from 'react-icons/fa'
 
 const PERKS = [
   'Book & manage appointments on the go',
@@ -74,24 +74,74 @@ export default function AppDownloadSection() {
           <div className="relative w-64 h-[34rem] rounded-[2.5rem] bg-[#0A1A33] border-[10px] border-[#0a2547] shadow-2xl ring-1 ring-white/10 overflow-hidden">
             {/* notch */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#0a2547] rounded-b-2xl z-20" />
-            {/* screen */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#001E40] to-[#0C6780] flex flex-col items-center pt-14 px-5">
-              <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center mb-4">
-                <span className="text-3xl font-black text-white">M</span>
+            {/* screen — a realistic mini app-home mockup */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#001E40] to-[#0C6780] flex flex-col pt-9 px-4">
+              {/* status bar */}
+              <div className="flex items-center justify-between text-white/80 text-[9px] font-semibold mb-3">
+                <span>9:41</span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-1.5 rounded-sm bg-white/70" />
+                  <span className="w-1 h-1.5 rounded-sm bg-white/40" />
+                  <span>100%</span>
+                </span>
               </div>
-              <div className="text-white font-bold text-lg mb-1">MediWyz</div>
-              <div className="text-brand-sky text-[11px] mb-6">Healthcare, Reimagined</div>
-              {/* fake cards */}
-              <div className="w-full space-y-3">
-                {['Find a doctor', 'Video consult', 'Order medicine'].map((t, i) => (
-                  <div key={t} className="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-brand-sky/30" />
-                    <div className="flex-1">
-                      <div className="h-2 w-2/3 rounded bg-white/40 mb-1.5" />
-                      <div className="h-1.5 w-1/2 rounded bg-white/20" />
-                    </div>
-                    {i === 0 && <FaCheckCircle className="text-brand-sky" />}
+
+              {/* app header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center text-white font-black text-sm">M</span>
+                  <span className="text-white font-bold text-sm">MediWyz</span>
+                </div>
+                <span className="relative w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+                  <FaBell className="text-white/80 text-[11px]" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-400 border border-[#0C2240]" />
+                </span>
+              </div>
+
+              {/* greeting + search */}
+              <p className="text-white text-[13px] font-bold leading-tight">Hi Emma</p>
+              <p className="text-white/60 text-[10px] mb-2.5">How are you feeling today?</p>
+              <div className="flex items-center gap-2 rounded-full bg-white/12 border border-white/15 px-3 py-2 mb-3.5">
+                <FaSearch className="text-white/60 text-[10px]" />
+                <span className="text-white/55 text-[10px]">Search doctors, medicines…</span>
+              </div>
+
+              {/* quick actions */}
+              <div className="grid grid-cols-4 gap-2 mb-3.5">
+                {[
+                  { p: 'devices/stethoscope', l: 'Doctors' },
+                  { p: 'medications/medicines', l: 'Pharmacy' },
+                  { p: 'devices/microscope', l: 'Labs' },
+                  { p: 'vehicles/ambulance', l: 'Emergency' },
+                ].map(a => (
+                  <div key={a.l} className="flex flex-col items-center gap-1">
+                    <span className="w-11 h-11 rounded-2xl bg-white/12 border border-white/15 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`/healthicons/${a.p}.svg`} alt="" aria-hidden className="w-5 h-5 [filter:brightness(0)_invert(1)] opacity-90" />
+                    </span>
+                    <span className="text-white/75 text-[8px] font-medium">{a.l}</span>
                   </div>
+                ))}
+              </div>
+
+              {/* upcoming appointment card */}
+              <p className="text-white/70 text-[9px] font-semibold uppercase tracking-wide mb-1.5">Upcoming</p>
+              <div className="rounded-2xl bg-white p-2.5 flex items-center gap-2.5 shadow-lg">
+                <span className="w-9 h-9 rounded-xl bg-[#0C6780]/15 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/healthicons/specialties/cardiology.svg" alt="" aria-hidden className="w-5 h-5" />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#001E40] text-[11px] font-bold leading-tight">Dr. Amelia Cole</p>
+                  <p className="text-gray-500 text-[9px]">Cardiology · Today, 4:30 PM</p>
+                </div>
+                <span className="text-[8px] font-bold text-[#0C6780] bg-[#0C6780]/10 px-1.5 py-0.5 rounded-full">Video</span>
+              </div>
+
+              {/* bottom tab hint */}
+              <div className="mt-auto -mx-4 px-6 py-2.5 bg-black/20 flex items-center justify-between">
+                {['Home', 'Search', 'Care', 'Profile'].map((t, i) => (
+                  <span key={t} className={`text-[8px] font-medium ${i === 0 ? 'text-brand-sky' : 'text-white/45'}`}>{t}</span>
                 ))}
               </div>
             </div>

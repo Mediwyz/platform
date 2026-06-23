@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaUtensils, FaDumbbell, FaTint, FaSync, FaTimes, FaFire } from 'react-icons/fa'
@@ -23,27 +23,27 @@ function generateInsight(data: DashboardData): { text: string; emoji: string } {
   const exPct = data.exercise.targetMinutes > 0 ? data.exercise.minutes / data.exercise.targetMinutes : 0
 
   if (data.calories.consumed === 0 && data.water.consumed === 0 && data.exercise.minutes === 0) {
-    return { emoji: 'â˜€ï¸', text: "Start your day right! Log your first meal and a glass of water to get personalised insights." }
+    return { emoji: '', text: "Start your day right! Log your first meal and a glass of water to get personalised insights." }
   }
   if (waterPct < 0.25) {
-    return { emoji: 'ðŸ’§', text: "You've had very little water today. Dehydration reduces focus - grab a glass now!" }
+    return { emoji: '', text: "You've had very little water today. Dehydration reduces focus - grab a glass now!" }
   }
   if (exPct >= 1 && waterPct >= 0.8) {
-    return { emoji: 'ðŸŽ‰', text: "Amazing! Exercise and hydration goals both hit. You're crushing it today!" }
+    return { emoji: '', text: "Amazing! Exercise and hydration goals both hit. You're crushing it today!" }
   }
   if (calPct > 1.1) {
-    return { emoji: 'âš–ï¸', text: "You've gone over your calorie goal. A light walk can help balance the day." }
+    return { emoji: '', text: "You've gone over your calorie goal. A light walk can help balance the day." }
   }
   if (exPct < 0.3 && calPct > 0.6) {
-    return { emoji: 'ðŸƒ', text: "You've fuelled up well - time to move! Even 15 minutes of walking counts." }
+    return { emoji: '', text: "You've fuelled up well - time to move! Even 15 minutes of walking counts." }
   }
   if (waterPct >= 1) {
-    return { emoji: 'ðŸ’¦', text: "Hydration goal reached! Staying consistent will boost your energy all day." }
+    return { emoji: '', text: "Hydration goal reached! Staying consistent will boost your energy all day." }
   }
   if (calPct < 0.4 && data.calories.consumed > 0) {
-    return { emoji: 'ðŸ¥—', text: "You've logged only a fraction of your daily calories. Make sure to eat enough to fuel your body." }
+    return { emoji: '', text: "You've logged only a fraction of your daily calories. Make sure to eat enough to fuel your body." }
   }
-  return { emoji: 'ðŸ“Š', text: "You're on track! Keep logging meals, water, and activity to close out the day strong." }
+  return { emoji: '', text: "You're on track! Keep logging meals, water, and activity to close out the day strong." }
 }
 
 export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {

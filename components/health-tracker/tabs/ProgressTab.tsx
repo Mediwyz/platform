@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { FaFire, FaDumbbell, FaTint, FaBalanceScale, FaTimes, FaArrowUp, FaArrowDown, FaMinus } from 'react-icons/fa'
@@ -76,11 +76,11 @@ function generateProgressInsight(data: ProgressData): { text: string; emoji: str
  if (data.weeklyData.every(d => d.calories === 0)) return null
  const activeDays = data.weeklyData.filter(d => d.exerciseMinutes > 0).length
  const totalDays = data.weeklyData.length
- if (activeDays === totalDays) return { emoji: 'ðŸ†', text: "You've been active every day this week. Consistency is the most powerful health habit you can build." }
- if (activeDays === 0) return { emoji: 'ðŸ’¡', text: "No exercise logged this week. Even a 15-minute walk each day would make a meaningful difference." }
- if (data.weeklyNetCalories < -1000) return { emoji: 'âš–ï¸', text: "Your net calories are very low this week. Make sure you're eating enough to sustain your energy and muscle mass." }
- if (activeDays >= 4) return { emoji: 'ðŸ’ª', text: `${activeDays} active days this week - well done! Aim for one more session to hit your full weekly target.` }
- return { emoji: 'ðŸ“ˆ', text: `You've been active ${activeDays} days this week. Building a consistent routine is the key to lasting results.` }
+ if (activeDays === totalDays) return { emoji: '', text: "You've been active every day this week. Consistency is the most powerful health habit you can build." }
+ if (activeDays === 0) return { emoji: '', text: "No exercise logged this week. Even a 15-minute walk each day would make a meaningful difference." }
+ if (data.weeklyNetCalories < -1000) return { emoji: '', text: "Your net calories are very low this week. Make sure you're eating enough to sustain your energy and muscle mass." }
+ if (activeDays >= 4) return { emoji: '', text: `${activeDays} active days this week - well done! Aim for one more session to hit your full weekly target.` }
+ return { emoji: '', text: `You've been active ${activeDays} days this week. Building a consistent routine is the key to lasting results.` }
 }
 
 function TrendBadge({ value, positive = true }: { value: number; positive?: boolean }) {

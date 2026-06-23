@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { FaSave, FaWeight, FaRulerVertical, FaBell } from 'react-icons/fa'

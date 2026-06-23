@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -37,11 +37,11 @@ function generateFoodInsight(data: FoodDayData): { text: string; emoji: string }
  const pct = data.targetCalories > 0 ? data.totalCalories / data.targetCalories : 0
  const totalProtein = data.entries.reduce((s, e) => s + (e.protein ?? 0), 0)
  if (data.entries.length === 0) return null
- if (pct > 1.15) return { emoji: 'âš ï¸', text: `You've exceeded your calorie target by ${Math.round((pct - 1) * 100)}%. Consider a lighter dinner or an extra workout.` }
- if (pct > 0.85) return { emoji: 'âœ…', text: "You're close to your calorie goal for today. Great balance - finish with a nutritious dinner!" }
- if (totalProtein < 30 && data.entries.length >= 2) return { emoji: 'ðŸ’ª', text: "Your protein intake looks low. Add a high-protein snack like eggs, Greek yogurt, or legumes." }
- if (pct < 0.4) return { emoji: 'ðŸ¥—', text: "You're well under your calorie target. Make sure you're eating enough to fuel your body." }
- return { emoji: 'ðŸ“', text: "Keep logging your meals to get a complete picture of your nutrition today." }
+ if (pct > 1.15) return { emoji: '', text: `You've exceeded your calorie target by ${Math.round((pct - 1) * 100)}%. Consider a lighter dinner or an extra workout.` }
+ if (pct > 0.85) return { emoji: '', text: "You're close to your calorie goal for today. Great balance - finish with a nutritious dinner!" }
+ if (totalProtein < 30 && data.entries.length >= 2) return { emoji: '', text: "Your protein intake looks low. Add a high-protein snack like eggs, Greek yogurt, or legumes." }
+ if (pct < 0.4) return { emoji: '', text: "You're well under your calorie target. Make sure you're eating enough to fuel your body." }
+ return { emoji: '', text: "Keep logging your meals to get a complete picture of your nutrition today." }
 }
 
 export default function FoodDiaryTab() {
@@ -111,7 +111,7 @@ export default function FoodDiaryTab() {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-     foodId: food.id,
+     foodDbId: food.id,
      name: food.name,
      calories: food.calories,
      protein: food.protein,
@@ -179,7 +179,7 @@ export default function FoodDiaryTab() {
     >
      <FaChevronLeft className="w-4 h-4" />
     </button>
-    <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
+    <span className="text-sm font-semibold text-fg">{formatDate(selectedDate)}</span>
     <button
      onClick={() => changeDate(1)}
      className="p-2 text-soft hover:text-[#0C6780] transition-colors rounded-lg hover:bg-subtle"
@@ -195,7 +195,7 @@ export default function FoodDiaryTab() {
      <div className="flex items-end justify-between mb-2">
       <div>
        <p className="text-xs text-soft">Calories today</p>
-       <p className="text-2xl font-bold text-[#001E40]">
+       <p className="text-2xl font-bold text-fg">
         {data.totalCalories}
         <span className="text-sm font-normal text-faint"> / {data.targetCalories}</span>
        </p>
@@ -214,15 +214,15 @@ export default function FoodDiaryTab() {
      {/* Macro pills */}
      <div className="flex gap-2">
       <span className="flex-1 text-center text-xs py-1.5 bg-blue-50 rounded-lg">
-       <span className="font-bold text-[#001E40]">{totalProtein}g</span>
+       <span className="font-bold text-fg">{totalProtein}g</span>
        <span className="text-faint ml-1">Protein</span>
       </span>
       <span className="flex-1 text-center text-xs py-1.5 bg-amber-50 rounded-lg">
-       <span className="font-bold text-[#001E40]">{totalCarbs}g</span>
+       <span className="font-bold text-fg">{totalCarbs}g</span>
        <span className="text-faint ml-1">Carbs</span>
       </span>
       <span className="flex-1 text-center text-xs py-1.5 bg-pink-50 rounded-lg">
-       <span className="font-bold text-[#001E40]">{totalFat}g</span>
+       <span className="font-bold text-fg">{totalFat}g</span>
        <span className="text-faint ml-1">Fat</span>
       </span>
      </div>
@@ -274,7 +274,7 @@ export default function FoodDiaryTab() {
          <Icon className={`w-4 h-4 ${meal.color}`} />
         </div>
         <div>
-         <span className="text-sm font-semibold text-[#001E40]">{meal.label}</span>
+         <span className="text-sm font-semibold text-fg">{meal.label}</span>
          {mealCals > 0 && (
           <span className="ml-2 text-xs text-faint">{mealCals} cal</span>
          )}
@@ -321,7 +321,7 @@ export default function FoodDiaryTab() {
     <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
      <div className="bg-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
-       <h3 className="text-base font-bold text-[#001E40]">
+       <h3 className="text-base font-bold text-fg">
         Add {MEAL_TYPES.find((m) => m.key === addMealType)?.label || 'Food'}
        </h3>
        <button onClick={() => setShowAddModal(false)} className="p-2 text-faint hover:text-soft transition-colors">

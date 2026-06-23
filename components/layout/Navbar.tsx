@@ -24,6 +24,7 @@ import {
 import HealthwyzLogo from '@/components/ui/HealthwyzLogo'
 import SearchAutocomplete from '@/components/search/SearchAutocomplete'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
+import ThemeToggle from '@/components/ui/theme/ThemeToggle'
 import { useCapacitor } from '@/hooks/useCapacitor'
 import { getProfilePath } from '@/lib/navigation/profilePath'
 import * as FaIcons from 'react-icons/fa'
@@ -281,6 +282,8 @@ const Navbar: React.FC = () => {
 
  <LanguageSwitcher variant="navbar" />
 
+ <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-white/20" />
+
  {isLoggedIn ? (
  <>
  <Link
@@ -423,9 +426,11 @@ const Navbar: React.FC = () => {
  </Link>
  </div>
 
- {/* Mobile Language Switcher */}
- <div className="px-2 mt-3">
+ {/* Mobile Language Switcher + Theme */}
+ <div className="px-2 mt-3 flex items-center gap-2">
  <LanguageSwitcher variant="navbar" />
+ <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-white/20" />
+ <span className="text-xs text-white/70 font-medium">Theme</span>
  </div>
 
  {/* Mobile Auth Buttons */}

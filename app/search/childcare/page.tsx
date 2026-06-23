@@ -31,7 +31,7 @@ const NannyCard = ({ nanny }: NannyProps) => {
  const rating = nanny.rating ?? 0
 
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
  {/* Left: Avatar + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -55,7 +55,7 @@ const NannyCard = ({ nanny }: NannyProps) => {
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
- <h3 className="text-sm font-bold text-gray-900 truncate">
+ <h3 className="text-sm font-bold text-fg truncate">
  {nanny.firstName} {nanny.lastName}
  </h3>
  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium border whitespace-nowrap bg-pink-50 text-pink-700 border-pink-200">
@@ -68,23 +68,23 @@ const NannyCard = ({ nanny }: NannyProps) => {
  </p>
 
  {/* Meta row */}
- <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-1.5">
+ <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-soft mb-1.5">
  <span className="flex items-center gap-1">
  <FaStar className="text-yellow-500 text-[10px]" />
- <span className="font-semibold text-gray-700">{rating}</span>
- <span className="text-gray-400">({reviews})</span>
+ <span className="font-semibold text-soft">{rating}</span>
+ <span className="text-faint">({reviews})</span>
  </span>
  {location && (
  <span className="flex items-center gap-1">
- <FaMapMarkerAlt className="text-[10px] text-gray-400" />
+ <FaMapMarkerAlt className="text-[10px] text-faint" />
  <span className="truncate max-w-[120px]">{location}</span>
  </span>
  )}
  {languages.length > 0 && (
  <span className="flex items-center gap-1">
- <FaLanguage className="text-[10px] text-gray-400" />
+ <FaLanguage className="text-[10px] text-faint" />
  <span>{languages.slice(0, 2).join(', ')}</span>
- {languages.length > 2 && <span className="text-gray-400">+{languages.length - 2}</span>}
+ {languages.length > 2 && <span className="text-faint">+{languages.length - 2}</span>}
  </span>
  )}
  </div>
@@ -119,20 +119,20 @@ const NannyCard = ({ nanny }: NannyProps) => {
  </div>
 
  {/* Right: Price + Buttons */}
- <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-4 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+ <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-4 border-t sm:border-t-0 border-line pt-3 sm:pt-0">
  <div className="sm:text-right">
- <p className="text-sm font-bold text-gray-900 whitespace-nowrap">
+ <p className="text-sm font-bold text-fg whitespace-nowrap">
  Rs {(nanny.hourlyRate ?? 0).toLocaleString()}/hr
  </p>
  {(nanny.overnightRate ?? 0) > 0 && (
- <p className="text-[10px] text-gray-400 whitespace-nowrap">
+ <p className="text-[10px] text-faint whitespace-nowrap">
  Overnight: Rs {(nanny.overnightRate ?? 0).toLocaleString()}
  </p>
  )}
  </div>
  <div className="flex items-center gap-2">
  <Link href={`/search/childcare/${nanny.id}`} className="flex-1 sm:flex-none">
- <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+ <button className="w-full bg-subtle hover:bg-line text-soft px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
  Details
  </button>
  </Link>
@@ -150,15 +150,15 @@ const NannyCard = ({ nanny }: NannyProps) => {
 const LoadingAnimation = () => (
  <div className="flex justify-center items-center py-12">
  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
- <span className="ml-3 text-gray-600">Finding the best nannies for you...</span>
+ <span className="ml-3 text-soft">Finding the best nannies for you...</span>
  </div>
 )
 
 const EmptyState = ({ onClear }: { onClear: () => void }) => (
  <div className="text-center py-12">
- <FaBaby className="text-6xl text-gray-300 mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-700 mb-2">No nannies found</h3>
- <p className="text-gray-600 mb-6">Try adjusting your search criteria or browse all available nannies</p>
+ <FaBaby className="text-6xl text-faint mx-auto mb-4" />
+ <h3 className="text-xl font-semibold text-soft mb-2">No nannies found</h3>
+ <p className="text-soft mb-6">Try adjusting your search criteria or browse all available nannies</p>
  <button 
  onClick={onClear}
  className="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
@@ -213,7 +213,7 @@ export default function NanniesSearchPage() {
  <div className="container mx-auto px-4 py-8">
  {/* Search Form */}
  <div className="relative z-10">
- <div className="bg-white rounded-xl shadow-xl p-4">
+ <div className="bg-surface rounded-xl shadow-xl p-4">
  <div className="flex flex-col gap-4">
  <div className="relative">
  <input
@@ -221,17 +221,17 @@ export default function NanniesSearchPage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Describe what you are looking for (e.g., 'infant care specialist', 'bilingual nanny', 'after school care')"
- className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 transition-colors text-base"
+ className="w-full px-4 py-3 pr-12 border-2 border-line rounded-xl focus:outline-none focus:border-purple-500 transition-colors text-base"
  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
  />
- <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
  
  <div className="flex flex-col md:flex-row gap-4">
  <select
  value={specialization}
  onChange={(e) => setSpecialization(e.target.value)}
- className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 transition-colors"
+ className="flex-1 px-4 py-2.5 border-2 border-line rounded-xl focus:outline-none focus:border-purple-500 transition-colors"
  >
  <option value="all">All Specializations</option>
  <option value="infant">Infant Care</option>
@@ -278,8 +278,8 @@ export default function NanniesSearchPage() {
  <>
  {hasSearched && (
  <div className="mb-6 flex items-center justify-between">
- <p className="text-gray-600">
- Found <span className="font-semibold text-gray-900">{searchResults.length}</span> nannies matching your criteria
+ <p className="text-soft">
+ Found <span className="font-semibold text-fg">{searchResults.length}</span> nannies matching your criteria
  </p>
  <button
  onClick={handleClearFilters}

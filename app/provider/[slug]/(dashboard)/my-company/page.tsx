@@ -10,6 +10,7 @@ import InsuranceMembersTable from '@/components/corporate/InsuranceMembersTable'
 import CompanyAnalytics from '@/components/corporate/CompanyAnalytics'
 import CompanyDangerZone from '@/components/corporate/CompanyDangerZone'
 import MyOrganisationsOverview from '@/components/corporate/MyOrganisationsOverview'
+import MyOrganisationsList from '@/components/corporate/MyOrganisationsList'
 
 interface Company {
   id: string
@@ -175,26 +176,32 @@ export default function MyCompanyPage() {
     return (
       <div className="p-6 max-w-4xl mx-auto">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-4" />
-          <div className="h-4 bg-gray-100 rounded w-96 mb-8" />
-          <div className="h-64 bg-gray-100 rounded-2xl" />
+          <div className="h-8 bg-line rounded w-48 mb-4" />
+          <div className="h-4 bg-subtle rounded w-96 mb-8" />
+          <div className="h-64 bg-subtle rounded-2xl" />
         </div>
       </div>
     )
   }
 
   // No corporate/insurance company yet: still show the user's healthcare
-  // organisations (clinics/hospitals/…) overview, then the company creation form.
+  // organisations (clinics/hospitals/clinics) overview, then the company creation form.
   if (!company) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
+        {/* 1  Organisations you belong to (clinics, pharmacies, labs) */}
+        <MyOrganisationsList />
+        {/* 2  Create or join a healthcare organisation */}
         <MyOrganisationsOverview />
-        <div className="flex items-center gap-3 mb-2">
+
+        {/* 3  Corporate company  a SEPARATE, optional concern from the
+            healthcare organisations above (employer / insurer entity). */}
+        <div className="flex items-center gap-3 mb-2 mt-10 pt-6 border-t border-line">
           <FaBuilding className="text-2xl text-[#0C6780]" />
-          <h1 className="text-2xl font-bold text-[#001E40]">Create a Company Page</h1>
+          <h1 className="text-2xl font-bold text-fg">Company &amp; insurance</h1>
         </div>
-        <p className="text-gray-600 mb-8">
-          Create a company page to manage employee wellness programs, enroll team members in corporate health plans, and post updates as your organization.
+        <p className="text-soft mb-8">
+          Different from the healthcare organisations above, separate from them, create a company to run employee wellness programs, enrol your team in corporate health plans, or operate as a health insurer.
         </p>
 
         {message && (
@@ -203,42 +210,42 @@ export default function MyCompanyPage() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-5">
+        <div className="bg-surface rounded-2xl border border-line shadow-sm p-6 space-y-5">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              <FaBuilding className="inline mr-1.5 text-gray-400" /> Company Name *
+            <label className="block text-sm font-semibold text-soft mb-1.5">
+              <FaBuilding className="inline mr-1.5 text-faint" /> Company Name *
             </label>
             <input
               type="text"
               value={form.companyName}
               onChange={e => setForm(f => ({ ...f, companyName: e.target.value }))}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+              className="w-full px-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               placeholder="e.g. MediCorp Mauritius Ltd"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              <FaIdCard className="inline mr-1.5 text-gray-400" /> Company Registration Number
+            <label className="block text-sm font-semibold text-soft mb-1.5">
+              <FaIdCard className="inline mr-1.5 text-faint" /> Company Registration Number
             </label>
             <input
               type="text"
               value={form.registrationNumber}
               onChange={e => setForm(f => ({ ...f, registrationNumber: e.target.value }))}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+              className="w-full px-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               placeholder="e.g. BRN-2024-00123"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                <FaIndustry className="inline mr-1.5 text-gray-400" /> Industry
+              <label className="block text-sm font-semibold text-soft mb-1.5">
+                <FaIndustry className="inline mr-1.5 text-faint" /> Industry
               </label>
               <select
                 value={form.industry}
                 onChange={e => setForm(f => ({ ...f, industry: e.target.value }))}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none bg-white"
+                className="w-full px-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none bg-surface"
               >
                 <option value="">Select industry</option>
                 <option value="Healthcare">Healthcare</option>
@@ -253,31 +260,31 @@ export default function MyCompanyPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                <FaUsers className="inline mr-1.5 text-gray-400" /> Number of Employees
+              <label className="block text-sm font-semibold text-soft mb-1.5">
+                <FaUsers className="inline mr-1.5 text-faint" /> Number of Employees
               </label>
               <input
                 type="number"
                 min={0}
                 value={form.employeeCount}
                 onChange={e => setForm(f => ({ ...f, employeeCount: parseInt(e.target.value) || 0 }))}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+                className="w-full px-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               />
             </div>
           </div>
 
-          {/* ─── Insurance-company toggle ─────────────────────────────── */}
+          {/*  Insurance-company toggle  */}
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
             <label className="flex items-start gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={form.isInsuranceCompany}
                 onChange={(e) => setForm((f) => ({ ...f, isInsuranceCompany: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-[#0C6780] rounded border-gray-300 focus:ring-[#0C6780]"
+                className="mt-1 w-4 h-4 text-[#0C6780] rounded border-line focus:ring-[#0C6780]"
               />
               <div>
-                <div className="text-sm font-semibold text-gray-900">This is an insurance company</div>
-                <p className="text-xs text-gray-600 mt-0.5">
+                <div className="text-sm font-semibold text-fg">This is an insurance company</div>
+                <p className="text-xs text-soft mt-0.5">
                   Tick this if your company sells health insurance plans. Members will pay a monthly contribution,
                   file claims through MediWyz, and receive reimbursements to their Account Balance. You&apos;ll get
                   access to <strong>Analytics</strong>, <strong>Pre-authorizations</strong>, and claim review tools.
@@ -286,17 +293,17 @@ export default function MyCompanyPage() {
             </label>
             {form.isInsuranceCompany && (
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-soft mb-1.5">
                   Monthly contribution per member
                 </label>
                 <input
                   type="number" min={0}
                   value={form.monthlyContribution}
                   onChange={(e) => setForm((f) => ({ ...f, monthlyContribution: parseFloat(e.target.value) || 0 }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
                   placeholder="500"
                 />
-                <p className="text-[11px] text-gray-500 mt-1">
+                <p className="text-[11px] text-soft mt-1">
                   Amount debited from each member&apos;s Account Balance every month. You can adjust later.
                 </p>
               </div>
@@ -305,24 +312,24 @@ export default function MyCompanyPage() {
 
           {plans.length > 0 && !form.isInsuranceCompany && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Available Corporate Plans</h3>
+              <h3 className="text-sm font-semibold text-soft mb-3">Available Corporate Plans</h3>
               <div className="grid gap-3">
                 {plans.map(plan => (
-                  <div key={plan.id} className="p-4 border border-gray-200 rounded-xl bg-gray-50">
+                  <div key={plan.id} className="p-4 border border-line rounded-xl bg-subtle">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-semibold text-gray-900">{plan.name}</h4>
-                        {plan.description && <p className="text-xs text-gray-500">{plan.description}</p>}
+                        <h4 className="font-semibold text-fg">{plan.name}</h4>
+                        {plan.description && <p className="text-xs text-soft">{plan.description}</p>}
                       </div>
                       <div className="text-right">
                         <span className="text-lg font-bold text-[#0C6780]">{plan.currency} {plan.price}</span>
-                        <span className="text-xs text-gray-400">/{plan.billingCycle}</span>
+                        <span className="text-xs text-faint">/{plan.billingCycle}</span>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-2">You can enroll employees in a plan after creating your company page.</p>
+              <p className="text-xs text-faint mt-2">You can enroll employees in a plan after creating your company page.</p>
             </div>
           )}
 
@@ -353,9 +360,9 @@ export default function MyCompanyPage() {
           <FaBuilding className="text-xl text-[#0C6780]" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#001E40]">{company.companyName}</h1>
-          <p className="text-sm text-gray-500">
-            {company.industry && `${company.industry} · `}
+          <h1 className="text-2xl font-bold text-fg">{company.companyName}</h1>
+          <p className="text-sm text-soft">
+            {company.industry && `${company.industry}  `}
             {company.registrationNumber && `Reg: ${company.registrationNumber}`}
           </p>
         </div>
@@ -367,46 +374,47 @@ export default function MyCompanyPage() {
         </div>
       )}
 
-      {/* All organisations the user owns or belongs to, grouped by category */}
+      {/* Organisations you belong to, then create/join more */}
+      <MyOrganisationsList />
       <MyOrganisationsOverview />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <div className="bg-surface rounded-xl border border-line p-4">
+          <div className="flex items-center gap-2 text-sm text-soft mb-1">
             <FaUsers className="text-[#0C6780]" /> Total Employees
           </div>
-          <p className="text-2xl font-bold text-gray-900">{activeEmployees.length}</p>
+          <p className="text-2xl font-bold text-fg">{activeEmployees.length}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <div className="bg-surface rounded-xl border border-line p-4">
+          <div className="flex items-center gap-2 text-sm text-soft mb-1">
             <FaClock className="text-amber-500" /> Pending
           </div>
-          <p className="text-2xl font-bold text-gray-900">{pendingEmployees.length}</p>
+          <p className="text-2xl font-bold text-fg">{pendingEmployees.length}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <div className="bg-surface rounded-xl border border-line p-4">
+          <div className="flex items-center gap-2 text-sm text-soft mb-1">
             <FaCheckCircle className="text-green-500" /> Active
           </div>
-          <p className="text-2xl font-bold text-gray-900">{activeEmployees.length}</p>
+          <p className="text-2xl font-bold text-fg">{activeEmployees.length}</p>
         </div>
       </div>
 
       {/* Invite employee */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <div className="bg-surface rounded-2xl border border-line shadow-sm p-6 mb-8">
+        <h2 className="text-lg font-bold text-fg mb-4 flex items-center gap-2">
           <FaUserPlus className="text-[#0C6780]" /> Invite Employee
         </h2>
-        <p className="text-sm text-gray-500 mb-4">Search by email to invite someone to your company. They will receive a notification to accept.</p>
+        <p className="text-sm text-soft mb-4">Search by email to invite someone to your company. They will receive a notification to accept.</p>
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
             <input
               type="email"
               value={inviteEmail}
               onChange={e => setInviteEmail(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleInvite()}
-              className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+              className="w-full pl-9 pr-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               placeholder="Enter employee email address"
             />
           </div>
@@ -429,29 +437,29 @@ export default function MyCompanyPage() {
       </div>
 
       {/* Employee list */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <div className="bg-surface rounded-2xl border border-line shadow-sm p-6">
+        <h2 className="text-lg font-bold text-fg mb-4 flex items-center gap-2">
           <FaUsers className="text-[#0C6780]" /> Employees ({employees.length})
         </h2>
         {employees.length === 0 ? (
-          <p className="text-gray-400 text-center py-8">No employees yet. Invite team members using their email address above.</p>
+          <p className="text-faint text-center py-8">No employees yet. Invite team members using their email address above.</p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-line">
             {employees.map(emp => (
               <div key={emp.id} className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
+                  <div className="w-10 h-10 rounded-full bg-line flex items-center justify-center text-sm font-bold text-soft">
                     {emp.user.firstName[0]}{emp.user.lastName[0]}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{emp.user.firstName} {emp.user.lastName}</p>
-                    <p className="text-xs text-gray-400">{emp.user.email}</p>
+                    <p className="font-medium text-fg">{emp.user.firstName} {emp.user.lastName}</p>
+                    <p className="text-xs text-faint">{emp.user.email}</p>
                   </div>
                 </div>
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                   emp.status === 'active' ? 'bg-green-100 text-green-700' :
                   emp.status === 'pending' ? 'bg-amber-100 text-amber-700' :
-                  'bg-gray-100 text-gray-500'
+                  'bg-subtle text-soft'
                 }`}>
                   {emp.status}
                 </span>

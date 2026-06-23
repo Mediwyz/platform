@@ -37,8 +37,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'navbar' 
  onClick={() => setOpen(!open)}
  className={
  isHeader
- ? 'p-2 sm:p-2.5 md:p-3 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-lg hover:bg-blue-100 transition flex items-center gap-1.5'
- : 'flex items-center gap-1.5 text-gray-700 hover:text-blue-600 transition-colors duration-200 px-2 py-1.5 rounded-md hover:bg-blue-50 text-sm font-medium'
+ ? 'p-2 sm:p-2.5 md:p-3 text-gray-600 dark:text-soft hover:text-brand-teal dark:hover:text-accent bg-gray-100 dark:bg-subtle rounded-lg hover:bg-sky-100 dark:hover:bg-line transition flex items-center gap-1.5'
+ : 'flex items-center gap-1.5 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1.5 rounded-md hover:bg-white/10 text-sm font-medium'
  }
  aria-label="Change language"
  aria-expanded={open}
@@ -50,7 +50,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'navbar' 
  </button>
 
  {open && (
- <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+ <div className="absolute right-0 top-full mt-1 w-44 bg-surface rounded-xl shadow-xl border border-line z-50 overflow-hidden">
  {supportedLanguages.map((lang) => (
  <button
  key={lang.code}
@@ -58,16 +58,16 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'navbar' 
  setLanguage(lang.code as SupportedLanguage)
  setOpen(false)
  }}
- className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 hover:bg-blue-50 transition-colors ${
+ className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 hover:bg-subtle transition-colors ${
  language === lang.code
- ? 'bg-blue-50 text-blue-700 font-medium'
- : 'text-gray-700'
+ ? 'bg-[#0C6780]/10 text-[#0C6780] dark:text-accent font-medium'
+ : 'text-soft'
  }`}
  >
  <span className="text-lg">{lang.flag}</span>
  <span>{lang.label}</span>
  {language === lang.code && (
- <span className="ml-auto text-blue-600 text-xs">&#10003;</span>
+ <span className="ml-auto text-[#0C6780] dark:text-accent text-xs">&#10003;</span>
  )}
  </button>
  ))}

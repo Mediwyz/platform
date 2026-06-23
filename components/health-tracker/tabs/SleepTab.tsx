@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -20,11 +20,11 @@ interface SleepDayData {
 }
 
 const QUALITIES = [
- { value: 'terrible', label: 'ðŸ˜« Terrible', activeClass: 'bg-red-500 text-white' },
- { value: 'poor', label: 'ðŸ˜• Poor', activeClass: 'bg-orange-500 text-white' },
- { value: 'fair', label: 'ðŸ˜ Fair', activeClass: 'bg-yellow-500 text-white' },
- { value: 'good', label: 'ðŸ˜Š Good', activeClass: 'bg-green-500 text-white' },
- { value: 'excellent', label: 'ðŸ˜„ Excellent', activeClass: 'bg-emerald-500 text-white' },
+ { value: 'terrible', label: ' Terrible', activeClass: 'bg-red-500 text-white' },
+ { value: 'poor', label: ' Poor', activeClass: 'bg-orange-500 text-white' },
+ { value: 'fair', label: ' Fair', activeClass: 'bg-yellow-500 text-white' },
+ { value: 'good', label: ' Good', activeClass: 'bg-green-500 text-white' },
+ { value: 'excellent', label: ' Excellent', activeClass: 'bg-emerald-500 text-white' },
 ]
 
 const qualityBgMap: Record<string, string> = {
@@ -36,7 +36,7 @@ const qualityBgMap: Record<string, string> = {
 }
 
 const qualityEmoji: Record<string, string> = {
- terrible: 'ðŸ˜«', poor: 'ðŸ˜•', fair: 'ðŸ˜', good: 'ðŸ˜Š', excellent: 'ðŸ˜„',
+ terrible: '', poor: '', fair: '', good: '', excellent: '',
 }
 
 function formatDuration(totalMin: number): string {
@@ -78,18 +78,18 @@ function getSleepScoreColor(durationMin: number, targetMin: number): string {
 function generateSleepInsight(entry: SleepEntry, targetMin: number): { text: string; emoji: string } {
  const ratio = entry.durationMin / targetMin
  if (entry.quality === 'excellent' && ratio >= 0.9) {
-  return { emoji: 'ðŸŒŸ', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
+  return { emoji: '', text: "Excellent night! Quality sleep like this supports memory consolidation, immune function, and mental clarity." }
  }
  if (ratio < 0.6) {
-  return { emoji: 'ðŸ˜´', text: `You slept ${formatDuration(entry.durationMin)} - well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
+  return { emoji: '', text: `You slept ${formatDuration(entry.durationMin)} - well below your target. Consistent sleep deprivation affects mood, weight, and focus.` }
  }
  if (entry.quality === 'terrible' || entry.quality === 'poor') {
-  return { emoji: 'ðŸ’¤', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
+  return { emoji: '', text: "Poor sleep quality? Try reducing screen time an hour before bed, keeping your room cool, and going to bed at a consistent time." }
  }
  if (ratio >= 0.9) {
-  return { emoji: 'âœ…', text: `You hit your sleep target (${formatDuration(entry.durationMin)}). Consistent sleep timing is one of the best things for your health.` }
+  return { emoji: '', text: `You hit your sleep target (${formatDuration(entry.durationMin)}). Consistent sleep timing is one of the best things for your health.` }
  }
- return { emoji: 'ðŸŒ™', text: "Good effort! Aim to go to bed 30 minutes earlier tonight to reach your full sleep target." }
+ return { emoji: '', text: "Good effort! Aim to go to bed 30 minutes earlier tonight to reach your full sleep target." }
 }
 
 export default function SleepTab() {
@@ -365,7 +365,7 @@ export default function SleepTab() {
        "Avoid caffeine after 2 PM",
       ].map((tip, i) => (
        <li key={i} className="text-xs text-soft flex items-start gap-2">
-        <span className="text-indigo-300 mt-0.5">â€¢</span>{tip}
+        <span className="text-indigo-300 mt-0.5"></span>{tip}
        </li>
       ))}
      </ul>
@@ -422,7 +422,7 @@ export default function SleepTab() {
           <p className="text-xs text-amber-600 ml-auto text-right">Less than 6 hours<br/>Consider an earlier bedtime</p>
          )}
          {derivedDuration >= 420 && (
-          <p className="text-xs text-emerald-600 ml-auto text-right">âœ“ Good duration</p>
+          <p className="text-xs text-emerald-600 ml-auto text-right"> Good duration</p>
          )}
         </div>
        )}

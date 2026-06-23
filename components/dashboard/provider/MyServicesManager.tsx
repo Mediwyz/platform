@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
@@ -14,7 +14,7 @@ const HealthiconPicker = dynamic(() => import('@/components/shared/HealthiconPic
 const WorkflowWizard = dynamic(() => import('@/components/workflow/builder/WorkflowWizard'), { ssr: false })
 import type { GeneratedTemplate } from '@/components/workflow/builder/WorkflowWizard'
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Types 
 
 interface WorkflowStep {
   order: number
@@ -66,7 +66,7 @@ interface CatalogGroup {
   services: CatalogService[]
 }
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Constants 
 
 const MODE_LABEL: Record<string, string> = {
   office: 'In-Person', home: 'Home Visit', video: 'Video Call',
@@ -77,13 +77,13 @@ const MODE_COLOR: Record<string, string> = {
   video:  'bg-purple-100 text-purple-700 border-purple-200',
 }
 const MODE_EMOJI: Record<string, string> = {
-  office: 'ðŸ¥', home: 'ðŸ ', video: 'ðŸ“¹',
+  office: '', home: '', video: '',
 }
 
-// â”€â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Main Component 
 
 export default function MyServicesManager({ providerType }: { providerType: string; slug?: string }) {
-  // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  State 
   const [configs, setConfigs] = useState<ServiceConfig[]>([])
   const [catalogGroups, setCatalogGroups] = useState<CatalogGroup[]>([])
   const [availableTemplates, setAvailableTemplates] = useState<WorkflowTemplate[]>([])
@@ -122,7 +122,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   // Appointment-type step: build a new workflow with the wizard, or pick existing.
   const [createMode, setCreateMode] = useState<'wizard' | 'pick'>('wizard')
 
-  // â”€â”€ Data fetchers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Data fetchers 
 
   const fetchMyServices = useCallback(async () => {
     try {
@@ -155,14 +155,14 @@ export default function MyServicesManager({ providerType }: { providerType: stri
     fetchTemplates()
   }, [fetchMyServices, fetchCatalog, fetchTemplates])
 
-  // â”€â”€ Toast helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Toast helper 
 
   function showToast(type: 'success' | 'error', text: string) {
     setToast({ type, text })
     setTimeout(() => setToast(null), 4000)
   }
 
-  // â”€â”€ Derived â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Derived 
 
   // Services already offered by this provider (by platformServiceId)
   const offeredIds = useMemo(() => new Set(configs.filter(c => c.isActive).map(c => c.platformServiceId)), [configs])
@@ -181,7 +181,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   // Active configs
   const activeConfigs = configs.filter(c => c.isActive)
 
-  // â”€â”€ Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Handlers 
 
   function openAddCatalog() {
     setCatalogSearch('')
@@ -414,7 +414,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
     }
   }
 
-  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Render 
 
   return (
     <div className="space-y-5">
@@ -428,7 +428,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
         </div>
       )}
 
-      {/* â”€â”€ Header â”€â”€ */}
+      {/*  Header  */}
       <div className="flex items-start justify-between gap-4">
         <div>
           {panel !== 'list' && (
@@ -457,9 +457,9 @@ export default function MyServicesManager({ providerType }: { providerType: stri
         </div>
       </div>
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {/* PANEL: LIST                                                        */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'list' && (
         loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -512,9 +512,9 @@ export default function MyServicesManager({ providerType }: { providerType: stri
         )
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {/* PANEL: ADD FROM CATALOG                                            */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'add-catalog' && (
         <div className="space-y-5">
           {!selectedCatalogSvc ? (
@@ -524,7 +524,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                 <FaSearch className="text-faint text-sm" />
                 <input
                   type="text"
-                  placeholder="Search servicesâ€¦"
+                  placeholder="Search services"
                   value={catalogSearch}
                   onChange={e => setCatalogSearch(e.target.value)}
                   className="flex-1 text-sm outline-none bg-transparent"
@@ -537,7 +537,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                   <FaConciergeBell className="text-3xl mx-auto mb-3" />
                   <p className="text-sm">No services match your search.</p>
                   <button onClick={openCreateService} className="mt-3 text-sm font-semibold text-[#0C6780] hover:underline">
-                    Create a new service â†’
+                    Create a new service 
                   </button>
                 </div>
               ) : (
@@ -580,7 +580,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-semibold text-[#001E40] truncate">{svc.serviceName}</p>
                                 <p className="text-xs text-faint">Rs {svc.defaultPrice.toLocaleString()}
-                                  {svc.duration ? ` Â· ${svc.duration}m` : ''}
+                                  {svc.duration ? `  ${svc.duration}m` : ''}
                                 </p>
                               </div>
                               {alreadyAdded && (
@@ -679,9 +679,9 @@ export default function MyServicesManager({ providerType }: { providerType: stri
         </div>
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {/* PANEL: MANAGE WORKFLOWS                                            */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'manage-workflows' && managingConfig && (
         <div className="space-y-5">
           <p className="text-xs text-faint">
@@ -718,9 +718,9 @@ export default function MyServicesManager({ providerType }: { providerType: stri
         </div>
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {/* PANEL: CREATE CUSTOM SERVICE                                       */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'create-service' && (
         <div className="max-w-lg space-y-5">
           <div className="bg-purple-50 border border-purple-200 rounded-xl px-4 py-3 text-sm text-purple-800">
@@ -828,18 +828,18 @@ export default function MyServicesManager({ providerType }: { providerType: stri
               className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-purple-600 text-white rounded-xl text-sm font-semibold
                 hover:bg-purple-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Next: appointment type â†’
+              Next: appointment type 
             </button>
           </div>
-          <p className="text-xs text-faint text-center">Step 1 of 2 Â· next you&apos;ll set how this service is delivered</p>
+          <p className="text-xs text-faint text-center">Step 1 of 2  next you&apos;ll set how this service is delivered</p>
         </div>
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-      {/* PANEL: CREATE SERVICE â€” STEP 2, WORKFLOW WIZARD                    */}
+      {/*  */}
+      {/* PANEL: CREATE SERVICE  STEP 2, WORKFLOW WIZARD                    */}
       {/* The provider configures the appointment type; the wizard generates */}
       {/* a workflow that is published + linked when the service is created.  */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'create-wizard' && (
         <div className="space-y-4">
           <button
@@ -850,7 +850,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           </button>
           <div className="px-4 py-3 bg-purple-50 border border-purple-100 rounded-xl">
             <p className="text-sm font-semibold text-[#001E40]">{createName || 'New service'}</p>
-            <p className="text-xs text-soft">Step 2 of 2 Â· choose how patients book this service</p>
+            <p className="text-xs text-soft">Step 2 of 2  choose how patients book this service</p>
           </div>
 
           {/* Mode toggle: build a fresh workflow with the wizard, or reuse existing ones */}
@@ -893,16 +893,16 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                 disabled={saving || newWorkflowIds.size === 0}
                 className="w-full flex items-center justify-center gap-2 py-3 bg-[#0C6780] text-white rounded-xl text-sm font-semibold hover:bg-[#0a5568] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {saving ? 'Creatingâ€¦' : `Create service${newWorkflowIds.size > 0 ? ` (${newWorkflowIds.size} type${newWorkflowIds.size !== 1 ? 's' : ''})` : ''}`}
+                {saving ? 'Creating' : `Create service${newWorkflowIds.size > 0 ? ` (${newWorkflowIds.size} type${newWorkflowIds.size !== 1 ? 's' : ''})` : ''}`}
               </button>
             </div>
           )}
         </div>
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {/* PANEL: EDIT PRICE                                                  */}
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/*  */}
       {panel === 'edit-price' && editingConfig && (
         <div className="max-w-sm space-y-5">
           <div className="px-4 py-3 bg-subtle rounded-xl border border-line">
@@ -959,7 +959,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
   )
 }
 
-// â”€â”€â”€ Service Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Service Card 
 
 function ServiceCard({
   config, onManageWorkflows, onEditPrice, onRemove,
@@ -1020,7 +1020,7 @@ function ServiceCard({
                   key={wf.id}
                   className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${MODE_COLOR[wf.serviceMode] ?? 'bg-subtle text-soft border-line'}`}
                 >
-                  {MODE_EMOJI[wf.serviceMode] ?? 'ðŸ“‹'} {MODE_LABEL[wf.serviceMode] ?? wf.serviceMode}
+                  {MODE_EMOJI[wf.serviceMode] ?? ''} {MODE_LABEL[wf.serviceMode] ?? wf.serviceMode}
                 </span>
               ))}
             </div>
@@ -1058,7 +1058,7 @@ function ServiceCard({
   )
 }
 
-// â”€â”€â”€ Workflow Selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Workflow Selector 
 
 function WorkflowSelector({
   templates, selectedIds, onToggle,
@@ -1090,7 +1090,7 @@ function WorkflowSelector({
       {Object.entries(grouped).map(([mode, wfs]) => (
         <div key={mode}>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-base">{MODE_EMOJI[mode] ?? 'ðŸ“‹'}</span>
+            <span className="text-base">{MODE_EMOJI[mode] ?? ''}</span>
             <p className="text-xs font-bold text-soft uppercase tracking-wider">
               {MODE_LABEL[mode] ?? mode}
             </p>
@@ -1115,7 +1115,7 @@ function WorkflowSelector({
                       className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                       style={{ backgroundColor: selected ? '#0C678018' : '#F3F4F6' }}
                     >
-                      {MODE_EMOJI[mode] ?? 'ðŸ“‹'}
+                      {MODE_EMOJI[mode] ?? ''}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm font-semibold truncate ${selected ? 'text-[#0C6780]' : 'text-[#001E40]'}`}>{wf.name}</p>
@@ -1123,7 +1123,7 @@ function WorkflowSelector({
                         <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${MODE_COLOR[mode] ?? 'bg-subtle text-soft border-line'} border`}>
                           {MODE_LABEL[mode] ?? mode}
                         </span>
-                        <span className="text-[10px] text-faint">{source} Â· {steps.length} steps</span>
+                        <span className="text-[10px] text-faint">{source}  {steps.length} steps</span>
                       </div>
                     </div>
                     <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center border-2 transition-all
@@ -1142,7 +1142,7 @@ function WorkflowSelector({
                               ${i === 0 ? 'bg-[#0C6780] text-white' : i === steps.length - 1 ? 'bg-emerald-500 text-white' : 'bg-line text-soft'}`}>
                               {step.label}
                             </span>
-                            {i < steps.length - 1 && <span className="text-faint text-[10px]">â€º</span>}
+                            {i < steps.length - 1 && <span className="text-faint text-[10px]"></span>}
                           </div>
                         ))}
                         {steps.length > 6 && <span className="text-[10px] text-faint flex-shrink-0">+{steps.length - 6} more</span>}
@@ -1159,7 +1159,7 @@ function WorkflowSelector({
   )
 }
 
-// â”€â”€â”€ Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Empty State 
 
 function EmptyServicesState({ onAdd, onCreate }: { onAdd: () => void; onCreate: () => void }) {
   return (
