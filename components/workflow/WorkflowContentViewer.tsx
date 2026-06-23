@@ -70,7 +70,7 @@ function renderLabResult(data: Record<string, unknown>) {
  <div>
  {data.findings ? <p className="text-sm text-gray-700 mb-2">{String(data.findings)}</p> : null}
  {values.length > 0 && (
- <table className="w-full text-sm">
+ <div className="overflow-x-auto"><table className="w-full text-sm">
  <thead>
  <tr className="border-b">
  <th className="text-left py-1 text-gray-500 font-medium">Test</th>
@@ -87,7 +87,7 @@ function renderLabResult(data: Record<string, unknown>) {
  </tr>
  ))}
  </tbody>
- </table>
+ </table></div>
  )}
  </div>
  )

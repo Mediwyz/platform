@@ -139,7 +139,7 @@ export default function CorporateEmployeesPage() {
     ) : (
      <>
       {/* Desktop table */}
-      <table className="w-full text-sm hidden sm:table">
+      <div className="overflow-x-auto"><table className="w-full text-sm hidden sm:table">
        <thead className="bg-gray-50">
         <tr>
          <th className="p-3 text-left font-medium text-gray-700">Employee</th>
@@ -190,7 +190,7 @@ export default function CorporateEmployeesPage() {
          </tr>
         ))}
        </tbody>
-      </table>
+      </table></div>
 
       {/* Mobile card view */}
       <div className="sm:hidden divide-y divide-gray-100">

@@ -98,7 +98,7 @@ export default function AuditLogPage() {
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <table className="w-full">
+          <div className="overflow-x-auto"><table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 <th className="px-5 py-3">When</th>
@@ -143,7 +143,7 @@ export default function AuditLogPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

@@ -408,7 +408,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
 
       {/* Desktop Table */}
       <div className={`hidden sm:block bg-white rounded-xl border ${borderColor} overflow-hidden`}>
-        <table className="w-full">
+        <div className="overflow-x-auto"><table className="w-full">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100">
               <th className="w-10 px-3 py-3"></th>
@@ -474,7 +474,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       {/* Mobile Cards */}

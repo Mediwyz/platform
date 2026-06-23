@@ -190,7 +190,7 @@ export default function AccountValidation() {
  <p className="text-sm mt-1">{statusFilter === 'unverified' ? 'All provider accounts have been verified' : 'No accounts match this filter'}</p>
  </div>
  ) : (
- <table className="w-full">
+ <div className="overflow-x-auto"><table className="w-full">
  <thead className="bg-gray-50">
  <tr>
  <th className="p-4 text-left text-sm font-medium text-gray-700">Provider</th>
@@ -272,7 +272,7 @@ export default function AccountValidation() {
  </tr>
  ))}
  </tbody>
- </table>
+ </table></div>
  )}
  </div>
  </div>

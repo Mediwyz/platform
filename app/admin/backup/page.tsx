@@ -136,7 +136,7 @@ export default function AdminBackupPage() {
  <p className="text-sm mt-1">Create your first backup to get started</p>
  </div>
  ) : (
- <table className="w-full text-sm">
+ <div className="overflow-x-auto"><table className="w-full text-sm">
  <thead className="bg-gray-50">
  <tr>
  <th className="p-3 text-left font-medium text-gray-700">Date</th>
@@ -169,7 +169,7 @@ export default function AdminBackupPage() {
  )
  })}
  </tbody>
- </table>
+ </table></div>
  )}
  </div>
  </div>

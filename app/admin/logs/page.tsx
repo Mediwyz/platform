@@ -149,7 +149,7 @@ export default function AdminLogsPage() {
  <p className="text-sm mt-1">Activity logs will appear here as users interact with the platform</p>
  </div>
  ) : (
- <table className="w-full text-sm">
+ <div className="overflow-x-auto"><table className="w-full text-sm">
  <thead className="bg-gray-50">
  <tr>
  <th className="p-3 text-left font-medium text-gray-700">Timestamp</th>
@@ -176,7 +176,7 @@ export default function AdminLogsPage() {
  </tr>
  ))}
  </tbody>
- </table>
+ </table></div>
  )}
  </div>
  </div>

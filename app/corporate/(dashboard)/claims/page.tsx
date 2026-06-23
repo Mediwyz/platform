@@ -108,7 +108,7 @@ export default function CorporateClaimsPage() {
  <p className="text-sm mt-1">Claims will appear here when employees submit them</p>
  </div>
  ) : (
- <table className="w-full text-sm">
+ <div className="overflow-x-auto"><table className="w-full text-sm">
  <thead className="bg-gray-50">
  <tr>
  <th className="p-3 text-left font-medium text-gray-700">Employee</th>
@@ -136,7 +136,7 @@ export default function CorporateClaimsPage() {
  )
  })}
  </tbody>
- </table>
+ </table></div>
  )}
  </div>
  </div>
