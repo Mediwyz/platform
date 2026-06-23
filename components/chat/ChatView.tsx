@@ -859,7 +859,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
  <input
  type="text"
- placeholder="Search conversations"
+ placeholder="Search conversations…"
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  className="w-full pl-9 pr-3 py-2 text-sm bg-subtle text-fg border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
@@ -901,7 +901,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <div className="border-t border-line">
  <div className="px-4 py-2 bg-subtle">
  <p className="text-xs font-semibold text-soft uppercase tracking-wide">
- {searchingUsers ? 'Searching users' : 'Start a new conversation'}
+ {searchingUsers ? 'Searching users…' : 'Start a new conversation'}
  </p>
  </div>
  {userSearchResults.map((user) => {
@@ -937,7 +937,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <div className="px-4 py-2 border-t border-line">
  <div className="flex items-center gap-1.5">
  <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-faint'}`} />
- <span className="text-xs text-faint">{connected ? 'Connected' : 'Reconnecting'}</span>
+ <span className="text-xs text-faint">{connected ? 'Connected' : 'Reconnecting…'}</span>
  </div>
  </div>
  </div>
@@ -1033,7 +1033,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <input
  ref={inputRef}
  type="text"
- placeholder="Type a message"
+ placeholder="Type a message…"
  value={inputText}
  onChange={handleInputChange}
  onKeyDown={handleKeyDown}

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -63,7 +63,7 @@ export default function AdminSystemTemplatesPage() {
           <option value="">All modes</option>
           {modes.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
-        <span className="text-sm text-soft">{filtered.length} templates  {filtered.filter(t => t.isDefault).length} system  {filtered.filter(t => !t.isDefault).length} custom</span>
+        <span className="text-sm text-soft">{filtered.length} templates · {filtered.filter(t => t.isDefault).length} system · {filtered.filter(t => !t.isDefault).length} custom</span>
       </div>
 
       {loading ? (
@@ -99,7 +99,7 @@ export default function AdminSystemTemplatesPage() {
                         <div className="flex flex-wrap gap-2">
                           {tpl.steps.sort((a, b) => a.order - b.order).map((step, i) => (
                             <div key={step.statusCode} className="flex items-center gap-1.5">
-                              {i > 0 && <span className="text-faint text-xs"></span>}
+                              {i > 0 && <span className="text-faint text-xs">→</span>}
                               <div className="text-xs bg-surface border border-line rounded px-2 py-1">
                                 <span className="text-fg">{step.label}</span>
                                 {Object.entries(step.flags ?? {}).filter(([,v]) => v).map(([f]) => (

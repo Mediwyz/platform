@@ -9,7 +9,7 @@ import {
   FaUserMd, FaFire, FaComments, FaArrowRight,
 } from 'react-icons/fa'
 
-//  Types 
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Post {
   id: string
@@ -39,7 +39,7 @@ interface SuggestedUser {
   verified: boolean
 }
 
-//  Helpers 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getRelativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -68,7 +68,7 @@ const CATEGORY_TABS = [
   { value: 'news', label: 'News' },
 ]
 
-//  Sub-components 
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
 function PostCard({ post }: { post: Post }) {
   const authorName = post.company
@@ -108,7 +108,7 @@ function PostCard({ post }: { post: Post }) {
         <div className="flex items-center gap-4 text-xs text-faint">
           <span className="flex items-center gap-1"><FaHeart className="text-red-400" /> {post.likeCount}</span>
           <span className="flex items-center gap-1"><FaComment /> {post._count.comments}</span>
-          <span className="ml-auto text-[#0C6780] font-medium cursor-default">Read more </span>
+          <span className="ml-auto text-[#0C6780] font-medium cursor-default">Read more →</span>
         </div>
       </div>
     </article>
@@ -188,7 +188,7 @@ function MessagesPanel() {
   )
 }
 
-//  Main page 
+// ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function PublicFeedPage() {
   const router = useRouter()
@@ -371,7 +371,7 @@ export default function PublicFeedPage() {
           </div>
         ) : posts.length === 0 ? (
           <div className="bg-surface rounded-2xl border border-line p-10 text-center">
-            <div className="text-4xl mb-3"></div>
+            <div className="text-4xl mb-3">📭</div>
             <p className="text-soft text-sm">No posts yet in this category.</p>
             <button onClick={() => setActiveCategory('')} className="mt-3 text-sm text-[#0C6780] underline">
               View all posts
@@ -387,7 +387,7 @@ export default function PublicFeedPage() {
                   disabled={loadingMore}
                   className="px-6 py-2.5 bg-surface border border-line text-sm font-semibold text-soft rounded-xl hover:border-[#0C6780] hover:text-[#0C6780] transition-colors disabled:opacity-50"
                 >
-                  {loadingMore ? 'Loading' : 'Load more posts'}
+                  {loadingMore ? 'Loading…' : 'Load more posts'}
                 </button>
               </div>
             )}

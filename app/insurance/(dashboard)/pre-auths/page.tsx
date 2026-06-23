@@ -95,7 +95,7 @@ export default function InsurancePreAuthsPage() {
       </header>
 
       {loading ? (
-        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading</div>
+        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading…</div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">{error}</div>
       ) : list.length === 0 ? (
@@ -133,7 +133,7 @@ export default function InsurancePreAuthsPage() {
                         <button onClick={() => setDenyingId(p.id)} disabled={busyId !== null} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg disabled:opacity-50"><FaBan /> Deny</button>
                         <button onClick={() => approve(p.id)} disabled={busyId !== null} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg disabled:opacity-50">
                           {busyId === p.id ? <FaSpinner className="animate-spin" /> : <FaCheck />}
-                          {busyId === p.id ? 'Approving' : 'Approve (runs rules engine)'}
+                          {busyId === p.id ? 'Approving…' : 'Approve (runs rules engine)'}
                         </button>
                       </div>
                     )}
@@ -175,14 +175,14 @@ function Row({ p, format }: { p: PreAuth; format: (amt: number) => string }) {
         <p className="text-sm font-semibold text-fg">
           {format(p.requestedAmount)}
           {p.approvedAmount != null && p.approvedAmount !== p.requestedAmount && (
-            <span className="text-emerald-700 font-semibold">  {format(p.approvedAmount)} approved</span>
+            <span className="text-emerald-700 font-semibold"> → {format(p.approvedAmount)} approved</span>
           )}
         </p>
         <p className="text-sm text-soft mt-0.5">{p.description}</p>
         <p className="text-[11px] text-soft mt-1">
           Member: {p.member?.firstName} {p.member?.lastName}
-          {'  '}Provider: {p.provider?.firstName} {p.provider?.lastName} ({p.provider?.userType?.toLowerCase()})
-          {p.category ? `  ${p.category}` : ''}
+          {' · '}Provider: {p.provider?.firstName} {p.provider?.lastName} ({p.provider?.userType?.toLowerCase()})
+          {p.category ? ` · ${p.category}` : ''}
           {p.status !== 'used' && p.status !== 'denied' && (
             <span className={expired ? 'text-red-600 ml-2' : 'ml-2'}><FaClock className="inline mb-0.5 mr-0.5" />{expired ? 'Expired ' : 'Expires '}{expires.toLocaleDateString()}</span>
           )}
@@ -196,7 +196,7 @@ function Row({ p, format }: { p: PreAuth; format: (amt: number) => string }) {
 
 function StatusBadge({ status }: { status: PreAuth['status'] }) {
   const cfg = {
-    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used  Paid' },
+    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used · Paid' },
     denied: { icon: FaTimes, cls: 'bg-red-50 text-red-700 border-red-200', label: 'Denied' },
     expired: { icon: FaClock, cls: 'bg-subtle text-soft border-line', label: 'Expired' },
     cancelled: { icon: FaBan, cls: 'bg-subtle text-soft border-line', label: 'Cancelled' },

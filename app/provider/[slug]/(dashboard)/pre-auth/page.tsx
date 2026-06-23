@@ -146,7 +146,7 @@ export default function ProviderPreAuthPage() {
             <div>
               <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Insurance company</label>
               <select value={companyProfileId} onChange={(e) => setCompanyProfileId(e.target.value)} className="w-full text-sm border border-line rounded-lg px-2 py-1.5 bg-surface">
-                <option value="">Choose an insurance company</option>
+                <option value="">Choose an insurance company…</option>
                 {companies.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
               </select>
             </div>
@@ -175,7 +175,7 @@ export default function ProviderPreAuthPage() {
           <div className="flex justify-end gap-2 pt-1">
             <button onClick={() => { setCreating(false); setError(null) }} className="px-3 py-1.5 text-sm text-soft hover:bg-subtle rounded-lg" disabled={submitting}>Cancel</button>
             <button onClick={submit} disabled={submitting || !memberEmail || !companyProfileId || !description || !requestedAmount} className="px-4 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50 inline-flex items-center gap-1.5">
-              {submitting && <FaSpinner className="animate-spin" />} {submitting ? 'Submitting' : 'Submit request'}
+              {submitting && <FaSpinner className="animate-spin" />} {submitting ? 'Submitting…' : 'Submit request'}
             </button>
           </div>
         </section>
@@ -199,7 +199,7 @@ export default function ProviderPreAuthPage() {
                 <Row key={p.id} p={p} format={format}>
                   <button onClick={() => markUsed(p.id)} disabled={usingId === p.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg disabled:opacity-50">
                     {usingId === p.id && <FaSpinner className="animate-spin" />}
-                    {usingId === p.id ? 'Processing' : 'Mark as used'}
+                    {usingId === p.id ? 'Processing…' : 'Mark as used'}
                   </button>
                 </Row>
               ))}
@@ -248,14 +248,14 @@ function Row({ p, children, format }: { p: PreAuth; children: React.ReactNode; f
         <p className="text-sm font-semibold text-fg">
           {format(p.requestedAmount)}
           {p.approvedAmount != null && p.approvedAmount !== p.requestedAmount && (
-            <span className="text-emerald-700 font-semibold">  {format(p.approvedAmount)} approved</span>
+            <span className="text-emerald-700 font-semibold"> → {format(p.approvedAmount)} approved</span>
           )}
         </p>
         <p className="text-sm text-soft mt-0.5">{p.description}</p>
         <p className="text-[11px] text-soft mt-1">
-          {p.member ? `${p.member.firstName} ${p.member.lastName}  ` : ''}
+          {p.member ? `${p.member.firstName} ${p.member.lastName} · ` : ''}
           {p.company?.companyName}
-          {p.category ? `  ${p.category}` : ''}
+          {p.category ? ` · ${p.category}` : ''}
           {p.status !== 'used' && p.status !== 'denied' && (
             <span className={expired ? 'text-red-600 ml-2' : 'ml-2'}><FaClock className="inline mb-0.5 mr-0.5" />{expired ? 'Expired ' : 'Expires '}{expires.toLocaleDateString()}</span>
           )}
@@ -269,7 +269,7 @@ function Row({ p, children, format }: { p: PreAuth; children: React.ReactNode; f
 
 function StatusBadge({ status }: { status: PreAuth['status'] }) {
   const cfg = {
-    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used  Paid' },
+    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used · Paid' },
     denied: { icon: FaTimes, cls: 'bg-red-50 text-red-700 border-red-200', label: 'Denied' },
     expired: { icon: FaClock, cls: 'bg-subtle text-soft border-line', label: 'Expired' },
     cancelled: { icon: FaBan, cls: 'bg-subtle text-soft border-line', label: 'Cancelled' },

@@ -31,7 +31,7 @@ export default function PublicAIAssistantPage() {
     )
   }
 
-  // Authenticated  render the canonical MediWyz AI component used everywhere
+  // Authenticated → render the canonical MediWyz AI component used everywhere
   // else (patient, provider, admin, regional dashboards). Same sessions API,
   // same UX.
   if (me?.user) {
@@ -45,7 +45,7 @@ export default function PublicAIAssistantPage() {
     )
   }
 
-  // Guest  invite them to sign in. The floating widget at the bottom-right
+  // Guest → invite them to sign in. The floating widget at the bottom-right
   // remains available for one-off questions without an account.
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#001E40] via-[#0a3d62] to-[#0C6780] flex items-center justify-center px-4 py-12">
@@ -63,15 +63,15 @@ export default function PublicAIAssistantPage() {
         <div className="px-6 sm:px-10 py-7 space-y-5">
           <ul className="space-y-3 text-sm text-soft">
             <li className="flex gap-3">
-              <span className="text-[#0C6780] flex-shrink-0"></span>
+              <span className="text-[#0C6780] flex-shrink-0">•</span>
               <span>Conversations grounded in <strong>your real profile</strong> - allergies, medications, goals, recent activity.</span>
             </li>
             <li className="flex gap-3">
-              <span className="text-[#0C6780] flex-shrink-0"></span>
+              <span className="text-[#0C6780] flex-shrink-0">•</span>
               <span>Saved chat history across all your sessions.</span>
             </li>
             <li className="flex gap-3">
-              <span className="text-[#0C6780] flex-shrink-0"></span>
+              <span className="text-[#0C6780] flex-shrink-0">•</span>
               <span>Booking, medication, and emergency guidance - all in one place.</span>
             </li>
           </ul>
@@ -99,7 +99,7 @@ export default function PublicAIAssistantPage() {
           </div>
 
           <p className="text-center text-xs text-soft pt-1">
-            Just want a quick question? Use the <strong>Assistant Sant IA</strong> bubble at the bottom right of every page.
+            Just want a quick question? Use the <strong>Assistant Santé IA</strong> bubble at the bottom right of every page.
           </p>
         </div>
       </div>

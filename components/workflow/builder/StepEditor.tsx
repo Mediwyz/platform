@@ -33,7 +33,7 @@ export interface WorkflowStep {
   /** Emoji icon chosen by the admin for a custom milestone step. */
   customEmoji?: string
   /** Optional visual bucket. When omitted, the engine derives one from the
-   *  step's shape (first  pending, terminal  success/danger, else active).
+   *  step's shape (first → pending, terminal → success/danger, else active).
    *  Authors only need to set this to override the derived value. */
   category?: StepCategory
   /** Optional explicit icon - authors pick from a closed set when the
@@ -325,7 +325,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                           value={notif.title}
                           onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, title: e.target.value } as never)}
                           onFocus={() => setFocusedNotifField(titleKey)}
-                          placeholder="e.g. Consultation confirme"
+                          placeholder="e.g. Consultation confirmée"
                           className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-surface transition ${
                             isTitleFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
                           }`}
@@ -339,7 +339,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                           value={notif.message}
                           onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, message: e.target.value } as never)}
                           onFocus={() => setFocusedNotifField(msgKey)}
-                          placeholder="e.g. Bonjour {{patientName}}, votre rendez-vous"
+                          placeholder="e.g. Bonjour {{patientName}}, votre rendez-vous…"
                           className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-surface transition ${
                             isMsgFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
                           }`}

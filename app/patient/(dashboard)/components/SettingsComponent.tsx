@@ -471,7 +471,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
  <FaThermometerHalf className="text-orange-500 text-base sm:text-lg md:text-xl mx-auto mb-1 sm:mb-2" />
  <p className="text-xs text-soft">Temperature</p>
- <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}C</p>
+ <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}°C</p>
  </div>
  </div>
  </div>
@@ -765,7 +765,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </p>
  <p className="text-xs sm:text-sm text-soft">{billing.cardNumber}</p>
  <p className="text-xs text-soft">
- Expires: {billing.expiryDate}  Added: {new Date(billing.addedDate).toLocaleDateString()}
+ Expires: {billing.expiryDate} • Added: {new Date(billing.addedDate).toLocaleDateString()}
  </p>
  </div>
  </div>

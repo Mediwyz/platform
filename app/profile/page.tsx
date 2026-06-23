@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * /profile (no id)  convenience redirect to the signed-in user's unified
+ * /profile (no id) — convenience redirect to the signed-in user's unified
  * profile at /profile/[id]. Any bare "/profile" link (or a link built with an
  * empty id) lands here instead of 404'ing. Falls back to /login when signed out.
  */

@@ -209,7 +209,7 @@ export default function RevenueAnalytics({ timeRange, region }: { timeRange: str
  {(stream.amount * currentCurrency.rate).toLocaleString('en-US', { maximumFractionDigits: 0 })}
  </p>
  <p className={`text-sm ${stream.trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
- {stream.trend > 0 ? '' : ''} {stream.trend}%
+ {stream.trend > 0 ? '▲' : '▼'} {stream.trend}%
  </p>
  </div>
  </div>

@@ -301,9 +301,9 @@ export default function SubscriptionsManagementPage() {
  </td>
  <td className="p-3 font-semibold text-fg">{sym} {plan.price.toLocaleString()}/mo</td>
  <td className="p-3 text-sm text-soft">
- GP: {plan.gpConsultsPerMonth === -1 ? '' : plan.gpConsultsPerMonth},
- Nurse: {plan.nurseConsultsPerMonth === -1 ? '' : plan.nurseConsultsPerMonth},
- Mental: {plan.mentalHealthConsultsPerMonth === -1 ? '' : plan.mentalHealthConsultsPerMonth}
+ GP: {plan.gpConsultsPerMonth === -1 ? '∞' : plan.gpConsultsPerMonth},
+ Nurse: {plan.nurseConsultsPerMonth === -1 ? '∞' : plan.nurseConsultsPerMonth},
+ Mental: {plan.mentalHealthConsultsPerMonth === -1 ? '∞' : plan.mentalHealthConsultsPerMonth}
  </td>
  <td className="p-3">
  <span className={`px-2 py-1 rounded-full text-xs font-medium ${plan.isActive ? 'bg-green-100 text-green-700' : 'bg-subtle text-soft'}`}>

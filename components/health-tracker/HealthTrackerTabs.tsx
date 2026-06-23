@@ -29,9 +29,9 @@ const TABS = [
  { id: 'ai-coach', label: 'AI Coach', icon: FaRobot },
  { id: 'progress', label: 'Progress', icon: FaChartLine },
  { id: 'meal-plan', label: 'Meal Plan', icon: FaCalendarAlt },
- // Profile & goals moved to the centralised profile page (`/profile/[id]` 
- //  Health Goals tab). One canonical destination - per
- // `.claude/rules//feedback_centralised_profile.md`. The health tracker
+ // Profile & goals moved to the centralised profile page (`/profile/[id]` →
+ // 🔒 Health Goals tab). One canonical destination - per
+ // `.claude/rules/…/feedback_centralised_profile.md`. The health tracker
  // now focuses on daily-logging surfaces (food, exercise, sleep, BP).
  { id: 'bp-check', label: 'BP Check', icon: FaHeartbeat },
 ]

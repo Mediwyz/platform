@@ -294,7 +294,7 @@ export default function ValidationPage() {
  <FaFileAlt className="text-2xl text-faint" />
  <div>
  <p className="font-medium">{doc.name}</p>
- <p className="text-sm text-soft">{doc.type}  {doc.size}</p>
+ <p className="text-sm text-soft">{doc.type} • {doc.size}</p>
  </div>
  </div>
  <div className="flex items-center gap-2">

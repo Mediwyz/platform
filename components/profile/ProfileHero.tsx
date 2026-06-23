@@ -15,7 +15,7 @@ import {
  *
  * The cover photo is optional - falls back to a teal brand gradient that
  * uses the design tokens from `.claude/rules/flutter-design-tokens.md` so
- * web  Flutter stay visually aligned.
+ * web ↔ Flutter stay visually aligned.
  */
 export interface ProfileHeroProps {
   userId: string
@@ -81,7 +81,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
 
   return (
     <header className="bg-surface rounded-b-2xl sm:rounded-2xl shadow-sm overflow-hidden border border-line">
-      {/*  Cover  */}
+      {/* ─── Cover ───────────────────────────────────────────────────── */}
       <div className="relative h-40 sm:h-56 md:h-64 bg-gradient-to-br from-[#001E40] via-[#0C6780] to-[#9AE1FF]">
         {coverImage && (
           <Image
@@ -102,7 +102,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
               className="inline-flex items-center gap-1.5 text-xs font-medium bg-white/90 hover:bg-surface text-fg px-3 py-1.5 rounded-lg cursor-pointer shadow disabled:opacity-70"
             >
               {uploadingCover ? <FaSpinner className="animate-spin text-[10px]" /> : <FaCamera className="text-[10px]" />}
-              {uploadingCover ? 'Uploading' : 'Change cover'}
+              {uploadingCover ? 'Uploading…' : 'Change cover'}
             </button>
             {coverError && (
               <span className="text-[11px] bg-red-100 text-red-700 px-2 py-0.5 rounded-lg">{coverError}</span>
@@ -118,7 +118,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
         )}
       </div>
 
-      {/*  Avatar + meta row  */}
+      {/* ─── Avatar + meta row ──────────────────────────────────────── */}
       <div className="px-4 sm:px-6 pb-5 -mt-14 sm:-mt-16">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
           <div className="relative">
@@ -194,7 +194,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
           )}
         </div>
 
-        {/*  Stats row (Posts / Followers / Years etc.)  */}
+        {/* ─── Stats row (Posts / Followers / Years etc.) ─────────── */}
         {stats.length > 0 && (
           <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4 text-sm">
             {stats.map((s) => (
@@ -206,7 +206,7 @@ export default function ProfileHero(props: ProfileHeroProps) {
           </ul>
         )}
 
-        {/*  Privacy legend  */}
+        {/* ─── Privacy legend ────────────────────────────────────── */}
         {isSelf && (
           <div className="mt-4 text-[11px] text-soft flex items-center gap-2">
             <FaShieldAlt className="text-faint" />

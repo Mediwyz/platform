@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -107,7 +107,7 @@ export default function AdminWorkflowsOverviewPage() {
                     <div key={t.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-50 last:border-0">
                       <div>
                         <div className="text-sm font-medium text-fg">{t.name}</div>
-                        <div className="text-xs text-faint">{t.providerType.replace(/_/g, ' ')}  {t.serviceMode}</div>
+                        <div className="text-xs text-faint">{t.providerType.replace(/_/g, ' ')} · {t.serviceMode}</div>
                       </div>
                       <span className="text-[10px] text-faint">{new Date(t.updatedAt).toLocaleDateString()}</span>
                     </div>

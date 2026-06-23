@@ -185,8 +185,8 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
           {waitingForOtherSide && (
             <p className="mt-3 pt-3 border-t border-gray-50 text-xs text-faint">
               {role === 'patient'
-                ? 'Waiting for the provider to take action'
-                : 'Waiting for the member to take action'}
+                ? 'Waiting for the provider to take action…'
+                : 'Waiting for the member to take action…'}
             </p>
           )}
 
@@ -205,7 +205,7 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
               )}
               <div>
                 <span className="text-faint">Type:</span>{' '}
-                <span className="font-medium capitalize">{data.bookingType.replace(/_/g, ' ')}  {data.serviceMode}</span>
+                <span className="font-medium capitalize">{data.bookingType.replace(/_/g, ' ')} · {data.serviceMode}</span>
               </div>
             </div>
           )}

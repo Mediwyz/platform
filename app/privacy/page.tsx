@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
  return (
  <div className="container mx-auto px-4 py-12">
- <h1 className="text-4xl font-bold mb-8">MediWyz  Privacy Policy</h1>
+ <h1 className="text-4xl font-bold mb-8">MediWyz – Privacy Policy</h1>
  
  <section className="mb-6">
  <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
  <section className="mb-6">
  <h2 className="text-2xl font-semibold mb-4">7. Data of Children</h2>
  <p>Users under 18 years of age must have a parent or legal consent of guardian to use MediWyz services.</p>
- <p>The guardian assumes responsibility for providing accurate information and overseeing the childs use of the platform.</p>
+ <p>The guardian assumes responsibility for providing accurate information and overseeing the child’s use of the platform.</p>
  </section>
 
  <section className="mb-6">

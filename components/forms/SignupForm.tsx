@@ -416,13 +416,13 @@ export default function EnhancedRegistrationForm() {
  {/* "Other - propose a new role" tile. Submits a ProviderRole
   request in `isActive:false` state; regional admin reviews.
   Keeps the platform open for roles we don't ship by default
-  (osteopath, audiologist, homeopath, ) without a code change. */}
+  (osteopath, audiologist, homeopath, …) without a code change. */}
  <button
  type="button"
  onClick={() => setShowRoleRequestModal(true)}
  className="p-6 border-2 border-dashed rounded-2xl text-left transition-all hover:shadow-lg hover:border-brand-teal text-soft hover:text-brand-navy"
  >
- <span className="text-3xl mb-4 block"></span>
+ <span className="text-3xl mb-4 block">➕</span>
  <h3 className="font-bold text-lg mb-2">I don&apos;t see my role</h3>
  <p className="text-sm text-soft">Propose a new provider role for regional admin review.</p>
  </button>
@@ -447,7 +447,7 @@ export default function EnhancedRegistrationForm() {
  <h4 className="font-bold text-blue-800 mb-2">Required Documents for {selectedType?.label}</h4>
  <ul className="text-blue-700 text-sm space-y-1">
  {documentRequirements[selectedUserType]?.filter(doc => doc.required).map(doc => (
- <li key={doc.id}> {doc.name}</li>
+ <li key={doc.id}>• {doc.name}</li>
  ))}
  </ul>
  <p className="text-brand-teal text-xs mt-2">
@@ -969,11 +969,11 @@ export default function EnhancedRegistrationForm() {
  <div>
  <h4 className="font-bold text-blue-800 mb-2">What happens next?</h4>
  <ul className="text-blue-700 text-sm space-y-1">
- <li> Your documents will be reviewed by our verification team</li>
- <li> We may contact you for additional information if needed</li>
- <li> Verification typically takes 2-5 business days</li>
- <li> You will receive an email once your account is approved</li>
- <li> Professional credentials will be verified with relevant authorities</li>
+ <li>• Your documents will be reviewed by our verification team</li>
+ <li>• We may contact you for additional information if needed</li>
+ <li>• Verification typically takes 2-5 business days</li>
+ <li>• You will receive an email once your account is approved</li>
+ <li>• Professional credentials will be verified with relevant authorities</li>
  </ul>
  </div>
  </div>
@@ -1149,7 +1149,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
    disabled={busy}
    className="px-4 py-2 rounded-lg text-sm font-semibold bg-brand-navy hover:bg-brand-teal text-white disabled:opacity-50"
    >
-   {busy ? 'Submitting' : 'Submit request'}
+   {busy ? 'Submitting…' : 'Submit request'}
    </button>
   </div>
   </div>

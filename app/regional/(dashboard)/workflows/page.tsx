@@ -258,18 +258,18 @@ export default function RegionalWorkflowsPage() {
                                 <span className="font-semibold">{s.today}</span>
                                 <span className="text-faint">today</span>
                               </span>
-                              <span className="text-faint"></span>
+                              <span className="text-faint">·</span>
                               <span className="inline-flex items-center gap-0.5">
                                 <span className="font-semibold">{s.week}</span>
                                 <span className="text-faint">7d</span>
                               </span>
-                              <span className="text-faint"></span>
+                              <span className="text-faint">·</span>
                               <span className="inline-flex items-center gap-0.5">
                                 <span className="font-semibold">{s.total}</span>
                                 <span className="text-faint">total</span>
                               </span>
-                              <span className="text-faint"></span>
-                              <span className={`inline-flex items-center gap-0.5 ${dropColor}`} title="Cancelled  total">
+                              <span className="text-faint">·</span>
+                              <span className={`inline-flex items-center gap-0.5 ${dropColor}`} title="Cancelled ÷ total">
                                 <span className="font-semibold">{s.dropOffRate}%</span>
                                 <span>drop-off</span>
                               </span>
@@ -375,7 +375,7 @@ export default function RegionalWorkflowsPage() {
                         <div className="flex flex-wrap gap-2">
                           {tpl.transitions.map((tr, i) => (
                             <span key={i} className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
-                              {tr.from} <span className="text-brand-teal font-bold mx-1"></span> {tr.to}
+                              {tr.from} <span className="text-brand-teal font-bold mx-1">→</span> {tr.to}
                               <span className="text-faint ml-1">({tr.action})</span>
                             </span>
                           ))}
@@ -390,7 +390,7 @@ export default function RegionalWorkflowsPage() {
         </div>
       )}
 
-      {/*  Library picker modal  */}
+      {/* ─── Library picker modal ─────────────────────────────────────── */}
       {libraryOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setLibraryOpen(false)}>
           <div className="bg-surface w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
@@ -408,14 +408,14 @@ export default function RegionalWorkflowsPage() {
               <input
                 value={libraryFilter}
                 onChange={(e) => setLibraryFilter(e.target.value)}
-                placeholder="Search by name, category, provider type"
+                placeholder="Search by name, category, provider type…"
                 className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               />
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
               {library.length === 0 ? (
-                <div className="py-8 text-center text-sm text-soft">Loading library</div>
+                <div className="py-8 text-center text-sm text-soft">Loading library…</div>
               ) : (
                 <div className="space-y-2">
                   {library

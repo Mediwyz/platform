@@ -127,14 +127,14 @@ export default function ClaimReviewDrawer({ claim, onClose, onResolved }: Props)
               onClick={() => act('deny')}
               className="py-2 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <FaBan /> {busy === 'deny' ? 'Denying' : 'Deny'}
+              <FaBan /> {busy === 'deny' ? 'Denying…' : 'Deny'}
             </button>
             <button
               disabled={busy !== null}
               onClick={() => act('approve')}
               className="py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <FaCheck /> {busy === 'approve' ? 'Approving' : 'Approve'}
+              <FaCheck /> {busy === 'approve' ? 'Approving…' : 'Approve'}
             </button>
           </section>
 

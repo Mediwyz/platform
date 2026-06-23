@@ -115,7 +115,7 @@ export default function RoleRequestsPage() {
                 )}
                 <p className="text-[11px] text-faint mt-1.5 inline-flex items-center gap-1">
                   <FiUser className="w-3 h-3" />
-                  Submitted {new Date(role.createdAt).toLocaleDateString()}  slug <span className="font-mono">{role.slug}</span>
+                  Submitted {new Date(role.createdAt).toLocaleDateString()} · slug <span className="font-mono">{role.slug}</span>
                 </p>
               </div>
               <div className="flex gap-2 flex-shrink-0">
@@ -125,7 +125,7 @@ export default function RoleRequestsPage() {
                   className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50 inline-flex items-center gap-1"
                 >
                   <FiCheckCircle className="w-3 h-3" />
-                  {busyId === role.id ? 'Activating' : 'Activate'}
+                  {busyId === role.id ? 'Activating…' : 'Activate'}
                 </button>
               </div>
             </div>

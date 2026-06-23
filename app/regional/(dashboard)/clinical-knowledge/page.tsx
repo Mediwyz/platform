@@ -5,7 +5,7 @@ import { FaPlus, FaTrash, FaCheck, FaBan, FaEdit, FaBook } from 'react-icons/fa'
 
 /**
  * Regional admin CRUD for the AI assistant's clinical knowledge base.
- * Each row maps a condition  one-line dietary guidance that gets
+ * Each row maps a condition → one-line dietary guidance that gets
  * injected into the AI prompt when a user has the condition on file.
  * Any mutation triggers backend cache invalidation so the next AI call
  * picks up the change.
@@ -161,7 +161,7 @@ export default function ClinicalKnowledgePage() {
               value={draft.dietaryGuidance}
               onChange={(e) => setDraft({ ...draft, dietaryGuidance: e.target.value })}
               rows={2} maxLength={200}
-              placeholder="Diabetes: low-GI foods, limit added sugars, emphasise fibre-rich veg"
+              placeholder="Diabetes: low-GI foods, limit added sugars, emphasise fibre-rich veg…"
               className="w-full text-sm border border-line rounded-lg p-2"
             />
           </div>
@@ -189,14 +189,14 @@ export default function ClinicalKnowledgePage() {
                 onClick={save}
                 disabled={saving || !draft.conditionKey || !draft.dietaryGuidance}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50"
-              ><FaCheck /> {saving ? 'Saving' : 'Save'}</button>
+              ><FaCheck /> {saving ? 'Saving…' : 'Save'}</button>
             </div>
           </div>
         </section>
       )}
 
       {loading ? (
-        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading</div>
+        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading…</div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">{error}</div>
       ) : entries.length === 0 ? (

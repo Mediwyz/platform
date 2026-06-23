@@ -169,7 +169,7 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
             className="flex items-center gap-2 px-6 py-2.5 bg-surface border border-line text-soft text-sm font-medium rounded-lg hover:bg-subtle transition disabled:opacity-50 shadow-sm"
           >
             {loadingMore ? <FaSpinner className="animate-spin text-xs" /> : null}
-            {loadingMore ? 'Loading' : 'Load more'}
+            {loadingMore ? 'Loading…' : 'Load more'}
           </button>
         </div>
       )}

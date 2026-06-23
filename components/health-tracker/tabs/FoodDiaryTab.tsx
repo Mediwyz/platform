@@ -67,8 +67,6 @@ export default function FoodDiaryTab() {
    const json = await res.json()
    if (!json.success) throw new Error(json.message || 'Failed to load food diary')
    const d = json.data
-   // Backend returns a flat `entries` array (+ a `grouped` map). Older shape
-   // nested meals at the top level — support both so logged food shows up.
    const entries: FoodEntry[] = Array.isArray(d.entries)
     ? d.entries
     : [

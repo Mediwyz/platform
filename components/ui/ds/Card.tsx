@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 /**
- * Card  themed surface container. `interactive` adds hover lift for clickable
+ * Card — themed surface container. `interactive` adds hover lift for clickable
  * cards. Compose with CardHeader/CardBody/CardFooter or just pass children.
  */
 export function Card({

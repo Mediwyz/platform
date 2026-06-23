@@ -9,9 +9,9 @@ import { useT } from '@/lib/i18n/useT'
  *
  * Visualises the per-template stats already computed server-side at
  * `/api/workflow/templates/stats`. Each template shows:
- *    instances today / 7 days / all-time
- *    completed count
- *    drop-off rate (cancelled  total)
+ *   • instances today / 7 days / all-time
+ *   • completed count
+ *   • drop-off rate (cancelled ÷ total)
  * With a top-level summary row + a simple bar chart per template.
  */
 interface Stats {
@@ -91,7 +91,7 @@ export default function AnalyticsPage() {
       <div className="bg-surface rounded-xl border border-line">
         <div className="px-4 py-3 border-b border-line flex items-center justify-between">
           <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Templates by volume</h2>
-          {loading && <span className="text-xs text-faint">Loading</span>}
+          {loading && <span className="text-xs text-faint">Loading…</span>}
         </div>
 
         {!loading && rows.length === 0 && (
@@ -107,7 +107,7 @@ export default function AnalyticsPage() {
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-fg truncate">{tpl.name}</p>
                   <p className="text-[11px] text-soft">
-                    {tpl.providerType.replace(/_/g, ' ')}  {tpl.serviceMode}
+                    {tpl.providerType.replace(/_/g, ' ')} · {tpl.serviceMode}
                     {tpl.isDefault && <span className="ml-2 text-[10px] bg-subtle px-1 rounded">default</span>}
                   </p>
                 </div>

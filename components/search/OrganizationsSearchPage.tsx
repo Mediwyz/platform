@@ -10,7 +10,7 @@ const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: 
 import { FaSearch, FaMapMarkerAlt, FaPhone, FaGlobe, FaBriefcaseMedical, FaHospital, FaFlask, FaTooth, FaEye, FaHeart } from 'react-icons/fa'
 import { MdVerified } from 'react-icons/md'
 
-//  Types 
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 interface SampleProvider {
   id: string
@@ -37,7 +37,7 @@ interface OrgEntity {
   sampleProviders: SampleProvider[]
 }
 
-//  Constants 
+// ── Constants ─────────────────────────────────────────────────────────────────
 
 const ENTITY_TYPES = [
   { value: '', label: 'All Types' },
@@ -76,7 +76,7 @@ function EntityTypeIcon({ type, className, color }: { type: string; className?: 
   return <Icon className={className} style={color ? { color } : undefined} />
 }
 
-//  EntityCard 
+// ── EntityCard ────────────────────────────────────────────────────────────────
 
 function EntityCard({ entity }: { entity: OrgEntity }) {
   const color = TYPE_COLORS[entity.type] ?? '#0C6780'
@@ -166,7 +166,7 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
   )
 }
 
-//  Main page 
+// ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function OrganizationsSearchPage() {
   const searchParams = useSearchParams()
@@ -210,7 +210,7 @@ export default function OrganizationsSearchPage() {
       <div className="bg-surface border-b border-line shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-8">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-2xl"></span>
+            <span className="text-2xl">🏥</span>
             <h1 className="text-2xl font-bold text-fg">Find an Organization</h1>
           </div>
           <p className="text-sm text-soft mb-5">Hospitals, clinics, labs, dental practices, and wellness centers near you</p>
@@ -267,7 +267,7 @@ export default function OrganizationsSearchPage() {
           </div>
         ) : entities.length === 0 ? (
           <div className="text-center py-16">
-            <span className="text-5xl block mb-3"></span>
+            <span className="text-5xl block mb-3">🏥</span>
             <h3 className="font-bold text-fg text-lg mb-1">No organizations found</h3>
             <p className="text-soft text-sm">
               {query || selectedType

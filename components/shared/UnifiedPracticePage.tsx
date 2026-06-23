@@ -11,7 +11,7 @@ import {
   FaVideo, FaPhone, FaUser, FaHome, FaHospital, FaBolt, FaExternalLinkAlt,
 } from 'react-icons/fa'
 
-//  Types 
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 interface Booking {
   id: string
@@ -35,7 +35,7 @@ interface Booking {
   providerType?: string
 }
 
-//  Component 
+// ─── Component ──────────────────────────────────────────────────────────────
 
 export default function UnifiedPracticePage() {
   const user = useDashboardUser()
@@ -68,7 +68,7 @@ export default function UnifiedPracticePage() {
 
   useEffect(() => { fetchBookings() }, [fetchBookings])
 
-  //  Actions 
+  // ─── Actions ────────────────────────────────────────────────────────────
 
   const handleAction = async (bookingId: string, bookingType: string, action: string) => {
     if (!user) return
@@ -142,7 +142,7 @@ export default function UnifiedPracticePage() {
     }
   }
 
-  //  Bulk action 
+  // ─── Bulk action ─────────────────────────────────────────────────────────
 
   const runBulk = async (action: 'accept' | 'deny' | 'complete') => {
     if (selected.size === 0 || bulkBusy) return
@@ -184,7 +184,7 @@ export default function UnifiedPracticePage() {
     })
   }
 
-  //  Filters 
+  // ─── Filters ────────────────────────────────────────────────────────────
 
   const filtered = useMemo(() => {
     return bookings.filter(b => {
@@ -212,7 +212,7 @@ export default function UnifiedPracticePage() {
     return actions.length > 0 && !['completed', 'resolved', 'cancelled'].includes(b.status)
   }), [bookings])
 
-  //  Stats 
+  // ─── Stats ──────────────────────────────────────────────────────────────
 
   const stats = useMemo(() => ({
     pending: bookings.filter(b => b.status === 'pending').length,
@@ -226,7 +226,7 @@ export default function UnifiedPracticePage() {
     completed: bookings.filter(b => ['completed', 'resolved'].includes(b.status)).length,
   }), [bookings])
 
-  //  Render 
+  // ─── Render ─────────────────────────────────────────────────────────────
 
   if (!user) return null
 
@@ -369,7 +369,7 @@ export default function UnifiedPracticePage() {
   )
 }
 
-//  Sub-components 
+// ─── Sub-components ─────────────────────────────────────────────────────────
 
 function StatCard({ icon: Icon, label, value, color, bgColor, onClick, active }: {
   icon: React.ComponentType<{ className?: string }>
@@ -514,7 +514,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
 }
 
 // Booking-list status pill. Uses the same category buckets as the workflow
-// detail page so custom status codes (sample_collected, eye_test_done, )
+// detail page so custom status codes (sample_collected, eye_test_done, …)
 // still light up with colour. Falls back to categoryFromLegacyStatus when
 // the booking doesn't carry a category (older rows).
 function StatusBadge({ status }: { status: string }) {
@@ -591,7 +591,7 @@ function deriveActionsFromStatus(status: string): string[] {
   }
 }
 
-//  Helpers 
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function mapBookingType(type: string): string {
   const map: Record<string, string> = {

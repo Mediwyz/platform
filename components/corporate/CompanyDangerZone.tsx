@@ -127,7 +127,7 @@ export default function CompanyDangerZone({
               disabled={busy || disabled || (mode === 'transfer' && !newOwnerEmail)}
               className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50"
             >
-              {busy ? 'Working' : mode === 'transfer' ? 'Transfer ownership' : 'Delete company'}
+              {busy ? 'Working…' : mode === 'transfer' ? 'Transfer ownership' : 'Delete company'}
             </button>
           </div>
         </div>

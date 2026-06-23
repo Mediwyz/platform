@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Regional admin  Organisation Categories CRUD.
+ * Regional admin · Organisation Categories CRUD.
  * Manages the list of organisation types (pharmacy, clinic, hospital, lab,
  * insurance, other...) used by org create/edit forms and search filters.
  */
@@ -75,7 +75,7 @@ export default function OrgCategoriesPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-fg flex items-center gap-2"><FaBuilding className="text-[#0C6780]" /> Organisation Categories</h1>
-          <p className="text-sm text-soft mt-1">Manage the organisation types used across the platform (pharmacy, clinic, hospital, lab, insurance, other).</p>
+          <p className="text-sm text-soft mt-1">Manage the organisation types used across the platform (pharmacy, clinic, hospital, lab, insurance, other…).</p>
         </div>
         <button onClick={openCreate} className="inline-flex items-center gap-2 bg-[#0C6780] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#001E40] transition-colors">
           <FaPlus /> New category
@@ -91,7 +91,7 @@ export default function OrgCategoriesPage() {
               <span className="w-10 h-10 rounded-lg bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center font-bold text-xs flex-shrink-0">{c.displayOrder}</span>
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-fg">{c.label} {!c.isActive && <span className="text-xs text-red-400">(inactive)</span>}</div>
-                <div className="text-xs text-faint font-mono">{c.key}{c.blurb ? `  ${c.blurb}` : ''}</div>
+                <div className="text-xs text-faint font-mono">{c.key}{c.blurb ? ` · ${c.blurb}` : ''}</div>
               </div>
               <button onClick={() => openEdit(c)} className="p-2 text-faint hover:text-[#0C6780] rounded transition"><FaEdit /></button>
               <button onClick={() => remove(c)} className="p-2 text-faint hover:text-red-500 rounded transition"><FaTrash /></button>

@@ -26,10 +26,10 @@ export default function HomePage() {
       {/* Sticky "Book Now / Find Provider" bar - appears after scrolling past hero */}
       <StickyCTABar />
 
-      {/* 2 - Discover first: it's what users come to do - 3-level category navigator  /search/* (live map at final step) */}
+      {/* 2 - Discover first: it's what users come to do - 3-level category navigator → /search/* (live map at final step) */}
       <CategoryNavigator />
 
-      {/* 3 - Explain: 3-step "Search  Book  Consult" */}
+      {/* 3 - Explain: 3-step "Search → Book → Consult" */}
       <HowItWorksSection />
 
       {/* 3b - Impact stats band (animated counters) */}

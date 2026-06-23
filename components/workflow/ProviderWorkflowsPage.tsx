@@ -148,7 +148,7 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
             href={createHref.replace('/create', '/my-suggestions')}
             className="text-sm font-medium text-amber-800 underline underline-offset-2 hover:text-amber-900"
           >
-            View status 
+            View status →
           </Link>
         </div>
       )}

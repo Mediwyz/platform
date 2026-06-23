@@ -13,7 +13,7 @@ import { useProviderRoles } from '@/hooks/useProviderRoles'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
-// Icon per provider role code  falls back to a generic user icon.
+// Icon per provider role code — falls back to a generic user icon.
 const ROLE_ICON: Record<string, IconType> = {
  DOCTOR: FaUserMd, NURSE: FaUserNurse, NANNY: FaBaby, PHARMACIST: FaCapsules,
  LAB_TECHNICIAN: FaFlask, EMERGENCY_WORKER: FaAmbulance, CAREGIVER: FaHandHoldingHeart,
@@ -27,7 +27,7 @@ function Loading() {
  return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" /></div>
 }
 
-//  Lab Results Modal 
+// ─── Lab Results Modal ──────────────────────────────────────────────────────
 function LabResultsModal({ bookingId, testName, onClose }: { bookingId: string; testName: string; onClose: () => void }) {
  const user = useDashboardUser()
  const [results, setResults] = useState<{ id: string; testName: string; result: string; unit: string; referenceRange: string; status: string; notes: string | null }[]>([])
@@ -82,7 +82,7 @@ function LabResultsModal({ bookingId, testName, onClose }: { bookingId: string; 
  )
 }
 
-//  Prescriptions Modal 
+// ─── Prescriptions Modal ────────────────────────────────────────────────────
 function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmentId: string; doctorName: string; onClose: () => void }) {
  const user = useDashboardUser()
  const [prescriptions, setPrescriptions] = useState<{
@@ -135,7 +135,7 @@ function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmen
  <div className="flex-1 min-w-0">
  <p className="text-xs font-medium text-fg">{m.medicine?.name || 'Medicine'}</p>
  {m.medicine?.genericName && <p className="text-[10px] text-faint">{m.medicine.genericName}</p>}
- <p className="text-[10px] text-blue-600">{m.dosage}  {m.frequency}  {m.duration}</p>
+ <p className="text-[10px] text-blue-600">{m.dosage} · {m.frequency} · {m.duration}</p>
  </div>
  <Link href={`/search/medicines?q=${encodeURIComponent(m.medicine?.name || '')}`}
  className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-medium hover:bg-blue-100 flex-shrink-0 ml-2">
@@ -164,7 +164,7 @@ function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmen
  )
 }
 
-//  Enhanced Bookings List with View Results / View Prescriptions 
+// ─── Enhanced Bookings List with View Results / View Prescriptions ───────────
 interface BookingItem {
  id: string
  bookingType: string
@@ -267,7 +267,7 @@ function ProviderBookingsList({ providerType, title }: { providerType: string; t
  )
 }
 
-//  My Health (card grid  detail) 
+// ─── My Health (card grid → detail) ──────────────────────────────────────────
 
 const COLOR_MAP: Record<string, { text: string; bg: string }> = {
  blue: { text: 'text-blue-600', bg: 'bg-blue-50' },
@@ -319,7 +319,7 @@ export default function MyHealthSidebar() {
  const activeProviderType = activeItem?.providerType ?? null
  const isProviderSection = !!activeProviderType
 
- //  DETAIL VIEW 
+ // ── DETAIL VIEW ─────────────────────────────────────────────────────────
  if (activeSection) {
  const Icon = activeProviderType ? (ROLE_ICON[activeProviderType] || FaUser) : FaShieldAlt
  return (
@@ -356,13 +356,13 @@ export default function MyHealthSidebar() {
  )
  }
 
- //  GRID VIEW (default) 
+ // ── GRID VIEW (default) ─────────────────────────────────────────────────
  return (
  <div className="max-w-5xl mx-auto">
  <DashboardPageHeader
  icon={FaHeartbeat}
  title="My Health"
- description="Your care across every provider  pick a category to see your visits, results and prescriptions, or book a new appointment."
+ description="Your care across every provider — pick a category to see your visits, results and prescriptions, or book a new appointment."
  />
 
  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">

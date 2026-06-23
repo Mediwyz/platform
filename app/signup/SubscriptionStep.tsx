@@ -42,7 +42,7 @@ export default function SubscriptionStep({
 
  // Corporate-admin is a capability acquired AFTER signup (by creating a
  // company). Signup only ever picks an individual plan - users can upgrade
- // via the Settings  Subscription tab once they have a company.
+ // via the Settings → Subscription tab once they have a company.
  const isCorporate = false
 
  useEffect(() => {
@@ -83,7 +83,7 @@ export default function SubscriptionStep({
 
  const formatPrice = (price: number, currency: string) => {
  const symbols: Record<string, string> = {
- MUR: 'Rs', MGA: 'Ar', KES: 'KSh', XOF: 'CFA', RWF: 'FRw', USD: '$', EUR: '',
+ MUR: 'Rs', MGA: 'Ar', KES: 'KSh', XOF: 'CFA', RWF: 'FRw', USD: '$', EUR: '€',
  }
  return `${symbols[currency] || currency} ${Math.round(price).toLocaleString()}`
  }

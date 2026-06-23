@@ -5,7 +5,7 @@ import { useTheme } from './ThemeProvider'
 import { cn } from '@/lib/cn'
 
 /**
- * ThemeToggle  sun/moon switch for the dashboard header.
+ * ThemeToggle — sun/moon switch for the dashboard header.
  * Mounted client-side; reflects the resolved theme and flips light/dark.
  */
 export default function ThemeToggle({ className }: { className?: string }) {

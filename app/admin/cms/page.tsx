@@ -202,7 +202,7 @@ export default function CMSManagement() {
  </div>
  <p className="text-soft text-sm line-clamp-2">{article.content}</p>
  <div className="flex justify-between items-center mt-4">
- <span className="text-xs text-soft">{article.date}  {article.author}</span>
+ <span className="text-xs text-soft">{article.date} • {article.author}</span>
  <div className="flex gap-2">
  <button onClick={() => toggleNewsPublish(article.id)} className="p-2 bg-subtle text-soft rounded hover:bg-line"><FaEye /></button>
  <button className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"><FaEdit /></button>

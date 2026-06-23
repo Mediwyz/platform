@@ -241,7 +241,7 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
           className="flex items-center gap-2 px-5 py-2.5 bg-brand-teal text-white rounded-lg font-medium hover:bg-brand-teal/90 disabled:opacity-50"
         >
           <FiSend className="w-4 h-4" />
-          {submitting ? 'Submitting' : 'Submit suggestion'}
+          {submitting ? 'Submitting…' : 'Submit suggestion'}
         </button>
       </div>
     </div>

@@ -7,13 +7,13 @@ import { useCart } from './CartContext'
 import PrescriptionUploadModal from '@/components/shared/PrescriptionUploadModal'
 
 const CATEGORY_EMOJI: Record<string, string> = {
-  medication: '', vitamins: '', first_aid: '', personal_care: '',
-  dental_care: '', baby_care: '', nutrition: '', eyewear: '',
-  medical_devices: '', monitoring: '', supplements: '', rehab_equipment: '',
-  contact_lenses: '',
-  prescription_medicines: '', otc_medicines: '', fitness_wellness: '',
-  beauty_care: '', ayurveda: '', first_aid_kit: '',
-  eye_care: '', dental: '', vitamins_supplements: '',
+  medication: '💊', vitamins: '🧴', first_aid: '🩹', personal_care: '🧼',
+  dental_care: '🦷', baby_care: '👶', nutrition: '🥗', eyewear: '👓',
+  medical_devices: '🩺', monitoring: '❤️', supplements: '💪', rehab_equipment: '🏋️',
+  contact_lenses: '👁️',
+  prescription_medicines: '💊', otc_medicines: '🏥', fitness_wellness: '💪',
+  beauty_care: '✨', ayurveda: '🌿', first_aid_kit: '🩹',
+  eye_care: '👁️', dental: '🦷', vitamins_supplements: '💉',
 }
 
 interface Product {
@@ -109,10 +109,10 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
             <h3 className="font-semibold text-fg text-sm truncate">{product.name}</h3>
             {product.genericName && <p className="text-xs text-faint truncate">{product.genericName}</p>}
             {(product.providerName || product.organisationName) && (
-              <p className="text-[11px] text-[#0C6780] dark:text-accent font-medium truncate" title={`${product.providerName ?? ''}${product.organisationName ? `  ${product.organisationName}` : ''}`}>
+              <p className="text-[11px] text-[#0C6780] dark:text-accent font-medium truncate" title={`${product.providerName ?? ''}${product.organisationName ? ` · ${product.organisationName}` : ''}`}>
                 {product.providerName ?? 'Provider'}
                 {product.organisationName && (
-                  <span className="text-faint font-normal">  {product.organisationName}</span>
+                  <span className="text-faint font-normal"> · {product.organisationName}</span>
                 )}
               </p>
             )}
@@ -120,7 +120,7 @@ export default function ShopItemCard({ product, rxMatch = false }: { product: Pr
           <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
             {rxMatch && (
               <span className="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">
-                 Rx match
+                ✓ Rx match
               </span>
             )}
             {product.requiresPrescription && (

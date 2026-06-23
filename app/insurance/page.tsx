@@ -118,7 +118,7 @@ const InsurancePlanCard = ({ plan }: InsurancePlanProps) => {
  <TypeIcon className="text-sm" />
  {plan.provider}
  </p>
- <p className="text-soft text-sm">{plan.type}  {plan.coverage}</p>
+ <p className="text-soft text-sm">{plan.type} • {plan.coverage}</p>
  
  {/* Rating */}
  <div className="flex items-center gap-2 mt-2">
@@ -663,19 +663,19 @@ export default function InsurancePage() {
  <FaMoneyBillWave className="text-4xl text-green-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Financial Protection</h3>
  <p className="text-soft text-sm mb-4">Protect yourself from high medical costs and unexpected health expenses</p>
- <button className="text-green-600 font-medium text-sm">Learn More </button>
+ <button className="text-green-600 font-medium text-sm">Learn More →</button>
  </div>
  <div className="bg-surface rounded-lg p-6 shadow-lg">
  <FaBuilding className="text-4xl text-blue-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Cashless Treatment</h3>
  <p className="text-soft text-sm mb-4">Get treatment at network hospitals without paying upfront</p>
- <button className="text-blue-600 font-medium text-sm">Find Hospitals </button>
+ <button className="text-blue-600 font-medium text-sm">Find Hospitals →</button>
  </div>
  <div className="bg-surface rounded-lg p-6 shadow-lg">
  <FaCreditCard className="text-4xl text-purple-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Tax Benefits</h3>
  <p className="text-soft text-sm mb-4">Save taxes up to Rs 75,000 under Section 80D of Income Tax Act</p>
- <button className="text-purple-600 font-medium text-sm">Calculate Tax </button>
+ <button className="text-purple-600 font-medium text-sm">Calculate Tax →</button>
  </div>
  </div>
  </div>
@@ -744,7 +744,7 @@ export default function InsurancePage() {
  </p>
  <div className="flex gap-4">
  <button className="bg-surface text-green-700 px-6 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors">
- Become a Partner 
+ Become a Partner →
  </button>
  <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-surface hover:text-green-700 transition-colors">
  Learn More

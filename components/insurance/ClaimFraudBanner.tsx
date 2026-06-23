@@ -82,7 +82,7 @@ export default function ClaimFraudBanner({ claimId }: { claimId: string }) {
       <ul className="space-y-1 text-xs">
         {signals.flags.map((flag) => (
           <li key={flag.code} className="flex items-start gap-1.5">
-            <span className="mt-0.5"></span>
+            <span className="mt-0.5">•</span>
             <div>
               <span className="font-medium">{flag.code.replace(/_/g, ' ')}:</span> {flag.message}
             </div>

@@ -112,7 +112,7 @@ export default function ProviderBookingsList({ basePath, defaultActiveOnly = fal
         <div>
           <h1 className="text-2xl font-bold text-fg">Bookings</h1>
           <p className="text-sm text-soft mt-1">
-            {active.length} active  {completed.length} completed  {cancelled.length} cancelled
+            {active.length} active · {completed.length} completed · {cancelled.length} cancelled
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -228,9 +228,9 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-fg truncate">
-                {patient ? `${patient.firstName} ${patient.lastName}` : 'Loading'}
+                {patient ? `${patient.firstName} ${patient.lastName}` : 'Loading…'}
               </p>
-              <p className="text-xs text-faint truncate">{inst.template.name}  {inst.serviceMode}</p>
+              <p className="text-xs text-faint truncate">{inst.template.name} · {inst.serviceMode}</p>
             </div>
           </div>
 
@@ -277,7 +277,7 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
 
       {inst.actionsForProvider.length === 0 && !inst.isCompleted && !inst.isCancelled && (
         <p className="mt-3 pt-3 border-t border-line text-xs text-faint">
-          Waiting for the member to take action
+          Waiting for the member to take action…
         </p>
       )}
     </div>

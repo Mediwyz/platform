@@ -93,7 +93,7 @@ export default function WorkplaceStep({ onContinue, onSkip }: WorkplaceStepProps
             type="text"
             value={query}
             onChange={e => { setQuery(e.target.value); if (selected) setSelected(null) }}
-            placeholder="Search clinics, hospitals, pharmacies"
+            placeholder="Search clinics, hospitals, pharmacies…"
             className="w-full pl-10 pr-10 py-3 border-2 border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none transition-colors"
           />
           {query && (
@@ -112,7 +112,7 @@ export default function WorkplaceStep({ onContinue, onSkip }: WorkplaceStepProps
         {results.length > 0 && !selected && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-surface border border-line rounded-xl shadow-lg z-30 overflow-hidden max-h-64 overflow-y-auto">
             {searching && (
-              <div className="px-4 py-2 text-xs text-faint">Searching</div>
+              <div className="px-4 py-2 text-xs text-faint">Searching…</div>
             )}
             {results.map(org => (
               <button

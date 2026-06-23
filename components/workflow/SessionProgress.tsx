@@ -62,7 +62,7 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
           <h3 className="font-semibold text-fg">{programName}</h3>
           <p className="text-sm text-soft mt-0.5">
             {completedCount} of {totalSessions} sessions completed
-            {nextSessionAt && `  Next: ${formatDate(nextSessionAt)}`}
+            {nextSessionAt && ` · Next: ${formatDate(nextSessionAt)}`}
           </p>
         </div>
         <span className="text-2xl font-bold text-brand-teal">{pct}%</span>

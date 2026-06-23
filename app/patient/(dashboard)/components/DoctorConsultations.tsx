@@ -295,7 +295,7 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  name: d.name,
  subtitle: d.specialty.join(', '),
  tags: [
- ...(d.rating ? [` ${d.rating}`] : []),
+ ...(d.rating ? [`★ ${d.rating}`] : []),
  ...(d.consultationFee ? [`Rs ${d.consultationFee}`] : []),
  ...(d.location ? [d.location] : []),
  ],

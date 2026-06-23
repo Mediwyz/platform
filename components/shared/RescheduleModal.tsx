@@ -93,7 +93,7 @@ export default function RescheduleModal({ bookingId, bookingType, onClose, onRes
             disabled={busy}
             className="flex-1 py-2.5 text-sm font-semibold text-white bg-[#0C6780] rounded-lg hover:bg-[#0a5568] disabled:opacity-50"
           >
-            {busy ? 'Rescheduling' : 'Reschedule'}
+            {busy ? 'Rescheduling…' : 'Reschedule'}
           </button>
         </div>
       </div>

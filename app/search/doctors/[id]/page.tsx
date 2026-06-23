@@ -507,7 +507,7 @@ function OverviewContent({ doctor, mobile = false }: { doctor: Doctor; mobile?: 
  <span className="text-soft"> - {cert.issuingBody}</span>
  <div className="text-soft text-xs sm:text-sm">
  {cert.dateObtained}
- {cert.expiryDate && <span>  Expires: {cert.expiryDate}</span>}
+ {cert.expiryDate && <span> • Expires: {cert.expiryDate}</span>}
  </div>
  </div>
  </li>
@@ -658,9 +658,9 @@ function AvailabilityContent({ doctor, mobile = false }: { doctor: Doctor; mobil
  <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
  <h4 className={`font-medium text-blue-900 mb-2 ${textSize}`}>Quick Booking Tips</h4>
  <ul className="text-xs sm:text-sm text-blue-800 space-y-1">
- <li> Book in advance for regular consultations</li>
- <li> Emergency appointments available for urgent cases</li>
- <li> Video consultations available for follow-ups</li>
+ <li>• Book in advance for regular consultations</li>
+ <li>• Emergency appointments available for urgent cases</li>
+ <li>• Video consultations available for follow-ups</li>
  </ul>
  </div>
  </div>

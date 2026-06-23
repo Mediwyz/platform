@@ -144,7 +144,7 @@ export default function RegionalServicesPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search services"
+            placeholder="Search services…"
             className="w-full pl-10 pr-4 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
           />
         </div>
@@ -215,7 +215,7 @@ export default function RegionalServicesPage() {
                         </div>
                         <div>
                           <h3 className="font-semibold text-fg text-sm">{svc.serviceName}</h3>
-                          <p className="text-xs text-soft">{svc.category}  Rs {svc.defaultPrice.toLocaleString()}</p>
+                          <p className="text-xs text-soft">{svc.category} · Rs {svc.defaultPrice.toLocaleString()}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1 flex-shrink-0">

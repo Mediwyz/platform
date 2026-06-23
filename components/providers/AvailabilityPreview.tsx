@@ -74,7 +74,7 @@ export default function AvailabilityPreview({ providerId, roleSlug }: Props) {
           <li key={r.dayOfWeek} className="flex items-center gap-3 text-sm">
             <span className="w-24 font-medium text-soft">{DAY_NAMES[r.dayOfWeek]}</span>
             <span className="text-soft">
-              {formatTime(r.startTime)}  {formatTime(r.endTime)}
+              {formatTime(r.startTime)} – {formatTime(r.endTime)}
             </span>
           </li>
         ))}

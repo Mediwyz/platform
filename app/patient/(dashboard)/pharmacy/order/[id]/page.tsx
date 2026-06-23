@@ -81,7 +81,7 @@ interface PaymentMethod {
 const defaultPharmacy: Pharmacy = {
  id: "", name: "Pharmacy", location: "", rating: 0, reviews: 0,
  license: "", operatingHours: "Mon-Sat: 8AM-8PM", deliveryRadius: "",
- certifications: [], avatar: ""
+ certifications: [], avatar: "💊"
 }
 
 // Default delivery slot generator used as a fallback.
@@ -110,7 +110,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "mcb-juice",
  name: "MCB Juice",
  description: "Pay instantly with MCB Juice mobile payment",
- icon: "",
+ icon: "📱",
  available: true
  },
  {
@@ -119,7 +119,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's pharmaceutical benefits",
  discount: 20,
- icon: "",
+ icon: "🏢",
  available: true
  },
  {
@@ -128,7 +128,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Insurance Coverage",
  description: "Apply health insurance (60% covered for prescribed medicines)",
  discount: 60,
- icon: "",
+ icon: "🛡️",
  available: true
  },
  {
@@ -137,7 +137,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Pharmacy Subscription",
  description: "Use your active medication subscription plan",
  discount: 100,
- icon: "",
+ icon: "💳",
  available: true
  }
 ]
@@ -183,7 +183,7 @@ export default function CompletePharmacyOrderBooking() {
  operatingHours: 'Mon-Sat: 8AM-8PM',
  deliveryRadius: 'Local delivery available',
  certifications: ['Licensed Pharmacy'],
- avatar: '',
+ avatar: '💊',
  }
  }))
  }
@@ -430,7 +430,7 @@ export default function CompletePharmacyOrderBooking() {
  </button>
  </div>
  <div className="text-right">
- <p className="text-sm text-soft">Rs {item.price}  {item.quantity}</p>
+ <p className="text-sm text-soft">Rs {item.price} × {item.quantity}</p>
  <p className="font-bold text-green-600">Rs {item.price * item.quantity}</p>
  </div>
  </div>
@@ -535,7 +535,7 @@ export default function CompletePharmacyOrderBooking() {
  disabled={orderDetails.prescriptions.get(item.id)?.validated}
  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
  >
- {orderDetails.prescriptions.get(item.id)?.validated ? "Validated " : "Validate Prescription"}
+ {orderDetails.prescriptions.get(item.id)?.validated ? "Validated ✓" : "Validate Prescription"}
  </button>
  )}
 
@@ -780,7 +780,7 @@ export default function CompletePharmacyOrderBooking() {
  {/* Items breakdown */}
  {cartItems.map(item => (
  <div key={item.id} className="flex justify-between text-sm">
- <span className="text-soft">{item.name}  {item.quantity}</span>
+ <span className="text-soft">{item.name} × {item.quantity}</span>
  <span className="font-medium">Rs {item.price * item.quantity}</span>
  </div>
  ))}

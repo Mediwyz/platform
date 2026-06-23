@@ -73,7 +73,7 @@ export default function AudioCallListPage() {
               <p className="text-xs text-soft flex items-center gap-1">
                 <FaClock className="w-3 h-3" />
                 {new Date(room.scheduledAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                <span className="mx-1"></span>
+                <span className="mx-1">·</span>
                 <span>{room.reason}</span>
                 {room.status === 'ended' && (
                   <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-subtle text-soft">Ended</span>

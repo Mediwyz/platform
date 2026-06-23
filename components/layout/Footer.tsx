@@ -109,7 +109,7 @@ const Footer: React.FC = () => (
 
       {/* Bottom legal bar */}
       <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-soft">
-        <p> {new Date().getFullYear()} MediWyz. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} MediWyz. All rights reserved.</p>
         <p className="text-center sm:text-right max-w-2xl">
           MediWyz connects users with licensed providers and does not provide medical care directly. In an emergency, call your local emergency services.
         </p>

@@ -6,9 +6,9 @@ import { FaCheck, FaChevronRight, FaTimes } from 'react-icons/fa'
 
 /**
  * Dismissible activation checklist per the SaaS best-practice rule:
- * users should reach their first meaningful action in 3 steps. Shown
+ * users should reach their first meaningful action in ≤3 steps. Shown
  * on the dashboard for new users; hidden once all items are done OR
- * the user taps the  once (preference persists via localStorage).
+ * the user taps the × once (preference persists via localStorage).
  *
  * Each item fires a GET against its "done?" endpoint, so progress is
  * derived from real state - nothing to reset, nothing to game.
@@ -46,7 +46,7 @@ export default function OnboardingChecklist({ userId }: { userId: string }) {
     {
       id: 'favorite',
       label: 'Save a provider for later',
-      description: 'Tap  on any provider for one-tap rebooking.',
+      description: 'Tap ⭐ on any provider for one-tap rebooking.',
       href: '/search/doctors',
       check: async () => {
         try {
@@ -105,7 +105,7 @@ export default function OnboardingChecklist({ userId }: { userId: string }) {
         <div>
           <h2 className="font-bold text-fg">Get the most out of MediWyz</h2>
           <p className="text-xs text-soft">
-            {doneCount}/{steps.length} steps  takes about a minute
+            {doneCount}/{steps.length} steps · takes about a minute
           </p>
         </div>
         <button

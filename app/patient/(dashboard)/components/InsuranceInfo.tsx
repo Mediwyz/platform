@@ -290,7 +290,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  {billing.type === 'mcb_juice' ? 'MCB Juice' : 'Credit Card'}
  </p>
  <p className="text-xs sm:text-sm text-soft">
- {billing.cardNumber}  Exp: {billing.expiryDate}
+ {billing.cardNumber} • Exp: {billing.expiryDate}
  </p>
  <p className="text-xs text-soft">{billing.cardHolder}</p>
  </div>
@@ -334,7 +334,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </p>
  <div className="mt-1">
  {order.medicines.slice(0, 2).map((med, index) => (
- <p key={index} className="text-xs text-soft"> {med.name}</p>
+ <p key={index} className="text-xs text-soft">• {med.name}</p>
  ))}
  </div>
  </div>
@@ -367,7 +367,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <h3 className="text-lg sm:text-xl md:text-2xl font-bold">{patient.subscriptionPlan.planName}</h3>
  </div>
  <p className="text-xs sm:text-sm opacity-90 capitalize">
- {patient.subscriptionPlan.type} Plan  {patient.subscriptionPlan.billingCycle} Billing
+ {patient.subscriptionPlan.type} Plan • {patient.subscriptionPlan.billingCycle} Billing
  </p>
  {patient.subscriptionPlan.corporateName && (
  <p className="text-xs sm:text-sm mt-1 opacity-80">
@@ -519,8 +519,8 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </div>
  <p className="text-xs sm:text-sm text-soft">
  {claim.policyType}
- {claim.insuranceRep ? `  ${claim.insuranceRep.companyName}` : ''}
- {'  '}{new Date(claim.submittedDate).toLocaleDateString()}
+ {claim.insuranceRep ? ` • ${claim.insuranceRep.companyName}` : ''}
+ {' • '}{new Date(claim.submittedDate).toLocaleDateString()}
  </p>
  <p className="text-xs text-soft mt-1">Claim ID: {claim.claimId}</p>
  </div>
@@ -648,7 +648,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div>
  <p className="font-medium text-fg text-sm">Annual Health Screening</p>
  <p className="text-xs text-soft">Comprehensive checkup included</p>
- <button className="mt-2 text-xs text-blue-600 hover:underline">Schedule Now </button>
+ <button className="mt-2 text-xs text-blue-600 hover:underline">Schedule Now →</button>
  </div>
  </div>
  </div>
@@ -659,7 +659,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div>
  <p className="font-medium text-fg text-sm">Childcare Services</p>
  <p className="text-xs text-soft">Nanny services available</p>
- <button className="mt-2 text-xs text-pink-600 hover:underline">Learn More </button>
+ <button className="mt-2 text-xs text-pink-600 hover:underline">Learn More →</button>
  </div>
  </div>
  </div>
@@ -670,7 +670,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div>
  <p className="font-medium text-fg text-sm">Dental Care</p>
  <p className="text-xs text-soft">70% coverage on treatments</p>
- <button className="mt-2 text-xs text-yellow-600 hover:underline">Find Dentist </button>
+ <button className="mt-2 text-xs text-yellow-600 hover:underline">Find Dentist →</button>
  </div>
  </div>
  </div>
@@ -681,7 +681,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div>
  <p className="font-medium text-fg text-sm">Emergency Services</p>
  <p className="text-xs text-soft">24/7 ambulance service</p>
- <button className="mt-2 text-xs text-red-600 hover:underline">View Details </button>
+ <button className="mt-2 text-xs text-red-600 hover:underline">View Details →</button>
  </div>
  </div>
  </div>

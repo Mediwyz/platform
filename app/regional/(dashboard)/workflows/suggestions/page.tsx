@@ -167,7 +167,7 @@ export default function WorkflowSuggestionsPage() {
                     <div className="flex flex-wrap gap-2">
                       {s.steps.sort((a, b) => a.order - b.order).map((step, i) => (
                         <div key={step.statusCode} className="flex items-center gap-1.5">
-                          {i > 0 && <span className="text-faint text-xs"></span>}
+                          {i > 0 && <span className="text-faint text-xs">→</span>}
                           <span className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
                             {step.label}
                           </span>
@@ -182,7 +182,7 @@ export default function WorkflowSuggestionsPage() {
                       <textarea
                         value={noteMap[s.id] || ''}
                         onChange={e => setNoteMap(prev => ({ ...prev, [s.id]: e.target.value }))}
-                        placeholder="Optional note for the provider (reason for approval/rejection)"
+                        placeholder="Optional note for the provider (reason for approval/rejection)…"
                         rows={2}
                         className="w-full text-sm border border-line rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none resize-none"
                       />
@@ -193,7 +193,7 @@ export default function WorkflowSuggestionsPage() {
                           className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50"
                         >
                           <FiCheckCircle className="w-3.5 h-3.5" />
-                          {busyId === s.id ? 'Processing' : 'Approve & activate'}
+                          {busyId === s.id ? 'Processing…' : 'Approve & activate'}
                         </button>
                         <button
                           onClick={() => review(s.id, 'reject')}

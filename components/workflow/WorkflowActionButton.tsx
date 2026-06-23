@@ -27,7 +27,7 @@ interface WorkflowActionButtonProps {
   onTransition?: (result: unknown) => void
   disabled?: boolean
   stepFlags?: StepFlags
-  /** Status-code  label on this template, used to render " next: X". */
+  /** Status-code → label on this template, used to render "→ next: X". */
   nextStepLabel?: string
   /** Pre-formatted price string, e.g. "Rs 500" - used in confirmation copy. */
   amountLabel?: string
@@ -209,7 +209,7 @@ export default function WorkflowActionButton({
         </button>
         {nextStepLabel && (
           <span className="text-[11px] text-faint pl-1" aria-hidden="true">
-             next: {nextStepLabel}
+            → next: {nextStepLabel}
           </span>
         )}
       </div>

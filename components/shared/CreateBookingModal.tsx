@@ -64,7 +64,7 @@ function getSlotProviderType(role: string): string {
  return map[role] || role.toLowerCase()
 }
 
-/** Generate MonSun dates for a given week offset (0 = this week, 1 = next, etc.) */
+/** Generate Mon–Sun dates for a given week offset (0 = this week, 1 = next, etc.) */
 function getWeekDates(weekOffset: number): { date: string; dayName: string; dayNum: number; monthShort: string; isToday: boolean; isPast: boolean }[] {
  const now = new Date()
  const dayOfWeek = now.getDay() // 0=Sun, 1=Mon
@@ -229,7 +229,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  }, [activeWorkflow])
 
  const handleSubmit = async () => {
- // NOTE: `user` is intentionally NOT required here  the booking is
+ // NOTE: `user` is intentionally NOT required here — the booking is
  // authenticated server-side via the JWT cookie (@CurrentUser), and `user`
  // (from localStorage) can legitimately be null when the modal is opened
  // outside a dashboard layout. Requiring it made Confirm a silent no-op.
@@ -391,7 +391,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  <div className="flex-1 min-w-0">
  <p className="font-medium text-sm text-fg">
  {selectedRole?.role === 'DOCTOR' ? 'Dr. ' : ''}{p.firstName} {p.lastName}
- {p.verified && <span className="ml-1 text-green-500 text-[10px]"></span>}
+ {p.verified && <span className="ml-1 text-green-500 text-[10px]">✓</span>}
  </p>
  {p.specializations.length > 0 && <p className="text-[10px] text-blue-600 truncate">{p.specializations.join(', ')}</p>}
  {p.address && <p className="text-[10px] text-faint truncate">{p.address}</p>}

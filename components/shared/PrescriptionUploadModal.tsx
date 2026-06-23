@@ -123,7 +123,7 @@ export default function PrescriptionUploadModal({ medicineName, onConfirm, onClo
                       <FaUpload className="text-faint group-hover:text-[#0C6780] text-xl transition-colors" />
                     </div>
                     <p className="text-sm font-medium text-soft">Upload prescription image</p>
-                    <p className="text-xs text-faint mt-1">JPG, PNG or PDF  Max 5MB</p>
+                    <p className="text-xs text-faint mt-1">JPG, PNG or PDF · Max 5MB</p>
                     <p className="text-xs text-faint mt-0.5">Drag & drop or click to browse</p>
                   </>
                 )}
@@ -168,7 +168,7 @@ export default function PrescriptionUploadModal({ medicineName, onConfirm, onClo
               <div className="w-16 h-16 rounded-full bg-[#0C6780]/10 flex items-center justify-center mx-auto mb-4">
                 <FaSpinner className="text-[#0C6780] text-2xl animate-spin" />
               </div>
-              <p className="font-bold text-fg mb-1">Scanning prescription</p>
+              <p className="font-bold text-fg mb-1">Scanning prescription…</p>
               <p className="text-sm text-soft">AI is verifying your prescription document</p>
             </div>
           )}
@@ -179,7 +179,7 @@ export default function PrescriptionUploadModal({ medicineName, onConfirm, onClo
                 <FaCheckCircle className="text-green-600 text-3xl" />
               </div>
               <p className="font-bold text-fg mb-1">Prescription verified!</p>
-              <p className="text-sm text-soft">Adding <strong>{medicineName}</strong> to your cart</p>
+              <p className="text-sm text-soft">Adding <strong>{medicineName}</strong> to your cart…</p>
             </div>
           )}
         </div>

@@ -35,9 +35,9 @@ const MODE_COLORS: Record<string, string> = {
 }
 const MODE_LABELS: Record<string, string> = { office: 'Office', home: 'Home', video: 'Video' }
 const FLAG_ICONS: Record<string, string> = {
-  triggers_video_call: '', triggers_payment: '', triggers_refund: '',
-  triggers_conversation: '', triggers_review_request: '', triggers_stock_check: '',
-  triggers_stock_subtract: '', requires_prescription: '',
+  triggers_video_call: '📹', triggers_payment: '💳', triggers_refund: '↩️',
+  triggers_conversation: '💬', triggers_review_request: '⭐', triggers_stock_check: '📦',
+  triggers_stock_subtract: '📉', requires_prescription: '💊',
 }
 
 export default function ServiceWorkflowLinker({ serviceId, providerType, createWorkflowHref, workflows: prefetched }: ServiceWorkflowLinkerProps) {

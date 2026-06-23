@@ -207,7 +207,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  {((current.usage as unknown as { quotas: { key: string; label: string; used: number; limit: number }[] }).quotas).map(q => (
  <div key={q.key} className="text-xs">
  <span className="text-soft">{q.label}:</span>{' '}
- <span className="font-medium">{q.used}/{q.limit === -1 ? '' : q.limit}</span>
+ <span className="font-medium">{q.used}/{q.limit === -1 ? '∞' : q.limit}</span>
  </div>
  ))}
  </div>

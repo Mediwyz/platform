@@ -481,7 +481,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
 
             <div className="p-5 space-y-4">
 
-              {/*  Illustration section  */}
+              {/* ── Illustration section ──────────────────────────────── */}
               <div>
                 <label className="block text-sm font-medium text-soft mb-2">Illustration</label>
 
@@ -598,7 +598,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                         {uploadingImage ? (
                           <>
                             <FaSpinner className="animate-spin text-xl" />
-                            <span className="text-xs">Uploading</span>
+                            <span className="text-xs">Uploading…</span>
                           </>
                         ) : (
                           <>
@@ -614,7 +614,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                 )}
               </div>
 
-              {/*  Standard form fields  */}
+              {/* ── Standard form fields ──────────────────────────────── */}
               {config.fields.map(field => (
                 <div key={field.key}>
                   <label className="block text-sm font-medium text-soft mb-1">
@@ -661,7 +661,7 @@ export default function ServiceCatalogManager({ config }: { config: ServiceCatal
                 </div>
               ))}
 
-              {/*  Workflow Assignment  */}
+              {/* ── Workflow Assignment ───────────────────────────────── */}
               {config.providerType && (
                 <div>
                   <label className="block text-sm font-medium text-soft mb-1.5">

@@ -274,7 +274,7 @@ export default function PatientTeleconsultationPage() {
  onClick={() => setShowChat(false)}
  className="text-soft hover:text-soft"
  >
- 
+ ×
  </button>
  </div>
 

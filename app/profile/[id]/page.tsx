@@ -142,7 +142,7 @@ export default function UnifiedProfilePage() {
         onCoverUpload={(f) => uploadImage(f, 'cover_image')}
       />
 
-      {/*  Tab bar (Facebook-style)  */}
+      {/* ─── Tab bar (Facebook-style) ────────────────────────────── */}
       <div className="bg-surface rounded-2xl shadow-sm border border-line">
         <nav className="flex overflow-x-auto border-b border-line px-2">
           {tabs.map((t) => {
@@ -259,7 +259,7 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
                   onClick={saveBio}
                   className="px-3 py-1.5 bg-[#0C6780] hover:bg-[#001E40] text-white font-semibold rounded-lg disabled:opacity-50"
                   disabled={saving}
-                >{saving ? 'Saving' : 'Save'}</button>
+                >{saving ? 'Saving…' : 'Save'}</button>
               </div>
             </div>
             {error && <div className="text-xs text-red-600">{error}</div>}
@@ -443,7 +443,7 @@ function DetailRow({ label, value }: { label: string; value: string }) {
 function buildStats(profile: ProfileData): Array<{ label: string; value: string | number }> {
   const stats: Array<{ label: string; value: string | number }> = []
   if (typeof profile.rating === 'number' && profile.rating > 0) {
-    stats.push({ label: 'Rating', value: `${profile.rating.toFixed(1)} ` })
+    stats.push({ label: 'Rating', value: `${profile.rating.toFixed(1)} ★` })
   }
   if (typeof profile.experience === 'number' && profile.experience > 0) {
     stats.push({ label: 'years experience', value: profile.experience })

@@ -44,7 +44,7 @@ export default function FloatingAuthFAB() {
 
   return (
     <>
-      {/*  Login modal (global, shared across the app)  */}
+      {/* ── Login modal (global, shared across the app) ───────────── */}
       <AnimatePresence>
         {loginModalOpen && (
           <>
@@ -115,7 +115,7 @@ export default function FloatingAuthFAB() {
                     hover:bg-[#0a5a6e] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {loading ? <FaSpinner className="animate-spin text-xs" /> : <FaLock className="text-xs" />}
-                  {loading ? 'Signing in' : 'Sign In & Continue'}
+                  {loading ? 'Signing in…' : 'Sign In & Continue'}
                 </button>
 
                 <div className="flex items-center justify-between pt-0.5">

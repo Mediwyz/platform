@@ -48,7 +48,7 @@ export default function InsuranceMembersTable() {
     return () => { cancelled = true }
   }, [])
 
-  if (loading) return <div className="text-sm text-faint py-6">Loading members</div>
+  if (loading) return <div className="text-sm text-faint py-6">Loading members…</div>
   if (error) return null // gracefully hide when not an insurance owner
   if (!data) return null
 
@@ -63,7 +63,7 @@ export default function InsuranceMembersTable() {
         <div className="flex-1">
           <h2 className="font-bold text-fg">Insurance members - {company.name}</h2>
           <p className="text-xs text-soft">
-            Fixed monthly contribution: <strong>MUR {company.monthlyContribution.toLocaleString()}</strong>  Period: {currentMonth}
+            Fixed monthly contribution: <strong>MUR {company.monthlyContribution.toLocaleString()}</strong> · Period: {currentMonth}
           </p>
         </div>
       </header>
@@ -102,7 +102,7 @@ export default function InsuranceMembersTable() {
                 </td>
                 <td className="py-2 px-3 text-xs text-soft">
                   {m.lastContributionAt
-                    ? `${m.lastContributionMonth}  ${new Date(m.lastContributionAt).toLocaleDateString()}`
+                    ? `${m.lastContributionMonth} · ${new Date(m.lastContributionAt).toLocaleDateString()}`
                     : ' - '}
                 </td>
                 <td className="py-2 px-3 text-right">

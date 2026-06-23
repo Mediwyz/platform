@@ -163,7 +163,7 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  </button>
  </div>
 
- {/* Reset credit panel  pick a preset, restore the trial, or set a custom
+ {/* Reset credit panel — pick a preset, restore the trial, or set a custom
      amount. Uses the reliable reset endpoint (no payment gateway). */}
  {showReset && (
  <div className="mt-3 bg-white/10 rounded-xl p-3">

@@ -4,10 +4,10 @@
  * ServiceIcon - renders the Healthicons illustration for a service.
  *
  * Priority:
- *   1. provider-uploaded image (PlatformService.imageUrl)         real picture
- *   2. explicit healthicon stored on the service (iconKey, e.g.    chosen icon
+ *   1. provider-uploaded image (PlatformService.imageUrl)        → real picture
+ *   2. explicit healthicon stored on the service (iconKey, e.g.   → chosen icon
  *      "specialties/cardiology")
- *   3. keyword match on the service name/category                 best-fit healthicon
+ *   3. keyword match on the service name/category                → best-fit healthicon
  *   4. provider-type fallback healthicon
  *
  * Icons are the Healthicons set shipped under /public/healthicons/<category>/<id>.svg
@@ -20,7 +20,7 @@ import Image from 'next/image'
 const HEALTHICON_BASE = '/healthicons'
 const DEFAULT_ICON = 'symbols/health'
 
-// Keyword  healthicon path (all verified to exist in /public/healthicons).
+// Keyword → healthicon path (all verified to exist in /public/healthicons).
 // Order matters: specific terms before generic ones.
 const KEYWORD_ICONS: [RegExp, string][] = [
   [/cardiac|heart|arrhythmia|echocardiogram|\becg\b|coronary|carotid|stress test|cardiovascular/i, 'specialties/cardiology'],

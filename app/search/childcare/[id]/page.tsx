@@ -390,10 +390,10 @@ export default function NannyDetailsPage() {
  <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
  <h4 className="font-medium text-purple-900 mb-2">Quick Booking Tips</h4>
  <ul className="text-sm text-purple-800 space-y-1">
- <li> Book in advance for regular childcare</li>
- <li> Emergency services available for urgent needs</li>
- <li> Discuss specific requirements during booking</li>
- <li> Background-checked nannies for peace of mind</li>
+ <li>• Book in advance for regular childcare</li>
+ <li>• Emergency services available for urgent needs</li>
+ <li>• Discuss specific requirements during booking</li>
+ <li>• Background-checked nannies for peace of mind</li>
  </ul>
  </div>
  </div>

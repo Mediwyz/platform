@@ -8,7 +8,7 @@ import {
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
 } from 'react-icons/fa'
 
-//  Types 
+// ─── Types ─────────────────────────────────────────────────────────────────
 
 interface EntityDetail {
   id: string; name: string; type: string; description: string | null
@@ -28,7 +28,7 @@ interface Invitation {
 
 type TabId = 'overview' | 'members' | 'invite' | 'settings'
 
-//  Helpers 
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -45,7 +45,7 @@ const ENTITY_TYPES = [
   'Eye Clinic', 'Physiotherapy Center', 'Nursing Home', 'Diagnostic Center', 'Other',
 ]
 
-//  Sub-components 
+// ─── Sub-components ─────────────────────────────────────────────────────────
 
 function MemberRow({
   member, onApprove, onReject, onRemove, loading,
@@ -124,7 +124,7 @@ function MemberRow({
   )
 }
 
-//  Tab: Overview 
+// ─── Tab: Overview ───────────────────────────────────────────────────────────
 
 function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
   const [form, setForm] = useState({
@@ -257,7 +257,7 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
             onChange={handleChange}
             rows={3}
             className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none resize-none"
-            placeholder="Brief description of your entity"
+            placeholder="Brief description of your entity…"
           />
         </div>
         <Field label="Address" name="address" value={form.address} onChange={handleChange} />
@@ -275,7 +275,7 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
           className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-6 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
         >
           {saving ? <FaSpinner className="animate-spin" /> : <FaCheck />}
-          {saving ? 'Saving' : 'Save Changes'}
+          {saving ? 'Saving…' : 'Save Changes'}
         </button>
       </div>
     </div>
@@ -305,7 +305,7 @@ function Field({
   )
 }
 
-//  Tab: Members 
+// ─── Tab: Members ────────────────────────────────────────────────────────────
 
 function MembersTab({ id }: { id: string }) {
   const [members, setMembers] = useState<WorkplaceMember[]>([])
@@ -424,7 +424,7 @@ function Section({
   )
 }
 
-//  Tab: Invite 
+// ─── Tab: Invite ─────────────────────────────────────────────────────────────
 
 function InviteTab({ id }: { id: string }) {
   const [email, setEmail] = useState('')
@@ -511,7 +511,7 @@ function InviteTab({ id }: { id: string }) {
           className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
         >
           {sending ? <FaSpinner className="animate-spin" /> : <FaEnvelope />}
-          {sending ? 'Sending' : 'Send Invitation'}
+          {sending ? 'Sending…' : 'Send Invitation'}
         </button>
       </div>
 
@@ -553,7 +553,7 @@ function InviteTab({ id }: { id: string }) {
   )
 }
 
-//  Tab: Settings 
+// ─── Tab: Settings ────────────────────────────────────────────────────────────
 
 function SettingsTab() {
   return (
@@ -578,7 +578,7 @@ function SettingsTab() {
   )
 }
 
-//  Page 
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
@@ -663,7 +663,7 @@ export default function ManageOrganizationPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold">{entity.name}</h1>
-              <p className="text-white/60 text-sm">{entity.type}  Manage</p>
+              <p className="text-white/60 text-sm">{entity.type} · Manage</p>
             </div>
             {entity.isVerified && (
               <span className="ml-auto text-xs font-bold bg-[#0C6780] text-white px-3 py-1 rounded-full">

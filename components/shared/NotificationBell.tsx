@@ -222,7 +222,7 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
   )
 }
 
-//  Notification row 
+// ─── Notification row ─────────────────────────────────────────────────────────
 
 interface NotifRowProps {
   notif: NotificationItem
@@ -252,7 +252,7 @@ function NotifRow({ notif, onClick }: NotifRowProps) {
   )
 }
 
-//  URL resolution helper 
+// ─── URL resolution helper ────────────────────────────────────────────────────
 
 function resolveHref(n: NotificationItem, profileHref?: string): string | null {
   // Payload may carry an explicit href
@@ -264,7 +264,7 @@ function resolveHref(n: NotificationItem, profileHref?: string): string | null {
 
   const base = profileHref ? profileHref.replace(/\/profile$/, '') : ''
 
-  // Workflow notifications  booking detail
+  // Workflow notifications → booking detail
   if ((n.type === 'workflow' || n.type === 'review_request') && n.referenceId && n.referenceType) {
     return `${base}/bookings/${n.referenceType}/${n.referenceId}`
   }

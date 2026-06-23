@@ -113,7 +113,7 @@ export default function MemberPaymentsPage() {
         <div>
           <h1 className="text-2xl font-bold text-fg">Member Payments</h1>
           <p className="text-sm text-soft mt-0.5">
-            {data.company.name}  {data.currentMonth}  {format(data.company.monthlyContribution)}/month per member
+            {data.company.name} · {data.currentMonth} · {format(data.company.monthlyContribution)}/month per member
           </p>
         </div>
         <button
@@ -183,7 +183,7 @@ export default function MemberPaymentsPage() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name or email"
+            placeholder="Search by name or email…"
             className="w-full pl-9 pr-4 py-2.5 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none"
           />
         </div>

@@ -57,7 +57,7 @@ function mapApiPrescription(p: any): Prescription {
  doctor: {
  name: docUser ? `Dr. ${docUser.firstName} ${docUser.lastName}` : 'Unknown',
  specialty: '',
- avatar: '',
+ avatar: '👨‍⚕️',
  regNumber: '',
  },
  date: new Date(p.date).toISOString().split('T')[0],
@@ -265,7 +265,7 @@ export default function PrescriptionManagementPage() {
  </span>
  </div>
  <p className="text-soft">
- {prescription.doctor.name}  {prescription.doctor.specialty}
+ {prescription.doctor.name} • {prescription.doctor.specialty}
  </p>
  <div className="flex items-center gap-4 mt-2 text-sm text-soft">
  <div className="flex items-center gap-1">
@@ -316,7 +316,7 @@ export default function PrescriptionManagementPage() {
  {med.name} {med.dosage}
  </h5>
  <p className="text-sm text-soft">
- {med.frequency}  {med.duration}  Qty: {med.quantity}
+ {med.frequency} • {med.duration} • Qty: {med.quantity}
  </p>
  <p className="text-sm text-soft mt-1">
  Instructions: {med.instructions}
@@ -386,7 +386,7 @@ export default function PrescriptionManagementPage() {
  onClick={() => setSelectedPrescription(null)}
  className="text-soft hover:text-soft text-2xl"
  >
- 
+ ×
  </button>
  </div>
  

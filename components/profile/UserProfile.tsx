@@ -42,7 +42,7 @@ const PdfViewer = dynamic(() => import('@/components/shared/PdfViewer'), {
  ),
 })
 
-/*  Interfaces  */
+/* ─── Interfaces ─────────────────────────────────────────────────────────── */
 
 interface UserProfileProps {
  userId: string
@@ -115,7 +115,7 @@ interface UserData {
  profile?: UserProfileData | null
 }
 
-/*  Tab config  */
+/* ─── Tab config ─────────────────────────────────────────────────────────── */
 
 type TabId = 'overview' | 'documents' | 'info' | 'reviews' | 'posts'
 
@@ -150,7 +150,7 @@ function getTabsForUserType(userType: string): TabConfig[] {
  return tabs
 }
 
-/*  Constants  */
+/* ─── Constants ──────────────────────────────────────────────────────────── */
 
 const USER_TYPE_LABELS: Record<string, string> = {
  MEMBER: 'Member',
@@ -208,7 +208,7 @@ const DOCUMENT_TYPE_COLORS: Record<string, string> = {
  other: 'bg-subtle text-soft',
 }
 
-/*  Helper: format file size  */
+/* ─── Helper: format file size ───────────────────────────────────────────── */
 
 function formatFileSize(bytes?: number): string {
  if (!bytes) return 'Unknown size'
@@ -217,7 +217,7 @@ function formatFileSize(bytes?: number): string {
  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-/*  Type-specific field definitions  */
+/* ─── Type-specific field definitions ────────────────────────────────────── */
 
 interface EditableField {
  key: string
@@ -239,9 +239,9 @@ function getEditableFieldsForType(
 }
 
 
-/*  */
+/* ═══════════════════════════════════════════════════════════════════════════ */
 /* Main component */
-/*  */
+/* ═══════════════════════════════════════════════════════════════════════════ */
 
 export default function UserProfile({ userId, userType }: UserProfileProps) {
  const { updateUser } = useUser()
@@ -355,7 +355,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  // Fetched once from /api/roles and looked up by userType code.
  const [profileFieldsByCode, setProfileFieldsByCode] = useState<Record<string, EditableField[]>>({})
 
- /*  Fetch user data + role profile-field schema  */
+ /* ─── Fetch user data + role profile-field schema ─────────────────────── */
 
  useEffect(() => {
  async function fetchUser() {
@@ -375,7 +375,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }, [userId])
 
  useEffect(() => {
- // Include legacy codes (PATIENT, CORPORATE_ADMIN, INSURANCE_REP, )
+ // Include legacy codes (PATIENT, CORPORATE_ADMIN, INSURANCE_REP, …)
  // so users with any historical userType still get their form.
  fetch('/api/roles?all=true&includeLegacy=true', { credentials: 'include' })
  .then(r => r.json())
@@ -392,7 +392,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  .catch(() => { /* fall back to empty - form shows user-level fields only */ })
  }, [])
 
- /*  Initialize edit state when entering edit mode  */
+ /* ─── Initialize edit state when entering edit mode ────────────────────── */
 
  const startEditing = useCallback(() => {
  if (!userData) return
@@ -427,7 +427,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setSaveMsg(null)
  }, [userData, userType, profileFieldsByCode])
 
- /*  Save edits  */
+ /* ─── Save edits ───────────────────────────────────────────────────────── */
 
  const handleSave = async () => {
  setSaving(true)
@@ -478,7 +478,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /*  Fetch documents  */
+ /* ─── Fetch documents ──────────────────────────────────────────────────── */
 
  const fetchDocuments = useCallback(async () => {
  setDocsLoading(true)
@@ -500,7 +500,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }, [activeTab, docsFetched, fetchDocuments])
 
- /*  Fetch required documents for this user type  */
+ /* ─── Fetch required documents for this user type ───────────────────────── */
  useEffect(() => {
  if (!userType) return
  fetch(`/api/required-documents?userType=${encodeURIComponent(userType)}`)
@@ -511,7 +511,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  .catch(() => {})
  }, [userType])
 
- /*  Upload document  */
+ /* ─── Upload document ──────────────────────────────────────────────────── */
 
  const handleDocUpload = async (file: File) => {
  setUploading(true)
@@ -530,7 +530,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /*  Delete document  */
+ /* ─── Delete document ──────────────────────────────────────────────────── */
 
  const handleDeleteDoc = async (docId: string) => {
  try {
@@ -548,7 +548,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /*  Tag helpers  */
+ /* ─── Tag helpers ──────────────────────────────────────────────────────── */
 
  const addTag = (fieldKey: string) => {
  const value = (tagInput[fieldKey] || '').trim()
@@ -565,9 +565,9 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setEditedProfile((prev) => ({ ...prev, [fieldKey]: current.filter((_, i) => i !== index) }))
  }
 
- /*  */
+ /* ═══════════════════════════════════════════════════════════════════════ */
  /* Render */
- /*  */
+ /* ═══════════════════════════════════════════════════════════════════════ */
 
  if (loading) {
  return (
@@ -581,7 +581,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  return <div className="text-center py-20 text-soft">Failed to load profile</div>
  }
 
- /*  Tab: Overview  */
+ /* ─── Tab: Overview ────────────────────────────────────────────────────── */
 
  const renderOverview = () => (
  <div className="space-y-6">
@@ -661,7 +661,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
        {checklist.length === 0
         ? 'No required documents for your account type'
         : missingCount === 0
-         ? 'All required documents uploaded '
+         ? 'All required documents uploaded ✓'
          : `${missingCount} required document${missingCount > 1 ? 's' : ''} still needed`}
       </p>
      </div>
@@ -669,7 +669,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
       onClick={() => setActiveTab('documents')}
       className="text-xs px-3 py-1.5 bg-[#0C6780]/10 text-[#0C6780] rounded-lg hover:bg-[#0C6780]/20 font-medium"
      >
-      Manage 
+      Manage →
      </button>
     </div>
     {checklist.length === 0 ? (
@@ -682,7 +682,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
          <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs ${
           item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-subtle text-soft'
          }`}>
-          {item.uploaded ? '' : item.required ? '!' : ''}
+          {item.uploaded ? '✓' : item.required ? '!' : '•'}
          </span>
          <span className="text-sm text-fg truncate">{item.documentName}</span>
          {!item.required && (
@@ -705,7 +705,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </div>
  )
 
- /*  Tab: Documents  */
+ /* ─── Tab: Documents ───────────────────────────────────────────────────── */
 
  const renderDocuments = () => {
  // Compare required docs vs uploaded docs (by name, case-insensitive)
@@ -727,7 +727,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
      {checklist.length === 0
       ? 'No required documents for your role'
       : missingRequired === 0
-       ? 'All required documents uploaded '
+       ? 'All required documents uploaded ✓'
        : `${missingRequired} required document${missingRequired > 1 ? 's' : ''} still needed`}
     </p>
    </div>
@@ -748,7 +748,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
         <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs ${
          item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-subtle text-soft'
         }`}>
-         {item.uploaded ? '' : item.required ? '!' : ''}
+         {item.uploaded ? '✓' : item.required ? '!' : '•'}
         </span>
         <span className="text-sm text-fg truncate">{item.documentName}</span>
         {item.required && !item.uploaded && (
@@ -839,7 +839,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  {uploading && (
- <p className="text-xs text-blue-600 mt-1 flex items-center gap-1"><FaSpinner className="animate-spin text-[10px]" /> Uploading</p>
+ <p className="text-xs text-blue-600 mt-1 flex items-center gap-1"><FaSpinner className="animate-spin text-[10px]" /> Uploading…</p>
  )}
  </div>
  {docError && (
@@ -932,7 +932,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /*  Tab: Medical / Professional Info (editable)  */
+ /* ─── Tab: Medical / Professional Info (editable) ──────────────────────── */
 
  const renderInfo = () => {
  const fields = getEditableFieldsForType(userType, profileFieldsByCode)
@@ -1094,7 +1094,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  ? editedProfile[field.key]
  : (profile as Record<string, unknown> | null)?.[field.key]
 
- /*  Tags field  */
+ /* ── Tags field ── */
  if (field.type === 'tags') {
  const tags = (isEditing ? (editedProfile[field.key] as string[]) : (rawValue as string[])) || []
  return (
@@ -1148,7 +1148,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /*  Select field  */
+ /* ── Select field ── */
  if (field.type === 'select' && isEditing) {
  return (
  <div key={field.key}>
@@ -1169,7 +1169,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /*  Readonly field  */
+ /* ── Readonly field ── */
  if (field.type === 'readonly') {
  return (
  <div key={field.key}>
@@ -1182,7 +1182,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /*  Text / Number field  */
+ /* ── Text / Number field ── */
  return (
  <div key={field.key}>
  <label className="block text-sm font-medium text-soft mb-1">{field.label}</label>
@@ -1272,9 +1272,9 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /*  */
+ /* ═══════════════════════════════════════════════════════════════════════ */
  /* Full layout */
- /*  */
+ /* ═══════════════════════════════════════════════════════════════════════ */
 
  return (
  <div className="space-y-6">
@@ -1412,7 +1412,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
 }
 
-/*  Helper: type-specific read-only summary (used in Overview tab)  */
+/* ─── Helper: type-specific read-only summary (used in Overview tab) ─────── */
 
 function renderTypeSpecificSummary(userType: string, profile: UserProfileData | null | undefined) {
  if (!profile) return null
@@ -1508,7 +1508,7 @@ function renderTypeSpecificSummary(userType: string, profile: UserProfileData | 
  )
 }
 
-/*  Per-required-document upload slot  */
+/* ─── Per-required-document upload slot ─────────────────────────────────── */
 
 function RequiredDocUploadSlot({
  documentName,
@@ -1563,7 +1563,7 @@ function RequiredDocUploadSlot({
     />
     <div className={`flex items-center gap-2 px-3 py-2 border border-line rounded-lg text-sm text-soft hover:border-blue-400 hover:text-blue-600 transition-colors ${uploading ? 'opacity-50 cursor-default' : 'cursor-pointer'}`}>
      {uploading ? <FaSpinner className="animate-spin text-xs" /> : <FaUpload className="text-xs" />}
-     <span>{uploading ? 'Uploading' : 'Choose file (JPG, PNG, PDF)'}</span>
+     <span>{uploading ? 'Uploading…' : 'Choose file (JPG, PNG, PDF)'}</span>
     </div>
    </label>
    {error && <p className="text-xs text-red-600 mt-1 flex items-center gap-1"><FaExclamationTriangle className="text-[10px]" /> {error}</p>}

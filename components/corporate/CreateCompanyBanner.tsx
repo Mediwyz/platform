@@ -240,7 +240,7 @@ export default function CreateCompanyBanner({
                   disabled={busy || !form.companyName.trim()}
                   className="px-4 py-2 rounded-lg bg-surface text-[#0C6780] text-sm font-semibold hover:bg-subtle disabled:bg-gray-300 disabled:text-soft"
                 >
-                  {busy ? 'Creating' : 'Create'}
+                  {busy ? 'Creating…' : 'Create'}
                 </button>
               </div>
             </form>

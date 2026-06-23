@@ -29,18 +29,18 @@ interface RoleData {
 }
 
 const PROVIDER_EMOJI: Record<string, string> = {
-  DOCTOR: '', NURSE: '', NANNY: '', PHARMACIST: '',
-  LAB_TECHNICIAN: '', EMERGENCY_WORKER: '', CAREGIVER: '',
-  PHYSIOTHERAPIST: '', DENTIST: '', OPTOMETRIST: '',
-  NUTRITIONIST: '',
+  DOCTOR: '🩺', NURSE: '💉', NANNY: '🧸', PHARMACIST: '💊',
+  LAB_TECHNICIAN: '🧪', EMERGENCY_WORKER: '🚑', CAREGIVER: '🤝',
+  PHYSIOTHERAPIST: '🏃', DENTIST: '🦷', OPTOMETRIST: '👁️',
+  NUTRITIONIST: '🥗',
 }
 
 const CATEGORY_EMOJI: Record<string, string> = {
-  consultation: '', 'home visit': '', 'video consultation': '',
-  prescription: '', 'lab test': '', vaccination: '',
-  emergency: '', childcare: '', nursing: '',
-  pharmacy: '', dental: '', eye: '', optical: '',
-  physiotherapy: '', nutrition: '', caregiver: '', custom: '',
+  consultation: '🩺', 'home visit': '🏠', 'video consultation': '📹',
+  prescription: '💊', 'lab test': '🧪', vaccination: '💉',
+  emergency: '🚑', childcare: '🧸', nursing: '💉',
+  pharmacy: '💊', dental: '🦷', eye: '👁️', optical: '👁️',
+  physiotherapy: '🏃', nutrition: '🥗', caregiver: '🤝', custom: '⚕️',
 }
 
 function resolveCategoryEmoji(category: string, providerType: string): string {
@@ -48,7 +48,7 @@ function resolveCategoryEmoji(category: string, providerType: string): string {
   for (const [key, emoji] of Object.entries(CATEGORY_EMOJI)) {
     if (lower.includes(key)) return emoji
   }
-  return PROVIDER_EMOJI[providerType] ?? ''
+  return PROVIDER_EMOJI[providerType] ?? '⚕️'
 }
 
 function hex2rgba(hex: string, alpha = 0.12) {

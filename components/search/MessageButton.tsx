@@ -90,7 +90,7 @@ export default function MessageButton({ providerId, className = '' }: MessageBut
  aria-label="Send a message"
  >
  <FaEnvelope className="w-4 h-4" />
- {loading ? 'Opening' : 'Message'}
+ {loading ? 'Opening…' : 'Message'}
  </button>
  {error && (
  <span className="text-xs text-red-500 col-span-2" role="alert">

@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa'
 import { useBookingDrawer, DrawerService, DrawerProvider, DrawerOrganization, DrawerWorkflow } from '@/lib/contexts/booking-drawer-context'
 
-//  Types 
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type DrawerStep = 'service' | 'providers' | 'workflow' | 'slot' | 'auth' | 'confirm'
 
@@ -42,9 +42,9 @@ const MODE_LABEL: Record<string, string> = {
   video: 'Video Call',
 }
 const MODE_EMOJI: Record<string, string> = {
-  office: '',
-  home: '',
-  video: '',
+  office: '🏥',
+  home: '🏠',
+  video: '📹',
 }
 
 function toSlotLabel(time: string): string {
@@ -90,7 +90,7 @@ function avatarUrl(provider: DrawerProvider): string {
   return `https://ui-avatars.com/api/?name=${name}&background=0C6780&color=fff&size=80`
 }
 
-//  Step tracker 
+// ─── Step tracker ─────────────────────────────────────────────────────────────
 
 const STEP_LABELS: Record<DrawerStep, string> = {
   service: 'Service',
@@ -101,12 +101,12 @@ const STEP_LABELS: Record<DrawerStep, string> = {
   confirm: 'Confirm',
 }
 
-//  Main component 
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function BookingDrawer() {
   const { isOpen, options, closeDrawer } = useBookingDrawer()
 
-  //  Wizard state 
+  // ── Wizard state ──────────────────────────────────────────────────────────
   const [step, setStep] = useState<DrawerStep>('service')
   const [stepHistory, setStepHistory] = useState<DrawerStep[]>([])
 
@@ -117,34 +117,34 @@ export default function BookingDrawer() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
-  //  Data lists 
+  // ── Data lists ────────────────────────────────────────────────────────────
   const [services, setServices] = useState<DrawerService[]>([])
   const [providers, setProviders] = useState<DrawerProvider[]>([])
   const [workflows, setWorkflows] = useState<WorkflowOption[]>([])
   const [slots, setSlots] = useState<TimeSlot[]>([])
   const [days] = useState<Date[]>(() => upcomingDays(14))
 
-  //  Loading / error 
+  // ── Loading / error ───────────────────────────────────────────────────────
   const [servicesLoading, setServicesLoading] = useState(false)
   const [providersLoading, setProvidersLoading] = useState(false)
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  //  Auth 
+  // ── Auth ──────────────────────────────────────────────────────────────────
   const [authEmail, setAuthEmail] = useState('')
   const [authPassword, setAuthPassword] = useState('')
   const [authError, setAuthError] = useState<string | null>(null)
   const [authLoading, setAuthLoading] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
 
-  //  Reason 
+  // ── Reason ────────────────────────────────────────────────────────────────
   const [reason, setReason] = useState('')
 
-  //  Wallet balance 
+  // ── Wallet balance ────────────────────────────────────────────────────────
   const [walletBalance, setWalletBalance] = useState<number | null>(null)
 
-  //  Reset when drawer opens/closes 
+  // ─── Reset when drawer opens/closes ──────────────────────────────────────
   useEffect(() => {
     if (!isOpen) return
     setError(null)
@@ -186,7 +186,7 @@ export default function BookingDrawer() {
       setStepHistory(['service', 'providers', 'slot', 'confirm'])
       return
     } else if (organization) {
-      // Organization-first entry: service  providers (filtered by organization)
+      // Organization-first entry: service → providers (filtered by organization)
       setSelectedOrg(organization)
       setSelectedService(null)
       setSelectedProvider(null)
@@ -230,7 +230,7 @@ export default function BookingDrawer() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
-  //  Step navigation 
+  // ─── Step navigation ──────────────────────────────────────────────────────
 
   function goTo(next: DrawerStep) {
     setStepHistory(prev => [...prev, next])
@@ -249,7 +249,7 @@ export default function BookingDrawer() {
 
   const canGoBack = stepHistory.length > 1
 
-  //  Data fetchers 
+  // ─── Data fetchers ────────────────────────────────────────────────────────
 
   async function fetchServicesForOrg(entityId: string) {
     setServicesLoading(true)
@@ -397,14 +397,14 @@ export default function BookingDrawer() {
     return slots
   }
 
-  //  Selection handlers 
+  // ─── Selection handlers ────────────────────────────────────────────────────
 
   async function handleSelectService(service: DrawerService) {
     setSelectedService(service)
     setError(null)
 
     if (selectedProvider) {
-      // Provider already known  get workflows for this service
+      // Provider already known → get workflows for this service
       const wfs = ((service as any)._workflows as WorkflowOption[] | undefined) ??
         await fetchWorkflowsForProviderService(selectedProvider, service)
       setWorkflows(wfs)
@@ -427,7 +427,7 @@ export default function BookingDrawer() {
         }
       }
     } else {
-      // No provider yet  go to providers step
+      // No provider yet → go to providers step
       goTo('providers')
       fetchProviders(service, selectedOrg)
     }
@@ -488,7 +488,7 @@ export default function BookingDrawer() {
     }
   }
 
-  //  Auth 
+  // ─── Auth ──────────────────────────────────────────────────────────────────
 
   async function handleLogin() {
     if (!authEmail || !authPassword) {
@@ -517,7 +517,7 @@ export default function BookingDrawer() {
     }
   }
 
-  //  Submit booking 
+  // ─── Submit booking ───────────────────────────────────────────────────────
 
   async function handleSubmit() {
     if (!selectedService || !selectedProvider || !selectedDate || !selectedTime) return
@@ -563,7 +563,7 @@ export default function BookingDrawer() {
     }
   }
 
-  //  Derived labels 
+  // ─── Derived labels ────────────────────────────────────────────────────────
 
   const dateLabel = useMemo(() => {
     if (!selectedDate) return ''
@@ -577,7 +577,7 @@ export default function BookingDrawer() {
 
   const roleColor = options.role?.color ?? '#0C6780'
 
-  //  Render 
+  // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <AnimatePresence>
@@ -594,7 +594,7 @@ export default function BookingDrawer() {
             onClick={closeDrawer}
           />
 
-          {/* Panel - bottom sheet on mobile, right panel on 640px */}
+          {/* Panel - bottom sheet on mobile, right panel on ≥640px */}
           <motion.div
             key="panel"
             initial={{ y: '100%', opacity: 0 }}
@@ -606,7 +606,7 @@ export default function BookingDrawer() {
               sm:top-0 sm:bottom-0 sm:left-auto sm:right-0 sm:rounded-none sm:rounded-l-3xl sm:max-h-full sm:w-[420px]"
             style={{}}
           >
-            {/*  Header  */}
+            {/* ── Header ── */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-line flex-shrink-0">
               <div className="flex items-center gap-3">
                 {canGoBack && (
@@ -632,13 +632,13 @@ export default function BookingDrawer() {
               </button>
             </div>
 
-            {/*  Step progress dots  */}
+            {/* ── Step progress dots ── */}
             <StepDots step={step} skippedSlot={!!(selectedTime && selectedDate && step !== 'slot')} />
 
-            {/*  Organization context banner (when booking via an organization)  */}
+            {/* ── Organization context banner (when booking via an organization) ── */}
             {selectedOrg && (
               <div className="mx-5 mt-3 px-3 py-2 rounded-xl bg-[#0C6780]/8 border border-[#0C6780]/20 flex items-center gap-2">
-                <span className="text-base"></span>
+                <span className="text-base">🏥</span>
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-[#0C6780] truncate">{selectedOrg.name}</p>
                   <p className="text-[10px] text-faint capitalize">{selectedOrg.type?.replace('_', ' ')}</p>
@@ -646,7 +646,7 @@ export default function BookingDrawer() {
               </div>
             )}
 
-            {/*  Body  */}
+            {/* ── Body ── */}
             <div className="flex-1 overflow-y-auto min-h-0">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -676,11 +676,11 @@ export default function BookingDrawer() {
     if (selectedService) parts.push(selectedService.serviceName)
     if (selectedProvider) parts.push(selectedProvider.name)
     if (selectedWorkflow) parts.push(MODE_LABEL[selectedWorkflow.serviceMode] ?? selectedWorkflow.name)
-    return parts.join('  ') || 'Book an appointment'
+    return parts.join(' · ') || 'Book an appointment'
   }
 }
 
-//  Step progress dots 
+// ─── Step progress dots ────────────────────────────────────────────────────────
 
 const STEP_ORDER: DrawerStep[] = ['service', 'providers', 'workflow', 'slot', 'auth', 'confirm']
 
@@ -704,7 +704,7 @@ function StepDots({ step, skippedSlot }: { step: DrawerStep; skippedSlot: boolea
   )
 }
 
-//  SERVICE STEP 
+// ─── SERVICE STEP ──────────────────────────────────────────────────────────────
 
 function ServiceStep({
   services, loading, onSelect, selectedId, roleColor,
@@ -724,7 +724,7 @@ function ServiceStep({
     <div className="px-4 pt-3 pb-6">
       <input
         type="text"
-        placeholder="Search services"
+        placeholder="Search services…"
         value={q}
         onChange={e => setQ(e.target.value)}
         className="w-full mb-3 px-3 py-2.5 rounded-xl border border-line text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
@@ -732,7 +732,7 @@ function ServiceStep({
       {loading ? (
         <LoadingList />
       ) : filtered.length === 0 ? (
-        <EmptyState icon="" text={q ? 'No services match your search' : 'No services available'} />
+        <EmptyState icon="🩺" text={q ? 'No services match your search' : 'No services available'} />
       ) : (
         <div className="space-y-2">
           {filtered.map(svc => (
@@ -747,7 +747,7 @@ function ServiceStep({
             >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
                 style={{ backgroundColor: `${roleColor}18` }}>
-                {svc.emoji ?? ''}
+                {svc.emoji ?? '⚕️'}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-fg leading-tight truncate">{svc.serviceName}</p>
@@ -765,7 +765,7 @@ function ServiceStep({
   )
 }
 
-//  PROVIDER STEP 
+// ─── PROVIDER STEP ─────────────────────────────────────────────────────────────
 
 function ProviderStep({
   providers, loading, onSelect, selectedId, service, roleColor: _roleColor, error,
@@ -792,13 +792,13 @@ function ProviderStep({
       )}
       {service && (
         <div className="mb-3 px-3 py-2 bg-[#0C6780]/8 rounded-xl flex items-center gap-2">
-          <span className="text-base">{service.emoji ?? ''}</span>
+          <span className="text-base">{service.emoji ?? '⚕️'}</span>
           <p className="text-xs font-medium text-[#0C6780] truncate">{service.serviceName}</p>
         </div>
       )}
       <input
         type="text"
-        placeholder="Search providers"
+        placeholder="Search providers…"
         value={q}
         onChange={e => setQ(e.target.value)}
         className="w-full mb-3 px-3 py-2.5 rounded-xl border border-line text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
@@ -806,7 +806,7 @@ function ProviderStep({
       {loading ? (
         <LoadingList />
       ) : filtered.length === 0 ? (
-        <EmptyState icon="" text={q ? 'No providers match your search' : 'No providers available for this service'} />
+        <EmptyState icon="👨‍⚕️" text={q ? 'No providers match your search' : 'No providers available for this service'} />
       ) : (
         <div className="space-y-2">
           {filtered.map(p => (
@@ -851,14 +851,14 @@ function ProviderStep({
   )
 }
 
-//  WORKFLOW STEP 
+// ─── WORKFLOW STEP ─────────────────────────────────────────────────────────────
 
 const STEP_STATUS_EMOJI: Record<string, string> = {
-  pending: '', confirmed: '', scheduled: '',
-  in_progress: '', completed: '', cancelled: '',
-  video_call: '', payment: '', prescription: '',
-  sample_collected: '', results_ready: '', delivered: '',
-  home_visit: '', on_the_way: '', arrived: '',
+  pending: '⏳', confirmed: '✅', scheduled: '📅',
+  in_progress: '▶️', completed: '🏁', cancelled: '❌',
+  video_call: '📹', payment: '💳', prescription: '📋',
+  sample_collected: '🧪', results_ready: '📊', delivered: '📦',
+  home_visit: '🏠', on_the_way: '🚗', arrived: '📍',
 }
 
 function stepEmoji(statusCode: string): string {
@@ -866,7 +866,7 @@ function stepEmoji(statusCode: string): string {
   for (const [key, val] of Object.entries(STEP_STATUS_EMOJI)) {
     if (lc.includes(key)) return val
   }
-  return ''
+  return '•'
 }
 
 function WorkflowStep({
@@ -880,7 +880,7 @@ function WorkflowStep({
   const [expanded, setExpanded] = useState<string | null>(null)
 
   if (workflows.length === 0) {
-    return <EmptyState icon="" text="No appointment types available" />
+    return <EmptyState icon="📋" text="No appointment types available" />
   }
 
   return (
@@ -888,7 +888,7 @@ function WorkflowStep({
       <p className="text-xs text-faint">Choose how you&apos;d like this appointment - tap to see what happens at each step.</p>
       {workflows.map(wf => {
         const modeLabel = MODE_LABEL[wf.serviceMode] ?? wf.serviceMode
-        const modeEmoji = MODE_EMOJI[wf.serviceMode] ?? ''
+        const modeEmoji = MODE_EMOJI[wf.serviceMode] ?? '📋'
         const selected = wf.id === selectedId
         const isExpanded = expanded === wf.id || selected
 
@@ -945,7 +945,7 @@ function WorkflowStep({
                   className={`text-[10px] text-faint transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                   style={{ display: 'inline-block' }}
                 >
-                  
+                  ▾
                 </span>
               </div>
             </button>
@@ -975,7 +975,7 @@ function WorkflowStep({
                                   : { backgroundColor: '#fff', borderColor: '#D1D5DB', color: '#6B7280' }
                             }
                           >
-                            {isFirst ? '1' : isLast ? '' : String(idx + 1)}
+                            {isFirst ? '1' : isLast ? '✓' : String(idx + 1)}
                           </div>
 
                           {/* Step content */}
@@ -1009,7 +1009,7 @@ function WorkflowStep({
   )
 }
 
-//  SLOT STEP 
+// ─── SLOT STEP ─────────────────────────────────────────────────────────────────
 
 function SlotStep({
   days, selectedDate, selectedTime, slots, loading,
@@ -1061,7 +1061,7 @@ function SlotStep({
       ) : !selectedDate ? (
         <p className="text-xs text-faint text-center py-8">Select a date above</p>
       ) : availableSlots.length === 0 ? (
-        <EmptyState icon="" text="No slots available for this day" />
+        <EmptyState icon="📅" text="No slots available for this day" />
       ) : (
         <>
           <div className="grid grid-cols-4 gap-2 max-h-52 overflow-y-auto mb-4">
@@ -1100,7 +1100,7 @@ function SlotStep({
   )
 }
 
-//  AUTH STEP 
+// ─── AUTH STEP ────────────────────────────────────────────────────────────────
 
 function AuthStep({
   email, password, onEmailChange, onPasswordChange, onSubmit, loading, error,
@@ -1150,7 +1150,7 @@ function AuthStep({
             value={password}
             onChange={e => onPasswordChange(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && onSubmit()}
-            placeholder=""
+            placeholder="••••••••"
             className="w-full px-4 py-3 rounded-xl border border-line text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
           />
         </div>
@@ -1168,14 +1168,14 @@ function AuthStep({
         </button>
         <p className="text-center text-xs text-faint">
           No account?{' '}
-          <Link href="/signup" className="text-[#0C6780] font-medium hover:underline">Create one here </Link>
+          <Link href="/signup" className="text-[#0C6780] font-medium hover:underline">Create one here →</Link>
         </p>
       </div>
     </div>
   )
 }
 
-//  CONFIRM STEP 
+// ─── CONFIRM STEP ─────────────────────────────────────────────────────────────
 
 function ConfirmStep({
   service, provider, workflow, dateLabel, timeLabel,
@@ -1207,7 +1207,7 @@ function ConfirmStep({
       {/* Service card */}
       {service && (
         <SummaryRow
-          icon={<span className="text-xl">{service.emoji ?? ''}</span>}
+          icon={<span className="text-xl">{service.emoji ?? '⚕️'}</span>}
           label="Service"
           primary={service.serviceName}
           secondary={service.category}
@@ -1239,7 +1239,7 @@ function ConfirmStep({
       {/* Workflow */}
       {workflow && (
         <SummaryRow
-          icon={<span className="text-xl">{MODE_EMOJI[workflow.serviceMode] ?? ''}</span>}
+          icon={<span className="text-xl">{MODE_EMOJI[workflow.serviceMode] ?? '📋'}</span>}
           label="Appointment type"
           primary={workflow.name}
           secondary={MODE_LABEL[workflow.serviceMode] ?? workflow.serviceMode}
@@ -1267,7 +1267,7 @@ function ConfirmStep({
             : 'bg-red-50 border-red-100'}`}>
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
             style={{ backgroundColor: canAfford ? '#10b98118' : '#ef444418' }}>
-            
+            💳
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] text-faint uppercase tracking-wide font-medium">Wallet balance</p>
@@ -1281,8 +1281,8 @@ function ConfirmStep({
             </p>
           </div>
           {canAfford
-            ? <span className="text-green-500 text-base flex-shrink-0"></span>
-            : <Link href="/patient/billing" className="text-[11px] text-[#0C6780] font-medium hover:underline flex-shrink-0 whitespace-nowrap">Top up </Link>}
+            ? <span className="text-green-500 text-base flex-shrink-0">✓</span>
+            : <Link href="/patient/billing" className="text-[11px] text-[#0C6780] font-medium hover:underline flex-shrink-0 whitespace-nowrap">Top up →</Link>}
         </div>
       )}
 
@@ -1295,7 +1295,7 @@ function ConfirmStep({
           value={reason}
           onChange={e => onReasonChange(e.target.value)}
           rows={2}
-          placeholder="e.g. Annual check-up, chest pain"
+          placeholder="e.g. Annual check-up, chest pain…"
           className="w-full px-3 py-2.5 rounded-xl border border-line text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
         />
       </div>
@@ -1319,7 +1319,7 @@ function ConfirmStep({
   )
 }
 
-//  Shared UI 
+// ─── Shared UI ────────────────────────────────────────────────────────────────
 
 function SummaryRow({ icon, label, primary, secondary, right, color }: {
   icon: React.ReactNode

@@ -54,7 +54,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  const [pendingConnectionCount, setPendingConnectionCount] = useState(0)
  const [wallet, setWallet] = useState<{ balance: number; currency: string } | null>(null)
 
- // Wallet balance  shown in the header so the member is always aware of their
+ // Wallet balance — shown in the header so the member is always aware of their
  // available credit. Refetched when a wallet movement happens (Socket.IO event).
  useEffect(() => {
  if (!userId) return
@@ -78,7 +78,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  if (json.success && json.data?.hasSubscription && json.data.plan) {
  const plan = json.data.plan
  const category = plan.type === 'corporate' ? 'Business' : 'For You'
- setPlanLabel(`${category}  ${plan.name}`)
+ setPlanLabel(`${category} · ${plan.name}`)
  }
  })
  .catch(() => {})
@@ -130,7 +130,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  )}
  </button>
 
- {/* Logo  smaller on mobile so the header never overflows */}
+ {/* Logo — smaller on mobile so the header never overflows */}
  <Link href="/" className="flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal rounded-md">
  <span className="sm:hidden"><HealthwyzLogo width={128} height={38} /></span>
  <span className="hidden sm:block"><HealthwyzLogo width={200} height={56} /></span>
@@ -178,7 +178,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  )}
  </Link>
 
- {/* Wallet balance  always-visible billing awareness, links to billing */}
+ {/* Wallet balance — always-visible billing awareness, links to billing */}
  {wallet && (
  <Link
  href={billingHref || '#'}

@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa'
 import { getUserId } from '@/hooks/useUser'
 
-//  Types 
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 export interface StatusOption {
  value: string
@@ -73,7 +73,7 @@ export interface ColumnDef {
  className?: string
 }
 
-//  Helpers 
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
  return path.split('.').reduce((acc: unknown, key) => {
@@ -94,7 +94,7 @@ function formatTime(dateStr: string) {
  })
 }
 
-//  Component 
+// ─── Component ──────────────────────────────────────────────────────────────
 
 export default function ServiceBookingManager({ config }: { config: ServiceBookingConfig }) {
  const [bookings, setBookings] = useState<Record<string, unknown>[]>([])
@@ -439,7 +439,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  )
 }
 
-//  Preset Configs 
+// ─── Preset Configs ─────────────────────────────────────────────────────────
 
 const COMMON_STATUSES: StatusOption[] = [
  { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },

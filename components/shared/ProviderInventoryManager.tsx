@@ -148,7 +148,7 @@ export default function ProviderInventoryManager() {
       <DashboardPageHeader
         icon={FiPackage}
         title="My Inventory"
-        description={`${items.length} item${items.length !== 1 ? 's' : ''}  sell products to patients via the Health Shop`}
+        description={`${items.length} item${items.length !== 1 ? 's' : ''} · sell products to patients via the Health Shop`}
         actions={
           <button onClick={openCreate} className="bg-brand-navy hover:bg-brand-teal text-white px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
             <FiPlus className="w-4 h-4" /> Add Item

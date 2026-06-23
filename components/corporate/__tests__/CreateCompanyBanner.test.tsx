@@ -36,17 +36,17 @@ describe('CreateCompanyBanner', () => {
 
   it('submits the form and calls onCreated', async () => {
     const fetchMock = vi.fn()
-      // 1. GET /api/corporate/:id/dashboard  no company
+      // 1. GET /api/corporate/:id/dashboard → no company
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true, data: { company: null } }),
       } as Response)
-      // 2. GET /api/subscriptions?type=corporate  empty plan list (loads when form opens)
+      // 2. GET /api/subscriptions?type=corporate → empty plan list (loads when form opens)
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true, data: [] }),
       } as Response)
-      // 3. POST /api/corporate/companies  created
+      // 3. POST /api/corporate/companies → created
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true, data: { id: 'c1' } }),

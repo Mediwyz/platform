@@ -74,7 +74,7 @@ export default function AuditLogPage() {
           <div className="relative">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
             <input
-              placeholder="Filter by targetType (User, Document, )"
+              placeholder="Filter by targetType (User, Document, …)"
               value={filter.targetType}
               onChange={e => setFilter(f => ({ ...f, targetType: e.target.value }))}
               className="w-full pl-10 pr-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]"
@@ -118,7 +118,7 @@ export default function AuditLogPage() {
                       <td className="px-5 py-3 text-xs text-soft whitespace-nowrap">
                         {new Date(e.createdAt).toLocaleString()}
                       </td>
-                      <td className="px-5 py-3 text-xs font-mono text-soft">{e.adminId.slice(0, 12)}</td>
+                      <td className="px-5 py-3 text-xs font-mono text-soft">{e.adminId.slice(0, 12)}…</td>
                       <td className="px-5 py-3">
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>
                           {e.action}
@@ -126,9 +126,9 @@ export default function AuditLogPage() {
                       </td>
                       <td className="px-5 py-3 text-xs text-soft">
                         {e.targetType}
-                        {e.targetId && <span className="font-mono ml-2 text-faint">{e.targetId.slice(0, 12)}</span>}
+                        {e.targetId && <span className="font-mono ml-2 text-faint">{e.targetId.slice(0, 12)}…</span>}
                       </td>
-                      <td className="px-5 py-3 text-right text-xs text-faint">{isOpen ? '' : ''}</td>
+                      <td className="px-5 py-3 text-right text-xs text-faint">{isOpen ? '▾' : '▸'}</td>
                     </tr>
                     {isOpen && e.details && (
                       <tr key={`${e.id}-details`} className="bg-subtle">

@@ -64,8 +64,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
  // Socket.IO singleton - ONE socket and ONE notification listener per
  // (tab, userId). Every time this effect runs (strict-mode, HMR, nav):
- //    reuse the existing socket if one exists for this userId
- //    ALWAYS re-attach the current `notification:new` handler using
+ //   • reuse the existing socket if one exists for this userId
+ //   • ALWAYS re-attach the current `notification:new` handler using
  //     off() then on() - prevents stale listeners from old HMR modules
  //     from continuing to fire toasts alongside the new one.
  //

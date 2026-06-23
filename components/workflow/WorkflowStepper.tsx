@@ -88,7 +88,7 @@ export default function WorkflowStepper({
                 <span className="text-[11px] text-soft truncate max-w-[120px]">{step.label}</span>
               </div>
               {idx < happyPath.length - 1 && (
-                <span className="text-faint text-xs flex-shrink-0"></span>
+                <span className="text-faint text-xs flex-shrink-0">→</span>
               )}
             </div>
           )
@@ -98,7 +98,7 @@ export default function WorkflowStepper({
             className="flex items-center gap-1 ml-2 px-2 py-1 rounded-full bg-red-50 border border-red-200 text-[11px] text-red-700 flex-shrink-0"
             title={`Cancel path: ${dangerStep.label}`}
           >
-            <span aria-hidden="true"></span>
+            <span aria-hidden="true">❌</span>
             <span>{dangerStep.label}</span>
           </span>
         )}
@@ -132,7 +132,7 @@ export default function WorkflowStepper({
               </p>
               <p className="text-[11px] text-soft">
                 <span className="font-mono">{step.statusCode}</span>
-                <span className="mx-1.5"></span>
+                <span className="mx-1.5">·</span>
                 <span>{label}</span>
               </p>
             </div>

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { FaHospital, FaSpinner, FaCheckCircle, FaTimesCircle, FaSignInAlt } from 'react-icons/fa'
 import Link from 'next/link'
 
-//  Types 
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface InvitationInfo {
   id: string
@@ -26,7 +26,7 @@ interface InvitationInfo {
   }
 }
 
-//  Helpers 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -39,7 +39,7 @@ function isExpired(expiresAt: string | null): boolean {
   return new Date(expiresAt) < new Date()
 }
 
-//  Page 
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function OrganizationJoinPage() {
   const params = useParams()
@@ -94,7 +94,7 @@ export default function OrganizationJoinPage() {
     }
   }
 
-  //  Loading 
+  // ── Loading ──
   if (loading) {
     return (
       <div className="min-h-screen bg-subtle flex items-center justify-center">
@@ -103,7 +103,7 @@ export default function OrganizationJoinPage() {
     )
   }
 
-  //  Fetch error 
+  // ── Fetch error ──
   if (fetchError) {
     return (
       <Shell>
@@ -119,7 +119,7 @@ export default function OrganizationJoinPage() {
 
   if (!info) return null
 
-  //  Already accepted 
+  // ── Already accepted ──
   if (info.alreadyAccepted) {
     return (
       <Shell>
@@ -133,7 +133,7 @@ export default function OrganizationJoinPage() {
     )
   }
 
-  //  Expired 
+  // ── Expired ──
   if (info.isExpired || isExpired(info.expiresAt)) {
     return (
       <Shell>
@@ -147,19 +147,19 @@ export default function OrganizationJoinPage() {
     )
   }
 
-  //  Success state 
+  // ── Success state ──
   if (accepted) {
     return (
       <Shell>
         <FaCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
         <h2 className="text-xl font-bold text-fg mb-2">Welcome to {info.entity.name}!</h2>
         <p className="text-soft text-sm">Your membership request is pending approval by the admin.</p>
-        <p className="text-faint text-xs mt-3">Redirecting to your dashboard</p>
+        <p className="text-faint text-xs mt-3">Redirecting to your dashboard…</p>
       </Shell>
     )
   }
 
-  //  Main invitation view 
+  // ── Main invitation view ──
   return (
     <div className="min-h-screen bg-subtle flex items-center justify-center p-4">
       <div className="bg-surface rounded-2xl shadow-xl border border-line max-w-md w-full overflow-hidden">
@@ -236,7 +236,7 @@ export default function OrganizationJoinPage() {
                   className="flex items-center justify-center gap-2 w-full bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-3 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
                 >
                   {accepting ? (
-                    <><FaSpinner className="animate-spin" /> Accepting</>
+                    <><FaSpinner className="animate-spin" /> Accepting…</>
                   ) : (
                     <><FaCheckCircle /> Accept Invitation</>
                   )}
@@ -256,7 +256,7 @@ export default function OrganizationJoinPage() {
   )
 }
 
-//  Shell layout 
+// ─── Shell layout ─────────────────────────────────────────────────────────────
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (

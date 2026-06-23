@@ -195,7 +195,7 @@ export default function CommentSection({
  disabled={loading}
  className="w-full text-center text-sm text-[#0C6780] dark:text-accent hover:underline font-medium py-2 disabled:opacity-50"
  >
- {loading ? 'Loading' : `Load more comments (${total - comments.length} remaining)`}
+ {loading ? 'Loading…' : `Load more comments (${total - comments.length} remaining)`}
  </button>
  )}
  </div>
@@ -208,7 +208,7 @@ export default function CommentSection({
  type="text"
  value={newComment}
  onChange={(e) => setNewComment(e.target.value)}
- placeholder="Add a comment"
+ placeholder="Add a comment…"
  className="flex-1 text-sm bg-surface text-fg border border-line rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
  disabled={submitting}
  />

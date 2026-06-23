@@ -8,8 +8,8 @@ import { useTranslation } from '@/lib/i18n'
 
 /**
  * In-app password reset (no email). Two steps:
- *   1. Enter email  backend returns the account's security question (fake question for unknown emails)
- *   2. Answer the question  backend issues a short-lived token, we redirect to /reset-password?token=
+ *   1. Enter email → backend returns the account's security question (fake question for unknown emails)
+ *   2. Answer the question → backend issues a short-lived token, we redirect to /reset-password?token=…
  */
 type Stage = 'email' | 'answer'
 

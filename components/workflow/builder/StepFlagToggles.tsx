@@ -46,7 +46,7 @@ export default function StepFlagToggles({ flags, onChange }: StepFlagTogglesProp
   return (
     <div className="space-y-4">
 
-      {/*  Automatic behaviors (read-only)  */}
+      {/* ── Automatic behaviors (read-only) ───────────────────────────────── */}
       <div>
         <div className="flex items-center gap-2 mb-2">
           <FiInfo className="w-3.5 h-3.5 text-faint" />
@@ -67,7 +67,7 @@ export default function StepFlagToggles({ flags, onChange }: StepFlagTogglesProp
         </div>
       </div>
 
-      {/*  Step-type-driven overrides 
+      {/* ── Step-type-driven overrides ─────────────────────────────────────
            These two are set automatically when you pick a step type that
            carries defaultFlags (RESULTS_READY, CARE_NOTES, etc.).
            Use the dropdowns below only when your step type doesn't set them

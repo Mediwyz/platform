@@ -82,7 +82,7 @@ export default function HealthiconPicker({ value, onSelectIcon, onSelectImage, o
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search icons (e.g. heart, tooth, vaccine, lab)"
+              placeholder="Search icons (e.g. heart, tooth, vaccine, lab)…"
               className="w-full pl-9 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
             />
           </div>
@@ -94,7 +94,7 @@ export default function HealthiconPicker({ value, onSelectIcon, onSelectImage, o
                   type="url"
                   value={customUrl}
                   onChange={e => setCustomUrl(e.target.value)}
-                  placeholder="or paste a custom image URL"
+                  placeholder="…or paste a custom image URL"
                   className="w-full pl-9 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
                 />
               </div>
@@ -126,9 +126,9 @@ export default function HealthiconPicker({ value, onSelectIcon, onSelectImage, o
         {/* icon grid */}
         <div className="flex-1 overflow-y-auto p-4">
           {loading ? (
-            <div className="text-center text-sm text-faint py-12">Loading icons</div>
+            <div className="text-center text-sm text-faint py-12">Loading icons…</div>
           ) : filtered.length === 0 ? (
-            <div className="text-center text-sm text-faint py-12">No icons match {query}.</div>
+            <div className="text-center text-sm text-faint py-12">No icons match “{query}”.</div>
           ) : (
             <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
               {filtered.map(ic => {

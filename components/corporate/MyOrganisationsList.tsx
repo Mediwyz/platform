@@ -1,9 +1,9 @@
 'use client'
 
 /**
- * MyOrganisationsList  a clean, at-a-glance list of every organisation the
+ * MyOrganisationsList — a clean, at-a-glance list of every organisation the
  * signed-in user belongs to (as owner or member), each showing its CATEGORY
- * (pharmacy, clinic, hospital, lab, insurance), the user's role, member count
+ * (pharmacy, clinic, hospital, lab, insurance…), the user's role, member count
  * and location, plus quick "Members" / "Invite" actions for owned orgs.
  *
  * This is the "who am I part of" view. Creating/joining new organisations lives

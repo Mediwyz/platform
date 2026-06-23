@@ -64,7 +64,7 @@ interface PaymentMethod {
 
 const defaultDoctor: Doctor = {
  id: "", name: "", specialty: "", rating: 0, experience: "",
- consultationFee: 0, avatar: "", availability: [], languages: [],
+ consultationFee: 0, avatar: "👨‍⚕️", availability: [], languages: [],
  location: "", qualifications: [], about: ""
 }
 
@@ -87,7 +87,7 @@ const defaultPaymentMethods: PaymentMethod[] = [
  type: "mcb-juice",
  name: "MCB Juice",
  description: "Pay instantly with MCB Juice mobile payment",
- icon: "",
+ icon: "📱",
  available: true
  },
 ]
@@ -136,7 +136,7 @@ export default function DoctorConsultationBooking() {
  name: plan?.name || "Healthcare Subscription",
  description: `Use your active ${plan?.name || 'subscription'} plan`,
  discount: subDiscount,
- icon: "",
+ icon: "💳",
  available: true,
  })
 
@@ -149,7 +149,7 @@ export default function DoctorConsultationBooking() {
  name: "Corporate Health Plan",
  description: "Use your company's health benefits",
  discount: corpDiscount,
- icon: "",
+ icon: "🏢",
  available: true,
  })
  }
@@ -181,7 +181,7 @@ export default function DoctorConsultationBooking() {
  rating: doc.rating || 4.5,
  experience: doc.experience ? `${doc.experience} years` : 'Experienced',
  consultationFee: doc.consultationFee || 2000,
- avatar: doc.profileImage || '',
+ avatar: doc.profileImage || '👨‍⚕️',
  availability: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
  languages: doc.languages || ['English', 'French'],
  location: doc.location || '',
@@ -789,11 +789,11 @@ export default function DoctorConsultationBooking() {
  <div>
  <h4 className="font-semibold text-yellow-800 mb-2">Important Information</h4>
  <ul className="text-yellow-800 text-sm space-y-1">
- <li> Confirmation email sent to your registered email address</li>
- <li> You will receive SMS reminders 24 hours and 1 hour before appointment</li>
- <li> Please arrive 15 minutes early for in-person consultations</li>
- <li> Bring your ID and any previous medical reports</li>
- <li> Free rescheduling available up to 4 hours before appointment</li>
+ <li>• Confirmation email sent to your registered email address</li>
+ <li>• You will receive SMS reminders 24 hours and 1 hour before appointment</li>
+ <li>• Please arrive 15 minutes early for in-person consultations</li>
+ <li>• Bring your ID and any previous medical reports</li>
+ <li>• Free rescheduling available up to 4 hours before appointment</li>
  </ul>
  </div>
  </div>

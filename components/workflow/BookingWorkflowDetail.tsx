@@ -233,7 +233,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  {/* Video / Audio Call Banner */}
  <WorkflowVideoCallBanner videoCallId={latestVideoCallId} currentStatus={state.currentStatus} callMode={callMode} isTerminal={state.isCompleted || state.isCancelled} />
 
- {/* Session Progress - recurrent programmes (physio, mental health, nutrition) */}
+ {/* Session Progress - recurrent programmes (physio, mental health, nutrition…) */}
  {isRecurrent && maxSessions > 0 && (
   <SessionProgress
    programName={state.templateName}

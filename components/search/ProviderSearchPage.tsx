@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
 
-// How a provider can be seen  derived from the serviceMode of the workflows
+// How a provider can be seen — derived from the serviceMode of the workflows
 // linked to their services (the same source the booking modal reads). Only the
 // modes a provider actually offers are shown on their card.
 const MODE_META: Record<string, { label: string; Icon: IconType; cls: string }> = {
@@ -200,7 +200,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  setHasSearched(true)
  setShowHistory(false)
 
- // Update the URL FIRST, synchronously  the query must be reflected in the
+ // Update the URL FIRST, synchronously — the query must be reflected in the
  // address bar immediately (shareable/back-button correct) and must not be
  // gated behind the results fetch, which can be slow on a cold start.
  const params = new URLSearchParams()
@@ -210,7 +210,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
  if (searchQuery.trim()) addToHistory(searchQuery, config.slug)
 
- // Then fetch results  a slow or failing request must not break the URL update.
+ // Then fetch results — a slow or failing request must not break the URL update.
  setIsLoading(true)
  try {
  const data = await fetchProviders(searchQuery, serviceId)

@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { FaLocationArrow, FaTimes, FaRoute, FaSpinner, FaSyncAlt } from 'react-icons/fa'
 
-//  Types 
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface NearPin {
   id: string
@@ -17,7 +17,7 @@ interface NearPin {
   lng: number
 }
 
-//  Haversine (client-side, used for "All" filter) 
+// ─── Haversine (client-side, used for "All" filter) ──────────────────────────
 
 function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371
@@ -29,36 +29,36 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-//  Filter config 
+// ─── Filter config ────────────────────────────────────────────────────────────
 
 const FILTERS: { key: string; emoji: string; label: string; isProvider: boolean }[] = [
-  { key: 'all',        emoji: '', label: 'All',          isProvider: false },
-  { key: 'DOCTOR',     emoji: '', label: 'Doctors',     isProvider: true  },
-  { key: 'NURSE',      emoji: '', label: 'Nurses',      isProvider: true  },
-  { key: 'DENTIST',    emoji: '',  label: 'Dentists',    isProvider: true  },
-  { key: 'PHARMACIST', emoji: '',  label: 'Pharmacists', isProvider: true  },
-  { key: 'clinic',     emoji: '',  label: 'Clinics',     isProvider: false },
-  { key: 'hospital',   emoji: '',  label: 'Hospitals',   isProvider: false },
-  { key: 'laboratory', emoji: '',  label: 'Labs',        isProvider: false },
+  { key: 'all',        emoji: '🏥', label: 'All',          isProvider: false },
+  { key: 'DOCTOR',     emoji: '👨‍⚕️', label: 'Doctors',     isProvider: true  },
+  { key: 'NURSE',      emoji: '👩‍⚕️', label: 'Nurses',      isProvider: true  },
+  { key: 'DENTIST',    emoji: '🦷',  label: 'Dentists',    isProvider: true  },
+  { key: 'PHARMACIST', emoji: '💊',  label: 'Pharmacists', isProvider: true  },
+  { key: 'clinic',     emoji: '🏥',  label: 'Clinics',     isProvider: false },
+  { key: 'hospital',   emoji: '🏨',  label: 'Hospitals',   isProvider: false },
+  { key: 'laboratory', emoji: '🔬',  label: 'Labs',        isProvider: false },
 ]
 
 const TYPE_EMOJI: Record<string, string> = {
-  DOCTOR: '', NURSE: '', DENTIST: '', PHARMACIST: '',
-  PHYSIOTHERAPIST: '', CAREGIVER: '', OPTOMETRIST: '', NUTRITIONIST: '',
-  LAB_TECHNICIAN: '', EMERGENCY_WORKER: '',
-  clinic: '', hospital: '', laboratory: '', dental_clinic: '',
-  optical_center: '', wellness_center: '', pharmacy: '',
+  DOCTOR: '👨‍⚕️', NURSE: '👩‍⚕️', DENTIST: '🦷', PHARMACIST: '💊',
+  PHYSIOTHERAPIST: '🧘', CAREGIVER: '🤝', OPTOMETRIST: '👁️', NUTRITIONIST: '🥗',
+  LAB_TECHNICIAN: '🔬', EMERGENCY_WORKER: '🚑',
+  clinic: '🏥', hospital: '🏨', laboratory: '🔬', dental_clinic: '🦷',
+  optical_center: '👁️', wellness_center: '💆', pharmacy: '💊',
 }
 
 function typeEmoji(type: string): string {
-  return TYPE_EMOJI[type] ?? ''
+  return TYPE_EMOJI[type] ?? '🏥'
 }
 
 function formatType(type: string): string {
   return type.toLowerCase().replace(/_/g, ' ')
 }
 
-//  Component 
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function FloatingGeoFAB() {
   const [open, setOpen]               = useState(false)
@@ -74,7 +74,7 @@ export default function FloatingGeoFAB() {
       setLoading(true)
       setError(null)
       try {
-        //  Get location 
+        // ── Get location ────────────────────────────────────────────────────
         let loc = forceFreshLoc ? null : userLoc
         if (!loc) {
           loc = await new Promise<{ lat: number; lng: number }>((resolve, reject) =>
@@ -87,7 +87,7 @@ export default function FloatingGeoFAB() {
           setUserLoc(loc)
         }
 
-        //  Fetch 
+        // ── Fetch ───────────────────────────────────────────────────────────
         let results: NearPin[] = []
 
         if (filter === 'all') {
@@ -163,7 +163,7 @@ export default function FloatingGeoFAB() {
 
   return (
     <>
-      {/*  FAB button  */}
+      {/* ── FAB button ─────────────────────────────────────────────────────── */}
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
@@ -179,7 +179,7 @@ export default function FloatingGeoFAB() {
         </span>
       </button>
 
-      {/*  Backdrop  */}
+      {/* ── Backdrop ───────────────────────────────────────────────────────── */}
       {open && (
         <div
           className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
@@ -187,7 +187,7 @@ export default function FloatingGeoFAB() {
         />
       )}
 
-      {/*  Modal / bottom sheet  */}
+      {/* ── Modal / bottom sheet ───────────────────────────────────────────── */}
       {open && (
         <div
           className="fixed bottom-0 left-0 right-0 z-[201]
@@ -198,7 +198,7 @@ export default function FloatingGeoFAB() {
             bg-surface shadow-2xl flex flex-col"
           style={{ maxHeight: '85vh' }}
         >
-          {/*  Header  */}
+          {/* ── Header ─────────────────────────────────────────────────────── */}
           <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-line">
             {/* Drag handle on mobile */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-line rounded-full sm:hidden" />
@@ -219,7 +219,7 @@ export default function FloatingGeoFAB() {
             </button>
           </div>
 
-          {/*  Action row  */}
+          {/* ── Action row ─────────────────────────────────────────────────── */}
           <div className="flex items-center gap-2 px-4 pt-3 pb-1 flex-wrap">
             <button
               onClick={() => { setActiveFilter('all'); loadNearest('all', true) }}
@@ -252,7 +252,7 @@ export default function FloatingGeoFAB() {
             </label>
           </div>
 
-          {/*  Filter chips  */}
+          {/* ── Filter chips ───────────────────────────────────────────────── */}
           <div className="flex gap-1.5 px-4 py-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {FILTERS.map(f => (
               <button
@@ -269,7 +269,7 @@ export default function FloatingGeoFAB() {
             ))}
           </div>
 
-          {/*  Results  */}
+          {/* ── Results ────────────────────────────────────────────────────── */}
           <div className="flex-1 overflow-y-auto px-4 pb-2 min-h-0">
 
             {/* Loading skeleton */}
@@ -284,7 +284,7 @@ export default function FloatingGeoFAB() {
             {/* Error */}
             {!loading && error && (
               <div className="text-center py-8">
-                <p className="text-sm text-red-500 mb-1"> {error}</p>
+                <p className="text-sm text-red-500 mb-1">⚠️ {error}</p>
                 <p className="text-xs text-faint">Check your browser location settings and try again.</p>
               </div>
             )}
@@ -292,7 +292,7 @@ export default function FloatingGeoFAB() {
             {/* Empty - no location yet */}
             {!loading && !error && pins.length === 0 && !userLoc && (
               <div className="text-center py-10">
-                <div className="text-4xl mb-2"></div>
+                <div className="text-4xl mb-2">📍</div>
                 <p className="text-sm text-soft font-medium">Ready to find care near you?</p>
                 <p className="text-xs text-faint mt-1">
                   Tap <strong>Find Nearest</strong> to detect your location.
@@ -303,7 +303,7 @@ export default function FloatingGeoFAB() {
             {/* Empty - location known but no results */}
             {!loading && !error && pins.length === 0 && userLoc && (
               <div className="text-center py-8">
-                <div className="text-3xl mb-2"></div>
+                <div className="text-3xl mb-2">🔍</div>
                 <p className="text-sm text-soft">No results found nearby.</p>
                 <p className="text-xs text-faint mt-1">Try a different filter or expand your search.</p>
               </div>
@@ -332,10 +332,10 @@ export default function FloatingGeoFAB() {
                           </p>
                           <p className="text-faint text-[10px] leading-tight mt-0.5">
                             {formatType(pin.type)}
-                            {(pin.city ?? pin.address) ? `  ${pin.city ?? pin.address}` : ''}
+                            {(pin.city ?? pin.address) ? ` · ${pin.city ?? pin.address}` : ''}
                             {userLoc && (
                               <span className="ml-1 text-[#0C6780] font-medium">
-                                 {pin.distanceKm < 1
+                                · {pin.distanceKm < 1
                                     ? `${Math.round(pin.distanceKm * 1000)} m`
                                     : `${pin.distanceKm.toFixed(1)} km`}
                               </span>
@@ -361,14 +361,14 @@ export default function FloatingGeoFAB() {
             )}
           </div>
 
-          {/*  Footer  */}
+          {/* ── Footer ─────────────────────────────────────────────────────── */}
           <div className="border-t border-line px-4 py-3 flex-shrink-0">
             <Link
               href="/search/providers"
               onClick={() => setOpen(false)}
               className="text-xs text-[#0C6780] font-semibold hover:underline"
             >
-              Browse all providers 
+              Browse all providers →
             </Link>
           </div>
         </div>

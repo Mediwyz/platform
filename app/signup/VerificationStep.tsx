@@ -197,31 +197,31 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  <h4 className="font-bold text-blue-800 mb-2">What happens next?</h4>
  {documents.filter(d => d.skipped).length > 0 ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li> Your account will be created with pending status</li>
- <li> You can upload deferred documents from your account settings</li>
- <li> Your account will be fully activated once all required documents are provided and verified</li>
- <li> You will receive a confirmation email with instructions</li>
+ <li>• Your account will be created with pending status</li>
+ <li>• You can upload deferred documents from your account settings</li>
+ <li>• Your account will be fully activated once all required documents are provided and verified</li>
+ <li>• You will receive a confirmation email with instructions</li>
  </ul>
  ) : allVerified && !requiresManualApproval ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li> All your documents have been verified automatically</li>
- <li> Your account will be activated immediately upon submission</li>
- <li> You will receive a confirmation email shortly</li>
- <li> You can start using MediWyz right away</li>
+ <li>• All your documents have been verified automatically</li>
+ <li>• Your account will be activated immediately upon submission</li>
+ <li>• You will receive a confirmation email shortly</li>
+ <li>• You can start using MediWyz right away</li>
  </ul>
  ) : requiresManualApproval ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li> Your account type requires administrator approval</li>
- <li> Your documents and application will be reviewed within 2-5 business days</li>
- <li> You will receive an email once your account is approved</li>
- <li> We may contact you for additional information if needed</li>
+ <li>• Your account type requires administrator approval</li>
+ <li>• Your documents and application will be reviewed within 2-5 business days</li>
+ <li>• You will receive an email once your account is approved</li>
+ <li>• We may contact you for additional information if needed</li>
  </ul>
  ) : (
  <ul className="text-blue-700 text-sm space-y-1">
- <li> Some documents require manual verification by our team</li>
- <li> Verification typically takes 2-5 business days</li>
- <li> You will receive an email once your account is approved</li>
- <li> Professional credentials will be verified with relevant authorities</li>
+ <li>• Some documents require manual verification by our team</li>
+ <li>• Verification typically takes 2-5 business days</li>
+ <li>• You will receive an email once your account is approved</li>
+ <li>• Professional credentials will be verified with relevant authorities</li>
  </ul>
  )}
  </div>

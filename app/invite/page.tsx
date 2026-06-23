@@ -72,12 +72,12 @@ export default function InviteFriendsPage() {
       <DashboardPageHeader
         icon={FaGift}
         title="Invite friends, earn credit"
-        description="Share your code  you both earn wallet credit when they sign up."
+        description="Share your code — you both earn wallet credit when they sign up."
         back={{ label: 'Home', onClick: () => router.push('/') }}
       />
 
       {loading ? (
-        <div className="py-12 text-center text-faint text-sm">Loading your code</div>
+        <div className="py-12 text-center text-faint text-sm">Loading your code…</div>
       ) : !data ? (
         <div className="py-12 text-center text-soft">Unable to load referral info.</div>
       ) : (

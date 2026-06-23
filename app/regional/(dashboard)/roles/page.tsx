@@ -346,14 +346,14 @@ export default function RolesManagementPage() {
                 </div>
               </div>
 
-              {/* Card illustration image  shown as the background of the provider-type cards on the public landing page */}
+              {/* Card illustration image · shown as the background of the provider-type cards on the public landing page */}
               <div>
                 <CmsImageUpload
                   value={form.cardImage || ''}
                   onChange={(url) => setForm(f => ({ ...f, cardImage: url }))}
                   label="Card image (illustration on the landing page)"
                 />
-                <p className="mt-1 text-xs text-faint">Optional  a realistic photo shown behind this provider type on the home page. If left empty, a default healthcare illustration is used.</p>
+                <p className="mt-1 text-xs text-faint">Optional — a realistic photo shown behind this provider type on the home page. If left empty, a default healthcare illustration is used.</p>
               </div>
 
               {/* Iconify icon picker (replaces legacy FA picker for richer healthcare icons) */}
@@ -452,7 +452,7 @@ export default function RolesManagementPage() {
   )
 }
 
-//  Role Card 
+// ─── Role Card ────────────────────────────────────────────────────────────
 
 function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: ProviderRole) => void; onDelete: (id: string) => void }) {
   return (

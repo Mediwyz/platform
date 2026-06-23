@@ -76,30 +76,30 @@ interface Review {
 }
 
 const fallbackServiceTypes: ServiceType[] = [
- { id: "ST001", name: "Regular Childcare", description: "Daily childcare during working hours", icon: "", priceType: "daily" },
- { id: "ST002", name: "Night Nanny", description: "Overnight childcare support", icon: "", priceType: "hourly" },
- { id: "ST003", name: "Weekend Care", description: "Weekend babysitting services", icon: "", priceType: "hourly" },
- { id: "ST004", name: "Full-Time Nanny", description: "Full-time live-in or live-out nanny", icon: "", priceType: "monthly" },
- { id: "ST005", name: "Emergency Care", description: "Last-minute childcare services", icon: "", priceType: "hourly" },
- { id: "ST006", name: "Special Needs Care", description: "Specialized care for children with special needs", icon: "", priceType: "hourly" },
+ { id: "ST001", name: "Regular Childcare", description: "Daily childcare during working hours", icon: "👶", priceType: "daily" },
+ { id: "ST002", name: "Night Nanny", description: "Overnight childcare support", icon: "🌙", priceType: "hourly" },
+ { id: "ST003", name: "Weekend Care", description: "Weekend babysitting services", icon: "📅", priceType: "hourly" },
+ { id: "ST004", name: "Full-Time Nanny", description: "Full-time live-in or live-out nanny", icon: "🏠", priceType: "monthly" },
+ { id: "ST005", name: "Emergency Care", description: "Last-minute childcare services", icon: "🚨", priceType: "hourly" },
+ { id: "ST006", name: "Special Needs Care", description: "Specialized care for children with special needs", icon: "💝", priceType: "hourly" },
 ]
 
 // Map service name keywords to icons
 function getServiceIcon(name: string): string {
  const lower = name.toLowerCase()
- if (lower.includes('night')) return ''
- if (lower.includes('weekend')) return ''
- if (lower.includes('full-time') || lower.includes('full time') || lower.includes('live')) return ''
- if (lower.includes('emergency') || lower.includes('urgent')) return ''
- if (lower.includes('special need')) return ''
- return ''
+ if (lower.includes('night')) return '🌙'
+ if (lower.includes('weekend')) return '📅'
+ if (lower.includes('full-time') || lower.includes('full time') || lower.includes('live')) return '🏠'
+ if (lower.includes('emergency') || lower.includes('urgent')) return '🚨'
+ if (lower.includes('special need')) return '💝'
+ return '👶'
 }
 
 // Map service duration to price type
 function getPriceType(duration: number | null): "hourly" | "daily" | "monthly" {
  if (!duration) return 'hourly'
- if (duration >= 480) return 'monthly' // 8+ hours  monthly rate
- if (duration >= 240) return 'daily'   // 4+ hours  daily rate
+ if (duration >= 480) return 'monthly' // 8+ hours → monthly rate
+ if (duration >= 240) return 'daily'   // 4+ hours → daily rate
  return 'hourly'
 }
 
@@ -123,7 +123,7 @@ export default function NannyBookingPage() {
  setNannies(data.data.map((n: any) => ({
  id: n.id,
  name: `${n.firstName} ${n.lastName}`,
- avatar: n.profileImage || '',
+ avatar: n.profileImage || '👩',
  age: n.age || 28,
  experience: n.experience || '2+ years',
  rating: n.rating || 4.5,
@@ -321,7 +321,7 @@ export default function NannyBookingPage() {
  <div className="text-4xl">{nanny.avatar}</div>
  <div>
  <h3 className="font-semibold text-lg">{nanny.name}</h3>
- <p className="text-soft text-sm">{nanny.age} years  {nanny.experience}</p>
+ <p className="text-soft text-sm">{nanny.age} years • {nanny.experience}</p>
  </div>
  </div>
  <div className="text-right">
@@ -578,10 +578,10 @@ export default function NannyBookingPage() {
  <FaShieldAlt className="text-green-500 mb-2" />
  <h4 className="font-semibold text-green-900 mb-2">Safety & Trust</h4>
  <ul className="text-sm text-green-800 space-y-1">
- <li> All nannies undergo thorough background checks</li>
- <li> Regular training on child safety and first aid</li>
- <li> 24/7 support available for any concerns</li>
- <li> Insurance coverage for all bookings</li>
+ <li>• All nannies undergo thorough background checks</li>
+ <li>• Regular training on child safety and first aid</li>
+ <li>• 24/7 support available for any concerns</li>
+ <li>• Insurance coverage for all bookings</li>
  </ul>
  </div>
  </div>
@@ -596,14 +596,14 @@ export default function NannyBookingPage() {
  <div className="text-5xl">{selectedNanny.avatar}</div>
  <div>
  <h2 className="text-2xl font-bold">{selectedNanny.name}</h2>
- <p className="text-soft">{selectedNanny.age} years  {selectedNanny.experience}</p>
+ <p className="text-soft">{selectedNanny.age} years • {selectedNanny.experience}</p>
  </div>
  </div>
  <button
  onClick={() => setShowNannyDetails(false)}
  className="text-soft hover:text-soft text-2xl"
  >
- 
+ ×
  </button>
  </div>
 

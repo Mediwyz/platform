@@ -374,10 +374,10 @@ export default function NurseDetailsPage() {
  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
  <h4 className="font-medium text-blue-900 mb-2">Quick Booking Tips</h4>
  <ul className="text-sm text-blue-800 space-y-1">
- <li> Book in advance for regular care services</li>
- <li> Emergency services available for urgent cases</li>
- <li> Video consultations available for follow-ups</li>
- <li> Home visits available in selected areas</li>
+ <li>• Book in advance for regular care services</li>
+ <li>• Emergency services available for urgent cases</li>
+ <li>• Video consultations available for follow-ups</li>
+ <li>• Home visits available in selected areas</li>
  </ul>
  </div>
  </div>

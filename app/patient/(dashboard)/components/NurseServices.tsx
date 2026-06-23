@@ -378,7 +378,7 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  <div><span className="text-soft">Nurse:</span> <span className="font-medium">{selectedNurse?.name}</span></div>
  <div><span className="text-soft">Service:</span> <span className="font-medium">{selectedService}{nurseServices.find(s => s.serviceName === selectedService)?.price ? ` - ${nurseServices.find(s => s.serviceName === selectedService)?.currency} ${nurseServices.find(s => s.serviceName === selectedService)?.price}` : ''}</span></div>
  <div className="col-span-2"><span className="text-soft">Slots ({selectedSlots.length}):</span>{' '}
- <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join('  ')}</span>
+ <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join(' • ')}</span>
  </div>
  <div><span className="text-soft">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
  </div>

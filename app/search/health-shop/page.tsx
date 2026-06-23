@@ -62,22 +62,22 @@ const PROVIDER_LABELS: Record<string, string> = {
 }
 
 const CATEGORY_PILLS: { key: string; label: string; emoji: string }[] = [
-  { key: 'prescription_medicines', label: 'Rx Medicines', emoji: '' },
-  { key: 'otc_medicines', label: 'OTC Medicines', emoji: '' },
-  { key: 'fitness_wellness', label: 'Fitness & Wellness', emoji: '' },
-  { key: 'beauty_care', label: 'Beauty Care', emoji: '' },
-  { key: 'ayurveda', label: 'Ayurveda & Wellness', emoji: '' },
-  { key: 'medical_devices', label: 'Medical Devices', emoji: '' },
-  { key: 'first_aid', label: 'First Aid', emoji: '' },
-  { key: 'baby_care', label: 'Baby Care', emoji: '' },
-  { key: 'personal_care', label: 'Personal Care', emoji: '' },
-  { key: 'dental_care', label: 'Dental Care', emoji: '' },
-  { key: 'eye_care', label: 'Eye Care', emoji: '' },
-  { key: 'nutrition', label: 'Nutrition', emoji: '' },
-  { key: 'vitamins', label: 'Vitamins & Supplements', emoji: '' },
-  { key: 'supplements', label: 'Supplements', emoji: '' },
-  { key: 'monitoring', label: 'Health Monitoring', emoji: '' },
-  { key: 'medication', label: 'Medications', emoji: '' },
+  { key: 'prescription_medicines', label: 'Rx Medicines', emoji: '💊' },
+  { key: 'otc_medicines', label: 'OTC Medicines', emoji: '🏥' },
+  { key: 'fitness_wellness', label: 'Fitness & Wellness', emoji: '💪' },
+  { key: 'beauty_care', label: 'Beauty Care', emoji: '✨' },
+  { key: 'ayurveda', label: 'Ayurveda & Wellness', emoji: '🌿' },
+  { key: 'medical_devices', label: 'Medical Devices', emoji: '🩺' },
+  { key: 'first_aid', label: 'First Aid', emoji: '🩹' },
+  { key: 'baby_care', label: 'Baby Care', emoji: '👶' },
+  { key: 'personal_care', label: 'Personal Care', emoji: '🧼' },
+  { key: 'dental_care', label: 'Dental Care', emoji: '🦷' },
+  { key: 'eye_care', label: 'Eye Care', emoji: '👁️' },
+  { key: 'nutrition', label: 'Nutrition', emoji: '🥗' },
+  { key: 'vitamins', label: 'Vitamins & Supplements', emoji: '💉' },
+  { key: 'supplements', label: 'Supplements', emoji: '🏋️' },
+  { key: 'monitoring', label: 'Health Monitoring', emoji: '❤️' },
+  { key: 'medication', label: 'Medications', emoji: '💊' },
 ]
 
 function HealthShopContent() {
@@ -187,7 +187,7 @@ function HealthShopContent() {
         {prescription.medicines.length > 0 && (
           <div className="mb-4 flex items-center gap-2 px-3 py-2.5 bg-amber-50 dark:bg-amber-500/15 border border-amber-200 dark:border-amber-500/30 rounded-xl text-sm text-amber-800 dark:text-amber-300">
             <FaFileMedical className="text-amber-500 flex-shrink-0" />
-            <span>Results sorted by your prescription  <strong>{prescription.medicines.length}</strong> medicine{prescription.medicines.length !== 1 ? 's' : ''} detected</span>
+            <span>Results sorted by your prescription · <strong>{prescription.medicines.length}</strong> medicine{prescription.medicines.length !== 1 ? 's' : ''} detected</span>
           </div>
         )}
 
@@ -224,7 +224,7 @@ function HealthShopContent() {
           <div className="flex justify-center gap-2 mt-8">
             <button disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 20))}
               className="px-4 py-2 text-sm border border-line rounded-lg text-soft disabled:opacity-50 hover:bg-subtle">Previous</button>
-            <span className="px-4 py-2 text-sm text-soft">{offset + 1}{Math.min(offset + 20, total)} of {total}</span>
+            <span className="px-4 py-2 text-sm text-soft">{offset + 1}–{Math.min(offset + 20, total)} of {total}</span>
             <button disabled={offset + 20 >= total} onClick={() => setOffset(offset + 20)}
               className="px-4 py-2 text-sm border border-line rounded-lg text-soft disabled:opacity-50 hover:bg-subtle">Next</button>
           </div>

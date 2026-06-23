@@ -117,10 +117,10 @@ export default function UTMLinkGenerator({ promoCode }: UTMLinkGeneratorProps) {
  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
  <h4 className="font-semibold text-blue-800 mb-2">How to use these links:</h4>
  <ul className="text-blue-700 text-sm space-y-1">
- <li> Use the specific platform link when promoting on that social media</li>
- <li> Track performance by source in your Lead Generation Dashboard</li>
- <li> Each conversion through these links will be credited to you</li>
- <li> Links automatically include your promo code: {promoCode}</li>
+ <li>• Use the specific platform link when promoting on that social media</li>
+ <li>• Track performance by source in your Lead Generation Dashboard</li>
+ <li>• Each conversion through these links will be credited to you</li>
+ <li>• Links automatically include your promo code: {promoCode}</li>
  </ul>
  </div>
  </div>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-//  Types 
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 export type LocationType = 'home' | 'office' | 'video' | 'audio' | 'async'
 export type SampleType = 'none' | 'home' | 'office' | 'self_kit'
@@ -59,50 +59,50 @@ export interface WorkflowWizardProps {
   platformServiceId?: string
   /** Override the primary save button label (e.g. "Create service"). */
   saveLabel?: string
-  /** Hide the secondary "Build Template " button  for contexts (like service
+  /** Hide the secondary "Build Template →" button — for contexts (like service
    *  creation) where there's no builder to fall back to. */
   hideBuilderButton?: boolean
 }
 
-//  Option card data 
+// ── Option card data ──────────────────────────────────────────────────────────
 
 const LOCATION_OPTIONS: Array<{ value: LocationType; emoji: string; title: string; description: string }> = [
-  { value: 'home',   emoji: '', title: 'Home Visit',     description: "Provider visits the patient at home" },
-  { value: 'office', emoji: '', title: 'Office Visit',   description: "Patient comes to the provider's office" },
-  { value: 'video',  emoji: '', title: 'Video Call',     description: "Real-time video consultation" },
-  { value: 'audio',  emoji: '', title: 'Audio Call',     description: "Voice-only consultation" },
-  { value: 'async',  emoji: '', title: 'Async / Remote', description: "No real-time session (prescription renewal, second opinion)" },
+  { value: 'home',   emoji: '🏠', title: 'Home Visit',     description: "Provider visits the patient at home" },
+  { value: 'office', emoji: '🏥', title: 'Office Visit',   description: "Patient comes to the provider's office" },
+  { value: 'video',  emoji: '📹', title: 'Video Call',     description: "Real-time video consultation" },
+  { value: 'audio',  emoji: '🎧', title: 'Audio Call',     description: "Voice-only consultation" },
+  { value: 'async',  emoji: '📋', title: 'Async / Remote', description: "No real-time session (prescription renewal, second opinion)" },
 ]
 
 const SAMPLE_OPTIONS: Array<{ value: SampleType; emoji: string; title: string; description: string }> = [
-  { value: 'none',     emoji: '', title: 'No Sample',            description: "No biological collection required" },
-  { value: 'home',     emoji: '', title: 'Home Collection',      description: "Provider collects sample at patient's home" },
-  { value: 'office',   emoji: '', title: 'Office Collection',    description: "Patient provides sample at the office" },
-  { value: 'self_kit', emoji: '', title: 'Self-collection Kit',  description: "Patient collects and ships the sample" },
+  { value: 'none',     emoji: '🚫', title: 'No Sample',            description: "No biological collection required" },
+  { value: 'home',     emoji: '🏠', title: 'Home Collection',      description: "Provider collects sample at patient's home" },
+  { value: 'office',   emoji: '🏥', title: 'Office Collection',    description: "Patient provides sample at the office" },
+  { value: 'self_kit', emoji: '📦', title: 'Self-collection Kit',  description: "Patient collects and ships the sample" },
 ]
 
 const CARE_MODEL_OPTIONS: Array<{ value: CareModelType; emoji: string; title: string; description: string }> = [
-  { value: 'single',    emoji: '',  title: 'Single Provider',   description: "One provider handles the entire service" },
-  { value: 'delegated', emoji: '', title: 'Delegated Visit',  description: "Doctor assigns a nurse to visit on their behalf" },
-  { value: 'multi',     emoji: '',  title: 'Multi-provider',    description: "Multiple providers involved in the same session" },
-  { value: 'group',     emoji: '',  title: 'Group Session',     description: "One provider, multiple patients simultaneously" },
+  { value: 'single',    emoji: '👤',  title: 'Single Provider',   description: "One provider handles the entire service" },
+  { value: 'delegated', emoji: '👨‍⚕️', title: 'Delegated Visit',  description: "Doctor assigns a nurse to visit on their behalf" },
+  { value: 'multi',     emoji: '👥',  title: 'Multi-provider',    description: "Multiple providers involved in the same session" },
+  { value: 'group',     emoji: '🏫',  title: 'Group Session',     description: "One provider, multiple patients simultaneously" },
 ]
 
 const URGENCY_OPTIONS: Array<{ value: UrgencyType; emoji: string; title: string; description: string }> = [
-  { value: 'scheduled', emoji: '', title: 'Scheduled',       description: "Standard booking with advance scheduling" },
-  { value: 'urgent',    emoji: '',  title: 'Urgent / Same-day', description: "Requires same-day response" },
-  { value: 'emergency', emoji: '', title: 'Emergency',        description: "Immediate response required" },
+  { value: 'scheduled', emoji: '🗓️', title: 'Scheduled',       description: "Standard booking with advance scheduling" },
+  { value: 'urgent',    emoji: '⚡',  title: 'Urgent / Same-day', description: "Requires same-day response" },
+  { value: 'emergency', emoji: '🚨', title: 'Emergency',        description: "Immediate response required" },
 ]
 
 const OUTPUT_OPTIONS: Array<{ value: OutputType; emoji: string; title: string; description: string }> = [
-  { value: 'none',           emoji: '', title: 'General Consultation', description: "No specific document produced" },
-  { value: 'exam_report',    emoji: '', title: 'Exam Report',           description: "Medical assessment or examination report" },
-  { value: 'lab_result',     emoji: '', title: 'Lab Results',           description: "Test results uploaded by the provider" },
-  { value: 'prescription',   emoji: '', title: 'Prescription',          description: "Medication prescription issued" },
-  { value: 'eye_prescription', emoji: '', title: 'Eye Prescription',  description: "Optical prescription (optometrist)" },
-  { value: 'care_notes',     emoji: '', title: 'Care Notes',            description: "Nursing or caregiver session notes" },
-  { value: 'exercise_plan',  emoji: '', title: 'Exercise Plan',         description: "Physiotherapy or rehabilitation plan" },
-  { value: 'meal_plan',      emoji: '', title: 'Meal Plan',             description: "Nutrition and dietary plan" },
+  { value: 'none',           emoji: '🗒️', title: 'General Consultation', description: "No specific document produced" },
+  { value: 'exam_report',    emoji: '📋', title: 'Exam Report',           description: "Medical assessment or examination report" },
+  { value: 'lab_result',     emoji: '🧪', title: 'Lab Results',           description: "Test results uploaded by the provider" },
+  { value: 'prescription',   emoji: '💊', title: 'Prescription',          description: "Medication prescription issued" },
+  { value: 'eye_prescription', emoji: '👁️', title: 'Eye Prescription',  description: "Optical prescription (optometrist)" },
+  { value: 'care_notes',     emoji: '📝', title: 'Care Notes',            description: "Nursing or caregiver session notes" },
+  { value: 'exercise_plan',  emoji: '🏃', title: 'Exercise Plan',         description: "Physiotherapy or rehabilitation plan" },
+  { value: 'meal_plan',      emoji: '🥗', title: 'Meal Plan',             description: "Nutrition and dietary plan" },
 ]
 
 const STEP_LABELS = [
@@ -118,7 +118,7 @@ const STEP_LABELS = [
 
 const TOTAL_STEPS = 8
 
-//  Option Card 
+// ── Option Card ───────────────────────────────────────────────────────────────
 
 function OptionCard({
   emoji, title, description, selected, onClick,
@@ -158,7 +158,7 @@ function Toggle({ label, description, checked, onChange }: { label: string; desc
   )
 }
 
-//  Step components 
+// ── Step components ───────────────────────────────────────────────────────────
 
 function LocationStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
@@ -311,7 +311,7 @@ function PaymentStep({ state, setState }: { state: WizardState; setState: (s: Wi
         <div className="text-xs font-semibold text-soft uppercase tracking-wide mb-2">Payment timing</div>
         <div className="space-y-2">
           {([
-            { value: 'auto',           label: 'Auto-detect',       description: 'Office/async  charge after; all others  charge on acceptance' },
+            { value: 'auto',           label: 'Auto-detect',       description: 'Office/async → charge after; all others → charge on acceptance' },
             { value: 'ON_ACCEPTANCE',  label: 'Charge on acceptance', description: 'Patient is charged as soon as the provider accepts the booking' },
             { value: 'ON_COMPLETION',  label: 'Charge on completion', description: 'Patient is charged only after the service is delivered' },
           ] as Array<{ value: PaymentTimingOverride; label: string; description: string }>).map(opt => (
@@ -370,15 +370,15 @@ function ReviewStep({
   const outputOpt = OUTPUT_OPTIONS.find(o => o.value === state.outputType)
 
   const summaryItems = [
-    { label: 'Location',   value: locationOpt?.title ?? ' - ', emoji: locationOpt?.emoji ?? '' },
-    { label: 'Recurrence', value: state.recurrenceType === 'once' ? 'One-time' : `Recurring (${state.recurrenceFrequency})`, emoji: state.recurrenceType === 'once' ? '1' : '' },
-    { label: 'Sample',     value: sampleOpt?.title ?? ' - ',  emoji: sampleOpt?.emoji ?? '' },
-    { label: 'Care model', value: careOpt?.title ?? ' - ',    emoji: careOpt?.emoji ?? '' },
-    { label: 'Urgency',    value: urgencyOpt?.title ?? ' - ', emoji: urgencyOpt?.emoji ?? '' },
-    { label: 'Output',     value: outputOpt?.title ?? ' - ',  emoji: outputOpt?.emoji ?? '' },
-    ...(state.requiresPrescription ? [{ label: 'Requires', value: 'Prescription gate', emoji: '' }] : []),
-    ...(state.isHealthShop ? [{ label: 'Mode', value: 'Health Shop order', emoji: '' }] : []),
-    { label: 'Payment',    value: state.paymentTimingOverride === 'auto' ? 'Auto-detect' : state.paymentTimingOverride === 'ON_ACCEPTANCE' ? 'On acceptance' : 'On completion', emoji: '' },
+    { label: 'Location',   value: locationOpt?.title ?? ' - ', emoji: locationOpt?.emoji ?? '📍' },
+    { label: 'Recurrence', value: state.recurrenceType === 'once' ? 'One-time' : `Recurring (${state.recurrenceFrequency})`, emoji: state.recurrenceType === 'once' ? '1️⃣' : '🔄' },
+    { label: 'Sample',     value: sampleOpt?.title ?? ' - ',  emoji: sampleOpt?.emoji ?? '🧪' },
+    { label: 'Care model', value: careOpt?.title ?? ' - ',    emoji: careOpt?.emoji ?? '👤' },
+    { label: 'Urgency',    value: urgencyOpt?.title ?? ' - ', emoji: urgencyOpt?.emoji ?? '⏱️' },
+    { label: 'Output',     value: outputOpt?.title ?? ' - ',  emoji: outputOpt?.emoji ?? '📄' },
+    ...(state.requiresPrescription ? [{ label: 'Requires', value: 'Prescription gate', emoji: '💊' }] : []),
+    ...(state.isHealthShop ? [{ label: 'Mode', value: 'Health Shop order', emoji: '🛒' }] : []),
+    { label: 'Payment',    value: state.paymentTimingOverride === 'auto' ? 'Auto-detect' : state.paymentTimingOverride === 'ON_ACCEPTANCE' ? 'On acceptance' : 'On completion', emoji: '💳' },
   ]
 
   return (
@@ -451,7 +451,7 @@ function ReviewStep({
                     Saving...
                   </>
                 ) : (
-                  saveLabel ?? ' Save & Publish'
+                  saveLabel ?? '✓ Save & Publish'
                 )}
               </button>
             )}
@@ -461,7 +461,7 @@ function ReviewStep({
                 onClick={onComplete}
                 className={`w-full font-semibold text-sm py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${onSave ? 'border border-line text-soft hover:bg-subtle' : 'bg-[#001E40] hover:bg-[#0C6780] text-white'}`}
               >
-                {onSave ? 'Customize in Builder ' : 'Build Template '}
+                {onSave ? 'Customize in Builder →' : 'Build Template →'}
               </button>
             )}
           </div>
@@ -471,7 +471,7 @@ function ReviewStep({
   )
 }
 
-//  Main wizard 
+// ── Main wizard ───────────────────────────────────────────────────────────────
 
 const INITIAL_STATE: WizardState = {
   location: null,
@@ -669,7 +669,7 @@ export default function WorkflowWizard({
           disabled={currentStep === 1}
           className="px-4 py-2 text-sm font-medium text-soft hover:text-fg disabled:opacity-0 disabled:pointer-events-none transition"
         >
-           Back
+          ← Back
         </button>
 
         {currentStep < TOTAL_STEPS && (
@@ -679,7 +679,7 @@ export default function WorkflowWizard({
             disabled={!canNext}
             className="px-5 py-2 bg-[#0C6780] hover:bg-[#001E40] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
           >
-            Next 
+            Next →
           </button>
         )}
 

@@ -117,7 +117,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
    return
  }
  setIsEmergencyCall(true)
- toast.info(`Connecting to ${service.name}`, { autoClose: 3000 })
+ toast.info(`Connecting to ${service.name}…`, { autoClose: 3000 })
  setTimeout(() => setIsEmergencyCall(false), 3000)
  }
 
@@ -241,7 +241,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="flex flex-wrap gap-1 mt-1">
  {(patientData.allergies || []).map((allergy, index) => (
  <span key={index} className="px-2 py-0.5 sm:py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs font-medium">
-  {allergy}
+ ⚠️ {allergy}
  </span>
  ))}
  </div>
@@ -266,7 +266,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-1 mt-1">
  {activeMedications?.slice(0, 3).map((prescription, index) => (
  <p key={index} className="text-xs text-green-800">
-  {prescription.medicines[0]?.name} - {prescription.medicines[0]?.dosage}
+ • {prescription.medicines[0]?.name} - {prescription.medicines[0]?.dosage}
  </p>
  ))}
  </div>

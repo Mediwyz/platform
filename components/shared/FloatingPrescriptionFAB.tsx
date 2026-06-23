@@ -191,12 +191,12 @@ export default function FloatingPrescriptionFAB() {
               {isExtracting ? (
                 <div className="py-10 text-center">
                   <FaSpinner className="text-amber-500 text-3xl animate-spin mx-auto mb-3" />
-                  <p className="font-semibold text-fg text-sm">Extracting prescription data</p>
+                  <p className="font-semibold text-fg text-sm">Extracting prescription data…</p>
                   <p className="text-xs text-soft mt-1">AI is reading your prescription</p>
                 </div>
 
               ) : detailed && !showReplace ? (
-                /*  Rich extraction view  */
+                /* ── Rich extraction view ── */
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <FaCheckCircle className="text-green-500" />
@@ -291,7 +291,7 @@ export default function FloatingPrescriptionFAB() {
                 </div>
 
               ) : hasPrescription && !showReplace ? (
-                /*  Simple view (legacy / unauthenticated flow)  */
+                /* ── Simple view (legacy / unauthenticated flow) ── */
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <FaCheckCircle className="text-green-500" />
@@ -346,11 +346,11 @@ export default function FloatingPrescriptionFAB() {
                 </div>
 
               ) : (
-                /*  Upload / replace mode  */
+                /* ── Upload / replace mode ── */
                 <div>
                   {showReplace && (
                     <button onClick={() => setShowReplace(false)} className="text-xs text-[#0C6780] mb-3 flex items-center gap-1 hover:underline">
-                       Back to current prescription
+                      ← Back to current prescription
                     </button>
                   )}
                   <p className="text-sm text-soft mb-4">
@@ -361,7 +361,7 @@ export default function FloatingPrescriptionFAB() {
                     <div className="mb-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">
                       {extractError}
                       {isLoggedIn && (
-                        <> <a href={`/${userType || 'patient'}/prescriptions/new`} className="underline">Enter manually </a></>
+                        <> <a href={`/${userType || 'patient'}/prescriptions/new`} className="underline">Enter manually →</a></>
                       )}
                     </div>
                   )}
@@ -382,7 +382,7 @@ export default function FloatingPrescriptionFAB() {
                       <>
                         <FaUpload className="text-faint group-hover:text-amber-400 text-2xl mx-auto mb-2 transition-colors" />
                         <p className="text-sm font-medium text-soft">Upload prescription image</p>
-                        <p className="text-xs text-faint mt-1">JPG, PNG, PDF  Max 10MB</p>
+                        <p className="text-xs text-faint mt-1">JPG, PNG, PDF · Max 10MB</p>
                         <p className="text-xs text-faint">Drag &amp; drop or click to browse</p>
                       </>
                     )}

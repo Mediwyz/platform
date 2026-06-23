@@ -141,7 +141,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
       <DashboardPageHeader
         icon={FiBookOpen}
         title="Workflow Library"
-        description="Browse every workflow on the platform  system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point."
+        description="Browse every workflow on the platform — system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point."
       />
 
       {/* Filter bar */}
@@ -277,16 +277,16 @@ function TemplateCard({
           <h3 className="font-semibold text-fg truncate">{tpl.name}</h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap text-[11px] text-soft">
             <span className="font-mono bg-subtle px-1.5 py-0.5 rounded">{tpl.providerType.replace(/_/g, ' ')}</span>
-            <span></span>
+            <span>·</span>
             <span>{tpl.serviceMode}</span>
-            <span></span>
+            <span>·</span>
             <span className="inline-flex items-center gap-1">
               <CreatorIcon className="w-3 h-3" />
               {creatorLabel}
             </span>
             {tpl.linkedService && (
               <>
-                <span></span>
+                <span>·</span>
                 <span className="inline-flex items-center gap-1 text-brand-teal">
                   {tpl.linkedService.serviceName}
                 </span>

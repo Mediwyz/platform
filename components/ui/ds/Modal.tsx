@@ -5,7 +5,7 @@ import { FaTimes } from 'react-icons/fa'
 import { cn } from '@/lib/cn'
 
 /**
- * Modal  centered dialog with themed backdrop. Closes on Escape and backdrop
+ * Modal — centered dialog with themed backdrop. Closes on Escape and backdrop
  * click. Locks body scroll while open. Pass `title` for the standard header.
  */
 export default function Modal({

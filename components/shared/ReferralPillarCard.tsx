@@ -12,7 +12,7 @@ import { useT } from '@/lib/i18n/useT'
  * wallet credit on successful signup attribution.
  *
  * This card surfaces the referral pillar on the member dashboard so the
- * platform's core loop (book  refer  earn) is visible, not buried in a
+ * platform's core loop (book → refer → earn) is visible, not buried in a
  * hidden menu. Other provider roles have this too - it's universal.
  */
 interface ReferralPillarCardProps {

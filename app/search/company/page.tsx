@@ -136,7 +136,7 @@ export default function FindCompanyPage() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSearch() }}
-                  placeholder="Search companies"
+                  placeholder="Search companies…"
                   className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
                 />
               </div>
@@ -262,7 +262,7 @@ export default function FindCompanyPage() {
                           disabled={joinBusyId === c.id}
                           className="px-4 py-1.5 bg-[#0C6780] text-white rounded-lg text-xs font-semibold hover:bg-[#001E40] disabled:opacity-50 transition-colors"
                         >
-                          {joinBusyId === c.id ? 'Joining' : 'Join'}
+                          {joinBusyId === c.id ? 'Joining…' : 'Join'}
                         </button>
                       </>
                     ) : (

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -120,7 +120,7 @@ export default function AdminWorkflowCompliancePage() {
                     <div className={'flex items-center justify-between p-4 ' + cfg.bg}>
                       <div>
                         <div className="font-semibold text-fg">{group.templateName}</div>
-                        <div className="text-xs text-soft mt-0.5">{group.providerType.replace(/_/g,' ')} {group.regionCode ? ' ' + group.regionCode : ' global'}</div>
+                        <div className="text-xs text-soft mt-0.5">{group.providerType.replace(/_/g,' ')} {group.regionCode ? '· ' + group.regionCode : '· global'}</div>
                       </div>
                       <span className={'text-xs font-semibold px-2 py-1 rounded ' + cfg.bg + ' ' + cfg.text}>{group.violations.length} issue{group.violations.length > 1 ? 's' : ''}</span>
                     </div>

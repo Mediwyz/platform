@@ -94,7 +94,7 @@ function mapApiAppointment(apt: any): Appointment {
  id: doc?.id || apt.providerUserId || '',
  name: doctorName,
  specialty: Array.isArray(doc?.specialty) ? doc.specialty[0] : (apt.specialty || apt.serviceName || 'General'),
- avatar: docUser?.profileImage || '',
+ avatar: docUser?.profileImage || '👨‍⚕️',
  rating: 4.8,
  hospital: doc?.clinicAffiliation || '',
  },
@@ -459,7 +459,7 @@ export default function DoctorConsultationsPage() {
  )}
  </div>
  
- <p className="text-soft mb-2">{appointment.doctor.specialty}  {appointment.doctor.hospital}</p>
+ <p className="text-soft mb-2">{appointment.doctor.specialty} • {appointment.doctor.hospital}</p>
  
  <div className="grid md:grid-cols-2 gap-2 text-sm text-soft mb-3">
  <div className="flex items-center gap-2">
@@ -623,7 +623,7 @@ export default function DoctorConsultationsPage() {
  onClick={() => setShowDetailModal(false)}
  className="text-soft hover:text-soft text-2xl"
  >
- 
+ ×
  </button>
  </div>
  
@@ -640,7 +640,7 @@ export default function DoctorConsultationsPage() {
  <div className="grid md:grid-cols-2 gap-4">
  <div>
  <p className="text-sm text-soft">Date & Time</p>
- <p className="font-medium">{new Date(selectedAppointment.date).toLocaleDateString()}  {selectedAppointment.time}</p>
+ <p className="font-medium">{new Date(selectedAppointment.date).toLocaleDateString()} • {selectedAppointment.time}</p>
  </div>
  <div>
  <p className="text-sm text-soft">Type</p>

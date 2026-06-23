@@ -9,8 +9,8 @@
  * distance-sorted list.
  *
  * Endpoints:
- *   providers  GET /api/geo/providers?type={CODE}&lat&lng&limit
- *   entities   GET /api/geo/entities?type={kind}&lat&lng&limit
+ *   providers → GET /api/geo/providers?type={CODE}&lat&lng&limit
+ *   entities  → GET /api/geo/entities?type={kind}&lat&lng&limit
  */
 
 import { useCallback, useRef, useState } from 'react'
@@ -32,7 +32,7 @@ interface NearbyItem {
 
 interface NearbyMapProps {
   mode: 'providers' | 'entities'
-  /** providerType code (DOCTOR) for providers, or entity kind (clinic) for entities. */
+  /** providerType code (DOCTOR…) for providers, or entity kind (clinic…) for entities. */
   type?: string
   accentColor?: string
   /** Heading shown on the toggle, e.g. "doctors near you". */
@@ -79,7 +79,7 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
               : (r.name as string) || 'Location',
             sub: mode === 'providers'
               ? (Array.isArray(r.specialty) ? (r.specialty as string[])[0] : undefined) ?? (r.address as string | undefined)
-              : [(r.type as string), (r.city as string)].filter(Boolean).join('  '),
+              : [(r.type as string), (r.city as string)].filter(Boolean).join(' · '),
           }))
           setItems(mapped)
         } catch {
@@ -170,7 +170,7 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
             {/* nearest list */}
             <div className="max-h-72 md:max-h-80 overflow-y-auto divide-y divide-gray-50">
               {loading ? (
-                <div className="p-6 text-center text-sm text-faint"><FaSpinner className="animate-spin inline mr-2" /> Locating you</div>
+                <div className="p-6 text-center text-sm text-faint"><FaSpinner className="animate-spin inline mr-2" /> Locating you…</div>
               ) : err ? (
                 <div className="p-6 text-center text-sm text-soft">
                   {err}

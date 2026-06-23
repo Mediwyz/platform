@@ -27,7 +27,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "credit-card",
  name: "Credit/Debit Card",
  description: "Visa, Mastercard, American Express accepted",
- icon: "",
+ icon: "💳",
  available: true
  },
  {
@@ -36,7 +36,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's health benefits",
  discount: 50,
- icon: "",
+ icon: "🏢",
  available: true
  },
  {
@@ -45,7 +45,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Insurance Coverage",
  description: "Apply insurance coverage (80% covered)",
  discount: 80,
- icon: "",
+ icon: "🛡️",
  available: true
  },
  {
@@ -54,7 +54,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Monthly Subscription",
  description: "Use your active healthcare subscription",
  discount: 100,
- icon: "",
+ icon: "💳",
  available: false
  }
 ]

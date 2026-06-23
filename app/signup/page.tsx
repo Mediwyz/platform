@@ -154,12 +154,12 @@ export default function RegistrationForm() {
  if (!validateStep(currentStep)) return
 
  if (currentStep === 2) {
- // If provider  show workplace step before submitting
+ // If provider → show workplace step before submitting
  if (isProviderType(selectedUserType) && subStep === 'basic') {
  setSubStep('workplace')
  return
  }
- // Otherwise (member, or already done workplace step)  go to step 3 (submit)
+ // Otherwise (member, or already done workplace step) → go to step 3 (submit)
  setCurrentStep(3)
  handleSubmit(new Event('submit') as unknown as FormEvent)
  return

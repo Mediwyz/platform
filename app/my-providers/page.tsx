@@ -56,13 +56,13 @@ export default function MyProvidersPage() {
       </div>
 
       {loading ? (
-        <div className="py-16 text-center text-faint text-sm">Loading</div>
+        <div className="py-16 text-center text-faint text-sm">Loading…</div>
       ) : favorites.length === 0 ? (
         <div className="py-16 text-center space-y-3">
           <FaStar className="mx-auto text-5xl text-gray-200" />
           <p className="text-soft">No saved providers yet.</p>
           <p className="text-xs text-faint">
-            Tap the  on any provider card to save them for one-tap rebooking.
+            Tap the ⭐ on any provider card to save them for one-tap rebooking.
           </p>
           <Link
             href="/search/doctors"

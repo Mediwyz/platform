@@ -26,7 +26,7 @@ interface WorkflowCurrentStepProps {
   /** Pre-formatted amount for confirmation copy (e.g. "Rs 500"). */
   amountLabel?: string
   /** Booking service mode - passed to WorkflowActionButton for consequence copy
-   *  ('video'  video room warning, 'audio'  audio room warning). */
+   *  ('video' → video room warning, 'audio' → audio room warning). */
   serviceMode?: string
   /** Session tracking - populated for recurrent/multi-session services */
   sessionNumber?: number

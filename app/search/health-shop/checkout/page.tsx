@@ -64,7 +64,7 @@ export default function CheckoutPage() {
     setError(null)
 
     try {
-      // Place one order per provider (multi-provider cart  multiple orders)
+      // Place one order per provider (multi-provider cart → multiple orders)
       const orderIds: string[] = []
 
       for (const [providerUserId, providerItems] of providerGroups) {

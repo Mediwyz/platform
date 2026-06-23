@@ -53,7 +53,7 @@ function sidebarForCookieUserType(cookieUserType: string | undefined): {
     patient: { items: PATIENT_SIDEBAR_ITEMS, active: patientActive },
   }
   if (cookieUserType && map[cookieUserType]) return map[cookieUserType]
-  // Every provider role (doctor, nurse, dentist, ) uses the shared dynamic
+  // Every provider role (doctor, nurse, dentist, …) uses the shared dynamic
   // provider sidebar.
   return {
     items: getDynamicProviderSidebarItems(providerSlug),

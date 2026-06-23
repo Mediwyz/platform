@@ -17,7 +17,7 @@ vi.mock('framer-motion', async () => {
   }
 })
 
-//  Helpers 
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
 function renderWithProvider(ui: React.ReactNode) {
   return render(<BookingDrawerProvider>{ui}</BookingDrawerProvider>)
@@ -31,11 +31,11 @@ function DrawerTrigger({ opts, label = 'Open Drawer' }: {
   return <button onClick={() => openDrawer(opts)}>{label}</button>
 }
 
-//  Mock data 
+// ── Mock data ──────────────────────────────────────────────────────────────────
 
 const MOCK_SERVICES = [
-  { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', duration: 30, emoji: '' },
-  { id: 'svc2', serviceName: 'Home Visit', category: 'Visit', defaultPrice: 800, providerType: 'DOCTOR', duration: 60, emoji: '' },
+  { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', duration: 30, emoji: '🩺' },
+  { id: 'svc2', serviceName: 'Home Visit', category: 'Visit', defaultPrice: 800, providerType: 'DOCTOR', duration: 60, emoji: '🏠' },
 ]
 
 const MOCK_PROVIDERS = [
@@ -97,7 +97,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-//  Context tests 
+// ── Context tests ──────────────────────────────────────────────────────────────
 
 describe('BookingDrawerProvider', () => {
   it('starts closed', () => {
@@ -140,12 +140,12 @@ describe('BookingDrawerProvider', () => {
   })
 })
 
-//  Entry from service card 
+// ── Entry from service card ────────────────────────────────────────────────────
 
 describe('BookingDrawer - entry from service card', () => {
   it('starts at providers step and calls filtered provider fetch', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -164,7 +164,7 @@ describe('BookingDrawer - entry from service card', () => {
 
   it('renders the provider list after fetch', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -181,7 +181,7 @@ describe('BookingDrawer - entry from service card', () => {
 
   it('back button from providers returns to service step', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -201,7 +201,7 @@ describe('BookingDrawer - entry from service card', () => {
   })
 })
 
-//  Entry from provider card 
+// ── Entry from provider card ───────────────────────────────────────────────────
 
 describe('BookingDrawer - entry from provider card', () => {
   it('starts at service step and fetches provider services', async () => {
@@ -240,7 +240,7 @@ describe('BookingDrawer - entry from provider card', () => {
   })
 })
 
-//  Entry from hero widget 
+// ── Entry from hero widget ─────────────────────────────────────────────────────
 
 describe('BookingDrawer - entry from hero widget (role + date + time)', () => {
   it('starts at service step and fetches services for the role', async () => {
@@ -263,12 +263,12 @@ describe('BookingDrawer - entry from hero widget (role + date + time)', () => {
   })
 })
 
-//  Workflow step 
+// ── Workflow step ──────────────────────────────────────────────────────────────
 
 describe('BookingDrawer - workflow step', () => {
   it('shows workflow options when provider has multiple workflows', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -287,13 +287,13 @@ describe('BookingDrawer - workflow step', () => {
   })
 })
 
-//  Slot step 
+// ── Slot step ──────────────────────────────────────────────────────────────────
 
 describe('BookingDrawer - slot step', () => {
   it('shows date strip and loads time slots after selecting a workflow', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
     // Pre-fill date so the slot step shows slots without a separate date-click
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -314,12 +314,12 @@ describe('BookingDrawer - slot step', () => {
   })
 })
 
-//  Auth step 
+// ── Auth step ─────────────────────────────────────────────────────────────────
 
 describe('BookingDrawer - auth step', () => {
   it('shows auth step when not logged in after selecting a slot', async () => {
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -350,7 +350,7 @@ describe('BookingDrawer - auth step', () => {
     }))
 
     const { default: BookingDrawer } = await import('../BookingDrawer')
-    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '' }
+    const service = { id: 'svc1', serviceName: 'General Consultation', category: 'Consultation', defaultPrice: 500, providerType: 'DOCTOR', emoji: '🩺' }
 
     renderWithProvider(
       <>
@@ -371,14 +371,14 @@ describe('BookingDrawer - auth step', () => {
     await waitFor(() => expect(screen.getByText('Sign in to complete booking')).toBeInTheDocument())
 
     fireEvent.change(screen.getByPlaceholderText('you@example.com'), { target: { value: 'bad@test.com' } })
-    fireEvent.change(screen.getByPlaceholderText(''), { target: { value: 'wrongpass' } })
+    fireEvent.change(screen.getByPlaceholderText('••••••••'), { target: { value: 'wrongpass' } })
     fireEvent.click(screen.getByText('Sign in & confirm booking'))
 
     await waitFor(() => expect(screen.getByText('Invalid credentials')).toBeInTheDocument())
   })
 })
 
-//  Close 
+// ── Close ──────────────────────────────────────────────────────────────────────
 
 describe('BookingDrawer - close', () => {
   it('X button closes the drawer', async () => {
@@ -401,7 +401,7 @@ describe('BookingDrawer - close', () => {
   })
 })
 
-//  Hero widget pre-filled - skip slot step 
+// ── Hero widget pre-filled - skip slot step ────────────────────────────────────
 
 describe('BookingDrawer - hero widget pre-filled date/time skips slot step', () => {
   it('goes to confirm directly after workflow selection when date+time are pre-filled and user is logged in', async () => {
@@ -432,7 +432,7 @@ describe('BookingDrawer - hero widget pre-filled date/time skips slot step', () 
     await waitFor(() => expect(screen.getByText('In-Person')).toBeInTheDocument())
     fireEvent.click(screen.getByText('In-Person'))
 
-    // slot pre-filled + user logged in  skip to confirm
+    // slot pre-filled + user logged in → skip to confirm
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeInTheDocument()
       expect(screen.getByText('Confirm Booking')).toBeInTheDocument()

@@ -78,12 +78,12 @@ export default function HorizontalScrollRow({
       </div>
 
       {/*
-        
-             [ card ] [ card ] [ card ] [ card ]    
-        
+        ┌────┬──────────────────────────────────────┬────┐
+        │ ◀  │  [ card ] [ card ] [ card ] [ card ] │ ▶  │
+        └────┴──────────────────────────────────────┴────┘
 
         Flex row: button (fixed 40px) | scroll zone (flex-1) | button (fixed 40px)
-        The scroll zone has overflow-hidden  cards are CLIPPED at its edges,
+        The scroll zone has overflow-hidden → cards are CLIPPED at its edges,
         never bleeding into the button columns. No absolute positioning needed.
       */}
       <div className="flex items-center gap-2">

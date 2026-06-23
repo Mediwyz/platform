@@ -164,7 +164,7 @@ export default function DynamicProviderDashboard() {
           <div className="bg-surface rounded-xl border border-dashed border-line p-5 text-center">
             <FaHospital className="text-faint text-2xl mx-auto mb-2" />
             <p className="text-sm text-soft mb-2">You have not linked an organization yet.</p>
-            <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">Find and join an organization </Link>
+            <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">Find and join an organization →</Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

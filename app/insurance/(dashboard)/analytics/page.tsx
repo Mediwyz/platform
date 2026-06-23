@@ -100,13 +100,13 @@ export default function InsuranceAnalyticsPage() {
           label="Loss Ratio (12m)"
           value={data.kpis.lossRatio == null ? ' - ' : `${(data.kpis.lossRatio * 100).toFixed(0)}%`}
           footer={<span className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${lossRatioColor}`}>{data.kpis.lossRatioLabel}</span>}
-          help="Payouts  premiums collected. <60% healthy, 6085% watch, >85% underwater."
+          help="Payouts ÷ premiums collected. <60% healthy, 60–85% watch, >85% underwater."
         />
         <KpiCard
           icon={<FaPiggyBank className="text-emerald-600" />}
           label="Treasury Balance"
           value={format(data.treasury.balance)}
-          footer={<span className="text-[11px] text-soft">{data.kpis.runwayMonths != null ? ` ${data.kpis.runwayMonths.toFixed(1)} mo runway` : 'No outflow history'}</span>}
+          footer={<span className="text-[11px] text-soft">{data.kpis.runwayMonths != null ? `≈ ${data.kpis.runwayMonths.toFixed(1)} mo runway` : 'No outflow history'}</span>}
           help="Money pool available to pay future claims."
         />
         <KpiCard
@@ -167,7 +167,7 @@ function KpiCard({ icon, label, value, footer, help }: {
     <div className="bg-surface rounded-xl border border-line p-4 flex flex-col gap-2 min-h-[112px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs font-medium text-soft">{icon}{label}</div>
-        {help && <span title={help} className="text-[10px] text-faint cursor-help"></span>}
+        {help && <span title={help} className="text-[10px] text-faint cursor-help">ⓘ</span>}
       </div>
       <div className="text-2xl font-bold text-fg">{value}</div>
       {footer && <div>{footer}</div>}

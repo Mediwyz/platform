@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaCalendarAlt, FaCheck, FaExclamationTriangle } from 'react-icons/fa'
 
-//  Types 
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface AvailabilityRow {
   id?: string
@@ -26,7 +26,7 @@ interface Props {
   readOnly?: boolean
 }
 
-//  Constants 
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 // Monday-first order
 const DAYS = [
@@ -59,7 +59,7 @@ const DEFAULT_START = '09:00'
 const DEFAULT_END = '17:00'
 const DEFAULT_DURATION = 60
 
-//  Helper: compute total slots 
+// ─── Helper: compute total slots ─────────────────────────────────────────────
 
 function computeTotalSlots(days: DayState[]): number {
   let total = 0
@@ -84,7 +84,7 @@ function formatTime(t: string): string {
   return `${h12}:${m} ${ampm}`
 }
 
-//  Component 
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function AvailabilityScheduler({ providerId, readOnly = false }: Props) {
   const [days, setDays] = useState<DayState[]>(
@@ -102,7 +102,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
   )
   const [loading, setLoading] = useState(true)
 
-  //  Fetch existing availability 
+  // ── Fetch existing availability ─────────────────────────────────────────
   const fetchAvailability = useCallback(async () => {
     setLoading(true)
     try {
@@ -137,7 +137,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
 
   useEffect(() => { fetchAvailability() }, [fetchAvailability])
 
-  //  Update a day's field 
+  // ── Update a day's field ────────────────────────────────────────────────
   function updateDay(dayOfWeek: number, patch: Partial<DayState>) {
     setDays((prev) =>
       prev.map((d) =>
@@ -146,7 +146,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
     )
   }
 
-  //  Save a single day 
+  // ── Save a single day ───────────────────────────────────────────────────
   async function saveDay(dayOfWeek: number) {
     const day = days.find((d) => d.dayOfWeek === dayOfWeek)
     if (!day) return
@@ -210,7 +210,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
 
   return (
     <div className="space-y-6">
-      {/*  Hint banner  */}
+      {/* ── Hint banner ─────────────────────────────────────────────────── */}
       {!readOnly && (
         <div className="flex items-start gap-3 p-3 bg-[#9AE1FF]/20 border border-[#9AE1FF] rounded-xl text-sm text-fg">
           <FaCalendarAlt className="text-[#0C6780] mt-0.5 flex-shrink-0" />
@@ -220,7 +220,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
         </div>
       )}
 
-      {/*  Day grid  */}
+      {/* ── Day grid ─────────────────────────────────────────────────────── */}
       <div className="space-y-2">
         {DAYS.map((dayConfig) => {
           const day = days.find((d) => d.dayOfWeek === dayConfig.dayOfWeek)!
@@ -241,7 +241,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
         })}
       </div>
 
-      {/*  Summary panel  */}
+      {/* ── Summary panel ────────────────────────────────────────────────── */}
       <div className="rounded-xl border border-line bg-subtle p-4 space-y-3">
         <h3 className="text-sm font-semibold text-fg">Your weekly availability</h3>
         {activeDays.length === 0 ? (
@@ -256,7 +256,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
                 <li key={d.dayOfWeek} className="flex items-center gap-2 text-sm">
                   <span className="w-24 font-medium text-soft">{dayLabel}</span>
                   <span className="text-soft">
-                    {formatTime(d.startTime)}  {formatTime(d.endTime)}
+                    {formatTime(d.startTime)} – {formatTime(d.endTime)}
                   </span>
                   <span className="text-faint text-xs">
                     ({d.slotDuration} min slots)
@@ -276,7 +276,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
   )
 }
 
-//  DayRow 
+// ─── DayRow ───────────────────────────────────────────────────────────────────
 
 interface DayRowProps {
   label: string
@@ -309,7 +309,7 @@ function DayRow({
     <div
       className={`rounded-xl border p-3 transition-all ${rowBg} ${savedFlash} ${active ? 'shadow-sm' : ''}`}
     >
-      {/*  Main row  */}
+      {/* ── Main row ─────────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-3">
         {/* Toggle + Day name */}
         <div className="flex items-center gap-2 w-28 flex-shrink-0">
@@ -385,7 +385,7 @@ function DayRow({
                     bg-[#0C6780] text-white hover:bg-[#001E40]
                     disabled:opacity-40 disabled:cursor-default"
                 >
-                  {day.saving ? 'Saving' : 'Save'}
+                  {day.saving ? 'Saving…' : 'Save'}
                 </button>
               </div>
             )}
@@ -406,7 +406,7 @@ function DayRow({
   )
 }
 
-//  TimeSelect 
+// ─── TimeSelect ───────────────────────────────────────────────────────────────
 
 function TimeSelect({
   value,

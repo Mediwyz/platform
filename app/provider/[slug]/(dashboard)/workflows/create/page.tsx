@@ -21,7 +21,7 @@ type WizardData = {
  *
  * Reads the canonical ProviderRole.code from `/api/auth/me.user.userTypeCode`
  * (resolved server-side via the DB-driven RolesResolverService). We NEVER
- * hardcode cookiecode maps on the frontend - provider roles are authored
+ * hardcode cookie→code maps on the frontend - provider roles are authored
  * dynamically by regional admins, so any hardcoded list goes stale the
  * moment a new role is created.
  */

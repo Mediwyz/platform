@@ -13,7 +13,7 @@ function initials(name?: string | null) {
 }
 
 /**
- * Avatar  image with graceful initials fallback (broken/missing src).
+ * Avatar — image with graceful initials fallback (broken/missing src).
  * `size` is a token key; px values map to next/image dimensions.
  */
 export default function Avatar({

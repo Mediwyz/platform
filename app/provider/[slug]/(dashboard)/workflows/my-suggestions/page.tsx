@@ -113,7 +113,7 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
                     <div className="flex flex-wrap gap-1.5">
                       {s.steps?.sort((a, b) => a.order - b.order).map((step, i) => (
                         <div key={step.statusCode} className="flex items-center gap-1">
-                          {i > 0 && <span className="text-faint text-xs"></span>}
+                          {i > 0 && <span className="text-faint text-xs">→</span>}
                           <span className="text-xs bg-subtle text-soft px-2 py-0.5 rounded">{step.label}</span>
                         </div>
                       ))}

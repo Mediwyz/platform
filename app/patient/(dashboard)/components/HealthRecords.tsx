@@ -442,7 +442,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  <p className="text-xs text-soft mb-0.5 sm:mb-1">Temperature</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}</p>
- <p className="text-xs text-soft">C</p>
+ <p className="text-xs text-soft">°C</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
@@ -499,7 +499,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  })}
  </p>
  <p className="text-xs sm:text-sm text-soft">
- {vital.time}  {vital.labTechnician}  {vital.facility}
+ {vital.time} • {vital.labTechnician} • {vital.facility}
  </p>
  </div>
  {index === 0 && (
@@ -520,7 +520,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  <div className="text-center">
  <p className="text-soft">Temp</p>
- <p className="font-medium">{vital.temperature}C</p>
+ <p className="font-medium">{vital.temperature}°C</p>
  </div>
  <div className="text-center">
  <p className="text-soft">Weight</p>

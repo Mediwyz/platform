@@ -145,7 +145,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
               <h4 className="font-bold text-blue-800 mb-2">Required Documents for {selectedType?.label}</h4>
               <ul className="text-blue-700 text-sm space-y-1">
                 {documentRequirements[selectedUserType]?.filter(doc => doc.required).map(doc => (
-                  <li key={doc.id}> {doc.name}</li>
+                  <li key={doc.id}>• {doc.name}</li>
                 ))}
               </ul>
               <p className="text-blue-600 text-xs mt-2">
@@ -275,7 +275,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
             disabled={busy}
             className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#001E40] hover:bg-[#0C6780] text-white disabled:opacity-50"
           >
-            {busy ? 'Submitting' : t('role.request.submit')}
+            {busy ? 'Submitting…' : t('role.request.submit')}
           </button>
         </div>
       </div>

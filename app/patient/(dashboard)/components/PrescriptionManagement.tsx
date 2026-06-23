@@ -307,7 +307,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div>
  <p className="font-medium text-fg text-sm sm:text-base">{prescription.medicines[0]?.name}</p>
  <p className={`text-xs sm:text-sm ${urgency === 'urgent' ? 'text-red-600' : 'text-yellow-600'}`}>
- Refill needed in {days} days  Next refill: {prescription.nextRefill}
+ Refill needed in {days} days • Next refill: {prescription.nextRefill}
  </p>
  </div>
  <Link href="/search/health-shop" className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-xs sm:text-sm inline-block">
@@ -564,7 +564,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
  <div className="flex-1">
  <h4 className="font-semibold text-fg mb-1 text-sm sm:text-base">{reminder.medicineName}</h4>
- <p className="text-xs sm:text-sm text-soft mb-2">{reminder.dosage}  {reminder.frequency}</p>
+ <p className="text-xs sm:text-sm text-soft mb-2">{reminder.dosage} • {reminder.frequency}</p>
  
  <div className="flex flex-wrap gap-2 sm:gap-3">
  {reminder.times.map((time, index) => (
@@ -651,10 +651,10 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-sky-50 rounded-lg sm:rounded-xl">
  <h4 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">Tips for Better Adherence</h4>
  <ul className="text-xs sm:text-sm text-green-700 space-y-1">
- <li> Set consistent daily routines</li>
- <li> Use pill organizers or reminder apps</li>
- <li> Keep medications visible and accessible</li>
- <li> Track your progress regularly</li>
+ <li>• Set consistent daily routines</li>
+ <li>• Use pill organizers or reminder apps</li>
+ <li>• Keep medications visible and accessible</li>
+ <li>• Track your progress regularly</li>
  </ul>
  </div>
  </div>

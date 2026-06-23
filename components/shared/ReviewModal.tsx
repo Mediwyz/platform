@@ -104,7 +104,7 @@ export default function ReviewModal({
             disabled={busy || rating === 0}
             className="flex-1 py-2.5 text-sm font-semibold text-white bg-[#0C6780] rounded-lg hover:bg-[#0a5568] disabled:opacity-50"
           >
-            {busy ? 'Submitting' : 'Submit review'}
+            {busy ? 'Submitting…' : 'Submit review'}
           </button>
         </div>
       </div>

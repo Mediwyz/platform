@@ -52,10 +52,10 @@ const OUTPUT_OPTIONS = [
 ]
 
 const CUSTOM_STEP_EMOJIS = [
-  '','','','','','','','',
-  '','','','','','','','',
-  '','','','','','','','',
-  '','','','','','','','',
+  '📋','✅','⏳','🔍','📝','💬','📞','🚗',
+  '🏥','🩺','💊','🩹','🧪','🔬','📄','🤝',
+  '💪','🌡️','🫀','🧠','👁️','🦷','🩻','🧬',
+  '🏃','🛏️','📦','🔑','🌟','🎯','📱','✍️',
 ]
 
 // Status codes that the engine auto-generates - used to classify legacy steps on load.
@@ -90,7 +90,7 @@ function derivePaymentTiming(mode: string): string {
   return 'ON_ACCEPTANCE'
 }
 
-//  Step template library 
+// ─── Step template library ────────────────────────────────────────────────
 
 type PartialStep = Omit<WorkflowStep, 'order'>
 
@@ -291,7 +291,7 @@ function deriveStepsFromConfig(mode: string, sample: string, output: string): Wo
   return base.map((s, i) => ({ ...s, order: i + 1 })) as WorkflowStep[]
 }
 
-//  Horizontal step illustration 
+// ─── Horizontal step illustration ────────────────────────────────────────
 
 const STEP_CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   pending:   { bg: 'bg-subtle',    border: 'border-line',   text: 'text-soft' },
@@ -331,7 +331,7 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
             ? { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-800' }
             : stepStyle(step)
           const emoji = isCustom
-            ? (step.customEmoji || '')
+            ? (step.customEmoji || '📋')
             : STEP_ICON_EMOJI[inferStepIcon({
                 statusCode: step.statusCode,
                 label: step.label,
@@ -346,11 +346,11 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
               <div className={`relative flex flex-col items-center text-center rounded-xl border-2 px-2.5 py-2 w-[90px] shrink-0 ${bg} ${border}`}>
                 {/* System indicator */}
                 {!isCustom && (
-                  <span className="absolute top-1 right-1 text-[9px] leading-none text-faint" title="System step - auto-generated, locked"></span>
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-faint" title="System step - auto-generated, locked">⚙️</span>
                 )}
                 {/* Custom milestone indicator */}
                 {isCustom && (
-                  <span className="absolute top-1 right-1 text-[9px] leading-none text-emerald-400 font-bold" title="Custom milestone"></span>
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-emerald-400 font-bold" title="Custom milestone">✦</span>
                 )}
                 <span className="text-2xl leading-tight">{emoji}</span>
                 <span className={`text-[11px] font-semibold mt-1 leading-tight line-clamp-2 ${text}`}>
@@ -363,13 +363,13 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
                 )}
                 {/* System step trigger badges */}
                 {!isCustom && !!step.flags?.triggers_video_call && (
-                  <span className="mt-1 text-[9px] bg-blue-100 text-blue-600 rounded px-1"> call</span>
+                  <span className="mt-1 text-[9px] bg-blue-100 text-blue-600 rounded px-1">📹 call</span>
                 )}
                 {!isCustom && !!step.flags?.triggers_audio_call && (
-                  <span className="mt-1 text-[9px] bg-cyan-100 text-cyan-600 rounded px-1"> call</span>
+                  <span className="mt-1 text-[9px] bg-cyan-100 text-cyan-600 rounded px-1">📞 call</span>
                 )}
                 {!isCustom && !!step.flags?.requires_content && (
-                  <span className="mt-1 text-[9px] bg-indigo-100 text-indigo-600 rounded px-1"> attach</span>
+                  <span className="mt-1 text-[9px] bg-indigo-100 text-indigo-600 rounded px-1">📎 attach</span>
                 )}
               </div>
               {/* Arrow connector */}
@@ -388,14 +388,14 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
       </div>
       {/* Legend */}
       <div className="flex items-center gap-4 mt-1 text-[10px] text-faint">
-        <span className="flex items-center gap-1"> System step <span className="text-faint">(auto-generated, locked)</span></span>
-        <span className="flex items-center gap-1 text-emerald-600"> Custom milestone <span className="text-emerald-300">(editable)</span></span>
+        <span className="flex items-center gap-1">⚙️ System step <span className="text-faint">(auto-generated, locked)</span></span>
+        <span className="flex items-center gap-1 text-emerald-600">✦ Custom milestone <span className="text-emerald-300">(editable)</span></span>
       </div>
     </div>
   )
 }
 
-//  Builder component 
+// ─── Builder component ────────────────────────────────────────────────────
 
 interface WorkflowBuilderProps {
   backHref: string
@@ -473,7 +473,7 @@ export default function WorkflowBuilder({
   const [addingCustom,    setAddingCustom]    = useState(false)
   const [newStepAfterIdx, setNewStepAfterIdx] = useState('0')
   const [newStepLabel,    setNewStepLabel]    = useState('')
-  const [newStepEmoji,    setNewStepEmoji]    = useState('')
+  const [newStepEmoji,    setNewStepEmoji]    = useState('📋')
 
   const [saving,          setSaving]          = useState(false)
   const [publishing,      setPublishing]      = useState(false)
@@ -614,7 +614,7 @@ export default function WorkflowBuilder({
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i]
       if (step.kind === 'custom') {
-        // Auto pass-through: provider presses "Continue"  next step
+        // Auto pass-through: provider presses "Continue" → next step
         const next = steps[i + 1]
         if (next) transitions.push({ from: step.statusCode, to: next.statusCode, action: 'proceed', allowedRoles: ['provider'] })
         continue
@@ -640,7 +640,7 @@ export default function WorkflowBuilder({
     const defaultIdx = completedIdx > 0 ? completedIdx - 1 : Math.max(0, steps.length - 2)
     setNewStepAfterIdx(String(defaultIdx))
     setNewStepLabel('')
-    setNewStepEmoji('')
+    setNewStepEmoji('📋')
     setAddingCustom(true)
   }
 
@@ -666,7 +666,7 @@ export default function WorkflowBuilder({
     setStepsCustomized(true)
     setAddingCustom(false)
     setNewStepLabel('')
-    setNewStepEmoji('')
+    setNewStepEmoji('📋')
   }
 
   function removeCustomStep(idx: number) {
@@ -794,7 +794,7 @@ export default function WorkflowBuilder({
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                 isDraft ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
               }`}>
-                {isDraft ? ' Draft' : ' Published'}
+                {isDraft ? '● Draft' : '✓ Published'}
               </span>
             )}
           </div>
@@ -810,7 +810,7 @@ export default function WorkflowBuilder({
             title={issues.length > 0 ? `Fix ${issues.length} issue${issues.length === 1 ? '' : 's'} first` : 'Save as draft'}
             className="bg-surface border border-line hover:border-gray-400 text-soft px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
             <FiSave className="w-4 h-4" />
-            {saving ? 'Saving' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : 'Save Draft'}
+            {saving ? 'Saving…' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : 'Save Draft'}
           </button>
           {isEdit && (
             <button
@@ -818,7 +818,7 @@ export default function WorkflowBuilder({
               disabled={saving || publishing || issues.length > 0}
               title={isDraft ? 'Publish - makes this template active for new bookings' : 'Re-publish with latest changes'}
               className="bg-[#0C6780] hover:bg-[#001E40] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
-              {publishing ? 'Publishing' : isDraft ? 'Publish' : 'Update & Publish'}
+              {publishing ? 'Publishing…' : isDraft ? 'Publish' : 'Update & Publish'}
             </button>
           )}
           {!isEdit && (
@@ -827,7 +827,7 @@ export default function WorkflowBuilder({
               disabled={saving || issues.length > 0}
               title="Create workflow as draft"
               className="bg-[#001E40] hover:bg-[#0C6780] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
-              {saving ? 'Creating' : 'Create Draft'}
+              {saving ? 'Creating…' : 'Create Draft'}
             </button>
           )}
         </div>
@@ -841,7 +841,7 @@ export default function WorkflowBuilder({
       {/* In-flight warning: editing a published template that has active bookings */}
       {!isDraft && inFlightCount > 0 && (
         <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex items-start gap-3">
-          <span className="text-amber-600 text-lg leading-none flex-shrink-0"></span>
+          <span className="text-amber-600 text-lg leading-none flex-shrink-0">⚠</span>
           <div>
             <p className="text-sm font-semibold text-amber-800">
               {inFlightCount} active booking{inFlightCount === 1 ? '' : 's'} are running this template
@@ -859,14 +859,14 @@ export default function WorkflowBuilder({
         <button onClick={() => setView('preview')} className={`flex-1 px-3 py-1.5 rounded-lg transition-colors ${view === 'preview' ? 'bg-[#0C6780] text-white' : 'text-soft hover:bg-subtle'}`}>Preview</button>
       </div>
 
-      {/*  Basic Info  */}
+      {/* ─── Basic Info ──────────────────────────────────────────────── */}
       <div className="bg-surface rounded-xl border border-line p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Basic Information</h2>
           {onRequestWizard && (
             <button type="button" onClick={onRequestWizard}
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] hover:text-fg border border-[#0C6780]/30 hover:border-[#0C6780] bg-[#0C6780]/5 hover:bg-[#0C6780]/10 px-3 py-1.5 rounded-lg transition">
-               Configure with Wizard
+              🪄 Configure with Wizard
             </button>
           )}
         </div>
@@ -928,12 +928,12 @@ export default function WorkflowBuilder({
                 className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
                 <option value=""> - All {providerType.replace(/_/g, ' ')} services (default) - </option>
                 {services.filter(s => !s.serviceMode || s.serviceMode === serviceMode).map(s => (
-                  <option key={s.id} value={s.id}>{s.name}{s.defaultPrice != null ? `  Rs ${s.defaultPrice}` : ''}</option>
+                  <option key={s.id} value={s.id}>{s.name}{s.defaultPrice != null ? ` · Rs ${s.defaultPrice}` : ''}</option>
                 ))}
               </select>
             ) : (
               <p className="text-xs text-faint border border-dashed border-line rounded-lg px-3 py-2">
-                {servicesLoading ? 'Loading services' : `No services yet for ${providerType.replace(/_/g, ' ')}.`}
+                {servicesLoading ? 'Loading services…' : `No services yet for ${providerType.replace(/_/g, ' ')}.`}
               </p>
             )
           ) : (
@@ -949,7 +949,7 @@ export default function WorkflowBuilder({
             className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
         </div>
 
-        {/*  Clinical Configuration (axis-based step generation)  */}
+        {/* ─── Clinical Configuration (axis-based step generation) ── */}
         <div className="border-t border-line pt-4">
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -1031,7 +1031,7 @@ export default function WorkflowBuilder({
         </div>
       ) : (
       <>
-        {/*  Step Flow Illustration  */}
+        {/* ─── Step Flow Illustration ─────────────────────────────── */}
         <div className="bg-surface rounded-xl border border-line p-4">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div>
@@ -1047,7 +1047,7 @@ export default function WorkflowBuilder({
           <StepFlowIllustration steps={steps} />
         </div>
 
-        {/*  Custom Milestones  */}
+        {/* ─── Custom Milestones ──────────────────────────────────── */}
         <div className="space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
@@ -1122,7 +1122,7 @@ export default function WorkflowBuilder({
               <div className="flex items-center gap-2 justify-end pt-1">
                 <button
                   type="button"
-                  onClick={() => { setAddingCustom(false); setNewStepLabel(''); setNewStepEmoji('') }}
+                  onClick={() => { setAddingCustom(false); setNewStepLabel(''); setNewStepEmoji('📋') }}
                   className="text-sm text-soft hover:text-fg px-3 py-1.5 rounded-lg hover:bg-subtle"
                 >
                   Cancel
@@ -1170,13 +1170,13 @@ export default function WorkflowBuilder({
               >
                 {/* Drag handle */}
                 <FiMenu className="text-faint hover:text-soft flex-shrink-0 w-4 h-4" title="Drag to reorder" />
-                <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || ''}</span>
+                <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || '📋'}</span>
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm text-fg">{step.label}</div>
                   <div className="text-xs text-faint mt-0.5">
                     <span>After: <span className="text-soft">{prev?.label || ' - '}</span></span>
                     {next && (
-                      <>  <span>Before: <span className="text-soft">{next.label}</span></span></>
+                      <> · <span>Before: <span className="text-soft">{next.label}</span></span></>
                     )}
                   </div>
                 </div>
@@ -1196,13 +1196,13 @@ export default function WorkflowBuilder({
           })}
         </div>
 
-        {/*  Auto-Generated Transitions  */}
+        {/* ─── Auto-Generated Transitions ─────────────────────────── */}
         <div className="bg-surface rounded-xl border border-line p-5">
           <h2 className="text-sm font-semibold text-soft uppercase tracking-wider mb-3">Auto-Generated Transitions</h2>
           <div className="flex flex-wrap gap-2">
             {generateTransitions().map((tr, i) => (
               <span key={i} className="text-xs bg-subtle border border-line rounded px-2 py-1 text-soft">
-                {tr.from} <span className="text-[#0C6780] font-bold mx-1"></span> {tr.to}
+                {tr.from} <span className="text-[#0C6780] font-bold mx-1">→</span> {tr.to}
                 <span className="text-faint ml-1">({tr.action})</span>
                 <span className="text-faint ml-1">[{tr.allowedRoles.join(', ')}]</span>
               </span>
@@ -1211,7 +1211,7 @@ export default function WorkflowBuilder({
           </div>
         </div>
 
-        {/*  Template Variables  */}
+        {/* ─── Template Variables ──────────────────────────────────── */}
         <div className="bg-sky-50 border border-sky-200 rounded-xl p-4">
           <h3 className="text-sm font-semibold text-fg mb-2">Notification Template Variables</h3>
           <div className="flex flex-wrap gap-2">
@@ -1223,7 +1223,7 @@ export default function WorkflowBuilder({
       </>
       )}
 
-      {/*  Pinned validation panel  */}
+      {/* ─── Pinned validation panel ─────────────────────────────── */}
       {issues.length > 0 && (
         <div className="sticky bottom-4 z-30 bg-amber-50 border border-amber-200 rounded-xl shadow-lg p-3">
           <div className="flex items-center gap-2 font-semibold text-amber-900 text-sm mb-1.5">
@@ -1231,13 +1231,13 @@ export default function WorkflowBuilder({
             {issues.length === 1 ? 'Issue to fix' : 'Issues to fix before saving'}
           </div>
           <ul className="text-xs text-amber-900 space-y-0.5 max-h-32 overflow-y-auto">
-            {issues.slice(0, 8).map((i) => <li key={i.key}> {i.message}</li>)}
-            {issues.length > 8 && <li className="text-amber-700">and {issues.length - 8} more</li>}
+            {issues.slice(0, 8).map((i) => <li key={i.key}>• {i.message}</li>)}
+            {issues.length > 8 && <li className="text-amber-700">…and {issues.length - 8} more</li>}
           </ul>
         </div>
       )}
 
-      {/*  AI-assist modal  */}
+      {/* ─── AI-assist modal ─────────────────────────────────────── */}
       {aiOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setAiOpen(false)}>
           <div className="bg-surface w-full max-w-xl rounded-2xl shadow-2xl p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
@@ -1253,14 +1253,14 @@ export default function WorkflowBuilder({
               rows={6} maxLength={1000}
               className="w-full text-sm border border-line rounded-lg p-3 focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none resize-none" />
             <div className="flex items-center justify-between text-xs">
-              <span className="text-soft">{aiPrompt.length}/1000  {providerType || 'no provider type'}  {serviceMode}</span>
+              <span className="text-soft">{aiPrompt.length}/1000 · {providerType || 'no provider type'} · {serviceMode}</span>
               {aiError && <span className="text-red-600">{aiError}</span>}
             </div>
             <div className="flex justify-end gap-2 pt-1">
               <button onClick={() => { setAiOpen(false); setAiError(null) }} disabled={aiBusy} className="px-3 py-1.5 text-sm text-soft hover:bg-subtle rounded-lg">Cancel</button>
               <button onClick={draftWithAi} disabled={aiBusy || aiPrompt.trim().length < 20}
                 className="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50">
-                <FiZap /> {aiBusy ? 'Drafting' : 'Draft steps'}
+                <FiZap /> {aiBusy ? 'Drafting…' : 'Draft steps'}
               </button>
             </div>
           </div>

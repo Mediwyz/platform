@@ -139,19 +139,19 @@ export default function ConsultationDetails({
  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
  <h4 className="font-semibold text-yellow-800 mb-2">Before Your Consultation</h4>
  <ul className="text-yellow-800 text-sm space-y-1">
- <li> Prepare a list of your current medications</li>
- <li> Note down specific symptoms and when they started</li>
- <li> Bring any recent test results or medical reports</li>
+ <li>• Prepare a list of your current medications</li>
+ <li>• Note down specific symptoms and when they started</li>
+ <li>• Bring any recent test results or medical reports</li>
  {bookingData.type === 'video' && (
  <>
- <li> Ensure stable internet connection and quiet environment</li>
- <li> Test your camera and microphone beforehand</li>
+ <li>• Ensure stable internet connection and quiet environment</li>
+ <li>• Test your camera and microphone beforehand</li>
  </>
  )}
  {bookingData.type === 'in-person' && (
  <>
- <li> Arrive 15 minutes early for check-in</li>
- <li> Bring a valid ID and insurance card (if applicable)</li>
+ <li>• Arrive 15 minutes early for check-in</li>
+ <li>• Bring a valid ID and insurance card (if applicable)</li>
  </>
  )}
  </ul>

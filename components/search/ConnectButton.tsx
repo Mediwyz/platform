@@ -162,7 +162,7 @@ export default function ConnectButton({ providerId, className = '' }: ConnectBut
  aria-label="Send connection request"
  >
  <FaUserPlus className="w-4 h-4" />
- {acting ? 'Sending' : 'Connect'}
+ {acting ? 'Sending…' : 'Connect'}
  </button>
  )
 }

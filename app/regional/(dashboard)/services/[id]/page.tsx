@@ -109,7 +109,7 @@ export default function EditServicePage() {
         </Link>
         <div>
           <h1 className="text-xl font-bold text-fg">Edit Service</h1>
-          <p className="text-sm text-soft">{form.providerType?.replace(/_/g, ' ')}  {form.category}</p>
+          <p className="text-sm text-soft">{form.providerType?.replace(/_/g, ' ')} · {form.category}</p>
         </div>
       </div>
 

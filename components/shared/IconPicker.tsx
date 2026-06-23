@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { Icon } from '@iconify/react'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 
-//  Curated medical icon sets 
+// ─── Curated medical icon sets ────────────────────────────────────────────────
 
 const HEALTHICONS: { key: string; label: string }[] = [
   { key: 'healthicons:ambulance', label: 'Ambulance' },
@@ -85,36 +85,36 @@ const HEALTHICONS: { key: string; label: string }[] = [
 ]
 
 const EMOJIS: { key: string; label: string }[] = [
-  { key: '', label: 'Stethoscope' },
-  { key: '', label: 'Anatomical Heart' },
-  { key: '', label: 'Lungs' },
-  { key: '', label: 'Brain' },
-  { key: '', label: 'Tooth' },
-  { key: '', label: 'Eye' },
-  { key: '', label: 'Bone' },
-  { key: '', label: 'Ear' },
-  { key: '', label: 'Pill' },
-  { key: '', label: 'Syringe' },
-  { key: '', label: 'Blood' },
-  { key: '', label: 'Microscope' },
-  { key: '', label: 'X-Ray' },
-  { key: '', label: 'Bandage' },
-  { key: '', label: 'Ambulance' },
-  { key: '', label: 'Hospital' },
-  { key: '', label: 'Home Visit' },
-  { key: '', label: 'Telemedicine' },
-  { key: '', label: 'Pregnancy' },
-  { key: '', label: 'Baby' },
-  { key: '', label: 'Childcare' },
-  { key: '', label: 'Elderly' },
-  { key: '', label: 'Mental Health' },
-  { key: '', label: 'Physiotherapy' },
-  { key: '', label: 'Nutrition' },
-  { key: '', label: 'Genetics' },
-  { key: '', label: 'Oncology' },
-  { key: '', label: 'Heart Health' },
-  { key: '', label: 'Medical Symbol' },
-  { key: '', label: 'Thermometer' },
+  { key: '🩺', label: 'Stethoscope' },
+  { key: '🫀', label: 'Anatomical Heart' },
+  { key: '🫁', label: 'Lungs' },
+  { key: '🧠', label: 'Brain' },
+  { key: '🦷', label: 'Tooth' },
+  { key: '👁️', label: 'Eye' },
+  { key: '🦴', label: 'Bone' },
+  { key: '👂', label: 'Ear' },
+  { key: '💊', label: 'Pill' },
+  { key: '💉', label: 'Syringe' },
+  { key: '🩸', label: 'Blood' },
+  { key: '🔬', label: 'Microscope' },
+  { key: '🩻', label: 'X-Ray' },
+  { key: '🩹', label: 'Bandage' },
+  { key: '🚑', label: 'Ambulance' },
+  { key: '🏥', label: 'Hospital' },
+  { key: '🏠', label: 'Home Visit' },
+  { key: '📱', label: 'Telemedicine' },
+  { key: '🤰', label: 'Pregnancy' },
+  { key: '👶', label: 'Baby' },
+  { key: '🧸', label: 'Childcare' },
+  { key: '🧓', label: 'Elderly' },
+  { key: '🧘', label: 'Mental Health' },
+  { key: '💪', label: 'Physiotherapy' },
+  { key: '🥗', label: 'Nutrition' },
+  { key: '🧬', label: 'Genetics' },
+  { key: '🎗️', label: 'Oncology' },
+  { key: '❤️', label: 'Heart Health' },
+  { key: '⚕️', label: 'Medical Symbol' },
+  { key: '🌡️', label: 'Thermometer' },
 ]
 
 type TabId = 'healthicons' | 'emoji'

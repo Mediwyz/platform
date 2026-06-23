@@ -142,7 +142,7 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
         <div>
           <h1 className="text-2xl font-bold text-fg">My Bookings</h1>
           <p className="text-sm text-soft mt-1">
-            {loading ? 'Loading' : `${counts.all} booking${counts.all !== 1 ? 's' : ''} across all services`}
+            {loading ? 'Loading…' : `${counts.all} booking${counts.all !== 1 ? 's' : ''} across all services`}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
         <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
         <input
           type="search"
-          placeholder={role === 'patient' ? 'Search by service or provider' : 'Search by service or member name'}
+          placeholder={role === 'patient' ? 'Search by service or provider…' : 'Search by service or member name…'}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="w-full pl-9 pr-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal"
@@ -289,7 +289,7 @@ function EmptyState({
           href="/search/providers"
           className="text-brand-teal hover:text-brand-navy font-medium text-sm"
         >
-          Browse Providers 
+          Browse Providers →
         </Link>
       )}
     </div>

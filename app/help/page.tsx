@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'What if I don\'t have a security question set?',
-    a: 'Log in, open your Profile  Security, and set one before you forget your password. You only need to do this once.',
+    a: 'Log in, open your Profile → Security, and set one before you forget your password. You only need to do this once.',
   },
   {
     q: 'How does my Account Balance work?',
@@ -69,7 +69,7 @@ export default function HelpPage() {
             <details key={i} className="bg-surface rounded-xl border border-line p-5 [&[open]>summary>span:last-child]:rotate-90 group">
               <summary className="flex items-center justify-between cursor-pointer select-none font-semibold text-fg">
                 {f.q}
-                <span className="transition-transform text-faint"></span>
+                <span className="transition-transform text-faint">▸</span>
               </summary>
               <p className="text-sm text-soft mt-3 leading-relaxed">{f.a}</p>
             </details>

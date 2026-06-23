@@ -175,7 +175,7 @@ export default function SearchDashboardWrapper({ children }: { children: React.R
     return <DashboardLoadingState />
   }
 
-  //  GUEST: no user 
+  // ── GUEST: no user ────────────────────────────────────────────────────────
   // Always show the layout with the search sidebar so visitors can browse
   // provider types without needing to log in.
   if (!user) {
@@ -186,7 +186,7 @@ export default function SearchDashboardWrapper({ children }: { children: React.R
     )
   }
 
-  //  AUTHENTICATED 
+  // ── AUTHENTICATED ─────────────────────────────────────────────────────────
   const registryConfig = getSidebarConfig(user.userType)
 
   let sidebarItems: SidebarItem[]

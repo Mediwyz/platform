@@ -13,7 +13,7 @@ import WorkflowStepper from '../WorkflowStepper'
  * runtime - not a dev-facing debug view. Patient tab shows the patient's
  * booking card chrome with the action buttons that step surfaces to them;
  * Provider tab shows the provider dashboard card. Placeholders in
- * notifications ({{patientName}}, ) get filled with demo data so admins
+ * notifications ({{patientName}}, …) get filled with demo data so admins
  * can sanity-check before publishing.
  *
  * Why this matters: the list view of steps is easy for an author but
@@ -27,7 +27,7 @@ const DEMO = {
   providerName: 'Dr Sarah Johnson',
   providerType: 'Doctor',
   serviceName: 'General Consultation',
-  scheduledAt: 'Tue 22 Apr  15:00',
+  scheduledAt: 'Tue 22 Apr · 15:00',
   amount: '500 MUR',
   status: 'confirmed',
   bookingId: 'BK-ABC123',
@@ -149,7 +149,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
         <div className="px-4 py-3 bg-gradient-to-r from-[#001E40] to-[#0C6780] text-white flex items-center justify-between flex-wrap gap-2">
           <div>
             <div className="text-xs text-white/70">{side === 'patient' ? 'Your booking' : 'Patient booking'}</div>
-            <div className="font-semibold">{DEMO.serviceName}  {DEMO.providerName}</div>
+            <div className="font-semibold">{DEMO.serviceName} · {DEMO.providerName}</div>
           </div>
           <div className="text-right">
             <div className="text-xs text-white/70">{DEMO.scheduledAt}</div>
@@ -209,7 +209,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
                       key={`${a.action}-${i}`}
                       type="button"
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg ${styleButton(a.style)}`}
-                      title={` ${a.targetStatus}`}
+                      title={`→ ${a.targetStatus}`}
                       onClick={(e) => {
                         e.preventDefault()
                         const next = steps.findIndex((s) => s.statusCode === a.targetStatus)
@@ -218,7 +218,7 @@ export default function WorkflowPreview({ steps }: { steps: WorkflowStep[] }) {
                     >
                       <Icon className="text-[10px]" />
                       {a.label || a.action}
-                      <span className="text-white/70 text-[10px]"> {a.targetStatus}</span>
+                      <span className="text-white/70 text-[10px]">→ {a.targetStatus}</span>
                     </button>
                   )
                 })}

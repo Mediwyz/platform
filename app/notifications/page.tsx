@@ -10,7 +10,7 @@ import {
 import { type NotificationItem } from '@/hooks/useNotifications'
 import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
-//  helpers 
+// ─── helpers ─────────────────────────────────────────────────────────────────
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -88,7 +88,7 @@ function filterByTab(items: NotificationItem[], tab: Tab): NotificationItem[] {
   }
 }
 
-//  Page 
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function NotificationsPage() {
   const router = useRouter()

@@ -121,14 +121,14 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 >
                   <FaCamera className="w-8 h-8 group-hover:scale-110 transition-transform" />
                   <span className="text-sm font-medium">Upload receipt photo</span>
-                  <span className="text-xs text-faint">JPG, PNG, WEBP  Max 10 MB</span>
+                  <span className="text-xs text-faint">JPG, PNG, WEBP · Max 10 MB</span>
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-3 py-10">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {preview && <img src={preview} alt="receipt" className="w-24 h-24 object-cover rounded-xl shadow" />}
                   <FaSpinner className="w-6 h-6 animate-spin text-[#0C6780]" />
-                  <p className="text-sm text-soft">Scanning receipt with AI</p>
+                  <p className="text-sm text-soft">Scanning receipt with AI…</p>
                 </div>
               )}
 
@@ -152,8 +152,8 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                   <FaCheckCircle className="flex-shrink-0" />
                   <span>
                     Receipt scanned
-                    {ocr.merchantName && <>  <span className="font-medium">{ocr.merchantName}</span></>}
-                    {ocr.receiptDate && <>  {ocr.receiptDate}</>}
+                    {ocr.merchantName && <> · <span className="font-medium">{ocr.merchantName}</span></>}
+                    {ocr.receiptDate && <> · {ocr.receiptDate}</>}
                   </span>
                 </div>
               )}
@@ -226,7 +226,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
           {step === 'submitting' && (
             <div className="flex flex-col items-center gap-3 py-10">
               <FaSpinner className="w-7 h-7 animate-spin text-[#0C6780]" />
-              <p className="text-sm text-soft">Submitting your claim</p>
+              <p className="text-sm text-soft">Submitting your claim…</p>
             </div>
           )}
 

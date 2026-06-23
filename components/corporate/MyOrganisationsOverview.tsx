@@ -1,10 +1,10 @@
 'use client'
 
 /**
- * MyOrganisationsOverview  the multi-organisation summary at the top of the
+ * MyOrganisationsOverview — the multi-organisation summary at the top of the
  * "My Company" page. Shows every healthcare entity the user founded or is a
  * member of, grouped by category (clinics, hospitals, labs, pharmacies,
- * self-employed practice). Each category shows the org names (or "0  none
+ * self-employed practice). Each category shows the org names (or "0 — none
  * yet"), a Create button, and a per-owned-org member invite.
  *
  * Insurance / employer companies live in the corporate subsystem and are
@@ -95,7 +95,7 @@ export default function MyOrganisationsOverview() {
       const json = await res.json()
       if (json.success) setData({ owned: json.data.owned ?? [], member: json.data.member ?? [] })
     } catch {
-      /* leave empty  each category still renders its create CTA */
+      /* leave empty — each category still renders its create CTA */
     } finally {
       setLoading(false)
     }
@@ -218,9 +218,9 @@ export default function MyOrganisationsOverview() {
                 </button>
               </div>
 
-              {/* Org list  or empty state */}
+              {/* Org list — or empty state */}
               {orgs.length === 0 ? (
-                <p className="text-xs text-faint mt-3 pl-13">None yet  create your first {cat.label.toLowerCase().replace(/s$/, '')} above.</p>
+                <p className="text-xs text-faint mt-3 pl-13">None yet — create your first {cat.label.toLowerCase().replace(/s$/, '')} above.</p>
               ) : (
                 <ul className="mt-3 space-y-2">
                   {orgs.map(o => (
@@ -233,7 +233,7 @@ export default function MyOrganisationsOverview() {
                             : <span className="text-[10px] font-medium text-soft">{o.role || 'Member'}</span>}
                         </div>
                         <p className="text-[11px] text-faint">
-                          {o.city ? `${o.city}  ` : ''}{o.isOwner ? `${o.memberCount ?? 0} member${(o.memberCount ?? 0) !== 1 ? 's' : ''}` : 'You are a member'}
+                          {o.city ? `${o.city} · ` : ''}{o.isOwner ? `${o.memberCount ?? 0} member${(o.memberCount ?? 0) !== 1 ? 's' : ''}` : 'You are a member'}
                         </p>
                       </div>
                       {o.isOwner && (

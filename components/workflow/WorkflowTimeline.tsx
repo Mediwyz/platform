@@ -19,7 +19,7 @@ interface StepLogEntry {
 interface WorkflowTimelineProps {
  steps: StepLogEntry[]
  currentStatus: string
- /** Status code  category lookup (from engine's allSteps). Optional;
+ /** Status code → category lookup (from engine's allSteps). Optional;
   *  timeline falls back to legacy derivation when absent. */
  categoryByStatus?: Record<string, StepCategory>
 }

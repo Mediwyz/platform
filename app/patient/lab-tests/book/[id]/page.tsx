@@ -190,7 +190,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "mcb-juice",
  name: "MCB Juice",
  description: "Pay instantly with MCB Juice mobile payment",
- icon: "",
+ icon: "📱",
  available: true
  },
  {
@@ -199,7 +199,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's health screening benefits",
  discount: 25,
- icon: "",
+ icon: "🏢",
  available: true
  },
  {
@@ -208,7 +208,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Insurance Coverage",
  description: "Apply health insurance (80% covered)",
  discount: 80,
- icon: "",
+ icon: "🛡️",
  available: true
  },
  {
@@ -217,7 +217,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Screening Package",
  description: "Use your active health screening subscription",
  discount: 100,
- icon: "",
+ icon: "💳",
  available: true
  }
 ]
@@ -245,7 +245,7 @@ export default function LabTestingBooking() {
  specializations: [],
  operatingHours: "",
  homeCollection: false,
- avatar: "",
+ avatar: "🔬",
  },
  selectedTests: [fallbackTests[0]],
  date: "",
@@ -286,7 +286,7 @@ export default function LabTestingBooking() {
  specializations: [],
  operatingHours: "Monday - Saturday: 7:00 AM - 5:00 PM",
  homeCollection: true,
- avatar: "",
+ avatar: "🔬",
  }
  setLabFacility(facility)
  setAppointmentDetails(prev => ({ ...prev, labFacility: facility }))
@@ -732,9 +732,9 @@ export default function LabTestingBooking() {
  <h3 className="font-bold text-lg mb-2">Lab Visit</h3>
  <p className="text-soft text-sm mb-2">Visit our laboratory for sample collection</p>
  <div className="text-xs text-soft space-y-1">
- <p> Professional sample collection</p>
- <p> Immediate sample processing</p>
- <p> No additional charges</p>
+ <p>• Professional sample collection</p>
+ <p>• Immediate sample processing</p>
+ <p>• No additional charges</p>
  </div>
  </div>
  </label>
@@ -759,9 +759,9 @@ export default function LabTestingBooking() {
  <h3 className="font-bold text-lg mb-2">Home Collection</h3>
  <p className="text-soft text-sm mb-2">Trained technician visits your home</p>
  <div className="text-xs text-soft space-y-1">
- <p> Convenient home service</p>
- <p> Sterile collection procedures</p>
- <p> Additional Rs 150 service fee</p>
+ <p>• Convenient home service</p>
+ <p>• Sterile collection procedures</p>
+ <p>• Additional Rs 150 service fee</p>
  </div>
  </div>
  </label>
@@ -785,7 +785,7 @@ export default function LabTestingBooking() {
  <p className="font-medium text-orange-800">{test.name}</p>
  <ul className="text-orange-700 text-xs mt-1 space-y-1">
  {test.preparationInstructions.map((instruction, idx) => (
- <li key={idx}> {instruction}</li>
+ <li key={idx}>• {instruction}</li>
  ))}
  </ul>
  </div>
@@ -1175,7 +1175,7 @@ export default function LabTestingBooking() {
  <div className="space-y-2 text-sm">
  <p><span className="text-blue-200">Name:</span> {appointmentDetails.labFacility.name}</p>
  <p><span className="text-blue-200">Location:</span> {appointmentDetails.labFacility.location}</p>
- <p><span className="text-blue-200">Rating:</span> {appointmentDetails.labFacility.rating}</p>
+ <p><span className="text-blue-200">Rating:</span> {appointmentDetails.labFacility.rating}⭐</p>
  </div>
  </div>
  
@@ -1197,7 +1197,7 @@ export default function LabTestingBooking() {
  </div>
  <div className="text-blue-100 text-sm space-y-1">
  {appointmentDetails.selectedTests.map((test, index) => (
- <p key={index}> {test.name}</p>
+ <p key={index}>• {test.name}</p>
  ))}
  </div>
  </div>
@@ -1219,7 +1219,7 @@ export default function LabTestingBooking() {
  <p className="font-medium">{test.name}:</p>
  <ul className="mt-1 space-y-1">
  {test.preparationInstructions.map((instruction, idx) => (
- <li key={idx} className="text-xs"> {instruction}</li>
+ <li key={idx} className="text-xs">• {instruction}</li>
  ))}
  </ul>
  </div>
@@ -1238,13 +1238,13 @@ export default function LabTestingBooking() {
  <div>
  <h4 className="font-semibold text-green-800 mb-2">Secure Result Delivery</h4>
  <ul className="text-green-800 text-sm space-y-1">
- <li> Results will be available in your patient portal</li>
- <li> Email notification when reports are ready</li>
- <li> SMS alerts for critical values</li>
+ <li>• Results will be available in your patient portal</li>
+ <li>• Email notification when reports are ready</li>
+ <li>• SMS alerts for critical values</li>
  {appointmentDetails.doctorNotification && (
- <li> Doctor will be automatically notified: {appointmentDetails.doctorEmail}</li>
+ <li>• Doctor will be automatically notified: {appointmentDetails.doctorEmail}</li>
  )}
- <li> Physical reports available for pickup</li>
+ <li>• Physical reports available for pickup</li>
  </ul>
  </div>
  </div>
@@ -1261,7 +1261,7 @@ export default function LabTestingBooking() {
  <p className="text-blue-700 font-medium">Accreditations:</p>
  <ul className="text-blue-600 text-xs space-y-1">
  {appointmentDetails.labFacility.certifications.map((cert, index) => (
- <li key={index}> {cert}</li>
+ <li key={index}>• {cert}</li>
  ))}
  </ul>
  </div>
@@ -1269,7 +1269,7 @@ export default function LabTestingBooking() {
  <p className="text-blue-700 font-medium">Equipment:</p>
  <ul className="text-blue-600 text-xs space-y-1">
  {appointmentDetails.labFacility.equipment.slice(0, 3).map((equipment, index) => (
- <li key={index}> {equipment}</li>
+ <li key={index}>• {equipment}</li>
  ))}
  </ul>
  </div>

@@ -83,9 +83,9 @@ export default function OrgDetailPage() {
   if (!entity) {
     return (
       <div className="min-h-screen bg-subtle flex flex-col items-center justify-center gap-4">
-        <span className="text-5xl"></span>
+        <span className="text-5xl">🏥</span>
         <h2 className="font-bold text-fg text-xl">Organization not found</h2>
-        <Link href="/search/organizations" className="text-[#0C6780] text-sm hover:underline"> Back to organizations</Link>
+        <Link href="/search/organizations" className="text-[#0C6780] text-sm hover:underline">← Back to organizations</Link>
       </div>
     )
   }
@@ -107,7 +107,7 @@ export default function OrgDetailPage() {
               {entity.logoUrl ? (
                 <Image src={entity.logoUrl} alt={entity.name} width={48} height={48} className="rounded-xl object-cover" />
               ) : (
-                <span className="text-3xl"></span>
+                <span className="text-3xl">🏥</span>
               )}
             </div>
             <div>

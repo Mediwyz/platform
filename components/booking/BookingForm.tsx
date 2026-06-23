@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fa'
 import { FiArrowRight } from 'react-icons/fi'
 
-//  Types 
+// ─── Types ──────────────────────────────────────────────────────────────────────
 
 export interface BookingSubmitData {
  scheduledDate: string
@@ -77,7 +77,7 @@ interface BookingFormProps {
  walletBalance?: number
 }
 
-//  Helpers 
+// ─── Helpers ────────────────────────────────────────────────────────────────────
 
 const MODE_LABELS: Record<string, string> = { office: 'In-Person', home: 'Home Visit', video: 'Video' }
 const MODE_COLORS: Record<string, string> = {
@@ -188,7 +188,7 @@ function getStepLabels(providerType: BookingFormProps['providerType']): string[]
  }
 }
 
-//  Component 
+// ─── Component ──────────────────────────────────────────────────────────────────
 
 export default function BookingForm({
  providerType,
@@ -249,7 +249,7 @@ export default function BookingForm({
 
  const isReasonRequired = providerType === 'doctor' || providerType === 'nurse'
 
- //  Validation 
+ // ── Validation ──────────────────────────────────────────────────────────────
 
  const canAdvanceStep1 = useMemo(() => {
  switch (providerType) {
@@ -313,7 +313,7 @@ export default function BookingForm({
  return null
  }, [step, canAdvanceStep1, canAdvanceStep2, providerType, testName, sampleType, emergencyType, location, contactNumber, scheduledDate, scheduledTime, reason, isReasonRequired])
 
- //  Build submit data 
+ // ── Build submit data ───────────────────────────────────────────────────────
 
  function buildSubmitData(): BookingSubmitData {
  const data: BookingSubmitData = {
@@ -349,7 +349,7 @@ export default function BookingForm({
  }
  }
 
- //  Navigation 
+ // ── Navigation ──────────────────────────────────────────────────────────────
 
  function goNext() {
  if (step < totalSteps) setStep(step + 1)
@@ -359,7 +359,7 @@ export default function BookingForm({
  if (step > 1) setStep(step - 1)
  }
 
- //  JSX 
+ // ── JSX ─────────────────────────────────────────────────────────────────────
 
  // Auth gate - show sign-in prompt if not authenticated
  if (!authLoading && !user) {
@@ -390,7 +390,7 @@ export default function BookingForm({
 
  return (
  <div className="space-y-6">
- {/*  Provider Info Card  */}
+ {/* ── Provider Info Card ─────────────────────────────────────────────── */}
  {providerName && (
  <div className="bg-surface rounded-2xl p-6 shadow-lg border border-line">
  <div className="flex items-center gap-4">
@@ -432,7 +432,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/*  Step Indicator  */}
+ {/* ── Step Indicator ────────────────────────────────────────────────── */}
  <div className="bg-surface rounded-2xl p-5 shadow-lg border border-line">
  <div className="flex items-center justify-between max-w-lg mx-auto">
  {stepLabels.map((label, index) => {
@@ -474,7 +474,7 @@ export default function BookingForm({
  </div>
  </div>
 
- {/*  Step 1  */}
+ {/* ── Step 1 ────────────────────────────────────────────────────────── */}
  {step === 1 && (
  <div className="bg-surface rounded-2xl p-6 sm:p-8 shadow-lg border border-line">
  <h2 className="text-xl font-bold text-fg mb-6">
@@ -600,7 +600,7 @@ export default function BookingForm({
                 {/* Mini step list for this specific workflow */}
                 {wf.steps.length > 0 && (
                  <p className="text-[9px] text-faint mt-0.5 max-w-[160px]">
-                  {[...wf.steps].sort((a,b)=>a.order-b.order).map(s=>s.label).join('  ')}
+                  {[...wf.steps].sort((a,b)=>a.order-b.order).map(s=>s.label).join(' → ')}
                  </p>
                 )}
                </div>
@@ -721,7 +721,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/*  Step 2 - Schedule  */}
+ {/* ── Step 2 - Schedule ─────────────────────────────────────────────── */}
  {step === 2 && (
  <div className="bg-surface rounded-2xl p-6 sm:p-8 shadow-lg border border-line">
  <h2 className="text-xl font-bold text-fg mb-6">Schedule Appointment</h2>
@@ -837,7 +837,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/*  Step 3 - Review & Submit  */}
+ {/* ── Step 3 - Review & Submit ──────────────────────────────────────── */}
  {step === 3 && (
  <div className="space-y-6">
  {/* Summary card */}
@@ -1000,7 +1000,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/*  Submission Error  */}
+ {/* ── Submission Error ──────────────────────────────────────────────── */}
  {submitError && (
  <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
  <span className="text-red-500 text-lg font-bold leading-none mt-0.5">!</span>
@@ -1011,7 +1011,7 @@ export default function BookingForm({
  </div>
  )}
 
- {/*  Navigation Buttons  */}
+ {/* ── Navigation Buttons ────────────────────────────────────────────── */}
  <div className="flex justify-between items-center">
  {step > 1 ? (
  <button

@@ -126,7 +126,7 @@ export default function SupportPage() {
                 disabled={busy}
                 className="w-full py-2.5 bg-[#0C6780] text-white rounded-lg font-medium hover:bg-[#0a5568] disabled:bg-gray-300"
               >
-                {busy ? 'Sending' : 'Send message'}
+                {busy ? 'Sending…' : 'Send message'}
               </button>
             </form>
           )}
