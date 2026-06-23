@@ -67,12 +67,16 @@ export default function FoodDiaryTab() {
    const json = await res.json()
    if (!json.success) throw new Error(json.message || 'Failed to load food diary')
    const d = json.data
-   const entries: FoodEntry[] = [
-    ...(d.breakfast || []),
-    ...(d.lunch || []),
-    ...(d.dinner || []),
-    ...(d.snack || []),
-   ]
+   // Backend returns a flat `entries` array (+ a `grouped` map). Older shape
+   // nested meals at the top level — support both so logged food shows up.
+   const entries: FoodEntry[] = Array.isArray(d.entries)
+    ? d.entries
+    : [
+       ...(d.grouped?.breakfast || d.breakfast || []),
+       ...(d.grouped?.lunch || d.lunch || []),
+       ...(d.grouped?.dinner || d.dinner || []),
+       ...(d.grouped?.snack || d.snack || []),
+      ]
    const newData = {
     entries,
     totalCalories: d.totalCalories ?? 0,

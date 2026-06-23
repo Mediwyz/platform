@@ -87,7 +87,7 @@ export default function CorporateEmployeesPage() {
    )}
 
    <div className="flex items-center justify-between">
-    <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+    <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
      <FaUsers className="text-blue-500" /> Employee Management
     </h1>
     {pendingCount > 0 && (
@@ -106,7 +106,7 @@ export default function CorporateEmployeesPage() {
       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
        activeTab === tab
         ? 'bg-blue-600 text-white'
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        : 'bg-subtle text-soft hover:bg-line'
       }`}
      >
       {tab === 'all' ? 'All' : tab === 'pending' ? `Pending (${pendingCount})` : 'Active'}
@@ -115,7 +115,7 @@ export default function CorporateEmployeesPage() {
    </div>
 
    <div className="relative">
-    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
     <input
      type="text"
      placeholder="Search members..."
@@ -125,14 +125,14 @@ export default function CorporateEmployeesPage() {
     />
    </div>
 
-   <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+   <div className="bg-surface rounded-xl shadow-lg overflow-hidden">
     {loading ? (
      <div className="flex items-center justify-center min-h-[400px]">
       <FaSpinner className="animate-spin text-blue-600 text-3xl" />
      </div>
     ) : filteredMembers.length === 0 ? (
-     <div className="text-center py-12 text-gray-500">
-      <FaUsers className="text-4xl mx-auto mb-3 text-gray-300" />
+     <div className="text-center py-12 text-soft">
+      <FaUsers className="text-4xl mx-auto mb-3 text-faint" />
       <p className="text-lg font-medium">No members found</p>
       <p className="text-sm mt-1">Members will appear here when employees enroll through your company.</p>
      </div>
@@ -140,19 +140,19 @@ export default function CorporateEmployeesPage() {
      <>
       {/* Desktop table */}
       <div className="overflow-x-auto"><table className="w-full text-sm hidden sm:table">
-       <thead className="bg-gray-50">
+       <thead className="bg-subtle">
         <tr>
-         <th className="p-3 text-left font-medium text-gray-700">Employee</th>
-         <th className="p-3 text-left font-medium text-gray-700">Status</th>
-         <th className="p-3 text-left font-medium text-gray-700">Actions</th>
+         <th className="p-3 text-left font-medium text-soft">Employee</th>
+         <th className="p-3 text-left font-medium text-soft">Status</th>
+         <th className="p-3 text-left font-medium text-soft">Actions</th>
         </tr>
        </thead>
        <tbody>
         {filteredMembers.map((m) => (
-         <tr key={m.id} className="border-b hover:bg-gray-50">
+         <tr key={m.id} className="border-b hover:bg-subtle">
           <td className="p-3">
-           <p className="font-medium text-gray-900">{m.user.firstName} {m.user.lastName}</p>
-           <p className="text-gray-500 text-xs">{m.user.email}</p>
+           <p className="font-medium text-fg">{m.user.firstName} {m.user.lastName}</p>
+           <p className="text-soft text-xs">{m.user.email}</p>
           </td>
           <td className="p-3">
            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
@@ -193,13 +193,13 @@ export default function CorporateEmployeesPage() {
       </table></div>
 
       {/* Mobile card view */}
-      <div className="sm:hidden divide-y divide-gray-100">
+      <div className="sm:hidden divide-y divide-line">
        {filteredMembers.map((m) => (
         <div key={m.id} className="p-4 space-y-2">
          <div className="flex items-center justify-between">
           <div>
-           <p className="font-medium text-gray-900">{m.user.firstName} {m.user.lastName}</p>
-           <p className="text-gray-500 text-xs">{m.user.email}</p>
+           <p className="font-medium text-fg">{m.user.firstName} {m.user.lastName}</p>
+           <p className="text-soft text-xs">{m.user.email}</p>
           </div>
           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
            m.status === 'active'

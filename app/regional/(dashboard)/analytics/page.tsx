@@ -9,9 +9,9 @@ import { useT } from '@/lib/i18n/useT'
  *
  * Visualises the per-template stats already computed server-side at
  * `/api/workflow/templates/stats`. Each template shows:
- *   • instances today / 7 days / all-time
- *   • completed count
- *   • drop-off rate (cancelled ÷ total)
+ *    instances today / 7 days / all-time
+ *    completed count
+ *    drop-off rate (cancelled  total)
  * With a top-level summary row + a simple bar chart per template.
  */
 interface Stats {
@@ -73,10 +73,10 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
           <FiActivity className="text-brand-teal" /> {t('analytics.title')}
         </h1>
-        <p className="text-sm text-gray-500 mt-1">{t('analytics.subtitle')}</p>
+        <p className="text-sm text-soft mt-1">{t('analytics.subtitle')}</p>
       </div>
 
       {/* Top-level summary */}
@@ -88,39 +88,39 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Per-template bars */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Templates by volume</h2>
-          {loading && <span className="text-xs text-gray-400">Loading…</span>}
+      <div className="bg-surface rounded-xl border border-line">
+        <div className="px-4 py-3 border-b border-line flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Templates by volume</h2>
+          {loading && <span className="text-xs text-faint">Loading</span>}
         </div>
 
         {!loading && rows.length === 0 && (
-          <p className="text-sm text-gray-500 text-center py-10">
+          <p className="text-sm text-soft text-center py-10">
             No templates yet. Seed data or create a workflow to see analytics.
           </p>
         )}
 
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-line">
           {rows.map(({ tpl, s }) => (
             <div key={tpl.id} className="px-4 py-3">
               <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{tpl.name}</p>
-                  <p className="text-[11px] text-gray-500">
-                    {tpl.providerType.replace(/_/g, ' ')} · {tpl.serviceMode}
-                    {tpl.isDefault && <span className="ml-2 text-[10px] bg-gray-100 px-1 rounded">default</span>}
+                  <p className="text-sm font-medium text-fg truncate">{tpl.name}</p>
+                  <p className="text-[11px] text-soft">
+                    {tpl.providerType.replace(/_/g, ' ')}  {tpl.serviceMode}
+                    {tpl.isDefault && <span className="ml-2 text-[10px] bg-subtle px-1 rounded">default</span>}
                   </p>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-gray-600 flex-shrink-0">
-                  <span><span className="font-semibold text-gray-900">{s.today}</span> today</span>
-                  <span><span className="font-semibold text-gray-900">{s.week}</span> 7d</span>
-                  <span><span className="font-semibold text-gray-900">{s.total}</span> total</span>
+                <div className="flex items-center gap-3 text-xs text-soft flex-shrink-0">
+                  <span><span className="font-semibold text-fg">{s.today}</span> today</span>
+                  <span><span className="font-semibold text-fg">{s.week}</span> 7d</span>
+                  <span><span className="font-semibold text-fg">{s.total}</span> total</span>
                   <span className={s.dropOffRate >= 40 ? 'text-red-600' : s.dropOffRate >= 20 ? 'text-amber-600' : 'text-emerald-600'}>
                     <span className="font-semibold">{s.dropOffRate}%</span> drop-off
                   </span>
                 </div>
               </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-2 bg-subtle rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-brand-navy to-brand-teal"
                   style={{ width: `${Math.min(100, (s.total / maxTotal) * 100)}%` }}
@@ -141,13 +141,13 @@ function StatCard({
   label: string; value: number | string; color: string; bg: string
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+    <div className="bg-surface rounded-xl border border-line p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center`}>
         <Icon className={`${color} text-lg`} />
       </div>
       <div>
-        <p className="text-xl font-bold text-gray-900">{value}</p>
-        <p className="text-[11px] text-gray-500 uppercase tracking-wider">{label}</p>
+        <p className="text-xl font-bold text-fg">{value}</p>
+        <p className="text-[11px] text-soft uppercase tracking-wider">{label}</p>
       </div>
     </div>
   )

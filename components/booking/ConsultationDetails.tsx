@@ -24,12 +24,12 @@ export default function ConsultationDetails({
 
  return (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Consultation Information</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Consultation Information</h2>
  
  <div className="space-y-6">
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">
+ <label className="block text-soft text-sm font-medium mb-2">
  Reason for Consultation *
  </label>
  <select
@@ -60,7 +60,7 @@ export default function ConsultationDetails({
  </div>
 
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">
+ <label className="block text-soft text-sm font-medium mb-2">
  Additional Notes (Optional)
  </label>
  <textarea
@@ -70,28 +70,28 @@ export default function ConsultationDetails({
  placeholder="Please describe your symptoms, concerns, or any relevant medical history..."
  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-blue-600"
  />
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  This information helps the doctor prepare for your consultation
  </p>
  </div>
 
  {/* Appointment Summary */}
  <div className=" rounded-xl p-6 border border-blue-100">
- <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+ <h3 className="font-bold text-fg mb-4 flex items-center gap-2">
  <FaInfoCircle className="text-blue-600" />
  Appointment Summary
  </h3>
  <div className="grid md:grid-cols-2 gap-4 text-sm">
  <div>
- <span className="text-gray-600">Doctor:</span>
+ <span className="text-soft">Doctor:</span>
  <p className="font-semibold">Dr. {bookingData.doctor.firstName} {bookingData.doctor.lastName}</p>
  </div>
  <div>
- <span className="text-gray-600">Specialty:</span>
+ <span className="text-soft">Specialty:</span>
  <p className="font-semibold">{bookingData.doctor.specialty.join(', ')}</p>
  </div>
  <div>
- <span className="text-gray-600">Date:</span>
+ <span className="text-soft">Date:</span>
  <p className="font-semibold">
  {bookingData.date ? new Date(bookingData.date).toLocaleDateString('en-US', {
  weekday: 'long',
@@ -102,17 +102,17 @@ export default function ConsultationDetails({
  </p>
  </div>
  <div>
- <span className="text-gray-600">Time:</span>
+ <span className="text-soft">Time:</span>
  <p className="font-semibold">{bookingData.time || 'Not selected'}</p>
  </div>
  <div>
- <span className="text-gray-600">Type:</span>
+ <span className="text-soft">Type:</span>
  <p className="font-semibold">
  {bookingData.type === "video" ? "Video Consultation" : "In-Person Visit"}
  </p>
  </div>
  <div>
- <span className="text-gray-600">Fee:</span>
+ <span className="text-soft">Fee:</span>
  <p className="font-semibold text-green-600">
  Rs {(bookingData.type === 'video' 
  ? bookingData.doctor.videoConsultationFee 
@@ -121,7 +121,7 @@ export default function ConsultationDetails({
  </p>
  </div>
  <div>
- <span className="text-gray-600">Location:</span>
+ <span className="text-soft">Location:</span>
  <p className="font-semibold">
  {bookingData.type === "video" 
  ? "Online Video Call" 
@@ -129,7 +129,7 @@ export default function ConsultationDetails({
  </p>
  </div>
  <div>
- <span className="text-gray-600">Next Available:</span>
+ <span className="text-soft">Next Available:</span>
  <p className="font-semibold text-blue-600">{bookingData.doctor.nextAvailable}</p>
  </div>
  </div>
@@ -139,19 +139,19 @@ export default function ConsultationDetails({
  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
  <h4 className="font-semibold text-yellow-800 mb-2">Before Your Consultation</h4>
  <ul className="text-yellow-800 text-sm space-y-1">
- <li>• Prepare a list of your current medications</li>
- <li>• Note down specific symptoms and when they started</li>
- <li>• Bring any recent test results or medical reports</li>
+ <li> Prepare a list of your current medications</li>
+ <li> Note down specific symptoms and when they started</li>
+ <li> Bring any recent test results or medical reports</li>
  {bookingData.type === 'video' && (
  <>
- <li>• Ensure stable internet connection and quiet environment</li>
- <li>• Test your camera and microphone beforehand</li>
+ <li> Ensure stable internet connection and quiet environment</li>
+ <li> Test your camera and microphone beforehand</li>
  </>
  )}
  {bookingData.type === 'in-person' && (
  <>
- <li>• Arrive 15 minutes early for check-in</li>
- <li>• Bring a valid ID and insurance card (if applicable)</li>
+ <li> Arrive 15 minutes early for check-in</li>
+ <li> Bring a valid ID and insurance card (if applicable)</li>
  </>
  )}
  </ul>
@@ -161,7 +161,7 @@ export default function ConsultationDetails({
  <div className="flex justify-between mt-8">
  <button
  onClick={onBack}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>

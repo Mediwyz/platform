@@ -7,7 +7,7 @@ interface ProgressStepsProps {
 
 export default function ProgressSteps({ currentStep }: ProgressStepsProps) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-2 sm:p-6 shadow-lg mb-4 sm:mb-8 w-full max-w-full overflow-hidden">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-2 sm:p-6 shadow-lg mb-4 sm:mb-8 w-full max-w-full overflow-hidden">
  {/* Mobile: compact dot stepper with current step label */}
  <div className="sm:hidden flex items-center justify-center gap-3 py-1">
  <div className="flex items-center gap-1.5">
@@ -27,7 +27,7 @@ export default function ProgressSteps({ currentStep }: ProgressStepsProps) {
  <span className="text-xs font-semibold text-blue-600">
  {steps.find(s => s.number === currentStep)?.title}
  </span>
- <span className="text-[10px] text-gray-400">
+ <span className="text-[10px] text-faint">
  {currentStep}/{steps.length}
  </span>
  </div>
@@ -40,19 +40,19 @@ export default function ProgressSteps({ currentStep }: ProgressStepsProps) {
  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-base ${
  currentStep > step.number ? "bg-green-500 text-white" :
  currentStep === step.number ? "bg-blue-600 text-white" :
- "bg-gray-200 text-gray-600"
+ "bg-line text-soft"
  }`}>
  {currentStep > step.number ? <FaCheck /> : <step.icon />}
  </div>
  <span className={`text-sm mt-2 font-medium text-center leading-tight ${
- currentStep >= step.number ? "text-blue-600" : "text-gray-500"
+ currentStep >= step.number ? "text-blue-600" : "text-soft"
  }`}>
  {step.title}
  </span>
  </div>
  {index < steps.length - 1 && (
  <div className={`flex-1 h-1 mx-4 min-w-[20px] ${
- currentStep > step.number ? "bg-green-500" : "bg-gray-200"
+ currentStep > step.number ? "bg-green-500" : "bg-line"
  }`} />
  )}
  </div>

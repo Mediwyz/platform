@@ -263,13 +263,13 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
 
  const renderBookingForm = () => (
  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
  <div className="p-4 sm:p-5 md:p-6 border-b border-blue-200">
  <div className="flex items-center justify-between">
- <h3 className="text-lg sm:text-xl font-bold text-gray-900">Book Doctor Consultation</h3>
+ <h3 className="text-lg sm:text-xl font-bold text-fg">Book Doctor Consultation</h3>
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+ className="p-1.5 sm:p-2 text-faint hover:text-soft rounded-lg hover:bg-subtle"
  >
  <FaTimes className="text-lg sm:text-xl" />
  </button>
@@ -282,8 +282,8 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
  <FaCheckCircle className="text-green-500 text-3xl" />
  </div>
- <h4 className="text-lg font-semibold text-gray-900 mb-2">Booking Submitted!</h4>
- <p className="text-gray-600 text-sm">Your consultation request has been sent. You will be notified once the doctor confirms.</p>
+ <h4 className="text-lg font-semibold text-fg mb-2">Booking Submitted!</h4>
+ <p className="text-soft text-sm">Your consultation request has been sent. You will be notified once the doctor confirms.</p>
  </div>
  ) : (
  <>
@@ -295,7 +295,7 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  name: d.name,
  subtitle: d.specialty.join(', '),
  tags: [
- ...(d.rating ? [`★ ${d.rating}`] : []),
+ ...(d.rating ? [` ${d.rating}`] : []),
  ...(d.consultationFee ? [`Rs ${d.consultationFee}`] : []),
  ...(d.location ? [d.location] : []),
  ],
@@ -312,11 +312,11 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  {/* Step 2: Select Service (if doctor has services configured) */}
  {selectedDoctorId && (
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
- Select Service {doctorServices.length > 0 && <span className="text-gray-400 font-normal">(optional)</span>}
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
+ Select Service {doctorServices.length > 0 && <span className="text-faint font-normal">(optional)</span>}
  </h4>
  {loadingServices ? (
- <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
+ <div className="flex items-center gap-2 text-sm text-soft py-2">
  <FaSpinner className="animate-spin" /> Loading services...
  </div>
  ) : doctorServices.length > 0 ? (
@@ -328,30 +328,30 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  className={`p-3 border rounded-lg text-left transition ${
  selectedServiceId === s.id
  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-200'
- : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
+ : 'border-line hover:border-blue-300 hover:bg-blue-50/50'
  }`}
  >
  <div className="flex items-center justify-between mb-1">
- <span className="font-medium text-sm text-gray-900">{s.serviceName}</span>
+ <span className="font-medium text-sm text-fg">{s.serviceName}</span>
  <span className="text-sm font-bold text-blue-600">{s.currency} {(s.price ?? 0).toLocaleString()}</span>
  </div>
- <p className="text-xs text-gray-500 line-clamp-1">{s.description}</p>
+ <p className="text-xs text-soft line-clamp-1">{s.description}</p>
  <div className="flex items-center gap-2 mt-1">
- <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 rounded text-gray-600">{s.category}</span>
- <span className="text-[10px] text-gray-400">{s.duration} min</span>
+ <span className="text-[10px] px-1.5 py-0.5 bg-subtle rounded text-soft">{s.category}</span>
+ <span className="text-[10px] text-faint">{s.duration} min</span>
  </div>
  </button>
  ))}
  </div>
  ) : (
- <p className="text-sm text-gray-400 py-1">This doctor has not configured specific services. Standard consultation fees apply.</p>
+ <p className="text-sm text-faint py-1">This doctor has not configured specific services. Standard consultation fees apply.</p>
  )}
  </div>
  )}
 
  {/* Step 3: Consultation Type */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">Consultation Type</h4>
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">Consultation Type</h4>
  <div className="grid grid-cols-3 gap-2 sm:gap-3">
  {[
  { value: 'in_person' as const, label: 'In-Person', icon: FaHospital },
@@ -364,10 +364,10 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  className={`p-3 border rounded-lg text-center transition ${
  consultationType === type.value
  ? 'bg-blue-100 border-blue-500 ring-2 ring-blue-300'
- : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+ : 'border-line hover:border-blue-300 hover:bg-blue-50'
  }`}
  >
- <type.icon className={`mx-auto text-lg mb-1 ${consultationType === type.value ? 'text-blue-600' : 'text-gray-400'}`} />
+ <type.icon className={`mx-auto text-lg mb-1 ${consultationType === type.value ? 'text-blue-600' : 'text-faint'}`} />
  <p className="text-xs sm:text-sm font-medium">{type.label}</p>
  </button>
  ))}
@@ -376,11 +376,11 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Step 3: Weekly Time Slot Selection */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  Select Time Slot <span className="text-red-500">*</span>
  </h4>
  {!selectedDoctorId ? (
- <p className="text-sm text-gray-400 py-3">Select a doctor first to see available times</p>
+ <p className="text-sm text-faint py-3">Select a doctor first to see available times</p>
  ) : (
  <WeeklySlotPicker
  providerId={selectedDoctorId}
@@ -395,44 +395,44 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Step 4: Reason */}
  <div>
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2">
  Reason for Visit <span className="text-red-500">*</span>
  </label>
  <input
  type="text"
  value={reason}
  onChange={(e) => setReason(e.target.value)}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm"
  placeholder="e.g., Annual checkup, headache, follow-up..."
  />
  </div>
 
  {/* Notes */}
  <div>
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Additional Notes (optional)</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2">Additional Notes (optional)</label>
  <textarea
  rows={3}
  value={notes}
  onChange={(e) => setNotes(e.target.value)}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm"
  placeholder="Any specific symptoms or information for the doctor..."
  />
  </div>
 
  {/* Summary */}
  {canSubmit && (
- <div className="bg-white rounded-lg p-4 border border-blue-200">
- <h4 className="font-semibold text-gray-800 mb-2 text-sm">Booking Summary</h4>
+ <div className="bg-surface rounded-lg p-4 border border-blue-200">
+ <h4 className="font-semibold text-fg mb-2 text-sm">Booking Summary</h4>
  <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
- <div><span className="text-gray-500">Doctor:</span> <span className="font-medium">{selectedDoctor?.name}</span></div>
- <div><span className="text-gray-500">Specialty:</span> <span className="font-medium">{selectedDoctor?.specialty.join(', ')}</span></div>
- <div><span className="text-gray-500">Date:</span> <span className="font-medium">{new Date(scheduledDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span></div>
- <div><span className="text-gray-500">Time:</span> <span className="font-medium">{scheduledTime}</span></div>
- <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
+ <div><span className="text-soft">Doctor:</span> <span className="font-medium">{selectedDoctor?.name}</span></div>
+ <div><span className="text-soft">Specialty:</span> <span className="font-medium">{selectedDoctor?.specialty.join(', ')}</span></div>
+ <div><span className="text-soft">Date:</span> <span className="font-medium">{new Date(scheduledDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span></div>
+ <div><span className="text-soft">Time:</span> <span className="font-medium">{scheduledTime}</span></div>
+ <div><span className="text-soft">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
  {selectedService && (
- <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService.serviceName} - {selectedService.currency} {selectedService.price.toLocaleString()}</span></div>
+ <div><span className="text-soft">Service:</span> <span className="font-medium">{selectedService.serviceName} - {selectedService.currency} {selectedService.price.toLocaleString()}</span></div>
  )}
- <div><span className="text-gray-500">Reason:</span> <span className="font-medium">{reason}</span></div>
+ <div><span className="text-soft">Reason:</span> <span className="font-medium">{reason}</span></div>
  </div>
  </div>
  )}
@@ -448,14 +448,14 @@ const DoctorConsultations: React.FC<Props> = ({ onVideoCall }) => {
  <div className="flex gap-3 sm:gap-4">
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-gray-700 rounded-lg transition text-sm sm:text-base"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-soft rounded-lg transition text-sm sm:text-base"
  >
  Cancel
  </button>
  <button
  onClick={handleBookingSubmit}
  disabled={!canSubmit}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-white transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-surface transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
  >
  {isSubmitting ? (
  <>

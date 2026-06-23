@@ -314,7 +314,7 @@ export default function PatientVideoCall() {
  <div className="text-center">
  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4" />
  <p className="text-white">Connecting to consultation...</p>
- <p className="text-gray-400 text-sm mt-2">Please ensure you&apos;re logged in</p>
+ <p className="text-faint text-sm mt-2">Please ensure you&apos;re logged in</p>
  </div>
  </div>
  )
@@ -326,11 +326,11 @@ export default function PatientVideoCall() {
  <div className="text-center max-w-md">
  <div className="bg-red-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><FaVideoSlash className="text-2xl" /></div>
  <h2 className="text-white text-xl font-semibold mb-2">Media Access Error</h2>
- <p className="text-gray-400 mb-6">{mediaError}</p>
+ <p className="text-faint mb-6">{mediaError}</p>
  <button onClick={retryMediaAccess} className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-2 mx-auto">
  <FaSync /> Retry Access
  </button>
- <button onClick={() => router.push('/patient')} className="mt-4 text-gray-400 hover:text-white transition">Return to Dashboard</button>
+ <button onClick={() => router.push('/patient')} className="mt-4 text-faint hover:text-white transition">Return to Dashboard</button>
  </div>
  </div>
  )
@@ -341,17 +341,17 @@ export default function PatientVideoCall() {
  {/* Header */}
  <div className="bg-gray-800 px-6 py-3 flex items-center justify-between">
  <div className="flex items-center space-x-4">
- <button onClick={() => router.push('/patient')} className="text-gray-400 hover:text-white transition"><FaArrowLeft /></button>
+ <button onClick={() => router.push('/patient')} className="text-faint hover:text-white transition"><FaArrowLeft /></button>
  <FaUserMd className="text-blue-400 text-xl" />
  <div>
  <h1 className="text-white font-semibold">Medical Consultation</h1>
- {appointmentData && <p className="text-gray-400 text-sm">with {appointmentData.doctorName}</p>}
+ {appointmentData && <p className="text-faint text-sm">with {appointmentData.doctorName}</p>}
  </div>
  </div>
  <div className="flex items-center space-x-6">
- <div className="flex items-center space-x-2"><FaClock className="text-gray-400" /><span className="text-white font-mono">{formatDuration(callDuration)}</span></div>
- <div className="flex items-center space-x-2"><FaUser className="text-gray-400" /><span className="text-white">{roomParticipants.length} participants</span></div>
- <button onClick={toggleFullscreen} className="text-gray-400 hover:text-white transition">{isFullscreen ? <FaCompress /> : <FaExpand />}</button>
+ <div className="flex items-center space-x-2"><FaClock className="text-faint" /><span className="text-white font-mono">{formatDuration(callDuration)}</span></div>
+ <div className="flex items-center space-x-2"><FaUser className="text-faint" /><span className="text-white">{roomParticipants.length} participants</span></div>
+ <button onClick={toggleFullscreen} className="text-faint hover:text-white transition">{isFullscreen ? <FaCompress /> : <FaExpand />}</button>
  </div>
  </div>
 

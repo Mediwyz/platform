@@ -88,16 +88,16 @@ export default function AddFoodModal({
  />
 
  {/* Modal */}
- <div className="relative bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+ <div className="relative bg-surface rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
  {/* Header */}
- <div className="flex items-center justify-between p-4 border-b border-gray-100">
- <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+ <div className="flex items-center justify-between p-4 border-b border-line">
+ <h2 className="text-lg font-bold text-fg flex items-center gap-2">
  <FaUtensils className="text-blue-500" />
  Add {mealLabel}
  </h2>
  <button
  onClick={onClose}
- className="p-2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+ className="p-2 text-faint hover:text-soft transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
  aria-label="Close modal"
  >
  <FaTimes />
@@ -105,13 +105,13 @@ export default function AddFoodModal({
  </div>
 
  {/* Tabs */}
- <div className="flex border-b border-gray-100">
+ <div className="flex border-b border-line">
  <button
  onClick={() => setTab('search')}
  className={`flex-1 py-2.5 text-sm font-medium transition-colors focus:outline-none ${
  tab === 'search'
  ? 'text-blue-600 border-b-2 border-blue-600'
- : 'text-gray-500 hover:text-gray-700'
+ : 'text-soft hover:text-soft'
  }`}
  >
  <FaSearch className="inline mr-1.5" />
@@ -122,7 +122,7 @@ export default function AddFoodModal({
  className={`flex-1 py-2.5 text-sm font-medium transition-colors focus:outline-none ${
  tab === 'ai'
  ? 'text-blue-600 border-b-2 border-blue-600'
- : 'text-gray-500 hover:text-gray-700'
+ : 'text-soft hover:text-soft'
  }`}
  >
  <FaCamera className="inline mr-1.5" />
@@ -157,15 +157,15 @@ export default function AddFoodModal({
  </div>
 
  {/* Manual entry */}
- <div className="border-t border-gray-100 p-4">
- <h3 className="text-sm font-semibold text-gray-700 mb-3">Manual Entry</h3>
+ <div className="border-t border-line p-4">
+ <h3 className="text-sm font-semibold text-soft mb-3">Manual Entry</h3>
  <div className="space-y-2">
  <input
  type="text"
  placeholder="Food name"
  value={manualName}
  onChange={(e) => setManualName(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  <div className="grid grid-cols-4 gap-2">
  <input
@@ -173,28 +173,28 @@ export default function AddFoodModal({
  placeholder="Calories"
  value={manualCalories}
  onChange={(e) => setManualCalories(e.target.value)}
- className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  <input
  type="number"
  placeholder="Protein"
  value={manualProtein}
  onChange={(e) => setManualProtein(e.target.value)}
- className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  <input
  type="number"
  placeholder="Carbs"
  value={manualCarbs}
  onChange={(e) => setManualCarbs(e.target.value)}
- className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  <input
  type="number"
  placeholder="Fat"
  value={manualFat}
  onChange={(e) => setManualFat(e.target.value)}
- className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
  <button

@@ -47,17 +47,17 @@ export default function ReviewModal({
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5"
+        className="bg-surface rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">How was it?</h2>
-            <p className="text-xs text-gray-500">
+            <h2 className="text-lg font-bold text-fg">How was it?</h2>
+            <p className="text-xs text-soft">
               {providerName ? `Rate your visit with ${providerName}.` : 'Rate your experience with this provider.'}
             </p>
           </div>
-          <button onClick={onClose} aria-label="Close" className="p-1 text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close" className="p-1 text-faint hover:text-soft">
             <FaTimes />
           </button>
         </div>
@@ -75,7 +75,7 @@ export default function ReviewModal({
             >
               {shown >= n
                 ? <FaStar size={36} className="text-amber-500" />
-                : <FaRegStar size={36} className="text-gray-300" />}
+                : <FaRegStar size={36} className="text-faint" />}
             </button>
           ))}
         </div>
@@ -85,7 +85,7 @@ export default function ReviewModal({
           value={comment}
           onChange={e => setComment(e.target.value)}
           placeholder="Share your experience (optional)"
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-none"
+          className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-none"
         />
 
         {error && (
@@ -95,7 +95,7 @@ export default function ReviewModal({
         <div className="flex gap-2">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="flex-1 py-2.5 text-sm font-medium text-soft bg-subtle rounded-lg hover:bg-line"
           >
             Skip
           </button>
@@ -104,7 +104,7 @@ export default function ReviewModal({
             disabled={busy || rating === 0}
             className="flex-1 py-2.5 text-sm font-semibold text-white bg-[#0C6780] rounded-lg hover:bg-[#0a5568] disabled:opacity-50"
           >
-            {busy ? 'Submitting…' : 'Submit review'}
+            {busy ? 'Submitting' : 'Submit review'}
           </button>
         </div>
       </div>

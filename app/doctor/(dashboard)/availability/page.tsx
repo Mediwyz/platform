@@ -14,8 +14,8 @@ export default function DoctorAvailabilityPage() {
           <FaCalendarAlt className="text-[#0C6780]" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-[#001E40]">My Availability</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-lg font-bold text-fg">My Availability</h1>
+          <p className="text-sm text-soft">
             Define when patients can book appointments with you.
           </p>
         </div>
@@ -26,7 +26,7 @@ export default function DoctorAvailabilityPage() {
       ) : (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
+            <div key={i} className="h-16 bg-subtle rounded-xl animate-pulse" />
           ))}
         </div>
       )}

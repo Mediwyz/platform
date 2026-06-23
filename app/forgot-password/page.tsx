@@ -8,8 +8,8 @@ import { useTranslation } from '@/lib/i18n'
 
 /**
  * In-app password reset (no email). Two steps:
- *   1. Enter email → backend returns the account's security question (fake question for unknown emails)
- *   2. Answer the question → backend issues a short-lived token, we redirect to /reset-password?token=…
+ *   1. Enter email  backend returns the account's security question (fake question for unknown emails)
+ *   2. Answer the question  backend issues a short-lived token, we redirect to /reset-password?token=
  */
 type Stage = 'email' | 'answer'
 
@@ -71,28 +71,28 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8">
-        <Link href="/login" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-subtle px-4">
+      <div className="w-full max-w-md bg-surface rounded-2xl shadow-sm p-8">
+        <Link href="/login" className="inline-flex items-center gap-2 text-sm text-soft hover:text-soft mb-6">
           <FaArrowLeft /> {t('auth.backToSignIn')}
         </Link>
-        <h1 className="text-2xl font-bold text-[#001E40] mb-2">{t('auth.forgotPassword')}</h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <h1 className="text-2xl font-bold text-fg mb-2">{t('auth.forgotPassword')}</h1>
+        <p className="text-sm text-soft mb-6">
           {stage === 'email' ? t('auth.enterEmailToContinue') : t('auth.answerToReset')}
         </p>
 
         {stage === 'email' && (
           <form onSubmit={lookup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('auth.email')}</label>
+              <label className="block text-sm font-medium text-soft mb-1.5">{t('auth.email')}</label>
               <div className="relative">
-                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
                   placeholder="you@example.com"
                 />
               </div>
@@ -110,23 +110,23 @@ export default function ForgotPasswordPage() {
         {stage === 'answer' && (
           <form onSubmit={verify} className="space-y-4">
             <div className="bg-[#9AE1FF]/20 border border-[#9AE1FF] rounded-lg p-4">
-              <p className="text-xs font-semibold text-[#001E40] uppercase tracking-wide mb-1">{t('auth.securityQuestion')}</p>
-              <p className="text-sm text-[#001E40]">{question}</p>
+              <p className="text-xs font-semibold text-fg uppercase tracking-wide mb-1">{t('auth.securityQuestion')}</p>
+              <p className="text-sm text-fg">{question}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('auth.yourAnswer')}</label>
+              <label className="block text-sm font-medium text-soft mb-1.5">{t('auth.yourAnswer')}</label>
               <div className="relative">
-                <FaKey className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <FaKey className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
                 <input
                   type="text"
                   required
                   value={answer}
                   onChange={e => setAnswer(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
                   autoFocus
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1">{t('auth.answerCaseInsensitive')}</p>
+              <p className="text-xs text-faint mt-1">{t('auth.answerCaseInsensitive')}</p>
             </div>
             <button
               type="submit"
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
             <button
               type="button"
               onClick={() => { setStage('email'); setError(null); setAnswer('') }}
-              className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+              className="w-full py-2 text-sm text-soft hover:text-soft"
             >
               {t('auth.useDifferentEmail')}
             </button>

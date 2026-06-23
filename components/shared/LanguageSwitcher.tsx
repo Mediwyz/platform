@@ -37,7 +37,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ variant = 'navbar' 
  onClick={() => setOpen(!open)}
  className={
  isHeader
- ? 'p-2 sm:p-2.5 md:p-3 text-gray-600 dark:text-soft hover:text-brand-teal dark:hover:text-accent bg-gray-100 dark:bg-subtle rounded-lg hover:bg-sky-100 dark:hover:bg-line transition flex items-center gap-1.5'
+ ? 'p-2 sm:p-2.5 md:p-3 text-soft dark:text-soft hover:text-brand-teal dark:hover:text-accent bg-subtle dark:bg-subtle rounded-lg hover:bg-sky-100 dark:hover:bg-line transition flex items-center gap-1.5'
  : 'flex items-center gap-1.5 text-white/90 hover:text-white transition-colors duration-200 px-2 py-1.5 rounded-md hover:bg-white/10 text-sm font-medium'
  }
  aria-label="Change language"

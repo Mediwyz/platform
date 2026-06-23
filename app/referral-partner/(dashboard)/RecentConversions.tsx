@@ -20,10 +20,10 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
  .reduce((sum, c) => sum + c.commission, 0)
 
  return (
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Recent Conversions</h2>
- <div className="text-sm text-gray-600">
+ <h2 className="text-xl font-bold text-fg">Recent Conversions</h2>
+ <div className="text-sm text-soft">
  Last 7 days
  </div>
  </div>
@@ -55,7 +55,7 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
  const StatusIcon = statusInfo.icon
 
  return (
- <div key={conversion.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition">
+ <div key={conversion.id} className="border border-line rounded-lg p-4 hover:bg-subtle transition">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
@@ -64,9 +64,9 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
  </span>
  </div>
  <div>
- <h3 className="font-semibold text-gray-900">{conversion.customerName}</h3>
- <p className="text-sm text-gray-600">{conversion.planType}</p>
- <p className="text-xs text-gray-500">
+ <h3 className="font-semibold text-fg">{conversion.customerName}</h3>
+ <p className="text-sm text-soft">{conversion.planType}</p>
+ <p className="text-xs text-soft">
  Converted on {new Date(conversion.conversionDate).toLocaleDateString('en-US', {
  year: 'numeric',
  month: 'short',
@@ -94,11 +94,11 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
 
  {conversions.length === 0 && (
  <div className="text-center py-12">
- <div className="text-gray-400 mb-4">
+ <div className="text-faint mb-4">
  <FaDollarSign className="text-4xl mx-auto" />
  </div>
- <h3 className="text-gray-600 font-medium mb-2">No conversions yet</h3>
- <p className="text-gray-500 text-sm">
+ <h3 className="text-soft font-medium mb-2">No conversions yet</h3>
+ <p className="text-soft text-sm">
  Start sharing your referral links to earn commissions!
  </p>
  </div>
@@ -106,17 +106,17 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
 
  {/* Commission Breakdown */}
  {conversions.length > 0 && (
- <div className="mt-6 p-4 bg-gray-50 rounded-lg">
- <h4 className="font-semibold text-gray-800 mb-3">Commission Breakdown</h4>
+ <div className="mt-6 p-4 bg-subtle rounded-lg">
+ <h4 className="font-semibold text-fg mb-3">Commission Breakdown</h4>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
  <div>
- <span className="text-gray-600">Total Commissions:</span>
+ <span className="text-soft">Total Commissions:</span>
  <span className="font-semibold ml-2 text-green-600">
  Rs {conversions.reduce((sum, c) => sum + c.commission, 0).toLocaleString()}
  </span>
  </div>
  <div>
- <span className="text-gray-600">Paid Out:</span>
+ <span className="text-soft">Paid Out:</span>
  <span className="font-semibold ml-2">
  Rs {conversions
  .filter(c => c.status === 'paid')
@@ -125,7 +125,7 @@ export default function RecentConversions({ conversions }: RecentConversionsProp
  </span>
  </div>
  <div>
- <span className="text-gray-600">Avg. Commission:</span>
+ <span className="text-soft">Avg. Commission:</span>
  <span className="font-semibold ml-2">
  Rs {conversions.length > 0 ? 
  Math.round(conversions.reduce((sum, c) => sum + c.commission, 0) / conversions.length) : 0}

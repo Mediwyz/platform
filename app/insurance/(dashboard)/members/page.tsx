@@ -100,8 +100,8 @@ export default function InsuranceMembersPage() {
         <div className="flex items-center gap-3">
           <FaUsers className="text-3xl text-purple-600" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Insurance Members</h1>
-            <p className="text-sm text-gray-500">Invite and manage policy holders</p>
+            <h1 className="text-2xl font-bold text-fg">Insurance Members</h1>
+            <p className="text-sm text-soft">Invite and manage policy holders</p>
           </div>
         </div>
         <button
@@ -125,28 +125,28 @@ export default function InsuranceMembersPage() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white border border-gray-200 rounded-xl p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Members</p>
-          <p className="text-2xl font-bold text-gray-900">{members.length}</p>
+        <div className="bg-surface border border-line rounded-xl p-4">
+          <p className="text-xs text-soft uppercase tracking-wider mb-1">Total Members</p>
+          <p className="text-2xl font-bold text-fg">{members.length}</p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Active Plans</p>
-          <p className="text-2xl font-bold text-gray-900">{plans.length}</p>
+        <div className="bg-surface border border-line rounded-xl p-4">
+          <p className="text-xs text-soft uppercase tracking-wider mb-1">Active Plans</p>
+          <p className="text-2xl font-bold text-fg">{plans.length}</p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Enrolled with Plan</p>
-          <p className="text-2xl font-bold text-gray-900">{members.filter(m => m.plan).length}</p>
+        <div className="bg-surface border border-line rounded-xl p-4">
+          <p className="text-xs text-soft uppercase tracking-wider mb-1">Enrolled with Plan</p>
+          <p className="text-2xl font-bold text-fg">{members.filter(m => m.plan).length}</p>
         </div>
       </div>
 
       <div className="relative mb-6">
-        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
         <input
           type="text"
           placeholder="Search by name or email..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+          className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
         />
       </div>
 
@@ -155,10 +155,10 @@ export default function InsuranceMembersPage() {
           <FaSpinner className="animate-spin text-3xl text-purple-600" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-          <FaUsers className="mx-auto text-4xl text-gray-300 mb-4" />
-          <h3 className="text-lg font-medium text-gray-600 mb-1">No members yet</h3>
-          <p className="text-sm text-gray-400 mb-4">Invite policy holders to join your insurance network.</p>
+        <div className="text-center py-20 bg-subtle rounded-xl border border-dashed border-line">
+          <FaUsers className="mx-auto text-4xl text-faint mb-4" />
+          <h3 className="text-lg font-medium text-soft mb-1">No members yet</h3>
+          <p className="text-sm text-faint mb-4">Invite policy holders to join your insurance network.</p>
           <button
             onClick={() => setShowInvite(true)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
@@ -167,33 +167,33 @@ export default function InsuranceMembersPage() {
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Member</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Plan</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Enrolled</th>
-                  <th className="text-center px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <tr className="bg-subtle border-b border-line">
+                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">Member</th>
+                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">Email</th>
+                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">Plan</th>
+                  <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">Enrolled</th>
+                  <th className="text-center px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {filtered.map(m => (
-                  <tr key={m.id} className="hover:bg-gray-50">
+                  <tr key={m.id} className="hover:bg-subtle">
                     <td className="px-6 py-4">
-                      <p className="font-medium text-gray-900">{m.policyHolderName}</p>
+                      <p className="font-medium text-fg">{m.policyHolderName}</p>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.patient?.user?.email || ' - '}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-soft">{m.patient?.user?.email || ' - '}</td>
+                    <td className="px-6 py-4 text-sm text-soft">
                       {m.plan ? (
                         <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-medium">
                           {m.plan.planName}
                         </span>
-                      ) : <span className="text-gray-400">No plan</span>}
+                      ) : <span className="text-faint">No plan</span>}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-6 py-4 text-sm text-soft">
                       {m.submittedDate ? new Date(m.submittedDate).toLocaleDateString() : ' - '}
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -210,35 +210,35 @@ export default function InsuranceMembersPage() {
       {/* Invite Modal */}
       {showInvite && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-lg font-bold text-gray-900">Invite Member</h2>
-              <button onClick={() => setShowInvite(false)} className="text-gray-400 hover:text-gray-600">
+          <div className="bg-surface rounded-xl shadow-xl max-w-md w-full">
+            <div className="flex items-center justify-between p-6 border-b border-line">
+              <h2 className="text-lg font-bold text-fg">Invite Member</h2>
+              <button onClick={() => setShowInvite(false)} className="text-faint hover:text-soft">
                 <FaTimes />
               </button>
             </div>
             <form onSubmit={handleInvite} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Member Email *</label>
+                <label className="block text-sm font-medium text-soft mb-1.5">Member Email *</label>
                 <div className="relative">
-                  <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
                   <input
                     type="email"
                     required
                     value={inviteEmail}
                     onChange={e => setInviteEmail(e.target.value)}
                     placeholder="member@example.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                    className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Member must have an existing MediWyz account</p>
+                <p className="text-xs text-soft mt-1">Member must have an existing MediWyz account</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Assign Plan (optional)</label>
+                <label className="block text-sm font-medium text-soft mb-1.5">Assign Plan (optional)</label>
                 <select
                   value={invitePlanId}
                   onChange={e => setInvitePlanId(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                  className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
                 >
                   <option value="">No plan</option>
                   {plans.map(p => (
@@ -250,7 +250,7 @@ export default function InsuranceMembersPage() {
                 <button
                   type="button"
                   onClick={() => setShowInvite(false)}
-                  className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+                  className="flex-1 px-4 py-2.5 border border-line text-soft rounded-lg hover:bg-subtle font-medium"
                 >
                   Cancel
                 </button>

@@ -100,8 +100,8 @@ export default function RoleConfigPage() {
  <div className="p-6 max-w-full">
  <div className="flex items-center justify-between mb-6">
  <div>
- <h1 className="text-2xl font-bold text-[#001E40]">Role Feature Configuration</h1>
- <p className="text-gray-600 mt-1">Toggle which features are visible for each user role</p>
+ <h1 className="text-2xl font-bold text-fg">Role Feature Configuration</h1>
+ <p className="text-soft mt-1">Toggle which features are visible for each user role</p>
  </div>
  <button
  onClick={handleSave}
@@ -119,13 +119,13 @@ export default function RoleConfigPage() {
  </div>
  )}
 
- <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
+ <div className="overflow-x-auto bg-surface rounded-xl shadow-lg">
  <table className="min-w-full">
  <thead>
- <tr className="bg-gray-50 border-b">
- <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 sticky left-0 bg-gray-50 z-10">Feature</th>
+ <tr className="bg-subtle border-b">
+ <th className="px-4 py-3 text-left text-sm font-semibold text-fg sticky left-0 bg-subtle z-10">Feature</th>
  {userTypes.map(ut => (
- <th key={ut} className="px-3 py-3 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
+ <th key={ut} className="px-3 py-3 text-center text-xs font-semibold text-soft whitespace-nowrap">
  {ut.replace('_', ' ')}
  </th>
  ))}
@@ -133,8 +133,8 @@ export default function RoleConfigPage() {
  </thead>
  <tbody>
  {ALL_FEATURES.map(feature => (
- <tr key={feature} className="border-b hover:bg-gray-50 transition-colors">
- <td className="px-4 py-2 text-sm font-medium text-gray-900 sticky left-0 bg-white z-10">
+ <tr key={feature} className="border-b hover:bg-subtle transition-colors">
+ <td className="px-4 py-2 text-sm font-medium text-fg sticky left-0 bg-surface z-10">
  {feature}
  </td>
  {userTypes.map(ut => {
@@ -149,7 +149,7 @@ export default function RoleConfigPage() {
  {enabled ? (
  <FaToggleOn className="text-green-500 hover:text-green-600" />
  ) : (
- <FaToggleOff className="text-gray-300 hover:text-gray-400" />
+ <FaToggleOff className="text-faint hover:text-faint" />
  )}
  </button>
  </td>

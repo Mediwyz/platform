@@ -110,21 +110,21 @@ export default function ProviderBookingsList({ basePath, defaultActiveOnly = fal
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {active.length} active · {completed.length} completed · {cancelled.length} cancelled
+          <h1 className="text-2xl font-bold text-fg">Bookings</h1>
+          <p className="text-sm text-soft mt-1">
+            {active.length} active  {completed.length} completed  {cancelled.length} cancelled
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAll(v => !v)}
-            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600"
+            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-line hover:bg-subtle text-soft"
           >
             {showAll ? 'Hide completed' : 'Show all'}
           </button>
           <button
             onClick={fetchInstances}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500"
+            className="p-2 rounded-lg border border-line hover:bg-subtle text-soft"
             aria-label="Refresh"
           >
             <FiRefreshCw className="w-4 h-4" />
@@ -133,10 +133,10 @@ export default function ProviderBookingsList({ basePath, defaultActiveOnly = fal
       </div>
 
       {instances.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <FiInbox className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">No bookings yet</p>
-          <p className="text-gray-400 text-sm mt-1">Accepted bookings will appear here with their current status and next actions.</p>
+        <div className="bg-surface rounded-xl border border-line p-12 text-center">
+          <FiInbox className="w-10 h-10 text-faint mx-auto mb-3" />
+          <p className="text-soft font-medium">No bookings yet</p>
+          <p className="text-faint text-sm mt-1">Accepted bookings will appear here with their current status and next actions.</p>
         </div>
       )}
 
@@ -190,8 +190,8 @@ function Section({ title, count, muted, children }: {
 }) {
   return (
     <div>
-      <h2 className={`text-sm font-semibold mb-3 ${muted ? 'text-gray-400' : 'text-brand-navy'}`}>
-        {title} <span className="font-normal text-gray-400">({count})</span>
+      <h2 className={`text-sm font-semibold mb-3 ${muted ? 'text-faint' : 'text-brand-navy'}`}>
+        {title} <span className="font-normal text-faint">({count})</span>
       </h2>
       <div className="space-y-3">{children}</div>
     </div>
@@ -218,7 +218,7 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
   const detailHref = `${basePath}/bookings/${inst.bookingType}/${inst.bookingId}`
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className="bg-surface rounded-xl border border-line p-4">
       <div className="flex items-start justify-between gap-4">
         {/* Left: patient + meta */}
         <div className="flex-1 min-w-0">
@@ -227,10 +227,10 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
               {patient ? `${patient.firstName[0]}${patient.lastName[0]}` : <FiUser className="w-4 h-4" />}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate">
-                {patient ? `${patient.firstName} ${patient.lastName}` : 'Loading…'}
+              <p className="text-sm font-semibold text-fg truncate">
+                {patient ? `${patient.firstName} ${patient.lastName}` : 'Loading'}
               </p>
-              <p className="text-xs text-gray-400 truncate">{inst.template.name} · {inst.serviceMode}</p>
+              <p className="text-xs text-faint truncate">{inst.template.name}  {inst.serviceMode}</p>
             </div>
           </div>
 
@@ -238,12 +238,12 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
             <span className={`${badge.bg} ${badge.text} px-2.5 py-0.5 rounded-full text-xs font-medium`}>
               {inst.currentStepLabel}
             </span>
-            <span className="flex items-center gap-1 text-xs text-gray-400">
+            <span className="flex items-center gap-1 text-xs text-faint">
               <FiCalendar className="w-3 h-3" />
               {new Date(inst.startedAt).toLocaleDateString('fr-FR')}
             </span>
             {amountLabel && (
-              <span className="text-xs text-gray-500">{amountLabel}</span>
+              <span className="text-xs text-soft">{amountLabel}</span>
             )}
           </div>
         </div>
@@ -251,7 +251,7 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
         {/* Right: detail link */}
         <Link
           href={detailHref}
-          className="flex-shrink-0 p-2 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-brand-teal"
+          className="flex-shrink-0 p-2 rounded-lg hover:bg-subtle text-faint hover:text-brand-teal"
           aria-label="View full booking details"
         >
           <FiExternalLink className="w-4 h-4" />
@@ -260,7 +260,7 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
 
       {/* Action buttons - the main point: one-click advance to next status */}
       {inst.actionsForProvider.length > 0 && !inst.isCompleted && !inst.isCancelled && (
-        <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
+        <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-2">
           {inst.actionsForProvider.map(action => (
             <WorkflowActionButton
               key={action.action}
@@ -276,8 +276,8 @@ function BookingCard({ inst, patient, basePath, onTransition }: {
       )}
 
       {inst.actionsForProvider.length === 0 && !inst.isCompleted && !inst.isCancelled && (
-        <p className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
-          Waiting for the member to take action…
+        <p className="mt-3 pt-3 border-t border-line text-xs text-faint">
+          Waiting for the member to take action
         </p>
       )}
     </div>

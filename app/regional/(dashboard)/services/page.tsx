@@ -121,10 +121,10 @@ export default function RegionalServicesPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Service Catalog</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-fg">Service Catalog</h1>
+          <p className="text-sm text-soft mt-1">
             Manage services, assign icons, and link workflow templates.{' '}
-            <span className="font-medium text-gray-700">{services.length}</span> services total.
+            <span className="font-medium text-soft">{services.length}</span> services total.
           </p>
         </div>
         <Link
@@ -139,21 +139,21 @@ export default function RegionalServicesPage() {
       {/* Filters */}
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 max-w-sm min-w-[180px]">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-4 h-4" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search services…"
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+            placeholder="Search services"
+            className="w-full pl-10 pr-4 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
           />
         </div>
         <div className="flex items-center gap-2">
-          <FiFilter className="w-4 h-4 text-gray-400" />
+          <FiFilter className="w-4 h-4 text-faint" />
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30"
+            className="border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30"
           >
             <option value="">All Provider Types</option>
             {filterOptions.filter(r => r.code).map(r => (
@@ -169,12 +169,12 @@ export default function RegionalServicesPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0C6780]" />
         </div>
       ) : Object.keys(grouped).length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-          <FiSearch className="w-8 h-8 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm font-medium text-gray-600 mb-1">
+        <div className="text-center py-16 bg-surface rounded-xl border border-line">
+          <FiSearch className="w-8 h-8 text-faint mx-auto mb-3" />
+          <p className="text-sm font-medium text-soft mb-1">
             {search || filterType ? 'No services match your search.' : 'No services in the catalog yet.'}
           </p>
-          <p className="text-xs text-gray-400 mb-4">
+          <p className="text-xs text-faint mb-4">
             {search || filterType ? 'Try clearing the filter.' : 'Add the first service to start building workflows.'}
           </p>
           <Link href="/regional/services/create" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] hover:underline">
@@ -186,8 +186,8 @@ export default function RegionalServicesPage() {
           {Object.entries(grouped).map(([providerType, svcs]) => (
             <div key={providerType}>
               <div className="flex items-center gap-3 mb-3">
-                <h2 className="text-base font-bold text-[#001E40]">{roleLabel(providerType)}</h2>
-                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{svcs.length} service{svcs.length !== 1 ? 's' : ''}</span>
+                <h2 className="text-base font-bold text-fg">{roleLabel(providerType)}</h2>
+                <span className="text-xs text-faint bg-subtle px-2 py-0.5 rounded-full">{svcs.length} service{svcs.length !== 1 ? 's' : ''}</span>
                 <Link
                   href={`/regional/workflows/create`}
                   className="ml-auto text-xs text-[#0C6780] hover:underline flex items-center gap-1"
@@ -199,7 +199,7 @@ export default function RegionalServicesPage() {
                 {svcs.map(svc => (
                   <div
                     key={svc.id}
-                    className={`bg-white rounded-xl p-4 border transition-all ${svc.isActive ? 'border-gray-200 hover:border-[#0C6780]/30' : 'border-gray-100 opacity-60'}`}
+                    className={`bg-surface rounded-xl p-4 border transition-all ${svc.isActive ? 'border-line hover:border-[#0C6780]/30' : 'border-line opacity-60'}`}
                   >
                     {/* Card header */}
                     <div className="flex items-start justify-between mb-2 gap-3">
@@ -214,32 +214,32 @@ export default function RegionalServicesPage() {
                           )}
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 text-sm">{svc.serviceName}</h3>
-                          <p className="text-xs text-gray-500">{svc.category} · Rs {svc.defaultPrice.toLocaleString()}</p>
+                          <h3 className="font-semibold text-fg text-sm">{svc.serviceName}</h3>
+                          <p className="text-xs text-soft">{svc.category}  Rs {svc.defaultPrice.toLocaleString()}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1 flex-shrink-0">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${svc.isActive ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${svc.isActive ? 'bg-green-50 text-green-700' : 'bg-subtle text-soft'}`}>
                           {svc.isActive ? 'Active' : 'Inactive'}
                         </span>
-                        <Link href={`/regional/services/${svc.id}`} className="p-1.5 text-gray-400 hover:text-[#0C6780] rounded" title="Edit">
+                        <Link href={`/regional/services/${svc.id}`} className="p-1.5 text-faint hover:text-[#0C6780] rounded" title="Edit">
                           <FiEdit2 className="w-3.5 h-3.5" />
                         </Link>
                         <button
                           onClick={() => handleDelete(svc.id, svc.serviceName)}
                           disabled={deleting === svc.id}
-                          className="p-1.5 text-gray-400 hover:text-red-500 rounded disabled:opacity-40"
+                          className="p-1.5 text-faint hover:text-red-500 rounded disabled:opacity-40"
                           title="Deactivate"
                         >
                           <FiTrash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 mb-3 line-clamp-2">{svc.description}</p>
+                    <p className="text-xs text-soft mb-3 line-clamp-2">{svc.description}</p>
 
                     {/* Linked workflows */}
-                    <div className="pt-3 border-t border-gray-100">
-                      <p className="text-xs font-medium text-gray-500 mb-1.5">Linked Workflows</p>
+                    <div className="pt-3 border-t border-line">
+                      <p className="text-xs font-medium text-soft mb-1.5">Linked Workflows</p>
                       <ServiceWorkflowLinker
                         serviceId={svc.id}
                         serviceName={svc.serviceName}

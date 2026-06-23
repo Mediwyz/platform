@@ -42,7 +42,7 @@ const TabButton = ({ icon: Icon, label, tabName, activeTab, setActiveTab }: TabB
  className={`flex items-center justify-center md:justify-start w-full text-left px-3 md:px-4 py-3 rounded-lg font-medium transition-colors ${
  activeTab === tabName
  ? 'bg-brand-navy text-white shadow-md'
- : 'text-gray-600 hover:bg-gray-100'
+ : 'text-soft hover:bg-subtle'
  }`}
  title={label}
  >
@@ -114,7 +114,7 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  <div className="flex flex-col md:flex-row gap-8">
  {/* Sidebar Navigation */}
  <aside className="w-full md:w-1/4">
- <div className="bg-white rounded-xl shadow-lg p-4 space-y-2">
+ <div className="bg-surface rounded-xl shadow-lg p-4 space-y-2">
  <TabButton 
  icon={FaBuilding} 
  label="Corporate Profile" 
@@ -148,33 +148,33 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
 
  {/* Content Area */}
  <main className="w-full md:w-3/4">
- <div className="bg-white rounded-xl shadow-lg p-8">
+ <div className="bg-surface rounded-xl shadow-lg p-8">
  {/* Corporate Profile Tab */}
  {activeTab === 'profile' && (
  <form className="space-y-8">
  <div className="pb-6 border-b">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Company Information</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Company Information</h2>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  <div>
- <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">Company Name</label>
+ <label htmlFor="companyName" className="block text-sm font-medium text-soft">Company Name</label>
  <input
  type="text"
  id="companyName"
  name="companyName"
  value={profile.companyName}
  onChange={handleProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-blue-500 focus:ring-blue-500"
  />
  </div>
  <div>
- <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+ <label htmlFor="phone" className="block text-sm font-medium text-soft">Phone Number</label>
  <input
  type="tel"
  id="phone"
  name="phone"
  value={profile.phone}
  onChange={handleProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-blue-500 focus:ring-blue-500"
  />
  </div>
  </div>
@@ -193,7 +193,7 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  {activeTab === 'employees' && (
  <div>
  <div className="flex justify-between items-center mb-6">
- <h2 className="text-2xl font-bold text-gray-800">Employee Management</h2>
+ <h2 className="text-2xl font-bold text-fg">Employee Management</h2>
  <div className="flex gap-3">
  <button className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2">
  <FaUpload />
@@ -206,42 +206,42 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  </div>
  </div>
 
- <div className="bg-gray-50 rounded-lg p-4 mb-6">
- <h3 className="font-semibold text-gray-800 mb-3">Quick Stats</h3>
+ <div className="bg-subtle rounded-lg p-4 mb-6">
+ <h3 className="font-semibold text-fg mb-3">Quick Stats</h3>
  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
- <div className="bg-white p-4 rounded-lg">
+ <div className="bg-surface p-4 rounded-lg">
  <p className="text-2xl font-bold text-blue-600">{quickStats.totalEmployees}</p>
- <p className="text-sm text-gray-600">Total Employees</p>
+ <p className="text-sm text-soft">Total Employees</p>
  </div>
- <div className="bg-white p-4 rounded-lg">
+ <div className="bg-surface p-4 rounded-lg">
  <p className="text-2xl font-bold text-green-600">{quickStats.activePolicies}</p>
- <p className="text-sm text-gray-600">Approved Claims</p>
+ <p className="text-sm text-soft">Approved Claims</p>
  </div>
- <div className="bg-white p-4 rounded-lg">
+ <div className="bg-surface p-4 rounded-lg">
  <p className="text-2xl font-bold text-yellow-600">{quickStats.pendingClaims}</p>
- <p className="text-sm text-gray-600">Pending Claims</p>
+ <p className="text-sm text-soft">Pending Claims</p>
  </div>
- <div className="bg-white p-4 rounded-lg">
+ <div className="bg-surface p-4 rounded-lg">
  <p className="text-2xl font-bold text-purple-600">{quickStats.coverageRate}%</p>
- <p className="text-sm text-gray-600">Coverage Rate</p>
+ <p className="text-sm text-soft">Coverage Rate</p>
  </div>
  </div>
  </div>
 
  <div className="space-y-4">
  <div className="flex justify-between items-center">
- <h3 className="font-semibold text-gray-800">Employee Actions</h3>
+ <h3 className="font-semibold text-fg">Employee Actions</h3>
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer">
- <FaUsers className="text-4xl text-gray-400 mx-auto mb-3" />
- <h4 className="font-semibold text-gray-800 mb-2">Add Individual Employee</h4>
- <p className="text-sm text-gray-600">Add a single employee with policy details</p>
+ <div className="border-2 border-dashed border-line rounded-lg p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer">
+ <FaUsers className="text-4xl text-faint mx-auto mb-3" />
+ <h4 className="font-semibold text-fg mb-2">Add Individual Employee</h4>
+ <p className="text-sm text-soft">Add a single employee with policy details</p>
  </div>
- <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50 transition cursor-pointer">
- <FaUpload className="text-4xl text-gray-400 mx-auto mb-3" />
- <h4 className="font-semibold text-gray-800 mb-2">Bulk Employee Import</h4>
- <p className="text-sm text-gray-600">Upload CSV/Excel file with employee data</p>
+ <div className="border-2 border-dashed border-line rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50 transition cursor-pointer">
+ <FaUpload className="text-4xl text-faint mx-auto mb-3" />
+ <h4 className="font-semibold text-fg mb-2">Bulk Employee Import</h4>
+ <p className="text-sm text-soft">Upload CSV/Excel file with employee data</p>
  </div>
  </div>
  </div>
@@ -251,18 +251,18 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  {/* Billing & Payments Tab */}
  {activeTab === 'billing' && (
  <div>
- <h2 className="text-2xl font-bold text-gray-800 mb-6">Billing & Payment Management</h2>
+ <h2 className="text-2xl font-bold text-fg mb-6">Billing & Payment Management</h2>
  
  {/* Payment Methods */}
  <div className="mb-8">
- <h3 className="font-bold text-gray-800 mb-4">Payment Methods</h3>
+ <h3 className="font-bold text-fg mb-4">Payment Methods</h3>
  <div className="space-y-4">
  {paymentMethods.map((method) => (
  <div key={method.id} className="border rounded-lg p-4">
  <div className="flex justify-between items-center">
  <div>
- <h4 className="font-semibold text-gray-800">{method.type}</h4>
- <p className="text-sm text-gray-600">{method.details}</p>
+ <h4 className="font-semibold text-fg">{method.type}</h4>
+ <p className="text-sm text-soft">{method.details}</p>
  {method.isPrimary && (
  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium mt-1 inline-block">
  Primary
@@ -290,7 +290,7 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  {/* Billing History */}
  <div>
  <div className="flex justify-between items-center mb-4">
- <h3 className="font-bold text-gray-800">Billing History</h3>
+ <h3 className="font-bold text-fg">Billing History</h3>
  <button className="text-blue-600 hover:text-blue-800 flex items-center gap-2">
  <FaDownload />
  Export All
@@ -298,18 +298,18 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full border rounded-lg">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-600">Date</th>
- <th className="p-3 text-left font-medium text-gray-600">Description</th>
- <th className="p-3 text-right font-medium text-gray-600">Amount</th>
- <th className="p-3 text-center font-medium text-gray-600">Status</th>
- <th className="p-3 text-center font-medium text-gray-600">Invoice</th>
+ <th className="p-3 text-left font-medium text-soft">Date</th>
+ <th className="p-3 text-left font-medium text-soft">Description</th>
+ <th className="p-3 text-right font-medium text-soft">Amount</th>
+ <th className="p-3 text-center font-medium text-soft">Status</th>
+ <th className="p-3 text-center font-medium text-soft">Invoice</th>
  </tr>
  </thead>
  <tbody>
  {billingHistory.map((bill) => (
- <tr key={bill.id} className="border-t hover:bg-gray-50">
+ <tr key={bill.id} className="border-t hover:bg-subtle">
  <td className="p-3 text-sm">{bill.date}</td>
  <td className="p-3 text-sm">{bill.description}</td>
  <td className="p-3 text-sm text-right font-semibold">Rs {bill.amount.toLocaleString()}</td>
@@ -341,7 +341,7 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  {/* Notifications Tab */}
  {activeTab === 'notifications' && (
  <div>
- <h2 className="text-2xl font-bold text-gray-800 mb-6">Notification Settings</h2>
+ <h2 className="text-2xl font-bold text-fg mb-6">Notification Settings</h2>
  <div className="space-y-6">
  <div className="space-y-4">
  {Object.entries({
@@ -352,10 +352,10 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  employeeNotifications: "Employee Notification Confirmations",
  customAlerts: "Custom Alert Notifications"
  }).map(([key, label]) => (
- <div key={key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+ <div key={key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-subtle">
  <div>
- <p className="font-medium text-gray-800">{label}</p>
- <p className="text-sm text-gray-600">
+ <p className="font-medium text-fg">{label}</p>
+ <p className="text-sm text-soft">
  {key === 'newClaims' && "Get notified when employees submit new insurance claims"}
  {key === 'employeeAdditions' && "Receive alerts when new employees are added to policies"}
  {key === 'billingUpdates' && "Updates about billing cycles and payment processing"}
@@ -370,7 +370,7 @@ export default function SettingsTabs({ initialTab }: SettingsTabsProps) {
  >
  {notifications[key as keyof NotificationSettings] ? 
  <FaToggleOn className="text-3xl text-green-500" /> : 
- <FaToggleOff className="text-3xl text-gray-400" />
+ <FaToggleOff className="text-3xl text-faint" />
  }
  </button>
  </div>

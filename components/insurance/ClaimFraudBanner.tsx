@@ -64,7 +64,7 @@ export default function ClaimFraudBanner({ claimId }: { claimId: string }) {
   const tint = {
     high:   'bg-red-50 border-red-200 text-red-900',
     medium: 'bg-amber-50 border-amber-200 text-amber-900',
-    low:    'bg-gray-50 border-gray-200 text-gray-800',
+    low:    'bg-subtle border-line text-fg',
   }[signals.riskLevel]
 
   const Icon = signals.riskLevel === 'high' ? FaExclamationCircle : FaExclamationTriangle
@@ -82,7 +82,7 @@ export default function ClaimFraudBanner({ claimId }: { claimId: string }) {
       <ul className="space-y-1 text-xs">
         {signals.flags.map((flag) => (
           <li key={flag.code} className="flex items-start gap-1.5">
-            <span className="mt-0.5">•</span>
+            <span className="mt-0.5"></span>
             <div>
               <span className="font-medium">{flag.code.replace(/_/g, ' ')}:</span> {flag.message}
             </div>

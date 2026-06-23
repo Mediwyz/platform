@@ -40,9 +40,9 @@ export default function CompanyAnalytics() {
   const paidTotal = claimsByStatus.paid?.totalAmount ?? 0
 
   return (
-    <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 mb-6">
+    <section className="bg-surface rounded-xl border border-line p-5 space-y-4 mb-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-gray-900">Analytics - {company.name}</h2>
+        <h2 className="font-bold text-fg">Analytics - {company.name}</h2>
         {company.isInsuranceCompany && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
             <FaShieldAlt /> Insurance
@@ -51,7 +51,7 @@ export default function CompanyAnalytics() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Tile label="Active members" value={members.active} Icon={FaUsers} color="text-gray-700 bg-gray-50" />
+        <Tile label="Active members" value={members.active} Icon={FaUsers} color="text-soft bg-subtle" />
         <Tile label="Pending" value={members.pending} Icon={FaUsers} color="text-amber-700 bg-amber-50" />
         <Tile
           label="Expected / month"
@@ -78,12 +78,12 @@ function Tile({
   label: string; value: number | string; Icon: React.ComponentType<{ className?: string }>; color: string
 }) {
   return (
-    <div className="border border-gray-100 rounded-lg p-3">
+    <div className="border border-line rounded-lg p-3">
       <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg ${color} mb-2`}>
         <Icon className="text-sm" />
       </div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-lg font-bold text-gray-900">{value}</p>
+      <p className="text-xs text-soft">{label}</p>
+      <p className="text-lg font-bold text-fg">{value}</p>
     </div>
   )
 }

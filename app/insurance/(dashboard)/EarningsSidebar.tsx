@@ -13,20 +13,20 @@ export default function EarningsSidebar({ totalCommission, platformFee, netPayou
  return (
  <div className="space-y-8">
  {/* Today's Payout */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-bold text-gray-900"> Payout</h3>
+ <h3 className="text-lg font-bold text-fg"> Payout</h3>
  <button className="text-blue-600 text-sm hover:underline">
  <FaFileExport />
  </button>
  </div>
  <div className="space-y-3">
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Total Commission</span>
+ <span className="text-soft">Total Commission</span>
  <span className="font-medium">Rs {totalCommission.toLocaleString()}</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Platform Fee (5%)</span>
+ <span className="text-soft">Platform Fee (5%)</span>
  <span className="font-medium text-red-500">-Rs {platformFee.toLocaleString()}</span>
  </div>
  <div className="border-t pt-3 mt-3 flex justify-between">
@@ -37,20 +37,20 @@ export default function EarningsSidebar({ totalCommission, platformFee, netPayou
  </div>
 
  {/* Performance Metrics */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">Performance Overview</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">Performance Overview</h3>
  <div className="space-y-4">
  <div className="flex items-center justify-between">
- <span className="text-gray-600">Claim Approval Rate</span>
+ <span className="text-soft">Claim Approval Rate</span>
  <div className="flex items-center gap-2">
- <div className="w-16 h-2 bg-gray-200 rounded-full">
+ <div className="w-16 h-2 bg-line rounded-full">
  <div className="h-2 bg-green-500 rounded-full" style={{ width: `${Math.min(claimApprovalRate, 100)}%` }}></div>
  </div>
  <span className="font-semibold text-green-600">{claimApprovalRate}%</span>
  </div>
  </div>
  <div className="flex items-center justify-between">
- <span className="text-gray-600">Expiring Policies</span>
+ <span className="text-soft">Expiring Policies</span>
  <span className={`font-semibold ${expiringPolicies > 0 ? 'text-orange-600' : 'text-green-600'}`}>
  {expiringPolicies} soon
  </span>
@@ -82,7 +82,7 @@ export default function EarningsSidebar({ totalCommission, platformFee, netPayou
  )}
  <Link
  href="/insurance/clients"
- className="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition"
+ className="bg-surface text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-subtle transition"
  >
  Manage Alerts
  </Link>

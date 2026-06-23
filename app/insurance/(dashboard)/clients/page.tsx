@@ -23,7 +23,7 @@ const statusConfig: Record<string, { label: string; color: string }> = {
  rejected: { label: 'Rejected', color: 'bg-red-100 text-red-800' },
  denied: { label: 'Denied', color: 'bg-red-100 text-red-800' },
  processing: { label: 'Processing', color: 'bg-blue-100 text-blue-800' },
- cancelled: { label: 'Cancelled', color: 'bg-gray-100 text-gray-800' },
+ cancelled: { label: 'Cancelled', color: 'bg-subtle text-fg' },
 }
 
 export default function InsuranceClientsPage() {
@@ -116,8 +116,8 @@ export default function InsuranceClientsPage() {
    <div className="flex items-center gap-3 mb-8">
     <FaUsers className="text-3xl text-purple-600" />
     <div>
-     <h1 className="text-2xl font-bold text-gray-900">Claims & Clients</h1>
-     <p className="text-sm text-gray-500">View recent claims and client activity</p>
+     <h1 className="text-2xl font-bold text-fg">Claims & Clients</h1>
+     <p className="text-sm text-soft">View recent claims and client activity</p>
     </div>
    </div>
 
@@ -134,13 +134,13 @@ export default function InsuranceClientsPage() {
    {/* Search */}
    <div className="flex flex-col sm:flex-row gap-4 mb-6">
     <div className="relative flex-1">
-     <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+     <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
      <input
       type="text"
       placeholder="Search by name, claim ID, or type..."
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
+      className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
      />
     </div>
    </div>
@@ -152,10 +152,10 @@ export default function InsuranceClientsPage() {
     </div>
    ) : filteredClaims.length === 0 ? (
     /* Empty State */
-    <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-     <FaUsers className="mx-auto text-4xl text-gray-300 mb-4" />
-     <h3 className="text-lg font-medium text-gray-600 mb-1">No claims found</h3>
-     <p className="text-sm text-gray-400">
+    <div className="text-center py-20 bg-subtle rounded-xl border border-dashed border-line">
+     <FaUsers className="mx-auto text-4xl text-faint mb-4" />
+     <h3 className="text-lg font-medium text-soft mb-1">No claims found</h3>
+     <p className="text-sm text-faint">
       {searchTerm
        ? 'Try adjusting your search term.'
        : 'Claims will appear here when they are submitted.'}
@@ -163,50 +163,50 @@ export default function InsuranceClientsPage() {
     </div>
    ) : (
     /* Claims Table */
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
      <div className="overflow-x-auto">
       <table className="w-full">
        <thead>
-        <tr className="bg-gray-50 border-b border-gray-200">
-         <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <tr className="bg-subtle border-b border-line">
+         <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Claim ID
          </th>
-         <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Claimant
          </th>
-         <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Type
          </th>
-         <th className="text-right px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-right px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Amount (MUR)
          </th>
-         <th className="text-center px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-center px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Status
          </th>
-         <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Date
          </th>
-         <th className="text-center px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+         <th className="text-center px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
           Actions
          </th>
         </tr>
        </thead>
-       <tbody className="divide-y divide-gray-100">
+       <tbody className="divide-y divide-line">
         {filteredClaims.map((claim) => {
          const info = statusConfig[claim.status] || statusConfig.pending
          return (
-          <tr key={claim.id} className="hover:bg-gray-50 transition-colors">
-           <td className="px-6 py-4 font-mono text-sm text-gray-700">
+          <tr key={claim.id} className="hover:bg-subtle transition-colors">
+           <td className="px-6 py-4 font-mono text-sm text-soft">
             {claim.claimId}
            </td>
            <td className="px-6 py-4">
-            <p className="font-medium text-gray-900">{claim.policyHolderName}</p>
+            <p className="font-medium text-fg">{claim.policyHolderName}</p>
             {claim.description && (
-             <p className="text-xs text-gray-500 mt-0.5 line-clamp-1 max-w-xs">{claim.description}</p>
+             <p className="text-xs text-soft mt-0.5 line-clamp-1 max-w-xs">{claim.description}</p>
             )}
            </td>
-           <td className="px-6 py-4 text-gray-600">{claim.policyType}</td>
-           <td className="px-6 py-4 text-right font-semibold text-gray-900">
+           <td className="px-6 py-4 text-soft">{claim.policyType}</td>
+           <td className="px-6 py-4 text-right font-semibold text-fg">
             Rs {claim.claimAmount.toLocaleString()}
            </td>
            <td className="px-6 py-4 text-center">
@@ -214,19 +214,19 @@ export default function InsuranceClientsPage() {
              {info.label}
             </span>
            </td>
-           <td className="px-6 py-4 text-sm text-gray-500">{claim.submittedDate}</td>
+           <td className="px-6 py-4 text-sm text-soft">{claim.submittedDate}</td>
            <td className="px-6 py-4">
             <div className="flex items-center justify-center gap-1">
              <button
               onClick={() => handleView(claim.id)}
-              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-faint hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               title="View Details"
              >
               <FaEye />
              </button>
              <button
               onClick={() => handleDelete(claim.id)}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 text-faint hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               title="Cancel Claim"
              >
               <FaTrash />

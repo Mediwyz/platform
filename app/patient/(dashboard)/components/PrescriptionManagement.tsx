@@ -259,7 +259,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
  <button 
  onClick={() => setActiveTab('reminders')}
- className="bg-white transition-all transform hover:scale-105 text-center"
+ className="bg-surface transition-all transform hover:scale-105 text-center"
  >
  <FaBell className="text-xl sm:text-2xl mx-auto mb-1 sm:mb-2" />
  <p className="font-semibold text-xs sm:text-sm md:text-base">Set Reminders</p>
@@ -268,20 +268,20 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  <button 
  onClick={() => setActiveTab('order')}
- className="bg-white transition-all transform hover:scale-105 text-center"
+ className="bg-surface transition-all transform hover:scale-105 text-center"
  >
  <FaShoppingCart className="text-xl sm:text-2xl mx-auto mb-1 sm:mb-2" />
  <p className="font-semibold text-xs sm:text-sm md:text-base">Order Medicines</p>
  <p className="text-xs opacity-80 hidden sm:block">Home delivery</p>
  </button>
 
- <Link href="/search/doctors" className="bg-white transition-all transform hover:scale-105 text-center">
+ <Link href="/search/doctors" className="bg-surface transition-all transform hover:scale-105 text-center">
  <FaUserMd className="text-xl sm:text-2xl mx-auto mb-1 sm:mb-2" />
  <p className="font-semibold text-xs sm:text-sm md:text-base">Consult Doctor</p>
  <p className="text-xs opacity-80 hidden sm:block">Ask questions</p>
  </Link>
 
- <Link href="/patient/ai-assistant" className="bg-white transition-all transform hover:scale-105 text-center block">
+ <Link href="/patient/ai-assistant" className="bg-surface transition-all transform hover:scale-105 text-center block">
  <FaAllergies className="text-xl sm:text-2xl mx-auto mb-1 sm:mb-2" />
  <p className="font-semibold text-xs sm:text-sm md:text-base">Drug Interactions</p>
  <p className="text-xs opacity-80 hidden sm:block">Safety check</p>
@@ -290,7 +290,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  {/* Refill Alerts */}
  {activePrescriptions && activePrescriptions.filter(p => getRefillUrgency(p) !== 'normal').length > 0 && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-orange-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-orange-200">
  <h3 className="text-base sm:text-lg font-semibold text-orange-800 mb-3 sm:mb-4 flex items-center">
  <FaExclamationTriangle className="mr-2" />
  Refill Reminders
@@ -301,13 +301,13 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  const days = getDaysUntilRefill(prescription)
  return (
  <div key={prescription.id} className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-l-4 ${
- urgency === 'urgent' ? 'bg-yellow-50 border-yellow-500' : 'bg-white border-gray-200'
+ urgency === 'urgent' ? 'bg-yellow-50 border-yellow-500' : 'bg-surface border-line'
  }`}>
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
  <div>
- <p className="font-medium text-gray-900 text-sm sm:text-base">{prescription.medicines[0]?.name}</p>
+ <p className="font-medium text-fg text-sm sm:text-base">{prescription.medicines[0]?.name}</p>
  <p className={`text-xs sm:text-sm ${urgency === 'urgent' ? 'text-red-600' : 'text-yellow-600'}`}>
- Refill needed in {days} days • Next refill: {prescription.nextRefill}
+ Refill needed in {days} days  Next refill: {prescription.nextRefill}
  </p>
  </div>
  <Link href="/search/health-shop" className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-xs sm:text-sm inline-block">
@@ -324,12 +324,12 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  {/* Active Prescriptions List */}
  <div className="space-y-3 sm:space-y-4">
  {filteredPrescriptions.filter(p => p.isActive).map((prescription) => (
- <div key={prescription.id} className="bg-white/30 rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all">
+ <div key={prescription.id} className="bg-white/30 rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden hover:shadow-xl transition-all">
  <div className="p-4 sm:p-5 md:p-6">
  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
  <div className="flex-1">
  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
- <h3 className="text-base sm:text-lg font-semibold text-gray-900">Prescription #{prescription.id}</h3>
+ <h3 className="text-base sm:text-lg font-semibold text-fg">Prescription #{prescription.id}</h3>
  <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-green-800 rounded-full text-xs sm:text-sm font-medium">
  <FaCheckCircle className="inline mr-1" />
  Active
@@ -344,7 +344,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  )}
  </div>
  
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm text-gray-600">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm text-soft">
  <div className="flex items-center gap-2">
  <FaUserMd className="text-blue-500" />
  <span>{prescription.doctorName}</span>
@@ -369,13 +369,13 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  onClick={() => setExpandedPrescription(
  expandedPrescription === prescription.id ? null : prescription.id
  )}
- className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white transition text-xs sm:text-sm"
+ className="px-3 sm:px-4 py-1.5 sm:py-2 bg-surface transition text-xs sm:text-sm"
  >
  <FaEye className="inline mr-1 sm:mr-2" />
  <span className="hidden sm:inline">{expandedPrescription === prescription.id ? 'Less' : 'Details'}</span>
  </button>
  
- <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white transition text-xs sm:text-sm">
+ <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-surface transition text-xs sm:text-sm">
  <FaShoppingCart className="inline mr-1 sm:mr-2" />
  <span className="hidden sm:inline">Reorder</span>
  </button>
@@ -383,7 +383,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Diagnosis */}
- <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-white rounded-lg sm:rounded-xl">
+ <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-surface rounded-lg sm:rounded-xl">
  <h4 className="font-medium text-blue-800 mb-1 flex items-center text-sm sm:text-base">
  <FaStethoscope className="mr-2" />
  Diagnosis
@@ -393,43 +393,43 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  {/* Medicines Overview */}
  <div className="space-y-2 sm:space-y-3">
- <h4 className="font-medium text-gray-800 flex items-center text-sm sm:text-base">
+ <h4 className="font-medium text-fg flex items-center text-sm sm:text-base">
  <FaPills className="mr-2 text-green-500" />
  Medications ({prescription.medicines.length})
  </h4>
  <div className="grid gap-2 sm:gap-3">
  {prescription.medicines.map((medicine, index) => (
- <div key={index} className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200">
+ <div key={index} className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-line">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
  <div className="flex-1">
- <h5 className="font-semibold text-gray-900 mb-2 flex items-center text-sm sm:text-base">
+ <h5 className="font-semibold text-fg mb-2 flex items-center text-sm sm:text-base">
  <FaCapsules className="mr-2 text-purple-500" />
  {medicine.name}
  </h5>
  
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
  <div className="space-y-1">
- <p className="text-gray-600">
+ <p className="text-soft">
  <span className="font-medium">Dosage:</span> {medicine.dosage}
  </p>
- <p className="text-gray-600">
+ <p className="text-soft">
  <span className="font-medium">Frequency:</span> {medicine.frequency}
  </p>
- <p className="text-gray-600">
+ <p className="text-soft">
  <span className="font-medium">Duration:</span> {medicine.duration}
  </p>
  </div>
  <div className="space-y-1">
- <p className="text-gray-600">
+ <p className="text-soft">
  <span className="font-medium">Quantity:</span> {medicine.quantity}
  </p>
- <p className="text-gray-600">
+ <p className="text-soft">
  <span className="font-medium">Take:</span> {medicine.beforeFood ? 'Before food' : 'After food'}
  </p>
  </div>
  </div>
 
- <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-white rounded-lg">
+ <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-surface rounded-lg">
  <p className="text-xs sm:text-sm text-yellow-800">
  <FaInfoCircle className="inline mr-1 sm:mr-2" />
  <strong>Instructions:</strong> {medicine.instructions}
@@ -443,7 +443,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${
  selectedForOrder.includes(medicine.name)
  ? 'bg-sky-50 text-green-700'
- : 'bg-sky-50 text-gray-600 '
+ : 'bg-sky-50 text-soft '
  }`}
  >
  <FaShoppingCart className="inline mr-1" />
@@ -463,10 +463,10 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  {/* Expanded Details */}
  {expandedPrescription === prescription.id && (
- <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-3 sm:space-y-4">
+ <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-line space-y-3 sm:space-y-4">
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
- <h5 className="font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <h5 className="font-semibold text-fg mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
  <FaUser className="mr-2 text-blue-500" />
  Doctor Information
  </h5>
@@ -477,7 +477,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h5 className="font-semibold text-green-800 mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
  <FaCalendarAlt className="mr-2" />
  Prescription Timeline
@@ -491,7 +491,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {prescription.notes && (
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h5 className="font-semibold text-blue-800 mb-2 flex items-center text-sm sm:text-base">
  <FaInfoCircle className="mr-2" />
  Additional Notes
@@ -522,11 +522,11 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {filteredPrescriptions.filter(p => p.isActive).length === 0 && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-gray-200">
- <FaPills className="text-gray-400 text-3xl sm:text-4xl lg:text-5xl mx-auto mb-3 sm:mb-4" />
- <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Active Prescriptions</h3>
- <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base">You don&apos;t have any active prescriptions at the moment</p>
- <button className="bg-white transition-all text-sm sm:text-base">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-line">
+ <FaPills className="text-faint text-3xl sm:text-4xl lg:text-5xl mx-auto mb-3 sm:mb-4" />
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2">No Active Prescriptions</h3>
+ <p className="text-soft mb-4 sm:mb-6 text-sm sm:text-base">You don&apos;t have any active prescriptions at the moment</p>
+ <button className="bg-surface transition-all text-sm sm:text-base">
  Consult a Doctor
  </button>
  </div>
@@ -537,34 +537,34 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  const renderReminders = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Today's Medication Schedule */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 flex items-center">
+ <h3 className="text-base sm:text-lg font-semibold text-fg flex items-center">
  <FaBell className="mr-2 text-blue-500" />
  Today&apos;s Medication Schedule
  </h3>
  <div className="flex items-center gap-2">
- <span className="text-xs sm:text-sm text-gray-600">Reminders</span>
+ <span className="text-xs sm:text-sm text-soft">Reminders</span>
  <button
  onClick={() => setShowReminders(!showReminders)}
- className="relative inline-flex h-5 w-10 sm:h-6 sm:w-11 items-center rounded-full bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+ className="relative inline-flex h-5 w-10 sm:h-6 sm:w-11 items-center rounded-full bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
  >
- <span className={`inline-block h-3 w-3 sm:h-4 sm:w-4 transform rounded-full bg-white shadow-lg transition-transform ${showReminders ? 'translate-x-5 sm:translate-x-6 bg-blue-500' : 'translate-x-1'}`} />
+ <span className={`inline-block h-3 w-3 sm:h-4 sm:w-4 transform rounded-full bg-surface shadow-lg transition-transform ${showReminders ? 'translate-x-5 sm:translate-x-6 bg-blue-500' : 'translate-x-1'}`} />
  </button>
  </div>
  </div>
 
  <div className="space-y-3 sm:space-y-4">
  {reminders.map((reminder) => (
- <div key={reminder.id} className="bg-white/70 border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
+ <div key={reminder.id} className="bg-white/70 border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
  <div className="flex items-start gap-3 sm:gap-4">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
  <FaPills className="text-blue-600 text-base sm:text-xl" />
  </div>
  <div className="flex-1">
- <h4 className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">{reminder.medicineName}</h4>
- <p className="text-xs sm:text-sm text-gray-600 mb-2">{reminder.dosage} • {reminder.frequency}</p>
+ <h4 className="font-semibold text-fg mb-1 text-sm sm:text-base">{reminder.medicineName}</h4>
+ <p className="text-xs sm:text-sm text-soft mb-2">{reminder.dosage}  {reminder.frequency}</p>
  
  <div className="flex flex-wrap gap-2 sm:gap-3">
  {reminder.times.map((time, index) => (
@@ -584,7 +584,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  ))}
  </div>
 
- <p className="text-xs text-gray-500 mt-2">
+ <p className="text-xs text-soft mt-2">
  Next dose: {reminder.nextDose}
  </p>
  </div>
@@ -608,7 +608,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-blue-200">
- <button className="w-full p-2.5 sm:p-3 border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl text-gray-600 hover:border-blue-400 hover:text-blue-600 transition text-sm sm:text-base">
+ <button className="w-full p-2.5 sm:p-3 border-2 border-dashed border-line rounded-lg sm:rounded-xl text-soft hover:border-blue-400 hover:text-blue-600 transition text-sm sm:text-base">
  <FaPlus className="inline mr-2" />
  Set New Medication Reminder
  </button>
@@ -616,8 +616,8 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Medication Adherence */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-6 flex items-center">
  <FaClipboardCheck className="mr-2 text-green-500" />
  Medication Adherence
  </h3>
@@ -627,34 +627,34 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <span className="text-xl sm:text-2xl font-bold text-green-600">87%</span>
  </div>
- <p className="font-semibold text-gray-900 text-sm sm:text-base">This Week</p>
- <p className="text-xs sm:text-sm text-gray-600">6 of 7 days on track</p>
+ <p className="font-semibold text-fg text-sm sm:text-base">This Week</p>
+ <p className="text-xs sm:text-sm text-soft">6 of 7 days on track</p>
  </div>
  
  <div className="text-center">
  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <span className="text-xl sm:text-2xl font-bold text-blue-600">92%</span>
  </div>
- <p className="font-semibold text-gray-900 text-sm sm:text-base">This Month</p>
- <p className="text-xs sm:text-sm text-gray-600">28 of 30 days completed</p>
+ <p className="font-semibold text-fg text-sm sm:text-base">This Month</p>
+ <p className="text-xs sm:text-sm text-soft">28 of 30 days completed</p>
  </div>
  
  <div className="text-center">
  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <FaStar className="text-purple-600 text-xl sm:text-2xl" />
  </div>
- <p className="font-semibold text-gray-900 text-sm sm:text-base">Overall Rating</p>
- <p className="text-xs sm:text-sm text-gray-600">Excellent adherence</p>
+ <p className="font-semibold text-fg text-sm sm:text-base">Overall Rating</p>
+ <p className="text-xs sm:text-sm text-soft">Excellent adherence</p>
  </div>
  </div>
 
  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-sky-50 rounded-lg sm:rounded-xl">
  <h4 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">Tips for Better Adherence</h4>
  <ul className="text-xs sm:text-sm text-green-700 space-y-1">
- <li>• Set consistent daily routines</li>
- <li>• Use pill organizers or reminder apps</li>
- <li>• Keep medications visible and accessible</li>
- <li>• Track your progress regularly</li>
+ <li> Set consistent daily routines</li>
+ <li> Use pill organizers or reminder apps</li>
+ <li> Keep medications visible and accessible</li>
+ <li> Track your progress regularly</li>
  </ul>
  </div>
  </div>
@@ -665,7 +665,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Order Summary */}
  {selectedForOrder.length > 0 && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
  <h3 className="text-base sm:text-lg font-semibold text-green-800 mb-3 sm:mb-4 flex items-center">
  <FaShoppingCart className="mr-2" />
  Your Medicine Cart ({selectedForOrder.length} items)
@@ -696,22 +696,22 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  {/* Current Order */}
  {currentOrder && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-6 flex items-center">
  <FaTruck className="mr-2 text-blue-500" />
  Current Order
  </h3>
 
  <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
  {currentOrder.medicines.map((medicine) => (
- <div key={medicine.id} className="flex items-center justify-between p-3 sm:p-4 bg-white/70 border border-gray-200 rounded-lg sm:rounded-xl">
+ <div key={medicine.id} className="flex items-center justify-between p-3 sm:p-4 bg-white/70 border border-line rounded-lg sm:rounded-xl">
  <div className="flex items-center gap-3 sm:gap-4">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-lg flex items-center justify-center">
  <FaPills className="text-blue-600 text-sm sm:text-base" />
  </div>
  <div>
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{medicine.name}</h4>
- <p className="text-xs sm:text-sm text-gray-600">{medicine.dosage}</p>
+ <h4 className="font-semibold text-fg text-sm sm:text-base">{medicine.name}</h4>
+ <p className="text-xs sm:text-sm text-soft">{medicine.dosage}</p>
  <div className="flex items-center gap-2 mt-1">
  <span className={`px-2 py-0.5 rounded-full text-xs ${
  medicine.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -723,7 +723,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
  <div className="text-right">
  <p className="font-bold text-base sm:text-lg">Rs {medicine.price}</p>
- <p className="text-xs sm:text-sm text-gray-600">Qty: {medicine.quantity}</p>
+ <p className="text-xs sm:text-sm text-soft">Qty: {medicine.quantity}</p>
  </div>
  </div>
  ))}
@@ -775,7 +775,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
 
- <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-white rounded-lg">
+ <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-surface rounded-lg">
  <p className="text-xs sm:text-sm text-green-800">
  <FaTruck className="inline mr-2" />
  Estimated delivery: {currentOrder.estimatedDelivery}
@@ -804,66 +804,66 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* History Stats */}
  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-blue-100 text-center">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-blue-100 text-center">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <FaHistory className="text-blue-600 text-base sm:text-xl" />
  </div>
  <p className="text-xl sm:text-2xl font-bold text-blue-600">{allPrescriptions.length}</p>
- <p className="text-xs sm:text-sm text-gray-600">Total Prescriptions</p>
+ <p className="text-xs sm:text-sm text-soft">Total Prescriptions</p>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-green-100 text-center">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-green-100 text-center">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <FaCheckCircle className="text-green-600 text-base sm:text-xl" />
  </div>
  <p className="text-xl sm:text-2xl font-bold text-green-600">
  {allPrescriptions.filter(p => p.isActive).length}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">Currently Active</p>
+ <p className="text-xs sm:text-sm text-soft">Currently Active</p>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-purple-100 text-center">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-purple-100 text-center">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <FaUserMd className="text-purple-600 text-base sm:text-xl" />
  </div>
  <p className="text-xl sm:text-2xl font-bold text-purple-600">
  {new Set(allPrescriptions.map(p => p.doctorName)).size}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">Different Doctors</p>
+ <p className="text-xs sm:text-sm text-soft">Different Doctors</p>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-orange-100 text-center">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-orange-100 text-center">
  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
  <FaPills className="text-orange-600 text-base sm:text-xl" />
  </div>
  <p className="text-xl sm:text-2xl font-bold text-orange-600">
  {allPrescriptions.reduce((sum, p) => sum + p.medicines.length, 0)}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">Total Medicines</p>
+ <p className="text-xs sm:text-sm text-soft">Total Medicines</p>
  </div>
  </div>
 
  {/* All Prescriptions */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-gray-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-line">
  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800">Prescription History</h3>
+ <h3 className="text-base sm:text-lg font-semibold text-fg">Prescription History</h3>
  
  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
  <div className="relative">
- <FaSearch className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  placeholder="Search prescriptions..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm w-full sm:w-auto"
+ className="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm w-full sm:w-auto"
  />
  </div>
  
  <select
  value={sortBy}
  onChange={(e) => setSortBy(e.target.value as 'date' | 'doctor' | 'medicine')}
- className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm"
+ className="px-3 sm:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm"
  >
  <option value="date">Sort by Date</option>
  <option value="doctor">Sort by Doctor</option>
@@ -873,7 +873,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  <select
  value={filterStatus}
  onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'expired')}
- className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm"
+ className="px-3 sm:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm"
  >
  <option value="all">All Status</option>
  <option value="active">Active Only</option>
@@ -884,15 +884,15 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  <div className="space-y-3 sm:space-y-4">
  {filteredPrescriptions.map((prescription) => (
- <div key={prescription.id} className="bg-white/70 border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
+ <div key={prescription.id} className="bg-white/70 border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
  <div className="flex-1">
  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Prescription #{prescription.id}</h4>
+ <h4 className="font-semibold text-fg text-sm sm:text-base">Prescription #{prescription.id}</h4>
  <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
  prescription.isActive 
  ? 'bg-sky-50 text-green-800' 
- : 'bg-sky-50 text-gray-800'
+ : 'bg-sky-50 text-fg'
  }`}>
  {prescription.isActive ? 'Active' : 'Completed'}
  </span>
@@ -900,18 +900,18 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-3">
  <div className="space-y-1">
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  <strong>Doctor:</strong> {prescription.doctorName}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  <strong>Date:</strong> {new Date(prescription.date).toLocaleDateString()}
  </p>
  </div>
  <div className="space-y-1">
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  <strong>Diagnosis:</strong> {prescription.diagnosis}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  <strong>Medicines:</strong> {prescription.medicines.length}
  </p>
  </div>
@@ -919,12 +919,12 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  <div className="flex flex-wrap gap-1.5 sm:gap-2">
  {prescription.medicines.slice(0, 3).map((medicine, index) => (
- <span key={index} className="px-2 sm:px-3 py-0.5 sm:py-1 bg-white text-blue-700 rounded-full text-xs">
+ <span key={index} className="px-2 sm:px-3 py-0.5 sm:py-1 bg-surface text-blue-700 rounded-full text-xs">
  {medicine.name}
  </span>
  ))}
  {prescription.medicines.length > 3 && (
- <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-gray-600 rounded-full text-xs">
+ <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-soft rounded-full text-xs">
  +{prescription.medicines.length - 3} more
  </span>
  )}
@@ -932,11 +932,11 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  <div className="flex gap-2">
- <button className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white transition text-xs sm:text-sm">
+ <button className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-surface transition text-xs sm:text-sm">
  <FaEye className="inline mr-1" />
  View
  </button>
- <button className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white transition text-xs sm:text-sm">
+ <button className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-surface transition text-xs sm:text-sm">
  <FaDownload className="inline mr-1" />
  Download
  </button>
@@ -948,8 +948,8 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
 
  {filteredPrescriptions.length === 0 && (
  <div className="text-center py-6 sm:py-8">
- <FaSearch className="text-gray-400 text-2xl sm:text-3xl mx-auto mb-3" />
- <p className="text-gray-500 text-sm sm:text-base">No prescriptions found matching your criteria</p>
+ <FaSearch className="text-faint text-2xl sm:text-3xl mx-auto mb-3" />
+ <p className="text-soft text-sm sm:text-base">No prescriptions found matching your criteria</p>
  </div>
  )}
  </div>
@@ -960,20 +960,20 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  return (
  <div className="flex items-center justify-center py-12">
  <FaPills className="animate-pulse text-purple-500 text-2xl mr-3" />
- <span className="text-gray-500">Loading prescriptions...</span>
+ <span className="text-soft">Loading prescriptions...</span>
  </div>
  )
  }
 
  if (allPrescriptions.length === 0) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-purple-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-purple-200">
  <div className="bg-sky-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-4 sm:mb-6">
  <FaPills className="text-purple-500 text-2xl sm:text-3xl" />
  </div>
- <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2 sm:mb-3">No Prescriptions Found</h3>
- <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base">You don&apos;t have any prescriptions yet. Consult with a doctor to get started.</p>
- <button className="bg-white transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base">
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2 sm:mb-3">No Prescriptions Found</h3>
+ <p className="text-soft mb-4 sm:mb-6 text-sm sm:text-base">You don&apos;t have any prescriptions yet. Consult with a doctor to get started.</p>
+ <button className="bg-surface transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base">
  <FaUserMd />
  Consult a Doctor
  </button>
@@ -1011,9 +1011,9 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Mobile Accordion / Desktop Tabs */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden">
  {/* Desktop Tab Navigation */}
- <div className="hidden sm:block border-b border-gray-200">
+ <div className="hidden sm:block border-b border-line">
  <div className="flex overflow-x-auto">
  {sections.map((tab) => (
  <button
@@ -1022,7 +1022,7 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  className={`flex-shrink-0 px-3 md:px-6 py-3 md:py-4 text-center font-medium transition-all flex items-center gap-1.5 md:gap-2 ${
  activeTab === tab.id
  ? `text-${tab.color}-600 border-b-2 border-current from-${tab.color}-50 to-transparent`
- : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+ : 'text-soft hover:text-fg hover:bg-subtle'
  }`}
  title={tab.label}
  >
@@ -1048,14 +1048,14 @@ const PrescriptionManagement: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Fixed Bottom Tab Bar - Mobile */}
- <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center py-2 px-1 z-50 shadow-lg">
+ <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-line flex justify-around items-center py-2 px-1 z-50 shadow-lg">
  {sections.map((section) => {
  const Icon = section.icon
  const isActive = activeTab === section.id
  return (
  <button key={section.id} onClick={() => setActiveTab(section.id as typeof activeTab)}
- className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-gray-400'}`}>
- <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+ className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-faint'}`}>
+ <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-faint'}`} />
  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-1" />}
  </button>
  )

@@ -1,10 +1,10 @@
 'use client'
 
 /**
- * MyOrganisationsOverview — the multi-organisation summary at the top of the
+ * MyOrganisationsOverview  the multi-organisation summary at the top of the
  * "My Company" page. Shows every healthcare entity the user founded or is a
  * member of, grouped by category (clinics, hospitals, labs, pharmacies,
- * self-employed practice). Each category shows the org names (or "0 — none
+ * self-employed practice). Each category shows the org names (or "0  none
  * yet"), a Create button, and a per-owned-org member invite.
  *
  * Insurance / employer companies live in the corporate subsystem and are
@@ -95,7 +95,7 @@ export default function MyOrganisationsOverview() {
       const json = await res.json()
       if (json.success) setData({ owned: json.data.owned ?? [], member: json.data.member ?? [] })
     } catch {
-      /* leave empty — each category still renders its create CTA */
+      /* leave empty  each category still renders its create CTA */
     } finally {
       setLoading(false)
     }
@@ -161,22 +161,22 @@ export default function MyOrganisationsOverview() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-56 mb-4" />
+      <div className="bg-surface rounded-2xl border border-line shadow-sm p-6 mb-8 animate-pulse">
+        <div className="h-6 bg-line rounded w-56 mb-4" />
         <div className="space-y-3">
-          {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-16 bg-gray-100 rounded-xl" />)}
+          {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-16 bg-subtle rounded-xl" />)}
         </div>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
+    <div className="bg-surface rounded-2xl border border-line shadow-sm p-6 mb-8">
       <div className="mb-1 flex items-center gap-2">
         <FaHospital className="text-[#0C6780]" />
-        <h2 className="text-lg font-bold text-gray-900">My Organisations</h2>
+        <h2 className="text-lg font-bold text-fg">My Organisations</h2>
       </div>
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-sm text-soft mb-5">
         Clinics, hospitals, labs and practices you own or belong to. Create one and invite colleagues by email.
       </p>
 
@@ -194,7 +194,7 @@ export default function MyOrganisationsOverview() {
           const orgs = orgsByType(cat.type)
           const Icon = cat.Icon
           return (
-            <div key={cat.type} className="border border-gray-200 rounded-xl p-4">
+            <div key={cat.type} className="border border-line rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3 min-w-0">
                   <span className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${TEAL}1A`, color: TEAL }}>
@@ -202,12 +202,12 @@ export default function MyOrganisationsOverview() {
                   </span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-gray-900">{cat.label}</h3>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${orgs.length ? 'bg-[#0C6780]/10 text-[#0C6780]' : 'bg-gray-100 text-gray-400'}`}>
+                      <h3 className="font-semibold text-fg">{cat.label}</h3>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${orgs.length ? 'bg-[#0C6780]/10 text-[#0C6780]' : 'bg-subtle text-faint'}`}>
                         {orgs.length}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-400">{cat.blurb}</p>
+                    <p className="text-xs text-faint">{cat.blurb}</p>
                   </div>
                 </div>
                 <button
@@ -218,28 +218,28 @@ export default function MyOrganisationsOverview() {
                 </button>
               </div>
 
-              {/* Org list — or empty state */}
+              {/* Org list  or empty state */}
               {orgs.length === 0 ? (
-                <p className="text-xs text-gray-400 mt-3 pl-13">None yet — create your first {cat.label.toLowerCase().replace(/s$/, '')} above.</p>
+                <p className="text-xs text-faint mt-3 pl-13">None yet  create your first {cat.label.toLowerCase().replace(/s$/, '')} above.</p>
               ) : (
                 <ul className="mt-3 space-y-2">
                   {orgs.map(o => (
-                    <li key={o.id} className="flex items-center justify-between gap-2 bg-gray-50 rounded-lg px-3 py-2">
+                    <li key={o.id} className="flex items-center justify-between gap-2 bg-subtle rounded-lg px-3 py-2">
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-medium text-sm text-gray-900 truncate">{o.name}</span>
+                          <span className="font-medium text-sm text-fg truncate">{o.name}</span>
                           {o.isOwner
                             ? <span title="You own this" className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600"><FaCrown size={9} /> Owner</span>
-                            : <span className="text-[10px] font-medium text-gray-500">{o.role || 'Member'}</span>}
+                            : <span className="text-[10px] font-medium text-soft">{o.role || 'Member'}</span>}
                         </div>
-                        <p className="text-[11px] text-gray-400">
-                          {o.city ? `${o.city} · ` : ''}{o.isOwner ? `${o.memberCount ?? 0} member${(o.memberCount ?? 0) !== 1 ? 's' : ''}` : 'You are a member'}
+                        <p className="text-[11px] text-faint">
+                          {o.city ? `${o.city}  ` : ''}{o.isOwner ? `${o.memberCount ?? 0} member${(o.memberCount ?? 0) !== 1 ? 's' : ''}` : 'You are a member'}
                         </p>
                       </div>
                       {o.isOwner && (
                         <button
                           onClick={() => { setInviteFor(inviteFor === o.id ? null : o.id); setInviteEmail(''); setMessage(null) }}
-                          className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-[#0C6780] transition"
+                          className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
                         >
                           <FaUserPlus size={11} /> Invite
                         </button>
@@ -258,7 +258,7 @@ export default function MyOrganisationsOverview() {
                     onChange={e => setNewName(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleCreate(cat.type)}
                     placeholder={`${cat.label.replace(/s$/, '')} name`}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+                    className="flex-1 px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
                     autoFocus
                   />
                   <button
@@ -280,7 +280,7 @@ export default function MyOrganisationsOverview() {
                     onChange={e => setInviteEmail(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && inviteFor && handleInvite(inviteFor)}
                     placeholder="colleague@email.com"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+                    className="flex-1 px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
                     autoFocus
                   />
                   <button

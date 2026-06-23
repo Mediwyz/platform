@@ -160,8 +160,8 @@ export default function RegionalWorkflowsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Workflow Templates</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-fg">Workflow Templates</h1>
+          <p className="text-sm text-soft mt-1">
             Manage status workflows for all provider types. {templates.length} templates configured.
           </p>
         </div>
@@ -180,13 +180,13 @@ export default function RegionalWorkflowsPage() {
           </Link>
           <Link
             href="/regional/workflows/library"
-            className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+            className="bg-surface border border-line hover:bg-subtle text-fg px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
           >
             <FiBookOpen className="w-4 h-4" /> Browse library
           </Link>
           <button
             onClick={openLibrary}
-            className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+            className="bg-surface border border-line hover:bg-subtle text-fg px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
           >
             <FiBookOpen className="w-4 h-4" /> Start from template
           </button>
@@ -201,14 +201,14 @@ export default function RegionalWorkflowsPage() {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
+          className="border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
         >
           <option value="">All Provider Types</option>
           {providerTypes.map(pt => (
             <option key={pt} value={pt}>{pt.replace(/_/g, ' ')}</option>
           ))}
         </select>
-        <span className="text-sm text-gray-400">{filtered.length} templates</span>
+        <span className="text-sm text-faint">{filtered.length} templates</span>
       </div>
 
       {loading ? (
@@ -222,16 +222,16 @@ export default function RegionalWorkflowsPage() {
               <h2 className="text-lg font-semibold text-brand-navy mb-3 flex items-center gap-2">
                 <FiSettings className="w-5 h-5 text-brand-teal" />
                 {providerType.replace(/_/g, ' ')}
-                <span className="text-xs font-normal text-gray-400">({tpls.length} workflows)</span>
+                <span className="text-xs font-normal text-faint">({tpls.length} workflows)</span>
               </h2>
 
               <div className="space-y-2">
                 {tpls.map(tpl => (
-                  <div key={tpl.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                  <div key={tpl.id} className="bg-surface border border-line rounded-xl overflow-hidden">
                     {/* Template header */}
                     <div
                       onClick={() => setExpandedId(expandedId === tpl.id ? null : tpl.id)}
-                      className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition cursor-pointer"
+                      className="w-full flex items-center justify-between p-4 hover:bg-subtle transition cursor-pointer"
                     >
                       <div className="flex items-center gap-3 flex-wrap">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
@@ -241,35 +241,35 @@ export default function RegionalWorkflowsPage() {
                         }`}>
                           {MODE_LABELS[tpl.serviceMode] || tpl.serviceMode}
                         </span>
-                        <span className="font-medium text-gray-900 text-sm">{tpl.name}</span>
-                        <span className="text-xs text-gray-400">{tpl.steps.length} steps</span>
+                        <span className="font-medium text-fg text-sm">{tpl.name}</span>
+                        <span className="text-xs text-faint">{tpl.steps.length} steps</span>
                         {/* Usage metrics pulled from /api/workflow/templates/stats */}
                         {(() => {
                           const s = stats[tpl.id]
                           if (!s || s.total === 0) return (
-                            <span className="text-[10px] text-gray-400 italic">no runs yet</span>
+                            <span className="text-[10px] text-faint italic">no runs yet</span>
                           )
                           const dropColor =
                             s.dropOffRate >= 40 ? 'text-red-600' :
                             s.dropOffRate >= 20 ? 'text-amber-600' : 'text-emerald-600'
                           return (
-                            <span className="flex items-center gap-2 text-[11px] text-gray-600">
+                            <span className="flex items-center gap-2 text-[11px] text-soft">
                               <span className="inline-flex items-center gap-0.5">
                                 <span className="font-semibold">{s.today}</span>
-                                <span className="text-gray-400">today</span>
+                                <span className="text-faint">today</span>
                               </span>
-                              <span className="text-gray-300">·</span>
+                              <span className="text-faint"></span>
                               <span className="inline-flex items-center gap-0.5">
                                 <span className="font-semibold">{s.week}</span>
-                                <span className="text-gray-400">7d</span>
+                                <span className="text-faint">7d</span>
                               </span>
-                              <span className="text-gray-300">·</span>
+                              <span className="text-faint"></span>
                               <span className="inline-flex items-center gap-0.5">
                                 <span className="font-semibold">{s.total}</span>
-                                <span className="text-gray-400">total</span>
+                                <span className="text-faint">total</span>
                               </span>
-                              <span className="text-gray-300">·</span>
-                              <span className={`inline-flex items-center gap-0.5 ${dropColor}`} title="Cancelled ÷ total">
+                              <span className="text-faint"></span>
+                              <span className={`inline-flex items-center gap-0.5 ${dropColor}`} title="Cancelled  total">
                                 <span className="font-semibold">{s.dropOffRate}%</span>
                                 <span>drop-off</span>
                               </span>
@@ -285,7 +285,7 @@ export default function RegionalWorkflowsPage() {
                             </Link>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDelete(tpl.id, tpl.name) }}
-                              className="text-gray-400 hover:text-red-500 p-1 transition" title="Delete"
+                              className="text-faint hover:text-red-500 p-1 transition" title="Delete"
                             >
                               <FiTrash2 className="w-4 h-4" />
                             </button>
@@ -318,15 +318,15 @@ export default function RegionalWorkflowsPage() {
 
                     {/* Expanded: show steps */}
                     {expandedId === tpl.id && (
-                      <div className="border-t border-gray-100 p-4 bg-gray-50">
-                        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      <div className="border-t border-line p-4 bg-subtle">
+                        <h4 className="text-xs font-semibold text-soft uppercase tracking-wider mb-3">
                           <FiList className="inline w-3 h-3 mr-1" />
                           Workflow Steps
                         </h4>
 
                         <div className="space-y-2">
                           {tpl.steps.sort((a, b) => a.order - b.order).map((step, idx) => (
-                            <div key={step.statusCode} className="flex items-start gap-3 bg-white rounded-lg p-3 border border-gray-100">
+                            <div key={step.statusCode} className="flex items-start gap-3 bg-surface rounded-lg p-3 border border-line">
                               {/* Step number */}
                               <div className="w-7 h-7 bg-brand-navy text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                                 {idx + 1}
@@ -334,8 +334,8 @@ export default function RegionalWorkflowsPage() {
 
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="font-medium text-sm text-gray-900">{step.label}</span>
-                                  <code className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">{step.statusCode}</code>
+                                  <span className="font-medium text-sm text-fg">{step.label}</span>
+                                  <code className="text-xs bg-subtle text-soft px-1.5 py-0.5 rounded">{step.statusCode}</code>
                                 </div>
 
                                 {/* Flags */}
@@ -358,7 +358,7 @@ export default function RegionalWorkflowsPage() {
                                     </span>
                                   ))}
                                   {step.actionsForPatient.map(a => (
-                                    <span key={a.action} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
+                                    <span key={a.action} className="px-1.5 py-0.5 bg-subtle text-soft text-xs rounded">
                                       Patient: {a.label}
                                     </span>
                                   ))}
@@ -369,14 +369,14 @@ export default function RegionalWorkflowsPage() {
                         </div>
 
                         {/* Transitions */}
-                        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">
+                        <h4 className="text-xs font-semibold text-soft uppercase tracking-wider mt-4 mb-2">
                           Transitions
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {tpl.transitions.map((tr, i) => (
-                            <span key={i} className="text-xs bg-white border border-gray-200 rounded px-2 py-1 text-gray-600">
-                              {tr.from} <span className="text-brand-teal font-bold mx-1">→</span> {tr.to}
-                              <span className="text-gray-400 ml-1">({tr.action})</span>
+                            <span key={i} className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
+                              {tr.from} <span className="text-brand-teal font-bold mx-1"></span> {tr.to}
+                              <span className="text-faint ml-1">({tr.action})</span>
                             </span>
                           ))}
                         </div>
@@ -390,32 +390,32 @@ export default function RegionalWorkflowsPage() {
         </div>
       )}
 
-      {/* ─── Library picker modal ─────────────────────────────────────── */}
+      {/*  Library picker modal  */}
       {libraryOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setLibraryOpen(false)}>
-          <div className="bg-white w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between gap-3">
+          <div className="bg-surface w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="px-5 py-4 border-b border-line flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-bold text-gray-900">Start from a template</h2>
-                <p className="text-xs text-gray-500 mt-0.5">Pick a vetted starter - we&apos;ll clone it into edit mode so you can customise the steps, actions and notifications.</p>
+                <h2 className="text-lg font-bold text-fg">Start from a template</h2>
+                <p className="text-xs text-soft mt-0.5">Pick a vetted starter - we&apos;ll clone it into edit mode so you can customise the steps, actions and notifications.</p>
               </div>
-              <button onClick={() => setLibraryOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500">
+              <button onClick={() => setLibraryOpen(false)} className="p-2 hover:bg-subtle rounded-lg text-soft">
                 <FiX />
               </button>
             </div>
 
-            <div className="px-5 py-3 border-b border-gray-100">
+            <div className="px-5 py-3 border-b border-line">
               <input
                 value={libraryFilter}
                 onChange={(e) => setLibraryFilter(e.target.value)}
-                placeholder="Search by name, category, provider type…"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+                placeholder="Search by name, category, provider type"
+                className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
               />
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
               {library.length === 0 ? (
-                <div className="py-8 text-center text-sm text-gray-500">Loading library…</div>
+                <div className="py-8 text-center text-sm text-soft">Loading library</div>
               ) : (
                 <div className="space-y-2">
                   {library
@@ -430,27 +430,27 @@ export default function RegionalWorkflowsPage() {
                         key={t.id}
                         onClick={() => cloneTemplate(t)}
                         disabled={cloningId === t.id}
-                        className="w-full text-left bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl p-3 transition-colors disabled:opacity-60"
+                        className="w-full text-left bg-subtle hover:bg-subtle border border-line rounded-xl p-3 transition-colors disabled:opacity-60"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                              <span className="font-semibold text-gray-900 text-sm">{t.name}</span>
-                              {t.category && <span className="text-[10px] bg-white border border-gray-200 text-gray-600 px-2 py-0.5 rounded-full">{t.category}</span>}
+                              <span className="font-semibold text-fg text-sm">{t.name}</span>
+                              {t.category && <span className="text-[10px] bg-surface border border-line text-soft px-2 py-0.5 rounded-full">{t.category}</span>}
                               <span className="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{t.providerType.replace(/_/g, ' ')}</span>
                               <span className="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">{t.serviceMode}</span>
-                              <span className="text-[10px] text-gray-400">{t.steps.length} steps</span>
+                              <span className="text-[10px] text-faint">{t.steps.length} steps</span>
                             </div>
-                            {t.description && <p className="text-xs text-gray-600 line-clamp-2">{t.description}</p>}
+                            {t.description && <p className="text-xs text-soft line-clamp-2">{t.description}</p>}
                           </div>
-                          <FiCopy className={`text-gray-400 flex-shrink-0 mt-1 ${cloningId === t.id ? 'animate-pulse' : ''}`} />
+                          <FiCopy className={`text-faint flex-shrink-0 mt-1 ${cloningId === t.id ? 'animate-pulse' : ''}`} />
                         </div>
                       </button>
                     ))}
                 </div>
               )}
             </div>
-            <div className="px-5 py-3 border-t border-gray-100 text-[11px] text-gray-500">
+            <div className="px-5 py-3 border-t border-line text-[11px] text-soft">
               Cloning keeps the steps, actions, flags, and notifications. You can rename, edit, or delete anything before publishing.
             </div>
           </div>

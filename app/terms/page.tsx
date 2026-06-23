@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
  return (
  <div className="container mx-auto px-4 py-12">
- <h1 className="text-4xl font-bold mb-8">MediWyz – Terms of Service (TOS)</h1>
+ <h1 className="text-4xl font-bold mb-8">MediWyz  Terms of Service (TOS)</h1>
  
  <section className="mb-6">
  <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
@@ -38,7 +38,7 @@ export default function TermsPage() {
  <section className="mb-6">
  <h2 className="text-2xl font-semibold mb-4">4. Eligibility and Use by Children</h2>
  <p>Users must be 18 years or older to register and use MediWyz independently.</p>
- <p>Minors may only use MediWyz under the supervision and consent of a parent or legal guardian, who assumes full responsibility for the minor’s use of the platform.</p>
+ <p>Minors may only use MediWyz under the supervision and consent of a parent or legal guardian, who assumes full responsibility for the minors use of the platform.</p>
  </section>
 
  <section className="mb-6">
@@ -77,7 +77,7 @@ export default function TermsPage() {
  <ul className="list-disc pl-6">
  <li>Providing false information.</li>
  <li>Using the service for unlawful purposes.</li>
- <li>Attempting unauthorized access to the system or other users’ data.</li>
+ <li>Attempting unauthorized access to the system or other users data.</li>
  </ul>
  </section>
 

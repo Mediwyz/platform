@@ -81,13 +81,13 @@ export default function CircularProgress({
  <span className={`text-3xl font-bold ${getColor()}`}>
  {consumed}
  </span>
- <span className="text-xs text-gray-500">of {target} cal</span>
+ <span className="text-xs text-soft">of {target} cal</span>
  </div>
  </div>
  {burned !== undefined && burned > 0 && (
  <div className="mt-2 flex items-center gap-1 text-sm text-orange-500">
  <span className="font-medium">{burned} cal</span>
- <span className="text-gray-400">burned</span>
+ <span className="text-faint">burned</span>
  </div>
  )}
  </div>

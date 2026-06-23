@@ -26,7 +26,7 @@ interface WorkflowCurrentStepProps {
   /** Pre-formatted amount for confirmation copy (e.g. "Rs 500"). */
   amountLabel?: string
   /** Booking service mode - passed to WorkflowActionButton for consequence copy
-   *  ('video' → video room warning, 'audio' → audio room warning). */
+   *  ('video'  video room warning, 'audio'  audio room warning). */
   serviceMode?: string
   /** Session tracking - populated for recurrent/multi-session services */
   sessionNumber?: number
@@ -72,11 +72,11 @@ export default function WorkflowCurrentStep({
     allSteps?.find(s => s.statusCode === targetStatus)?.label
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div className="bg-surface rounded-xl border border-line p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Current Status</p>
-          <h3 className="text-lg font-semibold text-gray-900 mt-1">{displayLabel}</h3>
+          <p className="text-xs font-medium text-soft uppercase tracking-wider">Current Status</p>
+          <h3 className="text-lg font-semibold text-fg mt-1">{displayLabel}</h3>
         </div>
         <span className={`${badge.bg} ${badge.text} px-3 py-1 rounded-full text-sm font-medium`}>
           {displayStatus.replace(/_/g, ' ')}
@@ -96,7 +96,7 @@ export default function WorkflowCurrentStep({
           </div>
           {maxSessions && (
             <div className="ml-auto flex-shrink-0">
-              <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div className="w-24 h-1.5 bg-line rounded-full overflow-hidden">
                 <div
                   className="h-full bg-brand-teal rounded-full transition-all"
                   style={{ width: `${Math.min(100, (sessionNumber / maxSessions) * 100)}%` }}
@@ -141,7 +141,7 @@ export default function WorkflowCurrentStep({
       )}
 
       {actions.length === 0 && !isCompleted && !isCancelled && (
-        <p className="text-sm text-gray-400">Waiting for the other party to take action...</p>
+        <p className="text-sm text-faint">Waiting for the other party to take action...</p>
       )}
     </div>
   )

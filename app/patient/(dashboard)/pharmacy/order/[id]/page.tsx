@@ -81,7 +81,7 @@ interface PaymentMethod {
 const defaultPharmacy: Pharmacy = {
  id: "", name: "Pharmacy", location: "", rating: 0, reviews: 0,
  license: "", operatingHours: "Mon-Sat: 8AM-8PM", deliveryRadius: "",
- certifications: [], avatar: "💊"
+ certifications: [], avatar: ""
 }
 
 // Default delivery slot generator used as a fallback.
@@ -110,7 +110,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "mcb-juice",
  name: "MCB Juice",
  description: "Pay instantly with MCB Juice mobile payment",
- icon: "📱",
+ icon: "",
  available: true
  },
  {
@@ -119,7 +119,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's pharmaceutical benefits",
  discount: 20,
- icon: "🏢",
+ icon: "",
  available: true
  },
  {
@@ -128,7 +128,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Insurance Coverage",
  description: "Apply health insurance (60% covered for prescribed medicines)",
  discount: 60,
- icon: "🛡️",
+ icon: "",
  available: true
  },
  {
@@ -137,7 +137,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Pharmacy Subscription",
  description: "Use your active medication subscription plan",
  discount: 100,
- icon: "💳",
+ icon: "",
  available: true
  }
 ]
@@ -183,7 +183,7 @@ export default function CompletePharmacyOrderBooking() {
  operatingHours: 'Mon-Sat: 8AM-8PM',
  deliveryRadius: 'Local delivery available',
  certifications: ['Licensed Pharmacy'],
- avatar: '💊',
+ avatar: '',
  }
  }))
  }
@@ -323,22 +323,22 @@ export default function CompletePharmacyOrderBooking() {
  return (
  <div className="min-h-screen to-white">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center gap-4">
- <Link href="/search/medicines" className="text-gray-600 hover:text-green-600">
+ <Link href="/search/medicines" className="text-soft hover:text-green-600">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Complete Your Order</h1>
- <p className="text-gray-600">{cartItems.length} items from {orderDetails.pharmacy.name}</p>
+ <h1 className="text-2xl font-bold text-fg">Complete Your Order</h1>
+ <p className="text-soft">{cartItems.length} items from {orderDetails.pharmacy.name}</p>
  </div>
  </div>
  </div>
  </div>
 
  {/* Progress Steps */}
- <div className="bg-white border-b">
+ <div className="bg-surface border-b">
  <div className="container mx-auto px-4 py-6">
  <div className="flex items-center justify-between max-w-4xl mx-auto">
  {steps.map((step, index) => (
@@ -347,19 +347,19 @@ export default function CompletePharmacyOrderBooking() {
  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold ${
  currentStep > step.number ? "bg-green-500 text-white" :
  currentStep === step.number ? "bg-green-600 text-white" :
- "bg-gray-200 text-gray-600"
+ "bg-line text-soft"
  }`}>
  {currentStep > step.number ? <FaCheck /> : <step.icon />}
  </div>
  <span className={`text-xs mt-2 text-center ${
- currentStep >= step.number ? "text-green-600 font-medium" : "text-gray-500"
+ currentStep >= step.number ? "text-green-600 font-medium" : "text-soft"
  }`}>
  {step.title}
  </span>
  </div>
  {index < steps.length - 1 && (
  <div className={`w-16 h-1 mx-2 ${
- currentStep > step.number ? "bg-green-500" : "bg-gray-200"
+ currentStep > step.number ? "bg-green-500" : "bg-line"
  }`} />
  )}
  </div>
@@ -372,8 +372,8 @@ export default function CompletePharmacyOrderBooking() {
  {/* Step 1: Cart Review */}
  {currentStep === 1 && (
  <div className="max-w-4xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Review Your Cart</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Review Your Cart</h2>
  
  {/* Pharmacy Info */}
  <div className="bg-green-50 rounded-lg p-4 mb-6">
@@ -392,8 +392,8 @@ export default function CompletePharmacyOrderBooking() {
  <div key={item.id} className="border rounded-lg p-4">
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <h3 className="font-semibold text-gray-900">{item.name}</h3>
- <p className="text-sm text-gray-600">{item.brand} - {item.genericName}</p>
+ <h3 className="font-semibold text-fg">{item.name}</h3>
+ <p className="text-sm text-soft">{item.brand} - {item.genericName}</p>
  <div className="flex items-center gap-3 mt-2">
  {item.prescriptionRequired && (
  <span className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded-full">
@@ -417,20 +417,20 @@ export default function CompletePharmacyOrderBooking() {
  <div className="flex items-center gap-3">
  <button
  onClick={() => updateQuantity(item.id, item.quantity - 1)}
- className="w-8 h-8 border rounded flex items-center justify-center hover:bg-gray-50"
+ className="w-8 h-8 border rounded flex items-center justify-center hover:bg-subtle"
  >
  <FaMinus className="text-xs" />
  </button>
  <span className="font-medium w-12 text-center">{item.quantity}</span>
  <button
  onClick={() => updateQuantity(item.id, item.quantity + 1)}
- className="w-8 h-8 border rounded flex items-center justify-center hover:bg-gray-50"
+ className="w-8 h-8 border rounded flex items-center justify-center hover:bg-subtle"
  >
  <FaPlus className="text-xs" />
  </button>
  </div>
  <div className="text-right">
- <p className="text-sm text-gray-500">Rs {item.price} × {item.quantity}</p>
+ <p className="text-sm text-soft">Rs {item.price}  {item.quantity}</p>
  <p className="font-bold text-green-600">Rs {item.price * item.quantity}</p>
  </div>
  </div>
@@ -449,7 +449,7 @@ export default function CompletePharmacyOrderBooking() {
  <div className="flex justify-between mt-8">
  <Link
  href="/search/medicines"
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Continue Shopping
  </Link>
@@ -467,16 +467,16 @@ export default function CompletePharmacyOrderBooking() {
  {/* Step 2: Prescriptions (if required) */}
  {currentStep === 2 && prescriptionRequired && (
  <div className="max-w-4xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload Prescriptions</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Upload Prescriptions</h2>
  
  <div className="space-y-6">
  {cartItems.filter(item => item.prescriptionRequired).map((item) => (
  <div key={item.id} className="border rounded-lg p-6">
  <div className="flex items-start justify-between mb-4">
  <div>
- <h3 className="font-semibold text-gray-900">{item.name}</h3>
- <p className="text-sm text-gray-600">{item.brand} - Qty: {item.quantity}</p>
+ <h3 className="font-semibold text-fg">{item.name}</h3>
+ <p className="text-sm text-soft">{item.brand} - Qty: {item.quantity}</p>
  </div>
  <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">
  Prescription Required
@@ -485,9 +485,9 @@ export default function CompletePharmacyOrderBooking() {
 
  <div className="space-y-4">
  {!orderDetails.prescriptions.get(item.id)?.file ? (
- <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
- <FaUpload className="text-3xl text-gray-400 mx-auto mb-3" />
- <p className="text-gray-600 mb-3">Upload prescription for {item.name}</p>
+ <div className="border-2 border-dashed border-line rounded-lg p-6 text-center">
+ <FaUpload className="text-3xl text-faint mx-auto mb-3" />
+ <p className="text-soft mb-3">Upload prescription for {item.name}</p>
  <input
  type="file"
  accept="image/*,.pdf"
@@ -535,7 +535,7 @@ export default function CompletePharmacyOrderBooking() {
  disabled={orderDetails.prescriptions.get(item.id)?.validated}
  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
  >
- {orderDetails.prescriptions.get(item.id)?.validated ? "Validated ✓" : "Validate Prescription"}
+ {orderDetails.prescriptions.get(item.id)?.validated ? "Validated " : "Validate Prescription"}
  </button>
  )}
 
@@ -575,7 +575,7 @@ export default function CompletePharmacyOrderBooking() {
  <div className="flex justify-between mt-8">
  <button
  onClick={() => setCurrentStep(1)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -594,11 +594,11 @@ export default function CompletePharmacyOrderBooking() {
  {currentStep === 3 && (
  <div className="max-w-4xl mx-auto">
  <div className="space-y-6">
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-xl font-bold text-gray-900 mb-6">Delivery Address</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-xl font-bold text-fg mb-6">Delivery Address</h3>
  <div className="space-y-4">
  <div>
- <label className="block text-gray-700 font-medium mb-2">Full Delivery Address *</label>
+ <label className="block text-soft font-medium mb-2">Full Delivery Address *</label>
  <textarea
  rows={3}
  required
@@ -610,7 +610,7 @@ export default function CompletePharmacyOrderBooking() {
  </div>
  
  <div>
- <label className="block text-gray-700 font-medium mb-2">Special Delivery Instructions</label>
+ <label className="block text-soft font-medium mb-2">Special Delivery Instructions</label>
  <textarea
  rows={2}
  placeholder="Any special instructions for delivery (gate code, landmark, etc.)"
@@ -621,7 +621,7 @@ export default function CompletePharmacyOrderBooking() {
  </div>
 
  <div>
- <label className="block text-gray-700 font-medium mb-2">Emergency Contact</label>
+ <label className="block text-soft font-medium mb-2">Emergency Contact</label>
  <input
  type="text"
  placeholder="Name and phone number"
@@ -633,12 +633,12 @@ export default function CompletePharmacyOrderBooking() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-xl font-bold text-gray-900 mb-6">Select Delivery Slot</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-xl font-bold text-fg mb-6">Select Delivery Slot</h3>
  <div className="mb-4">
  <div className="flex items-center gap-4 text-xs flex-wrap">
  <div className="flex items-center gap-2">
- <div className="w-3 h-3 border-2 border-gray-300 rounded"></div>
+ <div className="w-3 h-3 border-2 border-line rounded"></div>
  <span>Standard (Rs 50)</span>
  </div>
  <div className="flex items-center gap-2">
@@ -660,7 +660,7 @@ export default function CompletePharmacyOrderBooking() {
  return acc;
  }, [] as { date: string; slots: DeliverySlot[] }[]).map((dateGroup) => (
  <div key={dateGroup.date} className="border rounded-lg p-4">
- <h4 className="font-semibold text-gray-900 mb-3">
+ <h4 className="font-semibold text-fg mb-3">
  {new Date(dateGroup.date).toLocaleDateString('en-US', { 
  weekday: 'long', 
  year: 'numeric', 
@@ -676,14 +676,14 @@ export default function CompletePharmacyOrderBooking() {
  disabled={!slot.available}
  className={`p-4 border-2 rounded-lg text-left transition-all ${
  !slot.available 
- ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
+ ? "bg-subtle text-faint cursor-not-allowed border-line"
  : orderDetails.deliverySlot === slot
  ? "bg-green-600 text-white border-green-600"
  : slot.type === "express"
  ? "border-red-300 text-red-600 hover:bg-red-50"
  : slot.type === "priority"
  ? "border-orange-300 text-orange-600 hover:bg-orange-50"
- : "border-gray-300 hover:border-green-400 hover:bg-green-50"
+ : "border-line hover:border-green-400 hover:bg-green-50"
  }`}
  >
  <div className="flex justify-between items-start mb-2">
@@ -717,7 +717,7 @@ export default function CompletePharmacyOrderBooking() {
  <div className="flex justify-between mt-6">
  <button
  onClick={() => setCurrentStep(prescriptionRequired ? 2 : 1)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -735,19 +735,19 @@ export default function CompletePharmacyOrderBooking() {
  {/* Step 4: Payment */}
  {currentStep === 4 && (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Options</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Payment Options</h2>
  
  {/* Payment Methods */}
  <div className="space-y-4 mb-8">
- <h3 className="font-semibold text-gray-900 mb-4">Select Payment Method</h3>
+ <h3 className="font-semibold text-fg mb-4">Select Payment Method</h3>
  {paymentMethods.map((method) => (
  <label
  key={method.id}
- className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-gray-50 ${
+ className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-subtle ${
  selectedPaymentMethod?.id === method.id 
  ? "border-green-600 bg-green-50" 
- : "border-gray-200"
+ : "border-line"
  }`}
  >
  <input
@@ -767,34 +767,34 @@ export default function CompletePharmacyOrderBooking() {
  </span>
  )}
  </div>
- <p className="text-sm text-gray-600 mt-1">{method.description}</p>
+ <p className="text-sm text-soft mt-1">{method.description}</p>
  </div>
  </label>
  ))}
  </div>
 
  {/* Payment Summary */}
- <div className="bg-white rounded-xl p-6 mb-6 border">
- <h3 className="font-bold text-gray-900 mb-4">Order Summary</h3>
+ <div className="bg-surface rounded-xl p-6 mb-6 border">
+ <h3 className="font-bold text-fg mb-4">Order Summary</h3>
  <div className="space-y-3">
  {/* Items breakdown */}
  {cartItems.map(item => (
  <div key={item.id} className="flex justify-between text-sm">
- <span className="text-gray-600">{item.name} × {item.quantity}</span>
+ <span className="text-soft">{item.name}  {item.quantity}</span>
  <span className="font-medium">Rs {item.price * item.quantity}</span>
  </div>
  ))}
  
  <div className="border-t pt-3">
  <div className="flex justify-between">
- <span className="text-gray-600">Subtotal</span>
+ <span className="text-soft">Subtotal</span>
  <span className="font-medium">Rs {calculateSubtotal()}</span>
  </div>
  </div>
  
  {orderDetails.deliverySlot && (
  <div className="flex justify-between">
- <span className="text-gray-600">Delivery Fee</span>
+ <span className="text-soft">Delivery Fee</span>
  <span className="font-medium">Rs {orderDetails.deliverySlot.fee}</span>
  </div>
  )}
@@ -825,7 +825,7 @@ export default function CompletePharmacyOrderBooking() {
  <div className="flex justify-between">
  <button
  onClick={() => setCurrentStep(3)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -854,13 +854,13 @@ export default function CompletePharmacyOrderBooking() {
  {/* Step 5: Confirmation */}
  {currentStep === 5 && orderConfirmed && (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+ <div className="bg-surface rounded-2xl p-8 shadow-lg text-center">
  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <FaCheck className="text-green-600 text-3xl" />
  </div>
  
- <h2 className="text-3xl font-bold text-gray-900 mb-3">Order Confirmed!</h2>
- <p className="text-gray-600 mb-8">Your medicine order has been successfully placed and will be processed shortly.</p>
+ <h2 className="text-3xl font-bold text-fg mb-3">Order Confirmed!</h2>
+ <p className="text-soft mb-8">Your medicine order has been successfully placed and will be processed shortly.</p>
  
  {/* Digital Order Ticket */}
  <div className="bg-brand-teal rounded-2xl p-6 text-white mb-8 text-left">
@@ -894,7 +894,7 @@ export default function CompletePharmacyOrderBooking() {
  <Link href="/patient/bookings" className="bg-brand-teal transition-all text-center">
  View My Orders
  </Link>
- <Link href="/patient" className="border-2 border-gray-300 text-gray-700 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-all text-center">
+ <Link href="/patient" className="border-2 border-line text-soft py-4 px-6 rounded-lg font-semibold hover:bg-subtle transition-all text-center">
  Go to Dashboard
  </Link>
  </div>

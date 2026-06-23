@@ -78,7 +78,7 @@ export default function GenericBookEmergencyPage() {
  <div className="mb-6">
  <Link
  href={`/${baseSlug}/feed`}
- className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+ className="inline-flex items-center gap-2 text-soft hover:text-red-600 transition-colors"
  >
  <FaArrowLeft /> Back to Dashboard
  </Link>

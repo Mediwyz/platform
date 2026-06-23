@@ -106,20 +106,20 @@ export default function PatientOverviewPage() {
  <ReferralPillarCard userId={patientData.id} />
 
  {/* Health Score Card */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 lg:p-8 shadow-lg border border-green-100">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 lg:p-8 shadow-lg border border-green-100">
  <div className="flex items-center justify-between mb-3 sm:mb-4">
- <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-800">Your Health Score</h3>
+ <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-fg">Your Health Score</h3>
  <FaChartLine className="text-green-500 text-base sm:text-lg md:text-xl lg:text-2xl" />
  </div>
  <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-4">
  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-green-600">
  {patientData.healthScore ?? 0}%
  </div>
- <div className="text-xs sm:text-sm md:text-base text-gray-700 mt-1 sm:mb-2">
+ <div className="text-xs sm:text-sm md:text-base text-soft mt-1 sm:mb-2">
  Body Age: {patientData.bodyAge ?? 'N/A'} years
  </div>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5 mt-3 sm:mt-4">
+ <div className="w-full bg-line rounded-full h-2 sm:h-2.5 mt-3 sm:mt-4">
  <div
  className="bg-sky-100 h-2 sm:h-2.5 rounded-full transition-all duration-500"
  style={{ width: `${patientData.healthScore ?? 0}%` }}
@@ -129,13 +129,13 @@ export default function PatientOverviewPage() {
 
  {/* Quick Stats */}
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4 lg:gap-5">
- <div className="bg-white rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-blue-100">
+ <div className="bg-surface rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-blue-100">
  <div className="flex items-center justify-between">
  <div className="flex-1">
- <p className="text-gray-700 text-xs md:text-sm font-medium">Upcoming Appointments</p>
+ <p className="text-soft text-xs md:text-sm font-medium">Upcoming Appointments</p>
  <p className="text-xl md:text-2xl lg:text-3xl font-bold text-blue-600 mt-1">{upcomingCount}</p>
  {nextAppointment && (
- <p className="text-xs md:text-sm text-gray-600 mt-1">
+ <p className="text-xs md:text-sm text-soft mt-1">
  Next: {new Date(nextAppointment.date).toLocaleDateString()}
  </p>
  )}
@@ -146,10 +146,10 @@ export default function PatientOverviewPage() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-green-100">
+ <div className="bg-surface rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-green-100">
  <div className="flex items-center justify-between">
  <div className="flex-1">
- <p className="text-gray-700 text-xs md:text-sm font-medium">Active Prescriptions</p>
+ <p className="text-soft text-xs md:text-sm font-medium">Active Prescriptions</p>
  <p className="text-xl md:text-2xl lg:text-3xl font-bold text-green-600 mt-1">{prescriptionCount}</p>
  <p className="text-xs md:text-sm text-green-600 mt-1">All active</p>
  </div>
@@ -159,10 +159,10 @@ export default function PatientOverviewPage() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-purple-100">
+ <div className="bg-surface rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-purple-100">
  <div className="flex items-center justify-between">
  <div className="flex-1">
- <p className="text-gray-700 text-xs md:text-sm font-medium">Health Records</p>
+ <p className="text-soft text-xs md:text-sm font-medium">Health Records</p>
  <p className="text-xl md:text-2xl lg:text-3xl font-bold text-purple-600 mt-1">{recordCount}</p>
  <p className="text-xs md:text-sm text-purple-600 mt-1">Documents</p>
  </div>
@@ -172,10 +172,10 @@ export default function PatientOverviewPage() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-red-100">
+ <div className="bg-surface rounded-xl p-4 md:p-5 lg:p-6 shadow-lg border border-red-100">
  <div className="flex items-center justify-between">
  <div className="flex-1">
- <p className="text-gray-700 text-xs md:text-sm font-medium">Last Checkup</p>
+ <p className="text-soft text-xs md:text-sm font-medium">Last Checkup</p>
  <p className="text-sm md:text-lg lg:text-xl font-bold text-red-600 mt-1">
  {patientData.lastCheckupDate
  ? new Date(patientData.lastCheckupDate).toLocaleDateString()
@@ -191,31 +191,31 @@ export default function PatientOverviewPage() {
  </div>
 
  {/* Recent Activities */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 lg:p-8 shadow-lg border border-indigo-100">
- <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 lg:p-8 shadow-lg border border-indigo-100">
+ <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-fg mb-3 sm:mb-4">
  Recent Activities
  </h3>
  <div className="space-y-2 sm:space-y-3">
  {recentRecords.length > 0 ? recentRecords.map((record) => (
  <div
  key={record.id}
- className="flex items-center gap-3 md:gap-4 p-3 md:p-4 lg:p-5 bg-white bg-opacity-70 rounded-lg sm:rounded-xl hover:bg-opacity-90 transition"
+ className="flex items-center gap-3 md:gap-4 p-3 md:p-4 lg:p-5 bg-surface bg-opacity-70 rounded-lg sm:rounded-xl hover:bg-opacity-90 transition"
  >
  <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg">
  <FaFileAlt className="text-blue-600 text-sm sm:text-base md:text-lg" />
  </div>
  <div className="flex-1 min-w-0">
- <p className="font-medium text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg truncate">
+ <p className="font-medium text-fg text-xs sm:text-sm md:text-base lg:text-lg truncate">
  {record.title}
  </p>
- <p className="text-xs md:text-sm text-gray-600 truncate">
+ <p className="text-xs md:text-sm text-soft truncate">
  {record.doctorResponsible} &bull; {new Date(record.date).toLocaleDateString()}
  </p>
  </div>
- <FaEdit className="text-gray-400 hover:text-blue-500 cursor-pointer text-sm sm:text-base md:text-lg flex-shrink-0" />
+ <FaEdit className="text-faint hover:text-blue-500 cursor-pointer text-sm sm:text-base md:text-lg flex-shrink-0" />
  </div>
  )) : (
- <p className="text-sm text-gray-500 py-2">No recent activities</p>
+ <p className="text-sm text-soft py-2">No recent activities</p>
  )}
  </div>
  </div>

@@ -155,7 +155,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
 
       {/* Header with refresh */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-[#001E40]">Today&apos;s Summary</h2>
+        <h2 className="text-lg font-bold text-fg">Today&apos;s Summary</h2>
         <button
           onClick={fetchData}
           className="p-2 text-faint hover:text-[#0C6780] transition-colors rounded-lg hover:bg-subtle"
@@ -179,21 +179,21 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
             <FaFire className="text-orange-500 text-xl flex-shrink-0" />
             <div>
               <p className="text-xs text-soft">Net Calories</p>
-              <p className="text-lg font-bold text-[#001E40]">{netCalories}</p>
+              <p className="text-lg font-bold text-fg">{netCalories}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-3 bg-surface rounded-xl shadow-sm border-l-4 border-emerald-500">
             <FaDumbbell className="text-emerald-500 text-xl flex-shrink-0" />
             <div>
               <p className="text-xs text-soft">Exercise</p>
-              <p className="text-lg font-bold text-[#001E40]">{data.exercise.minutes} min</p>
+              <p className="text-lg font-bold text-fg">{data.exercise.minutes} min</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-3 bg-surface rounded-xl shadow-sm border-l-4 border-sky-400">
             <FaTint className="text-sky-500 text-xl flex-shrink-0" />
             <div>
               <p className="text-xs text-soft">Remaining today</p>
-              <p className="text-lg font-bold text-[#001E40]">{remaining} cal left</p>
+              <p className="text-lg font-bold text-fg">{remaining} cal left</p>
             </div>
           </div>
         </div>
@@ -203,15 +203,15 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
       <div className="flex gap-2 sm:hidden overflow-x-auto [&::-webkit-scrollbar]:hidden pb-1">
         <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaFire className="text-orange-500 text-xs" />
-          <span className="text-xs font-semibold text-[#001E40]">{netCalories} net cal</span>
+          <span className="text-xs font-semibold text-fg">{netCalories} net cal</span>
         </div>
         <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaDumbbell className="text-emerald-500 text-xs" />
-          <span className="text-xs font-semibold text-[#001E40]">{data.exercise.minutes} min</span>
+          <span className="text-xs font-semibold text-fg">{data.exercise.minutes} min</span>
         </div>
         <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 bg-surface rounded-full shadow-sm border border-line">
           <FaTint className="text-sky-500 text-xs" />
-          <span className="text-xs font-semibold text-[#001E40]">{data.water.consumed}ml water</span>
+          <span className="text-xs font-semibold text-fg">{data.water.consumed}ml water</span>
         </div>
       </div>
 
@@ -224,7 +224,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
 
       {/* Goal Progress */}
       <div className="bg-surface rounded-xl shadow-sm p-4 space-y-4">
-        <h3 className="text-sm font-semibold text-[#001E40]">Goal Progress</h3>
+        <h3 className="text-sm font-semibold text-fg">Goal Progress</h3>
         <GoalProgressBar
           label="Calories"
           current={data.calories.consumed}
@@ -250,7 +250,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
 
       {/* Quick Actions */}
       <div className="bg-surface rounded-xl shadow-sm p-4">
-        <h3 className="text-sm font-semibold text-[#001E40] mb-3">Quick Actions</h3>
+        <h3 className="text-sm font-semibold text-fg mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => onNavigateToTab?.(1)}
@@ -259,7 +259,7 @@ export default function DashboardTab({ onNavigateToTab }: DashboardTabProps) {
             <div className="w-10 h-10 rounded-lg bg-[#001E40] flex items-center justify-center">
               <FaUtensils className="w-4 h-4 text-white" />
             </div>
-            <span className="text-xs font-medium text-[#001E40]">Log Meal</span>
+            <span className="text-xs font-medium text-fg">Log Meal</span>
           </button>
           <button
             onClick={() => onNavigateToTab?.(2)}

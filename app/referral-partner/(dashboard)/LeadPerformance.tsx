@@ -16,10 +16,10 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  const totalEarnings = leadsBySource.reduce((sum, source) => sum + source.earnings, 0)
 
  return (
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Lead Generation Performance</h2>
- <div className="text-sm text-gray-600">
+ <h2 className="text-xl font-bold text-fg">Lead Generation Performance</h2>
+ <div className="text-sm text-soft">
  Last 30 days
  </div>
  </div>
@@ -43,14 +43,14 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  {/* Performance by Source */}
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-600">Source</th>
- <th className="p-3 text-center font-medium text-gray-600">Visitors</th>
- <th className="p-3 text-center font-medium text-gray-600">Conversions</th>
- <th className="p-3 text-center font-medium text-gray-600">Conversion Rate</th>
- <th className="p-3 text-center font-medium text-gray-600">Earnings</th>
- <th className="p-3 text-center font-medium text-gray-600">ARPU</th>
+ <th className="p-3 text-left font-medium text-soft">Source</th>
+ <th className="p-3 text-center font-medium text-soft">Visitors</th>
+ <th className="p-3 text-center font-medium text-soft">Conversions</th>
+ <th className="p-3 text-center font-medium text-soft">Conversion Rate</th>
+ <th className="p-3 text-center font-medium text-soft">Earnings</th>
+ <th className="p-3 text-center font-medium text-soft">ARPU</th>
  </tr>
  </thead>
  <tbody>
@@ -61,7 +61,7 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  const arpu = source.conversions > 0 ? (source.earnings / source.conversions).toFixed(0) : 0
 
  return (
- <tr key={source.source} className="border-b hover:bg-gray-50">
+ <tr key={source.source} className="border-b hover:bg-subtle">
  <td className="p-3">
  <div className="flex items-center gap-3">
  {sourceInfo && (
@@ -82,7 +82,7 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  </td>
  <td className="p-3 text-center">
  <div className="flex items-center justify-center gap-2">
- <div className="w-12 h-2 bg-gray-200 rounded-full">
+ <div className="w-12 h-2 bg-line rounded-full">
  <div 
  className="h-2 bg-blue-500 rounded-full" 
  style={{ width: `${Math.min(source.conversionRate, 100)}%` }}
@@ -94,7 +94,7 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  <td className="p-3 text-center font-semibold text-green-600">
  Rs {source.earnings.toLocaleString()}
  </td>
- <td className="p-3 text-center text-gray-600">
+ <td className="p-3 text-center text-soft">
  Rs {arpu}
  </td>
  </tr>
@@ -106,11 +106,11 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
 
  {/* Performance Insights */}
  {leadsBySource.length > 0 && (
- <div className="mt-6 p-4 bg-gray-50 rounded-lg">
- <h4 className="font-semibold text-gray-800 mb-3">Performance Insights</h4>
+ <div className="mt-6 p-4 bg-subtle rounded-lg">
+ <h4 className="font-semibold text-fg mb-3">Performance Insights</h4>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
  <div>
- <span className="text-gray-600">Best Converting Source:</span>
+ <span className="text-soft">Best Converting Source:</span>
  <span className="font-medium ml-2">
  {leadsBySource.reduce((best, current) =>
  current.conversionRate > best.conversionRate ? current : best
@@ -120,7 +120,7 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  </span>
  </div>
  <div>
- <span className="text-gray-600">Highest Earning Source:</span>
+ <span className="text-soft">Highest Earning Source:</span>
  <span className="font-medium ml-2">
  {leadsBySource.reduce((best, current) =>
  current.earnings > best.earnings ? current : best
@@ -130,13 +130,13 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  </span>
  </div>
  <div>
- <span className="text-gray-600">Average Conversion Rate:</span>
+ <span className="text-soft">Average Conversion Rate:</span>
  <span className="font-medium ml-2">
  {totalVisitors > 0 ? (totalConversions / totalVisitors * 100).toFixed(1) : '0.0'}%
  </span>
  </div>
  <div>
- <span className="text-gray-600">Revenue per Visitor:</span>
+ <span className="text-soft">Revenue per Visitor:</span>
  <span className="font-medium ml-2">
  Rs {totalVisitors > 0 ? (totalEarnings / totalVisitors).toFixed(2) : '0.00'}
  </span>
@@ -146,7 +146,7 @@ export default function LeadPerformance({ leadsBySource }: LeadPerformanceProps)
  )}
 
  {leadsBySource.length === 0 && (
- <div className="mt-6 p-6 text-center text-gray-500">
+ <div className="mt-6 p-6 text-center text-soft">
  <p className="text-sm">No lead data yet. Start sharing your referral links to see performance metrics here.</p>
  </div>
  )}

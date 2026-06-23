@@ -43,14 +43,14 @@ function matchesFilter(b: BookingCardData, filter: FilterTab): boolean {
 /** Skeleton card for loading state */
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4 animate-pulse">
+    <div className="bg-surface rounded-xl border border-line p-4 animate-pulse">
       <div className="flex gap-3">
-        <div className="w-9 h-9 rounded-full bg-gray-200 flex-shrink-0" />
+        <div className="w-9 h-9 rounded-full bg-line flex-shrink-0" />
         <div className="flex-1 space-y-2">
-          <div className="h-3.5 bg-gray-200 rounded w-1/2" />
-          <div className="h-3 bg-gray-100 rounded w-1/3" />
+          <div className="h-3.5 bg-line rounded w-1/2" />
+          <div className="h-3 bg-subtle rounded w-1/3" />
         </div>
-        <div className="h-3 bg-gray-100 rounded w-16" />
+        <div className="h-3 bg-subtle rounded w-16" />
       </div>
     </div>
   )
@@ -140,9 +140,9 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Bookings</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {loading ? 'Loading…' : `${counts.all} booking${counts.all !== 1 ? 's' : ''} across all services`}
+          <h1 className="text-2xl font-bold text-fg">My Bookings</h1>
+          <p className="text-sm text-soft mt-1">
+            {loading ? 'Loading' : `${counts.all} booking${counts.all !== 1 ? 's' : ''} across all services`}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
           )}
           <button
             onClick={fetchInstances}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-400 hover:text-gray-600"
+            className="p-2 rounded-lg border border-line hover:bg-subtle text-faint hover:text-soft"
             aria-label="Refresh bookings"
           >
             <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -166,13 +166,13 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
 
       {/* Search */}
       <div className="relative">
-        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
         <input
           type="search"
-          placeholder={role === 'patient' ? 'Search by service or provider…' : 'Search by service or member name…'}
+          placeholder={role === 'patient' ? 'Search by service or provider' : 'Search by service or member name'}
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal"
+          className="w-full pl-9 pr-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal"
         />
       </div>
 
@@ -188,14 +188,14 @@ export default function BookingsDashboard({ userId: _userId, role, userType, bas
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 filter === key
                   ? 'bg-brand-navy text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-subtle text-soft hover:bg-line'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
               {label}
               {count > 0 && key !== 'all' && (
                 <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                  filter === key ? 'bg-white/20' : 'bg-gray-200 text-gray-600'
+                  filter === key ? 'bg-white/20' : 'bg-line text-soft'
                 }`}>
                   {count}
                 </span>
@@ -251,10 +251,10 @@ function EmptyState({
 }) {
   if (hasSearch) {
     return (
-      <div className="bg-white rounded-xl p-10 text-center border border-gray-100">
+      <div className="bg-surface rounded-xl p-10 text-center border border-line">
         <FaSearch className="text-4xl text-gray-200 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-1">No results</h3>
-        <p className="text-gray-400 text-sm mb-5">No bookings match your search.</p>
+        <h3 className="text-lg font-semibold text-soft mb-1">No results</h3>
+        <p className="text-faint text-sm mb-5">No bookings match your search.</p>
         <button onClick={onClearSearch} className="text-brand-teal hover:text-brand-navy font-medium text-sm">
           Clear search
         </button>
@@ -264,22 +264,22 @@ function EmptyState({
 
   if (filter !== 'all') {
     return (
-      <div className="bg-white rounded-xl p-10 text-center border border-gray-100">
+      <div className="bg-surface rounded-xl p-10 text-center border border-line">
         <FaCalendarCheck className="text-4xl text-gray-200 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-1">No {filter} bookings</h3>
-        <p className="text-gray-400 text-sm">Try a different filter to see other bookings.</p>
+        <h3 className="text-lg font-semibold text-soft mb-1">No {filter} bookings</h3>
+        <p className="text-faint text-sm">Try a different filter to see other bookings.</p>
       </div>
     )
   }
 
   // True empty: no bookings at all
   return (
-    <div className="bg-white rounded-xl p-10 text-center border border-gray-100">
+    <div className="bg-surface rounded-xl p-10 text-center border border-line">
       <FaCalendarCheck className="text-4xl text-gray-200 mx-auto mb-4" />
-      <h3 className="text-lg font-semibold text-gray-700 mb-1">
+      <h3 className="text-lg font-semibold text-soft mb-1">
         {role === 'patient' ? 'No bookings yet' : 'No bookings received yet'}
       </h3>
-      <p className="text-gray-400 text-sm mb-5">
+      <p className="text-faint text-sm mb-5">
         {role === 'patient'
           ? 'Book a consultation with a doctor, nurse, or any other provider to get started.'
           : 'Once members book your services, their bookings will appear here with workflow actions.'}
@@ -289,7 +289,7 @@ function EmptyState({
           href="/search/providers"
           className="text-brand-teal hover:text-brand-navy font-medium text-sm"
         >
-          Browse Providers →
+          Browse Providers 
         </Link>
       )}
     </div>

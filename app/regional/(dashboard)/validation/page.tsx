@@ -128,9 +128,9 @@ export default function RegionalValidationPage() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
           <FaClipboardCheck className="text-2xl text-amber-600" />
-          <h1 className="text-2xl font-bold text-[#001E40]">Document Validation</h1>
+          <h1 className="text-2xl font-bold text-fg">Document Validation</h1>
         </div>
-        <p className="text-gray-600 text-sm">
+        <p className="text-soft text-sm">
           Review uploaded documents and approve or reject provider registrations
           {statusFilter === 'unverified' && unverifiedCount > 0 && (
             <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -141,21 +141,21 @@ export default function RegionalValidationPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-5 flex flex-wrap gap-3 items-center">
+      <div className="bg-surface rounded-xl p-4 shadow-sm border border-line mb-5 flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
           <input
             type="text"
-            placeholder="Search by name or email…"
+            placeholder="Search by name or email"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent"
           />
         </div>
         <select
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]"
+          className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]"
         >
           <option value="unverified">Pending Verification</option>
           <option value="verified">Verified</option>
@@ -172,24 +172,24 @@ export default function RegionalValidationPage() {
             <FaSpinner className="animate-spin text-3xl text-[#0C6780]" />
           </div>
         ) : filteredUsers.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl border border-gray-100">
-            <FaUsers className="text-4xl text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No users found</p>
+          <div className="text-center py-16 bg-surface rounded-xl border border-line">
+            <FaUsers className="text-4xl text-faint mx-auto mb-3" />
+            <p className="text-soft">No users found</p>
             {statusFilter === 'unverified' && (
-              <p className="text-gray-400 text-sm mt-1">All provider accounts have been verified</p>
+              <p className="text-faint text-sm mt-1">All provider accounts have been verified</p>
             )}
           </div>
         ) : filteredUsers.map(user => {
           const isExpanded = expandedUser === user.id
           const docs = userDocs[user.id] || []
           return (
-            <div key={user.id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div key={user.id} className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
               {/* User row */}
               <div className="flex items-center gap-4 p-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-gray-900">{user.firstName} {user.lastName}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${accountStatusColors[user.accountStatus] || 'bg-gray-100 text-gray-700'}`}>
+                    <span className="font-semibold text-fg">{user.firstName} {user.lastName}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${accountStatusColors[user.accountStatus] || 'bg-subtle text-soft'}`}>
                       {user.accountStatus}
                     </span>
                     {!user.verified && (
@@ -201,8 +201,8 @@ export default function RegionalValidationPage() {
                       {humanizeType(user.userType)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-0.5">{user.email}</p>
-                  <p className="text-xs text-gray-400">Registered {new Date(user.createdAt).toLocaleDateString()}</p>
+                  <p className="text-sm text-soft mt-0.5">{user.email}</p>
+                  <p className="text-xs text-faint">Registered {new Date(user.createdAt).toLocaleDateString()}</p>
                 </div>
 
                 {/* Action buttons */}
@@ -245,7 +245,7 @@ export default function RegionalValidationPage() {
                   )}
                   <button
                     onClick={() => toggleExpand(user.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs hover:bg-gray-200"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-subtle text-soft rounded-lg text-xs hover:bg-line"
                   >
                     <FaFileAlt /> Documents {isExpanded ? <FaChevronUp className="text-[10px]" /> : <FaChevronDown className="text-[10px]" />}
                   </button>
@@ -254,22 +254,22 @@ export default function RegionalValidationPage() {
 
               {/* Documents panel */}
               {isExpanded && (
-                <div className="border-t border-gray-100 bg-gray-50 px-4 py-4">
+                <div className="border-t border-line bg-subtle px-4 py-4">
                   {docsLoading === user.id ? (
-                    <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
-                      <FaSpinner className="animate-spin" /> Loading documents…
+                    <div className="flex items-center gap-2 text-sm text-soft py-2">
+                      <FaSpinner className="animate-spin" /> Loading documents
                     </div>
                   ) : docs.length === 0 ? (
-                    <p className="text-sm text-gray-400 italic py-2">No documents uploaded yet.</p>
+                    <p className="text-sm text-faint italic py-2">No documents uploaded yet.</p>
                   ) : (
                     <div className="space-y-2">
                       {docs.map(doc => (
-                        <div key={doc.id} className="flex items-center justify-between bg-white rounded-lg border border-gray-200 px-3 py-2.5">
+                        <div key={doc.id} className="flex items-center justify-between bg-surface rounded-lg border border-line px-3 py-2.5">
                           <div className="flex items-center gap-3 min-w-0">
                             <FaFileAlt className="text-[#0C6780] flex-shrink-0" />
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
-                              <p className="text-xs text-gray-400">{doc.type} · {formatBytes(doc.fileSize)} · {new Date(doc.createdAt).toLocaleDateString()}</p>
+                              <p className="text-sm font-medium text-fg truncate">{doc.name}</p>
+                              <p className="text-xs text-faint">{doc.type}  {formatBytes(doc.fileSize)}  {new Date(doc.createdAt).toLocaleDateString()}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
@@ -291,7 +291,7 @@ export default function RegionalValidationPage() {
                             <a
                               href={doc.url}
                               download
-                              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-1"
+                              className="text-xs px-2 py-1 bg-subtle text-soft rounded-lg hover:bg-line flex items-center gap-1"
                             >
                               <FaDownload className="text-[10px]" /> Download
                             </a>
@@ -304,7 +304,7 @@ export default function RegionalValidationPage() {
                     onClick={() => router.push(`/profile/${user.id}`)}
                     className="mt-3 text-xs text-[#0C6780] hover:underline font-medium"
                   >
-                    View full profile →
+                    View full profile 
                   </button>
                 </div>
               )}

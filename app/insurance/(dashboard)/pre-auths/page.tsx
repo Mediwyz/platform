@@ -89,26 +89,26 @@ export default function InsurancePreAuthsPage() {
       <header className="flex items-center gap-3">
         <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><FaShieldAlt /></div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pre-authorizations</h1>
-          <p className="text-sm text-gray-600 mt-1">Providers request coverage upfront; you approve, rules engine runs, direct billing triggers when they deliver.</p>
+          <h1 className="text-2xl font-bold text-fg">Pre-authorizations</h1>
+          <p className="text-sm text-soft mt-1">Providers request coverage upfront; you approve, rules engine runs, direct billing triggers when they deliver.</p>
         </div>
       </header>
 
       {loading ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-sm text-gray-500">Loading…</div>
+        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading</div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">{error}</div>
       ) : list.length === 0 ? (
-        <div className="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center">
-          <FaShieldAlt className="mx-auto text-4xl text-gray-300 mb-2" />
-          <p className="text-sm text-gray-500">No pre-authorizations yet.</p>
+        <div className="bg-surface border border-dashed border-line rounded-xl p-8 text-center">
+          <FaShieldAlt className="mx-auto text-4xl text-faint mb-2" />
+          <p className="text-sm text-soft">No pre-authorizations yet.</p>
         </div>
       ) : (
         <>
           {pending.length > 0 && (
             <section>
               <h2 className="text-xs font-semibold uppercase tracking-wide text-amber-700 mb-2">Awaiting your review</h2>
-              <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+              <div className="bg-surface border border-line rounded-xl divide-y divide-line">
                 {pending.map((p) => (
                   <div key={p.id} className="p-4">
                     <Row p={p} format={format} />
@@ -119,10 +119,10 @@ export default function InsurancePreAuthsPage() {
                           value={denyReason}
                           onChange={(e) => setDenyReason(e.target.value)}
                           placeholder="Optional reason shown to provider + member"
-                          className="w-full text-xs border border-gray-300 rounded-lg p-2"
+                          className="w-full text-xs border border-line rounded-lg p-2"
                         />
                         <div className="flex gap-2 justify-end">
-                          <button onClick={() => { setDenyingId(null); setDenyReason('') }} className="px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+                          <button onClick={() => { setDenyingId(null); setDenyReason('') }} className="px-3 py-1.5 text-xs text-soft hover:bg-subtle rounded-lg">Cancel</button>
                           <button onClick={() => deny(p.id)} disabled={busyId === p.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg disabled:opacity-50">
                             {busyId === p.id && <FaSpinner className="animate-spin" />} Confirm deny
                           </button>
@@ -133,7 +133,7 @@ export default function InsurancePreAuthsPage() {
                         <button onClick={() => setDenyingId(p.id)} disabled={busyId !== null} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg disabled:opacity-50"><FaBan /> Deny</button>
                         <button onClick={() => approve(p.id)} disabled={busyId !== null} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg disabled:opacity-50">
                           {busyId === p.id ? <FaSpinner className="animate-spin" /> : <FaCheck />}
-                          {busyId === p.id ? 'Approving…' : 'Approve (runs rules engine)'}
+                          {busyId === p.id ? 'Approving' : 'Approve (runs rules engine)'}
                         </button>
                       </div>
                     )}
@@ -146,7 +146,7 @@ export default function InsurancePreAuthsPage() {
           {approved.length > 0 && (
             <section>
               <h2 className="text-xs font-semibold uppercase tracking-wide text-emerald-700 mb-2">Approved - waiting for provider to deliver</h2>
-              <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+              <div className="bg-surface border border-line rounded-xl divide-y divide-line">
                 {approved.map((p) => <div key={p.id} className="p-4"><Row p={p} format={format} /></div>)}
               </div>
             </section>
@@ -154,8 +154,8 @@ export default function InsurancePreAuthsPage() {
 
           {historical.length > 0 && (
             <section>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-700 mb-2">History</h2>
-              <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-soft mb-2">History</h2>
+              <div className="bg-surface border border-line rounded-xl divide-y divide-line">
                 {historical.map((p) => <div key={p.id} className="p-4"><Row p={p} format={format} /></div>)}
               </div>
             </section>
@@ -172,17 +172,17 @@ function Row({ p, format }: { p: PreAuth; format: (amt: number) => string }) {
   return (
     <div className="flex items-start justify-between gap-3 flex-wrap">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-900">
+        <p className="text-sm font-semibold text-fg">
           {format(p.requestedAmount)}
           {p.approvedAmount != null && p.approvedAmount !== p.requestedAmount && (
-            <span className="text-emerald-700 font-semibold"> → {format(p.approvedAmount)} approved</span>
+            <span className="text-emerald-700 font-semibold">  {format(p.approvedAmount)} approved</span>
           )}
         </p>
-        <p className="text-sm text-gray-700 mt-0.5">{p.description}</p>
-        <p className="text-[11px] text-gray-500 mt-1">
+        <p className="text-sm text-soft mt-0.5">{p.description}</p>
+        <p className="text-[11px] text-soft mt-1">
           Member: {p.member?.firstName} {p.member?.lastName}
-          {' · '}Provider: {p.provider?.firstName} {p.provider?.lastName} ({p.provider?.userType?.toLowerCase()})
-          {p.category ? ` · ${p.category}` : ''}
+          {'  '}Provider: {p.provider?.firstName} {p.provider?.lastName} ({p.provider?.userType?.toLowerCase()})
+          {p.category ? `  ${p.category}` : ''}
           {p.status !== 'used' && p.status !== 'denied' && (
             <span className={expired ? 'text-red-600 ml-2' : 'ml-2'}><FaClock className="inline mb-0.5 mr-0.5" />{expired ? 'Expired ' : 'Expires '}{expires.toLocaleDateString()}</span>
           )}
@@ -196,10 +196,10 @@ function Row({ p, format }: { p: PreAuth; format: (amt: number) => string }) {
 
 function StatusBadge({ status }: { status: PreAuth['status'] }) {
   const cfg = {
-    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used · Paid' },
+    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used  Paid' },
     denied: { icon: FaTimes, cls: 'bg-red-50 text-red-700 border-red-200', label: 'Denied' },
-    expired: { icon: FaClock, cls: 'bg-gray-50 text-gray-600 border-gray-200', label: 'Expired' },
-    cancelled: { icon: FaBan, cls: 'bg-gray-50 text-gray-600 border-gray-200', label: 'Cancelled' },
+    expired: { icon: FaClock, cls: 'bg-subtle text-soft border-line', label: 'Expired' },
+    cancelled: { icon: FaBan, cls: 'bg-subtle text-soft border-line', label: 'Cancelled' },
     pending: { icon: FaHourglassHalf, cls: 'bg-amber-50 text-amber-700 border-amber-200', label: 'Pending' },
     approved: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Approved' },
   }[status]

@@ -100,16 +100,16 @@ export default function AddExerciseModal({
  <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
  {/* Modal */}
- <div className="relative bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+ <div className="relative bg-surface rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
  {/* Header */}
- <div className="flex items-center justify-between p-4 border-b border-gray-100">
- <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+ <div className="flex items-center justify-between p-4 border-b border-line">
+ <h2 className="text-lg font-bold text-fg flex items-center gap-2">
  <FaDumbbell className="text-purple-500" />
  Log Exercise
  </h2>
  <button
  onClick={onClose}
- className="p-2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+ className="p-2 text-faint hover:text-soft transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
  aria-label="Close modal"
  >
  <FaTimes />
@@ -119,7 +119,7 @@ export default function AddExerciseModal({
  <div className="p-4 space-y-4">
  {/* Exercise type grid */}
  <div>
- <label className="text-sm font-semibold text-gray-700 mb-2 block">Exercise Type</label>
+ <label className="text-sm font-semibold text-soft mb-2 block">Exercise Type</label>
  <div className="grid grid-cols-5 gap-2">
  {EXERCISES.map((ex) => {
  const Icon = ex.icon
@@ -131,7 +131,7 @@ export default function AddExerciseModal({
  className={`flex flex-col items-center gap-1 p-2 rounded-lg text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-300 ${
  isSelected
  ? 'bg-purple-100 text-purple-700 ring-2 ring-purple-400'
- : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+ : 'bg-subtle text-soft hover:bg-subtle'
  }`}
  >
  <Icon className="text-lg" />
@@ -144,7 +144,7 @@ export default function AddExerciseModal({
 
  {/* Duration */}
  <div>
- <label className="text-sm font-semibold text-gray-700 mb-1 block">
+ <label className="text-sm font-semibold text-soft mb-1 block">
  Duration (minutes)
  </label>
  <input
@@ -153,13 +153,13 @@ export default function AddExerciseModal({
  value={duration}
  onChange={(e) => setDuration(e.target.value)}
  min={1}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
  />
  </div>
 
  {/* Intensity */}
  <div>
- <label className="text-sm font-semibold text-gray-700 mb-2 block">Intensity</label>
+ <label className="text-sm font-semibold text-soft mb-2 block">Intensity</label>
  <div className="flex gap-2">
  {INTENSITIES.map((level) => (
  <button
@@ -168,7 +168,7 @@ export default function AddExerciseModal({
  className={`flex-1 py-2 text-sm font-medium rounded-lg border transition-all focus:outline-none focus:ring-2 focus:ring-blue-300 capitalize ${
  intensity === level
  ? intensityColors[level]
- : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+ : 'bg-surface text-soft border-line hover:bg-subtle'
  }`}
  >
  {level}
@@ -180,14 +180,14 @@ export default function AddExerciseModal({
  {/* Estimated calories */}
  {estimatedCalories > 0 && (
  <div className="bg-orange-50 rounded-lg p-3 text-center">
- <span className="text-sm text-gray-600">Estimated burn: </span>
+ <span className="text-sm text-soft">Estimated burn: </span>
  <span className="text-lg font-bold text-orange-600">{estimatedCalories} cal</span>
  </div>
  )}
 
  {/* Notes */}
  <div>
- <label className="text-sm font-semibold text-gray-700 mb-1 block">
+ <label className="text-sm font-semibold text-soft mb-1 block">
  Notes (optional)
  </label>
  <textarea
@@ -195,7 +195,7 @@ export default function AddExerciseModal({
  value={notes}
  onChange={(e) => setNotes(e.target.value)}
  rows={2}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
  />
  </div>
 

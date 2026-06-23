@@ -93,7 +93,7 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
     : '?'
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-brand-teal/40 hover:shadow-sm transition-all">
+    <div className="bg-surface rounded-xl border border-line overflow-hidden hover:border-brand-teal/40 hover:shadow-sm transition-all">
       <div className="flex">
         {/* Status bar */}
         <div className={`w-1 flex-shrink-0 ${bar}`} aria-hidden="true" />
@@ -114,11 +114,11 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
               {/* Meta */}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-sm font-semibold text-gray-900 truncate">
+                  <h3 className="text-sm font-semibold text-fg truncate">
                     {data.templateName || data.serviceName || data.bookingType.replace(/_/g, ' ')}
                   </h3>
                   {data.patientName && (
-                    <span className="text-xs text-gray-500 truncate">{data.patientName}</span>
+                    <span className="text-xs text-soft truncate">{data.patientName}</span>
                   )}
                 </div>
 
@@ -127,13 +127,13 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
                     {data.currentStepLabel}
                   </span>
                   {data.scheduledAt && (
-                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-faint">
                       <FiCalendar className="w-3 h-3" />
                       {formatScheduledAt(data.scheduledAt)}
                     </span>
                   )}
                   {amountLabel && (
-                    <span className="text-xs text-gray-500">{amountLabel}</span>
+                    <span className="text-xs text-soft">{amountLabel}</span>
                   )}
                 </div>
               </div>
@@ -148,14 +148,14 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
               )}
               <Link
                 href={detailHref}
-                className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-brand-teal"
+                className="p-1.5 rounded-lg hover:bg-subtle text-faint hover:text-brand-teal"
                 aria-label="View booking details"
               >
                 <FiExternalLink className="w-4 h-4" />
               </Link>
               <button
                 onClick={() => setExpanded(v => !v)}
-                className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-gray-600"
+                className="p-1.5 rounded-lg hover:bg-subtle text-faint hover:text-soft"
                 aria-label={expanded ? 'Collapse' : 'Expand'}
                 aria-expanded={expanded}
               >
@@ -183,18 +183,18 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
           )}
 
           {waitingForOtherSide && (
-            <p className="mt-3 pt-3 border-t border-gray-50 text-xs text-gray-400">
+            <p className="mt-3 pt-3 border-t border-gray-50 text-xs text-faint">
               {role === 'patient'
-                ? 'Waiting for the provider to take action…'
-                : 'Waiting for the member to take action…'}
+                ? 'Waiting for the provider to take action'
+                : 'Waiting for the member to take action'}
             </p>
           )}
 
           {/* Expanded: dates + booking type */}
           {expanded && (
-            <div className="mt-3 pt-3 border-t border-gray-50 space-y-1.5 text-xs text-gray-500">
+            <div className="mt-3 pt-3 border-t border-gray-50 space-y-1.5 text-xs text-soft">
               <div className="flex items-center gap-1.5">
-                <FiClock className="w-3.5 h-3.5 text-gray-300" />
+                <FiClock className="w-3.5 h-3.5 text-faint" />
                 <span>Started {new Date(data.startedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
               </div>
               {data.completedAt && (
@@ -204,8 +204,8 @@ export default function BookingCard({ data, role, basePath, onTransition }: Book
                 </div>
               )}
               <div>
-                <span className="text-gray-400">Type:</span>{' '}
-                <span className="font-medium capitalize">{data.bookingType.replace(/_/g, ' ')} · {data.serviceMode}</span>
+                <span className="text-faint">Type:</span>{' '}
+                <span className="font-medium capitalize">{data.bookingType.replace(/_/g, ' ')}  {data.serviceMode}</span>
               </div>
             </div>
           )}

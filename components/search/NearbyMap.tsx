@@ -9,8 +9,8 @@
  * distance-sorted list.
  *
  * Endpoints:
- *   providers → GET /api/geo/providers?type={CODE}&lat&lng&limit
- *   entities  → GET /api/geo/entities?type={kind}&lat&lng&limit
+ *   providers  GET /api/geo/providers?type={CODE}&lat&lng&limit
+ *   entities   GET /api/geo/entities?type={kind}&lat&lng&limit
  */
 
 import { useCallback, useRef, useState } from 'react'
@@ -32,7 +32,7 @@ interface NearbyItem {
 
 interface NearbyMapProps {
   mode: 'providers' | 'entities'
-  /** providerType code (DOCTOR…) for providers, or entity kind (clinic…) for entities. */
+  /** providerType code (DOCTOR) for providers, or entity kind (clinic) for entities. */
   type?: string
   accentColor?: string
   /** Heading shown on the toggle, e.g. "doctors near you". */
@@ -79,7 +79,7 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
               : (r.name as string) || 'Location',
             sub: mode === 'providers'
               ? (Array.isArray(r.specialty) ? (r.specialty as string[])[0] : undefined) ?? (r.address as string | undefined)
-              : [(r.type as string), (r.city as string)].filter(Boolean).join(' · '),
+              : [(r.type as string), (r.city as string)].filter(Boolean).join('  '),
           }))
           setItems(mapped)
         } catch {
@@ -111,16 +111,16 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
           <FaLocationArrow /> Find {noun} near me
         </button>
       ) : (
-        <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+        <div className="rounded-2xl border border-line bg-surface overflow-hidden shadow-sm">
           {/* header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-line">
             <span className="text-sm font-bold flex items-center gap-2" style={{ color: NAVY }}>
               <FaMapMarkerAlt style={{ color: accentColor }} /> {noun} near you
             </span>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close map"
-              className="text-gray-400 hover:text-gray-700 p-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
+              className="text-faint hover:text-soft p-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
             >
               <FaTimes />
             </button>
@@ -128,11 +128,11 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
 
           <div className="grid md:grid-cols-[1.4fr_1fr]">
             {/* map */}
-            <div className="relative h-72 md:h-80 bg-gray-100">
+            <div className="relative h-72 md:h-80 bg-subtle">
               {loadError ? (
-                <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-400">Map failed to load.</div>
+                <div className="absolute inset-0 flex items-center justify-center text-sm text-faint">Map failed to load.</div>
               ) : !isLoaded ? (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400"><FaSpinner className="animate-spin" /></div>
+                <div className="absolute inset-0 flex items-center justify-center text-faint"><FaSpinner className="animate-spin" /></div>
               ) : (
                 <GoogleMap
                   mapContainerStyle={{ width: '100%', height: '100%' }}
@@ -170,28 +170,28 @@ export default function NearbyMap({ mode, type, accentColor = TEAL, noun }: Near
             {/* nearest list */}
             <div className="max-h-72 md:max-h-80 overflow-y-auto divide-y divide-gray-50">
               {loading ? (
-                <div className="p-6 text-center text-sm text-gray-400"><FaSpinner className="animate-spin inline mr-2" /> Locating you…</div>
+                <div className="p-6 text-center text-sm text-faint"><FaSpinner className="animate-spin inline mr-2" /> Locating you</div>
               ) : err ? (
-                <div className="p-6 text-center text-sm text-gray-500">
+                <div className="p-6 text-center text-sm text-soft">
                   {err}
                   <button onClick={findNearMe} className="block mx-auto mt-3 text-xs font-semibold underline" style={{ color: accentColor }}>Try again</button>
                 </div>
               ) : items.length === 0 ? (
-                <div className="p-6 text-center text-sm text-gray-400">No {noun} found near you yet.</div>
+                <div className="p-6 text-center text-sm text-faint">No {noun} found near you yet.</div>
               ) : (
                 items.map((it, i) => (
                   <button
                     key={it.id}
                     onClick={() => panTo(it)}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-200"
+                    className="w-full text-left px-4 py-3 hover:bg-subtle transition-colors flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-200"
                   >
                     <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
                           style={{ background: accentColor }}>
                       {i + 1}
                     </span>
                     <span className="flex-1 min-w-0">
-                      <span className="block text-sm font-semibold text-gray-900 truncate">{it.label}</span>
-                      {it.sub && <span className="block text-xs text-gray-400 truncate">{it.sub}</span>}
+                      <span className="block text-sm font-semibold text-fg truncate">{it.label}</span>
+                      {it.sub && <span className="block text-xs text-faint truncate">{it.sub}</span>}
                     </span>
                     <span className="text-xs font-medium flex-shrink-0" style={{ color: accentColor }}>
                       {it.distanceKm < 1 ? `${Math.round(it.distanceKm * 1000)} m` : `${it.distanceKm.toFixed(1)} km`}

@@ -170,19 +170,19 @@ export default function FloatingPrescriptionFAB() {
       {open && (
         <div className="fixed inset-0 z-[190] flex items-end sm:items-center justify-center sm:p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { setOpen(false); setShowReplace(false) }} />
-          <div className="relative bg-white w-full sm:max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden">
+          <div className="relative bg-surface w-full sm:max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden">
 
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-line">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                   <FaFileMedical className="text-amber-600" />
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm">My Prescription</p>
-                  <p className="text-xs text-gray-500">Saved across the platform</p>
+                  <p className="font-bold text-fg text-sm">My Prescription</p>
+                  <p className="text-xs text-soft">Saved across the platform</p>
                 </div>
               </div>
-              <button onClick={() => { setOpen(false); setShowReplace(false) }} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <button onClick={() => { setOpen(false); setShowReplace(false) }} className="text-faint hover:text-soft transition-colors">
                 <FaTimes />
               </button>
             </div>
@@ -191,12 +191,12 @@ export default function FloatingPrescriptionFAB() {
               {isExtracting ? (
                 <div className="py-10 text-center">
                   <FaSpinner className="text-amber-500 text-3xl animate-spin mx-auto mb-3" />
-                  <p className="font-semibold text-gray-800 text-sm">Extracting prescription data…</p>
-                  <p className="text-xs text-gray-500 mt-1">AI is reading your prescription</p>
+                  <p className="font-semibold text-fg text-sm">Extracting prescription data</p>
+                  <p className="text-xs text-soft mt-1">AI is reading your prescription</p>
                 </div>
 
               ) : detailed && !showReplace ? (
-                /* ── Rich extraction view ── */
+                /*  Rich extraction view  */
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <FaCheckCircle className="text-green-500" />
@@ -204,12 +204,12 @@ export default function FloatingPrescriptionFAB() {
                   </div>
 
                   {preview && (
-                    <Image src={preview} alt="Prescription" width={400} height={112} className="w-full h-28 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
+                    <Image src={preview} alt="Prescription" width={400} height={112} className="w-full h-28 object-contain rounded-xl border border-line mb-3 bg-subtle" />
                   )}
 
                   {/* Extracted medications (editable) */}
                   <div className="mb-3">
-                    <p className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
+                    <p className="text-xs font-semibold text-soft mb-2 flex items-center gap-1.5">
                       <FaPills className="text-amber-500" />
                       Medications ({editedMedications.length})
                     </p>
@@ -224,7 +224,7 @@ export default function FloatingPrescriptionFAB() {
                               setEditedMedications(next)
                             }}
                             placeholder="Medication name"
-                            className="w-full text-xs font-semibold text-gray-800 bg-transparent border-none outline-none mb-1"
+                            className="w-full text-xs font-semibold text-fg bg-transparent border-none outline-none mb-1"
                           />
                           <div className="flex gap-2">
                             <input
@@ -235,7 +235,7 @@ export default function FloatingPrescriptionFAB() {
                                 setEditedMedications(next)
                               }}
                               placeholder="Dosage"
-                              className="flex-1 text-[10px] text-gray-600 bg-white border border-gray-200 rounded px-1.5 py-0.5 outline-none"
+                              className="flex-1 text-[10px] text-soft bg-surface border border-line rounded px-1.5 py-0.5 outline-none"
                             />
                             <input
                               value={med.frequency}
@@ -245,7 +245,7 @@ export default function FloatingPrescriptionFAB() {
                                 setEditedMedications(next)
                               }}
                               placeholder="Frequency"
-                              className="flex-1 text-[10px] text-gray-600 bg-white border border-gray-200 rounded px-1.5 py-0.5 outline-none"
+                              className="flex-1 text-[10px] text-soft bg-surface border border-line rounded px-1.5 py-0.5 outline-none"
                             />
                           </div>
                         </div>
@@ -254,12 +254,12 @@ export default function FloatingPrescriptionFAB() {
                   </div>
 
                   {detailed.prescriber && (
-                    <p className="text-xs text-gray-500 mb-1">
+                    <p className="text-xs text-soft mb-1">
                       <span className="font-medium">Prescriber:</span> {detailed.prescriber}
                     </p>
                   )}
                   {detailed.date && (
-                    <p className="text-xs text-gray-500 mb-3">
+                    <p className="text-xs text-soft mb-3">
                       <span className="font-medium">Date:</span> {detailed.date}
                     </p>
                   )}
@@ -280,7 +280,7 @@ export default function FloatingPrescriptionFAB() {
                           Save to Profile
                         </button>
                       )}
-                      <button onClick={() => setShowReplace(true)} className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                      <button onClick={() => setShowReplace(true)} className="flex-1 py-2.5 border border-line rounded-xl text-sm text-soft hover:bg-subtle transition-colors">
                         Replace
                       </button>
                       <button onClick={handleClear} className="flex items-center gap-1.5 px-3 py-2.5 border border-red-200 rounded-xl text-sm text-red-600 hover:bg-red-50 transition-colors">
@@ -291,25 +291,25 @@ export default function FloatingPrescriptionFAB() {
                 </div>
 
               ) : hasPrescription && !showReplace ? (
-                /* ── Simple view (legacy / unauthenticated flow) ── */
+                /*  Simple view (legacy / unauthenticated flow)  */
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <FaCheckCircle className="text-green-500" />
                     <span className="text-sm font-semibold text-green-700">Prescription active</span>
                     {prescription.uploadedAt && (
-                      <span className="text-xs text-gray-400 ml-auto">
+                      <span className="text-xs text-faint ml-auto">
                         {new Date(prescription.uploadedAt).toLocaleDateString()}
                       </span>
                     )}
                   </div>
 
                   {prescription.imageUrl && (
-                    <Image src={prescription.imageUrl} alt="Prescription" width={400} height={144} className="w-full h-36 object-contain rounded-xl border border-gray-200 mb-3 bg-gray-50" />
+                    <Image src={prescription.imageUrl} alt="Prescription" width={400} height={144} className="w-full h-36 object-contain rounded-xl border border-line mb-3 bg-subtle" />
                   )}
 
                   {prescription.medicines.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
+                      <p className="text-xs font-semibold text-soft mb-2 flex items-center gap-1.5">
                         <FaPills className="text-amber-500" />
                         Detected medicines ({prescription.medicines.length})
                       </p>
@@ -324,7 +324,7 @@ export default function FloatingPrescriptionFAB() {
                   )}
 
                   {prescription.medicines.length === 0 && (
-                    <p className="text-xs text-gray-500 mb-4">No medicines were extracted - the AI may need a clearer image.</p>
+                    <p className="text-xs text-soft mb-4">No medicines were extracted - the AI may need a clearer image.</p>
                   )}
 
                   {isLoggedIn && (
@@ -336,7 +336,7 @@ export default function FloatingPrescriptionFAB() {
                   )}
 
                   <div className="flex gap-2">
-                    <button onClick={() => setShowReplace(true)} className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                    <button onClick={() => setShowReplace(true)} className="flex-1 py-2.5 border border-line rounded-xl text-sm text-soft hover:bg-subtle transition-colors">
                       Replace
                     </button>
                     <button onClick={handleClear} className="flex items-center gap-1.5 px-4 py-2.5 border border-red-200 rounded-xl text-sm text-red-600 hover:bg-red-50 transition-colors">
@@ -346,14 +346,14 @@ export default function FloatingPrescriptionFAB() {
                 </div>
 
               ) : (
-                /* ── Upload / replace mode ── */
+                /*  Upload / replace mode  */
                 <div>
                   {showReplace && (
                     <button onClick={() => setShowReplace(false)} className="text-xs text-[#0C6780] mb-3 flex items-center gap-1 hover:underline">
-                      ← Back to current prescription
+                       Back to current prescription
                     </button>
                   )}
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-soft mb-4">
                     Upload your prescription. We&apos;ll extract the medicines and show matching products at the top of the Health Shop.
                   </p>
 
@@ -361,7 +361,7 @@ export default function FloatingPrescriptionFAB() {
                     <div className="mb-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">
                       {extractError}
                       {isLoggedIn && (
-                        <> <a href={`/${userType || 'patient'}/prescriptions/new`} className="underline">Enter manually →</a></>
+                        <> <a href={`/${userType || 'patient'}/prescriptions/new`} className="underline">Enter manually </a></>
                       )}
                     </div>
                   )}
@@ -370,20 +370,20 @@ export default function FloatingPrescriptionFAB() {
                     onClick={() => fileRef.current?.click()}
                     onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f) }}
                     onDragOver={e => e.preventDefault()}
-                    className="border-2 border-dashed border-gray-200 hover:border-amber-400 rounded-xl p-5 cursor-pointer text-center transition-colors group mb-2"
+                    className="border-2 border-dashed border-line hover:border-amber-400 rounded-xl p-5 cursor-pointer text-center transition-colors group mb-2"
                   >
                     {preview && preview !== prescription.imageUrl ? (
                       <div>
                         <Image src={preview} alt="Preview" width={400} height={128} className="max-h-32 mx-auto rounded-lg object-contain mb-2" />
-                        <p className="text-xs text-gray-500 truncate">{fileName}</p>
+                        <p className="text-xs text-soft truncate">{fileName}</p>
                         <p className="text-xs text-amber-600 font-medium mt-1">Click to change</p>
                       </div>
                     ) : (
                       <>
-                        <FaUpload className="text-gray-300 group-hover:text-amber-400 text-2xl mx-auto mb-2 transition-colors" />
-                        <p className="text-sm font-medium text-gray-700">Upload prescription image</p>
-                        <p className="text-xs text-gray-400 mt-1">JPG, PNG, PDF · Max 10MB</p>
-                        <p className="text-xs text-gray-400">Drag &amp; drop or click to browse</p>
+                        <FaUpload className="text-faint group-hover:text-amber-400 text-2xl mx-auto mb-2 transition-colors" />
+                        <p className="text-sm font-medium text-soft">Upload prescription image</p>
+                        <p className="text-xs text-faint mt-1">JPG, PNG, PDF  Max 10MB</p>
+                        <p className="text-xs text-faint">Drag &amp; drop or click to browse</p>
                       </>
                     )}
                   </div>
@@ -398,9 +398,9 @@ export default function FloatingPrescriptionFAB() {
 
                   <button
                     onClick={() => { if (fileRef.current) { fileRef.current.accept = 'image/*'; fileRef.current.click() }}}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors mb-3"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-line rounded-xl text-sm text-soft hover:bg-subtle transition-colors mb-3"
                   >
-                    <FaCamera className="text-gray-400" /> Take a photo
+                    <FaCamera className="text-faint" /> Take a photo
                   </button>
 
                   <button
@@ -412,7 +412,7 @@ export default function FloatingPrescriptionFAB() {
                   </button>
 
                   {isLoggedIn && (
-                    <p className="text-xs text-center text-gray-400 mt-3">
+                    <p className="text-xs text-center text-faint mt-3">
                       Prefer to type it?{' '}
                       <a href={`/${userType || 'patient'}/prescriptions/new`} className="text-[#0C6780] underline">
                         Manual entry

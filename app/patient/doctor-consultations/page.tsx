@@ -94,7 +94,7 @@ function mapApiAppointment(apt: any): Appointment {
  id: doc?.id || apt.providerUserId || '',
  name: doctorName,
  specialty: Array.isArray(doc?.specialty) ? doc.specialty[0] : (apt.specialty || apt.serviceName || 'General'),
- avatar: docUser?.profileImage || '👨‍⚕️',
+ avatar: docUser?.profileImage || '',
  rating: 4.8,
  hospital: doc?.clinicAffiliation || '',
  },
@@ -223,9 +223,9 @@ export default function DoctorConsultationsPage() {
  case "upcoming": return "bg-blue-100 text-blue-800"
  case "completed": return "bg-green-100 text-green-800"
  case "cancelled": return "bg-red-100 text-red-800"
- case "no-show": return "bg-gray-100 text-gray-800"
+ case "no-show": return "bg-subtle text-fg"
  case "rescheduled": return "bg-yellow-100 text-yellow-800"
- default: return "bg-gray-100 text-gray-800"
+ default: return "bg-subtle text-fg"
  }
  }
 
@@ -234,7 +234,7 @@ export default function DoctorConsultationsPage() {
  case "upcoming": return <FaClock className="text-blue-500" />
  case "completed": return <FaCheckCircle className="text-green-500" />
  case "cancelled": return <FaTimes className="text-red-500" />
- case "no-show": return <FaExclamationTriangle className="text-gray-500" />
+ case "no-show": return <FaExclamationTriangle className="text-soft" />
  case "rescheduled": return <FaRedo className="text-yellow-500" />
  default: return null
  }
@@ -289,18 +289,18 @@ export default function DoctorConsultationsPage() {
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
- <Link href="/patient" className="text-gray-600 hover:text-primary-blue">
+ <Link href="/patient" className="text-soft hover:text-primary-blue">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">My Consultations</h1>
- <p className="text-gray-600">Manage all your doctor appointments</p>
+ <h1 className="text-2xl font-bold text-fg">My Consultations</h1>
+ <p className="text-soft">Manage all your doctor appointments</p>
  </div>
  </div>
  <Link href="/patient/doctor-consultations/book" className="btn-gradient px-6 py-2 flex items-center gap-2">
@@ -314,37 +314,37 @@ export default function DoctorConsultationsPage() {
  <div className="container mx-auto px-4 py-8">
  {/* Stats Cards */}
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Total</p>
+ <p className="text-soft text-sm">Total</p>
  <p className="text-2xl font-bold">{stats.total}</p>
  </div>
- <FaCalendarAlt className="text-gray-400 text-2xl" />
+ <FaCalendarAlt className="text-faint text-2xl" />
  </div>
  </div>
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Upcoming</p>
+ <p className="text-soft text-sm">Upcoming</p>
  <p className="text-2xl font-bold text-blue-600">{stats.upcoming}</p>
  </div>
  <FaClock className="text-blue-500 text-2xl" />
  </div>
  </div>
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Completed</p>
+ <p className="text-soft text-sm">Completed</p>
  <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
  </div>
  <FaCheckCircle className="text-green-500 text-2xl" />
  </div>
  </div>
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Cancelled</p>
+ <p className="text-soft text-sm">Cancelled</p>
  <p className="text-2xl font-bold text-red-600">{stats.cancelled}</p>
  </div>
  <FaTimes className="text-red-500 text-2xl" />
@@ -353,7 +353,7 @@ export default function DoctorConsultationsPage() {
  </div>
 
  {/* Filters */}
- <div className="bg-white rounded-lg p-4 shadow mb-6">
+ <div className="bg-surface rounded-lg p-4 shadow mb-6">
  <div className="flex flex-col lg:flex-row gap-4">
  <div className="flex-1 relative">
  <input
@@ -363,7 +363,7 @@ export default function DoctorConsultationsPage() {
  onChange={(e) => setSearchQuery(e.target.value)}
  className="w-full px-4 py-2 pl-10 border rounded-lg focus:outline-none focus:border-primary-blue"
  />
- <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
  
  <select
@@ -425,13 +425,13 @@ export default function DoctorConsultationsPage() {
  {/* Appointments List */}
  <div className="space-y-4">
  {loading ? (
- <div className="bg-white rounded-lg p-12 text-center">
+ <div className="bg-surface rounded-lg p-12 text-center">
  <FaSpinner className="animate-spin text-blue-500 text-3xl mx-auto mb-4" />
- <p className="text-gray-500">Loading appointments...</p>
+ <p className="text-soft">Loading appointments...</p>
  </div>
  ) : sortedAppointments.length > 0 ? (
  sortedAppointments.map((appointment) => (
- <div key={appointment.id} className="bg-white rounded-lg shadow hover:shadow-lg transition">
+ <div key={appointment.id} className="bg-surface rounded-lg shadow hover:shadow-lg transition">
  <div className="p-6">
  <div className="flex items-start justify-between">
  <div className="flex items-start gap-4 flex-1">
@@ -459,11 +459,11 @@ export default function DoctorConsultationsPage() {
  )}
  </div>
  
- <p className="text-gray-600 mb-2">{appointment.doctor.specialty} • {appointment.doctor.hospital}</p>
+ <p className="text-soft mb-2">{appointment.doctor.specialty}  {appointment.doctor.hospital}</p>
  
- <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-600 mb-3">
+ <div className="grid md:grid-cols-2 gap-2 text-sm text-soft mb-3">
  <div className="flex items-center gap-2">
- <FaCalendarAlt className="text-gray-400" />
+ <FaCalendarAlt className="text-faint" />
  <span>{new Date(appointment.date).toLocaleDateString("en-GB", { 
  weekday: "short", 
  day: "numeric", 
@@ -472,11 +472,11 @@ export default function DoctorConsultationsPage() {
  })}</span>
  </div>
  <div className="flex items-center gap-2">
- <FaClock className="text-gray-400" />
+ <FaClock className="text-faint" />
  <span>{appointment.time} - {appointment.endTime}</span>
  </div>
  <div className="flex items-center gap-2">
- <FaMapMarkerAlt className="text-gray-400" />
+ <FaMapMarkerAlt className="text-faint" />
  <span>{appointment.location}</span>
  </div>
  <div className="flex items-center gap-2">
@@ -486,7 +486,7 @@ export default function DoctorConsultationsPage() {
  </div>
  
  {appointment.notes && (
- <p className="text-sm text-gray-500 italic mb-3">Note: {appointment.notes}</p>
+ <p className="text-sm text-soft italic mb-3">Note: {appointment.notes}</p>
  )}
  
  {/* Additional Info Badges */}
@@ -519,7 +519,7 @@ export default function DoctorConsultationsPage() {
  <div className="flex flex-col gap-2 ml-4">
  <button
  onClick={() => handleViewDetails(appointment)}
- className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+ className="px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle text-sm"
  >
  <FaEye className="inline mr-1" />
  View
@@ -571,7 +571,7 @@ export default function DoctorConsultationsPage() {
  <button
  key={star}
  onClick={() => handleRateAppointment(appointment, star)}
- className="text-gray-300 hover:text-yellow-500"
+ className="text-faint hover:text-yellow-500"
  >
  <FaStar />
  </button>
@@ -583,7 +583,7 @@ export default function DoctorConsultationsPage() {
  {[1, 2, 3, 4, 5].map((star) => (
  <FaStar
  key={star}
- className={star <= (appointment.rating ?? 0) ? "text-yellow-500" : "text-gray-300"}
+ className={star <= (appointment.rating ?? 0) ? "text-yellow-500" : "text-faint"}
  />
  ))}
  </div>
@@ -596,10 +596,10 @@ export default function DoctorConsultationsPage() {
  </div>
  ))
  ) : (
- <div className="bg-white rounded-lg p-12 text-center">
- <FaCalendarAlt className="text-gray-400 text-5xl mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-600 mb-2">No appointments found</h3>
- <p className="text-gray-500 mb-6">
+ <div className="bg-surface rounded-lg p-12 text-center">
+ <FaCalendarAlt className="text-faint text-5xl mx-auto mb-4" />
+ <h3 className="text-xl font-semibold text-soft mb-2">No appointments found</h3>
+ <p className="text-soft mb-6">
  {searchQuery || filters.status !== "all" 
  ? "Try adjusting your search or filters" 
  : "You have no appointments scheduled"}
@@ -616,59 +616,59 @@ export default function DoctorConsultationsPage() {
  {/* Detail Modal */}
  {showDetailModal && selectedAppointment && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
  <div className="flex items-center justify-between mb-6">
  <h2 className="text-xl font-bold">Appointment Details</h2>
  <button
  onClick={() => setShowDetailModal(false)}
- className="text-gray-500 hover:text-gray-700 text-2xl"
+ className="text-soft hover:text-soft text-2xl"
  >
- ×
+ 
  </button>
  </div>
  
  <div className="space-y-4">
- <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+ <div className="flex items-center gap-4 p-4 bg-subtle rounded-lg">
  <div className="text-4xl">{selectedAppointment.doctor.avatar}</div>
  <div>
  <h3 className="font-semibold">{selectedAppointment.doctor.name}</h3>
- <p className="text-gray-600">{selectedAppointment.doctor.specialty}</p>
- <p className="text-sm text-gray-500">{selectedAppointment.doctor.hospital}</p>
+ <p className="text-soft">{selectedAppointment.doctor.specialty}</p>
+ <p className="text-sm text-soft">{selectedAppointment.doctor.hospital}</p>
  </div>
  </div>
  
  <div className="grid md:grid-cols-2 gap-4">
  <div>
- <p className="text-sm text-gray-600">Date & Time</p>
- <p className="font-medium">{new Date(selectedAppointment.date).toLocaleDateString()} • {selectedAppointment.time}</p>
+ <p className="text-sm text-soft">Date & Time</p>
+ <p className="font-medium">{new Date(selectedAppointment.date).toLocaleDateString()}  {selectedAppointment.time}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Type</p>
+ <p className="text-sm text-soft">Type</p>
  <p className="font-medium capitalize">{selectedAppointment.type.replace("-", " ")}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Location</p>
+ <p className="text-sm text-soft">Location</p>
  <p className="font-medium">{selectedAppointment.location}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Status</p>
+ <p className="text-sm text-soft">Status</p>
  <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedAppointment.status)}`}>
  {selectedAppointment.status}
  </span>
  </div>
  <div>
- <p className="text-sm text-gray-600">Reason</p>
+ <p className="text-sm text-soft">Reason</p>
  <p className="font-medium">{selectedAppointment.reason}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Amount</p>
+ <p className="text-sm text-soft">Amount</p>
  <p className="font-medium">Rs {selectedAppointment.amount}</p>
  </div>
  </div>
  
  {selectedAppointment.notes && (
  <div>
- <p className="text-sm text-gray-600">Notes</p>
+ <p className="text-sm text-soft">Notes</p>
  <p className="font-medium">{selectedAppointment.notes}</p>
  </div>
  )}
@@ -676,7 +676,7 @@ export default function DoctorConsultationsPage() {
  <div className="flex gap-3 mt-6">
  <button
  onClick={() => setShowDetailModal(false)}
- className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Close
  </button>
@@ -699,21 +699,21 @@ export default function DoctorConsultationsPage() {
  {/* Cancel Modal */}
  {showCancelModal && selectedAppointment && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+ <div className="bg-surface rounded-2xl p-6 max-w-md w-full">
  <div className="flex items-center gap-3 mb-4">
  <FaExclamationTriangle className="text-yellow-500 text-xl" />
  <h3 className="text-lg font-semibold">Cancel Appointment?</h3>
  </div>
- <p className="text-gray-600 mb-4">
+ <p className="text-soft mb-4">
  Are you sure you want to cancel your appointment with {selectedAppointment.doctor.name} on {new Date(selectedAppointment.date).toLocaleDateString()}?
  </p>
- <p className="text-sm text-gray-500 mb-6">
+ <p className="text-sm text-soft mb-6">
  Note: Cancellation fees may apply if cancelled within 24 hours of the appointment.
  </p>
  <div className="flex gap-3">
  <button
  onClick={() => setShowCancelModal(false)}
- className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Keep Appointment
  </button>
@@ -731,14 +731,14 @@ export default function DoctorConsultationsPage() {
  {/* Reschedule Modal */}
  {showRescheduleModal && selectedAppointment && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+ <div className="bg-surface rounded-2xl p-6 max-w-md w-full">
  <h3 className="text-lg font-semibold mb-4">Reschedule Appointment</h3>
- <p className="text-gray-600 mb-6">
+ <p className="text-soft mb-6">
  Select a new date and time for your appointment with {selectedAppointment.doctor.name}
  </p>
  <div className="space-y-4">
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">New Date</label>
+ <label className="block text-soft text-sm font-medium mb-2">New Date</label>
  <input
  type="date"
  min={new Date().toISOString().split("T")[0]}
@@ -746,7 +746,7 @@ export default function DoctorConsultationsPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">New Time</label>
+ <label className="block text-soft text-sm font-medium mb-2">New Time</label>
  <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary-blue">
  <option>09:00 AM</option>
  <option>09:30 AM</option>
@@ -764,7 +764,7 @@ export default function DoctorConsultationsPage() {
  <div className="flex gap-3 mt-6">
  <button
  onClick={() => setShowRescheduleModal(false)}
- className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Cancel
  </button>

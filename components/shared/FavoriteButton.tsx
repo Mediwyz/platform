@@ -65,11 +65,11 @@ export default function FavoriteButton({
       aria-label={favorited ? 'Remove from favourites' : 'Save provider'}
       aria-pressed={favorited}
       disabled={busy}
-      className={`inline-flex items-center justify-center p-2 rounded-full transition-colors hover:bg-gray-100 disabled:opacity-50 ${className}`}
+      className={`inline-flex items-center justify-center p-2 rounded-full transition-colors hover:bg-subtle disabled:opacity-50 ${className}`}
     >
       {favorited
         ? <FaStar size={iconSize} className="text-amber-500" />
-        : <FaRegStar size={iconSize} className="text-gray-400 hover:text-amber-500" />}
+        : <FaRegStar size={iconSize} className="text-faint hover:text-amber-500" />}
     </button>
   )
 }

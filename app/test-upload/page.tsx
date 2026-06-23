@@ -66,7 +66,7 @@ export default function TestUploadPage() {
 
  {loading && <p className="mt-4">Loading...</p>}
  {result && (
- <div className="mt-4 p-4 bg-gray-100 rounded">
+ <div className="mt-4 p-4 bg-subtle rounded">
  <pre>{JSON.stringify(result, null, 2)}</pre>
  </div>
  )}

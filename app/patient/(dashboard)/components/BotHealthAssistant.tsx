@@ -448,7 +448,7 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  className={`rounded-2xl px-4 py-3 ${
  isUser
  ? 'bg-blue-500 text-white'
- : 'bg-white border border-gray-200 text-gray-800'
+ : 'bg-surface border border-line text-fg'
  }`}
  >
  {isUser ? (
@@ -458,7 +458,7 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  )}
  <p
  className={`text-xs mt-2 ${
- isUser ? 'text-blue-100' : 'text-gray-400'
+ isUser ? 'text-blue-100' : 'text-faint'
  }`}
  >
  {formatTime(message.createdAt)}
@@ -470,7 +470,7 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  }
 
  return (
- <div className="h-full flex bg-gray-50 border border-gray-100 overflow-hidden">
+ <div className="h-full flex bg-subtle border border-line overflow-hidden">
  {/* Mobile Sidebar Overlay */}
  {isSidebarOpen && (
  <div
@@ -483,25 +483,25 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  <div
  className={`${
  isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
- } lg:translate-x-0 fixed lg:relative z-50 lg:z-0 w-72 h-screen lg:h-full bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ease-in-out`}
+ } lg:translate-x-0 fixed lg:relative z-50 lg:z-0 w-72 h-screen lg:h-full bg-surface border-r border-line flex flex-col transition-transform duration-300 ease-in-out`}
  >
  {/* Sidebar Header */}
- <div className="p-4 border-b border-gray-200">
+ <div className="p-4 border-b border-line">
  <div className="flex items-center justify-between mb-3">
- <h3 className="font-semibold text-gray-800 flex items-center">
+ <h3 className="font-semibold text-fg flex items-center">
  <FaComments className="mr-2 text-purple-500" />
  Chats
  </h3>
  <button
  onClick={() => setIsSidebarOpen(false)}
- className="lg:hidden p-1 text-gray-500 hover:text-gray-700"
+ className="lg:hidden p-1 text-soft hover:text-soft"
  >
  <FaTimes />
  </button>
  </div>
  <button
  onClick={startNewChat}
- className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white transition text-sm font-medium"
+ className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-surface transition text-sm font-medium"
  >
  <FaPlus className="text-xs" />
  New Chat
@@ -511,11 +511,11 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  {/* Sessions List */}
  <div className="flex-1 overflow-y-auto">
  {isLoadingSessions ? (
- <div className="p-4 text-center text-gray-400 text-sm">
+ <div className="p-4 text-center text-faint text-sm">
  Loading chats...
  </div>
  ) : sessions.length === 0 ? (
- <div className="p-4 text-center text-gray-400 text-sm">
+ <div className="p-4 text-center text-faint text-sm">
  No chat history yet. Start a new conversation!
  </div>
  ) : (
@@ -523,24 +523,24 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  <div
  key={session.id}
  onClick={() => loadSessionMessages(session.id)}
- className={`group flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 border-b border-gray-100 transition ${
+ className={`group flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-subtle border-b border-line transition ${
  activeSessionId === session.id
  ? 'bg-purple-50 border-l-2 border-l-purple-500'
  : ''
  }`}
  >
  <div className="flex-1 min-w-0">
- <p className="text-sm font-medium text-gray-800 truncate">
+ <p className="text-sm font-medium text-fg truncate">
  {session.title}
  </p>
- <p className="text-xs text-gray-400 mt-0.5">
+ <p className="text-xs text-faint mt-0.5">
  {formatDate(session.updatedAt)} &middot;{' '}
  {session._count.messages} messages
  </p>
  </div>
  <button
  onClick={(e) => deleteSession(session.id, e)}
- className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition ml-2"
+ className="opacity-0 group-hover:opacity-100 p-1 text-faint hover:text-red-500 transition ml-2"
  title="Delete chat"
  >
  <FaTrash className="text-xs" />
@@ -581,16 +581,16 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  </div>
 
  {/* Chat Messages */}
- <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
+ <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-subtle">
  {messages.length === 0 && !isLoading ? (
  <div className="flex flex-col items-center justify-center h-full text-center">
- <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
+ <div className="w-20 h-20 bg-surface rounded-full flex items-center justify-center mb-4">
  <FaRobot className="text-3xl text-white" />
  </div>
- <h3 className="text-xl font-semibold text-gray-700 mb-2">
+ <h3 className="text-xl font-semibold text-soft mb-2">
  Hello{displayName ? `, ${displayName}` : ''}!
  </h3>
- <p className="text-gray-500 mb-6 max-w-md text-sm">
+ <p className="text-soft mb-6 max-w-md text-sm">
  I am your AI Health Assistant. I can help you with diet and
  nutrition advice, exercise recommendations, and wellness
  guidance tailored to your health profile.
@@ -604,13 +604,13 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  'What healthy meals would you recommend for me based on my health profile?'
  )
  }
- className="bg-white border border-gray-200 hover:border-green-300 hover:shadow-md p-4 rounded-xl transition text-left group"
+ className="bg-surface border border-line hover:border-green-300 hover:shadow-md p-4 rounded-xl transition text-left group"
  >
  <FaUtensils className="text-green-500 text-lg mb-2 group-hover:scale-110 transition-transform" />
- <h4 className="font-medium text-gray-800 text-sm">
+ <h4 className="font-medium text-fg text-sm">
  Meal Planning
  </h4>
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Get diet suggestions
  </p>
  </button>
@@ -621,13 +621,13 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  'Can you suggest a safe exercise plan for me based on my health conditions?'
  )
  }
- className="bg-white border border-gray-200 hover:border-blue-300 hover:shadow-md p-4 rounded-xl transition text-left group"
+ className="bg-surface border border-line hover:border-blue-300 hover:shadow-md p-4 rounded-xl transition text-left group"
  >
  <FaDumbbell className="text-blue-500 text-lg mb-2 group-hover:scale-110 transition-transform" />
- <h4 className="font-medium text-gray-800 text-sm">
+ <h4 className="font-medium text-fg text-sm">
  Exercise Plan
  </h4>
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Custom workouts
  </p>
  </button>
@@ -638,13 +638,13 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  'Can you analyze my health profile and give me tips to improve my health score?'
  )
  }
- className="bg-white border border-gray-200 hover:border-purple-300 hover:shadow-md p-4 rounded-xl transition text-left group"
+ className="bg-surface border border-line hover:border-purple-300 hover:shadow-md p-4 rounded-xl transition text-left group"
  >
  <FaChartLine className="text-purple-500 text-lg mb-2 group-hover:scale-110 transition-transform" />
- <h4 className="font-medium text-gray-800 text-sm">
+ <h4 className="font-medium text-fg text-sm">
  Health Insights
  </h4>
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Improve your score
  </p>
  </button>
@@ -658,10 +658,10 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  {isLoading && (
  <div className="flex justify-start mb-4">
  <div className="flex items-start">
- <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
+ <div className="w-8 h-8 bg-surface rounded-full flex items-center justify-center mr-3">
  <FaRobot className="text-white text-sm" />
  </div>
- <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+ <div className="bg-surface border border-line rounded-2xl px-4 py-3">
  <div className="flex space-x-1.5">
  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
  <div
@@ -693,7 +693,7 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  </div>
 
  {/* Chat Input */}
- <div className="p-3 md:p-4 border-t bg-white">
+ <div className="p-3 md:p-4 border-t bg-surface">
  <div className="flex items-end space-x-3">
  <textarea
  ref={textareaRef}
@@ -702,19 +702,19 @@ const BotHealthAssistant: React.FC<Props> = ({ userName, healthScore }) => {
  onKeyDown={handleKeyDown}
  placeholder="Ask about nutrition, exercise, or wellness..."
  rows={1}
- className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition resize-none text-sm"
+ className="flex-1 px-4 py-3 border border-line rounded-2xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition resize-none text-sm"
  style={{ maxHeight: '120px' }}
  disabled={isLoading}
  />
  <button
  onClick={handleSendMessage}
  disabled={!newMessage.trim() || isLoading}
- className="p-3 bg-white disabled:opacity-50 disabled:cursor-not-allowed transition flex-shrink-0"
+ className="p-3 bg-surface disabled:opacity-50 disabled:cursor-not-allowed transition flex-shrink-0"
  >
  <FaPaperPlane className="text-lg" />
  </button>
  </div>
- <p className="text-xs text-gray-400 mt-2 text-center">
+ <p className="text-xs text-faint mt-2 text-center">
  AI responses are informational only. Always consult your doctor for
  medical advice.
  </p>

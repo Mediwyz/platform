@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function GlobalNotFound() {
  return (
- <div className="min-h-screen flex items-center justify-center bg-white">
+ <div className="min-h-screen flex items-center justify-center bg-surface">
  <div className="text-center max-w-lg px-6">
  {/* Icon */}
  <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -28,8 +28,8 @@ export default function GlobalNotFound() {
  404
  </span>
 
- <h1 className="text-3xl font-bold text-gray-900 mb-3">Page Not Found</h1>
- <p className="text-gray-600 mb-8 leading-relaxed">
+ <h1 className="text-3xl font-bold text-fg mb-3">Page Not Found</h1>
+ <p className="text-soft mb-8 leading-relaxed">
  The page you&apos;re looking for doesn&apos;t exist or has been moved.
  Please check the URL or navigate back to safety.
  </p>
@@ -37,7 +37,7 @@ export default function GlobalNotFound() {
  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
  <button
  onClick={() => window.history.back()}
- className="w-full sm:w-auto px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+ className="w-full sm:w-auto px-6 py-2.5 border-2 border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium"
  >
  Go Back
  </button>

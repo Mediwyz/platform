@@ -10,7 +10,7 @@ import {
 import { type NotificationItem } from '@/hooks/useNotifications'
 import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+//  helpers 
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -62,9 +62,9 @@ function NotifIcon({ type }: { type: string }) {
     case 'inventory': case 'order':
       return <FaBoxOpen className={`${cls} text-orange-500`} aria-hidden="true" />
     case 'system':
-      return <FaBell className={`${cls} text-gray-400`} aria-hidden="true" />
+      return <FaBell className={`${cls} text-faint`} aria-hidden="true" />
     default:
-      return <FaInfoCircle className={`${cls} text-gray-400`} aria-hidden="true" />
+      return <FaInfoCircle className={`${cls} text-faint`} aria-hidden="true" />
   }
 }
 
@@ -88,7 +88,7 @@ function filterByTab(items: NotificationItem[], tab: Tab): NotificationItem[] {
   }
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+//  Page 
 
 export default function NotificationsPage() {
   const router = useRouter()
@@ -191,7 +191,7 @@ export default function NotificationsPage() {
             className={`flex-shrink-0 px-3 py-1.5 text-sm rounded-lg font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal ${
               activeTab === tab.id
                 ? 'bg-brand-teal text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-subtle text-soft hover:bg-line'
             }`}
           >
             {tab.label}
@@ -203,21 +203,21 @@ export default function NotificationsPage() {
           </button>
         ))}
         <div className="ml-auto flex-shrink-0">
-          <FaFilter className="text-gray-400 text-sm mt-2 ml-2" aria-hidden="true" />
+          <FaFilter className="text-faint text-sm mt-2 ml-2" aria-hidden="true" />
         </div>
       </div>
 
       {/* List */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+      <div className="bg-surface rounded-xl border border-line overflow-hidden shadow-sm">
         {loading ? (
           [...Array(5)].map((_, i) => (
-            <div key={i} className="px-4 py-4 border-b border-gray-100 animate-pulse last:border-b-0">
+            <div key={i} className="px-4 py-4 border-b border-line animate-pulse last:border-b-0">
               <div className="flex gap-3">
-                <div className="w-5 h-5 bg-gray-200 rounded-full flex-shrink-0 mt-0.5" />
+                <div className="w-5 h-5 bg-line rounded-full flex-shrink-0 mt-0.5" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-3.5 bg-gray-200 rounded w-2/3" />
-                  <div className="h-3 bg-gray-100 rounded w-full" />
-                  <div className="h-2.5 bg-gray-100 rounded w-1/4" />
+                  <div className="h-3.5 bg-line rounded w-2/3" />
+                  <div className="h-3 bg-subtle rounded w-full" />
+                  <div className="h-2.5 bg-subtle rounded w-1/4" />
                 </div>
               </div>
             </div>
@@ -225,10 +225,10 @@ export default function NotificationsPage() {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <FaBell className="text-5xl text-gray-200 mb-4" aria-hidden="true" />
-            <p className="text-base font-semibold text-gray-500">
+            <p className="text-base font-semibold text-soft">
               {activeTab === 'unread' ? 'All caught up!' : 'No notifications here'}
             </p>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-faint mt-1">
               {activeTab === 'unread'
                 ? 'You have no unread notifications.'
                 : 'Notifications will appear here as they arrive.'}
@@ -249,17 +249,17 @@ export default function NotificationsPage() {
                 key={n.id}
                 type="button"
                 onClick={() => handleNotifClick(n)}
-                className={`w-full text-left px-4 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition flex gap-3 items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-teal ${
+                className={`w-full text-left px-4 py-4 border-b border-line last:border-b-0 hover:bg-subtle transition flex gap-3 items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-teal ${
                   !n.isRead ? 'bg-sky-50/60 border-l-2 border-l-brand-teal' : ''
                 }`}
               >
                 <NotifIcon type={n.type} />
                 <div className="flex-1 min-w-0">
-                  <p className={`text-sm ${!n.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                  <p className={`text-sm ${!n.isRead ? 'font-semibold text-fg' : 'font-medium text-soft'}`}>
                     {n.title}
                   </p>
-                  <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">{n.message}</p>
-                  <p className="text-xs text-gray-400 mt-1">{timeAgo(n.createdAt)}</p>
+                  <p className="text-sm text-soft mt-0.5 line-clamp-2">{n.message}</p>
+                  <p className="text-xs text-faint mt-1">{timeAgo(n.createdAt)}</p>
                 </div>
                 {!n.isRead && (
                   <span className="w-2.5 h-2.5 bg-brand-teal rounded-full flex-shrink-0 mt-1.5" aria-label="Unread" />
@@ -269,7 +269,7 @@ export default function NotificationsPage() {
 
             {/* Load more */}
             {activeTab === 'all' && hasMore && (
-              <div className="px-4 py-3 border-t border-gray-100 text-center">
+              <div className="px-4 py-3 border-t border-line text-center">
                 <button
                   onClick={handleLoadMore}
                   className="text-sm text-brand-teal hover:text-brand-navy font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal rounded"
@@ -284,7 +284,7 @@ export default function NotificationsPage() {
 
       {/* Back link */}
       <div className="mt-6 text-center">
-        <Link href="javascript:history.back()" className="text-sm text-gray-400 hover:text-gray-600 transition">
+        <Link href="javascript:history.back()" className="text-sm text-faint hover:text-soft transition">
           &larr; Go back
         </Link>
       </div>

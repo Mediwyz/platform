@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ export default function AdminWorkflowsOverviewPage() {
 
   if (loading) return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {[...Array(6)].map((_, i) => <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />)}
+      {[...Array(6)].map((_, i) => <div key={i} className="h-24 bg-subtle rounded-xl animate-pulse" />)}
     </div>
   )
 
@@ -39,17 +39,17 @@ export default function AdminWorkflowsOverviewPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Workflow Engine</h1>
-          <p className="text-sm text-gray-500 mt-1">Platform-wide visibility into workflow templates, live bookings, and compliance.</p>
+          <h1 className="text-2xl font-bold text-fg">Workflow Engine</h1>
+          <p className="text-sm text-soft mt-1">Platform-wide visibility into workflow templates, live bookings, and compliance.</p>
         </div>
         <div className="flex gap-2">
           <Link href="/admin/workflows/compliance" className="bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition">
             <FiShield className="w-4 h-4" /> Compliance
           </Link>
-          <Link href="/admin/workflows/templates" className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition">
+          <Link href="/admin/workflows/templates" className="bg-surface border border-line text-soft hover:bg-subtle px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition">
             <FiLayers className="w-4 h-4" /> Templates
           </Link>
-          <Link href="/admin/workflows/audit" className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition">
+          <Link href="/admin/workflows/audit" className="bg-surface border border-line text-soft hover:bg-subtle px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition">
             <FiList className="w-4 h-4" /> Audit log
           </Link>
         </div>
@@ -66,39 +66,39 @@ export default function AdminWorkflowsOverviewPage() {
               { label: 'Pending Suggestions', value: overview.pendingSuggestions, sub: 'awaiting review', icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50' },
               { label: 'Completed / Week', value: overview.instances.completedThisWeek, sub: overview.instances.cancelledThisWeek + ' cancelled', icon: FiCheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50' },
             ].map((c, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 flex items-start gap-3">
+              <div key={i} className="bg-surface border border-line rounded-xl p-4 flex items-start gap-3">
                 <div className={'p-2 rounded-lg ' + c.bg}><c.icon className={'w-5 h-5 ' + c.color} /></div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{c.value}</div>
-                  <div className="text-xs font-medium text-gray-700">{c.label}</div>
-                  <div className="text-xs text-gray-400">{c.sub}</div>
+                  <div className="text-2xl font-bold text-fg">{c.value}</div>
+                  <div className="text-xs font-medium text-soft">{c.label}</div>
+                  <div className="text-xs text-faint">{c.sub}</div>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <h2 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+            <div className="bg-surface border border-line rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-soft mb-3 flex items-center gap-2">
                 <FiGlobe className="w-4 h-4 text-teal-600" /> Templates by region
               </h2>
               {overview.byRegion.length > 0 ? (
                 <div className="space-y-2">
                   {overview.byRegion.sort((a, b) => b.count - a.count).map(r => (
                     <div key={r.region} className="flex items-center gap-2">
-                      <span className="text-sm text-gray-700 w-16 font-medium">{r.region}</span>
-                      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <span className="text-sm text-soft w-16 font-medium">{r.region}</span>
+                      <div className="flex-1 h-2 bg-subtle rounded-full overflow-hidden">
                         <div className="h-full bg-brand-teal rounded-full" style={{ width: Math.round((r.count / (overview.templates.total || 1)) * 100) + '%' }} />
                       </div>
-                      <span className="text-xs text-gray-500 w-6 text-right">{r.count}</span>
+                      <span className="text-xs text-soft w-6 text-right">{r.count}</span>
                     </div>
                   ))}
                 </div>
-              ) : <p className="text-sm text-gray-400">No region data yet.</p>}
+              ) : <p className="text-sm text-faint">No region data yet.</p>}
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <h2 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+            <div className="bg-surface border border-line rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-soft mb-3 flex items-center gap-2">
                 <FiClock className="w-4 h-4 text-blue-600" /> Recently updated
               </h2>
               {overview.recentTemplates.length > 0 ? (
@@ -106,14 +106,14 @@ export default function AdminWorkflowsOverviewPage() {
                   {overview.recentTemplates.map(t => (
                     <div key={t.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-50 last:border-0">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{t.name}</div>
-                        <div className="text-xs text-gray-400">{t.providerType.replace(/_/g, ' ')} · {t.serviceMode}</div>
+                        <div className="text-sm font-medium text-fg">{t.name}</div>
+                        <div className="text-xs text-faint">{t.providerType.replace(/_/g, ' ')}  {t.serviceMode}</div>
                       </div>
-                      <span className="text-[10px] text-gray-400">{new Date(t.updatedAt).toLocaleDateString()}</span>
+                      <span className="text-[10px] text-faint">{new Date(t.updatedAt).toLocaleDateString()}</span>
                     </div>
                   ))}
                 </div>
-              ) : <p className="text-sm text-gray-400">No templates yet.</p>}
+              ) : <p className="text-sm text-faint">No templates yet.</p>}
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { FaLocationArrow, FaTimes, FaRoute, FaSpinner, FaSyncAlt } from 'react-icons/fa'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface NearPin {
   id: string
@@ -17,7 +17,7 @@ interface NearPin {
   lng: number
 }
 
-// ─── Haversine (client-side, used for "All" filter) ──────────────────────────
+//  Haversine (client-side, used for "All" filter) 
 
 function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371
@@ -29,36 +29,36 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-// ─── Filter config ────────────────────────────────────────────────────────────
+//  Filter config 
 
 const FILTERS: { key: string; emoji: string; label: string; isProvider: boolean }[] = [
-  { key: 'all',        emoji: '🏥', label: 'All',          isProvider: false },
-  { key: 'DOCTOR',     emoji: '👨‍⚕️', label: 'Doctors',     isProvider: true  },
-  { key: 'NURSE',      emoji: '👩‍⚕️', label: 'Nurses',      isProvider: true  },
-  { key: 'DENTIST',    emoji: '🦷',  label: 'Dentists',    isProvider: true  },
-  { key: 'PHARMACIST', emoji: '💊',  label: 'Pharmacists', isProvider: true  },
-  { key: 'clinic',     emoji: '🏥',  label: 'Clinics',     isProvider: false },
-  { key: 'hospital',   emoji: '🏨',  label: 'Hospitals',   isProvider: false },
-  { key: 'laboratory', emoji: '🔬',  label: 'Labs',        isProvider: false },
+  { key: 'all',        emoji: '', label: 'All',          isProvider: false },
+  { key: 'DOCTOR',     emoji: '', label: 'Doctors',     isProvider: true  },
+  { key: 'NURSE',      emoji: '', label: 'Nurses',      isProvider: true  },
+  { key: 'DENTIST',    emoji: '',  label: 'Dentists',    isProvider: true  },
+  { key: 'PHARMACIST', emoji: '',  label: 'Pharmacists', isProvider: true  },
+  { key: 'clinic',     emoji: '',  label: 'Clinics',     isProvider: false },
+  { key: 'hospital',   emoji: '',  label: 'Hospitals',   isProvider: false },
+  { key: 'laboratory', emoji: '',  label: 'Labs',        isProvider: false },
 ]
 
 const TYPE_EMOJI: Record<string, string> = {
-  DOCTOR: '👨‍⚕️', NURSE: '👩‍⚕️', DENTIST: '🦷', PHARMACIST: '💊',
-  PHYSIOTHERAPIST: '🧘', CAREGIVER: '🤝', OPTOMETRIST: '👁️', NUTRITIONIST: '🥗',
-  LAB_TECHNICIAN: '🔬', EMERGENCY_WORKER: '🚑',
-  clinic: '🏥', hospital: '🏨', laboratory: '🔬', dental_clinic: '🦷',
-  optical_center: '👁️', wellness_center: '💆', pharmacy: '💊',
+  DOCTOR: '', NURSE: '', DENTIST: '', PHARMACIST: '',
+  PHYSIOTHERAPIST: '', CAREGIVER: '', OPTOMETRIST: '', NUTRITIONIST: '',
+  LAB_TECHNICIAN: '', EMERGENCY_WORKER: '',
+  clinic: '', hospital: '', laboratory: '', dental_clinic: '',
+  optical_center: '', wellness_center: '', pharmacy: '',
 }
 
 function typeEmoji(type: string): string {
-  return TYPE_EMOJI[type] ?? '🏥'
+  return TYPE_EMOJI[type] ?? ''
 }
 
 function formatType(type: string): string {
   return type.toLowerCase().replace(/_/g, ' ')
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+//  Component 
 
 export default function FloatingGeoFAB() {
   const [open, setOpen]               = useState(false)
@@ -74,7 +74,7 @@ export default function FloatingGeoFAB() {
       setLoading(true)
       setError(null)
       try {
-        // ── Get location ────────────────────────────────────────────────────
+        //  Get location 
         let loc = forceFreshLoc ? null : userLoc
         if (!loc) {
           loc = await new Promise<{ lat: number; lng: number }>((resolve, reject) =>
@@ -87,7 +87,7 @@ export default function FloatingGeoFAB() {
           setUserLoc(loc)
         }
 
-        // ── Fetch ───────────────────────────────────────────────────────────
+        //  Fetch 
         let results: NearPin[] = []
 
         if (filter === 'all') {
@@ -163,7 +163,7 @@ export default function FloatingGeoFAB() {
 
   return (
     <>
-      {/* ── FAB button ─────────────────────────────────────────────────────── */}
+      {/*  FAB button  */}
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-[216px] sm:bottom-[140px] right-4 sm:right-5 z-[150]
@@ -179,7 +179,7 @@ export default function FloatingGeoFAB() {
         </span>
       </button>
 
-      {/* ── Backdrop ───────────────────────────────────────────────────────── */}
+      {/*  Backdrop  */}
       {open && (
         <div
           className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
@@ -187,7 +187,7 @@ export default function FloatingGeoFAB() {
         />
       )}
 
-      {/* ── Modal / bottom sheet ───────────────────────────────────────────── */}
+      {/*  Modal / bottom sheet  */}
       {open && (
         <div
           className="fixed bottom-0 left-0 right-0 z-[201]
@@ -195,31 +195,31 @@ export default function FloatingGeoFAB() {
             sm:-translate-y-1/2 sm:-translate-x-1/2
             sm:w-[500px] sm:rounded-2xl
             w-full rounded-t-2xl
-            bg-white shadow-2xl flex flex-col"
+            bg-surface shadow-2xl flex flex-col"
           style={{ maxHeight: '85vh' }}
         >
-          {/* ── Header ─────────────────────────────────────────────────────── */}
-          <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-gray-100">
+          {/*  Header  */}
+          <div className="flex items-start justify-between px-4 pt-4 pb-3 border-b border-line">
             {/* Drag handle on mobile */}
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-200 rounded-full sm:hidden" />
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-line rounded-full sm:hidden" />
             <div>
-              <h2 className="text-[#001E40] font-bold text-base leading-tight">
+              <h2 className="text-fg font-bold text-base leading-tight">
                 Find Nearest Healthcare
               </h2>
-              <p className="text-gray-500 text-xs mt-0.5 leading-snug">
+              <p className="text-soft text-xs mt-0.5 leading-snug">
                 Discover providers &amp; clinics near you - tap a pin for directions
               </p>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="ml-3 p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition flex-shrink-0"
+              className="ml-3 p-1.5 rounded-full hover:bg-subtle text-faint hover:text-soft transition flex-shrink-0"
               aria-label="Close"
             >
               <FaTimes className="text-sm" />
             </button>
           </div>
 
-          {/* ── Action row ─────────────────────────────────────────────────── */}
+          {/*  Action row  */}
           <div className="flex items-center gap-2 px-4 pt-3 pb-1 flex-wrap">
             <button
               onClick={() => { setActiveFilter('all'); loadNearest('all', true) }}
@@ -235,14 +235,14 @@ export default function FloatingGeoFAB() {
             <button
               onClick={() => loadNearest(activeFilter)}
               disabled={loading || !userLoc}
-              className="flex items-center gap-1.5 border border-gray-200 text-gray-600 text-xs
-                font-medium px-3 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition"
+              className="flex items-center gap-1.5 border border-line text-soft text-xs
+                font-medium px-3 py-2 rounded-lg hover:bg-subtle disabled:opacity-40 transition"
             >
               <FaSyncAlt className="text-xs" />
               Update
             </button>
             <label className="ml-auto flex items-center gap-1.5 cursor-pointer select-none">
-              <span className="text-[11px] text-gray-500 whitespace-nowrap">Sort by distance</span>
+              <span className="text-[11px] text-soft whitespace-nowrap">Sort by distance</span>
               <input
                 type="checkbox"
                 checked={sortByDist}
@@ -252,7 +252,7 @@ export default function FloatingGeoFAB() {
             </label>
           </div>
 
-          {/* ── Filter chips ───────────────────────────────────────────────── */}
+          {/*  Filter chips  */}
           <div className="flex gap-1.5 px-4 py-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {FILTERS.map(f => (
               <button
@@ -261,7 +261,7 @@ export default function FloatingGeoFAB() {
                 className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-full border font-medium transition
                   ${activeFilter === f.key
                     ? 'bg-[#0C6780] text-white border-[#0C6780]'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'
+                    : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'
                   }`}
               >
                 {f.emoji} {f.label}
@@ -269,14 +269,14 @@ export default function FloatingGeoFAB() {
             ))}
           </div>
 
-          {/* ── Results ────────────────────────────────────────────────────── */}
+          {/*  Results  */}
           <div className="flex-1 overflow-y-auto px-4 pb-2 min-h-0">
 
             {/* Loading skeleton */}
             {loading && (
               <div className="space-y-2 py-2">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />
+                  <div key={i} className="h-14 bg-subtle rounded-xl animate-pulse" />
                 ))}
               </div>
             )}
@@ -284,17 +284,17 @@ export default function FloatingGeoFAB() {
             {/* Error */}
             {!loading && error && (
               <div className="text-center py-8">
-                <p className="text-sm text-red-500 mb-1">⚠️ {error}</p>
-                <p className="text-xs text-gray-400">Check your browser location settings and try again.</p>
+                <p className="text-sm text-red-500 mb-1"> {error}</p>
+                <p className="text-xs text-faint">Check your browser location settings and try again.</p>
               </div>
             )}
 
             {/* Empty - no location yet */}
             {!loading && !error && pins.length === 0 && !userLoc && (
               <div className="text-center py-10">
-                <div className="text-4xl mb-2">📍</div>
-                <p className="text-sm text-gray-500 font-medium">Ready to find care near you?</p>
-                <p className="text-xs text-gray-400 mt-1">
+                <div className="text-4xl mb-2"></div>
+                <p className="text-sm text-soft font-medium">Ready to find care near you?</p>
+                <p className="text-xs text-faint mt-1">
                   Tap <strong>Find Nearest</strong> to detect your location.
                 </p>
               </div>
@@ -303,23 +303,23 @@ export default function FloatingGeoFAB() {
             {/* Empty - location known but no results */}
             {!loading && !error && pins.length === 0 && userLoc && (
               <div className="text-center py-8">
-                <div className="text-3xl mb-2">🔍</div>
-                <p className="text-sm text-gray-500">No results found nearby.</p>
-                <p className="text-xs text-gray-400 mt-1">Try a different filter or expand your search.</p>
+                <div className="text-3xl mb-2"></div>
+                <p className="text-sm text-soft">No results found nearby.</p>
+                <p className="text-xs text-faint mt-1">Try a different filter or expand your search.</p>
               </div>
             )}
 
             {/* Results list */}
             {!loading && displayPins.length > 0 && (
               <>
-                <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold pt-1 pb-2">
+                <p className="text-[10px] text-faint uppercase tracking-widest font-semibold pt-1 pb-2">
                   Nearest to you ({displayPins.length})
                 </p>
                 <div className="space-y-2">
                   {displayPins.map(pin => (
                     <div
                       key={pin.id}
-                      className="flex items-center justify-between bg-gray-50 hover:bg-gray-100
+                      className="flex items-center justify-between bg-subtle hover:bg-subtle
                         rounded-xl px-3 py-2.5 transition"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -327,15 +327,15 @@ export default function FloatingGeoFAB() {
                           {typeEmoji(pin.type)}
                         </span>
                         <div className="min-w-0">
-                          <p className="text-[#001E40] text-xs font-semibold truncate leading-tight">
+                          <p className="text-fg text-xs font-semibold truncate leading-tight">
                             {pin.name}
                           </p>
-                          <p className="text-gray-400 text-[10px] leading-tight mt-0.5">
+                          <p className="text-faint text-[10px] leading-tight mt-0.5">
                             {formatType(pin.type)}
-                            {(pin.city ?? pin.address) ? ` · ${pin.city ?? pin.address}` : ''}
+                            {(pin.city ?? pin.address) ? `  ${pin.city ?? pin.address}` : ''}
                             {userLoc && (
                               <span className="ml-1 text-[#0C6780] font-medium">
-                                · {pin.distanceKm < 1
+                                 {pin.distanceKm < 1
                                     ? `${Math.round(pin.distanceKm * 1000)} m`
                                     : `${pin.distanceKm.toFixed(1)} km`}
                               </span>
@@ -361,14 +361,14 @@ export default function FloatingGeoFAB() {
             )}
           </div>
 
-          {/* ── Footer ─────────────────────────────────────────────────────── */}
-          <div className="border-t border-gray-100 px-4 py-3 flex-shrink-0">
+          {/*  Footer  */}
+          <div className="border-t border-line px-4 py-3 flex-shrink-0">
             <Link
               href="/search/providers"
               onClick={() => setOpen(false)}
               className="text-xs text-[#0C6780] font-semibold hover:underline"
             >
-              Browse all providers →
+              Browse all providers 
             </Link>
           </div>
         </div>

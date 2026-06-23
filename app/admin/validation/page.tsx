@@ -80,23 +80,23 @@ export default function AccountValidation() {
 
  if (loading) {
  return (
- <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+ <div className="min-h-screen bg-subtle flex items-center justify-center">
  <FaSpinner className="animate-spin text-3xl text-blue-600" />
  </div>
  )
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Account Validation</h1>
- <p className="text-gray-600">Review and approve provider registrations</p>
+ <h1 className="text-2xl font-bold text-fg">Account Validation</h1>
+ <p className="text-soft">Review and approve provider registrations</p>
  </div>
- <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-gray-50">
+ <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-subtle">
  Back to Dashboard
  </Link>
  </div>
@@ -106,31 +106,31 @@ export default function AccountValidation() {
  <div className="container mx-auto px-4 py-8">
  {/* Summary Cards */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
  <p className="text-2xl font-bold text-orange-600">{accounts.length}</p>
- <p className="text-gray-600 text-sm">Showing {statusFilter} accounts</p>
+ <p className="text-soft text-sm">Showing {statusFilter} accounts</p>
  </div>
  <FaClock className="text-orange-600 text-2xl" />
  </div>
  </div>
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
  <p className="text-2xl font-bold text-blue-600">{filteredAccounts.length}</p>
- <p className="text-gray-600 text-sm">Matching search</p>
+ <p className="text-soft text-sm">Matching search</p>
  </div>
  <FaEye className="text-blue-600 text-2xl" />
  </div>
  </div>
- <div className="bg-white rounded-lg p-4 shadow">
+ <div className="bg-surface rounded-lg p-4 shadow">
  <div className="flex items-center justify-between">
  <div>
  <p className="text-2xl font-bold text-green-600">
  {accounts.filter(a => a.accountStatus === 'active').length}
  </p>
- <p className="text-gray-600 text-sm">Active in view</p>
+ <p className="text-soft text-sm">Active in view</p>
  </div>
  <FaCheckCircle className="text-green-600 text-2xl" />
  </div>
@@ -138,7 +138,7 @@ export default function AccountValidation() {
  </div>
 
  {/* Filters */}
- <div className="bg-white rounded-xl p-4 shadow mb-6">
+ <div className="bg-surface rounded-xl p-4 shadow mb-6">
  <div className="flex flex-wrap gap-4 items-center justify-between">
  <div className="flex flex-wrap gap-2">
  {[
@@ -154,7 +154,7 @@ export default function AccountValidation() {
  className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition ${
  statusFilter === key
  ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {label}
@@ -162,7 +162,7 @@ export default function AccountValidation() {
  ))}
  </div>
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search by name or email..."
@@ -182,41 +182,41 @@ export default function AccountValidation() {
  )}
 
  {/* Accounts Table */}
- <div className="bg-white rounded-xl shadow overflow-hidden">
+ <div className="bg-surface rounded-xl shadow overflow-hidden">
  {filteredAccounts.length === 0 ? (
- <div className="text-center py-16 text-gray-500">
- <FaUsers className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="text-center py-16 text-soft">
+ <FaUsers className="text-4xl mx-auto mb-3 text-faint" />
  <p className="text-lg font-medium">No accounts found</p>
  <p className="text-sm mt-1">{statusFilter === 'unverified' ? 'All provider accounts have been verified' : 'No accounts match this filter'}</p>
  </div>
  ) : (
  <div className="overflow-x-auto"><table className="w-full">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Provider</th>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Type</th>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Phone</th>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Status</th>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Registered</th>
- <th className="p-4 text-left text-sm font-medium text-gray-700">Actions</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Provider</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Type</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Phone</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Status</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Registered</th>
+ <th className="p-4 text-left text-sm font-medium text-soft">Actions</th>
  </tr>
  </thead>
  <tbody>
  {filteredAccounts.map(account => (
- <tr key={account.id} className="border-t hover:bg-gray-50">
+ <tr key={account.id} className="border-t hover:bg-subtle">
  <td className="p-4">
  <div>
- <p className="font-medium text-gray-900">
+ <p className="font-medium text-fg">
  {account.firstName} {account.lastName}
  </p>
- <p className="text-sm text-gray-500">{account.email}</p>
+ <p className="text-sm text-soft">{account.email}</p>
  </div>
  </td>
  <td className="p-4">
- <span className="text-sm text-gray-700">{formatUserType(account.userType)}</span>
+ <span className="text-sm text-soft">{formatUserType(account.userType)}</span>
  </td>
  <td className="p-4">
- <span className="text-sm text-gray-700">{account.phone || ' - '}</span>
+ <span className="text-sm text-soft">{account.phone || ' - '}</span>
  </td>
  <td className="p-4">
  <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
@@ -228,7 +228,7 @@ export default function AccountValidation() {
  </span>
  </td>
  <td className="p-4">
- <span className="text-sm text-gray-700">
+ <span className="text-sm text-soft">
  {new Date(account.createdAt).toLocaleDateString()}
  </span>
  </td>

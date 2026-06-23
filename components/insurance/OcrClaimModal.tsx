@@ -89,14 +89,14 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md bg-surface rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-200">
+        <div className="flex items-center justify-between p-5 border-b border-line">
           <div>
-            <h2 className="text-base font-bold text-gray-900">File a claim</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Upload your receipt - we&apos;ll pre-fill the details</p>
+            <h2 className="text-base font-bold text-fg">File a claim</h2>
+            <p className="text-xs text-soft mt-0.5">Upload your receipt - we&apos;ll pre-fill the details</p>
           </div>
-          <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400">
+          <button onClick={onClose} className="p-1.5 hover:bg-subtle rounded-lg text-faint">
             <FaTimes />
           </button>
         </div>
@@ -117,18 +117,18 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
-                  className="w-full border-2 border-dashed border-gray-300 hover:border-[#0C6780] rounded-xl py-10 flex flex-col items-center gap-3 text-gray-500 hover:text-[#0C6780] transition group"
+                  className="w-full border-2 border-dashed border-line hover:border-[#0C6780] rounded-xl py-10 flex flex-col items-center gap-3 text-soft hover:text-[#0C6780] transition group"
                 >
                   <FaCamera className="w-8 h-8 group-hover:scale-110 transition-transform" />
                   <span className="text-sm font-medium">Upload receipt photo</span>
-                  <span className="text-xs text-gray-400">JPG, PNG, WEBP · Max 10 MB</span>
+                  <span className="text-xs text-faint">JPG, PNG, WEBP  Max 10 MB</span>
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-3 py-10">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {preview && <img src={preview} alt="receipt" className="w-24 h-24 object-cover rounded-xl shadow" />}
                   <FaSpinner className="w-6 h-6 animate-spin text-[#0C6780]" />
-                  <p className="text-sm text-gray-600">Scanning receipt with AI…</p>
+                  <p className="text-sm text-soft">Scanning receipt with AI</p>
                 </div>
               )}
 
@@ -137,7 +137,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
               <button
                 type="button"
                 onClick={() => setStep('review')}
-                className="w-full text-sm text-gray-500 hover:text-gray-700 py-2"
+                className="w-full text-sm text-soft hover:text-soft py-2"
               >
                 Skip scan - fill in manually
               </button>
@@ -152,19 +152,19 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                   <FaCheckCircle className="flex-shrink-0" />
                   <span>
                     Receipt scanned
-                    {ocr.merchantName && <> · <span className="font-medium">{ocr.merchantName}</span></>}
-                    {ocr.receiptDate && <> · {ocr.receiptDate}</>}
+                    {ocr.merchantName && <>  <span className="font-medium">{ocr.merchantName}</span></>}
+                    {ocr.receiptDate && <>  {ocr.receiptDate}</>}
                   </span>
                 </div>
               )}
 
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {preview && (
-                <img src={preview} alt="receipt" className="w-full max-h-40 object-contain rounded-xl border border-gray-200" />
+                <img src={preview} alt="receipt" className="w-full max-h-40 object-contain rounded-xl border border-line" />
               )}
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-soft mb-1">
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -172,17 +172,17 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                   onChange={e => setDescription(e.target.value)}
                   rows={3}
                   placeholder="What was this expense for?"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none resize-none"
+                  className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none resize-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-soft mb-1">
                   Amount (HC) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">HC</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm">HC</span>
                   <input
                     type="number"
                     min="1"
@@ -190,7 +190,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                     value={amount}
                     onChange={e => setAmount(e.target.value)}
                     placeholder="0.00"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none"
+                    className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none"
                     required
                   />
                 </div>
@@ -207,7 +207,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 <button
                   type="button"
                   onClick={() => { setStep('upload'); setOcr(null); setPreview(null) }}
-                  className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition"
+                  className="flex-1 border border-line text-soft py-2.5 rounded-xl text-sm font-medium hover:bg-subtle transition"
                 >
                   Re-scan
                 </button>
@@ -226,7 +226,7 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
           {step === 'submitting' && (
             <div className="flex flex-col items-center gap-3 py-10">
               <FaSpinner className="w-7 h-7 animate-spin text-[#0C6780]" />
-              <p className="text-sm text-gray-600">Submitting your claim…</p>
+              <p className="text-sm text-soft">Submitting your claim</p>
             </div>
           )}
 
@@ -237,8 +237,8 @@ export default function OcrClaimModal({ onClose, onSubmitted }: Props) {
                 <FaCheckCircle className="w-7 h-7 text-emerald-600" />
               </div>
               <div className="text-center">
-                <p className="font-semibold text-gray-900">Claim submitted</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="font-semibold text-fg">Claim submitted</p>
+                <p className="text-sm text-soft mt-1">
                   Your insurance provider will review it and get back to you.
                 </p>
               </div>

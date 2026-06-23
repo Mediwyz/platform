@@ -190,7 +190,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "mcb-juice",
  name: "MCB Juice",
  description: "Pay instantly with MCB Juice mobile payment",
- icon: "📱",
+ icon: "",
  available: true
  },
  {
@@ -199,7 +199,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's health screening benefits",
  discount: 25,
- icon: "🏢",
+ icon: "",
  available: true
  },
  {
@@ -208,7 +208,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Insurance Coverage",
  description: "Apply health insurance (80% covered)",
  discount: 80,
- icon: "🛡️",
+ icon: "",
  available: true
  },
  {
@@ -217,7 +217,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Health Screening Package",
  description: "Use your active health screening subscription",
  discount: 100,
- icon: "💳",
+ icon: "",
  available: true
  }
 ]
@@ -245,7 +245,7 @@ export default function LabTestingBooking() {
  specializations: [],
  operatingHours: "",
  homeCollection: false,
- avatar: "🔬",
+ avatar: "",
  },
  selectedTests: [fallbackTests[0]],
  date: "",
@@ -286,7 +286,7 @@ export default function LabTestingBooking() {
  specializations: [],
  operatingHours: "Monday - Saturday: 7:00 AM - 5:00 PM",
  homeCollection: true,
- avatar: "🔬",
+ avatar: "",
  }
  setLabFacility(facility)
  setAppointmentDetails(prev => ({ ...prev, labFacility: facility }))
@@ -445,7 +445,7 @@ export default function LabTestingBooking() {
  }
 
  const getTimeSlotStyle = (slot: TimeSlot, isSelected: boolean) => {
- if (!slot.available) return "bg-gray-100 text-gray-400 cursor-not-allowed"
+ if (!slot.available) return "bg-subtle text-faint cursor-not-allowed"
  if (isSelected) return "bg-blue-600 text-white border-blue-600"
  
  switch (slot.type) {
@@ -454,7 +454,7 @@ export default function LabTestingBooking() {
  case "priority":
  return "border-orange-300 text-orange-600 hover:bg-orange-50 hover:border-orange-500"
  default:
- return "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+ return "border-line hover:border-blue-400 hover:bg-blue-50"
  }
  }
 
@@ -466,10 +466,10 @@ export default function LabTestingBooking() {
 
  if (facilityLoading) {
  return (
- <div className="min-h-screen bg-white flex items-center justify-center">
+ <div className="min-h-screen bg-surface flex items-center justify-center">
  <div className="text-center">
  <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
- <p className="text-gray-600">Loading lab facility information...</p>
+ <p className="text-soft">Loading lab facility information...</p>
  </div>
  </div>
  )
@@ -477,11 +477,11 @@ export default function LabTestingBooking() {
 
  if (facilityError || !labFacility) {
  return (
- <div className="min-h-screen bg-white flex items-center justify-center">
+ <div className="min-h-screen bg-surface flex items-center justify-center">
  <div className="text-center">
  <FaExclamationTriangle className="text-yellow-500 text-5xl mx-auto mb-4" />
- <h2 className="text-xl font-semibold text-gray-900 mb-2">Lab Facility Not Found</h2>
- <p className="text-gray-600 mb-6">{facilityError ?? "The lab facility could not be loaded."}</p>
+ <h2 className="text-xl font-semibold text-fg mb-2">Lab Facility Not Found</h2>
+ <p className="text-soft mb-6">{facilityError ?? "The lab facility could not be loaded."}</p>
  <Link href="/search/lab" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
  Search Lab Facilities
  </Link>
@@ -491,24 +491,24 @@ export default function LabTestingBooking() {
  }
 
  return (
- <div className="min-h-screen bg-white">
+ <div className="min-h-screen bg-surface">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center gap-4">
- <Link href="/search/lab" className="text-gray-600 hover:text-blue-600">
+ <Link href="/search/lab" className="text-soft hover:text-blue-600">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Book Lab Tests</h1>
- <p className="text-gray-600">Schedule laboratory testing at {labFacility.name}</p>
+ <h1 className="text-2xl font-bold text-fg">Book Lab Tests</h1>
+ <p className="text-soft">Schedule laboratory testing at {labFacility.name}</p>
  </div>
  </div>
  </div>
  </div>
 
  {/* Progress Steps */}
- <div className="bg-white border-b">
+ <div className="bg-surface border-b">
  <div className="container mx-auto px-4 py-6">
  <div className="flex items-center justify-between max-w-4xl mx-auto">
  {steps.map((step, index) => (
@@ -517,19 +517,19 @@ export default function LabTestingBooking() {
  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold ${
  currentStep > step.number ? "bg-green-500 text-white" :
  currentStep === step.number ? "bg-blue-600 text-white" :
- "bg-gray-200 text-gray-600"
+ "bg-line text-soft"
  }`}>
  {currentStep > step.number ? <FaCheck /> : <step.icon />}
  </div>
  <span className={`text-xs mt-2 text-center ${
- currentStep >= step.number ? "text-blue-600 font-medium" : "text-gray-500"
+ currentStep >= step.number ? "text-blue-600 font-medium" : "text-soft"
  }`}>
  {step.title}
  </span>
  </div>
  {index < steps.length - 1 && (
  <div className={`w-16 h-1 mx-2 ${
- currentStep > step.number ? "bg-green-500" : "bg-gray-200"
+ currentStep > step.number ? "bg-green-500" : "bg-line"
  }`} />
  )}
  </div>
@@ -544,8 +544,8 @@ export default function LabTestingBooking() {
  <div className="max-w-4xl mx-auto">
  <div className="space-y-6">
  {/* Lab Facility Info */}
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Laboratory Facility</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Laboratory Facility</h2>
  
  <div className="flex flex-col lg:flex-row gap-8">
  <div className="lg:w-1/4 text-center">
@@ -553,20 +553,20 @@ export default function LabTestingBooking() {
  <div className="flex items-center justify-center gap-1 text-yellow-500 mb-2">
  <FaStar />
  <span className="font-bold text-lg">{appointmentDetails.labFacility.rating}</span>
- <span className="text-gray-600 text-sm">({appointmentDetails.labFacility.reviews} reviews)</span>
+ <span className="text-soft text-sm">({appointmentDetails.labFacility.reviews} reviews)</span>
  </div>
  </div>
  
  <div className="lg:w-3/4">
- <h3 className="text-xl font-bold text-gray-900 mb-2">{appointmentDetails.labFacility.name}</h3>
- <div className="flex items-center gap-2 text-gray-600 mb-4">
+ <h3 className="text-xl font-bold text-fg mb-2">{appointmentDetails.labFacility.name}</h3>
+ <div className="flex items-center gap-2 text-soft mb-4">
  <FaMapMarkerAlt />
  <span>{appointmentDetails.labFacility.location}</span>
  </div>
  
  <div className="grid md:grid-cols-2 gap-6 mb-6">
  <div>
- <h4 className="font-semibold text-gray-900 mb-2">Certifications</h4>
+ <h4 className="font-semibold text-fg mb-2">Certifications</h4>
  <div className="flex flex-wrap gap-2">
  {appointmentDetails.labFacility.certifications.map((cert, index) => (
  <span key={index} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
@@ -576,7 +576,7 @@ export default function LabTestingBooking() {
  </div>
  </div>
  <div>
- <h4 className="font-semibold text-gray-900 mb-2">Specializations</h4>
+ <h4 className="font-semibold text-fg mb-2">Specializations</h4>
  <div className="flex flex-wrap gap-2">
  {appointmentDetails.labFacility.specializations.map((spec, index) => (
  <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
@@ -601,8 +601,8 @@ export default function LabTestingBooking() {
  </div>
 
  {/* Test Selection */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-xl font-bold text-gray-900 mb-6">Available Laboratory Tests</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-xl font-bold text-fg mb-6">Available Laboratory Tests</h3>
  
  <div className="grid gap-4">
  {availableTests.map((test) => {
@@ -612,7 +612,7 @@ export default function LabTestingBooking() {
  <div
  key={test.id}
  className={`border-2 rounded-xl p-6 transition-all ${
- isSelected ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+ isSelected ? "border-blue-600 bg-blue-50" : "border-line hover:border-line"
  }`}
  >
  <div className="flex items-start justify-between">
@@ -626,27 +626,27 @@ export default function LabTestingBooking() {
  />
  </label>
  
- <Icon className={`text-3xl mt-1 ${isSelected ? "text-blue-600" : "text-gray-400"}`} />
+ <Icon className={`text-3xl mt-1 ${isSelected ? "text-blue-600" : "text-faint"}`} />
  
  <div className="flex-1">
  <h4 className="font-bold text-lg mb-2">{test.name}</h4>
- <p className="text-gray-600 text-sm mb-3">{test.description}</p>
+ <p className="text-soft text-sm mb-3">{test.description}</p>
  
  <div className="grid md:grid-cols-2 gap-4 text-sm">
  <div>
- <span className="text-gray-500">Category:</span>
+ <span className="text-soft">Category:</span>
  <span className="font-medium ml-1">{test.category}</span>
  </div>
  <div>
- <span className="text-gray-500">Sample:</span>
+ <span className="text-soft">Sample:</span>
  <span className="font-medium ml-1">{test.sampleType}</span>
  </div>
  <div>
- <span className="text-gray-500">Duration:</span>
+ <span className="text-soft">Duration:</span>
  <span className="font-medium ml-1">{test.duration}</span>
  </div>
  <div>
- <span className="text-gray-500">Results:</span>
+ <span className="text-soft">Results:</span>
  <span className="font-medium ml-1">{test.reportDelivery}</span>
  </div>
  </div>
@@ -674,8 +674,8 @@ export default function LabTestingBooking() {
 
  {/* Selected Tests Summary */}
  {appointmentDetails.selectedTests.length > 0 && (
- <div className="mt-6 bg-gray-50 rounded-lg p-4">
- <h4 className="font-semibold text-gray-900 mb-2">Selected Tests</h4>
+ <div className="mt-6 bg-subtle rounded-lg p-4">
+ <h4 className="font-semibold text-fg mb-2">Selected Tests</h4>
  <div className="space-y-2">
  {appointmentDetails.selectedTests.map((test, index) => (
  <div key={index} className="flex justify-between text-sm">
@@ -708,14 +708,14 @@ export default function LabTestingBooking() {
  {/* Step 2: Collection Method */}
  {currentStep === 2 && (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Sample Collection Method</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Sample Collection Method</h2>
  
  <div className="space-y-4 mb-8">
  <label className={`flex items-start p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg ${
  appointmentDetails.collectionMethod === "lab"
  ? "border-blue-600 bg-blue-50"
- : "border-gray-200 hover:border-gray-300"
+ : "border-line hover:border-line"
  }`}>
  <input
  type="radio"
@@ -726,15 +726,15 @@ export default function LabTestingBooking() {
  className="mr-4 mt-1"
  />
  <FaHospital className={`text-3xl mr-4 ${
- appointmentDetails.collectionMethod === "lab" ? "text-blue-600" : "text-gray-400"
+ appointmentDetails.collectionMethod === "lab" ? "text-blue-600" : "text-faint"
  }`} />
  <div className="flex-1">
  <h3 className="font-bold text-lg mb-2">Lab Visit</h3>
- <p className="text-gray-600 text-sm mb-2">Visit our laboratory for sample collection</p>
- <div className="text-xs text-gray-500 space-y-1">
- <p>• Professional sample collection</p>
- <p>• Immediate sample processing</p>
- <p>• No additional charges</p>
+ <p className="text-soft text-sm mb-2">Visit our laboratory for sample collection</p>
+ <div className="text-xs text-soft space-y-1">
+ <p> Professional sample collection</p>
+ <p> Immediate sample processing</p>
+ <p> No additional charges</p>
  </div>
  </div>
  </label>
@@ -742,7 +742,7 @@ export default function LabTestingBooking() {
  <label className={`flex items-start p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg ${
  appointmentDetails.collectionMethod === "home"
  ? "border-blue-600 bg-blue-50"
- : "border-gray-200 hover:border-gray-300"
+ : "border-line hover:border-line"
  }`}>
  <input
  type="radio"
@@ -753,15 +753,15 @@ export default function LabTestingBooking() {
  className="mr-4 mt-1"
  />
  <FaHome className={`text-3xl mr-4 ${
- appointmentDetails.collectionMethod === "home" ? "text-blue-600" : "text-gray-400"
+ appointmentDetails.collectionMethod === "home" ? "text-blue-600" : "text-faint"
  }`} />
  <div className="flex-1">
  <h3 className="font-bold text-lg mb-2">Home Collection</h3>
- <p className="text-gray-600 text-sm mb-2">Trained technician visits your home</p>
- <div className="text-xs text-gray-500 space-y-1">
- <p>• Convenient home service</p>
- <p>• Sterile collection procedures</p>
- <p>• Additional Rs 150 service fee</p>
+ <p className="text-soft text-sm mb-2">Trained technician visits your home</p>
+ <div className="text-xs text-soft space-y-1">
+ <p> Convenient home service</p>
+ <p> Sterile collection procedures</p>
+ <p> Additional Rs 150 service fee</p>
  </div>
  </div>
  </label>
@@ -781,11 +781,11 @@ export default function LabTestingBooking() {
  {appointmentDetails.selectedTests
  .filter(test => test.fastingRequired)
  .map((test, index) => (
- <div key={index} className="bg-white rounded p-3">
+ <div key={index} className="bg-surface rounded p-3">
  <p className="font-medium text-orange-800">{test.name}</p>
  <ul className="text-orange-700 text-xs mt-1 space-y-1">
  {test.preparationInstructions.map((instruction, idx) => (
- <li key={idx}>• {instruction}</li>
+ <li key={idx}> {instruction}</li>
  ))}
  </ul>
  </div>
@@ -800,7 +800,7 @@ export default function LabTestingBooking() {
  {/* Additional Information */}
  <div className="space-y-4">
  <div>
- <label className="block text-gray-700 font-medium mb-2">Emergency Contact</label>
+ <label className="block text-soft font-medium mb-2">Emergency Contact</label>
  <input
  type="text"
  placeholder="Name and phone number"
@@ -811,7 +811,7 @@ export default function LabTestingBooking() {
  </div>
 
  <div>
- <label className="block text-gray-700 font-medium mb-2">Additional Notes</label>
+ <label className="block text-soft font-medium mb-2">Additional Notes</label>
  <textarea
  rows={3}
  placeholder="Any specific instructions or medical conditions to note..."
@@ -829,7 +829,7 @@ export default function LabTestingBooking() {
  onChange={(e) => setAppointmentDetails({ ...appointmentDetails, doctorNotification: e.target.checked })}
  className="w-5 h-5"
  />
- <span className="text-gray-700 font-medium">Notify my doctor about test results</span>
+ <span className="text-soft font-medium">Notify my doctor about test results</span>
  </label>
  
  {appointmentDetails.doctorNotification && (
@@ -849,7 +849,7 @@ export default function LabTestingBooking() {
  <div className="flex justify-between mt-8">
  <button
  onClick={() => setCurrentStep(1)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -869,11 +869,11 @@ export default function LabTestingBooking() {
  <div className="max-w-4xl mx-auto">
  <div className="grid lg:grid-cols-2 gap-6">
  {/* Date Selection */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-xl font-bold text-gray-900 mb-6">Select Date & Time</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-xl font-bold text-fg mb-6">Select Date & Time</h3>
  
  <div className="mb-6">
- <label className="block text-gray-700 text-sm font-medium mb-2">
+ <label className="block text-soft text-sm font-medium mb-2">
  Test Date
  </label>
  <input
@@ -910,14 +910,14 @@ export default function LabTestingBooking() {
  </div>
 
  {/* Time Slots */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-xl font-bold text-gray-900 mb-6">Available Time Slots</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-xl font-bold text-fg mb-6">Available Time Slots</h3>
  {appointmentDetails.date ? (
  <div>
  <div className="mb-4">
  <div className="flex items-center gap-4 text-xs flex-wrap">
  <div className="flex items-center gap-2">
- <div className="w-3 h-3 border-2 border-gray-300 rounded"></div>
+ <div className="w-3 h-3 border-2 border-line rounded"></div>
  <span>Regular</span>
  </div>
  <div className="flex items-center gap-2">
@@ -934,12 +934,12 @@ export default function LabTestingBooking() {
  {slotsLoading ? (
  <div className="text-center py-8">
  <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
- <p className="text-gray-500 text-sm">Loading available slots...</p>
+ <p className="text-soft text-sm">Loading available slots...</p>
  </div>
  ) : timeSlots.length === 0 ? (
  <div className="text-center py-8">
- <FaClock className="text-gray-300 text-3xl mx-auto mb-2" />
- <p className="text-gray-500 text-sm">No available slots for this date.</p>
+ <FaClock className="text-faint text-3xl mx-auto mb-2" />
+ <p className="text-soft text-sm">No available slots for this date.</p>
  </div>
  ) : (
  <div className="grid grid-cols-3 gap-3 mb-6">
@@ -999,8 +999,8 @@ export default function LabTestingBooking() {
  </div>
  ) : (
  <div className="text-center py-12">
- <FaCalendarAlt className="text-4xl text-gray-300 mx-auto mb-4" />
- <p className="text-gray-500">Please select a date to view available times</p>
+ <FaCalendarAlt className="text-4xl text-faint mx-auto mb-4" />
+ <p className="text-soft">Please select a date to view available times</p>
  </div>
  )}
  </div>
@@ -1009,7 +1009,7 @@ export default function LabTestingBooking() {
  <div className="flex justify-between mt-6">
  <button
  onClick={() => setCurrentStep(2)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -1027,19 +1027,19 @@ export default function LabTestingBooking() {
  {/* Step 4: Payment */}
  {currentStep === 4 && (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Options</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Payment Options</h2>
  
  {/* Payment Methods */}
  <div className="space-y-4 mb-8">
- <h3 className="font-semibold text-gray-900 mb-4">Select Payment Method</h3>
+ <h3 className="font-semibold text-fg mb-4">Select Payment Method</h3>
  {paymentMethods.map((method) => (
  <label
  key={method.id}
- className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-gray-50 ${
+ className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-subtle ${
  selectedPaymentMethod?.id === method.id 
  ? "border-blue-600 bg-blue-50" 
- : "border-gray-200"
+ : "border-line"
  }`}
  >
  <input
@@ -1059,7 +1059,7 @@ export default function LabTestingBooking() {
  </span>
  )}
  </div>
- <p className="text-sm text-gray-600 mt-1">{method.description}</p>
+ <p className="text-sm text-soft mt-1">{method.description}</p>
  </div>
  {!method.available && (
  <span className="text-sm text-red-600 font-medium">Unavailable</span>
@@ -1069,23 +1069,23 @@ export default function LabTestingBooking() {
  </div>
 
  {/* Payment Summary */}
- <div className="bg-white rounded-xl p-6 mb-6 border">
- <h3 className="font-bold text-gray-900 mb-4">Payment Summary</h3>
+ <div className="bg-surface rounded-xl p-6 mb-6 border">
+ <h3 className="font-bold text-fg mb-4">Payment Summary</h3>
  <div className="space-y-3">
  {appointmentDetails.selectedTests.map((test, index) => (
  <div key={index} className="flex justify-between text-sm">
- <span className="text-gray-600">{test.name}</span>
+ <span className="text-soft">{test.name}</span>
  <span className="font-medium">Rs {test.price}</span>
  </div>
  ))}
  {appointmentDetails.collectionMethod === "home" && (
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Home Collection Fee</span>
+ <span className="text-soft">Home Collection Fee</span>
  <span className="font-medium">Rs 150</span>
  </div>
  )}
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Processing Fee</span>
+ <span className="text-soft">Processing Fee</span>
  <span className="font-medium">Rs 30</span>
  </div>
  {selectedPaymentMethod?.discount && (
@@ -1119,7 +1119,7 @@ export default function LabTestingBooking() {
  <div className="flex justify-between">
  <button
  onClick={() => setCurrentStep(3)}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -1148,13 +1148,13 @@ export default function LabTestingBooking() {
  {/* Step 5: Confirmation */}
  {currentStep === 5 && bookingConfirmed && (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+ <div className="bg-surface rounded-2xl p-8 shadow-lg text-center">
  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <FaCheck className="text-green-600 text-3xl" />
  </div>
  
- <h2 className="text-3xl font-bold text-gray-900 mb-3">Lab Tests Booked!</h2>
- <p className="text-gray-600 mb-8">Your laboratory testing appointment has been successfully confirmed.</p>
+ <h2 className="text-3xl font-bold text-fg mb-3">Lab Tests Booked!</h2>
+ <p className="text-soft mb-8">Your laboratory testing appointment has been successfully confirmed.</p>
  
  {/* Digital Ticket */}
  <div className="bg-brand-navy rounded-2xl p-6 text-white mb-8 text-left">
@@ -1175,7 +1175,7 @@ export default function LabTestingBooking() {
  <div className="space-y-2 text-sm">
  <p><span className="text-blue-200">Name:</span> {appointmentDetails.labFacility.name}</p>
  <p><span className="text-blue-200">Location:</span> {appointmentDetails.labFacility.location}</p>
- <p><span className="text-blue-200">Rating:</span> {appointmentDetails.labFacility.rating}⭐</p>
+ <p><span className="text-blue-200">Rating:</span> {appointmentDetails.labFacility.rating}</p>
  </div>
  </div>
  
@@ -1197,7 +1197,7 @@ export default function LabTestingBooking() {
  </div>
  <div className="text-blue-100 text-sm space-y-1">
  {appointmentDetails.selectedTests.map((test, index) => (
- <p key={index}>• {test.name}</p>
+ <p key={index}> {test.name}</p>
  ))}
  </div>
  </div>
@@ -1215,11 +1215,11 @@ export default function LabTestingBooking() {
  {appointmentDetails.selectedTests
  .filter(test => test.fastingRequired)
  .map((test, index) => (
- <div key={index} className="bg-white rounded p-3">
+ <div key={index} className="bg-surface rounded p-3">
  <p className="font-medium">{test.name}:</p>
  <ul className="mt-1 space-y-1">
  {test.preparationInstructions.map((instruction, idx) => (
- <li key={idx} className="text-xs">• {instruction}</li>
+ <li key={idx} className="text-xs"> {instruction}</li>
  ))}
  </ul>
  </div>
@@ -1238,13 +1238,13 @@ export default function LabTestingBooking() {
  <div>
  <h4 className="font-semibold text-green-800 mb-2">Secure Result Delivery</h4>
  <ul className="text-green-800 text-sm space-y-1">
- <li>• Results will be available in your patient portal</li>
- <li>• Email notification when reports are ready</li>
- <li>• SMS alerts for critical values</li>
+ <li> Results will be available in your patient portal</li>
+ <li> Email notification when reports are ready</li>
+ <li> SMS alerts for critical values</li>
  {appointmentDetails.doctorNotification && (
- <li>• Doctor will be automatically notified: {appointmentDetails.doctorEmail}</li>
+ <li> Doctor will be automatically notified: {appointmentDetails.doctorEmail}</li>
  )}
- <li>• Physical reports available for pickup</li>
+ <li> Physical reports available for pickup</li>
  </ul>
  </div>
  </div>
@@ -1261,7 +1261,7 @@ export default function LabTestingBooking() {
  <p className="text-blue-700 font-medium">Accreditations:</p>
  <ul className="text-blue-600 text-xs space-y-1">
  {appointmentDetails.labFacility.certifications.map((cert, index) => (
- <li key={index}>• {cert}</li>
+ <li key={index}> {cert}</li>
  ))}
  </ul>
  </div>
@@ -1269,7 +1269,7 @@ export default function LabTestingBooking() {
  <p className="text-blue-700 font-medium">Equipment:</p>
  <ul className="text-blue-600 text-xs space-y-1">
  {appointmentDetails.labFacility.equipment.slice(0, 3).map((equipment, index) => (
- <li key={index}>• {equipment}</li>
+ <li key={index}> {equipment}</li>
  ))}
  </ul>
  </div>
@@ -1279,16 +1279,16 @@ export default function LabTestingBooking() {
  </div>
 
  {/* Next Steps */}
- <div className="bg-gray-50 rounded-xl p-6 mb-8 text-left">
- <h4 className="font-semibold text-gray-900 mb-4">What happens next?</h4>
+ <div className="bg-subtle rounded-xl p-6 mb-8 text-left">
+ <h4 className="font-semibold text-fg mb-4">What happens next?</h4>
  <div className="space-y-4">
  <div className="flex items-start gap-4">
  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
  <span className="text-blue-600 font-bold text-sm">1</span>
  </div>
  <div>
- <p className="font-medium text-gray-900">Preparation Reminder</p>
- <p className="text-gray-600 text-sm">
+ <p className="font-medium text-fg">Preparation Reminder</p>
+ <p className="text-soft text-sm">
  {hasFastingTests 
  ? `Follow fasting instructions ${maxFastingHours} hours before your appointment`
  : "No special preparation required for your selected tests"
@@ -1302,8 +1302,8 @@ export default function LabTestingBooking() {
  <span className="text-blue-600 font-bold text-sm">2</span>
  </div>
  <div>
- <p className="font-medium text-gray-900">Sample Collection</p>
- <p className="text-gray-600 text-sm">
+ <p className="font-medium text-fg">Sample Collection</p>
+ <p className="text-soft text-sm">
  {appointmentDetails.collectionMethod === "home" 
  ? "Trained technician will visit your home for sample collection"
  : "Visit the lab facility for professional sample collection"
@@ -1317,8 +1317,8 @@ export default function LabTestingBooking() {
  <span className="text-blue-600 font-bold text-sm">3</span>
  </div>
  <div>
- <p className="font-medium text-gray-900">Processing & Analysis</p>
- <p className="text-gray-600 text-sm">Your samples will be processed using state-of-the-art equipment</p>
+ <p className="font-medium text-fg">Processing & Analysis</p>
+ <p className="text-soft text-sm">Your samples will be processed using state-of-the-art equipment</p>
  </div>
  </div>
  
@@ -1327,8 +1327,8 @@ export default function LabTestingBooking() {
  <span className="text-blue-600 font-bold text-sm">4</span>
  </div>
  <div>
- <p className="font-medium text-gray-900">Result Delivery</p>
- <p className="text-gray-600 text-sm">Secure digital delivery through patient portal and email notification</p>
+ <p className="font-medium text-fg">Result Delivery</p>
+ <p className="text-soft text-sm">Secure digital delivery through patient portal and email notification</p>
  </div>
  </div>
  </div>
@@ -1336,22 +1336,22 @@ export default function LabTestingBooking() {
 
  {/* Action Buttons */}
  <div className="grid md:grid-cols-4 gap-3 mb-6">
- <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+ <button className="flex flex-col items-center gap-2 p-4 border border-line rounded-lg hover:bg-subtle transition-colors">
  <FaDownload className="text-blue-600 text-xl" />
  <span className="text-sm font-medium">Download Ticket</span>
  </button>
  
- <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+ <button className="flex flex-col items-center gap-2 p-4 border border-line rounded-lg hover:bg-subtle transition-colors">
  <FaPrint className="text-green-600 text-xl" />
  <span className="text-sm font-medium">Print Details</span>
  </button>
  
- <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+ <button className="flex flex-col items-center gap-2 p-4 border border-line rounded-lg hover:bg-subtle transition-colors">
  <FaCalendarPlus className="text-purple-600 text-xl" />
  <span className="text-sm font-medium">Add to Calendar</span>
  </button>
  
- <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+ <button className="flex flex-col items-center gap-2 p-4 border border-line rounded-lg hover:bg-subtle transition-colors">
  <FaPhone className="text-orange-600 text-xl" />
  <span className="text-sm font-medium">Contact Lab</span>
  </button>
@@ -1362,13 +1362,13 @@ export default function LabTestingBooking() {
  <Link href="/patient/lab-results" className="bg-brand-navy transition-all text-center">
  View Test Results
  </Link>
- <Link href="/patient" className="border-2 border-gray-300 text-gray-700 py-4 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-all text-center">
+ <Link href="/patient" className="border-2 border-line text-soft py-4 px-6 rounded-lg font-semibold hover:bg-subtle transition-all text-center">
  Go to Dashboard
  </Link>
  </div>
  
  {/* Emergency Contact */}
- <div className="mt-8 pt-6 border-t border-gray-200">
+ <div className="mt-8 pt-6 border-t border-line">
  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
  <div className="flex items-center gap-2 mb-2">
  <FaExclamationTriangle className="text-red-600" />

@@ -167,12 +167,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           <div className="flex flex-wrap items-center justify-center gap-3 mb-7">
             <a
               href="/MediWyz-v3.0.0-debug.apk"
-              className="inline-flex items-center gap-2 rounded-xl bg-white text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               aria-label="Get it on Google Play"
             >
               <FaGooglePlay className="text-lg" />
               <span className="flex flex-col leading-none">
-                <span className="text-[8px] uppercase tracking-wide text-gray-500">Get it on</span>
+                <span className="text-[8px] uppercase tracking-wide text-soft">Get it on</span>
                 <span className="text-xs font-bold">Google Play</span>
               </span>
             </a>

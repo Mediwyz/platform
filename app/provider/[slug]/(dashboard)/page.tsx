@@ -96,10 +96,10 @@ export default function DynamicProviderDashboard() {
   return (
     <div className="space-y-6 p-1">
       <div>
-        <h1 className="text-2xl font-bold text-[#001E40]">
+        <h1 className="text-2xl font-bold text-fg">
           Welcome back{user ? `, ${user.firstName}` : ''}
         </h1>
-        <p className="text-gray-500 mt-1">Here is your dashboard overview</p>
+        <p className="text-soft mt-1">Here is your dashboard overview</p>
       </div>
 
       {/* Stats */}
@@ -142,12 +142,12 @@ export default function DynamicProviderDashboard() {
           <Link
             key={link.href}
             href={link.href}
-            className="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all"
+            className="flex flex-col items-center gap-2 p-4 bg-surface rounded-xl border border-line hover:shadow-md transition-all"
           >
             <div className={`w-10 h-10 rounded-xl ${link.color} flex items-center justify-center`}>
               <link.icon className="text-lg" />
             </div>
-            <span className="text-sm font-medium text-gray-700">{link.label}</span>
+            <span className="text-sm font-medium text-soft">{link.label}</span>
           </Link>
         ))}
       </div>
@@ -155,34 +155,34 @@ export default function DynamicProviderDashboard() {
       {/* My Workplace */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold text-gray-900">My Workplace</h2>
+          <h2 className="text-lg font-bold text-fg">My Workplace</h2>
           <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline flex items-center gap-1">
             <FaPlus size={10} /> Add Workplace
           </Link>
         </div>
         {workplaces.length === 0 ? (
-          <div className="bg-white rounded-xl border border-dashed border-gray-200 p-5 text-center">
-            <FaHospital className="text-gray-300 text-2xl mx-auto mb-2" />
-            <p className="text-sm text-gray-500 mb-2">You have not linked an organization yet.</p>
-            <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">Find and join an organization →</Link>
+          <div className="bg-surface rounded-xl border border-dashed border-line p-5 text-center">
+            <FaHospital className="text-faint text-2xl mx-auto mb-2" />
+            <p className="text-sm text-soft mb-2">You have not linked an organization yet.</p>
+            <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">Find and join an organization </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {workplaces.map(wp => (
-              <div key={wp.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-start gap-3">
+              <div key={wp.id} className="bg-surface rounded-xl border border-line shadow-sm p-4 flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
                   <FaHospital className="text-red-600" size={16} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1">
-                    <p className="text-sm font-semibold text-[#001E40] truncate">{wp.entity.name}</p>
+                    <p className="text-sm font-semibold text-fg truncate">{wp.entity.name}</p>
                     {wp.entity.isVerified && <MdVerified className="text-[#0C6780] flex-shrink-0" size={13} />}
                     {wp.isPrimary && <span className="text-[10px] bg-[#0C6780]/10 text-[#0C6780] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0">Primary</span>}
                   </div>
-                  {wp.role && <p className="text-xs text-gray-500">{wp.role}</p>}
+                  {wp.role && <p className="text-xs text-soft">{wp.role}</p>}
                   <div className="flex items-center gap-1 mt-0.5">
-                    <FaMapMarkerAlt className="text-gray-300" size={9} />
-                    <p className="text-[10px] text-gray-400">{wp.entity.city ?? ''}{wp.entity.city ? ', ' : ''}{wp.entity.country}</p>
+                    <FaMapMarkerAlt className="text-faint" size={9} />
+                    <p className="text-[10px] text-faint">{wp.entity.city ?? ''}{wp.entity.city ? ', ' : ''}{wp.entity.country}</p>
                   </div>
                 </div>
               </div>
@@ -193,14 +193,14 @@ export default function DynamicProviderDashboard() {
 
       {/* Recent Activity */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-3">Recent Activity</h2>
+        <h2 className="text-lg font-bold text-fg mb-3">Recent Activity</h2>
         {loading ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <p className="text-sm text-gray-500">Loading bookings...</p>
+          <div className="bg-surface rounded-xl border border-line p-6 text-center">
+            <p className="text-sm text-soft">Loading bookings...</p>
           </div>
         ) : recentBookings.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <p className="text-sm text-gray-500">
+          <div className="bg-surface rounded-xl border border-line p-6 text-center">
+            <p className="text-sm text-soft">
               No recent bookings yet. View your full schedule in{' '}
               <Link href={`${base}/practice`} className="text-[#0C6780] font-medium hover:underline">
                 My Practice
@@ -208,22 +208,22 @@ export default function DynamicProviderDashboard() {
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+          <div className="bg-surface rounded-xl border border-line divide-y divide-line">
             {recentBookings.map(booking => {
               const dateStr = booking.scheduledAt || booking.createdAt
               const statusKey = booking.status?.toUpperCase() ?? ''
               return (
                 <div key={booking.id} className="flex items-center justify-between p-4">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-fg truncate">
                       {booking.patientName || booking.type?.replace(/_/g, ' ') || 'Booking'}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-soft mt-0.5">
                       {booking.type?.replace(/_/g, ' ')}
                       {dateStr ? ` - ${new Date(dateStr).toLocaleDateString()}` : ''}
                     </p>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${statusColor[statusKey] || 'bg-gray-100 text-gray-800'}`}>
+                  <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${statusColor[statusKey] || 'bg-subtle text-fg'}`}>
                     {booking.status?.replace(/_/g, ' ') || 'Unknown'}
                   </span>
                 </div>

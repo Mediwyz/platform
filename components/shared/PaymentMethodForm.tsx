@@ -81,19 +81,19 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  </div>
  </div>
 
- <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-6 flex items-center gap-2">
  <FaCreditCard className="text-blue-600" /> Payment Methods
  </h2>
 
  {/* Existing Methods */}
  <div className="space-y-3 mb-6">
  {methods.length === 0 && (
- <p className="text-gray-500 text-sm p-4 border rounded-lg border-dashed">
+ <p className="text-soft text-sm p-4 border rounded-lg border-dashed">
  No payment methods added yet.
  </p>
  )}
  {methods.map((method) => (
- <div key={method.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition gap-3">
+ <div key={method.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-subtle transition gap-3">
  <div className="flex items-center gap-3">
  {method.type === 'mcb_juice' ? (
  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -105,8 +105,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  </div>
  )}
  <div>
- <p className="font-medium text-gray-800">{method.label}</p>
- <p className="text-sm text-gray-500">{method.details}</p>
+ <p className="font-medium text-fg">{method.label}</p>
+ <p className="text-sm text-soft">{method.details}</p>
  </div>
  </div>
  <div className="flex items-center gap-2">
@@ -115,7 +115,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  <FaCheckCircle /> Default
  </span>
  ) : (
- <button onClick={() => setDefault(method.id)} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium hover:bg-gray-200 transition">
+ <button onClick={() => setDefault(method.id)} className="px-3 py-1 bg-subtle text-soft rounded-full text-xs font-medium hover:bg-line transition">
  Set Default
  </button>
  )}
@@ -129,19 +129,19 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
 
  {/* Add New Method */}
  {!showAddForm ? (
- <button onClick={() => setShowAddForm(true)} className="w-full p-4 border-2 border-dashed rounded-lg text-gray-500 hover:border-blue-400 hover:text-blue-600 transition flex items-center justify-center gap-2">
+ <button onClick={() => setShowAddForm(true)} className="w-full p-4 border-2 border-dashed rounded-lg text-soft hover:border-blue-400 hover:text-blue-600 transition flex items-center justify-center gap-2">
  <FaPlus /> Add Payment Method
  </button>
  ) : (
  <div className="border rounded-lg p-6 space-y-4">
- <h3 className="font-semibold text-gray-800">Add New Payment Method</h3>
+ <h3 className="font-semibold text-fg">Add New Payment Method</h3>
 
  {/* Type Selector */}
  <div className="flex gap-3">
  <button
  onClick={() => setAddType('credit_card')}
  className={`flex-1 p-3 rounded-lg border-2 transition flex items-center justify-center gap-2 ${
- addType === 'credit_card' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-600'
+ addType === 'credit_card' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-line text-soft'
  }`}
  >
  <FaCreditCard /> Credit / Debit Card
@@ -149,7 +149,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  <button
  onClick={() => setAddType('mcb_juice')}
  className={`flex-1 p-3 rounded-lg border-2 transition flex items-center justify-center gap-2 ${
- addType === 'mcb_juice' ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 text-gray-600'
+ addType === 'mcb_juice' ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-line text-soft'
  }`}
  >
  <FaMobileAlt /> MCB Juice
@@ -159,32 +159,32 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  {addType === 'credit_card' ? (
  <div className="space-y-3">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
- <input type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="1234 5678 9012 3456" maxLength={19} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
+ <label className="block text-sm font-medium text-soft mb-1">Card Number</label>
+ <input type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="1234 5678 9012 3456" maxLength={19} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Cardholder Name</label>
- <input type="text" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} placeholder="John Smith" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
+ <label className="block text-sm font-medium text-soft mb-1">Cardholder Name</label>
+ <input type="text" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} placeholder="John Smith" className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
  </div>
  <div className="grid grid-cols-2 gap-3">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
- <input type="text" value={expiry} onChange={(e) => setExpiry(e.target.value)} placeholder="MM/YY" maxLength={5} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
+ <label className="block text-sm font-medium text-soft mb-1">Expiry Date</label>
+ <input type="text" value={expiry} onChange={(e) => setExpiry(e.target.value)} placeholder="MM/YY" maxLength={5} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">CVV</label>
- <input type="password" value={cvv} onChange={(e) => setCvv(e.target.value)} placeholder="***" maxLength={4} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
+ <label className="block text-sm font-medium text-soft mb-1">CVV</label>
+ <input type="password" value={cvv} onChange={(e) => setCvv(e.target.value)} placeholder="***" maxLength={4} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" />
  </div>
  </div>
  </div>
  ) : (
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">MCB Juice Phone Number</label>
+ <label className="block text-sm font-medium text-soft mb-1">MCB Juice Phone Number</label>
  <div className="flex">
- <span className="inline-flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-600 text-sm">+230</span>
- <input type="tel" value={juicePhone} onChange={(e) => setJuicePhone(e.target.value)} placeholder="5XXX XXXX" maxLength={9} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-500" />
+ <span className="inline-flex items-center px-3 bg-subtle border border-r-0 border-line rounded-l-lg text-soft text-sm">+230</span>
+ <input type="tel" value={juicePhone} onChange={(e) => setJuicePhone(e.target.value)} placeholder="5XXX XXXX" maxLength={9} className="flex-1 px-4 py-2.5 border border-line rounded-r-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-500" />
  </div>
- <p className="text-xs text-gray-500 mt-1">Enter your MCB Juice registered mobile number</p>
+ <p className="text-xs text-soft mt-1">Enter your MCB Juice registered mobile number</p>
  </div>
  )}
 
@@ -192,7 +192,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
  <button onClick={addMethod} className="w-full sm:w-auto bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
  <FaSave /> Add Method
  </button>
- <button onClick={() => setShowAddForm(false)} className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg font-semibold text-gray-600 hover:bg-gray-50">
+ <button onClick={() => setShowAddForm(false)} className="w-full sm:w-auto px-6 py-2.5 border border-line rounded-lg font-semibold text-soft hover:bg-subtle">
  Cancel
  </button>
  </div>

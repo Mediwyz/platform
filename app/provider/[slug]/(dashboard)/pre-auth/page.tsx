@@ -124,8 +124,8 @@ export default function ProviderPreAuthPage() {
         <div className="flex items-center gap-3">
           <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><FaShieldAlt /></div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Pre-authorizations</h1>
-            <p className="text-sm text-gray-600 mt-1">Request coverage upfront, then mark as used to get paid directly by the insurer.</p>
+            <h1 className="text-2xl font-bold text-fg">Pre-authorizations</h1>
+            <p className="text-sm text-soft mt-1">Request coverage upfront, then mark as used to get paid directly by the insurer.</p>
           </div>
         </div>
         {!creating && (
@@ -136,46 +136,46 @@ export default function ProviderPreAuthPage() {
       </header>
 
       {creating && (
-        <section className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-900">Request pre-authorization</h2>
+        <section className="bg-surface border border-line rounded-xl p-4 sm:p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-fg">Request pre-authorization</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Member email</label>
-              <input value={memberEmail} onChange={(e) => setMemberEmail(e.target.value)} placeholder="member@mediwyz.com" className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5" />
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Member email</label>
+              <input value={memberEmail} onChange={(e) => setMemberEmail(e.target.value)} placeholder="member@mediwyz.com" className="w-full text-sm border border-line rounded-lg px-2 py-1.5" />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Insurance company</label>
-              <select value={companyProfileId} onChange={(e) => setCompanyProfileId(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 bg-white">
-                <option value="">Choose an insurance company…</option>
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Insurance company</label>
+              <select value={companyProfileId} onChange={(e) => setCompanyProfileId(e.target.value)} className="w-full text-sm border border-line rounded-lg px-2 py-1.5 bg-surface">
+                <option value="">Choose an insurance company</option>
                 {companies.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
               </select>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 bg-white">
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Category</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full text-sm border border-line rounded-lg px-2 py-1.5 bg-surface">
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Requested amount</label>
-              <input type="number" inputMode="decimal" value={requestedAmount} onChange={(e) => setRequestedAmount(e.target.value)} placeholder="0" className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5" />
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Requested amount</label>
+              <input type="number" inputMode="decimal" value={requestedAmount} onChange={(e) => setRequestedAmount(e.target.value)} placeholder="0" className="w-full text-sm border border-line rounded-lg px-2 py-1.5" />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Expires in (days)</label>
-              <input type="number" min={1} max={90} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5" />
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Expires in (days)</label>
+              <input type="number" min={1} max={90} value={expiresInDays} onChange={(e) => setExpiresInDays(e.target.value)} className="w-full text-sm border border-line rounded-lg px-2 py-1.5" />
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Description</label>
-            <textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Orthodontic consultation + treatment plan" className="w-full text-sm border border-gray-300 rounded-lg p-2" />
+            <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Description</label>
+            <textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Orthodontic consultation + treatment plan" className="w-full text-sm border border-line rounded-lg p-2" />
           </div>
           {error && <div className="text-xs text-red-600">{error}</div>}
           <div className="flex justify-end gap-2 pt-1">
-            <button onClick={() => { setCreating(false); setError(null) }} className="px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded-lg" disabled={submitting}>Cancel</button>
+            <button onClick={() => { setCreating(false); setError(null) }} className="px-3 py-1.5 text-sm text-soft hover:bg-subtle rounded-lg" disabled={submitting}>Cancel</button>
             <button onClick={submit} disabled={submitting || !memberEmail || !companyProfileId || !description || !requestedAmount} className="px-4 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50 inline-flex items-center gap-1.5">
-              {submitting && <FaSpinner className="animate-spin" />} {submitting ? 'Submitting…' : 'Submit request'}
+              {submitting && <FaSpinner className="animate-spin" />} {submitting ? 'Submitting' : 'Submit request'}
             </button>
           </div>
         </section>
@@ -186,10 +186,10 @@ export default function ProviderPreAuthPage() {
       ) : error && !creating ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">{error}</div>
       ) : list.length === 0 ? (
-        <div className="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center">
-          <FaShieldAlt className="mx-auto text-4xl text-gray-300 mb-2" />
-          <p className="text-sm text-gray-500 mb-3">No pre-authorizations yet.</p>
-          <p className="text-[11px] text-gray-400 max-w-sm mx-auto">Use pre-auths for services where the member wants the insurer to pay you directly (tiers payant) instead of reimbursing them after the fact.</p>
+        <div className="bg-surface border border-dashed border-line rounded-xl p-8 text-center">
+          <FaShieldAlt className="mx-auto text-4xl text-faint mb-2" />
+          <p className="text-sm text-soft mb-3">No pre-authorizations yet.</p>
+          <p className="text-[11px] text-faint max-w-sm mx-auto">Use pre-auths for services where the member wants the insurer to pay you directly (tiers payant) instead of reimbursing them after the fact.</p>
         </div>
       ) : (
         <>
@@ -199,7 +199,7 @@ export default function ProviderPreAuthPage() {
                 <Row key={p.id} p={p} format={format}>
                   <button onClick={() => markUsed(p.id)} disabled={usingId === p.id} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg disabled:opacity-50">
                     {usingId === p.id && <FaSpinner className="animate-spin" />}
-                    {usingId === p.id ? 'Processing…' : 'Mark as used'}
+                    {usingId === p.id ? 'Processing' : 'Mark as used'}
                   </button>
                 </Row>
               ))}
@@ -230,11 +230,11 @@ export default function ProviderPreAuthPage() {
 }
 
 function Group({ title, tint, children }: { title: string; tint: 'emerald' | 'amber' | 'gray'; children: React.ReactNode }) {
-  const tintCls = { emerald: 'text-emerald-700', amber: 'text-amber-700', gray: 'text-gray-700' }[tint]
+  const tintCls = { emerald: 'text-emerald-700', amber: 'text-amber-700', gray: 'text-soft' }[tint]
   return (
     <section>
       <h2 className={`text-xs font-semibold uppercase tracking-wide mb-2 ${tintCls}`}>{title}</h2>
-      <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">{children}</div>
+      <div className="bg-surface border border-line rounded-xl divide-y divide-line">{children}</div>
     </section>
   )
 }
@@ -245,17 +245,17 @@ function Row({ p, children, format }: { p: PreAuth; children: React.ReactNode; f
   return (
     <div className="p-4 flex items-start justify-between gap-3 flex-wrap">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-900">
+        <p className="text-sm font-semibold text-fg">
           {format(p.requestedAmount)}
           {p.approvedAmount != null && p.approvedAmount !== p.requestedAmount && (
-            <span className="text-emerald-700 font-semibold"> → {format(p.approvedAmount)} approved</span>
+            <span className="text-emerald-700 font-semibold">  {format(p.approvedAmount)} approved</span>
           )}
         </p>
-        <p className="text-sm text-gray-700 mt-0.5">{p.description}</p>
-        <p className="text-[11px] text-gray-500 mt-1">
-          {p.member ? `${p.member.firstName} ${p.member.lastName} · ` : ''}
+        <p className="text-sm text-soft mt-0.5">{p.description}</p>
+        <p className="text-[11px] text-soft mt-1">
+          {p.member ? `${p.member.firstName} ${p.member.lastName}  ` : ''}
           {p.company?.companyName}
-          {p.category ? ` · ${p.category}` : ''}
+          {p.category ? `  ${p.category}` : ''}
           {p.status !== 'used' && p.status !== 'denied' && (
             <span className={expired ? 'text-red-600 ml-2' : 'ml-2'}><FaClock className="inline mb-0.5 mr-0.5" />{expired ? 'Expired ' : 'Expires '}{expires.toLocaleDateString()}</span>
           )}
@@ -269,10 +269,10 @@ function Row({ p, children, format }: { p: PreAuth; children: React.ReactNode; f
 
 function StatusBadge({ status }: { status: PreAuth['status'] }) {
   const cfg = {
-    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used · Paid' },
+    used: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Used  Paid' },
     denied: { icon: FaTimes, cls: 'bg-red-50 text-red-700 border-red-200', label: 'Denied' },
-    expired: { icon: FaClock, cls: 'bg-gray-50 text-gray-600 border-gray-200', label: 'Expired' },
-    cancelled: { icon: FaBan, cls: 'bg-gray-50 text-gray-600 border-gray-200', label: 'Cancelled' },
+    expired: { icon: FaClock, cls: 'bg-subtle text-soft border-line', label: 'Expired' },
+    cancelled: { icon: FaBan, cls: 'bg-subtle text-soft border-line', label: 'Cancelled' },
     pending: { icon: FaHourglassHalf, cls: 'bg-amber-50 text-amber-700 border-amber-200', label: 'Pending' },
     approved: { icon: FaCheck, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'Approved' },
   }[status]
@@ -282,9 +282,9 @@ function StatusBadge({ status }: { status: PreAuth['status'] }) {
 
 function Skeleton() {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+    <div className="bg-surface border border-line rounded-xl p-4 space-y-3">
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="h-16 bg-gray-100 rounded-lg animate-pulse" />
+        <div key={i} className="h-16 bg-subtle rounded-lg animate-pulse" />
       ))}
     </div>
   )

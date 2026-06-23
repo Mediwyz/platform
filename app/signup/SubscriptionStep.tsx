@@ -42,7 +42,7 @@ export default function SubscriptionStep({
 
  // Corporate-admin is a capability acquired AFTER signup (by creating a
  // company). Signup only ever picks an individual plan - users can upgrade
- // via the Settings → Subscription tab once they have a company.
+ // via the Settings  Subscription tab once they have a company.
  const isCorporate = false
 
  useEffect(() => {
@@ -83,7 +83,7 @@ export default function SubscriptionStep({
 
  const formatPrice = (price: number, currency: string) => {
  const symbols: Record<string, string> = {
- MUR: 'Rs', MGA: 'Ar', KES: 'KSh', XOF: 'CFA', RWF: 'FRw', USD: '$', EUR: '€',
+ MUR: 'Rs', MGA: 'Ar', KES: 'KSh', XOF: 'CFA', RWF: 'FRw', USD: '$', EUR: '',
  }
  return `${symbols[currency] || currency} ${Math.round(price).toLocaleString()}`
  }
@@ -95,7 +95,7 @@ export default function SubscriptionStep({
  title: string
  ) => (
  <div className="mb-8">
- <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
+ <h3 className="text-lg font-semibold text-fg mb-4">{title}</h3>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
  {plans.map((plan) => {
  const isSelected = selected === plan.id
@@ -107,26 +107,26 @@ export default function SubscriptionStep({
  className={`border rounded-xl p-5 text-left transition-all ${
  isSelected
  ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50'
- : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
+ : 'border-line hover:border-blue-300 hover:shadow-md'
  }`}
  >
  <div className="flex items-center justify-between mb-3">
- <h4 className="text-base font-bold text-gray-900">{plan.name}</h4>
+ <h4 className="text-base font-bold text-fg">{plan.name}</h4>
  {isSelected && <FaCheckCircle className="text-blue-500" />}
  </div>
- <p className="text-2xl font-bold text-gray-900 mb-1">
+ <p className="text-2xl font-bold text-fg mb-1">
  {formatPrice(plan.price, plan.currency)}
- <span className="text-sm font-normal text-gray-500">/mo</span>
+ <span className="text-sm font-normal text-soft">/mo</span>
  </p>
  <div className="mt-3 space-y-1.5">
  {plan.features.slice(0, 6).map((feature) => (
- <div key={feature} className="flex items-start gap-2 text-sm text-gray-600">
+ <div key={feature} className="flex items-start gap-2 text-sm text-soft">
  <FaCheckCircle className="text-green-500 mt-0.5 flex-shrink-0 text-xs" />
  <span>{feature}</span>
  </div>
  ))}
  {plan.features.length > 6 && (
- <p className="text-xs text-gray-400">+{plan.features.length - 6} more features</p>
+ <p className="text-xs text-faint">+{plan.features.length - 6} more features</p>
  )}
  </div>
  </button>
@@ -140,7 +140,7 @@ export default function SubscriptionStep({
  return (
  <div className="flex flex-col items-center justify-center py-12">
  <FaSpinner className="animate-spin text-blue-500 text-2xl mb-3" />
- <p className="text-gray-500">Loading subscription plans...</p>
+ <p className="text-soft">Loading subscription plans...</p>
  </div>
  )
  }
@@ -149,10 +149,10 @@ export default function SubscriptionStep({
  <div>
  <div className="flex items-center gap-2 mb-6">
  <FaCrown className="text-yellow-500 text-xl" />
- <h2 className="text-xl font-bold text-gray-800">Choose Your Plan</h2>
+ <h2 className="text-xl font-bold text-fg">Choose Your Plan</h2>
  </div>
 
- <p className="text-gray-600 text-sm mb-6">
+ <p className="text-soft text-sm mb-6">
  Select a subscription plan to get started. You can also skip this and choose later from your settings.
  </p>
 
@@ -182,7 +182,7 @@ export default function SubscriptionStep({
  onSelectPlan(undefined)
  onSelectBusinessPlan(undefined)
  }}
- className="text-sm text-gray-500 hover:text-gray-700 underline"
+ className="text-sm text-soft hover:text-soft underline"
  >
  Skip for now - choose a plan later
  </button>

@@ -72,14 +72,14 @@ export default function InviteFriendsPage() {
       <DashboardPageHeader
         icon={FaGift}
         title="Invite friends, earn credit"
-        description="Share your code — you both earn wallet credit when they sign up."
+        description="Share your code  you both earn wallet credit when they sign up."
         back={{ label: 'Home', onClick: () => router.push('/') }}
       />
 
       {loading ? (
-        <div className="py-12 text-center text-gray-400 text-sm">Loading your code…</div>
+        <div className="py-12 text-center text-faint text-sm">Loading your code</div>
       ) : !data ? (
-        <div className="py-12 text-center text-gray-500">Unable to load referral info.</div>
+        <div className="py-12 text-center text-soft">Unable to load referral info.</div>
       ) : (
         <>
           {/* Hero card with code + share */}
@@ -90,7 +90,7 @@ export default function InviteFriendsPage() {
             <div className="flex gap-2 mt-4">
               <button
                 onClick={copyLink}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-[#0C6780] rounded-lg text-sm font-semibold hover:bg-gray-100"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-surface text-[#0C6780] rounded-lg text-sm font-semibold hover:bg-subtle"
               >
                 {copied ? <><FaCheckCircle /> Copied!</> : <><FaCopy /> Copy link</>}
               </button>
@@ -104,9 +104,9 @@ export default function InviteFriendsPage() {
           </div>
 
           {/* How it works */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="font-bold text-gray-900 mb-3">How it works</h2>
-            <ol className="space-y-2 text-sm text-gray-700 list-decimal list-inside">
+          <div className="bg-surface border border-line rounded-xl p-5">
+            <h2 className="font-bold text-fg mb-3">How it works</h2>
+            <ol className="space-y-2 text-sm text-soft list-decimal list-inside">
               <li>Share your code or link with a friend.</li>
               <li>They sign up and enter your code during registration.</li>
               <li>You both get wallet credit - instant, no waiting period.</li>
@@ -123,20 +123,20 @@ export default function InviteFriendsPage() {
 
           {/* Recent conversions */}
           {data.recentConversions.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-xl">
-              <div className="px-4 py-3 border-b border-gray-100">
-                <h3 className="font-semibold text-sm text-gray-900">Recent signups</h3>
+            <div className="bg-surface border border-line rounded-xl">
+              <div className="px-4 py-3 border-b border-line">
+                <h3 className="font-semibold text-sm text-fg">Recent signups</h3>
               </div>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-line">
                 {data.recentConversions.map(c => (
                   <div key={c.id} className="flex items-center justify-between px-4 py-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-fg">
                         {c.firstName} {c.lastName}
                       </p>
-                      <p className="text-xs text-gray-500 capitalize">{c.userType.replace('_', ' ').toLowerCase()}</p>
+                      <p className="text-xs text-soft capitalize">{c.userType.replace('_', ' ').toLowerCase()}</p>
                     </div>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-faint">
                       {new Date(c.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -152,9 +152,9 @@ export default function InviteFriendsPage() {
 
 function StatTile({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="bg-white border border-gray-100 rounded-lg p-3">
-      <p className="text-xl font-bold text-gray-900">{value}</p>
-      <p className="text-xs text-gray-500">{label}</p>
+    <div className="bg-surface border border-line rounded-lg p-3">
+      <p className="text-xl font-bold text-fg">{value}</p>
+      <p className="text-xs text-soft">{label}</p>
     </div>
   )
 }

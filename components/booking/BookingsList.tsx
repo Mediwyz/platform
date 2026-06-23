@@ -101,9 +101,9 @@ export default function BookingsList({
 
  if (bookings.length === 0) {
  return (
- <div className="bg-gray-50 rounded-xl p-6 sm:p-8 text-center border border-gray-200">
- <FaCalendarAlt className="text-3xl text-gray-300 mx-auto mb-3" />
- <p className="text-gray-500 text-sm sm:text-base">{emptyMessage || `No ${providerLabel.toLowerCase()} bookings yet.`}</p>
+ <div className="bg-subtle rounded-xl p-6 sm:p-8 text-center border border-line">
+ <FaCalendarAlt className="text-3xl text-faint mx-auto mb-3" />
+ <p className="text-soft text-sm sm:text-base">{emptyMessage || `No ${providerLabel.toLowerCase()} bookings yet.`}</p>
  <Link
  href={`/search/${providerLabel.toLowerCase()}`}
  className={`inline-flex items-center gap-2 mt-4 px-5 py-2.5 ${accent.from} ${accent.to} text-white text-sm font-medium rounded-lg hover:opacity-90 transition`}
@@ -135,21 +135,21 @@ export default function BookingsList({
  </div>
 
  {/* Search & Filter */}
- <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+ <div className="bg-surface rounded-xl p-4 shadow-sm border border-line">
  <div className="flex gap-3">
  <div className="flex-1 relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  placeholder={`Search ${providerLabel.toLowerCase()}s, services...`}
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
+ className="w-full pl-9 pr-3 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm"
  />
  </div>
  <button
  onClick={() => setShowFilters(!showFilters)}
- className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center gap-1.5 text-sm"
+ className="px-3 py-2 bg-subtle text-soft rounded-lg hover:bg-line transition flex items-center gap-1.5 text-sm"
  >
  <FaFilter />
  {showFilters ? <FaChevronUp /> : <FaChevronDown />}
@@ -160,7 +160,7 @@ export default function BookingsList({
  <select
  value={statusFilter}
  onChange={(e) => setStatusFilter(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  >
  <option value="all">All Status</option>
  <option value="upcoming">Upcoming</option>
@@ -178,7 +178,7 @@ export default function BookingsList({
  {filtered.map((booking) => (
  <div
  key={booking.id}
- className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all"
+ className="bg-surface rounded-xl shadow-sm border border-line overflow-hidden hover:shadow-md transition-all"
  >
  <div className="p-4">
  <div className="flex items-start gap-3">
@@ -190,20 +190,20 @@ export default function BookingsList({
  {/* Info */}
  <div className="flex-1 min-w-0">
  <div className="flex flex-wrap items-center gap-2 mb-1.5">
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{booking.providerName}</h4>
+ <h4 className="font-semibold text-fg text-sm sm:text-base truncate">{booking.providerName}</h4>
  <span className={`px-2 py-0.5 rounded-full text-xs font-medium border flex items-center gap-1 ${STATUS_STYLES[booking.status] || STATUS_STYLES.upcoming}`}>
  {getStatusIcon(booking.status)}
  <span className="capitalize">{booking.status}</span>
  </span>
  </div>
 
- <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+ <div className="flex flex-wrap items-center gap-3 text-xs text-soft">
  <span className="flex items-center gap-1">
- <FaCalendarAlt className="text-gray-400" />
+ <FaCalendarAlt className="text-faint" />
  {new Date(booking.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
  </span>
  <span className="flex items-center gap-1">
- <FaClock className="text-gray-400" />
+ <FaClock className="text-faint" />
  {booking.time}
  </span>
  {booking.type && (
@@ -215,7 +215,7 @@ export default function BookingsList({
  </div>
 
  {booking.service && (
- <p className="text-xs text-gray-500 mt-1.5 bg-gray-50 rounded px-2 py-1 inline-block">{booking.service}</p>
+ <p className="text-xs text-soft mt-1.5 bg-subtle rounded px-2 py-1 inline-block">{booking.service}</p>
  )}
  </div>
 
@@ -232,7 +232,7 @@ export default function BookingsList({
  )}
  <button
  onClick={() => setExpandedId(expandedId === booking.id ? null : booking.id)}
- className="p-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+ className="p-2 bg-subtle text-soft rounded-lg hover:bg-subtle transition"
  aria-label="View booking details"
  >
  <FaEye className="text-sm" />
@@ -242,16 +242,16 @@ export default function BookingsList({
 
  {/* Expanded Details */}
  {expandedId === booking.id && (
- <div className="mt-3 pt-3 border-t border-gray-100">
+ <div className="mt-3 pt-3 border-t border-line">
  {booking.notes && (
- <p className="text-xs text-gray-600 mb-2"><span className="font-medium">Notes:</span> {booking.notes}</p>
+ <p className="text-xs text-soft mb-2"><span className="font-medium">Notes:</span> {booking.notes}</p>
  )}
  {booking.details && booking.details.length > 0 && (
  <div className="grid grid-cols-2 gap-2 text-xs">
  {booking.details.map((d, i) => (
  <div key={i}>
- <span className="text-gray-500">{d.label}:</span>{' '}
- <span className="font-medium text-gray-800">{d.value}</span>
+ <span className="text-soft">{d.label}:</span>{' '}
+ <span className="font-medium text-fg">{d.value}</span>
  </div>
  ))}
  </div>
@@ -263,9 +263,9 @@ export default function BookingsList({
  ))}
 
  {filtered.length === 0 && (
- <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200">
- <FaSearch className="text-gray-400 text-xl mx-auto mb-2" />
- <p className="text-gray-500 text-sm">No bookings match your criteria.</p>
+ <div className="bg-subtle rounded-xl p-6 text-center border border-line">
+ <FaSearch className="text-faint text-xl mx-auto mb-2" />
+ <p className="text-soft text-sm">No bookings match your criteria.</p>
  <button
  onClick={() => { setSearchQuery(''); setStatusFilter('all') }}
  className="mt-2 text-blue-600 hover:underline text-sm"

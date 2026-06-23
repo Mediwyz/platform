@@ -190,17 +190,17 @@ export default function ProviderBookingRequests({
  {/* Search + Filters */}
  <div className="flex flex-col sm:flex-row gap-3 mb-4">
  <div className="relative flex-1">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  placeholder="Search by patient name or reason..."
  value={searchQuery}
  onChange={e => setSearchQuery(e.target.value)}
- className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
  </div>
  <div className="flex items-center gap-2">
- <FaFilter className="text-gray-400 text-sm" />
+ <FaFilter className="text-faint text-sm" />
  {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map(status => (
  <button
  key={status}
@@ -208,7 +208,7 @@ export default function ProviderBookingRequests({
  className={`px-3 py-1.5 text-xs font-medium rounded-full border transition ${
  statusFilter === status
  ? `${styles.button} text-white border-transparent`
- : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+ : 'bg-surface text-soft border-line hover:bg-subtle'
  }`}
  >
  {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -219,10 +219,10 @@ export default function ProviderBookingRequests({
 
  {/* Booking List */}
  {filtered.length === 0 ? (
- <div className="bg-white rounded-xl border p-8 text-center">
- <FaInbox className="text-4xl text-gray-300 mx-auto mb-3" />
- <p className="font-medium text-gray-600">No booking requests found</p>
- <p className="text-sm text-gray-400 mt-1">
+ <div className="bg-surface rounded-xl border p-8 text-center">
+ <FaInbox className="text-4xl text-faint mx-auto mb-3" />
+ <p className="font-medium text-soft">No booking requests found</p>
+ <p className="text-sm text-faint mt-1">
  {searchQuery || statusFilter !== 'all'
  ? 'Try adjusting your search or filters'
  : 'New booking requests will appear here'}
@@ -233,7 +233,7 @@ export default function ProviderBookingRequests({
  {filtered.map(booking => {
  const typeInfo = TYPE_ICONS[booking.type] || TYPE_ICONS.in_person
  return (
- <div key={booking.id} className="bg-white rounded-xl border shadow-sm p-4 hover:shadow-md transition">
+ <div key={booking.id} className="bg-surface rounded-xl border shadow-sm p-4 hover:shadow-md transition">
  <div className="flex items-start gap-4">
  {/* Patient Avatar */}
  {booking.patient.profileImage ? (
@@ -242,7 +242,7 @@ export default function ProviderBookingRequests({
  alt={`${booking.patient.firstName} ${booking.patient.lastName}`}
  width={48}
  height={48}
- className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+ className="w-12 h-12 rounded-full object-cover border-2 border-line"
  />
  ) : (
  <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold">
@@ -252,7 +252,7 @@ export default function ProviderBookingRequests({
 
  <div className="flex-1 min-w-0">
  <div className="flex items-center justify-between gap-2 mb-1">
- <h3 className="font-semibold text-gray-900">
+ <h3 className="font-semibold text-fg">
  {booking.patient.firstName} {booking.patient.lastName}
  </h3>
  <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusStyle(booking.status)}`}>
@@ -260,7 +260,7 @@ export default function ProviderBookingRequests({
  </span>
  </div>
 
- <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-2">
+ <div className="flex flex-wrap items-center gap-3 text-sm text-soft mb-2">
  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${typeInfo.color}`}>
  {typeInfo.icon} {booking.type.replace('_', ' ')}
  </span>
@@ -273,31 +273,31 @@ export default function ProviderBookingRequests({
  {booking.scheduledTime}
  </span>
  {booking.duration && (
- <span className="text-xs text-gray-400">{booking.duration} min</span>
+ <span className="text-xs text-faint">{booking.duration} min</span>
  )}
  </div>
 
  {booking.reason && (
- <p className="text-sm text-gray-600 mb-2">
+ <p className="text-sm text-soft mb-2">
  <span className="font-medium">Reason:</span> {booking.reason}
  </p>
  )}
 
  {showTestFields && booking.testName && (
- <p className="text-sm text-gray-600 mb-1">
+ <p className="text-sm text-soft mb-1">
  <span className="font-medium">Test:</span> {booking.testName}
  {booking.sampleType && ` (${booking.sampleType})`}
  </p>
  )}
 
  {showChildrenFields && booking.children && booking.children.length > 0 && (
- <p className="text-sm text-gray-600 mb-1">
+ <p className="text-sm text-soft mb-1">
  <span className="font-medium">Children:</span> {booking.children.join(', ')}
  </p>
  )}
 
  {showEmergencyFields && booking.emergencyType && (
- <p className="text-sm text-gray-600 mb-1">
+ <p className="text-sm text-soft mb-1">
  <span className="font-medium">Emergency Type:</span> {booking.emergencyType}
  {booking.priority && (
  <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${

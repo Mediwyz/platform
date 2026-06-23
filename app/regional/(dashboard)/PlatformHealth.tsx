@@ -67,7 +67,7 @@ export default function PlatformHealth() {
  case 'healthy': return 'text-green-500 bg-green-50'
  case 'warning': return 'text-yellow-500 bg-yellow-50'
  case 'critical': return 'text-red-500 bg-red-50'
- default: return 'text-gray-500 bg-gray-50'
+ default: return 'text-soft bg-subtle'
  }
  }
 
@@ -76,7 +76,7 @@ export default function PlatformHealth() {
  case 'healthy': return 'border-green-200'
  case 'warning': return 'border-yellow-200'
  case 'critical': return 'border-red-200'
- default: return 'border-gray-200'
+ default: return 'border-line'
  }
  }
 
@@ -90,7 +90,7 @@ export default function PlatformHealth() {
  return (
  <div className="mb-8 flex items-center justify-center py-12">
  <FaSpinner className="animate-spin text-2xl text-blue-600 mr-2" />
- <span className="text-gray-500">Loading platform health...</span>
+ <span className="text-soft">Loading platform health...</span>
  </div>
  )
  }
@@ -109,7 +109,7 @@ export default function PlatformHealth() {
  {healthMetrics.map((metric, idx) => {
  const Icon = SERVICE_ICONS[metric.service] || FaServer
  return (
- <div key={idx} className={`bg-white rounded-xl p-6 shadow-lg border-2 ${getStatusBorder(metric.status)}`}>
+ <div key={idx} className={`bg-surface rounded-xl p-6 shadow-lg border-2 ${getStatusBorder(metric.status)}`}>
  <div className="flex items-center justify-between mb-4">
  <div className={`p-3 rounded-lg ${getStatusColor(metric.status)}`}>
  <Icon className="text-2xl" />
@@ -119,23 +119,23 @@ export default function PlatformHealth() {
  </span>
  </div>
 
- <h3 className="font-semibold text-gray-900 mb-3">{metric.service}</h3>
+ <h3 className="font-semibold text-fg mb-3">{metric.service}</h3>
 
  <div className="space-y-2">
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Uptime</span>
- <span className="font-medium text-gray-700">{metric.uptime}%</span>
+ <span className="text-soft">Uptime</span>
+ <span className="font-medium text-soft">{metric.uptime}%</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Response Time</span>
- <span className="font-medium text-gray-700">{metric.responseTime}ms</span>
+ <span className="text-soft">Response Time</span>
+ <span className="font-medium text-soft">{metric.responseTime}ms</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Error Rate</span>
- <span className="font-medium text-gray-700">{metric.errorRate}%</span>
+ <span className="text-soft">Error Rate</span>
+ <span className="font-medium text-soft">{metric.errorRate}%</span>
  </div>
  <div className="pt-2 border-t">
- <span className="text-xs text-gray-400">Last checked: {metric.lastCheck}</span>
+ <span className="text-xs text-faint">Last checked: {metric.lastCheck}</span>
  </div>
  </div>
  </div>
@@ -145,33 +145,33 @@ export default function PlatformHealth() {
 
  {/* System Performance Metrics */}
  {performance && (
- <div className="bg-white rounded-xl p-6 shadow-lg mt-6">
+ <div className="bg-surface rounded-xl p-6 shadow-lg mt-6">
  <h3 className="text-lg font-semibold mb-4">System Performance Metrics</h3>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
  <div>
  <div className="flex items-center justify-between mb-2">
- <span className="text-sm text-gray-600">CPU Usage</span>
+ <span className="text-sm text-soft">CPU Usage</span>
  <span className="text-sm font-medium">{performance.cpuUsage}%</span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div className={`${getBarColor(performance.cpuUsage)} h-2 rounded-full`} style={{ width: `${performance.cpuUsage}%` }} />
  </div>
  </div>
  <div>
  <div className="flex items-center justify-between mb-2">
- <span className="text-sm text-gray-600">Memory Usage</span>
+ <span className="text-sm text-soft">Memory Usage</span>
  <span className="text-sm font-medium">{performance.memoryUsage}%</span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div className={`${getBarColor(performance.memoryUsage)} h-2 rounded-full`} style={{ width: `${performance.memoryUsage}%` }} />
  </div>
  </div>
  <div>
  <div className="flex items-center justify-between mb-2">
- <span className="text-sm text-gray-600">Storage Usage</span>
+ <span className="text-sm text-soft">Storage Usage</span>
  <span className="text-sm font-medium">{performance.storageUsage}%</span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div className={`${getBarColor(performance.storageUsage)} h-2 rounded-full`} style={{ width: `${performance.storageUsage}%` }} />
  </div>
  </div>

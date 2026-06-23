@@ -227,7 +227,7 @@ export default function RolesManagementPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FaUsersCog className="text-2xl text-violet-600" />
-          <h1 className="text-2xl font-bold text-[#001E40]">Provider Roles</h1>
+          <h1 className="text-2xl font-bold text-fg">Provider Roles</h1>
         </div>
         <button onClick={openCreate} className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
           <FaPlus /> Create Role
@@ -236,7 +236,7 @@ export default function RolesManagementPage() {
 
       {/* Provider Roles */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wider">Provider Roles ({providerRoles.length})</h2>
+        <h2 className="text-sm font-semibold text-soft mb-3 uppercase tracking-wider">Provider Roles ({providerRoles.length})</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {providerRoles.map(role => (
             <RoleCard key={role.id} role={role} onEdit={openEdit} onDelete={handleDelete} />
@@ -246,7 +246,7 @@ export default function RolesManagementPage() {
 
       {/* Non-Provider Roles */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wider">System Roles ({nonProviderRoles.length})</h2>
+        <h2 className="text-sm font-semibold text-soft mb-3 uppercase tracking-wider">System Roles ({nonProviderRoles.length})</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {nonProviderRoles.map(role => (
             <RoleCard key={role.id} role={role} onEdit={openEdit} onDelete={handleDelete} />
@@ -258,10 +258,10 @@ export default function RolesManagementPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowModal(false)} />
-          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+          <div className="relative bg-surface rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
             <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-lg font-bold text-gray-900">{editingId ? 'Edit Role' : 'Create Provider Role'}</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded-lg"><FaTimes className="text-gray-400" /></button>
+              <h2 className="text-lg font-bold text-fg">{editingId ? 'Edit Role' : 'Create Provider Role'}</h2>
+              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-subtle rounded-lg"><FaTimes className="text-faint" /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -270,14 +270,14 @@ export default function RolesManagementPage() {
               {!editingId && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Label (plural) *</label>
+                    <label className="block text-sm font-medium text-soft mb-1">Label (plural) *</label>
                     <input required value={form.label} onChange={e => {
                       const v = e.target.value
                       setForm(f => ({ ...f, label: v, slug: autoSlug(v), code: autoCode(f.singularLabel || v) }))
                     }} className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" placeholder="Audiologists" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Singular Label *</label>
+                    <label className="block text-sm font-medium text-soft mb-1">Singular Label *</label>
                     <input required value={form.singularLabel} onChange={e => {
                       const v = e.target.value
                       setForm(f => ({ ...f, singularLabel: v, code: autoCode(v) }))
@@ -289,14 +289,14 @@ export default function RolesManagementPage() {
               {!editingId && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Code (UPPER_CASE) *</label>
+                    <label className="block text-sm font-medium text-soft mb-1">Code (UPPER_CASE) *</label>
                     <input required value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, '') }))}
-                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono bg-gray-50 focus:ring-2 focus:ring-[#0C6780] outline-none" placeholder="AUDIOLOGIST" />
+                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono bg-subtle focus:ring-2 focus:ring-[#0C6780] outline-none" placeholder="AUDIOLOGIST" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug *</label>
+                    <label className="block text-sm font-medium text-soft mb-1">URL Slug *</label>
                     <input required value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
-                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono bg-gray-50 focus:ring-2 focus:ring-[#0C6780] outline-none" placeholder="audiologists" />
+                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono bg-subtle focus:ring-2 focus:ring-[#0C6780] outline-none" placeholder="audiologists" />
                   </div>
                 </div>
               )}
@@ -304,12 +304,12 @@ export default function RolesManagementPage() {
               {editingId && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Label (plural)</label>
+                    <label className="block text-sm font-medium text-soft mb-1">Label (plural)</label>
                     <input value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
                       className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Singular Label</label>
+                    <label className="block text-sm font-medium text-soft mb-1">Singular Label</label>
                     <input value={form.singularLabel} onChange={e => setForm(f => ({ ...f, singularLabel: e.target.value }))}
                       className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
                   </div>
@@ -318,8 +318,8 @@ export default function RolesManagementPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Icon</label>
-                  <div className="grid grid-cols-6 gap-1.5 p-2 border rounded-lg max-h-56 overflow-y-auto bg-white">
+                  <label className="block text-sm font-medium text-soft mb-1">Icon</label>
+                  <div className="grid grid-cols-6 gap-1.5 p-2 border rounded-lg max-h-56 overflow-y-auto bg-surface">
                     {ICON_OPTIONS.map(name => {
                       const Icon = ICON_MAP[name]
                       const selected = form.icon === name
@@ -327,7 +327,7 @@ export default function RolesManagementPage() {
                         <button key={name} type="button" onClick={() => setForm(f => ({ ...f, icon: name }))}
                           title={name}
                           className={`flex flex-col items-center gap-1 p-2 rounded-lg text-xs transition-all ${
-                            selected ? 'bg-[#0C6780] text-white ring-2 ring-[#0C6780]' : 'hover:bg-gray-100 text-gray-600'
+                            selected ? 'bg-[#0C6780] text-white ring-2 ring-[#0C6780]' : 'hover:bg-subtle text-soft'
                           }`}>
                           <Icon className="text-lg" />
                           <span className="truncate w-full text-center text-[9px]">{name.replace('Fa', '')}</span>
@@ -337,7 +337,7 @@ export default function RolesManagementPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Brand Color</label>
+                  <label className="block text-sm font-medium text-soft mb-1">Brand Color</label>
                   <div className="flex gap-2">
                     <input type="color" value={form.color} onChange={e => setForm(f => ({ ...f, color: e.target.value }))} className="w-10 h-10 rounded border cursor-pointer" />
                     <input value={form.color} onChange={e => setForm(f => ({ ...f, color: e.target.value }))}
@@ -346,25 +346,25 @@ export default function RolesManagementPage() {
                 </div>
               </div>
 
-              {/* Card illustration image · shown as the background of the provider-type cards on the public landing page */}
+              {/* Card illustration image  shown as the background of the provider-type cards on the public landing page */}
               <div>
                 <CmsImageUpload
                   value={form.cardImage || ''}
                   onChange={(url) => setForm(f => ({ ...f, cardImage: url }))}
                   label="Card image (illustration on the landing page)"
                 />
-                <p className="mt-1 text-xs text-gray-400">Optional — a realistic photo shown behind this provider type on the home page. If left empty, a default healthcare illustration is used.</p>
+                <p className="mt-1 text-xs text-faint">Optional  a realistic photo shown behind this provider type on the home page. If left empty, a default healthcare illustration is used.</p>
               </div>
 
               {/* Iconify icon picker (replaces legacy FA picker for richer healthcare icons) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Illustration Icon (Iconify)</label>
+                <label className="block text-sm font-medium text-soft mb-1">Illustration Icon (Iconify)</label>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-lg border border-gray-200 bg-gray-50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg border border-line bg-subtle flex items-center justify-center">
                     {form.iconKey ? (
                       <Icon icon={form.iconKey} width={22} height={22} color={form.color || '#0C6780'} />
                     ) : (
-                      <span className="text-xs text-gray-400"> - </span>
+                      <span className="text-xs text-faint"> - </span>
                     )}
                   </div>
                   <button
@@ -375,7 +375,7 @@ export default function RolesManagementPage() {
                     {form.iconKey ? 'Change' : 'Choose Icon'}
                   </button>
                   {form.iconKey && (
-                    <span className="text-xs text-gray-500 font-mono truncate max-w-[180px]">{form.iconKey}</span>
+                    <span className="text-xs text-soft font-mono truncate max-w-[180px]">{form.iconKey}</span>
                   )}
                 </div>
                 {showIconPicker && (
@@ -389,7 +389,7 @@ export default function RolesManagementPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-soft mb-1">Description</label>
                 <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={2}
                   className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-none" placeholder="Role description..." />
               </div>
@@ -405,23 +405,23 @@ export default function RolesManagementPage() {
                     <input type="checkbox" checked={(form as Record<string, unknown>)[t.key] as boolean}
                       onChange={e => setForm(f => ({ ...f, [t.key]: e.target.checked }))}
                       className="w-4 h-4 text-[#0C6780] rounded" />
-                    <span className="text-sm text-gray-700">{t.label}</span>
+                    <span className="text-sm text-soft">{t.label}</span>
                   </label>
                 ))}
               </div>
 
               {/* Verification Documents */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-soft mb-2">
                   <FaFileAlt className="inline mr-1" /> Required Verification Documents
                 </label>
                 {form.verificationDocs.length > 0 && (
                   <div className="space-y-2 mb-3">
                     {form.verificationDocs.map((doc, i) => (
-                      <div key={i} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg text-sm">
+                      <div key={i} className="flex items-center justify-between bg-subtle px-3 py-2 rounded-lg text-sm">
                         <div>
                           <span className="font-medium">{doc.documentName}</span>
-                          {doc.description && <span className="text-gray-400 ml-2"> - {doc.description}</span>}
+                          {doc.description && <span className="text-faint ml-2"> - {doc.description}</span>}
                           {doc.isRequired && <span className="text-red-500 ml-1">*</span>}
                         </div>
                         <button type="button" onClick={() => removeDoc(i)} className="text-red-400 hover:text-red-600"><FaTimes /></button>
@@ -434,12 +434,12 @@ export default function RolesManagementPage() {
                     className="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
                   <input placeholder="Description" value={docInput.description} onChange={e => setDocInput(d => ({ ...d, description: e.target.value }))}
                     className="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
-                  <button type="button" onClick={addDoc} className="px-3 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200"><FaPlus /></button>
+                  <button type="button" onClick={addDoc} className="px-3 py-2 bg-subtle rounded-lg text-sm hover:bg-line"><FaPlus /></button>
                 </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-soft bg-subtle rounded-lg text-sm hover:bg-line">Cancel</button>
                 <button type="submit" disabled={submitting} className="px-4 py-2 bg-[#0C6780] text-white rounded-lg text-sm font-medium hover:bg-[#0a5568] disabled:opacity-50">
                   {submitting ? <FaSpinner className="animate-spin" /> : editingId ? 'Save Changes' : 'Create Role'}
                 </button>
@@ -452,11 +452,11 @@ export default function RolesManagementPage() {
   )
 }
 
-// ─── Role Card ────────────────────────────────────────────────────────────
+//  Role Card 
 
 function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: ProviderRole) => void; onDelete: (id: string) => void }) {
   return (
-    <div className={`bg-white rounded-xl border ${role.isActive ? 'border-gray-200' : 'border-red-200 opacity-60'} p-4 hover:shadow-sm transition-shadow`}>
+    <div className={`bg-surface rounded-xl border ${role.isActive ? 'border-line' : 'border-red-200 opacity-60'} p-4 hover:shadow-sm transition-shadow`}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white text-lg" style={{ backgroundColor: role.color }}>
@@ -467,8 +467,8 @@ function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: 
             )}
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 text-sm">{role.label}</h3>
-            <p className="text-xs text-gray-400 font-mono">{role.code}</p>
+            <h3 className="font-semibold text-fg text-sm">{role.label}</h3>
+            <p className="text-xs text-faint font-mono">{role.code}</p>
           </div>
         </div>
         <div className="flex gap-1">
@@ -479,7 +479,7 @@ function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: 
         </div>
       </div>
 
-      {role.description && <p className="text-xs text-gray-500 mb-3 line-clamp-2">{role.description}</p>}
+      {role.description && <p className="text-xs text-soft mb-3 line-clamp-2">{role.description}</p>}
 
       <div className="flex flex-wrap gap-1.5 mb-3">
         <Badge active={role.searchEnabled} label="Search" />
@@ -487,7 +487,7 @@ function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: 
         <Badge active={role.inventoryEnabled} label="Inventory" />
       </div>
 
-      <div className="flex items-center justify-between text-xs text-gray-400">
+      <div className="flex items-center justify-between text-xs text-faint">
         <span>/{role.slug}</span>
         <span>{role.verificationDocs.length} doc{role.verificationDocs.length !== 1 ? 's' : ''} required</span>
       </div>
@@ -498,7 +498,7 @@ function RoleCard({ role, onEdit, onDelete }: { role: ProviderRole; onEdit: (r: 
 function Badge({ active, label }: { active: boolean; label: string }) {
   return (
     <span className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-medium ${
-      active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
+      active ? 'bg-green-100 text-green-700' : 'bg-subtle text-faint'
     }`}>
       {active ? <FaEye className="text-[8px]" /> : <FaEyeSlash className="text-[8px]" />}
       {label}

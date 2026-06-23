@@ -170,7 +170,7 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
 
  return (
  <div>
- <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-2 flex items-center gap-2">
  <FaCrown className="text-yellow-500" /> Subscription Management
  </h2>
 
@@ -180,8 +180,8 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  <div className="flex items-center justify-between flex-wrap gap-2">
  <div>
  <p className="text-sm text-blue-600 font-medium">Current Plan</p>
- <p className="text-lg font-bold text-gray-900">{current.plan.name}</p>
- <p className="text-sm text-gray-600">
+ <p className="text-lg font-bold text-fg">{current.plan.name}</p>
+ <p className="text-sm text-soft">
  {getCurrencySymbol(current.plan.currency)} {current.plan.price.toLocaleString()}/month
  {current.status === 'active' && <span className="ml-2 text-green-600 font-medium">Active</span>}
  </p>
@@ -206,15 +206,15 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  <div className="mt-3 pt-3 border-t border-blue-200 grid grid-cols-2 sm:grid-cols-3 gap-2">
  {((current.usage as unknown as { quotas: { key: string; label: string; used: number; limit: number }[] }).quotas).map(q => (
  <div key={q.key} className="text-xs">
- <span className="text-gray-500">{q.label}:</span>{' '}
- <span className="font-medium">{q.used}/{q.limit === -1 ? '∞' : q.limit}</span>
+ <span className="text-soft">{q.label}:</span>{' '}
+ <span className="font-medium">{q.used}/{q.limit === -1 ? '' : q.limit}</span>
  </div>
  ))}
  </div>
  )}
  </div>
  ) : (
- <p className="mb-6 text-sm text-gray-500">You don&apos;t have an active subscription. Choose a plan below.</p>
+ <p className="mb-6 text-sm text-soft">You don&apos;t have an active subscription. Choose a plan below.</p>
  )}
 
  {message && (
@@ -227,13 +227,13 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  {individualPlans.length > 0 && (
  <div className="mb-8">
  <div className="mb-4">
- <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+ <h3 className="text-lg font-bold text-fg flex items-center gap-2">
  <span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm">
  <FaCrown />
  </span>
  MediWyz For You
  </h3>
- <p className="text-sm text-gray-500 mt-1">Personal health plans for individuals</p>
+ <p className="text-sm text-soft mt-1">Personal health plans for individuals</p>
  </div>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
  {individualPlans.map((plan) => renderPlanCard(plan, currentPlanId))}
@@ -245,13 +245,13 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  {corporatePlans.length > 0 && (
  <div>
  <div className="mb-4">
- <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+ <h3 className="text-lg font-bold text-fg flex items-center gap-2">
  <span className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-sm">
  <FaCrown />
  </span>
  MediWyz For Business
  </h3>
- <p className="text-sm text-gray-500 mt-1">Corporate wellness plans - employer pays per employee</p>
+ <p className="text-sm text-soft mt-1">Corporate wellness plans - employer pays per employee</p>
  </div>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
  {corporatePlans.map((plan) => renderPlanCard(plan, currentPlanId))}
@@ -271,21 +271,21 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  isCurrent ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50' : 'hover:shadow-lg'
  }`}
  >
- <h4 className="text-lg font-bold text-gray-900 mb-1">{plan.name}</h4>
+ <h4 className="text-lg font-bold text-fg mb-1">{plan.name}</h4>
  <p className="text-2xl font-bold mb-3">
  {plan.price > 0 ? `${sym} ${plan.price.toLocaleString()}` : 'Free'}
- <span className="text-sm font-normal text-gray-500">
+ <span className="text-sm font-normal text-soft">
  {plan.type === 'corporate' ? '/employee/mo' : '/month'}
  </span>
  </p>
- <ul className="space-y-1.5 text-gray-600 mb-5 text-sm">
+ <ul className="space-y-1.5 text-soft mb-5 text-sm">
  {(plan.features as string[]).slice(0, 6).map((feature) => (
  <li key={feature} className="flex items-start gap-2">
  <FaCheckCircle className="text-green-500 flex-shrink-0 mt-0.5 text-xs" /> {feature}
  </li>
  ))}
  {(plan.features as string[]).length > 6 && (
- <li className="text-xs text-gray-400">+{(plan.features as string[]).length - 6} more</li>
+ <li className="text-xs text-faint">+{(plan.features as string[]).length - 6} more</li>
  )}
  </ul>
  {isCurrent ? (
@@ -293,14 +293,14 @@ const SubscriptionTab: React.FC<SubscriptionTabProps> = ({ userId }) => {
  Current Plan
  </div>
  ) : isCorporateEmployee ? (
- <div className="w-full py-2 rounded-lg font-semibold bg-gray-100 text-gray-400 text-center text-sm">
+ <div className="w-full py-2 rounded-lg font-semibold bg-subtle text-faint text-center text-sm">
  Managed by employer
  </div>
  ) : (
  <button
  onClick={() => handleChangePlan(plan.id)}
  disabled={changing}
- className="w-full py-2 rounded-lg font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 transition flex items-center justify-center gap-2 text-sm"
+ className="w-full py-2 rounded-lg font-semibold bg-line text-fg hover:bg-gray-300 transition flex items-center justify-center gap-2 text-sm"
  >
  {changing ? <FaSpinner className="animate-spin" /> : <FaExchangeAlt className="text-xs" />}
  {current?.hasSubscription ? 'Switch Plan' : 'Subscribe'}

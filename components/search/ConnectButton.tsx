@@ -119,7 +119,7 @@ export default function ConnectButton({ providerId, className = '' }: ConnectBut
  return (
  <button
  disabled
- className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-400 cursor-not-allowed ${className}`}
+ className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-subtle text-faint cursor-not-allowed ${className}`}
  aria-label="Loading connection status"
  >
  <FaUserPlus className="w-4 h-4" />
@@ -162,7 +162,7 @@ export default function ConnectButton({ providerId, className = '' }: ConnectBut
  aria-label="Send connection request"
  >
  <FaUserPlus className="w-4 h-4" />
- {acting ? 'Sending…' : 'Connect'}
+ {acting ? 'Sending' : 'Connect'}
  </button>
  )
 }

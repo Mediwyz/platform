@@ -38,7 +38,7 @@ const planTypeBadgeColor: Record<string, string> = {
  Vision: 'bg-indigo-100 text-indigo-700',
  Life: 'bg-purple-100 text-purple-700',
  Family: 'bg-pink-100 text-pink-700',
- Other: 'bg-gray-100 text-gray-700',
+ Other: 'bg-subtle text-soft',
 };
 
 export default function InsurancePlansPage() {
@@ -177,8 +177,8 @@ export default function InsurancePlansPage() {
  <div className="flex items-center gap-3 mb-4 sm:mb-0">
  <FaShieldAlt className="text-3xl text-blue-600" />
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Insurance Plans</h1>
- <p className="text-sm text-gray-500">Manage your insurance plan offerings</p>
+ <h1 className="text-2xl font-bold text-fg">Insurance Plans</h1>
+ <p className="text-sm text-soft">Manage your insurance plan offerings</p>
  </div>
  </div>
  <button
@@ -193,19 +193,19 @@ export default function InsurancePlansPage() {
  {/* Search and Filter */}
  <div className="flex flex-col sm:flex-row gap-3 mb-6">
  <div className="relative flex-1">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search by name or type..."
  value={searchTerm}
  onChange={(e) => setSearchTerm(e.target.value)}
- className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+ className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
  />
  </div>
  <select
  value={filterType}
  onChange={(e) => setFilterType(e.target.value)}
- className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+ className="px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-surface"
  >
  <option value="">All Types</option>
  {PLAN_TYPES.map((type) => (
@@ -235,10 +235,10 @@ export default function InsurancePlansPage() {
 
  {/* Empty State */}
  {!loading && filteredPlans.length === 0 && (
- <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
- <FaShieldAlt className="mx-auto text-4xl text-gray-300 mb-4" />
- <h3 className="text-lg font-medium text-gray-600 mb-1">No plans found</h3>
- <p className="text-sm text-gray-400">
+ <div className="text-center py-20 bg-subtle rounded-xl border border-dashed border-line">
+ <FaShieldAlt className="mx-auto text-4xl text-faint mb-4" />
+ <h3 className="text-lg font-medium text-soft mb-1">No plans found</h3>
+ <p className="text-sm text-faint">
  {searchTerm || filterType
  ? 'Try adjusting your search or filter.'
  : 'Get started by adding your first insurance plan.'}
@@ -248,39 +248,39 @@ export default function InsurancePlansPage() {
 
  {/* Plans Table */}
  {!loading && filteredPlans.length > 0 && (
- <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+ <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="bg-gray-50 border-b border-gray-200">
- <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <tr className="bg-subtle border-b border-line">
+ <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Plan Name
  </th>
- <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-left px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Type
  </th>
- <th className="text-right px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-right px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Monthly Premium (MUR)
  </th>
- <th className="text-right px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-right px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Annual Premium
  </th>
- <th className="text-right px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-right px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Coverage Amount
  </th>
- <th className="text-center px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-center px-6 py-3.5 text-xs font-semibold text-soft uppercase tracking-wider">
  Actions
  </th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {filteredPlans.map((plan) => (
- <tr key={plan.id} className="hover:bg-gray-50 transition-colors">
+ <tr key={plan.id} className="hover:bg-subtle transition-colors">
  <td className="px-6 py-4">
  <div>
- <p className="font-medium text-gray-900">{plan.planName}</p>
+ <p className="font-medium text-fg">{plan.planName}</p>
  {plan.description && (
- <p className="text-xs text-gray-500 mt-0.5 line-clamp-1 max-w-xs">
+ <p className="text-xs text-soft mt-0.5 line-clamp-1 max-w-xs">
  {plan.description}
  </p>
  )}
@@ -295,27 +295,27 @@ export default function InsurancePlansPage() {
  {plan.planType}
  </span>
  </td>
- <td className="px-6 py-4 text-right font-medium text-gray-900">
+ <td className="px-6 py-4 text-right font-medium text-fg">
  {formatCurrency(plan.monthlyPremium)}
  </td>
- <td className="px-6 py-4 text-right text-gray-600">
+ <td className="px-6 py-4 text-right text-soft">
  {formatCurrency(plan.annualPremium)}
  </td>
- <td className="px-6 py-4 text-right text-gray-600">
+ <td className="px-6 py-4 text-right text-soft">
  {formatCurrency(plan.coverageAmount)}
  </td>
  <td className="px-6 py-4">
  <div className="flex items-center justify-center gap-1">
  <button
  onClick={() => openEditModal(plan)}
- className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+ className="p-2 text-faint hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
  title="Edit"
  >
  <FaEdit />
  </button>
  <button
  onClick={() => handleDelete(plan.id)}
- className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+ className="p-2 text-faint hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
  title="Delete"
  >
  <FaTrash />
@@ -341,14 +341,14 @@ export default function InsurancePlansPage() {
  onClick={closeModal}
  onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') closeModal() }}
  ></div>
- <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
- <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex items-center justify-between">
- <h2 className="text-lg font-semibold text-gray-900">
+ <div className="relative bg-surface rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+ <div className="sticky top-0 bg-surface border-b border-line px-6 py-4 rounded-t-2xl flex items-center justify-between">
+ <h2 className="text-lg font-semibold text-fg">
  {editingPlan ? 'Edit Plan' : 'Add New Plan'}
  </h2>
  <button
  onClick={closeModal}
- className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+ className="p-2 text-faint hover:text-soft hover:bg-subtle rounded-lg transition-colors"
  >
  <FaTimes />
  </button>
@@ -356,7 +356,7 @@ export default function InsurancePlansPage() {
 
  <form onSubmit={handleSubmit} className="p-6 space-y-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Plan Name <span className="text-red-500">*</span>
  </label>
  <input
@@ -364,20 +364,20 @@ export default function InsurancePlansPage() {
  required
  value={formData.planName}
  onChange={(e) => setFormData({ ...formData, planName: e.target.value })}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="e.g., Premium Health Plan"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Plan Type <span className="text-red-500">*</span>
  </label>
  <select
  required
  value={formData.planType}
  onChange={(e) => setFormData({ ...formData, planType: e.target.value })}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-surface"
  >
  {PLAN_TYPES.map((type) => (
  <option key={type} value={type}>
@@ -388,19 +388,19 @@ export default function InsurancePlansPage() {
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+ <label className="block text-sm font-medium text-soft mb-1">Description</label>
  <textarea
  rows={3}
  value={formData.description}
  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
  placeholder="Describe the plan coverage..."
  />
  </div>
 
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Monthly Premium (MUR) <span className="text-red-500">*</span>
  </label>
  <input
@@ -412,12 +412,12 @@ export default function InsurancePlansPage() {
  onChange={(e) =>
  setFormData({ ...formData, monthlyPremium: Number(e.target.value) })
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="0"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Annual Premium (MUR)
  </label>
  <input
@@ -431,7 +431,7 @@ export default function InsurancePlansPage() {
  annualPremium: e.target.value ? Number(e.target.value) : null,
  })
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="Optional"
  />
  </div>
@@ -439,7 +439,7 @@ export default function InsurancePlansPage() {
 
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Coverage Amount (MUR) <span className="text-red-500">*</span>
  </label>
  <input
@@ -451,12 +451,12 @@ export default function InsurancePlansPage() {
  onChange={(e) =>
  setFormData({ ...formData, coverageAmount: Number(e.target.value) })
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="0"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Deductible (MUR)
  </label>
  <input
@@ -470,28 +470,28 @@ export default function InsurancePlansPage() {
  deductible: e.target.value ? Number(e.target.value) : null,
  })
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="Optional"
  />
  </div>
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Coverage Details
  </label>
  <input
  type="text"
  value={coverageDetailsInput}
  onChange={(e) => setCoverageDetailsInput(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="e.g., Hospitalization, Surgery, Medication (comma-separated)"
  />
- <p className="mt-1 text-xs text-gray-400">Separate multiple items with commas</p>
+ <p className="mt-1 text-xs text-faint">Separate multiple items with commas</p>
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Eligibility</label>
+ <label className="block text-sm font-medium text-soft mb-1">Eligibility</label>
  <input
  type="text"
  value={formData.eligibility ?? ''}
@@ -501,16 +501,16 @@ export default function InsurancePlansPage() {
  eligibility: e.target.value || null,
  })
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
  placeholder="e.g., Ages 18-65, Mauritius residents"
  />
  </div>
 
- <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+ <div className="flex justify-end gap-3 pt-4 border-t border-line">
  <button
  type="button"
  onClick={closeModal}
- className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+ className="px-4 py-2 text-sm font-medium text-soft bg-surface border border-line rounded-lg hover:bg-subtle transition-colors"
  >
  Cancel
  </button>

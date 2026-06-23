@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'What if I don\'t have a security question set?',
-    a: 'Log in, open your Profile → Security, and set one before you forget your password. You only need to do this once.',
+    a: 'Log in, open your Profile  Security, and set one before you forget your password. You only need to do this once.',
   },
   {
     q: 'How does my Account Balance work?',
@@ -36,42 +36,42 @@ const FAQS = [
 
 export default function HelpPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="min-h-screen bg-subtle py-10 px-4">
       <div className="max-w-3xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-soft hover:text-soft mb-6">
           <FaArrowLeft /> Back to home
         </Link>
-        <h1 className="text-3xl font-bold text-[#001E40] flex items-center gap-3 mb-2">
+        <h1 className="text-3xl font-bold text-fg flex items-center gap-3 mb-2">
           <FaQuestionCircle className="text-[#0C6780]" /> Help centre
         </h1>
-        <p className="text-gray-500 mb-8">Quick answers to the questions we get most often.</p>
+        <p className="text-soft mb-8">Quick answers to the questions we get most often.</p>
 
         <div className="grid sm:grid-cols-3 gap-4 mb-10">
-          <Link href="/help" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-[#0C6780] transition-colors">
+          <Link href="/help" className="bg-surface rounded-xl border border-line p-4 hover:border-[#0C6780] transition-colors">
             <FaBookOpen className="text-[#0C6780] text-xl mb-2" />
-            <p className="font-semibold text-[#001E40]">Guides</p>
-            <p className="text-xs text-gray-500">Step-by-step walkthroughs</p>
+            <p className="font-semibold text-fg">Guides</p>
+            <p className="text-xs text-soft">Step-by-step walkthroughs</p>
           </Link>
-          <Link href="/support" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-[#0C6780] transition-colors">
+          <Link href="/support" className="bg-surface rounded-xl border border-line p-4 hover:border-[#0C6780] transition-colors">
             <FaLifeRing className="text-[#0C6780] text-xl mb-2" />
-            <p className="font-semibold text-[#001E40]">Contact support</p>
-            <p className="text-xs text-gray-500">Message a human</p>
+            <p className="font-semibold text-fg">Contact support</p>
+            <p className="text-xs text-soft">Message a human</p>
           </Link>
-          <Link href="/medical-disclaimer" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-[#0C6780] transition-colors">
+          <Link href="/medical-disclaimer" className="bg-surface rounded-xl border border-line p-4 hover:border-[#0C6780] transition-colors">
             <FaEnvelope className="text-[#0C6780] text-xl mb-2" />
-            <p className="font-semibold text-[#001E40]">Medical disclaimer</p>
-            <p className="text-xs text-gray-500">Important information</p>
+            <p className="font-semibold text-fg">Medical disclaimer</p>
+            <p className="text-xs text-soft">Important information</p>
           </Link>
         </div>
 
         <div className="space-y-3">
           {FAQS.map((f, i) => (
-            <details key={i} className="bg-white rounded-xl border border-gray-200 p-5 [&[open]>summary>span:last-child]:rotate-90 group">
-              <summary className="flex items-center justify-between cursor-pointer select-none font-semibold text-[#001E40]">
+            <details key={i} className="bg-surface rounded-xl border border-line p-5 [&[open]>summary>span:last-child]:rotate-90 group">
+              <summary className="flex items-center justify-between cursor-pointer select-none font-semibold text-fg">
                 {f.q}
-                <span className="transition-transform text-gray-400">▸</span>
+                <span className="transition-transform text-faint"></span>
               </summary>
-              <p className="text-sm text-gray-600 mt-3 leading-relaxed">{f.a}</p>
+              <p className="text-sm text-soft mt-3 leading-relaxed">{f.a}</p>
             </details>
           ))}
         </div>

@@ -67,7 +67,7 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
             className={`px-3 py-1.5 text-sm rounded-lg border font-medium transition ${
               filter === s
                 ? 'bg-brand-navy text-white border-brand-navy'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                : 'bg-surface text-soft border-line hover:bg-subtle'
             }`}
           >
             {s === '' ? 'All' : s[0] + s.slice(1).toLowerCase()}
@@ -80,10 +80,10 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-teal" />
         </div>
       ) : suggestions.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <FiSend className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">No suggestions yet</p>
-          <p className="text-sm text-gray-400 mt-1 mb-4">
+        <div className="bg-surface rounded-xl border border-line p-12 text-center">
+          <FiSend className="w-10 h-10 text-faint mx-auto mb-3" />
+          <p className="font-medium text-soft">No suggestions yet</p>
+          <p className="text-sm text-faint mt-1 mb-4">
             Suggest a custom workflow to your regional admin - they&apos;ll review and activate it for you.
           </p>
           <Link
@@ -99,34 +99,34 @@ export default function MyWorkflowSuggestionsPage({ params }: { params: Promise<
             const cfg = STATUS_CONFIG[s.suggestionStatus]
             const Icon = cfg.icon
             return (
-              <div key={s.id} className={`bg-white rounded-xl border ${cfg.border} p-4`}>
+              <div key={s.id} className={`bg-surface rounded-xl border ${cfg.border} p-4`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="font-semibold text-gray-900">{s.name}</h3>
+                      <h3 className="font-semibold text-fg">{s.name}</h3>
                       <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded ${cfg.bg} ${cfg.text}`}>
                         <Icon className="w-3 h-3" /> {cfg.label}
                       </span>
                       <span className="text-xs bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded">{s.serviceMode}</span>
                     </div>
-                    {s.description && <p className="text-sm text-gray-600 mb-2">{s.description}</p>}
+                    {s.description && <p className="text-sm text-soft mb-2">{s.description}</p>}
                     <div className="flex flex-wrap gap-1.5">
                       {s.steps?.sort((a, b) => a.order - b.order).map((step, i) => (
                         <div key={step.statusCode} className="flex items-center gap-1">
-                          {i > 0 && <span className="text-gray-300 text-xs">→</span>}
-                          <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{step.label}</span>
+                          {i > 0 && <span className="text-faint text-xs"></span>}
+                          <span className="text-xs bg-subtle text-soft px-2 py-0.5 rounded">{step.label}</span>
                         </div>
                       ))}
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-faint mt-2">
                       Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : ' - '}
                     </p>
                   </div>
                 </div>
                 {s.suggestionNote && (
                   <div className={`mt-3 pt-3 border-t ${cfg.border}`}>
-                    <p className="text-xs font-medium text-gray-500 mb-0.5">Admin note</p>
-                    <p className="text-sm text-gray-700 italic">{s.suggestionNote}</p>
+                    <p className="text-xs font-medium text-soft mb-0.5">Admin note</p>
+                    <p className="text-sm text-soft italic">{s.suggestionNote}</p>
                   </div>
                 )}
               </div>

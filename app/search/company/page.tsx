@@ -104,40 +104,40 @@ export default function FindCompanyPage() {
   const corporateCount = useMemo(() => companies.filter(c => !c.isInsuranceCompany).length, [companies])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-subtle">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-30">
+      <div className="bg-surface border-b border-line sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex items-center gap-3 mb-3">
-            <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
+            <Link href="/" className="text-faint hover:text-soft transition-colors">
               <FaArrowLeft />
             </Link>
             <nav className="flex items-center gap-2 text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
-              <span className="text-gray-300">/</span>
-              <span className="font-medium text-gray-900">Company Partners</span>
+              <Link href="/" className="text-soft hover:text-soft">Home</Link>
+              <span className="text-faint">/</span>
+              <span className="font-medium text-fg">Company Partners</span>
             </nav>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2">
               <FaBuilding className="text-[#0C6780] text-xl" />
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Find Company Partners</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-fg">Find Company Partners</h1>
               {!loading && (
-                <span className="text-sm text-gray-400">({companies.length})</span>
+                <span className="text-sm text-faint">({companies.length})</span>
               )}
             </div>
 
             {/* Search */}
             <div className="flex gap-2 sm:ml-auto">
               <div className="relative flex-1 sm:w-64">
-                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
                 <input
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSearch() }}
-                  placeholder="Search companies…"
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-gray-50"
+                  placeholder="Search companies"
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
                 />
               </div>
               <button
@@ -158,16 +158,16 @@ export default function FindCompanyPage() {
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border
                   ${activeType === f.key
                     ? 'bg-[#0C6780] text-white border-[#0C6780]'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                    : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'}`}
               >
                 {f.label}
                 {!loading && f.key === 'insurance' && insuranceCount > 0 && (
-                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${activeType === f.key ? 'bg-white/20' : 'bg-gray-100'}`}>
+                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${activeType === f.key ? 'bg-white/20' : 'bg-subtle'}`}>
                     {insuranceCount}
                   </span>
                 )}
                 {!loading && f.key === 'corporate' && corporateCount > 0 && (
-                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${activeType === f.key ? 'bg-white/20' : 'bg-gray-100'}`}>
+                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${activeType === f.key ? 'bg-white/20' : 'bg-subtle'}`}>
                     {corporateCount}
                   </span>
                 )}
@@ -195,14 +195,14 @@ export default function FindCompanyPage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="animate-pulse bg-white rounded-2xl h-40 border border-gray-200" />
+              <div key={i} className="animate-pulse bg-surface rounded-2xl h-40 border border-line" />
             ))}
           </div>
         ) : companies.length === 0 ? (
           <div className="text-center py-24">
             <FaBuilding className="text-5xl text-gray-200 mx-auto mb-4" />
-            <p className="text-base font-semibold text-gray-600">No companies found</p>
-            <p className="text-sm text-gray-400 mt-1 mb-4">Try a different search or remove filters</p>
+            <p className="text-base font-semibold text-soft">No companies found</p>
+            <p className="text-sm text-faint mt-1 mb-4">Try a different search or remove filters</p>
             <button
               onClick={() => { setQuery(''); setActiveType('all'); load('', 'all'); syncUrl('', 'all') }}
               className="px-4 py-2 bg-[#0C6780] text-white rounded-lg text-sm font-medium hover:bg-[#001E40] transition-colors"
@@ -216,7 +216,7 @@ export default function FindCompanyPage() {
               const color = companyColor(c.companyName)
               const initials = companyInitials(c.companyName)
               return (
-                <div key={c.id} className="bg-white rounded-2xl border border-gray-200 p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
+                <div key={c.id} className="bg-surface rounded-2xl border border-line p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3">
                     {/* Logo placeholder */}
                     <div
@@ -226,7 +226,7 @@ export default function FindCompanyPage() {
                       {initials}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate text-sm">{c.companyName}</h3>
+                      <h3 className="font-semibold text-fg truncate text-sm">{c.companyName}</h3>
                       <div className="flex items-center gap-1 mt-0.5">
                         {c.isInsuranceCompany ? (
                           <span className="inline-flex items-center gap-1 text-[10px] font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
@@ -238,22 +238,22 @@ export default function FindCompanyPage() {
                           </span>
                         )}
                         {c.industry && (
-                          <span className="text-[10px] text-gray-400 truncate">{c.industry}</span>
+                          <span className="text-[10px] text-faint truncate">{c.industry}</span>
                         )}
                       </div>
                     </div>
                   </div>
 
                   {c.coverageDescription && (
-                    <p className="text-xs text-gray-600 line-clamp-2 flex-1">{c.coverageDescription}</p>
+                    <p className="text-xs text-soft line-clamp-2 flex-1">{c.coverageDescription}</p>
                   )}
 
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between pt-2 border-t border-line">
                     {c.isInsuranceCompany && c.monthlyContribution != null ? (
                       <>
                         <div>
-                          <p className="text-[10px] text-gray-400">Monthly contribution</p>
-                          <p className="text-sm font-bold text-gray-900">
+                          <p className="text-[10px] text-faint">Monthly contribution</p>
+                          <p className="text-sm font-bold text-fg">
                             MUR {c.monthlyContribution.toLocaleString()}
                           </p>
                         </div>
@@ -262,13 +262,13 @@ export default function FindCompanyPage() {
                           disabled={joinBusyId === c.id}
                           className="px-4 py-1.5 bg-[#0C6780] text-white rounded-lg text-xs font-semibold hover:bg-[#001E40] disabled:opacity-50 transition-colors"
                         >
-                          {joinBusyId === c.id ? 'Joining…' : 'Join'}
+                          {joinBusyId === c.id ? 'Joining' : 'Join'}
                         </button>
                       </>
                     ) : (
                       <Link
                         href={`/profile/${c.user?.id ?? ''}`}
-                        className="flex items-center gap-1 text-xs font-medium text-[#0C6780] hover:text-[#001E40] transition-colors"
+                        className="flex items-center gap-1 text-xs font-medium text-[#0C6780] hover:text-fg transition-colors"
                       >
                         View profile <FaArrowRight className="text-[9px]" />
                       </Link>

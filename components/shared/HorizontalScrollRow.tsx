@@ -61,15 +61,15 @@ export default function HorizontalScrollRow({
         <div className="flex items-center gap-3 min-w-0">
           {icon && <span className="text-2xl flex-shrink-0">{icon}</span>}
           <div className="min-w-0">
-            <h3 className="text-lg font-bold text-gray-900 truncate">{title}</h3>
-            {subtitle && <p className="text-xs text-gray-500 truncate">{subtitle}</p>}
+            <h3 className="text-lg font-bold text-fg truncate">{title}</h3>
+            {subtitle && <p className="text-xs text-soft truncate">{subtitle}</p>}
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0 ml-4">
           {seeAllHref && (
             <Link
               href={seeAllHref}
-              className="text-sm font-medium text-[#0C6780] hover:text-[#001E40] transition-colors whitespace-nowrap"
+              className="text-sm font-medium text-[#0C6780] hover:text-fg transition-colors whitespace-nowrap"
             >
               {seeAllLabel} &rarr;
             </Link>
@@ -78,12 +78,12 @@ export default function HorizontalScrollRow({
       </div>
 
       {/*
-        ┌────┬──────────────────────────────────────┬────┐
-        │ ◀  │  [ card ] [ card ] [ card ] [ card ] │ ▶  │
-        └────┴──────────────────────────────────────┴────┘
+        
+             [ card ] [ card ] [ card ] [ card ]    
+        
 
         Flex row: button (fixed 40px) | scroll zone (flex-1) | button (fixed 40px)
-        The scroll zone has overflow-hidden → cards are CLIPPED at its edges,
+        The scroll zone has overflow-hidden  cards are CLIPPED at its edges,
         never bleeding into the button columns. No absolute positioning needed.
       */}
       <div className="flex items-center gap-2">
@@ -92,11 +92,11 @@ export default function HorizontalScrollRow({
           onClick={() => scroll('left')}
           disabled={!canScrollLeft}
           className={`hidden md:flex flex-shrink-0 w-10 h-10 rounded-full
-            bg-white shadow-md border-2 items-center justify-center
+            bg-surface shadow-md border-2 items-center justify-center
             transition-all duration-150
             ${canScrollLeft
               ? 'border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white cursor-pointer'
-              : 'border-gray-200 text-gray-300 cursor-default'
+              : 'border-line text-faint cursor-default'
             }`}
           aria-label="Scroll left"
         >
@@ -129,11 +129,11 @@ export default function HorizontalScrollRow({
           onClick={() => scroll('right')}
           disabled={!canScrollRight}
           className={`hidden md:flex flex-shrink-0 w-10 h-10 rounded-full
-            bg-white shadow-md border-2 items-center justify-center
+            bg-surface shadow-md border-2 items-center justify-center
             transition-all duration-150
             ${canScrollRight
               ? 'border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white cursor-pointer'
-              : 'border-gray-200 text-gray-300 cursor-default'
+              : 'border-line text-faint cursor-default'
             }`}
           aria-label="Scroll right"
         >

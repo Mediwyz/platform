@@ -8,7 +8,7 @@ import {
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
 } from 'react-icons/fa'
 
-// ─── Types ─────────────────────────────────────────────────────────────────
+//  Types 
 
 interface EntityDetail {
   id: string; name: string; type: string; description: string | null
@@ -28,7 +28,7 @@ interface Invitation {
 
 type TabId = 'overview' | 'members' | 'invite' | 'settings'
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -45,7 +45,7 @@ const ENTITY_TYPES = [
   'Eye Clinic', 'Physiotherapy Center', 'Nursing Home', 'Diagnostic Center', 'Other',
 ]
 
-// ─── Sub-components ─────────────────────────────────────────────────────────
+//  Sub-components 
 
 function MemberRow({
   member, onApprove, onReject, onRemove, loading,
@@ -60,7 +60,7 @@ function MemberRow({
   const name = `${provider.firstName} ${provider.lastName}`
 
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0">
+    <div className="flex items-center gap-3 py-3 border-b border-line last:border-0">
       {provider.profileImage ? (
         <Image
           src={provider.profileImage}
@@ -77,8 +77,8 @@ function MemberRow({
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-gray-900 text-sm truncate">{name}</p>
-        <p className="text-xs text-gray-500">{provider.userType.replace(/_/g, ' ')}</p>
+        <p className="font-semibold text-fg text-sm truncate">{name}</p>
+        <p className="text-xs text-soft">{provider.userType.replace(/_/g, ' ')}</p>
         {member.role && <p className="text-xs text-[#0C6780]">{member.role}</p>}
       </div>
 
@@ -114,7 +114,7 @@ function MemberRow({
             onClick={() => onRemove(member.id)}
             disabled={loading}
             aria-label="Remove"
-            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors disabled:opacity-50"
+            className="w-8 h-8 rounded-full bg-subtle hover:bg-line text-soft flex items-center justify-center transition-colors disabled:opacity-50"
           >
             <FaTrash className="text-xs" />
           </button>
@@ -124,7 +124,7 @@ function MemberRow({
   )
 }
 
-// ─── Tab: Overview ───────────────────────────────────────────────────────────
+//  Tab: Overview 
 
 function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
   const [form, setForm] = useState({
@@ -215,7 +215,7 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
         <button
           onClick={() => fileRef.current?.click()}
           aria-label="Change logo"
-          className="relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-dashed border-gray-300 hover:border-[#0C6780] transition-colors group"
+          className="relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-dashed border-line hover:border-[#0C6780] transition-colors group"
         >
           {logoPreview ? (
             <Image src={logoPreview} alt="Logo" fill unoptimized className="object-cover" />
@@ -230,8 +230,8 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
         </button>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
         <div>
-          <p className="font-semibold text-gray-800">Entity Logo</p>
-          <p className="text-xs text-gray-500 mt-0.5">Click to upload. PNG or JPG up to 2MB.</p>
+          <p className="font-semibold text-fg">Entity Logo</p>
+          <p className="text-xs text-soft mt-0.5">Click to upload. PNG or JPG up to 2MB.</p>
         </div>
       </div>
 
@@ -239,25 +239,25 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Entity Name" name="name" value={form.name} onChange={handleChange} required />
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+          <label className="block text-sm font-medium text-soft mb-1">Type</label>
           <select
             name="type"
             value={form.type}
             onChange={handleChange}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+            className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
           >
             {ENTITY_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-medium text-soft mb-1">Description</label>
           <textarea
             name="description"
             value={form.description}
             onChange={handleChange}
             rows={3}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none resize-none"
-            placeholder="Brief description of your entity…"
+            className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none resize-none"
+            placeholder="Brief description of your entity"
           />
         </div>
         <Field label="Address" name="address" value={form.address} onChange={handleChange} />
@@ -275,7 +275,7 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
           className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-6 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
         >
           {saving ? <FaSpinner className="animate-spin" /> : <FaCheck />}
-          {saving ? 'Saving…' : 'Save Changes'}
+          {saving ? 'Saving' : 'Save Changes'}
         </button>
       </div>
     </div>
@@ -290,7 +290,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-soft mb-1">
         {label}{required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       <input
@@ -299,13 +299,13 @@ function Field({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+        className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
       />
     </div>
   )
 }
 
-// ─── Tab: Members ────────────────────────────────────────────────────────────
+//  Tab: Members 
 
 function MembersTab({ id }: { id: string }) {
   const [members, setMembers] = useState<WorkplaceMember[]>([])
@@ -359,7 +359,7 @@ function MembersTab({ id }: { id: string }) {
   }
 
   if (loading) {
-    return <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />)}</div>
+    return <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-14 bg-subtle rounded-xl animate-pulse" />)}</div>
   }
 
   const pending = members.filter(m => m.status === 'pending_approval')
@@ -371,7 +371,7 @@ function MembersTab({ id }: { id: string }) {
       {/* Pending */}
       <Section title="Pending Approval" count={pending.length} accentColor="amber">
         {pending.length === 0 ? (
-          <p className="text-sm text-gray-400 py-2">No pending requests</p>
+          <p className="text-sm text-faint py-2">No pending requests</p>
         ) : pending.map(m => (
           <MemberRow key={m.id} member={m} onApprove={approve} onReject={reject} loading={actionLoading} />
         ))}
@@ -380,7 +380,7 @@ function MembersTab({ id }: { id: string }) {
       {/* Active */}
       <Section title="Active Members" count={active.length} accentColor="green">
         {active.length === 0 ? (
-          <p className="text-sm text-gray-400 py-2">No active members yet. Approve pending requests or send invitations.</p>
+          <p className="text-sm text-faint py-2">No active members yet. Approve pending requests or send invitations.</p>
         ) : active.map(m => (
           <MemberRow key={m.id} member={m} onRemove={remove} loading={actionLoading} />
         ))}
@@ -405,16 +405,16 @@ function Section({
   const badge: Record<string, string> = {
     amber: 'bg-amber-100 text-amber-700',
     green: 'bg-green-100 text-green-700',
-    gray: 'bg-gray-100 text-gray-600',
+    gray: 'bg-subtle text-soft',
   }
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div className="border border-line rounded-xl overflow-hidden">
       <button
         onClick={onToggle}
-        className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 ${collapsible ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'}`}
+        className={`w-full flex items-center justify-between px-4 py-3 bg-subtle border-b border-line ${collapsible ? 'cursor-pointer hover:bg-subtle' : 'cursor-default'}`}
         disabled={!collapsible}
       >
-        <span className="font-semibold text-gray-800 text-sm">{title}</span>
+        <span className="font-semibold text-fg text-sm">{title}</span>
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${badge[accentColor] ?? badge.gray}`}>{count}</span>
       </button>
       {(!collapsible || !collapsed) && (
@@ -424,7 +424,7 @@ function Section({
   )
 }
 
-// ─── Tab: Invite ─────────────────────────────────────────────────────────────
+//  Tab: Invite 
 
 function InviteTab({ id }: { id: string }) {
   const [email, setEmail] = useState('')
@@ -477,28 +477,28 @@ function InviteTab({ id }: { id: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="border border-gray-200 rounded-xl p-5 space-y-4">
-        <h3 className="font-semibold text-gray-900">Send Invitation</h3>
+      <div className="border border-line rounded-xl p-5 space-y-4">
+        <h3 className="font-semibold text-fg">Send Invitation</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email address <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium text-soft mb-1">Email address <span className="text-red-500">*</span></label>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="colleague@hospital.mu"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+              className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Suggested role <span className="text-gray-400 font-normal">(optional)</span></label>
+            <label className="block text-sm font-medium text-soft mb-1">Suggested role <span className="text-faint font-normal">(optional)</span></label>
             <input
               type="text"
               value={role}
               onChange={e => setRole(e.target.value)}
               placeholder="e.g. Head Nurse, Cardiologist"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+              className="w-full px-3 py-2.5 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
             />
           </div>
         </div>
@@ -511,7 +511,7 @@ function InviteTab({ id }: { id: string }) {
           className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
         >
           {sending ? <FaSpinner className="animate-spin" /> : <FaEnvelope />}
-          {sending ? 'Sending…' : 'Send Invitation'}
+          {sending ? 'Sending' : 'Send Invitation'}
         </button>
       </div>
 
@@ -519,7 +519,7 @@ function InviteTab({ id }: { id: string }) {
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2">
           <p className="text-sm font-semibold text-green-800">Invitation created! Share this link:</p>
           <div className="flex items-center gap-2">
-            <code className="flex-1 text-xs bg-white border border-green-200 rounded-lg px-3 py-2 text-green-900 break-all">{inviteLink}</code>
+            <code className="flex-1 text-xs bg-surface border border-green-200 rounded-lg px-3 py-2 text-green-900 break-all">{inviteLink}</code>
             <button
               onClick={copyLink}
               aria-label="Copy link"
@@ -532,18 +532,18 @@ function InviteTab({ id }: { id: string }) {
       )}
 
       {invitations.length > 0 && (
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-            <span className="font-semibold text-gray-800 text-sm">Pending Invitations</span>
+        <div className="border border-line rounded-xl overflow-hidden">
+          <div className="px-4 py-3 bg-subtle border-b border-line">
+            <span className="font-semibold text-fg text-sm">Pending Invitations</span>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-line">
             {invitations.map(inv => (
               <div key={inv.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{inv.email}</p>
-                  {inv.suggestedRole && <p className="text-xs text-gray-500">{inv.suggestedRole}</p>}
+                  <p className="text-sm font-medium text-fg">{inv.email}</p>
+                  {inv.suggestedRole && <p className="text-xs text-soft">{inv.suggestedRole}</p>}
                 </div>
-                <p className="text-xs text-gray-400">{new Date(inv.createdAt).toLocaleDateString()}</p>
+                <p className="text-xs text-faint">{new Date(inv.createdAt).toLocaleDateString()}</p>
               </div>
             ))}
           </div>
@@ -553,7 +553,7 @@ function InviteTab({ id }: { id: string }) {
   )
 }
 
-// ─── Tab: Settings ────────────────────────────────────────────────────────────
+//  Tab: Settings 
 
 function SettingsTab() {
   return (
@@ -578,7 +578,7 @@ function SettingsTab() {
   )
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
+//  Page 
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
@@ -632,9 +632,9 @@ export default function ManageOrganizationPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="text-center max-w-sm">
-          <FaUserCircle className="text-5xl text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-500 mb-6">You don&apos;t have permission to manage this organization.</p>
+          <FaUserCircle className="text-5xl text-faint mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-fg mb-2">Access Denied</h2>
+          <p className="text-soft mb-6">You don&apos;t have permission to manage this organization.</p>
           <button
             onClick={() => router.back()}
             className="px-5 py-2.5 bg-[#0C6780] text-white rounded-xl font-semibold text-sm hover:bg-[#0a5568] transition-colors"
@@ -647,7 +647,7 @@ export default function ManageOrganizationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-subtle">
       {/* Header */}
       <div className="bg-[#001E40] text-white px-4 sm:px-8 py-6">
         <div className="max-w-4xl mx-auto">
@@ -663,7 +663,7 @@ export default function ManageOrganizationPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold">{entity.name}</h1>
-              <p className="text-white/60 text-sm">{entity.type} · Manage</p>
+              <p className="text-white/60 text-sm">{entity.type}  Manage</p>
             </div>
             {entity.isVerified && (
               <span className="ml-auto text-xs font-bold bg-[#0C6780] text-white px-3 py-1 rounded-full">
@@ -675,7 +675,7 @@ export default function ManageOrganizationPage() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
+      <div className="bg-surface border-b border-line sticky top-0 z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-8">
           <div className="flex overflow-x-auto scrollbar-hide">
             {TABS.map(tab => (
@@ -685,7 +685,7 @@ export default function ManageOrganizationPage() {
                 className={`flex items-center gap-2 px-4 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex-shrink-0
                   ${activeTab === tab.id
                     ? 'border-[#0C6780] text-[#0C6780]'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    : 'border-transparent text-soft hover:text-soft'
                   }`}
               >
                 <span className="text-xs">{tab.icon}</span>
@@ -698,7 +698,7 @@ export default function ManageOrganizationPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6">
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-7">
+        <div className="bg-surface rounded-2xl border border-line p-5 sm:p-7">
           {activeTab === 'overview' && <OverviewTab entity={entity} id={id} />}
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}

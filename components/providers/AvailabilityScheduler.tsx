@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaCalendarAlt, FaCheck, FaExclamationTriangle } from 'react-icons/fa'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface AvailabilityRow {
   id?: string
@@ -26,7 +26,7 @@ interface Props {
   readOnly?: boolean
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+//  Constants 
 
 // Monday-first order
 const DAYS = [
@@ -59,7 +59,7 @@ const DEFAULT_START = '09:00'
 const DEFAULT_END = '17:00'
 const DEFAULT_DURATION = 60
 
-// ─── Helper: compute total slots ─────────────────────────────────────────────
+//  Helper: compute total slots 
 
 function computeTotalSlots(days: DayState[]): number {
   let total = 0
@@ -84,7 +84,7 @@ function formatTime(t: string): string {
   return `${h12}:${m} ${ampm}`
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+//  Component 
 
 export default function AvailabilityScheduler({ providerId, readOnly = false }: Props) {
   const [days, setDays] = useState<DayState[]>(
@@ -102,7 +102,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
   )
   const [loading, setLoading] = useState(true)
 
-  // ── Fetch existing availability ─────────────────────────────────────────
+  //  Fetch existing availability 
   const fetchAvailability = useCallback(async () => {
     setLoading(true)
     try {
@@ -137,7 +137,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
 
   useEffect(() => { fetchAvailability() }, [fetchAvailability])
 
-  // ── Update a day's field ────────────────────────────────────────────────
+  //  Update a day's field 
   function updateDay(dayOfWeek: number, patch: Partial<DayState>) {
     setDays((prev) =>
       prev.map((d) =>
@@ -146,7 +146,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
     )
   }
 
-  // ── Save a single day ───────────────────────────────────────────────────
+  //  Save a single day 
   async function saveDay(dayOfWeek: number) {
     const day = days.find((d) => d.dayOfWeek === dayOfWeek)
     if (!day) return
@@ -202,7 +202,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
     return (
       <div className="space-y-3">
         {DAYS.map((d) => (
-          <div key={d.dayOfWeek} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
+          <div key={d.dayOfWeek} className="h-16 bg-subtle rounded-xl animate-pulse" />
         ))}
       </div>
     )
@@ -210,9 +210,9 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
 
   return (
     <div className="space-y-6">
-      {/* ── Hint banner ─────────────────────────────────────────────────── */}
+      {/*  Hint banner  */}
       {!readOnly && (
-        <div className="flex items-start gap-3 p-3 bg-[#9AE1FF]/20 border border-[#9AE1FF] rounded-xl text-sm text-[#001E40]">
+        <div className="flex items-start gap-3 p-3 bg-[#9AE1FF]/20 border border-[#9AE1FF] rounded-xl text-sm text-fg">
           <FaCalendarAlt className="text-[#0C6780] mt-0.5 flex-shrink-0" />
           <span>
             Set your schedule so patients can book appointments with you. Each time slot will appear in the booking calendar.
@@ -220,7 +220,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
         </div>
       )}
 
-      {/* ── Day grid ─────────────────────────────────────────────────────── */}
+      {/*  Day grid  */}
       <div className="space-y-2">
         {DAYS.map((dayConfig) => {
           const day = days.find((d) => d.dayOfWeek === dayConfig.dayOfWeek)!
@@ -241,11 +241,11 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
         })}
       </div>
 
-      {/* ── Summary panel ────────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-3">
-        <h3 className="text-sm font-semibold text-gray-900">Your weekly availability</h3>
+      {/*  Summary panel  */}
+      <div className="rounded-xl border border-line bg-subtle p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-fg">Your weekly availability</h3>
         {activeDays.length === 0 ? (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-soft">
             No days enabled yet. Toggle a day above to mark yourself as available.
           </p>
         ) : (
@@ -254,11 +254,11 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
               const dayLabel = DAYS.find((x) => x.dayOfWeek === d.dayOfWeek)?.label ?? ''
               return (
                 <li key={d.dayOfWeek} className="flex items-center gap-2 text-sm">
-                  <span className="w-24 font-medium text-gray-700">{dayLabel}</span>
-                  <span className="text-gray-600">
-                    {formatTime(d.startTime)} – {formatTime(d.endTime)}
+                  <span className="w-24 font-medium text-soft">{dayLabel}</span>
+                  <span className="text-soft">
+                    {formatTime(d.startTime)}  {formatTime(d.endTime)}
                   </span>
-                  <span className="text-gray-400 text-xs">
+                  <span className="text-faint text-xs">
                     ({d.slotDuration} min slots)
                   </span>
                 </li>
@@ -276,7 +276,7 @@ export default function AvailabilityScheduler({ providerId, readOnly = false }: 
   )
 }
 
-// ─── DayRow ───────────────────────────────────────────────────────────────────
+//  DayRow 
 
 interface DayRowProps {
   label: string
@@ -302,14 +302,14 @@ function DayRow({
   onSave,
 }: DayRowProps) {
   const active = day.isActive
-  const rowBg = active ? 'bg-white border-[#0C6780]/30' : 'bg-gray-50 border-gray-200'
+  const rowBg = active ? 'bg-surface border-[#0C6780]/30' : 'bg-subtle border-line'
   const savedFlash = day.saved ? 'ring-2 ring-emerald-400' : ''
 
   return (
     <div
       className={`rounded-xl border p-3 transition-all ${rowBg} ${savedFlash} ${active ? 'shadow-sm' : ''}`}
     >
-      {/* ── Main row ─────────────────────────────────────────────────────── */}
+      {/*  Main row  */}
       <div className="flex flex-wrap items-center gap-3">
         {/* Toggle + Day name */}
         <div className="flex items-center gap-2 w-28 flex-shrink-0">
@@ -322,12 +322,12 @@ function DayRow({
                 ${active ? 'bg-[#0C6780]' : 'bg-gray-300'}`}
             >
               <span
-                className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${active ? 'translate-x-4' : ''}`}
+                className={`absolute top-0.5 left-0.5 w-4 h-4 bg-surface rounded-full shadow transition-transform ${active ? 'translate-x-4' : ''}`}
               />
             </button>
           )}
           <span
-            className={`text-sm font-semibold ${active ? 'text-[#001E40]' : 'text-gray-400'}`}
+            className={`text-sm font-semibold ${active ? 'text-fg' : 'text-faint'}`}
           >
             <span className="hidden sm:inline">{label}</span>
             <span className="sm:hidden">{shortLabel}</span>
@@ -338,14 +338,14 @@ function DayRow({
         {active ? (
           <>
             <div className="flex items-center gap-1.5 text-sm">
-              <label className="text-xs text-gray-500 sr-only">Start</label>
+              <label className="text-xs text-soft sr-only">Start</label>
               <TimeSelect
                 value={day.startTime}
                 onChange={onStartChange}
                 disabled={readOnly}
                 label="Start time"
               />
-              <span className="text-gray-400 text-xs">to</span>
+              <span className="text-faint text-xs">to</span>
               <TimeSelect
                 value={day.endTime}
                 onChange={onEndChange}
@@ -355,13 +355,13 @@ function DayRow({
             </div>
 
             <div className="flex items-center gap-1.5">
-              <label className="text-xs text-gray-500 hidden sm:inline">Slots</label>
+              <label className="text-xs text-soft hidden sm:inline">Slots</label>
               <select
                 value={day.slotDuration}
                 onChange={(e) => onDurationChange(Number(e.target.value))}
                 disabled={readOnly}
                 aria-label="Slot duration"
-                className="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C6780] disabled:opacity-50 disabled:cursor-default"
+                className="text-xs border border-line rounded-lg px-2 py-1.5 bg-surface focus:outline-none focus:ring-2 focus:ring-[#0C6780] disabled:opacity-50 disabled:cursor-default"
               >
                 {SLOT_DURATION_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -385,13 +385,13 @@ function DayRow({
                     bg-[#0C6780] text-white hover:bg-[#001E40]
                     disabled:opacity-40 disabled:cursor-default"
                 >
-                  {day.saving ? 'Saving…' : 'Save'}
+                  {day.saving ? 'Saving' : 'Save'}
                 </button>
               </div>
             )}
           </>
         ) : (
-          <span className="text-xs text-gray-400 ml-1">Not available</span>
+          <span className="text-xs text-faint ml-1">Not available</span>
         )}
       </div>
 
@@ -406,7 +406,7 @@ function DayRow({
   )
 }
 
-// ─── TimeSelect ───────────────────────────────────────────────────────────────
+//  TimeSelect 
 
 function TimeSelect({
   value,
@@ -425,7 +425,7 @@ function TimeSelect({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       aria-label={label}
-      className="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C6780] disabled:opacity-50 disabled:cursor-default"
+      className="text-xs border border-line rounded-lg px-2 py-1.5 bg-surface focus:outline-none focus:ring-2 focus:ring-[#0C6780] disabled:opacity-50 disabled:cursor-default"
     >
       {TIME_OPTIONS.map((t) => (
         <option key={t} value={t}>{formatTime(t)}</option>

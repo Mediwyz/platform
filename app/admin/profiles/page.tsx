@@ -29,7 +29,7 @@ const USER_TYPE_ICON: Record<string, React.ReactNode> = {
 }
 
 function getUserTypeIcon(userType: string) {
- return USER_TYPE_ICON[userType] || <FaUsers className="text-gray-600" />
+ return USER_TYPE_ICON[userType] || <FaUsers className="text-soft" />
 }
 
 function formatUserType(userType: string) {
@@ -86,23 +86,23 @@ export default function ProfileManagement() {
 
  if (loading) {
  return (
- <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+ <div className="min-h-screen bg-subtle flex items-center justify-center">
  <FaSpinner className="animate-spin text-3xl text-blue-600" />
  </div>
  )
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Profile Management</h1>
- <p className="text-gray-600">Manage all healthcare provider profiles</p>
+ <h1 className="text-2xl font-bold text-fg">Profile Management</h1>
+ <p className="text-soft">Manage all healthcare provider profiles</p>
  </div>
- <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-gray-50">
+ <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-subtle">
  Back to Dashboard
  </Link>
  </div>
@@ -118,7 +118,7 @@ export default function ProfileManagement() {
  )}
 
  {/* Filters */}
- <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
+ <div className="bg-surface rounded-xl p-6 shadow-lg mb-6">
  <div className="flex flex-wrap gap-4 items-center justify-between">
  <div className="flex flex-wrap gap-2">
  {STATUS_FILTER_OPTIONS.map(status => (
@@ -128,7 +128,7 @@ export default function ProfileManagement() {
  className={`px-4 py-2 rounded-lg font-medium capitalize transition ${
  statusFilter === status
  ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {status}
@@ -146,7 +146,7 @@ export default function ProfileManagement() {
  ))}
  </select>
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search profiles..."
@@ -161,26 +161,26 @@ export default function ProfileManagement() {
 
  {/* Profile Grid */}
  {filteredAccounts.length === 0 ? (
- <div className="text-center py-16 text-gray-500">
- <FaUsers className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="text-center py-16 text-soft">
+ <FaUsers className="text-4xl mx-auto mb-3 text-faint" />
  <p className="text-lg font-medium">No profiles found</p>
  <p className="text-sm mt-1">Try changing the filters above</p>
  </div>
  ) : (
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
  {filteredAccounts.map(account => (
- <div key={account.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
+ <div key={account.id} className="bg-surface rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
  <div className="p-6">
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-xl">
+ <div className="w-12 h-12 rounded-full bg-subtle flex items-center justify-center text-xl">
  {getUserTypeIcon(account.userType)}
  </div>
  <div>
- <h3 className="font-semibold text-gray-900">
+ <h3 className="font-semibold text-fg">
  {account.firstName} {account.lastName}
  </h3>
- <p className="text-sm text-gray-600">{formatUserType(account.userType)}</p>
+ <p className="text-sm text-soft">{formatUserType(account.userType)}</p>
  </div>
  </div>
  <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
@@ -194,15 +194,15 @@ export default function ProfileManagement() {
 
  <div className="space-y-2 text-sm">
  <div className="flex items-center justify-between">
- <span className="text-gray-600">Email:</span>
- <span className="font-medium text-gray-900 truncate ml-2">{account.email}</span>
+ <span className="text-soft">Email:</span>
+ <span className="font-medium text-fg truncate ml-2">{account.email}</span>
  </div>
  <div className="flex items-center justify-between">
- <span className="text-gray-600">Phone:</span>
+ <span className="text-soft">Phone:</span>
  <span className="font-medium">{account.phone || ' - '}</span>
  </div>
  <div className="flex items-center justify-between">
- <span className="text-gray-600">Joined:</span>
+ <span className="text-soft">Joined:</span>
  <span className="font-medium">{new Date(account.createdAt).toLocaleDateString()}</span>
  </div>
  </div>
@@ -234,30 +234,30 @@ export default function ProfileManagement() {
  )}
 
  {/* Summary Stats */}
- <div className="mt-8 bg-white rounded-xl p-6 shadow-lg">
- <h2 className="text-lg font-bold text-gray-900 mb-4">Summary Statistics</h2>
+ <div className="mt-8 bg-surface rounded-xl p-6 shadow-lg">
+ <h2 className="text-lg font-bold text-fg mb-4">Summary Statistics</h2>
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
  <div className="text-center">
  <p className="text-3xl font-bold text-blue-600">{accounts.length}</p>
- <p className="text-gray-600 text-sm">Total Profiles</p>
+ <p className="text-soft text-sm">Total Profiles</p>
  </div>
  <div className="text-center">
  <p className="text-3xl font-bold text-green-600">
  {accounts.filter(p => p.accountStatus === 'active').length}
  </p>
- <p className="text-gray-600 text-sm">Active</p>
+ <p className="text-soft text-sm">Active</p>
  </div>
  <div className="text-center">
  <p className="text-3xl font-bold text-orange-600">
  {accounts.filter(p => p.accountStatus === 'pending').length}
  </p>
- <p className="text-gray-600 text-sm">Pending</p>
+ <p className="text-soft text-sm">Pending</p>
  </div>
  <div className="text-center">
  <p className="text-3xl font-bold text-red-600">
  {accounts.filter(p => p.accountStatus === 'suspended').length}
  </p>
- <p className="text-gray-600 text-sm">Suspended</p>
+ <p className="text-soft text-sm">Suspended</p>
  </div>
  </div>
  </div>

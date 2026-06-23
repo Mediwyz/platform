@@ -166,9 +166,9 @@ export default function RegionalUsersPage() {
    <div className="mb-6">
     <div className="flex items-center gap-3 mb-2">
      <FaUserShield className="text-2xl text-purple-600" />
-     <h1 className="text-2xl font-bold text-[#001E40]">User Management</h1>
+     <h1 className="text-2xl font-bold text-fg">User Management</h1>
     </div>
-    <p className="text-gray-600">
+    <p className="text-soft">
      Manage user accounts - approve, suspend, or message users
      {pendingCount > 0 && (
       <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -179,25 +179,25 @@ export default function RegionalUsersPage() {
    </div>
 
    {/* Filters */}
-   <div className="bg-white rounded-xl p-4 shadow-lg mb-6">
+   <div className="bg-surface rounded-xl p-4 shadow-lg mb-6">
     <div className="flex flex-wrap gap-4 items-center">
      <div className="relative flex-1 min-w-[200px]">
-      <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
       <input
        type="text"
        placeholder="Search by name, email, or type..."
        value={searchQuery}
        onChange={(e) => setSearchQuery(e.target.value)}
-       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+       className="w-full pl-10 pr-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
      </div>
 
      <div className="flex items-center gap-2">
-      <FaFilter className="text-gray-400" />
+      <FaFilter className="text-faint" />
       <select
        value={typeFilter}
        onChange={(e) => setTypeFilter(e.target.value)}
-       className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+       className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
       >
        <option value="all">All Types</option>
        {allFilterTypes.map(code => (
@@ -209,7 +209,7 @@ export default function RegionalUsersPage() {
      <select
       value={statusFilter}
       onChange={(e) => setStatusFilter(e.target.value)}
-      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+      className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
      >
       <option value="all">All Statuses</option>
       <option value="active">Active</option>
@@ -221,23 +221,23 @@ export default function RegionalUsersPage() {
    </div>
 
    {/* Users List */}
-   <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+   <div className="bg-surface rounded-xl shadow-lg overflow-hidden">
     {loading ? (
      <div className="flex justify-center items-center py-16">
       <FaSpinner className="animate-spin text-3xl text-blue-500" />
      </div>
     ) : filteredUsers.length === 0 ? (
      <div className="text-center py-16">
-      <FaUsers className="text-4xl text-gray-300 mx-auto mb-3" />
-      <p className="text-gray-500 text-lg">No users found</p>
-      <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filters</p>
+      <FaUsers className="text-4xl text-faint mx-auto mb-3" />
+      <p className="text-soft text-lg">No users found</p>
+      <p className="text-faint text-sm mt-1">Try adjusting your search or filters</p>
      </div>
     ) : (
-     <div className="divide-y divide-gray-100">
+     <div className="divide-y divide-line">
       {filteredUsers.map((user) => (
        <div
         key={user.id}
-        className="p-4 flex flex-col md:flex-row md:items-center justify-between hover:bg-gray-50 transition-colors gap-4"
+        className="p-4 flex flex-col md:flex-row md:items-center justify-between hover:bg-subtle transition-colors gap-4"
        >
         <div className="flex items-center gap-4 flex-1">
          <Image
@@ -245,19 +245,19 @@ export default function RegionalUsersPage() {
           alt={`${user.firstName} ${user.lastName}`}
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full object-cover border border-gray-200 bg-gray-100 flex-shrink-0"
+          className="w-12 h-12 rounded-full object-cover border border-line bg-subtle flex-shrink-0"
           onError={e => { e.currentTarget.src = initialsAvatar(user.firstName, user.lastName) }}
          />
          <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900">
+          <h3 className="font-semibold text-fg">
            {user.firstName} {user.lastName}
           </h3>
-          <p className="text-sm text-gray-500 truncate">{user.email}</p>
+          <p className="text-sm text-soft truncate">{user.email}</p>
           <div className="flex flex-wrap gap-2 mt-1">
            <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
             {roleLabels[user.userType] || user.userType}
            </span>
-           <span className={`text-xs px-2 py-0.5 rounded-full ${statusColors[user.accountStatus] || 'bg-gray-100 text-gray-800'}`}>
+           <span className={`text-xs px-2 py-0.5 rounded-full ${statusColors[user.accountStatus] || 'bg-subtle text-fg'}`}>
             {user.accountStatus}
            </span>
            {user.verified && (
@@ -271,11 +271,11 @@ export default function RegionalUsersPage() {
             </span>
            )}
            {!user.subscription && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-subtle text-soft">
              No plan
             </span>
            )}
-           <span className="text-xs text-gray-400">
+           <span className="text-xs text-faint">
             Joined {new Date(user.createdAt).toLocaleDateString()}
            </span>
           </div>
@@ -287,7 +287,7 @@ export default function RegionalUsersPage() {
          <button
           onClick={() => handleMessage(user.id)}
           disabled={messageLoading === user.id}
-          className="flex items-center gap-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-1 px-3 py-2 bg-subtle text-soft rounded-lg text-sm hover:bg-line disabled:opacity-50 transition-colors"
          >
           {messageLoading === user.id ? <FaSpinner className="animate-spin" /> : <FaEnvelope />}
           Message
@@ -339,7 +339,7 @@ export default function RegionalUsersPage() {
     )}
 
     {!loading && filteredUsers.length > 0 && (
-     <div className="px-6 py-3 bg-gray-50 border-t text-sm text-gray-500">
+     <div className="px-6 py-3 bg-subtle border-t text-sm text-soft">
       Showing {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''}
      </div>
     )}

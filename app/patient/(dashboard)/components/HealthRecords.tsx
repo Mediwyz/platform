@@ -137,7 +137,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  case 'imaging': return 'bg-sky-50 text-orange-800 border-orange-200'
  case 'vaccination': return 'bg-sky-50 text-cyan-800 border-cyan-200'
  case 'surgery': return 'bg-sky-50 text-red-800 border-red-200'
- default: return 'bg-sky-50 text-gray-800 border-gray-200'
+ default: return 'bg-sky-50 text-fg border-line'
  }
  }
 
@@ -156,7 +156,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  const getVitalTrend = (current: number, previous: number) => {
  if (current > previous) return { icon: MdTrendingUp, color: 'text-red-500' }
  if (current < previous) return { icon: MdTrendingDown, color: 'text-green-500' }
- return { icon: FaMinus, color: 'text-gray-500' }
+ return { icon: FaMinus, color: 'text-soft' }
  }
 
  const sections = [
@@ -169,10 +169,10 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  const renderRecords = () => (
  <div className="space-y-3 sm:space-y-4">
  {filteredRecords.length === 0 ? (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-gray-200">
- <FaFileAlt className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Health Records Found</h3>
- <p className="text-gray-500 text-sm sm:text-base">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-line">
+ <FaFileAlt className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-base sm:text-lg font-semibold text-soft mb-2">No Health Records Found</h3>
+ <p className="text-soft text-sm sm:text-base">
  {searchQuery || filters.type !== 'all' || filters.doctor !== 'all' || filters.dateRange !== 'all'
  ? 'No records match your current filters.'
  : 'Your health records will appear here once they are added.'}
@@ -193,7 +193,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  filteredRecords.map((record) => (
  <div 
  key={record.id} 
- className="bg-white/30 rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all"
+ className="bg-white/30 rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden hover:shadow-xl transition-all"
  >
  <div className="p-4 sm:p-5 md:p-6">
  <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
@@ -204,13 +204,13 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
- <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{record.title}</h3>
+ <h3 className="text-base sm:text-lg font-semibold text-fg truncate">{record.title}</h3>
  <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium border ${getRecordTypeColor(record.type)}`}>
  {record.type.replace('_', ' ')}
  </span>
  </div>
  
- <div className="space-y-1 sm:space-y-0 sm:flex sm:flex-wrap sm:items-center sm:gap-3 md:gap-4 text-xs sm:text-sm text-gray-600 mb-3">
+ <div className="space-y-1 sm:space-y-0 sm:flex sm:flex-wrap sm:items-center sm:gap-3 md:gap-4 text-xs sm:text-sm text-soft mb-3">
  <div className="flex items-center gap-1">
  <FaUserMd className="text-blue-500" />
  <span className="truncate">{record.doctorResponsible}</span>
@@ -234,9 +234,9 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
- <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Summary:</p>
- <p className="text-gray-600 text-xs sm:text-sm">{record.summary}</p>
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <p className="text-xs sm:text-sm font-medium text-soft mb-1">Summary:</p>
+ <p className="text-soft text-xs sm:text-sm">{record.summary}</p>
  </div>
  </div>
  </div>
@@ -247,18 +247,18 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  onClick={() => setExpandedRecord(
  expandedRecord === record.id ? null : record.id
  )}
- className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm"
+ className="px-3 sm:px-4 py-1.5 sm:py-2 bg-surface transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm"
  >
  <FaEye />
  <span className="hidden sm:inline">{expandedRecord === record.id ? 'Less' : 'Details'}</span>
  </button>
  
- <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+ <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-surface transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
  <FaDownload />
  <span className="hidden sm:inline">Download</span>
  </button>
  
- <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+ <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-surface transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
  <FaShare />
  <span className="hidden sm:inline">Share</span>
  </button>
@@ -267,12 +267,12 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
 
  {/* Expanded Details */}
  {expandedRecord === record.id && (
- <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-3 sm:space-y-4">
+ <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-line space-y-3 sm:space-y-4">
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 md:gap-6">
  {/* Medical Details */}
  <div className="space-y-3 sm:space-y-4">
  {record.diagnosis && (
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h4 className="font-semibold text-blue-800 mb-2 flex items-center text-sm sm:text-base">
  <FaStethoscope className="mr-2" />
  Diagnosis
@@ -282,7 +282,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  )}
 
  {record.treatment && (
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h4 className="font-semibold text-green-800 mb-2 flex items-center text-sm sm:text-base">
  <FaPills className="mr-2" />
  Treatment
@@ -295,7 +295,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  {/* Additional Info */}
  <div className="space-y-3 sm:space-y-4">
  {record.notes && (
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h4 className="font-semibold text-yellow-800 mb-2 flex items-center text-sm sm:text-base">
  <FaFileAlt className="mr-2" />
  Notes
@@ -304,22 +304,22 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  )}
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
- <h4 className="font-semibold text-gray-800 mb-2 flex items-center text-sm sm:text-base">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <h4 className="font-semibold text-fg mb-2 flex items-center text-sm sm:text-base">
  <FaInfoCircle className="mr-2" />
  Record Details
  </h4>
  <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
  <div className="flex justify-between">
- <span className="text-gray-600">Record ID:</span>
+ <span className="text-soft">Record ID:</span>
  <span className="font-medium truncate ml-2">{record.id}</span>
  </div>
  <div className="flex justify-between">
- <span className="text-gray-600">Type:</span>
+ <span className="text-soft">Type:</span>
  <span className="font-medium capitalize">{record.type.replace('_', ' ')}</span>
  </div>
  <div className="flex justify-between">
- <span className="text-gray-600">Date & Time:</span>
+ <span className="text-soft">Date & Time:</span>
  <span className="font-medium">{new Date(record.date).toLocaleDateString()} {record.time}</span>
  </div>
  </div>
@@ -329,7 +329,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
 
  {/* Attachments */}
  {record.attachments && record.attachments.length > 0 && (
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <h4 className="font-semibold text-indigo-800 mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
  <FaFileAlt className="mr-2" />
  Attachments ({record.attachments.length})
@@ -339,7 +339,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  {record.attachments.map((attachment: any, index: number) => (
  <button
  key={index}
- className="w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-white transition text-left"
+ className="w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-surface transition text-left"
  >
  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-sky-50 rounded-lg flex items-center justify-center flex-shrink-0">
  <FaDownload className="text-indigo-600 text-xs sm:text-sm" />
@@ -365,10 +365,10 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  const renderVitals = () => {
  if (!patientData.vitalSigns || patientData.vitalSigns.length === 0) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-red-200">
- <FaThermometerHalf className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Vital Signs Data</h3>
- <p className="text-gray-500 text-sm sm:text-base">Your vital signs will be recorded during medical visits</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-red-200">
+ <FaThermometerHalf className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-base sm:text-lg font-semibold text-soft mb-2">No Vital Signs Data</h3>
+ <p className="text-soft text-sm sm:text-base">Your vital signs will be recorded during medical visits</p>
  </div>
  )
  }
@@ -379,15 +379,15 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Latest Vitals Overview */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 flex items-center">
+ <h3 className="text-base sm:text-lg font-semibold text-fg flex items-center">
  <FaThermometerHalf className="mr-2 text-orange-500" />
  Latest Vital Signs
  </h3>
  <div className="text-left sm:text-right">
- <p className="text-xs sm:text-sm text-gray-600">Recorded by {latestVitals.labTechnician}</p>
- <p className="text-xs text-gray-500">{latestVitals.facility}</p>
+ <p className="text-xs sm:text-sm text-soft">Recorded by {latestVitals.labTechnician}</p>
+ <p className="text-xs text-soft">{latestVitals.facility}</p>
  </div>
  </div>
 
@@ -403,11 +403,11 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return <trend.icon className={`text-xs sm:text-sm ${trend.color}`} />
  })()}
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">Blood Pressure</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">Blood Pressure</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-red-600">
  {latestVitals.bloodPressure.systolic}/{latestVitals.bloodPressure.diastolic}
  </p>
- <p className="text-xs text-gray-500">mmHg</p>
+ <p className="text-xs text-soft">mmHg</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
@@ -418,18 +418,18 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return <trend.icon className={`text-xs sm:text-sm ${trend.color}`} />
  })()}
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">Weight</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">Weight</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-blue-600">{latestVitals.weight}</p>
- <p className="text-xs text-gray-500">kg</p>
+ <p className="text-xs text-soft">kg</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
  <div className="flex items-center justify-center mb-1 sm:mb-2">
  <FaRuler className="text-green-500 text-base sm:text-lg md:text-xl mr-1 sm:mr-2" />
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">Height</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">Height</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-green-600">{latestVitals.height}</p>
- <p className="text-xs text-gray-500">cm</p>
+ <p className="text-xs text-soft">cm</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
@@ -440,9 +440,9 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return <trend.icon className={`text-xs sm:text-sm ${trend.color}`} />
  })()}
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">Temperature</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">Temperature</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}</p>
- <p className="text-xs text-gray-500">°C</p>
+ <p className="text-xs text-soft">C</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
@@ -453,9 +453,9 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return <trend.icon className={`text-xs sm:text-sm ${trend.color}`} />
  })()}
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">O2 Saturation</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">O2 Saturation</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-purple-600">{latestVitals.oxygenSaturation}</p>
- <p className="text-xs text-gray-500">%</p>
+ <p className="text-xs text-soft">%</p>
  </div>
 
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 text-center">
@@ -466,40 +466,40 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return <trend.icon className={`text-xs sm:text-sm ${trend.color}`} />
  })()}
  </div>
- <p className="text-xs text-gray-600 mb-0.5 sm:mb-1">Heart Rate</p>
+ <p className="text-xs text-soft mb-0.5 sm:mb-1">Heart Rate</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-pink-600">{latestVitals.heartRate}</p>
- <p className="text-xs text-gray-500">bpm</p>
+ <p className="text-xs text-soft">bpm</p>
  </div>
  </div>
 
  <div className="text-center">
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  Recorded on {new Date(latestVitals.date).toLocaleDateString()} at {latestVitals.time}
  </p>
  </div>
  </div>
 
  {/* Vitals History */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-3 sm:mb-4 flex items-center">
  <FaHistory className="mr-2 text-blue-500" />
  Vitals History
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
  {patientData.vitalSigns.map((vital, index) => (
- <div key={vital.id} className="bg-white/70 border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
+ <div key={vital.id} className="bg-white/70 border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
  <div>
- <p className="font-medium text-gray-900 text-sm sm:text-base">
+ <p className="font-medium text-fg text-sm sm:text-base">
  {new Date(vital.date).toLocaleDateString('en-US', { 
  weekday: 'short', 
  month: 'short', 
  day: 'numeric' 
  })}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">
- {vital.time} • {vital.labTechnician} • {vital.facility}
+ <p className="text-xs sm:text-sm text-soft">
+ {vital.time}  {vital.labTechnician}  {vital.facility}
  </p>
  </div>
  {index === 0 && (
@@ -511,27 +511,27 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
 
  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 text-xs sm:text-sm">
  <div className="text-center">
- <p className="text-gray-600">BP</p>
+ <p className="text-soft">BP</p>
  <p className="font-medium">{vital.bloodPressure.systolic}/{vital.bloodPressure.diastolic}</p>
  </div>
  <div className="text-center">
- <p className="text-gray-600">HR</p>
+ <p className="text-soft">HR</p>
  <p className="font-medium">{vital.heartRate} bpm</p>
  </div>
  <div className="text-center">
- <p className="text-gray-600">Temp</p>
- <p className="font-medium">{vital.temperature}°C</p>
+ <p className="text-soft">Temp</p>
+ <p className="font-medium">{vital.temperature}C</p>
  </div>
  <div className="text-center">
- <p className="text-gray-600">Weight</p>
+ <p className="text-soft">Weight</p>
  <p className="font-medium">{vital.weight} kg</p>
  </div>
  <div className="text-center">
- <p className="text-gray-600">O2 Sat</p>
+ <p className="text-soft">O2 Sat</p>
  <p className="font-medium">{vital.oxygenSaturation}%</p>
  </div>
  <div className="text-center">
- <p className="text-gray-600">Height</p>
+ <p className="text-soft">Height</p>
  <p className="font-medium">{vital.height} cm</p>
  </div>
  </div>
@@ -546,10 +546,10 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  const renderMetrics = () => {
  if (!patientData.healthMetrics) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-green-200">
- <FaChartLine className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Health Metrics Available</h3>
- <p className="text-gray-500 text-sm sm:text-base">Health metrics will be available after your first comprehensive checkup</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-green-200">
+ <FaChartLine className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-base sm:text-lg font-semibold text-soft mb-2">No Health Metrics Available</h3>
+ <p className="text-soft text-sm sm:text-base">Health metrics will be available after your first comprehensive checkup</p>
  </div>
  )
  }
@@ -575,75 +575,75 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  {/* Detailed Metrics */}
  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
  {/* Cardiovascular Health */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
  <h4 className="font-semibold text-red-800 mb-3 sm:mb-4 flex items-center text-sm sm:text-base">
  <FaHeart className="mr-2 text-red-500" />
  Cardiovascular Health
  </h4>
  <div className="space-y-2 sm:space-y-3">
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Blood Pressure</span>
+ <span className="text-xs sm:text-sm text-soft">Blood Pressure</span>
  <span className="font-medium text-red-600 text-xs sm:text-sm">
  {metrics.bloodPressure.systolic}/{metrics.bloodPressure.diastolic} mmHg
  </span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Heart Rate Variability</span>
+ <span className="text-xs sm:text-sm text-soft">Heart Rate Variability</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.heartRateVariability} ms</span>
  </div>
- <div className="text-xs text-gray-500">
+ <div className="text-xs text-soft">
  Last updated: {metrics.bloodPressure.date}
  </div>
  </div>
  </div>
 
  {/* Cholesterol Profile */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
  <h4 className="font-semibold text-purple-800 mb-3 sm:mb-4 flex items-center text-sm sm:text-base">
  <FaNutritionix className="mr-2 text-purple-500" />
  Cholesterol Profile
  </h4>
  <div className="space-y-2 sm:space-y-3">
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Total</span>
+ <span className="text-xs sm:text-sm text-soft">Total</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.cholesterol.total} mg/dL</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">LDL</span>
+ <span className="text-xs sm:text-sm text-soft">LDL</span>
  <span className="font-medium text-red-600 text-xs sm:text-sm">{metrics.cholesterol.ldl} mg/dL</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">HDL</span>
+ <span className="text-xs sm:text-sm text-soft">HDL</span>
  <span className="font-medium text-green-600 text-xs sm:text-sm">{metrics.cholesterol.hdl} mg/dL</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Triglycerides</span>
+ <span className="text-xs sm:text-sm text-soft">Triglycerides</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.cholesterol.triglycerides} mg/dL</span>
  </div>
  </div>
  </div>
 
  {/* Body Composition */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
  <h4 className="font-semibold text-blue-800 mb-3 sm:mb-4 flex items-center text-sm sm:text-base">
  <FaWeight className="mr-2 text-blue-500" />
  Body Composition
  </h4>
  <div className="space-y-2 sm:space-y-3">
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">BMI</span>
+ <span className="text-xs sm:text-sm text-soft">BMI</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.bmi.value}</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Category</span>
+ <span className="text-xs sm:text-sm text-soft">Category</span>
  <span className="font-medium text-blue-600 text-xs sm:text-sm">{metrics.bmi.category}</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Muscle Mass</span>
+ <span className="text-xs sm:text-sm text-soft">Muscle Mass</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.muscleMass} kg</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-xs sm:text-sm text-gray-600">Visceral Fat</span>
+ <span className="text-xs sm:text-sm text-soft">Visceral Fat</span>
  <span className="font-medium text-xs sm:text-sm">{metrics.visceralFat}</span>
  </div>
  </div>
@@ -690,8 +690,8 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
 
  return (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-6 flex items-center">
  <FaHistory className="mr-2 text-blue-500" />
  Health Timeline
  </h3>
@@ -715,19 +715,19 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
  
  {/* Event content */}
- <div className="flex-1 bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
+ <div className="flex-1 bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{event.title}</h4>
+ <h4 className="font-semibold text-fg text-sm sm:text-base">{event.title}</h4>
  <div className="text-left sm:text-right">
- <p className="text-xs sm:text-sm font-medium text-gray-700">
+ <p className="text-xs sm:text-sm font-medium text-soft">
  {new Date(event.date).toLocaleDateString()}
  </p>
- <p className="text-xs text-gray-500">{event.time}</p>
+ <p className="text-xs text-soft">{event.time}</p>
  </div>
  </div>
- <p className="text-xs sm:text-sm text-gray-600 mb-2">{event.description}</p>
+ <p className="text-xs sm:text-sm text-soft mb-2">{event.description}</p>
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
- <p className="text-xs text-gray-500">
+ <p className="text-xs text-soft">
  <FaUserMd className="inline mr-1" />
  {event.provider}
  </p>
@@ -749,20 +749,20 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  return (
  <div className="flex items-center justify-center py-12">
  <FaFileAlt className="animate-pulse text-blue-500 text-2xl mr-3" />
- <span className="text-gray-500">Loading health records...</span>
+ <span className="text-soft">Loading health records...</span>
  </div>
  )
  }
 
  if (medicalRecords.length === 0 && !patientData.vitalSigns && !patientData.healthMetrics) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-blue-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-blue-200">
  <div className="bg-sky-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-4">
  <FaFileAlt className="text-blue-500 text-2xl sm:text-3xl" />
  </div>
- <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No Health Records</h3>
- <p className="text-gray-500 mb-6 text-sm sm:text-base">Your health records will appear here once they are added</p>
- <Link href="/search/doctors" className="bg-white transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base w-fit">
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2">No Health Records</h3>
+ <p className="text-soft mb-6 text-sm sm:text-base">Your health records will appear here once they are added</p>
+ <Link href="/search/doctors" className="bg-surface transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base w-fit">
  <FaPlus />
  Request Medical Records
  </Link>
@@ -796,22 +796,22 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Search and Filters */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-gray-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-line">
  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
  <div className="flex-1 relative">
- <FaSearch className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm sm:text-base" />
+ <FaSearch className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-faint text-sm sm:text-base" />
  <input
  type="text"
  placeholder="Search records, diagnoses..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition text-sm sm:text-base"
+ className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border border-line rounded-lg sm:rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition text-sm sm:text-base"
  />
  </div>
 
  <button
  onClick={() => setShowFilters(!showFilters)}
- className="px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-gray-700 rounded-lg sm:rounded-xl transition flex items-center justify-center gap-2 text-sm sm:text-base"
+ className="px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-soft rounded-lg sm:rounded-xl transition flex items-center justify-center gap-2 text-sm sm:text-base"
  >
  <FaFilter />
  <span className="hidden sm:inline">Filters</span>
@@ -820,11 +820,11 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {showFilters && (
- <div className="mt-4 pt-4 border-t border-gray-200 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-3 md:gap-4">
+ <div className="mt-4 pt-4 border-t border-line space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-3 md:gap-4">
  <select
  value={filters.type}
  onChange={(e) => setFilters({ ...filters, type: e.target.value as FilterOptions['type'] })}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
  >
  <option value="all">All Types</option>
  <option value="consultation">Consultations</option>
@@ -838,7 +838,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  <select
  value={filters.dateRange}
  onChange={(e) => setFilters({ ...filters, dateRange: e.target.value as FilterOptions['dateRange'] })}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
  >
  <option value="all">All Time</option>
  <option value="last_week">Last Week</option>
@@ -850,7 +850,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  <select
  value={filters.doctor}
  onChange={(e) => setFilters({ ...filters, doctor: e.target.value })}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-sm sm:text-base"
  >
  <option value="all">All Doctors</option>
  {doctors.map(doctor => (
@@ -862,9 +862,9 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Mobile Accordion / Desktop Tabs */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden">
  {/* Desktop Tab Navigation */}
- <div className="hidden sm:block border-b border-gray-200">
+ <div className="hidden sm:block border-b border-line">
  <div className="flex overflow-x-auto">
  {sections.map((tab) => (
  <button
@@ -873,7 +873,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  className={`flex-shrink-0 px-3 md:px-6 py-3 md:py-4 text-center font-medium transition-all flex items-center gap-1.5 md:gap-2 ${
  activeTab === tab.id
  ? `text-${tab.color}-600 border-b-2 border-current from-${tab.color}-50 to-transparent`
- : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+ : 'text-soft hover:text-fg hover:bg-subtle'
  }`}
  title={tab.label}
  >
@@ -894,7 +894,7 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Mobile fixed bottom tab bar */}
- <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center py-2 px-1 z-50 shadow-lg">
+ <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-line flex justify-around items-center py-2 px-1 z-50 shadow-lg">
  {sections.map((section) => {
  const Icon = section.icon
  const isActive = activeTab === section.id
@@ -902,9 +902,9 @@ const HealthRecords: React.FC<Props> = ({ patientData }) => {
  <button
  key={section.id}
  onClick={() => setActiveTab(section.id as typeof activeTab)}
- className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-gray-400'}`}
+ className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-faint'}`}
  >
- <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+ <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-faint'}`} />
  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-1" />}
  </button>
  )

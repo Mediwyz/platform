@@ -290,33 +290,33 @@ export default function InsuranceDashboardPage() {
     </div>
    </div>
 
-   <div className="mt-12 bg-white rounded-2xl p-6 shadow-lg">
-    <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+   <div className="mt-12 bg-surface rounded-2xl p-6 shadow-lg">
+    <h2 className="text-xl font-bold text-fg mb-6">Quick Actions</h2>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
      <Link
       href="/insurance/clients"
-      className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-blue-500 hover:bg-blue-50 transition group"
+      className="p-4 border-2 border-dashed border-line rounded-lg text-center hover:border-blue-500 hover:bg-blue-50 transition group"
      >
       <FaUsers className="text-2xl text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
       <p className="text-sm font-medium">View Clients</p>
      </Link>
      <Link
       href="/insurance/claims"
-      className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-green-500 hover:bg-green-50 transition group"
+      className="p-4 border-2 border-dashed border-line rounded-lg text-center hover:border-green-500 hover:bg-green-50 transition group"
      >
       <FaClock className="text-2xl text-green-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
       <p className="text-sm font-medium">Process Claims</p>
      </Link>
      <Link
       href="/insurance/plans"
-      className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-purple-500 hover:bg-purple-50 transition group"
+      className="p-4 border-2 border-dashed border-line rounded-lg text-center hover:border-purple-500 hover:bg-purple-50 transition group"
      >
       <FaShieldAlt className="text-2xl text-purple-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
       <p className="text-sm font-medium">Manage Plans</p>
      </Link>
      <Link
       href="/insurance/billing"
-      className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-orange-500 hover:bg-orange-50 transition group"
+      className="p-4 border-2 border-dashed border-line rounded-lg text-center hover:border-orange-500 hover:bg-orange-50 transition group"
      >
       <FaChartLine className="text-2xl text-orange-500 mx-auto mb-2 group-hover:scale-110 transition-transform" />
       <p className="text-sm font-medium">View Billing</p>

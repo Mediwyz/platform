@@ -189,27 +189,27 @@ export default function RevenueAnalytics({ timeRange, region }: { timeRange: str
  </div>
 
  {/* Revenue Streams */}
- <div className="bg-white rounded-xl p-6 shadow-lg lg:col-span-2">
+ <div className="bg-surface rounded-xl p-6 shadow-lg lg:col-span-2">
  <h3 className="text-lg font-semibold mb-4">Revenue Streams Breakdown</h3>
  <div className="space-y-3">
  {revenueStreams.map((stream, idx) => (
- <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+ <div key={idx} className="flex items-center justify-between p-3 bg-subtle rounded-lg">
  <div className="flex items-center gap-3">
  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${iconColors.bg[idx]}`}>
  <FaDollarSign className={iconColors.text[idx]} />
  </div>
  <div>
- <p className="font-medium text-gray-900">{stream.source}</p>
- <p className="text-sm text-gray-500">{stream.percentage}% of total</p>
+ <p className="font-medium text-fg">{stream.source}</p>
+ <p className="text-sm text-soft">{stream.percentage}% of total</p>
  </div>
  </div>
  <div className="text-right">
- <p className="font-semibold text-gray-900">
+ <p className="font-semibold text-fg">
  {currentCurrency.symbol}
  {(stream.amount * currentCurrency.rate).toLocaleString('en-US', { maximumFractionDigits: 0 })}
  </p>
  <p className={`text-sm ${stream.trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
- {stream.trend > 0 ? '▲' : '▼'} {stream.trend}%
+ {stream.trend > 0 ? '' : ''} {stream.trend}%
  </p>
  </div>
  </div>
@@ -220,7 +220,7 @@ export default function RevenueAnalytics({ timeRange, region }: { timeRange: str
 
  {/* Revenue Trend & Distribution Charts */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <h3 className="text-lg font-semibold mb-4">Revenue Trend</h3>
  {/* ---- FIX: Added relative positioning and defined height ---- */}
  <div className="relative h-64">
@@ -238,7 +238,7 @@ export default function RevenueAnalytics({ timeRange, region }: { timeRange: str
  </div>
  </div>
  
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <h3 className="text-lg font-semibold mb-4">Revenue Distribution</h3>
  {/* ---- FIX: Added relative positioning and defined height ---- */}
  <div className="relative h-64">

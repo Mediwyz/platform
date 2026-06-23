@@ -81,7 +81,7 @@ export default function CompanyDangerZone({
         <div className="flex gap-2">
           <button
             onClick={() => setMode('transfer')}
-            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-red-700 border border-red-300 rounded-lg text-xs font-semibold hover:bg-red-100"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-surface text-red-700 border border-red-300 rounded-lg text-xs font-semibold hover:bg-red-100"
           >
             <FaExchangeAlt /> Transfer ownership
           </button>
@@ -95,39 +95,39 @@ export default function CompanyDangerZone({
       )}
 
       {mode !== 'idle' && (
-        <div className="bg-white border border-red-200 rounded-lg p-4 space-y-3">
+        <div className="bg-surface border border-red-200 rounded-lg p-4 space-y-3">
           {mode === 'transfer' && (
             <label className="block">
-              <span className="text-xs font-medium text-gray-700">New owner&apos;s email</span>
+              <span className="text-xs font-medium text-soft">New owner&apos;s email</span>
               <input
                 type="email"
                 value={newOwnerEmail}
                 onChange={e => setNewOwnerEmail(e.target.value)}
-                className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                 placeholder="user@example.com"
               />
             </label>
           )}
           <label className="block">
-            <span className="text-xs font-medium text-gray-700">
+            <span className="text-xs font-medium text-soft">
               Type <strong>{companyName}</strong> to confirm
             </span>
             <input
               type="text"
               value={confirmText}
               onChange={e => setConfirmText(e.target.value)}
-              className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+              className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
             />
           </label>
           {error && <p className="text-xs text-red-600">{error}</p>}
           <div className="flex gap-2 justify-end">
-            <button onClick={reset} className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+            <button onClick={reset} className="px-3 py-2 text-sm text-soft hover:bg-subtle rounded-lg">Cancel</button>
             <button
               onClick={mode === 'transfer' ? transfer : remove}
               disabled={busy || disabled || (mode === 'transfer' && !newOwnerEmail)}
               className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50"
             >
-              {busy ? 'Working…' : mode === 'transfer' ? 'Transfer ownership' : 'Delete company'}
+              {busy ? 'Working' : mode === 'transfer' ? 'Transfer ownership' : 'Delete company'}
             </button>
           </div>
         </div>

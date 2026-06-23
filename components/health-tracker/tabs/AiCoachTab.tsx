@@ -59,7 +59,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
       onClick={() => setShowChat(false)}
       className="text-xs text-[#0C6780] dark:text-accent hover:underline font-medium"
      >
-      ← Back
+       Back
      </button>
      <div className="flex items-center gap-2">
       <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#001E40] to-[#0C6780] flex items-center justify-center">
@@ -87,7 +87,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
       <p className="font-bold text-lg">Wyzo - Your Health AI</p>
       <div className="flex items-center gap-1.5 mt-0.5">
        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-       <span className="text-white/70 text-xs">Online • Responds instantly</span>
+       <span className="text-white/70 text-xs">Online  Responds instantly</span>
       </div>
      </div>
     </div>
@@ -96,7 +96,7 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
     </p>
     <button
      onClick={() => setShowChat(true)}
-     className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#001E40] rounded-xl font-bold text-sm hover:bg-white/90 transition-colors"
+     className="flex items-center gap-2 px-5 py-2.5 bg-surface text-fg rounded-xl font-bold text-sm hover:bg-white/90 transition-colors"
     >
      <FaRobot className="text-[#0C6780]" />
      Open Wyzo Chat

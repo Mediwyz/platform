@@ -41,7 +41,7 @@ export default function ProviderListCard({
  badge,
 }: ProviderListCardProps) {
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-3 sm:p-4 flex flex-col sm:flex-row gap-3">
  {/* Left: Avatar + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -54,11 +54,11 @@ export default function ProviderListCard({
  alt={avatar.alt}
  width={48}
  height={48}
- className={`rounded-full object-cover border-2 ${avatar.borderColor || 'border-gray-100'}`}
+ className={`rounded-full object-cover border-2 ${avatar.borderColor || 'border-line'}`}
  />
  ) : (
  <div
- className={`w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-lg text-gray-400 border-2 ${avatar.borderColor || 'border-gray-100'}`}
+ className={`w-12 h-12 rounded-full bg-subtle flex items-center justify-center text-lg text-faint border-2 ${avatar.borderColor || 'border-line'}`}
  >
  {avatar.fallbackIcon}
  </div>
@@ -74,7 +74,7 @@ export default function ProviderListCard({
  {/* Info */}
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
- <h3 className="text-sm font-bold text-gray-900 truncate">
+ <h3 className="text-sm font-bold text-fg truncate">
  {namePrefix && `${namePrefix} `}{name}
  </h3>
  {badge && (
@@ -93,7 +93,7 @@ export default function ProviderListCard({
 
  {/* Right: Price + Buttons */}
  {rightSection && (
- <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-3 border-t sm:border-t-0 border-gray-100 pt-2 sm:pt-0">
+ <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-3 border-t sm:border-t-0 border-line pt-2 sm:pt-0">
  {rightSection}
  </div>
  )}
@@ -112,7 +112,7 @@ export function CardButton({
  const base = 'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap'
  const variants = {
  primary: 'bg-blue-600 text-white hover:bg-blue-700',
- secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+ secondary: 'bg-subtle text-soft hover:bg-line',
  danger: 'bg-red-600 text-white hover:bg-red-700',
  }
  return (

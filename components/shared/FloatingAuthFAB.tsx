@@ -44,7 +44,7 @@ export default function FloatingAuthFAB() {
 
   return (
     <>
-      {/* ── Login modal (global, shared across the app) ───────────── */}
+      {/*  Login modal (global, shared across the app)  */}
       <AnimatePresence>
         {loginModalOpen && (
           <>
@@ -62,7 +62,7 @@ export default function FloatingAuthFAB() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 24 }}
               transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-              className="fixed inset-x-4 bottom-20 sm:inset-auto sm:bottom-44 sm:right-6 z-[90] sm:w-[340px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="fixed inset-x-4 bottom-20 sm:inset-auto sm:bottom-44 sm:right-6 z-[90] sm:w-[340px] bg-surface rounded-2xl shadow-2xl overflow-hidden"
               style={{ boxShadow: '0 32px 80px rgba(0,30,64,0.30)' }}
             >
               {/* Header */}
@@ -92,7 +92,7 @@ export default function FloatingAuthFAB() {
                   onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                   autoComplete="email"
                   required
-                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                  className="w-full px-3 py-2.5 text-sm border border-line rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
                 />
                 <input
                   type="password"
@@ -101,7 +101,7 @@ export default function FloatingAuthFAB() {
                   onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                   autoComplete="current-password"
                   required
-                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                  className="w-full px-3 py-2.5 text-sm border border-line rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
                 />
 
                 {error && (
@@ -115,14 +115,14 @@ export default function FloatingAuthFAB() {
                     hover:bg-[#0a5a6e] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {loading ? <FaSpinner className="animate-spin text-xs" /> : <FaLock className="text-xs" />}
-                  {loading ? 'Signing in…' : 'Sign In & Continue'}
+                  {loading ? 'Signing in' : 'Sign In & Continue'}
                 </button>
 
                 <div className="flex items-center justify-between pt-0.5">
                   <Link href="/signup" className="text-xs text-[#0C6780] hover:underline font-medium">
                     Create free account
                   </Link>
-                  <Link href="/login" className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1">
+                  <Link href="/login" className="text-xs text-faint hover:text-soft flex items-center gap-1">
                     Full login <FaArrowRight className="text-[8px]" />
                   </Link>
                 </div>

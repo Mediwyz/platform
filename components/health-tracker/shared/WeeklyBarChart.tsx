@@ -26,15 +26,15 @@ export default function WeeklyBarChart({
  globalTarget !== undefined ? Math.min((globalTarget / maxValue) * 100, 100) : null
 
  return (
- <div className="bg-white rounded-lg shadow-sm p-4">
+ <div className="bg-surface rounded-lg shadow-sm p-4">
  <div className="relative" style={{ height: maxHeight }}>
  {/* Target line */}
  {targetPercent !== null && (
  <div
- className="absolute left-0 right-0 border-t-2 border-dashed border-gray-300 z-10"
+ className="absolute left-0 right-0 border-t-2 border-dashed border-line z-10"
  style={{ bottom: `${targetPercent}%` }}
  >
- <span className="absolute -top-4 right-0 text-xs text-gray-400">
+ <span className="absolute -top-4 right-0 text-xs text-faint">
  Target: {globalTarget}{unit ? ` ${unit}` : ''}
  </span>
  </div>
@@ -47,7 +47,7 @@ export default function WeeklyBarChart({
  return (
  <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
  {/* Value label */}
- <span className="text-xs text-gray-500 mb-1 font-medium">
+ <span className="text-xs text-soft mb-1 font-medium">
  {item.value > 0 ? item.value : ''}
  </span>
  {/* Bar */}
@@ -68,7 +68,7 @@ export default function WeeklyBarChart({
  <div className="flex justify-between mt-2">
  {data.map((item, i) => (
  <div key={i} className="flex-1 text-center">
- <span className="text-xs text-gray-400">{item.label}</span>
+ <span className="text-xs text-faint">{item.label}</span>
  </div>
  ))}
  </div>

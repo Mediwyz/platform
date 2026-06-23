@@ -85,9 +85,9 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  const sectionLabel = sectionType.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
  return (
- <div className="bg-white rounded-xl shadow p-6 space-y-6">
+ <div className="bg-surface rounded-xl shadow p-6 space-y-6">
  <div className="flex items-center justify-between">
- <h2 className="text-xl font-bold text-gray-900">{sectionLabel} Section</h2>
+ <h2 className="text-xl font-bold text-fg">{sectionLabel} Section</h2>
  <button
  onClick={addItem}
  className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition"
@@ -100,22 +100,22 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  {(data?.title !== undefined || data?.sectionTitle !== undefined || title) && (
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Section Title</label>
+ <label className="block text-sm font-medium text-soft mb-1">Section Title</label>
  <input
  type="text"
  value={title}
  onChange={(e) => setTitle(e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Section title"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Section Subtitle</label>
+ <label className="block text-sm font-medium text-soft mb-1">Section Subtitle</label>
  <input
  type="text"
  value={subtitle}
  onChange={(e) => setSubtitle(e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Section subtitle"
  />
  </div>
@@ -124,7 +124,7 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
 
  {/* Items */}
  {items.length === 0 && (
- <div className="text-center py-10 text-gray-500">
+ <div className="text-center py-10 text-soft">
  <p className="text-lg font-medium">No items yet</p>
  <p className="text-sm mt-1">Click &quot;Add Item&quot; to get started</p>
  </div>
@@ -134,28 +134,28 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  {items.map((item, index) => (
  <div
  key={index}
- className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+ className="p-4 bg-subtle rounded-lg border border-line"
  >
  <div className="flex items-center justify-between mb-3">
- <span className="text-sm font-semibold text-gray-600">
+ <span className="text-sm font-semibold text-soft">
  Item {index + 1}
  </span>
  <div className="flex items-center gap-1">
  <button
  onClick={() => moveItem(index, 'up')}
  disabled={index === 0}
- className="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+ className="p-1.5 bg-surface border border-line rounded hover:bg-subtle disabled:opacity-30 disabled:cursor-not-allowed transition"
  title="Move up"
  >
- <FaArrowUp className="text-xs text-gray-600" />
+ <FaArrowUp className="text-xs text-soft" />
  </button>
  <button
  onClick={() => moveItem(index, 'down')}
  disabled={index === items.length - 1}
- className="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+ className="p-1.5 bg-surface border border-line rounded hover:bg-subtle disabled:opacity-30 disabled:cursor-not-allowed transition"
  title="Move down"
  >
- <FaArrowDown className="text-xs text-gray-600" />
+ <FaArrowDown className="text-xs text-soft" />
  </button>
  <button
  onClick={() => removeItem(index)}
@@ -170,20 +170,20 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
  {fields.map((field) => (
  <div key={field.key} className={field.type === 'textarea' ? 'md:col-span-2 lg:col-span-3' : ''}>
- <label className="block text-xs font-medium text-gray-600 mb-1">{field.label}</label>
+ <label className="block text-xs font-medium text-soft mb-1">{field.label}</label>
  {field.type === 'textarea' ? (
  <textarea
  value={item[field.key] || ''}
  onChange={(e) => handleItemChange(index, field.key, e.target.value)}
  rows={2}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder={field.label}
  />
  ) : field.type === 'select' ? (
  <select
  value={item[field.key] || ''}
  onChange={(e) => handleItemChange(index, field.key, e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-surface"
  >
  <option value="">Select {field.label}</option>
  {field.options?.map((opt) => (
@@ -197,7 +197,7 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  type="number"
  value={item[field.key] ?? ''}
  onChange={(e) => handleItemChange(index, field.key, Number(e.target.value))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder={field.label}
  />
  ) : (
@@ -205,7 +205,7 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  type="text"
  value={item[field.key] || ''}
  onChange={(e) => handleItemChange(index, field.key, e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder={field.label}
  />
  )}
@@ -217,7 +217,7 @@ export default function SectionItemsEditor({ sectionType, data, fields, onSave }
  </div>
 
  {/* Save Button */}
- <div className="flex justify-end pt-4 border-t border-gray-200">
+ <div className="flex justify-end pt-4 border-t border-line">
  <button
  onClick={handleSave}
  disabled={saving}

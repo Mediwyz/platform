@@ -49,34 +49,34 @@ export default function AudioCallListPage() {
       <DashboardPageHeader icon={FaPhone} title={t('audio.title')} description={t('audio.subtitle')} />
 
       {loading && (
-        <div className="h-24 bg-white rounded-xl border border-gray-200 flex items-center justify-center">
-          <FaSpinner className="animate-spin text-gray-400" />
+        <div className="h-24 bg-surface rounded-xl border border-line flex items-center justify-center">
+          <FaSpinner className="animate-spin text-faint" />
         </div>
       )}
 
       {!loading && rooms.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
-          <FaPhone className="text-4xl text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">{t('audio.empty.title')}</p>
-          <p className="text-sm text-gray-400 mt-1">{t('audio.empty.subtitle')}</p>
+        <div className="bg-surface rounded-xl border border-line p-10 text-center">
+          <FaPhone className="text-4xl text-faint mx-auto mb-3" />
+          <p className="font-medium text-soft">{t('audio.empty.title')}</p>
+          <p className="text-sm text-faint mt-1">{t('audio.empty.subtitle')}</p>
         </div>
       )}
 
       <div className="space-y-3">
         {rooms.map(room => (
-          <div key={room.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+          <div key={room.id} className="bg-surface rounded-xl border border-line p-4 flex items-center gap-4">
             <div className="w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0">
               <FaPhone className="text-cyan-700" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-medium text-gray-900 truncate">{room.participantName}</p>
-              <p className="text-xs text-gray-500 flex items-center gap-1">
+              <p className="font-medium text-fg truncate">{room.participantName}</p>
+              <p className="text-xs text-soft flex items-center gap-1">
                 <FaClock className="w-3 h-3" />
                 {new Date(room.scheduledAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                <span className="mx-1">·</span>
+                <span className="mx-1"></span>
                 <span>{room.reason}</span>
                 {room.status === 'ended' && (
-                  <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Ended</span>
+                  <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-subtle text-soft">Ended</span>
                 )}
               </p>
             </div>
@@ -88,7 +88,7 @@ export default function AudioCallListPage() {
                 <FaPlay className="w-3 h-3" /> {t('audio.action.join')}
               </Link>
             ) : (
-              <span className="text-xs text-gray-400"> - </span>
+              <span className="text-xs text-faint"> - </span>
             )}
           </div>
         ))}

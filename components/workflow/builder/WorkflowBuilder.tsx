@@ -52,10 +52,10 @@ const OUTPUT_OPTIONS = [
 ]
 
 const CUSTOM_STEP_EMOJIS = [
-  '📋','✅','⏳','🔍','📝','💬','📞','🚗',
-  '🏥','🩺','💊','🩹','🧪','🔬','📄','🤝',
-  '💪','🌡️','🫀','🧠','👁️','🦷','🩻','🧬',
-  '🏃','🛏️','📦','🔑','🌟','🎯','📱','✍️',
+  '','','','','','','','',
+  '','','','','','','','',
+  '','','','','','','','',
+  '','','','','','','','',
 ]
 
 // Status codes that the engine auto-generates - used to classify legacy steps on load.
@@ -90,7 +90,7 @@ function derivePaymentTiming(mode: string): string {
   return 'ON_ACCEPTANCE'
 }
 
-// ─── Step template library ────────────────────────────────────────────────
+//  Step template library 
 
 type PartialStep = Omit<WorkflowStep, 'order'>
 
@@ -291,10 +291,10 @@ function deriveStepsFromConfig(mode: string, sample: string, output: string): Wo
   return base.map((s, i) => ({ ...s, order: i + 1 })) as WorkflowStep[]
 }
 
-// ─── Horizontal step illustration ────────────────────────────────────────
+//  Horizontal step illustration 
 
 const STEP_CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  pending:   { bg: 'bg-gray-50',    border: 'border-gray-300',   text: 'text-gray-600' },
+  pending:   { bg: 'bg-subtle',    border: 'border-line',   text: 'text-soft' },
   completed: { bg: 'bg-green-50',   border: 'border-green-300',  text: 'text-green-700' },
   cancelled: { bg: 'bg-red-50',     border: 'border-red-200',    text: 'text-red-600' },
   video:     { bg: 'bg-blue-50',    border: 'border-blue-300',   text: 'text-blue-700' },
@@ -302,7 +302,7 @@ const STEP_CATEGORY_STYLES: Record<string, { bg: string; border: string; text: s
   transport: { bg: 'bg-amber-50',   border: 'border-amber-300',  text: 'text-amber-700' },
   sample:    { bg: 'bg-purple-50',  border: 'border-purple-300', text: 'text-purple-700' },
   content:   { bg: 'bg-indigo-50',  border: 'border-indigo-300', text: 'text-indigo-700' },
-  default:   { bg: 'bg-[#0C6780]/5', border: 'border-[#0C6780]/25', text: 'text-[#001E40]' },
+  default:   { bg: 'bg-[#0C6780]/5', border: 'border-[#0C6780]/25', text: 'text-fg' },
 }
 
 function stepStyle(step: WorkflowStep) {
@@ -331,7 +331,7 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
             ? { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-800' }
             : stepStyle(step)
           const emoji = isCustom
-            ? (step.customEmoji || '📋')
+            ? (step.customEmoji || '')
             : STEP_ICON_EMOJI[inferStepIcon({
                 statusCode: step.statusCode,
                 label: step.label,
@@ -346,37 +346,37 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
               <div className={`relative flex flex-col items-center text-center rounded-xl border-2 px-2.5 py-2 w-[90px] shrink-0 ${bg} ${border}`}>
                 {/* System indicator */}
                 {!isCustom && (
-                  <span className="absolute top-1 right-1 text-[9px] leading-none text-gray-300" title="System step - auto-generated, locked">⚙️</span>
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-faint" title="System step - auto-generated, locked"></span>
                 )}
                 {/* Custom milestone indicator */}
                 {isCustom && (
-                  <span className="absolute top-1 right-1 text-[9px] leading-none text-emerald-400 font-bold" title="Custom milestone">✦</span>
+                  <span className="absolute top-1 right-1 text-[9px] leading-none text-emerald-400 font-bold" title="Custom milestone"></span>
                 )}
                 <span className="text-2xl leading-tight">{emoji}</span>
                 <span className={`text-[11px] font-semibold mt-1 leading-tight line-clamp-2 ${text}`}>
                   {step.label || step.statusCode}
                 </span>
                 {!isCustom && (
-                  <code className="text-[9px] text-gray-400 mt-0.5 font-mono truncate max-w-full px-0.5">
+                  <code className="text-[9px] text-faint mt-0.5 font-mono truncate max-w-full px-0.5">
                     {step.statusCode}
                   </code>
                 )}
                 {/* System step trigger badges */}
                 {!isCustom && !!step.flags?.triggers_video_call && (
-                  <span className="mt-1 text-[9px] bg-blue-100 text-blue-600 rounded px-1">📹 call</span>
+                  <span className="mt-1 text-[9px] bg-blue-100 text-blue-600 rounded px-1"> call</span>
                 )}
                 {!isCustom && !!step.flags?.triggers_audio_call && (
-                  <span className="mt-1 text-[9px] bg-cyan-100 text-cyan-600 rounded px-1">📞 call</span>
+                  <span className="mt-1 text-[9px] bg-cyan-100 text-cyan-600 rounded px-1"> call</span>
                 )}
                 {!isCustom && !!step.flags?.requires_content && (
-                  <span className="mt-1 text-[9px] bg-indigo-100 text-indigo-600 rounded px-1">📎 attach</span>
+                  <span className="mt-1 text-[9px] bg-indigo-100 text-indigo-600 rounded px-1"> attach</span>
                 )}
               </div>
               {/* Arrow connector */}
               {!isLast && (
-                <div className="flex items-center shrink-0 text-gray-300 mx-0.5">
+                <div className="flex items-center shrink-0 text-faint mx-0.5">
                   <div className="w-3 h-0.5 bg-gray-300" />
-                  <svg width="8" height="10" viewBox="0 0 8 10" fill="none" className="text-gray-300">
+                  <svg width="8" height="10" viewBox="0 0 8 10" fill="none" className="text-faint">
                     <path d="M1 1L7 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <div className="w-3 h-0.5 bg-gray-300" />
@@ -387,15 +387,15 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
         })}
       </div>
       {/* Legend */}
-      <div className="flex items-center gap-4 mt-1 text-[10px] text-gray-400">
-        <span className="flex items-center gap-1">⚙️ System step <span className="text-gray-300">(auto-generated, locked)</span></span>
-        <span className="flex items-center gap-1 text-emerald-600">✦ Custom milestone <span className="text-emerald-300">(editable)</span></span>
+      <div className="flex items-center gap-4 mt-1 text-[10px] text-faint">
+        <span className="flex items-center gap-1"> System step <span className="text-faint">(auto-generated, locked)</span></span>
+        <span className="flex items-center gap-1 text-emerald-600"> Custom milestone <span className="text-emerald-300">(editable)</span></span>
       </div>
     </div>
   )
 }
 
-// ─── Builder component ────────────────────────────────────────────────────
+//  Builder component 
 
 interface WorkflowBuilderProps {
   backHref: string
@@ -473,7 +473,7 @@ export default function WorkflowBuilder({
   const [addingCustom,    setAddingCustom]    = useState(false)
   const [newStepAfterIdx, setNewStepAfterIdx] = useState('0')
   const [newStepLabel,    setNewStepLabel]    = useState('')
-  const [newStepEmoji,    setNewStepEmoji]    = useState('📋')
+  const [newStepEmoji,    setNewStepEmoji]    = useState('')
 
   const [saving,          setSaving]          = useState(false)
   const [publishing,      setPublishing]      = useState(false)
@@ -614,7 +614,7 @@ export default function WorkflowBuilder({
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i]
       if (step.kind === 'custom') {
-        // Auto pass-through: provider presses "Continue" → next step
+        // Auto pass-through: provider presses "Continue"  next step
         const next = steps[i + 1]
         if (next) transitions.push({ from: step.statusCode, to: next.statusCode, action: 'proceed', allowedRoles: ['provider'] })
         continue
@@ -640,7 +640,7 @@ export default function WorkflowBuilder({
     const defaultIdx = completedIdx > 0 ? completedIdx - 1 : Math.max(0, steps.length - 2)
     setNewStepAfterIdx(String(defaultIdx))
     setNewStepLabel('')
-    setNewStepEmoji('📋')
+    setNewStepEmoji('')
     setAddingCustom(true)
   }
 
@@ -666,7 +666,7 @@ export default function WorkflowBuilder({
     setStepsCustomized(true)
     setAddingCustom(false)
     setNewStepLabel('')
-    setNewStepEmoji('📋')
+    setNewStepEmoji('')
   }
 
   function removeCustomStep(idx: number) {
@@ -785,32 +785,32 @@ export default function WorkflowBuilder({
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <Link href={backHref} className="flex items-center gap-1 text-[#0C6780] hover:text-[#001E40] text-sm mb-2">
+          <Link href={backHref} className="flex items-center gap-1 text-[#0C6780] hover:text-fg text-sm mb-2">
             <FiArrowLeft className="w-4 h-4" /> Back to workflows
           </Link>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Edit Workflow' : 'Create Workflow'}</h1>
+            <h1 className="text-2xl font-bold text-fg">{isEdit ? 'Edit Workflow' : 'Create Workflow'}</h1>
             {isEdit && (
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                 isDraft ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
               }`}>
-                {isDraft ? '● Draft' : '✓ Published'}
+                {isDraft ? ' Draft' : ' Published'}
               </span>
             )}
           </div>
         </div>
         <div className="flex gap-2">
           <button type="button" onClick={() => setAiOpen(true)}
-            className="bg-white border border-[#0C6780] hover:bg-[#0C6780]/5 text-[#0C6780] px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
+            className="bg-surface border border-[#0C6780] hover:bg-[#0C6780]/5 text-[#0C6780] px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition">
             <FiZap className="w-4 h-4" /> AI draft
           </button>
           <button
             onClick={handleSave}
             disabled={saving || publishing || issues.length > 0}
             title={issues.length > 0 ? `Fix ${issues.length} issue${issues.length === 1 ? '' : 's'} first` : 'Save as draft'}
-            className="bg-white border border-gray-300 hover:border-gray-400 text-gray-700 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
+            className="bg-surface border border-line hover:border-gray-400 text-soft px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
             <FiSave className="w-4 h-4" />
-            {saving ? 'Saving…' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : 'Save Draft'}
+            {saving ? 'Saving' : issues.length > 0 ? `Save (${issues.length} issue${issues.length === 1 ? '' : 's'})` : 'Save Draft'}
           </button>
           {isEdit && (
             <button
@@ -818,7 +818,7 @@ export default function WorkflowBuilder({
               disabled={saving || publishing || issues.length > 0}
               title={isDraft ? 'Publish - makes this template active for new bookings' : 'Re-publish with latest changes'}
               className="bg-[#0C6780] hover:bg-[#001E40] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
-              {publishing ? 'Publishing…' : isDraft ? 'Publish' : 'Update & Publish'}
+              {publishing ? 'Publishing' : isDraft ? 'Publish' : 'Update & Publish'}
             </button>
           )}
           {!isEdit && (
@@ -827,7 +827,7 @@ export default function WorkflowBuilder({
               disabled={saving || issues.length > 0}
               title="Create workflow as draft"
               className="bg-[#001E40] hover:bg-[#0C6780] text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition disabled:opacity-50">
-              {saving ? 'Creating…' : 'Create Draft'}
+              {saving ? 'Creating' : 'Create Draft'}
             </button>
           )}
         </div>
@@ -841,7 +841,7 @@ export default function WorkflowBuilder({
       {/* In-flight warning: editing a published template that has active bookings */}
       {!isDraft && inFlightCount > 0 && (
         <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex items-start gap-3">
-          <span className="text-amber-600 text-lg leading-none flex-shrink-0">⚠</span>
+          <span className="text-amber-600 text-lg leading-none flex-shrink-0"></span>
           <div>
             <p className="text-sm font-semibold text-amber-800">
               {inFlightCount} active booking{inFlightCount === 1 ? '' : 's'} are running this template
@@ -854,63 +854,63 @@ export default function WorkflowBuilder({
       )}
 
       {/* Builder / Preview tab */}
-      <div className="bg-white border border-gray-200 rounded-xl p-1 flex gap-1 max-w-xs text-sm font-medium">
-        <button onClick={() => setView('builder')} className={`flex-1 px-3 py-1.5 rounded-lg transition-colors ${view === 'builder' ? 'bg-[#0C6780] text-white' : 'text-gray-700 hover:bg-gray-100'}`}>Builder</button>
-        <button onClick={() => setView('preview')} className={`flex-1 px-3 py-1.5 rounded-lg transition-colors ${view === 'preview' ? 'bg-[#0C6780] text-white' : 'text-gray-700 hover:bg-gray-100'}`}>Preview</button>
+      <div className="bg-surface border border-line rounded-xl p-1 flex gap-1 max-w-xs text-sm font-medium">
+        <button onClick={() => setView('builder')} className={`flex-1 px-3 py-1.5 rounded-lg transition-colors ${view === 'builder' ? 'bg-[#0C6780] text-white' : 'text-soft hover:bg-subtle'}`}>Builder</button>
+        <button onClick={() => setView('preview')} className={`flex-1 px-3 py-1.5 rounded-lg transition-colors ${view === 'preview' ? 'bg-[#0C6780] text-white' : 'text-soft hover:bg-subtle'}`}>Preview</button>
       </div>
 
-      {/* ─── Basic Info ──────────────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      {/*  Basic Info  */}
+      <div className="bg-surface rounded-xl border border-line p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Basic Information</h2>
+          <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Basic Information</h2>
           {onRequestWizard && (
             <button type="button" onClick={onRequestWizard}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] hover:text-[#001E40] border border-[#0C6780]/30 hover:border-[#0C6780] bg-[#0C6780]/5 hover:bg-[#0C6780]/10 px-3 py-1.5 rounded-lg transition">
-              🪄 Configure with Wizard
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] hover:text-fg border border-[#0C6780]/30 hover:border-[#0C6780] bg-[#0C6780]/5 hover:bg-[#0C6780]/10 px-3 py-1.5 rounded-lg transition">
+               Configure with Wizard
             </button>
           )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Workflow Name *</label>
+            <label className="text-xs font-medium text-soft block mb-1">Workflow Name *</label>
             <input type="text" value={name} onChange={(e) => { setName(e.target.value); if (!slug) setSlug(autoSlug(`${providerType}-${e.target.value}`)) }}
               placeholder="e.g. Doctor Video Consultation"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Slug (auto-generated)</label>
+            <label className="text-xs font-medium text-soft block mb-1">Slug (auto-generated)</label>
             <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="auto-generated"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Provider Type</label>
+            <label className="text-xs font-medium text-soft block mb-1">Provider Type</label>
             {lockedProviderType ? (
-              <div className="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700">
-                {lockedProviderType.replace(/_/g, ' ')} <span className="text-[11px] text-gray-400 ml-1">(from your role)</span>
+              <div className="w-full border border-line bg-subtle rounded-lg px-3 py-2 text-sm text-soft">
+                {lockedProviderType.replace(/_/g, ' ')} <span className="text-[11px] text-faint ml-1">(from your role)</span>
               </div>
             ) : (
               <select value={providerType} onChange={(e) => setProviderType(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
                 <option value="">Global (All Providers)</option>
                 {providerTypes.map(pt => <option key={pt} value={pt}>{pt.replace(/_/g, ' ')}</option>)}
               </select>
             )}
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Service Mode *</label>
+            <label className="text-xs font-medium text-soft block mb-1">Service Mode *</label>
             <select value={serviceMode} onChange={(e) => setServiceMode(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
               {SERVICE_MODES.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">
+            <label className="text-xs font-medium text-soft block mb-1">
               Payment Timing
-              <span className="ml-1 text-gray-400 font-normal">(auto-derived)</span>
+              <span className="ml-1 text-faint font-normal">(auto-derived)</span>
             </label>
             <select value={paymentTiming} onChange={(e) => setPaymentTiming(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
               {PAYMENT_TIMING_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
@@ -918,43 +918,43 @@ export default function WorkflowBuilder({
 
         {/* Service picker */}
         <div>
-          <label className="text-xs font-medium text-gray-500 block mb-1">
+          <label className="text-xs font-medium text-soft block mb-1">
             Applies to Service
-            <span className="ml-1 text-gray-400 font-normal">(leave empty to apply as default for this provider type)</span>
+            <span className="ml-1 text-faint font-normal">(leave empty to apply as default for this provider type)</span>
           </label>
           {providerType ? (
             services.length > 0 ? (
               <select value={platformServiceId} onChange={(e) => setPlatformServiceId(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
                 <option value=""> - All {providerType.replace(/_/g, ' ')} services (default) - </option>
                 {services.filter(s => !s.serviceMode || s.serviceMode === serviceMode).map(s => (
-                  <option key={s.id} value={s.id}>{s.name}{s.defaultPrice != null ? ` · Rs ${s.defaultPrice}` : ''}</option>
+                  <option key={s.id} value={s.id}>{s.name}{s.defaultPrice != null ? `  Rs ${s.defaultPrice}` : ''}</option>
                 ))}
               </select>
             ) : (
-              <p className="text-xs text-gray-400 border border-dashed border-gray-200 rounded-lg px-3 py-2">
-                {servicesLoading ? 'Loading services…' : `No services yet for ${providerType.replace(/_/g, ' ')}.`}
+              <p className="text-xs text-faint border border-dashed border-line rounded-lg px-3 py-2">
+                {servicesLoading ? 'Loading services' : `No services yet for ${providerType.replace(/_/g, ' ')}.`}
               </p>
             )
           ) : (
-            <p className="text-xs text-gray-400 border border-dashed border-gray-200 rounded-lg px-3 py-2">
+            <p className="text-xs text-faint border border-dashed border-line rounded-lg px-3 py-2">
               Pick a provider type first to see available services.
             </p>
           )}
         </div>
 
         <div>
-          <label className="text-xs font-medium text-gray-500 block mb-1">Description</label>
+          <label className="text-xs font-medium text-soft block mb-1">Description</label>
           <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional description"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+            className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
         </div>
 
-        {/* ─── Clinical Configuration (axis-based step generation) ── */}
-        <div className="border-t border-gray-100 pt-4">
+        {/*  Clinical Configuration (axis-based step generation)  */}
+        <div className="border-t border-line pt-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Clinical Configuration</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Steps are auto-generated from these options - no manual step editing needed.</p>
+              <h3 className="text-xs font-semibold text-soft uppercase tracking-wider">Clinical Configuration</h3>
+              <p className="text-xs text-faint mt-0.5">Steps are auto-generated from these options - no manual step editing needed.</p>
             </div>
             {stepsCustomized && (
               <button
@@ -969,22 +969,22 @@ export default function WorkflowBuilder({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="text-xs font-medium text-gray-500 block mb-1">Sample Collection</label>
+              <label className="text-xs font-medium text-soft block mb-1">Sample Collection</label>
               <select value={configSample} onChange={(e) => { setConfigSample(e.target.value); setStepsCustomized(false) }}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
                 {SAMPLE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-500 block mb-1">Clinical Output</label>
+              <label className="text-xs font-medium text-soft block mb-1">Clinical Output</label>
               <select value={configOutput} onChange={(e) => { setConfigOutput(e.target.value); setStepsCustomized(false) }}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]">
                 {OUTPUT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
             <div className="flex items-end">
               <div className="w-full">
-                <label className="text-xs font-medium text-gray-500 block mb-1">
+                <label className="text-xs font-medium text-soft block mb-1">
                   {stepsCustomized ? 'Steps manually edited' : `${steps.length} steps auto-derived`}
                 </label>
                 <button
@@ -1000,25 +1000,25 @@ export default function WorkflowBuilder({
         </div>
 
         {showAdminFields && (
-          <div className="border-t border-gray-100 pt-4">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">SLA &amp; Sharing</h3>
+          <div className="border-t border-line pt-4">
+            <h3 className="text-xs font-semibold text-soft uppercase tracking-wider mb-3">SLA &amp; Sharing</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-medium text-gray-500 block mb-1">Expected duration (hours)</label>
+                <label className="text-xs font-medium text-soft block mb-1">Expected duration (hours)</label>
                 <input type="number" min={1} value={expectedDurationHours} onChange={e => setExpectedDurationHours(e.target.value)}
-                  placeholder="e.g. 24" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30" />
+                  placeholder="e.g. 24" className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30" />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-500 block mb-1">SLA note</label>
+                <label className="text-xs font-medium text-soft block mb-1">SLA note</label>
                 <input type="text" value={slaNote} onChange={e => setSlaNote(e.target.value)}
-                  placeholder="e.g. Results within 24h guaranteed" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30" />
+                  placeholder="e.g. Results within 24h guaranteed" className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30" />
               </div>
             </div>
             <div className="mt-3 flex items-center gap-3">
               <input id="isShared" type="checkbox" checked={isShared} onChange={e => setIsShared(e.target.checked)} className="w-4 h-4 accent-[#0C6780]" />
-              <label htmlFor="isShared" className="text-sm text-gray-700 cursor-pointer">
+              <label htmlFor="isShared" className="text-sm text-soft cursor-pointer">
                 Share this template across regions
-                <span className="ml-1 text-xs text-gray-400">(other regional admins can clone it)</span>
+                <span className="ml-1 text-xs text-faint">(other regional admins can clone it)</span>
               </label>
             </div>
           </div>
@@ -1026,33 +1026,33 @@ export default function WorkflowBuilder({
       </div>
 
       {view === 'preview' ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
+        <div className="bg-surface border border-line rounded-xl p-5">
           <WorkflowPreview steps={steps} />
         </div>
       ) : (
       <>
-        {/* ─── Step Flow Illustration ─────────────────────────────── */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        {/*  Step Flow Illustration  */}
+        <div className="bg-surface rounded-xl border border-line p-4">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div>
-              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Step Flow</h2>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Step Flow</h2>
+              <p className="text-xs text-faint mt-0.5">
                 {stepsCustomized
                   ? 'Manually customised - click "Reset to config" to regenerate'
                   : 'Auto-generated from your configuration above'}
               </p>
             </div>
-            <span className="text-xs font-medium text-gray-500 shrink-0">{steps.length} steps</span>
+            <span className="text-xs font-medium text-soft shrink-0">{steps.length} steps</span>
           </div>
           <StepFlowIllustration steps={steps} />
         </div>
 
-        {/* ─── Custom Milestones ──────────────────────────────────── */}
+        {/*  Custom Milestones  */}
         <div className="space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
-              <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Custom Milestones</h2>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Custom Milestones</h2>
+              <p className="text-xs text-faint mt-0.5">
                 Add named checkpoints between system steps. Choose an emoji icon and a position.
               </p>
             </div>
@@ -1060,7 +1060,7 @@ export default function WorkflowBuilder({
               type="button"
               onClick={openAddCustomForm}
               disabled={addingCustom}
-              className="text-sm text-[#0C6780] hover:text-[#001E40] flex items-center gap-1 font-medium disabled:opacity-40"
+              className="text-sm text-[#0C6780] hover:text-fg flex items-center gap-1 font-medium disabled:opacity-40"
             >
               <FiPlus className="w-4 h-4" /> Add milestone
             </button>
@@ -1068,14 +1068,14 @@ export default function WorkflowBuilder({
 
           {/* Inline add form */}
           {addingCustom && (
-            <div className="bg-white border border-[#0C6780]/30 rounded-xl p-4 space-y-4">
+            <div className="bg-surface border border-[#0C6780]/30 rounded-xl p-4 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-medium text-gray-500 block mb-1">Insert after</label>
+                  <label className="text-xs font-medium text-soft block mb-1">Insert after</label>
                   <select
                     value={newStepAfterIdx}
                     onChange={e => setNewStepAfterIdx(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                    className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
                   >
                     {steps.map((s, i) => (
                       <option key={i} value={i}>{s.label || s.statusCode}</option>
@@ -1083,7 +1083,7 @@ export default function WorkflowBuilder({
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-500 block mb-1">Step name *</label>
+                  <label className="text-xs font-medium text-soft block mb-1">Step name *</label>
                   <input
                     autoFocus
                     type="text"
@@ -1091,15 +1091,15 @@ export default function WorkflowBuilder({
                     onChange={e => setNewStepLabel(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') confirmAddCustomStep() }}
                     placeholder="e.g. Patient preparation"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                    className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
                   />
                 </div>
               </div>
 
               {/* Emoji picker */}
               <div>
-                <label className="text-xs font-medium text-gray-500 block mb-2">
-                  Icon <span className="font-normal text-gray-400"> - click to choose</span>
+                <label className="text-xs font-medium text-soft block mb-2">
+                  Icon <span className="font-normal text-faint"> - click to choose</span>
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {CUSTOM_STEP_EMOJIS.map(em => (
@@ -1110,7 +1110,7 @@ export default function WorkflowBuilder({
                       className={`w-9 h-9 rounded-lg text-xl flex items-center justify-center border-2 transition ${
                         newStepEmoji === em
                           ? 'border-[#0C6780] bg-[#0C6780]/10 scale-110'
-                          : 'border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                          : 'border-line hover:bg-subtle hover:border-line'
                       }`}
                     >
                       {em}
@@ -1122,8 +1122,8 @@ export default function WorkflowBuilder({
               <div className="flex items-center gap-2 justify-end pt-1">
                 <button
                   type="button"
-                  onClick={() => { setAddingCustom(false); setNewStepLabel(''); setNewStepEmoji('📋') }}
-                  className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100"
+                  onClick={() => { setAddingCustom(false); setNewStepLabel(''); setNewStepEmoji('') }}
+                  className="text-sm text-soft hover:text-fg px-3 py-1.5 rounded-lg hover:bg-subtle"
                 >
                   Cancel
                 </button>
@@ -1141,9 +1141,9 @@ export default function WorkflowBuilder({
 
           {/* Existing custom steps list */}
           {steps.filter(s => s.kind === 'custom').length === 0 && !addingCustom && (
-            <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
-              <p className="text-sm text-gray-500">No custom milestones yet.</p>
-              <p className="text-xs text-gray-400 mt-1">
+            <div className="text-center py-8 border border-dashed border-line rounded-xl bg-subtle/50">
+              <p className="text-sm text-soft">No custom milestones yet.</p>
+              <p className="text-xs text-faint mt-1">
                 System steps cover the full flow - add milestones to create named checkpoints visible to provider and member.
               </p>
             </div>
@@ -1162,21 +1162,21 @@ export default function WorkflowBuilder({
                 onDragOver={(e) => handleDragOver(e, idx)}
                 onDrop={() => handleDrop(idx)}
                 onDragEnd={handleDragEnd}
-                className={`bg-white border rounded-xl p-3 flex items-center gap-3 transition cursor-grab active:cursor-grabbing select-none ${
+                className={`bg-surface border rounded-xl p-3 flex items-center gap-3 transition cursor-grab active:cursor-grabbing select-none ${
                   isDragOver
                     ? 'border-[#0C6780] bg-[#0C6780]/5 shadow-md scale-[1.01]'
                     : 'border-emerald-200 hover:border-emerald-300 hover:shadow-sm'
                 }`}
               >
                 {/* Drag handle */}
-                <FiMenu className="text-gray-300 hover:text-gray-500 flex-shrink-0 w-4 h-4" title="Drag to reorder" />
-                <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || '📋'}</span>
+                <FiMenu className="text-faint hover:text-soft flex-shrink-0 w-4 h-4" title="Drag to reorder" />
+                <span className="text-2xl leading-none flex-shrink-0">{step.customEmoji || ''}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm text-gray-900">{step.label}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">
-                    <span>After: <span className="text-gray-600">{prev?.label || ' - '}</span></span>
+                  <div className="font-medium text-sm text-fg">{step.label}</div>
+                  <div className="text-xs text-faint mt-0.5">
+                    <span>After: <span className="text-soft">{prev?.label || ' - '}</span></span>
                     {next && (
-                      <> · <span>Before: <span className="text-gray-600">{next.label}</span></span></>
+                      <>  <span>Before: <span className="text-soft">{next.label}</span></span></>
                     )}
                   </div>
                 </div>
@@ -1186,7 +1186,7 @@ export default function WorkflowBuilder({
                 <button
                   type="button"
                   onClick={() => removeCustomStep(idx)}
-                  className="p-1.5 text-gray-400 hover:text-red-500 rounded flex-shrink-0"
+                  className="p-1.5 text-faint hover:text-red-500 rounded flex-shrink-0"
                   title="Remove milestone"
                 >
                   <FiTrash2 className="w-4 h-4" />
@@ -1196,34 +1196,34 @@ export default function WorkflowBuilder({
           })}
         </div>
 
-        {/* ─── Auto-Generated Transitions ─────────────────────────── */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">Auto-Generated Transitions</h2>
+        {/*  Auto-Generated Transitions  */}
+        <div className="bg-surface rounded-xl border border-line p-5">
+          <h2 className="text-sm font-semibold text-soft uppercase tracking-wider mb-3">Auto-Generated Transitions</h2>
           <div className="flex flex-wrap gap-2">
             {generateTransitions().map((tr, i) => (
-              <span key={i} className="text-xs bg-gray-50 border border-gray-200 rounded px-2 py-1 text-gray-600">
-                {tr.from} <span className="text-[#0C6780] font-bold mx-1">→</span> {tr.to}
-                <span className="text-gray-400 ml-1">({tr.action})</span>
-                <span className="text-gray-300 ml-1">[{tr.allowedRoles.join(', ')}]</span>
+              <span key={i} className="text-xs bg-subtle border border-line rounded px-2 py-1 text-soft">
+                {tr.from} <span className="text-[#0C6780] font-bold mx-1"></span> {tr.to}
+                <span className="text-faint ml-1">({tr.action})</span>
+                <span className="text-faint ml-1">[{tr.allowedRoles.join(', ')}]</span>
               </span>
             ))}
-            {generateTransitions().length === 0 && <span className="text-xs text-gray-400">Add actions to steps to see transitions</span>}
+            {generateTransitions().length === 0 && <span className="text-xs text-faint">Add actions to steps to see transitions</span>}
           </div>
         </div>
 
-        {/* ─── Template Variables ──────────────────────────────────── */}
+        {/*  Template Variables  */}
         <div className="bg-sky-50 border border-sky-200 rounded-xl p-4">
-          <h3 className="text-sm font-semibold text-[#001E40] mb-2">Notification Template Variables</h3>
+          <h3 className="text-sm font-semibold text-fg mb-2">Notification Template Variables</h3>
           <div className="flex flex-wrap gap-2">
             {['{{patientName}}','{{providerName}}','{{providerType}}','{{serviceName}}','{{scheduledAt}}','{{amount}}','{{status}}','{{bookingId}}','{{actionBy}}','{{eta}}'].map(v => (
-              <code key={v} className="text-xs bg-white border border-sky-200 rounded px-2 py-1 text-[#0C6780] font-mono">{v}</code>
+              <code key={v} className="text-xs bg-surface border border-sky-200 rounded px-2 py-1 text-[#0C6780] font-mono">{v}</code>
             ))}
           </div>
         </div>
       </>
       )}
 
-      {/* ─── Pinned validation panel ─────────────────────────────── */}
+      {/*  Pinned validation panel  */}
       {issues.length > 0 && (
         <div className="sticky bottom-4 z-30 bg-amber-50 border border-amber-200 rounded-xl shadow-lg p-3">
           <div className="flex items-center gap-2 font-semibold text-amber-900 text-sm mb-1.5">
@@ -1231,36 +1231,36 @@ export default function WorkflowBuilder({
             {issues.length === 1 ? 'Issue to fix' : 'Issues to fix before saving'}
           </div>
           <ul className="text-xs text-amber-900 space-y-0.5 max-h-32 overflow-y-auto">
-            {issues.slice(0, 8).map((i) => <li key={i.key}>• {i.message}</li>)}
-            {issues.length > 8 && <li className="text-amber-700">…and {issues.length - 8} more</li>}
+            {issues.slice(0, 8).map((i) => <li key={i.key}> {i.message}</li>)}
+            {issues.length > 8 && <li className="text-amber-700">and {issues.length - 8} more</li>}
           </ul>
         </div>
       )}
 
-      {/* ─── AI-assist modal ─────────────────────────────────────── */}
+      {/*  AI-assist modal  */}
       {aiOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setAiOpen(false)}>
-          <div className="bg-white w-full max-w-xl rounded-2xl shadow-2xl p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-xl rounded-2xl shadow-2xl p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="flex items-center gap-2"><FiZap className="text-[#0C6780]" /><h3 className="text-base font-bold text-gray-900">Draft with AI</h3></div>
-                <p className="text-xs text-gray-500 mt-1">Describe the workflow in plain words. We&apos;ll draft the steps, actions, and notifications - you review before saving. This <strong>replaces</strong> your current steps.</p>
+                <div className="flex items-center gap-2"><FiZap className="text-[#0C6780]" /><h3 className="text-base font-bold text-fg">Draft with AI</h3></div>
+                <p className="text-xs text-soft mt-1">Describe the workflow in plain words. We&apos;ll draft the steps, actions, and notifications - you review before saving. This <strong>replaces</strong> your current steps.</p>
               </div>
-              <button onClick={() => setAiOpen(false)} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500"><FiX /></button>
+              <button onClick={() => setAiOpen(false)} className="p-1.5 hover:bg-subtle rounded-lg text-soft"><FiX /></button>
             </div>
             <textarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)}
               placeholder={`e.g. "Patient books teleconsultation. Doctor accepts, video call opens, we charge the patient. Doctor can send prescription after the call."`}
               rows={6} maxLength={1000}
-              className="w-full text-sm border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none resize-none" />
+              className="w-full text-sm border border-line rounded-lg p-3 focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none resize-none" />
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-500">{aiPrompt.length}/1000 · {providerType || 'no provider type'} · {serviceMode}</span>
+              <span className="text-soft">{aiPrompt.length}/1000  {providerType || 'no provider type'}  {serviceMode}</span>
               {aiError && <span className="text-red-600">{aiError}</span>}
             </div>
             <div className="flex justify-end gap-2 pt-1">
-              <button onClick={() => { setAiOpen(false); setAiError(null) }} disabled={aiBusy} className="px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+              <button onClick={() => { setAiOpen(false); setAiError(null) }} disabled={aiBusy} className="px-3 py-1.5 text-sm text-soft hover:bg-subtle rounded-lg">Cancel</button>
               <button onClick={draftWithAi} disabled={aiBusy || aiPrompt.trim().length < 20}
                 className="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50">
-                <FiZap /> {aiBusy ? 'Drafting…' : 'Draft steps'}
+                <FiZap /> {aiBusy ? 'Drafting' : 'Draft steps'}
               </button>
             </div>
           </div>

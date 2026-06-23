@@ -10,7 +10,7 @@ const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: 
 import { FaSearch, FaMapMarkerAlt, FaPhone, FaGlobe, FaBriefcaseMedical, FaHospital, FaFlask, FaTooth, FaEye, FaHeart } from 'react-icons/fa'
 import { MdVerified } from 'react-icons/md'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface SampleProvider {
   id: string
@@ -37,7 +37,7 @@ interface OrgEntity {
   sampleProviders: SampleProvider[]
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+//  Constants 
 
 const ENTITY_TYPES = [
   { value: '', label: 'All Types' },
@@ -76,12 +76,12 @@ function EntityTypeIcon({ type, className, color }: { type: string; className?: 
   return <Icon className={className} style={color ? { color } : undefined} />
 }
 
-// ── EntityCard ────────────────────────────────────────────────────────────────
+//  EntityCard 
 
 function EntityCard({ entity }: { entity: OrgEntity }) {
   const color = TYPE_COLORS[entity.type] ?? '#0C6780'
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+    <div className="bg-surface rounded-xl border border-line shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       {/* Top color bar */}
       <div className="h-1.5" style={{ background: color }} />
 
@@ -97,7 +97,7 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <h3 className="font-bold text-[#001E40] text-sm sm:text-base leading-snug">{entity.name}</h3>
+              <h3 className="font-bold text-fg text-sm sm:text-base leading-snug">{entity.name}</h3>
               {entity.isVerified && <MdVerified className="text-[#0C6780] flex-shrink-0" size={16} title="Verified" />}
             </div>
             <span className="text-xs font-medium px-2 py-0.5 rounded-full capitalize" style={{ background: `${color}18`, color }}>
@@ -108,26 +108,26 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
 
         {/* Description */}
         {entity.description && (
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">{entity.description}</p>
+          <p className="text-xs text-soft mb-3 line-clamp-2">{entity.description}</p>
         )}
 
         {/* Meta */}
         <div className="space-y-1 mb-3">
           {entity.address && (
-            <div className="flex items-start gap-1.5 text-xs text-gray-500">
-              <FaMapMarkerAlt className="flex-shrink-0 mt-0.5 text-gray-400" size={11} />
+            <div className="flex items-start gap-1.5 text-xs text-soft">
+              <FaMapMarkerAlt className="flex-shrink-0 mt-0.5 text-faint" size={11} />
               <span>{entity.address}{entity.city ? `, ${entity.city}` : ''}</span>
             </div>
           )}
           {entity.phone && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <FaPhone className="flex-shrink-0 text-gray-400" size={10} />
+            <div className="flex items-center gap-1.5 text-xs text-soft">
+              <FaPhone className="flex-shrink-0 text-faint" size={10} />
               <span>{entity.phone}</span>
             </div>
           )}
           {entity.website && (
             <div className="flex items-center gap-1.5 text-xs text-[#0C6780]">
-              <FaGlobe className="flex-shrink-0 text-gray-400" size={10} />
+              <FaGlobe className="flex-shrink-0 text-faint" size={10} />
               <a href={entity.website} target="_blank" rel="noopener noreferrer" className="hover:underline truncate">{entity.website.replace(/^https?:\/\//, '')}</a>
             </div>
           )}
@@ -138,16 +138,16 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
           <div className="flex items-center gap-2 mb-3">
             <div className="flex -space-x-2">
               {entity.sampleProviders.slice(0, 3).map(p => (
-                <div key={p.id} className="w-7 h-7 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div key={p.id} className="w-7 h-7 rounded-full bg-line border-2 border-white flex items-center justify-center overflow-hidden flex-shrink-0">
                   {p.profileImage ? (
                     <Image src={p.profileImage} alt={p.name} width={28} height={28} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-[10px] font-bold text-gray-500">{p.name.charAt(0)}</span>
+                    <span className="text-[10px] font-bold text-soft">{p.name.charAt(0)}</span>
                   )}
                 </div>
               ))}
             </div>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-soft">
               {entity.providerCount} provider{entity.providerCount !== 1 ? 's' : ''}
             </span>
           </div>
@@ -166,7 +166,7 @@ function EntityCard({ entity }: { entity: OrgEntity }) {
   )
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
+//  Main page 
 
 export default function OrganizationsSearchPage() {
   const searchParams = useSearchParams()
@@ -205,25 +205,25 @@ export default function OrganizationsSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-subtle">
       {/* Hero / search bar */}
-      <div className="bg-white border-b border-gray-100 shadow-sm">
+      <div className="bg-surface border-b border-line shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-8">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-2xl">🏥</span>
-            <h1 className="text-2xl font-bold text-[#001E40]">Find an Organization</h1>
+            <span className="text-2xl"></span>
+            <h1 className="text-2xl font-bold text-fg">Find an Organization</h1>
           </div>
-          <p className="text-sm text-gray-500 mb-5">Hospitals, clinics, labs, dental practices, and wellness centers near you</p>
+          <p className="text-sm text-soft mb-5">Hospitals, clinics, labs, dental practices, and wellness centers near you</p>
 
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="flex-1 relative">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" size={14} />
               <input
                 type="text"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search by name, city, or service..."
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
+                className="w-full pl-9 pr-4 py-2.5 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30"
               />
             </div>
             <button type="submit" className="px-5 py-2.5 bg-[#0C6780] text-white rounded-lg text-sm font-medium hover:bg-[#0a5a6f] transition-colors">
@@ -240,7 +240,7 @@ export default function OrganizationsSearchPage() {
                 className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
                   selectedType === t.value
                     ? 'bg-[#0C6780] text-white border-[#0C6780]'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780]'
+                    : 'bg-surface text-soft border-line hover:border-[#0C6780]'
                 }`}
               >
                 {t.label}
@@ -256,20 +256,20 @@ export default function OrganizationsSearchPage() {
         <NearbyMap mode="entities" type={selectedType || undefined} noun="organisations" accentColor="#0C6780" />
 
         {!loading && entities.length > 0 && (
-          <p className="text-sm text-gray-500 mb-4">{total} result{total !== 1 ? 's' : ''}</p>
+          <p className="text-sm text-soft mb-4">{total} result{total !== 1 ? 's' : ''}</p>
         )}
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-100 h-64 animate-pulse" />
+              <div key={i} className="bg-surface rounded-xl border border-line h-64 animate-pulse" />
             ))}
           </div>
         ) : entities.length === 0 ? (
           <div className="text-center py-16">
-            <span className="text-5xl block mb-3">🏥</span>
-            <h3 className="font-bold text-[#001E40] text-lg mb-1">No organizations found</h3>
-            <p className="text-gray-500 text-sm">
+            <span className="text-5xl block mb-3"></span>
+            <h3 className="font-bold text-fg text-lg mb-1">No organizations found</h3>
+            <p className="text-soft text-sm">
               {query || selectedType
                 ? 'Try a different search term or filter.'
                 : 'No healthcare entities have been registered yet.'}

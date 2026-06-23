@@ -13,7 +13,7 @@ import { useProviderRoles } from '@/hooks/useProviderRoles'
 import { useDashboardUser } from '@/hooks/useDashboardUser'
 import DashboardPageHeader from '@/components/shared/DashboardPageHeader'
 
-// Icon per provider role code — falls back to a generic user icon.
+// Icon per provider role code  falls back to a generic user icon.
 const ROLE_ICON: Record<string, IconType> = {
  DOCTOR: FaUserMd, NURSE: FaUserNurse, NANNY: FaBaby, PHARMACIST: FaCapsules,
  LAB_TECHNICIAN: FaFlask, EMERGENCY_WORKER: FaAmbulance, CAREGIVER: FaHandHoldingHeart,
@@ -27,7 +27,7 @@ function Loading() {
  return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" /></div>
 }
 
-// ─── Lab Results Modal ──────────────────────────────────────────────────────
+//  Lab Results Modal 
 function LabResultsModal({ bookingId, testName, onClose }: { bookingId: string; testName: string; onClose: () => void }) {
  const user = useDashboardUser()
  const [results, setResults] = useState<{ id: string; testName: string; result: string; unit: string; referenceRange: string; status: string; notes: string | null }[]>([])
@@ -50,28 +50,28 @@ function LabResultsModal({ bookingId, testName, onClose }: { bookingId: string; 
 
  return (
  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
- <div className="bg-white rounded-xl w-full max-w-md max-h-[70vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
- <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white">
- <h3 className="text-base font-bold text-gray-900 flex items-center gap-2"><FaFlask className="text-blue-500" /> Lab Results</h3>
- <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600"><FaTimes /></button>
+ <div className="bg-surface rounded-xl w-full max-w-md max-h-[70vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+ <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-surface">
+ <h3 className="text-base font-bold text-fg flex items-center gap-2"><FaFlask className="text-blue-500" /> Lab Results</h3>
+ <button onClick={onClose} className="p-1.5 text-faint hover:text-soft"><FaTimes /></button>
  </div>
  <div className="p-4">
- <p className="text-sm font-medium text-gray-700 mb-3">{testName}</p>
+ <p className="text-sm font-medium text-soft mb-3">{testName}</p>
  {loading ? <Loading /> : results.length === 0 ? (
- <p className="text-center py-6 text-gray-400 text-sm">Results not yet available. The lab technician will upload results once ready.</p>
+ <p className="text-center py-6 text-faint text-sm">Results not yet available. The lab technician will upload results once ready.</p>
  ) : (
  <div className="space-y-2">
  {results.map((r, i) => (
- <div key={r.id || i} className="bg-gray-50 rounded-lg p-3">
+ <div key={r.id || i} className="bg-subtle rounded-lg p-3">
  <div className="flex justify-between items-start">
- <p className="font-medium text-sm text-gray-900">{r.testName || 'Test'}</p>
- <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${r.status === 'normal' ? 'bg-green-100 text-green-700' : r.status === 'abnormal' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>
+ <p className="font-medium text-sm text-fg">{r.testName || 'Test'}</p>
+ <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${r.status === 'normal' ? 'bg-green-100 text-green-700' : r.status === 'abnormal' ? 'bg-red-100 text-red-700' : 'bg-subtle text-soft'}`}>
  {r.status || 'pending'}
  </span>
  </div>
- {r.result && <p className="text-lg font-bold text-gray-900 mt-1">{r.result} {r.unit}</p>}
- {r.referenceRange && <p className="text-[10px] text-gray-400">Ref: {r.referenceRange}</p>}
- {r.notes && <p className="text-xs text-gray-500 mt-1">{r.notes}</p>}
+ {r.result && <p className="text-lg font-bold text-fg mt-1">{r.result} {r.unit}</p>}
+ {r.referenceRange && <p className="text-[10px] text-faint">Ref: {r.referenceRange}</p>}
+ {r.notes && <p className="text-xs text-soft mt-1">{r.notes}</p>}
  </div>
  ))}
  </div>
@@ -82,7 +82,7 @@ function LabResultsModal({ bookingId, testName, onClose }: { bookingId: string; 
  )
 }
 
-// ─── Prescriptions Modal ────────────────────────────────────────────────────
+//  Prescriptions Modal 
 function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmentId: string; doctorName: string; onClose: () => void }) {
  const user = useDashboardUser()
  const [prescriptions, setPrescriptions] = useState<{
@@ -107,35 +107,35 @@ function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmen
 
  return (
  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
- <div className="bg-white rounded-xl w-full max-w-md max-h-[75vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
- <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white">
- <h3 className="text-base font-bold text-gray-900 flex items-center gap-2"><FaPills className="text-purple-500" /> Prescriptions</h3>
- <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600"><FaTimes /></button>
+ <div className="bg-surface rounded-xl w-full max-w-md max-h-[75vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+ <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-surface">
+ <h3 className="text-base font-bold text-fg flex items-center gap-2"><FaPills className="text-purple-500" /> Prescriptions</h3>
+ <button onClick={onClose} className="p-1.5 text-faint hover:text-soft"><FaTimes /></button>
  </div>
  <div className="p-4">
- <p className="text-sm text-gray-500 mb-3">From {doctorName}</p>
+ <p className="text-sm text-soft mb-3">From {doctorName}</p>
  {loading ? <Loading /> : prescriptions.length === 0 ? (
- <p className="text-center py-6 text-gray-400 text-sm">No prescriptions found.</p>
+ <p className="text-center py-6 text-faint text-sm">No prescriptions found.</p>
  ) : (
  <div className="space-y-3">
  {prescriptions.map(rx => (
- <div key={rx.id} className="bg-gray-50 rounded-lg p-3">
+ <div key={rx.id} className="bg-subtle rounded-lg p-3">
  <div className="flex justify-between items-start mb-2">
- <p className="font-medium text-sm text-gray-900">{rx.diagnosis || 'Prescription'}</p>
- <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${rx.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+ <p className="font-medium text-sm text-fg">{rx.diagnosis || 'Prescription'}</p>
+ <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${rx.isActive ? 'bg-green-100 text-green-700' : 'bg-subtle text-soft'}`}>
  {rx.isActive ? 'Active' : 'Completed'}
  </span>
  </div>
- <p className="text-[10px] text-gray-400 mb-2">{new Date(rx.createdAt).toLocaleDateString()}</p>
- {rx.notes && <p className="text-xs text-gray-500 mb-2">{rx.notes}</p>}
+ <p className="text-[10px] text-faint mb-2">{new Date(rx.createdAt).toLocaleDateString()}</p>
+ {rx.notes && <p className="text-xs text-soft mb-2">{rx.notes}</p>}
  {rx.medicines?.length > 0 && (
  <div className="space-y-1.5">
  {rx.medicines.map(m => (
- <div key={m.id} className="flex items-center justify-between bg-white rounded p-2 border border-gray-200">
+ <div key={m.id} className="flex items-center justify-between bg-surface rounded p-2 border border-line">
  <div className="flex-1 min-w-0">
- <p className="text-xs font-medium text-gray-900">{m.medicine?.name || 'Medicine'}</p>
- {m.medicine?.genericName && <p className="text-[10px] text-gray-400">{m.medicine.genericName}</p>}
- <p className="text-[10px] text-blue-600">{m.dosage} · {m.frequency} · {m.duration}</p>
+ <p className="text-xs font-medium text-fg">{m.medicine?.name || 'Medicine'}</p>
+ {m.medicine?.genericName && <p className="text-[10px] text-faint">{m.medicine.genericName}</p>}
+ <p className="text-[10px] text-blue-600">{m.dosage}  {m.frequency}  {m.duration}</p>
  </div>
  <Link href={`/search/medicines?q=${encodeURIComponent(m.medicine?.name || '')}`}
  className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-medium hover:bg-blue-100 flex-shrink-0 ml-2">
@@ -164,7 +164,7 @@ function PrescriptionsModal({ appointmentId, doctorName, onClose }: { appointmen
  )
 }
 
-// ─── Enhanced Bookings List with View Results / View Prescriptions ───────────
+//  Enhanced Bookings List with View Results / View Prescriptions 
 interface BookingItem {
  id: string
  bookingType: string
@@ -204,15 +204,15 @@ function ProviderBookingsList({ providerType, title }: { providerType: string; t
  <>
  <div className="space-y-2">
  {bookings.length === 0 ? (
- <p className="text-center py-8 text-gray-400 text-sm">No {title.toLowerCase()} bookings yet.</p>
+ <p className="text-center py-8 text-faint text-sm">No {title.toLowerCase()} bookings yet.</p>
  ) : (
  bookings.map(b => (
- <div key={b.id} className="bg-white rounded-lg border border-gray-200 p-3">
+ <div key={b.id} className="bg-surface rounded-lg border border-line p-3">
  <div className="flex items-center justify-between">
  <div className="min-w-0 flex-1">
- <p className="font-medium text-gray-900 text-sm truncate">{b.providerName}</p>
- <p className="text-xs text-gray-500">{b.serviceName || title}</p>
- <p className="text-xs text-gray-400">{new Date(b.scheduledAt).toLocaleDateString()}</p>
+ <p className="font-medium text-fg text-sm truncate">{b.providerName}</p>
+ <p className="text-xs text-soft">{b.serviceName || title}</p>
+ <p className="text-xs text-faint">{new Date(b.scheduledAt).toLocaleDateString()}</p>
  </div>
  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
@@ -267,7 +267,7 @@ function ProviderBookingsList({ providerType, title }: { providerType: string; t
  )
 }
 
-// ─── My Health (card grid → detail) ──────────────────────────────────────────
+//  My Health (card grid  detail) 
 
 const COLOR_MAP: Record<string, { text: string; bg: string }> = {
  blue: { text: 'text-blue-600', bg: 'bg-blue-50' },
@@ -281,7 +281,7 @@ const COLOR_MAP: Record<string, { text: string; bg: string }> = {
  orange: { text: 'text-orange-600', bg: 'bg-orange-50' },
  cyan: { text: 'text-cyan-600', bg: 'bg-cyan-50' },
  red: { text: 'text-red-600', bg: 'bg-red-50' },
- gray: { text: 'text-gray-600', bg: 'bg-gray-50' },
+ gray: { text: 'text-soft', bg: 'bg-subtle' },
 }
 
 export default function MyHealthSidebar() {
@@ -319,7 +319,7 @@ export default function MyHealthSidebar() {
  const activeProviderType = activeItem?.providerType ?? null
  const isProviderSection = !!activeProviderType
 
- // ── DETAIL VIEW ─────────────────────────────────────────────────────────
+ //  DETAIL VIEW 
  if (activeSection) {
  const Icon = activeProviderType ? (ROLE_ICON[activeProviderType] || FaUser) : FaShieldAlt
  return (
@@ -356,13 +356,13 @@ export default function MyHealthSidebar() {
  )
  }
 
- // ── GRID VIEW (default) ─────────────────────────────────────────────────
+ //  GRID VIEW (default) 
  return (
  <div className="max-w-5xl mx-auto">
  <DashboardPageHeader
  icon={FaHeartbeat}
  title="My Health"
- description="Your care across every provider — pick a category to see your visits, results and prescriptions, or book a new appointment."
+ description="Your care across every provider  pick a category to see your visits, results and prescriptions, or book a new appointment."
  />
 
  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -374,16 +374,16 @@ export default function MyHealthSidebar() {
  <button
  key={r.role}
  onClick={() => setActiveSection(`role:${r.role}`)}
- className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
+ className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-surface border border-line shadow-sm
  hover:shadow-lg hover:-translate-y-0.5 hover:border-[#0C6780]/30 transition-all duration-200
  focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]"
  >
  <span className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 ${colors.bg} ${colors.text}`}>
  <Icon className="text-xl" />
  </span>
- <span className="text-sm font-bold text-[#001E40] leading-tight">{r.label}</span>
- <span className="text-[11px] text-gray-400 mt-0.5">{r.providerCount} available</span>
- <span className={`mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold ${visits > 0 ? colors.text : 'text-gray-400'}`}>
+ <span className="text-sm font-bold text-fg leading-tight">{r.label}</span>
+ <span className="text-[11px] text-faint mt-0.5">{r.providerCount} available</span>
+ <span className={`mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold ${visits > 0 ? colors.text : 'text-faint'}`}>
  {visits > 0 ? `${visits} visit${visits !== 1 ? 's' : ''}` : 'No visits yet'}
  <FaCalendarAlt className="text-[9px]" />
  </span>
@@ -394,15 +394,15 @@ export default function MyHealthSidebar() {
  {/* Insurance card */}
  <button
  onClick={() => setActiveSection('insurance')}
- className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-white border border-gray-100 shadow-sm
+ className="group flex flex-col items-start text-left p-4 sm:p-5 rounded-2xl bg-surface border border-line shadow-sm
  hover:shadow-lg hover:-translate-y-0.5 hover:border-indigo-300 transition-all duration-200
  focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
  >
  <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 bg-indigo-50 text-indigo-600">
  <FaShieldAlt className="text-xl" />
  </span>
- <span className="text-sm font-bold text-[#001E40] leading-tight">Insurance</span>
- <span className="text-[11px] text-gray-400 mt-0.5">Cover & claims</span>
+ <span className="text-sm font-bold text-fg leading-tight">Insurance</span>
+ <span className="text-[11px] text-faint mt-0.5">Cover & claims</span>
  <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-600">
  Manage <FaArrowLeft className="text-[9px] rotate-180" />
  </span>

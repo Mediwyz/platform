@@ -184,7 +184,7 @@ export default function ExerciseTab() {
     <button onClick={() => changeDate(-1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Previous day">
      <FaChevronLeft className="w-4 h-4" />
     </button>
-    <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
+    <span className="text-sm font-semibold text-fg">{formatDate(selectedDate)}</span>
     <button onClick={() => changeDate(1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Next day">
      <FaChevronRight className="w-4 h-4" />
     </button>
@@ -195,17 +195,17 @@ export default function ExerciseTab() {
     <div className="grid grid-cols-3 gap-3">
      <div className="bg-surface rounded-xl shadow-sm p-3 text-center border-t-4 border-orange-400">
       <FaFire className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-      <p className="text-xl font-bold text-[#001E40]">{data.totalBurned}</p>
+      <p className="text-xl font-bold text-fg">{data.totalBurned}</p>
       <p className="text-xs text-soft">Burned</p>
      </div>
      <div className="bg-surface rounded-xl shadow-sm p-3 text-center border-t-4 border-[#0C6780]">
       <FaClock className="w-5 h-5 text-[#0C6780] mx-auto mb-1" />
-      <p className="text-xl font-bold text-[#001E40]">{data.totalMinutes}</p>
+      <p className="text-xl font-bold text-fg">{data.totalMinutes}</p>
       <p className="text-xs text-soft">Minutes</p>
      </div>
      <div className="bg-surface rounded-xl shadow-sm p-3 text-center border-t-4 border-emerald-400">
       <FaDumbbell className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-      <p className="text-xl font-bold text-[#001E40]">{data.entries.length}</p>
+      <p className="text-xl font-bold text-fg">{data.entries.length}</p>
       <p className="text-xs text-soft">Sessions</p>
      </div>
     </div>
@@ -282,13 +282,13 @@ export default function ExerciseTab() {
     <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-[60]">
      <div className="bg-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
-       <h3 className="text-base font-bold text-[#001E40]">Log Exercise</h3>
+       <h3 className="text-base font-bold text-fg">Log Exercise</h3>
        <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-faint hover:text-soft">&times;</button>
       </div>
       <div className="p-4 space-y-5">
        {/* Exercise type grid */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-2">Exercise Type</label>
+        <label className="block text-sm font-medium text-fg mb-2">Exercise Type</label>
         <div className="flex flex-wrap gap-2">
          {EXERCISE_TYPES.map((type) => (
           <button
@@ -308,7 +308,7 @@ export default function ExerciseTab() {
 
        {/* Intensity */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-2">Intensity</label>
+        <label className="block text-sm font-medium text-fg mb-2">Intensity</label>
         <div className="grid grid-cols-3 gap-2">
          {INTENSITIES.map((level) => (
           <button
@@ -327,7 +327,7 @@ export default function ExerciseTab() {
 
        {/* Duration */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-1">Duration (minutes)</label>
+        <label className="block text-sm font-medium text-fg mb-1">Duration (minutes)</label>
         <div className="flex items-center gap-3">
          <button
           onClick={() => setFormDuration(d => Math.max(5, d - 5))}
@@ -338,7 +338,7 @@ export default function ExerciseTab() {
           value={formDuration}
           onChange={(e) => setFormDuration(Math.max(1, Number(e.target.value)))}
           min={1}
-          className="flex-1 text-center text-lg font-bold text-[#001E40] px-3 py-2 border border-line rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/40"
+          className="flex-1 text-center text-lg font-bold text-fg px-3 py-2 border border-line rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C6780]/40"
          />
          <button
           onClick={() => setFormDuration(d => d + 5)}
@@ -359,7 +359,7 @@ export default function ExerciseTab() {
 
        {/* Notes */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-1">Notes (optional)</label>
+        <label className="block text-sm font-medium text-fg mb-1">Notes (optional)</label>
         <textarea
          value={formNotes}
          onChange={(e) => setFormNotes(e.target.value)}

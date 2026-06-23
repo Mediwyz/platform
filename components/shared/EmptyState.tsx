@@ -9,11 +9,11 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
  return (
  <div className="text-center py-16">
- <div className="text-gray-400 text-6xl mb-6">
+ <div className="text-faint text-6xl mb-6">
  <Icon className="mx-auto" />
  </div>
- <h3 className="text-2xl font-semibold text-gray-600 mb-4">{title}</h3>
- <p className="text-gray-500 mb-8 max-w-md mx-auto">{description}</p>
+ <h3 className="text-2xl font-semibold text-soft mb-4">{title}</h3>
+ <p className="text-soft mb-8 max-w-md mx-auto">{description}</p>
  {buttonText && onButtonClick && (
  <button 
  onClick={onButtonClick}

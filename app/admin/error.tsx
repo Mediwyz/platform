@@ -10,7 +10,7 @@ export default function AdminError({
  reset: () => void
 }) {
  return (
- <div className="min-h-screen flex items-center justify-center bg-white">
+ <div className="min-h-screen flex items-center justify-center bg-surface">
  <div className="text-center max-w-lg px-6">
  <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <svg
@@ -32,8 +32,8 @@ export default function AdminError({
  Error
  </span>
 
- <h1 className="text-3xl font-bold text-gray-900 mb-3">Error Loading Admin Page</h1>
- <p className="text-gray-600 mb-8 leading-relaxed">
+ <h1 className="text-3xl font-bold text-fg mb-3">Error Loading Admin Page</h1>
+ <p className="text-soft mb-8 leading-relaxed">
  {error.message || 'An unexpected error occurred. Please try again.'}
  </p>
 
@@ -46,13 +46,13 @@ export default function AdminError({
  </button>
  <button
  onClick={() => window.history.back()}
- className="w-full sm:w-auto px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+ className="w-full sm:w-auto px-6 py-2.5 border-2 border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium"
  >
  Go Back
  </button>
  <Link
  href="/admin"
- className="w-full sm:w-auto px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center"
+ className="w-full sm:w-auto px-6 py-2.5 border-2 border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium text-center"
  >
  Dashboard
  </Link>

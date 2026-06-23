@@ -113,14 +113,14 @@ const NotificationSettingsTab: React.FC<NotificationSettingsTabProps> = ({
  return (
  <div className="flex items-center justify-center py-12">
  <FaSpinner className="animate-spin text-blue-600 text-2xl mr-3" />
- <span className="text-gray-600">Loading notification preferences...</span>
+ <span className="text-soft">Loading notification preferences...</span>
  </div>
  )
  }
 
  return (
  <div>
- <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-6 flex items-center gap-2">
  <FaBell className="text-blue-600" /> Notification Preferences
  </h2>
 
@@ -133,16 +133,16 @@ const NotificationSettingsTab: React.FC<NotificationSettingsTabProps> = ({
 
  <div className="space-y-3">
  {options.map((opt) => (
- <div key={opt.key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+ <div key={opt.key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-subtle transition">
  <div>
- <p className="font-medium text-gray-800">{opt.label}</p>
- {opt.description && <p className="text-sm text-gray-500">{opt.description}</p>}
+ <p className="font-medium text-fg">{opt.label}</p>
+ {opt.description && <p className="text-sm text-soft">{opt.description}</p>}
  </div>
  <button type="button" onClick={() => toggle(opt.key)} aria-label={`Toggle ${opt.label}`} disabled={isSaving}>
  {settings[opt.key] ? (
  <FaToggleOn className="text-3xl text-green-500" />
  ) : (
- <FaToggleOff className="text-3xl text-gray-400" />
+ <FaToggleOff className="text-3xl text-faint" />
  )}
  </button>
  </div>

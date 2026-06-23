@@ -154,12 +154,12 @@ export default function RegistrationForm() {
  if (!validateStep(currentStep)) return
 
  if (currentStep === 2) {
- // If provider → show workplace step before submitting
+ // If provider  show workplace step before submitting
  if (isProviderType(selectedUserType) && subStep === 'basic') {
  setSubStep('workplace')
  return
  }
- // Otherwise (member, or already done workplace step) → go to step 3 (submit)
+ // Otherwise (member, or already done workplace step)  go to step 3 (submit)
  setCurrentStep(3)
  handleSubmit(new Event('submit') as unknown as FormEvent)
  return
@@ -264,15 +264,15 @@ export default function RegistrationForm() {
  <div className="max-w-4xl mx-auto">
  {/* Header */}
  <div className="text-center mb-4 sm:mb-8">
- <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">Join MediWyz</h1>
- <p className="text-gray-600 text-sm sm:text-base md:text-lg">Create your healthcare account in under a minute</p>
+ <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-fg mb-1 sm:mb-2">Join MediWyz</h1>
+ <p className="text-soft text-sm sm:text-base md:text-lg">Create your healthcare account in under a minute</p>
  </div>
 
  {/* Progress Steps */}
  <ProgressSteps currentStep={currentStep} />
 
  {/* Step Content */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8">
  {/* Success Display */}
  {submissionSuccess && (
  <div className="text-center py-12">
@@ -283,7 +283,7 @@ export default function RegistrationForm() {
  </div>
  <h2 className="text-3xl font-bold text-green-600 mb-4">Account Created Successfully!</h2>
  <div className="max-w-md mx-auto">
- <p className="text-gray-600 mb-4">
+ <p className="text-soft mb-4">
  Your account has been created. You can log in immediately.
  </p>
  {formData.userType !== 'patient' && (
@@ -295,7 +295,7 @@ export default function RegistrationForm() {
  )}
  {workplaceSelection && (
  <div className="bg-[#9AE1FF]/20 border border-[#9AE1FF]/40 rounded-lg p-4 mb-4">
- <p className="text-[#001E40] text-sm">
+ <p className="text-fg text-sm">
  Your workplace link to <strong>{workplaceSelection.entityName}</strong> is pending admin approval.
  </p>
  </div>
@@ -353,8 +353,8 @@ export default function RegistrationForm() {
  <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
  </div>
- <h2 className="text-2xl font-bold text-gray-900 mb-2">Creating Your Account...</h2>
- <p className="text-gray-600">Please wait while we set up your account.</p>
+ <h2 className="text-2xl font-bold text-fg mb-2">Creating Your Account...</h2>
+ <p className="text-soft">Please wait while we set up your account.</p>
  </div>
  )}
 
@@ -398,13 +398,13 @@ export default function RegistrationForm() {
  {!submissionSuccess && (
  <>
  <div className="text-center mt-8">
- <p className="text-gray-600 text-sm">
+ <p className="text-soft text-sm">
  Already have an account?{' '}
  <Link href="/login" className="text-brand-teal hover:underline font-medium">
  Sign in here
  </Link>
  </p>
- <p className="text-gray-500 text-xs mt-2">
+ <p className="text-soft text-xs mt-2">
  Need help with registration?{' '}
  <Link href="/support" className="text-brand-teal hover:underline">
  Contact Support
@@ -415,7 +415,7 @@ export default function RegistrationForm() {
 
  {/* Legal Information Preview Buttons */}
  <div className="mt-6 text-center">
- <p className="text-gray-600 text-sm mb-3">Review our legal documents before registration:</p>
+ <p className="text-soft text-sm mb-3">Review our legal documents before registration:</p>
  <div className="flex justify-center gap-4 flex-wrap">
  <button
  type="button"

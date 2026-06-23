@@ -84,66 +84,66 @@ export default function HeroSectionEditor({ data, onSave }: HeroSectionEditorPro
  }
 
  return (
- <div className="bg-white rounded-xl shadow p-6 space-y-6">
- <h2 className="text-xl font-bold text-gray-900">Hero Section</h2>
+ <div className="bg-surface rounded-xl shadow p-6 space-y-6">
+ <h2 className="text-xl font-bold text-fg">Hero Section</h2>
 
  {/* Main Title */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Main Title</label>
+ <label className="block text-sm font-medium text-soft mb-1">Main Title</label>
  <input
  type="text"
  value={formData.mainTitle}
  onChange={(e) => handleChange('mainTitle', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Enter main title"
  />
  </div>
 
  {/* Highlight Word */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Highlight Word</label>
+ <label className="block text-sm font-medium text-soft mb-1">Highlight Word</label>
  <input
  type="text"
  value={formData.highlightWord}
  onChange={(e) => handleChange('highlightWord', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Word to highlight in the title"
  />
- <p className="text-xs text-gray-500 mt-1">This word will be styled differently in the title</p>
+ <p className="text-xs text-soft mt-1">This word will be styled differently in the title</p>
  </div>
 
  {/* Subtitle */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
+ <label className="block text-sm font-medium text-soft mb-1">Subtitle</label>
  <textarea
  value={formData.subtitle}
  onChange={(e) => handleChange('subtitle', e.target.value)}
  rows={3}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Enter subtitle text"
  />
  </div>
 
  {/* Platform Badge */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Platform Badge</label>
+ <label className="block text-sm font-medium text-soft mb-1">Platform Badge</label>
  <input
  type="text"
  value={formData.platformBadge}
  onChange={(e) => handleChange('platformBadge', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., #1 Digital Health Platform"
  />
  </div>
 
  {/* Search Placeholder */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Search Placeholder</label>
+ <label className="block text-sm font-medium text-soft mb-1">Search Placeholder</label>
  <input
  type="text"
  value={formData.searchPlaceholder}
  onChange={(e) => handleChange('searchPlaceholder', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Search bar placeholder text"
  />
  </div>
@@ -151,7 +151,7 @@ export default function HeroSectionEditor({ data, onSave }: HeroSectionEditorPro
  {/* CTA Buttons */}
  <div>
  <div className="flex items-center justify-between mb-3">
- <label className="block text-sm font-medium text-gray-700">CTA Buttons</label>
+ <label className="block text-sm font-medium text-soft">CTA Buttons</label>
  <button
  onClick={addCtaButton}
  className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -161,40 +161,40 @@ export default function HeroSectionEditor({ data, onSave }: HeroSectionEditorPro
  </div>
 
  {formData.ctaButtons.length === 0 && (
- <p className="text-sm text-gray-500 italic">No CTA buttons configured. Click &quot;Add Button&quot; to add one.</p>
+ <p className="text-sm text-soft italic">No CTA buttons configured. Click &quot;Add Button&quot; to add one.</p>
  )}
 
  <div className="space-y-3">
  {formData.ctaButtons.map((btn, index) => (
- <div key={index} className="flex gap-3 items-start p-4 bg-gray-50 rounded-lg border border-gray-200">
+ <div key={index} className="flex gap-3 items-start p-4 bg-subtle rounded-lg border border-line">
  <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Icon</label>
+ <label className="block text-xs font-medium text-soft mb-1">Icon</label>
  <input
  type="text"
  value={btn.icon}
  onChange={(e) => handleCtaChange(index, 'icon', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., FaVideo"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Label</label>
+ <label className="block text-xs font-medium text-soft mb-1">Label</label>
  <input
  type="text"
  value={btn.label}
  onChange={(e) => handleCtaChange(index, 'label', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Button label"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Short Label</label>
+ <label className="block text-xs font-medium text-soft mb-1">Short Label</label>
  <input
  type="text"
  value={btn.shortLabel}
  onChange={(e) => handleCtaChange(index, 'shortLabel', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Mobile label"
  />
  </div>
@@ -212,7 +212,7 @@ export default function HeroSectionEditor({ data, onSave }: HeroSectionEditorPro
  </div>
 
  {/* Save Button */}
- <div className="flex justify-end pt-4 border-t border-gray-200">
+ <div className="flex justify-end pt-4 border-t border-line">
  <button
  onClick={handleSave}
  disabled={saving}

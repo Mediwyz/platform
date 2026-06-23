@@ -84,9 +84,9 @@ export default function ProviderPracticePage({
  s === 'pending' ? 'bg-yellow-100 text-yellow-700' :
  s === 'accepted' || s === 'upcoming' ? 'bg-green-100 text-green-700' :
  s === 'in_progress' ? 'bg-blue-100 text-blue-700' :
- s === 'completed' ? 'bg-gray-100 text-gray-600' :
+ s === 'completed' ? 'bg-subtle text-soft' :
  s === 'cancelled' ? 'bg-red-100 text-red-700' :
- 'bg-gray-100 text-gray-500'
+ 'bg-subtle text-soft'
 
  const pendingBookings = bookings.filter(b => b.status === 'pending')
  const activeBookings = bookings.filter(b => ['accepted', 'upcoming', 'in_progress'].includes(b.status))
@@ -97,16 +97,16 @@ export default function ProviderPracticePage({
  return (
  <div key={b.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
  <div className="min-w-0 flex-1">
- <p className="font-medium text-gray-900 text-sm">{b.serviceName || defaultServiceLabel}</p>
- {b.specialty && <p className="text-xs text-gray-500">{b.specialty}</p>}
- <p className="text-xs text-gray-400">
+ <p className="font-medium text-fg text-sm">{b.serviceName || defaultServiceLabel}</p>
+ {b.specialty && <p className="text-xs text-soft">{b.specialty}</p>}
+ <p className="text-xs text-faint">
  {new Date(b.scheduledAt).toLocaleDateString()} at {new Date(b.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
  </p>
  </div>
  <div className="flex items-center gap-2 flex-shrink-0">
  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColor(b.status)}`}>{b.status}</span>
  {b.servicePrice != null && b.servicePrice > 0 && (
- <span className="text-xs font-medium text-gray-600">Rs {(b.servicePrice ?? 0).toLocaleString()}</span>
+ <span className="text-xs font-medium text-soft">Rs {(b.servicePrice ?? 0).toLocaleString()}</span>
  )}
 
  {/* Action buttons based on status */}
@@ -155,11 +155,11 @@ export default function ProviderPracticePage({
 
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+ <h1 className="text-2xl font-bold text-fg">{title}</h1>
 
  {bookings.length === 0 ? (
- <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500">
- <FaCalendarAlt className="text-4xl text-gray-300 mx-auto mb-3" />
+ <div className="bg-surface rounded-xl border border-line p-8 text-center text-soft">
+ <FaCalendarAlt className="text-4xl text-faint mx-auto mb-3" />
  <p className="font-medium">No booking requests yet</p>
  <p className="text-sm mt-1">When patients book your services, they will appear here.</p>
  </div>
@@ -168,7 +168,7 @@ export default function ProviderPracticePage({
  {pendingBookings.length > 0 && (
  <div>
  <h2 className="text-sm font-semibold text-yellow-700 mb-2">Pending Requests ({pendingBookings.length})</h2>
- <div className="bg-white rounded-xl border border-yellow-200 divide-y divide-yellow-100">
+ <div className="bg-surface rounded-xl border border-yellow-200 divide-y divide-yellow-100">
  {pendingBookings.map(renderBooking)}
  </div>
  </div>
@@ -177,7 +177,7 @@ export default function ProviderPracticePage({
  {activeBookings.length > 0 && (
  <div>
  <h2 className="text-sm font-semibold text-green-700 mb-2">Active ({activeBookings.length})</h2>
- <div className="bg-white rounded-xl border border-green-200 divide-y divide-green-100">
+ <div className="bg-surface rounded-xl border border-green-200 divide-y divide-green-100">
  {activeBookings.map(renderBooking)}
  </div>
  </div>
@@ -185,8 +185,8 @@ export default function ProviderPracticePage({
 
  {pastBookings.length > 0 && (
  <div>
- <h2 className="text-sm font-semibold text-gray-500 mb-2">Past ({pastBookings.length})</h2>
- <div className="bg-white rounded-xl border border-gray-200 divide-y">
+ <h2 className="text-sm font-semibold text-soft mb-2">Past ({pastBookings.length})</h2>
+ <div className="bg-surface rounded-xl border border-line divide-y">
  {pastBookings.map(renderBooking)}
  </div>
  </div>

@@ -88,33 +88,33 @@ export default function AdminUsersPage() {
  <div className="mb-6">
  <div className="flex items-center gap-3 mb-2">
  <FaUsers className="text-2xl text-purple-600" />
- <h1 className="text-2xl font-bold text-[#001E40]">User Management</h1>
+ <h1 className="text-2xl font-bold text-fg">User Management</h1>
  </div>
- <p className="text-gray-600">View and manage all platform users</p>
+ <p className="text-soft">View and manage all platform users</p>
  </div>
 
  {/* Filters */}
- <div className="bg-white rounded-xl p-4 shadow-lg mb-6">
+ <div className="bg-surface rounded-xl p-4 shadow-lg mb-6">
  <div className="flex flex-wrap gap-4 items-center">
  {/* Search */}
  <div className="relative flex-1 min-w-[200px]">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search by name or email..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pl-10 pr-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
  />
  </div>
 
  {/* Type Filter */}
  <div className="flex items-center gap-2">
- <FaFilter className="text-gray-400" />
+ <FaFilter className="text-faint" />
  <select
  value={typeFilter}
  onChange={(e) => setTypeFilter(e.target.value)}
- className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
  >
  <option value="all">All Types</option>
  {Object.entries(userTypeLabels).map(([key, label]) => (
@@ -127,7 +127,7 @@ export default function AdminUsersPage() {
  <select
  value={statusFilter}
  onChange={(e) => setStatusFilter(e.target.value)}
- className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+ className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
  >
  <option value="all">All Statuses</option>
  <option value="active">Active</option>
@@ -138,54 +138,54 @@ export default function AdminUsersPage() {
  </div>
 
  {/* Users Table */}
- <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-lg overflow-hidden">
  {loading ? (
  <div className="flex justify-center items-center py-16">
  <FaSpinner className="animate-spin text-3xl text-blue-500" />
  </div>
  ) : filteredUsers.length === 0 ? (
  <div className="text-center py-16">
- <FaUsers className="text-4xl text-gray-300 mx-auto mb-3" />
- <p className="text-gray-500 text-lg">No users found</p>
- <p className="text-gray-400 text-sm mt-1">Try adjusting your filters</p>
+ <FaUsers className="text-4xl text-faint mx-auto mb-3" />
+ <p className="text-soft text-lg">No users found</p>
+ <p className="text-faint text-sm mt-1">Try adjusting your filters</p>
  </div>
  ) : (
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
- <thead className="bg-gray-50 border-b">
+ <thead className="bg-subtle border-b">
  <tr>
- <th className="px-6 py-3 text-left font-medium text-gray-700">Name</th>
- <th className="px-6 py-3 text-left font-medium text-gray-700">Email</th>
- <th className="px-6 py-3 text-left font-medium text-gray-700">User Type</th>
- <th className="px-6 py-3 text-left font-medium text-gray-700">Status</th>
- <th className="px-6 py-3 text-left font-medium text-gray-700">Join Date</th>
+ <th className="px-6 py-3 text-left font-medium text-soft">Name</th>
+ <th className="px-6 py-3 text-left font-medium text-soft">Email</th>
+ <th className="px-6 py-3 text-left font-medium text-soft">User Type</th>
+ <th className="px-6 py-3 text-left font-medium text-soft">Status</th>
+ <th className="px-6 py-3 text-left font-medium text-soft">Join Date</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {filteredUsers.map((user) => (
- <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+ <tr key={user.id} className="hover:bg-subtle transition-colors">
  <td className="px-6 py-4">
  <div className="flex items-center gap-3">
  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
  {user.firstName[0]}{user.lastName[0]}
  </div>
- <span className="font-medium text-gray-900">
+ <span className="font-medium text-fg">
  {user.firstName} {user.lastName}
  </span>
  </div>
  </td>
- <td className="px-6 py-4 text-gray-600">{user.email}</td>
+ <td className="px-6 py-4 text-soft">{user.email}</td>
  <td className="px-6 py-4">
  <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
  {userTypeLabels[user.userType] || user.userType}
  </span>
  </td>
  <td className="px-6 py-4">
- <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[user.accountStatus] || 'bg-gray-100 text-gray-800'}`}>
+ <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[user.accountStatus] || 'bg-subtle text-fg'}`}>
  {user.accountStatus}
  </span>
  </td>
- <td className="px-6 py-4 text-gray-500">
+ <td className="px-6 py-4 text-soft">
  {new Date(user.createdAt).toLocaleDateString()}
  </td>
  </tr>
@@ -197,7 +197,7 @@ export default function AdminUsersPage() {
 
  {/* Results count */}
  {!loading && filteredUsers.length > 0 && (
- <div className="px-6 py-3 bg-gray-50 border-t text-sm text-gray-500">
+ <div className="px-6 py-3 bg-subtle border-t text-sm text-soft">
  Showing {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''}
  </div>
  )}

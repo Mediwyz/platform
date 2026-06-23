@@ -20,14 +20,14 @@ const ProfessionalBanner: React.FC<ProfessionalBannerProps> = ({
  <div className="flex flex-col sm:flex-row gap-4 justify-center">
  <button 
  onClick={onPrimaryClick}
- className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+ className="bg-surface text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-subtle transition"
  >
  {primaryButton}
  </button>
  {secondaryButton && (
  <button 
  onClick={onSecondaryClick}
- className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary-blue transition"
+ className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-surface hover:text-primary-blue transition"
  >
  {secondaryButton}
  </button>

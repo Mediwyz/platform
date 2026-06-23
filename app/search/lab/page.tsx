@@ -76,7 +76,7 @@ const LabTestCard = ({ test }: LabTestProps) => {
  const CategoryIcon = categoryIcons[test.category as keyof typeof categoryIcons] || FaFlask
 
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
  {/* Left: Icon + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -92,7 +92,7 @@ const LabTestCard = ({ test }: LabTestProps) => {
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
- <h3 className="text-sm font-bold text-gray-900 truncate">{test.name}</h3>
+ <h3 className="text-sm font-bold text-fg truncate">{test.name}</h3>
  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium border whitespace-nowrap bg-purple-50 text-purple-700 border-purple-200">
  {test.category}
  </span>
@@ -102,18 +102,18 @@ const LabTestCard = ({ test }: LabTestProps) => {
  </p>
 
  {/* Meta row */}
- <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-1.5">
+ <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-soft mb-1.5">
  <span className="flex items-center gap-1">
  <FaStar className="text-yellow-500 text-[10px]" />
- <span className="font-semibold text-gray-700">{test.rating.toFixed(1)}</span>
- <span className="text-gray-400">({test.reviews})</span>
+ <span className="font-semibold text-soft">{test.rating.toFixed(1)}</span>
+ <span className="text-faint">({test.reviews})</span>
  </span>
  <span className="flex items-center gap-1">
- <FaClock className="text-[10px] text-gray-400" />
+ <FaClock className="text-[10px] text-faint" />
  <span>{test.resultTime}</span>
  </span>
  <span className="flex items-center gap-1">
- <FaMapMarkerAlt className="text-[10px] text-gray-400" />
+ <FaMapMarkerAlt className="text-[10px] text-faint" />
  <span className="truncate max-w-[120px]">{test.labLocation}</span>
  </span>
  </div>
@@ -147,13 +147,13 @@ const LabTestCard = ({ test }: LabTestProps) => {
  </div>
 
  {/* Right: Price + Buttons */}
- <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-4 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+ <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-4 border-t sm:border-t-0 border-line pt-3 sm:pt-0">
  <div className="sm:text-right">
- <p className="text-sm font-bold text-gray-900 whitespace-nowrap">{test.price}</p>
- <p className="text-[10px] text-gray-400 line-through whitespace-nowrap">{test.originalPrice}</p>
+ <p className="text-sm font-bold text-fg whitespace-nowrap">{test.price}</p>
+ <p className="text-[10px] text-faint line-through whitespace-nowrap">{test.originalPrice}</p>
  </div>
  <div className="flex items-center gap-2">
- <button className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors">
+ <button className="flex-1 sm:flex-none bg-subtle hover:bg-line text-soft px-3 py-2 rounded-lg text-xs font-medium transition-colors">
  Details
  </button>
  <AuthBookingLink type="lab-test" providerId={test.id} className="flex-1 sm:flex-none bg-purple-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-purple-700 transition-colors text-center inline-flex items-center gap-1">
@@ -176,7 +176,7 @@ const LoadingAnimation = () => {
  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-purple-600 rounded-full animate-spin border-t-transparent"></div>
  <FaFlask className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-purple-600 text-2xl" />
  </div>
- <p className="mt-4 text-gray-600 font-medium animate-pulse">AI is finding the best lab tests for you...</p>
+ <p className="mt-4 text-soft font-medium animate-pulse">AI is finding the best lab tests for you...</p>
  <div className="flex gap-1 mt-2">
  <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
  <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -194,9 +194,9 @@ interface EmptyStateProps {
 const EmptyState = ({ onClear }: EmptyStateProps) => {
  return (
  <div className="text-center py-12">
- <FaFlask className="text-6xl text-gray-300 mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-700 mb-2">No lab tests found</h3>
- <p className="text-gray-500 mb-6">Try adjusting your search criteria or browse all categories</p>
+ <FaFlask className="text-6xl text-faint mx-auto mb-4" />
+ <h3 className="text-xl font-semibold text-soft mb-2">No lab tests found</h3>
+ <p className="text-soft mb-6">Try adjusting your search criteria or browse all categories</p>
  <button
  onClick={onClear}
  className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
@@ -272,7 +272,7 @@ export default function LabTestingPage() {
  <div className="container mx-auto px-4 py-8">
  {/* Search Form */}
  <div>
- <div className="bg-white rounded-xl shadow-xl p-4">
+ <div className="bg-surface rounded-xl shadow-xl p-4">
  <div>
  <div className="flex flex-col gap-4">
  <div className="relative">
@@ -281,16 +281,16 @@ export default function LabTestingPage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Search lab tests by name, condition, or symptoms (e.g., 'diabetes test', 'cholesterol check')"
- className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 transition-colors text-base"
+ className="w-full px-4 py-3 pr-12 border-2 border-line rounded-xl focus:outline-none focus:border-purple-500 transition-colors text-base"
  />
- <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
 
  <div className="flex flex-col md:flex-row gap-4">
  <select
  value={category}
  onChange={(e) => setCategory(e.target.value)}
- className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 transition-colors"
+ className="flex-1 px-4 py-2.5 border-2 border-line rounded-xl focus:outline-none focus:border-purple-500 transition-colors"
  >
  <option value="all">All Categories</option>
  <option value="hematology">Blood Tests</option>
@@ -324,8 +324,8 @@ export default function LabTestingPage() {
  <>
  {hasSearched && (
  <div className="mb-6 flex items-center justify-between">
- <p className="text-gray-600">
- Found <span className="font-semibold text-gray-900">{searchResults.length}</span> lab tests matching your search
+ <p className="text-soft">
+ Found <span className="font-semibold text-fg">{searchResults.length}</span> lab tests matching your search
  </p>
  <button
  onClick={handleClearFilters}

@@ -12,7 +12,7 @@ import { useT } from '@/lib/i18n/useT'
  * wallet credit on successful signup attribution.
  *
  * This card surfaces the referral pillar on the member dashboard so the
- * platform's core loop (book → refer → earn) is visible, not buried in a
+ * platform's core loop (book  refer  earn) is visible, not buried in a
  * hidden menu. Other provider roles have this too - it's universal.
  */
 interface ReferralPillarCardProps {
@@ -80,7 +80,7 @@ export default function ReferralPillarCard({ userId }: ReferralPillarCardProps) 
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 animate-pulse h-32" />
+      <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-line animate-pulse h-32" />
     )
   }
 
@@ -135,7 +135,7 @@ export default function ReferralPillarCard({ userId }: ReferralPillarCardProps) 
       <div className="flex items-center gap-2">
         <button
           onClick={shareNative}
-          className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-brand-navy font-semibold text-sm py-2.5 rounded-lg hover:bg-gray-100 transition"
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-surface text-brand-navy font-semibold text-sm py-2.5 rounded-lg hover:bg-subtle transition"
         >
           <FaShareAlt /> {t('referral.share')}
         </button>

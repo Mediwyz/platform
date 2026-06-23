@@ -96,11 +96,11 @@ export default function CommissionConfigPage() {
 
  return (
  <div className="p-4 sm:p-6 max-w-2xl">
- <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Commission Configuration</h1>
+ <h1 className="text-xl sm:text-2xl font-bold text-fg mb-6">Commission Configuration</h1>
 
  {/* Visual breakdown */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
- <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6 mb-6">
+ <h2 className="text-lg font-semibold text-fg mb-4 flex items-center gap-2">
  <FaPercentage className="text-blue-500" />
  Revenue Split
  </h2>
@@ -127,7 +127,7 @@ export default function CommissionConfigPage() {
  </div>
  </div>
 
- <div className="flex items-center gap-4 text-sm text-gray-600">
+ <div className="flex items-center gap-4 text-sm text-soft">
  <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded-full inline-block" /> Provider</span>
  <span className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-500 rounded-full inline-block" /> Regional Admin</span>
  <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded-full inline-block" /> Platform</span>
@@ -135,9 +135,9 @@ export default function CommissionConfigPage() {
  </div>
 
  {/* Form */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-5">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6 space-y-5">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Provider Commission Rate (%)
  </label>
  <input
@@ -147,13 +147,13 @@ export default function CommissionConfigPage() {
  step={0.5}
  value={provider}
  onChange={(e) => setProvider(parseFloat(e.target.value) || 0)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
- <p className="text-xs text-gray-400 mt-1">Percentage going to doctors, nurses, and other service providers</p>
+ <p className="text-xs text-faint mt-1">Percentage going to doctors, nurses, and other service providers</p>
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Regional Admin Commission Rate (%)
  </label>
  <input
@@ -163,13 +163,13 @@ export default function CommissionConfigPage() {
  step={0.5}
  value={regional}
  onChange={(e) => setRegional(parseFloat(e.target.value) || 0)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
- <p className="text-xs text-gray-400 mt-1">Default rate for regional administrators (can be overridden per admin)</p>
+ <p className="text-xs text-faint mt-1">Default rate for regional administrators (can be overridden per admin)</p>
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">
+ <label className="block text-sm font-medium text-soft mb-1">
  Platform Commission Rate (%)
  </label>
  <input
@@ -179,9 +179,9 @@ export default function CommissionConfigPage() {
  step={0.5}
  value={platform}
  onChange={(e) => setPlatform(parseFloat(e.target.value) || 0)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
- <p className="text-xs text-gray-400 mt-1">MediWyz platform maintenance fee</p>
+ <p className="text-xs text-faint mt-1">MediWyz platform maintenance fee</p>
  </div>
 
  {/* Total indicator */}
@@ -192,28 +192,28 @@ export default function CommissionConfigPage() {
  </span>
  </div>
 
- <hr className="border-gray-200" />
+ <hr className="border-line" />
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+ <label className="block text-sm font-medium text-soft mb-1">Currency</label>
  <input
  type="text"
  value={currency}
  onChange={(e) => setCurrency(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Trial Wallet Amount</label>
+ <label className="block text-sm font-medium text-soft mb-1">Trial Wallet Amount</label>
  <input
  type="number"
  min={0}
  value={trialAmount}
  onChange={(e) => setTrialAmount(parseFloat(e.target.value) || 0)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
  />
- <p className="text-xs text-gray-400 mt-1">Initial credit given to new users for trial</p>
+ <p className="text-xs text-faint mt-1">Initial credit given to new users for trial</p>
  </div>
 
  {error && (

@@ -69,15 +69,15 @@ export default function WorkflowSuggestionsPage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <Link href="/regional/workflows" className="p-2 hover:bg-gray-100 rounded-lg text-gray-500">
+        <Link href="/regional/workflows" className="p-2 hover:bg-subtle rounded-lg text-soft">
           <FiArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
             <FiInbox className="text-brand-teal" />
             Workflow Suggestions
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <p className="text-sm text-soft mt-0.5">
             Providers can propose custom workflows for you to review and approve.
             Approved suggestions become active templates for that provider type.
           </p>
@@ -93,7 +93,7 @@ export default function WorkflowSuggestionsPage() {
             className={`px-3 py-1.5 text-sm rounded-lg border font-medium transition ${
               filter === s
                 ? 'bg-brand-navy text-white border-brand-navy'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                : 'bg-surface text-soft border-line hover:bg-subtle'
             }`}
           >
             {s === '' ? 'All' : s === 'PENDING' ? `Pending (${pending.length})` : s[0] + s.slice(1).toLowerCase()}
@@ -104,16 +104,16 @@ export default function WorkflowSuggestionsPage() {
       {loading && (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 bg-white rounded-xl border border-gray-200 animate-pulse" />
+            <div key={i} className="h-24 bg-surface rounded-xl border border-line animate-pulse" />
           ))}
         </div>
       )}
 
       {!loading && suggestions.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+        <div className="bg-surface rounded-xl border border-line p-10 text-center">
           <FiCheckCircle className="text-4xl text-green-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">No suggestions here</p>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="font-medium text-soft">No suggestions here</p>
+          <p className="text-sm text-faint mt-1">
             When providers suggest a workflow, it will appear here for your review.
           </p>
         </div>
@@ -126,14 +126,14 @@ export default function WorkflowSuggestionsPage() {
           const isExpanded = expandedId === s.id
 
           return (
-            <div key={s.id} className={`bg-white rounded-xl border ${cfg.border} overflow-hidden`}>
+            <div key={s.id} className={`bg-surface rounded-xl border ${cfg.border} overflow-hidden`}>
               <div
-                className="flex items-start justify-between gap-3 p-4 cursor-pointer hover:bg-gray-50"
+                className="flex items-start justify-between gap-3 p-4 cursor-pointer hover:bg-subtle"
                 onClick={() => setExpandedId(isExpanded ? null : s.id)}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <h3 className="font-semibold text-gray-900">{s.name}</h3>
+                    <h3 className="font-semibold text-fg">{s.name}</h3>
                     <span className={`inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.text}`}>
                       <Icon className="w-3 h-3" /> {cfg.label}
                     </span>
@@ -143,32 +143,32 @@ export default function WorkflowSuggestionsPage() {
                     <span className="text-xs bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded">
                       {s.serviceMode}
                     </span>
-                    <span className="text-xs text-gray-400">{s.steps.length} steps</span>
+                    <span className="text-xs text-faint">{s.steps.length} steps</span>
                   </div>
                   {s.description && (
-                    <p className="text-sm text-gray-600">{s.description}</p>
+                    <p className="text-sm text-soft">{s.description}</p>
                   )}
-                  <p className="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
+                  <p className="text-[11px] text-faint mt-1 flex items-center gap-1">
                     <FiUser className="w-3 h-3" />
                     Submitted {s.suggestedAt ? new Date(s.suggestedAt).toLocaleDateString() : ' - '}
                   </p>
                   {s.suggestionNote && (
-                    <p className="text-xs text-gray-500 mt-1 italic">Note: {s.suggestionNote}</p>
+                    <p className="text-xs text-soft mt-1 italic">Note: {s.suggestionNote}</p>
                   )}
                 </div>
-                {isExpanded ? <FiChevronUp className="text-gray-400 flex-shrink-0 mt-1" /> : <FiChevronDown className="text-gray-400 flex-shrink-0 mt-1" />}
+                {isExpanded ? <FiChevronUp className="text-faint flex-shrink-0 mt-1" /> : <FiChevronDown className="text-faint flex-shrink-0 mt-1" />}
               </div>
 
               {isExpanded && (
-                <div className="border-t border-gray-100 p-4 bg-gray-50 space-y-4">
+                <div className="border-t border-line p-4 bg-subtle space-y-4">
                   {/* Steps preview */}
                   <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Steps</p>
+                    <p className="text-xs font-semibold text-soft uppercase tracking-wider mb-2">Steps</p>
                     <div className="flex flex-wrap gap-2">
                       {s.steps.sort((a, b) => a.order - b.order).map((step, i) => (
                         <div key={step.statusCode} className="flex items-center gap-1.5">
-                          {i > 0 && <span className="text-gray-300 text-xs">→</span>}
-                          <span className="text-xs bg-white border border-gray-200 rounded px-2 py-1 text-gray-700">
+                          {i > 0 && <span className="text-faint text-xs"></span>}
+                          <span className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
                             {step.label}
                           </span>
                         </div>
@@ -182,9 +182,9 @@ export default function WorkflowSuggestionsPage() {
                       <textarea
                         value={noteMap[s.id] || ''}
                         onChange={e => setNoteMap(prev => ({ ...prev, [s.id]: e.target.value }))}
-                        placeholder="Optional note for the provider (reason for approval/rejection)…"
+                        placeholder="Optional note for the provider (reason for approval/rejection)"
                         rows={2}
-                        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none resize-none"
+                        className="w-full text-sm border border-line rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none resize-none"
                       />
                       <div className="flex gap-2">
                         <button
@@ -193,7 +193,7 @@ export default function WorkflowSuggestionsPage() {
                           className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50"
                         >
                           <FiCheckCircle className="w-3.5 h-3.5" />
-                          {busyId === s.id ? 'Processing…' : 'Approve & activate'}
+                          {busyId === s.id ? 'Processing' : 'Approve & activate'}
                         </button>
                         <button
                           onClick={() => review(s.id, 'reject')}

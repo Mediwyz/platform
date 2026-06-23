@@ -85,7 +85,7 @@ export default function PostCard({
     id: '', firstName: 'Unknown', lastName: '', profileImage: null, userType: 'MEMBER', verified: false,
   }
   const isLong = post.content.length > 300
-  const displayContent = isLong && !expanded ? post.content.slice(0, 300) + '…' : post.content
+  const displayContent = isLong && !expanded ? post.content.slice(0, 300) + '' : post.content
   const specialty = author.doctorProfile?.specialty?.join(', ')
 
   const displayName = post.company
@@ -121,7 +121,7 @@ export default function PostCard({
             </div>
             <div className="flex items-center gap-1.5 text-xs text-faint mt-0.5">
               {subtitle && <span className="capitalize truncate">{subtitle}</span>}
-              {subtitle && <span aria-hidden>·</span>}
+              {subtitle && <span aria-hidden></span>}
               <span className="whitespace-nowrap">{getRelativeTime(post.createdAt)}</span>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function PostCard({
         )}
       </div>
 
-      {/* Image — full-bleed */}
+      {/* Image  full-bleed */}
       {post.imageUrl && (
         <div className="bg-subtle">
           <Image

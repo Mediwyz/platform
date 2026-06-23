@@ -88,8 +88,8 @@ export default function NotificationsPage() {
  <div className="flex items-center gap-3">
  <FaBell className="text-2xl text-yellow-600" />
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
- <p className="text-sm text-gray-500">
+ <h1 className="text-2xl font-bold text-fg">Notifications</h1>
+ <p className="text-sm text-soft">
  {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up'}
  </p>
  </div>
@@ -109,10 +109,10 @@ export default function NotificationsPage() {
  <FaSpinner className="animate-spin text-3xl text-blue-500" />
  </div>
  ) : notifications.length === 0 ? (
- <div className="text-center py-16 bg-white rounded-xl shadow-lg">
- <FaBell className="text-4xl text-gray-300 mx-auto mb-3" />
- <p className="text-gray-500 text-lg font-medium">No notifications</p>
- <p className="text-gray-400 text-sm mt-1">You&apos;re all caught up</p>
+ <div className="text-center py-16 bg-surface rounded-xl shadow-lg">
+ <FaBell className="text-4xl text-faint mx-auto mb-3" />
+ <p className="text-soft text-lg font-medium">No notifications</p>
+ <p className="text-faint text-sm mt-1">You&apos;re all caught up</p>
  </div>
  ) : (
  <div className="space-y-3">
@@ -122,27 +122,27 @@ export default function NotificationsPage() {
  return (
  <div
  key={notification.id}
- className={`bg-white rounded-xl p-4 shadow-sm border transition-colors ${
- notification.read ? 'border-gray-100' : 'border-blue-200 bg-blue-50/30'
+ className={`bg-surface rounded-xl p-4 shadow-sm border transition-colors ${
+ notification.read ? 'border-line' : 'border-blue-200 bg-blue-50/30'
  }`}
  >
  <div className="flex items-start gap-3">
  <Icon className={`mt-0.5 text-lg ${typeInfo.color} flex-shrink-0`} />
  <div className="flex-1 min-w-0">
  <div className="flex items-start justify-between gap-2">
- <h3 className={`text-sm font-semibold ${notification.read ? 'text-gray-700' : 'text-gray-900'}`}>
+ <h3 className={`text-sm font-semibold ${notification.read ? 'text-soft' : 'text-fg'}`}>
  {notification.title}
  </h3>
- <span className="text-xs text-gray-400 flex-shrink-0">
+ <span className="text-xs text-faint flex-shrink-0">
  {new Date(notification.createdAt).toLocaleDateString()}
  </span>
  </div>
- <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+ <p className="text-sm text-soft mt-1">{notification.message}</p>
  </div>
  {!notification.read && (
  <button
  onClick={() => markAsRead(notification.id)}
- className="p-1.5 text-gray-400 hover:text-blue-600 transition-colors flex-shrink-0"
+ className="p-1.5 text-faint hover:text-blue-600 transition-colors flex-shrink-0"
  title="Mark as read"
  >
  <FaCheck className="text-sm" />

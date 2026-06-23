@@ -220,8 +220,8 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  </Link>
  <div className="flex items-start justify-between">
  <div>
- <h1 className="text-xl font-bold text-gray-900">{state.templateName}</h1>
- <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+ <h1 className="text-xl font-bold text-fg">{state.templateName}</h1>
+ <div className="flex items-center gap-4 mt-2 text-sm text-soft">
  <span className="flex items-center gap-1"><FiCalendar className="w-4 h-4" /> {new Date(state.startedAt).toLocaleDateString('fr-FR')}</span>
  <span className="flex items-center gap-1"><FiUser className="w-4 h-4" /> {state.serviceMode}</span>
  <span className="flex items-center gap-1"><FiClock className="w-4 h-4" /> {bookingType.replace(/_/g, ' ')}</span>
@@ -233,7 +233,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  {/* Video / Audio Call Banner */}
  <WorkflowVideoCallBanner videoCallId={latestVideoCallId} currentStatus={state.currentStatus} callMode={callMode} isTerminal={state.isCompleted || state.isCancelled} />
 
- {/* Session Progress - recurrent programmes (physio, mental health, nutrition…) */}
+ {/* Session Progress - recurrent programmes (physio, mental health, nutrition) */}
  {isRecurrent && maxSessions > 0 && (
   <SessionProgress
    programName={state.templateName}
@@ -270,7 +270,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
  {/* Content Attachments */}
  {contentSteps.length > 0 && (
  <div className="space-y-3">
- <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Documents & Content</h2>
+ <h2 className="text-sm font-semibold text-soft uppercase tracking-wider">Documents & Content</h2>
  {contentSteps.map((step) => (
  <WorkflowContentViewer
  key={step.id}
@@ -283,7 +283,7 @@ export default function BookingWorkflowDetail({ bookingType, bookingId, userRole
 
  {/* Timeline */}
  <div>
- <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">Workflow History</h2>
+ <h2 className="text-sm font-semibold text-soft uppercase tracking-wider mb-4">Workflow History</h2>
  <WorkflowTimeline
  steps={timeline}
  currentStatus={state.currentStatus}

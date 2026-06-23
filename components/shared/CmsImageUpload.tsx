@@ -50,7 +50,7 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
 
  return (
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+ <label className="block text-sm font-medium text-soft mb-1">{label}</label>
 
  {value ? (
  <div className="relative group">
@@ -59,14 +59,14 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
  alt="Preview"
  width={400}
  height={160}
- className="w-full h-40 object-cover rounded-lg border border-gray-200"
+ className="w-full h-40 object-cover rounded-lg border border-line"
  onError={(e) => { (e.target as HTMLImageElement).src = '' }}
  />
  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-3">
  <button
  type="button"
  onClick={() => fileInputRef.current?.click()}
- className="px-3 py-1.5 bg-white text-gray-800 rounded-lg text-sm font-medium hover:bg-gray-100"
+ className="px-3 py-1.5 bg-surface text-fg rounded-lg text-sm font-medium hover:bg-subtle"
  >
  Replace
  </button>
@@ -85,7 +85,7 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
  onDragOver={(e) => e.preventDefault()}
  onDrop={handleDrop}
  className={`w-full h-40 border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
- uploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50/50'
+ uploading ? 'border-blue-300 bg-blue-50' : 'border-line hover:border-blue-400 hover:bg-blue-50/50'
  }`}
  >
  {uploading ? (
@@ -95,9 +95,9 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
  </>
  ) : (
  <>
- <FaCloudUploadAlt className="text-gray-400 text-2xl" />
- <span className="text-sm text-gray-500">Click or drag image here</span>
- <span className="text-xs text-gray-400">JPG, PNG, WebP (max 5MB)</span>
+ <FaCloudUploadAlt className="text-faint text-2xl" />
+ <span className="text-sm text-soft">Click or drag image here</span>
+ <span className="text-xs text-faint">JPG, PNG, WebP (max 5MB)</span>
  </>
  )}
  </div>
@@ -105,12 +105,12 @@ export default function CmsImageUpload({ value, onChange, label = 'Image' }: Cms
 
  {/* Fallback URL input */}
  <div className="mt-2 flex items-center gap-2">
- <FaImage className="text-gray-400 text-xs flex-shrink-0" />
+ <FaImage className="text-faint text-xs flex-shrink-0" />
  <input
  type="text"
  value={value}
  onChange={(e) => onChange(e.target.value)}
- className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-1.5 border border-line rounded-lg text-xs text-soft focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Or paste image URL..."
  />
  </div>

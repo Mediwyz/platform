@@ -112,8 +112,8 @@ export default function ValidationPage() {
  case 'passed': return 'text-green-500 bg-green-50'
  case 'failed': return 'text-red-500 bg-red-50'
  case 'in_review': return 'text-yellow-500 bg-yellow-50'
- case 'pending': return 'text-gray-500 bg-gray-50'
- default: return 'text-gray-500 bg-gray-50'
+ case 'pending': return 'text-soft bg-subtle'
+ default: return 'text-soft bg-subtle'
  }
  }
 
@@ -122,23 +122,23 @@ export default function ValidationPage() {
  case 'low': return 'bg-green-100 text-green-800'
  case 'medium': return 'bg-yellow-100 text-yellow-800'
  case 'high': return 'bg-red-100 text-red-800'
- default: return 'bg-gray-100 text-gray-800'
+ default: return 'bg-subtle text-fg'
  }
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white border-b">
+ <div className="bg-surface border-b">
  <div className="container mx-auto px-6 py-4">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Regional Admin Validation</h1>
- <p className="text-gray-600 mt-1">Multi-stage verification process for new administrators</p>
+ <h1 className="text-2xl font-bold text-fg">Regional Admin Validation</h1>
+ <p className="text-soft mt-1">Multi-stage verification process for new administrators</p>
  </div>
  <Link 
  href="/regional/regional-admins"
- className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+ className="px-4 py-2 border rounded-lg hover:bg-subtle"
  >
  Back to Admins
  </Link>
@@ -151,7 +151,7 @@ export default function ValidationPage() {
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
  {/* Requests List */}
  <div className="lg:col-span-1">
- <div className="bg-white rounded-xl shadow-lg p-6">
+ <div className="bg-surface rounded-xl shadow-lg p-6">
  <h2 className="text-lg font-semibold mb-4">Pending Validations</h2>
  <div className="space-y-3">
  {requests.map(request => (
@@ -161,7 +161,7 @@ export default function ValidationPage() {
  className={`w-full text-left p-4 rounded-lg border-2 transition ${
  selectedRequest?.id === request.id 
  ? 'border-blue-500 bg-blue-50' 
- : 'border-gray-200 hover:border-gray-300'
+ : 'border-line hover:border-line'
  }`}
  >
  <div className="flex items-center justify-between mb-2">
@@ -170,11 +170,11 @@ export default function ValidationPage() {
  {request.risk} risk
  </span>
  </div>
- <p className="text-sm text-gray-600">{request.applicant.targetRegion}</p>
+ <p className="text-sm text-soft">{request.applicant.targetRegion}</p>
  <div className="mt-2 flex items-center justify-between">
- <span className="text-xs text-gray-500">{request.submittedDate}</span>
+ <span className="text-xs text-soft">{request.submittedDate}</span>
  <div className="flex items-center gap-1">
- <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+ <div className="w-20 h-2 bg-line rounded-full overflow-hidden">
  <div 
  className="h-full bg-blue-500 transition-all"
  style={{ width: `${request.overallScore}%` }}
@@ -192,7 +192,7 @@ export default function ValidationPage() {
  {/* Selected Request Details */}
  {selectedRequest && (
  <div className="lg:col-span-2">
- <div className="bg-white rounded-xl shadow-lg">
+ <div className="bg-surface rounded-xl shadow-lg">
  {/* Tabs */}
  <div className="border-b">
  <div className="flex">
@@ -203,7 +203,7 @@ export default function ValidationPage() {
  className={`px-6 py-3 font-medium capitalize transition ${
  activeTab === tab 
  ? 'border-b-2 border-blue-500 text-blue-600' 
- : 'text-gray-600 hover:text-gray-900'
+ : 'text-soft hover:text-fg'
  }`}
  >
  {tab}
@@ -219,23 +219,23 @@ export default function ValidationPage() {
  <h3 className="text-lg font-semibold mb-4">Application Overview</h3>
  
  {/* Applicant Info */}
- <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+ <div className="mb-6 p-4 bg-subtle rounded-lg">
  <h4 className="font-medium mb-3">Applicant Information</h4>
  <div className="grid grid-cols-2 gap-4">
  <div>
- <p className="text-sm text-gray-600">Name</p>
+ <p className="text-sm text-soft">Name</p>
  <p className="font-medium">{selectedRequest.applicant.name}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Email</p>
+ <p className="text-sm text-soft">Email</p>
  <p className="font-medium">{selectedRequest.applicant.email}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Company</p>
+ <p className="text-sm text-soft">Company</p>
  <p className="font-medium">{selectedRequest.applicant.company}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Target Region</p>
+ <p className="text-sm text-soft">Target Region</p>
  <p className="font-medium">{selectedRequest.applicant.targetRegion}</p>
  </div>
  </div>
@@ -256,7 +256,7 @@ export default function ValidationPage() {
  <p className="font-medium capitalize">
  {key.replace(/([A-Z])/g, ' $1').trim()}
  </p>
- <p className="text-sm text-gray-600">{stage.notes}</p>
+ <p className="text-sm text-soft">{stage.notes}</p>
  </div>
  </div>
  <div className="text-right">
@@ -264,7 +264,7 @@ export default function ValidationPage() {
  {stage.status === 'passed' && <FaCheckCircle className="text-green-500" />}
  {stage.status === 'failed' && <FaTimesCircle className="text-red-500" />}
  {stage.status === 'in_review' && <FaClock className="text-yellow-500" />}
- {stage.status === 'pending' && <FaClock className="text-gray-400" />}
+ {stage.status === 'pending' && <FaClock className="text-faint" />}
  <span className="font-medium">
  {stage.score}/{stage.maxScore}
  </span>
@@ -291,10 +291,10 @@ export default function ValidationPage() {
  ].map((doc, idx) => (
  <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
  <div className="flex items-center gap-3">
- <FaFileAlt className="text-2xl text-gray-400" />
+ <FaFileAlt className="text-2xl text-faint" />
  <div>
  <p className="font-medium">{doc.name}</p>
- <p className="text-sm text-gray-600">{doc.type} • {doc.size}</p>
+ <p className="text-sm text-soft">{doc.type}  {doc.size}</p>
  </div>
  </div>
  <div className="flex items-center gap-2">
@@ -305,8 +305,8 @@ export default function ValidationPage() {
  }`}>
  {doc.status}
  </span>
- <button className="p-2 hover:bg-gray-100 rounded">
- <FaDownload className="text-gray-600" />
+ <button className="p-2 hover:bg-subtle rounded">
+ <FaDownload className="text-soft" />
  </button>
  </div>
  </div>
@@ -331,7 +331,7 @@ export default function ValidationPage() {
  </div>
  <div className="mt-4 w-full h-3 bg-white/20 rounded-full overflow-hidden">
  <div 
- className="h-full bg-white transition-all"
+ className="h-full bg-surface transition-all"
  style={{ width: `${selectedRequest.overallScore}%` }}
  ></div>
  </div>
@@ -349,7 +349,7 @@ export default function ValidationPage() {
  {stage.score}/{stage.maxScore}
  </span>
  </div>
- <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+ <div className="w-full h-2 bg-line rounded-full overflow-hidden">
  <div 
  className={`h-full transition-all ${
  stage.score >= 80 ? 'bg-green-500' :
@@ -358,7 +358,7 @@ export default function ValidationPage() {
  style={{ width: `${(stage.score / stage.maxScore) * 100}%` }}
  ></div>
  </div>
- <p className="text-sm text-gray-600 mt-2">{stage.notes}</p>
+ <p className="text-sm text-soft mt-2">{stage.notes}</p>
  </div>
  ))}
  </div>
@@ -384,7 +384,7 @@ export default function ValidationPage() {
 
  <div className="space-y-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Decision Notes
  </label>
  <textarea
@@ -395,7 +395,7 @@ export default function ValidationPage() {
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Commission Structure
  </label>
  <input
@@ -412,7 +412,7 @@ export default function ValidationPage() {
  <button className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium">
  Reject Application
  </button>
- <button className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium">
+ <button className="flex-1 px-4 py-3 border border-line rounded-lg hover:bg-subtle font-medium">
  Request More Info
  </button>
  </div>

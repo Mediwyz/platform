@@ -30,7 +30,7 @@ const STATUS_CONFIG: Record<SessionEntry['status'], { label: string; color: stri
   completed: { label: 'Completed', color: 'text-green-600', icon: <FiCheckCircle className="w-4 h-4 text-green-500" /> },
   in_progress: { label: 'In progress', color: 'text-brand-teal', icon: <FiClock className="w-4 h-4 text-brand-teal animate-pulse" /> },
   scheduled: { label: 'Scheduled', color: 'text-blue-600', icon: <FiCalendar className="w-4 h-4 text-blue-500" /> },
-  pending: { label: 'Pending', color: 'text-gray-400', icon: <FiCircle className="w-4 h-4 text-gray-300" /> },
+  pending: { label: 'Pending', color: 'text-faint', icon: <FiCircle className="w-4 h-4 text-faint" /> },
 }
 
 export default function SessionProgress({ programName, totalSessions, sessions, compact, nextSessionAt }: SessionProgressProps) {
@@ -41,10 +41,10 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
     return (
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-medium text-gray-700 truncate">{programName}</span>
-          <span className="text-gray-500 ml-2 flex-shrink-0">{completedCount}/{totalSessions} sessions</span>
+          <span className="font-medium text-soft truncate">{programName}</span>
+          <span className="text-soft ml-2 flex-shrink-0">{completedCount}/{totalSessions} sessions</span>
         </div>
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-subtle rounded-full overflow-hidden">
           <div
             className="h-full bg-brand-teal rounded-full transition-all duration-500"
             style={{ width: `${pct}%` }}
@@ -55,21 +55,21 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-4">
+    <div className="bg-surface border border-line rounded-xl p-4 space-y-4">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-semibold text-gray-900">{programName}</h3>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h3 className="font-semibold text-fg">{programName}</h3>
+          <p className="text-sm text-soft mt-0.5">
             {completedCount} of {totalSessions} sessions completed
-            {nextSessionAt && ` · Next: ${formatDate(nextSessionAt)}`}
+            {nextSessionAt && `  Next: ${formatDate(nextSessionAt)}`}
           </p>
         </div>
         <span className="text-2xl font-bold text-brand-teal">{pct}%</span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+      <div className="w-full h-3 bg-subtle rounded-full overflow-hidden">
         <div
           className="h-full bg-brand-teal rounded-full transition-all duration-700"
           style={{ width: `${pct}%` }}
@@ -84,18 +84,18 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
             <div key={s.sessionNumber} className="flex items-center gap-3 py-1.5">
               {cfg.icon}
               <div className="flex-1 min-w-0">
-                <span className="text-sm text-gray-800">
+                <span className="text-sm text-fg">
                   Session {s.sessionNumber}
                   {s.label && ` - ${s.label}`}
                 </span>
                 {s.completedAt && (
-                  <span className="text-xs text-gray-400 ml-2">{formatDate(s.completedAt)}</span>
+                  <span className="text-xs text-faint ml-2">{formatDate(s.completedAt)}</span>
                 )}
                 {s.scheduledAt && s.status === 'scheduled' && (
                   <span className="text-xs text-blue-500 ml-2">{formatDate(s.scheduledAt)}</span>
                 )}
                 {s.notes && (
-                  <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{s.notes}</p>
+                  <p className="text-xs text-soft mt-0.5 line-clamp-1">{s.notes}</p>
                 )}
               </div>
               <span className={`text-xs font-medium ${cfg.color}`}>{cfg.label}</span>
@@ -105,8 +105,8 @@ export default function SessionProgress({ programName, totalSessions, sessions, 
         {/* Render pending placeholders for sessions not yet created */}
         {Array.from({ length: Math.max(0, totalSessions - sessions.length) }).map((_, i) => (
           <div key={`placeholder-${i}`} className="flex items-center gap-3 py-1.5 opacity-40">
-            <FiCircle className="w-4 h-4 text-gray-300" />
-            <span className="text-sm text-gray-400">Session {sessions.length + i + 1}</span>
+            <FiCircle className="w-4 h-4 text-faint" />
+            <span className="text-sm text-faint">Session {sessions.length + i + 1}</span>
           </div>
         ))}
       </div>

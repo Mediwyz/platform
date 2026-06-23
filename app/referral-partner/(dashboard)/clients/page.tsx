@@ -51,19 +51,19 @@ export default function ClientsPage() {
  const totalLifetimeValue = clients.reduce((sum, c) => sum + c.lifetimeValue, 0)
 
  const planColors: Record<string, string> = {
- basic: 'bg-gray-100 text-gray-700',
+ basic: 'bg-subtle text-soft',
  standard: 'bg-blue-100 text-blue-700',
  premium: 'bg-purple-100 text-purple-700',
  enterprise: 'bg-indigo-100 text-indigo-700',
  }
 
  const getPlanBadgeColor = (plan: string) => {
- return planColors[plan.toLowerCase()] || 'bg-gray-100 text-gray-700'
+ return planColors[plan.toLowerCase()] || 'bg-subtle text-soft'
  }
 
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+ <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
  <FaUsers className="text-purple-500" /> Converted Clients
  </h1>
 
@@ -74,26 +74,26 @@ export default function ClientsPage() {
  ) : (
  <>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
- <div className="bg-white rounded-xl p-5 shadow-lg">
- <p className="text-gray-600 text-sm">Total Clients</p>
- <p className="text-2xl font-bold text-gray-900 mt-1">{clients.length}</p>
+ <div className="bg-surface rounded-xl p-5 shadow-lg">
+ <p className="text-soft text-sm">Total Clients</p>
+ <p className="text-2xl font-bold text-fg mt-1">{clients.length}</p>
  </div>
- <div className="bg-white rounded-xl p-5 shadow-lg">
- <p className="text-gray-600 text-sm">Total Lifetime Value</p>
+ <div className="bg-surface rounded-xl p-5 shadow-lg">
+ <p className="text-soft text-sm">Total Lifetime Value</p>
  <p className="text-2xl font-bold text-purple-600 mt-1">Rs {totalLifetimeValue.toLocaleString()}</p>
  </div>
- <div className="bg-white rounded-xl p-5 shadow-lg">
- <p className="text-gray-600 text-sm">Avg. Value per Client</p>
+ <div className="bg-surface rounded-xl p-5 shadow-lg">
+ <p className="text-soft text-sm">Avg. Value per Client</p>
  <p className="text-2xl font-bold text-green-600 mt-1">
  Rs {clients.length > 0 ? Math.round(totalLifetimeValue / clients.length).toLocaleString() : '0'}
  </p>
  </div>
  </div>
 
- <div className="bg-white rounded-xl shadow-lg">
+ <div className="bg-surface rounded-xl shadow-lg">
  <div className="p-4 border-b">
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search by name, email, or plan..."
@@ -106,9 +106,9 @@ export default function ClientsPage() {
 
  {filteredClients.length === 0 ? (
  <div className="p-12 text-center">
- <FaUserCheck className="mx-auto text-4xl text-gray-300 mb-4" />
- <h3 className="text-lg font-semibold text-gray-600 mb-2">No converted clients yet</h3>
- <p className="text-gray-500 text-sm">
+ <FaUserCheck className="mx-auto text-4xl text-faint mb-4" />
+ <h3 className="text-lg font-semibold text-soft mb-2">No converted clients yet</h3>
+ <p className="text-soft text-sm">
  {searchTerm
  ? 'No clients match your search criteria.'
  : 'When your referrals convert, they will appear here.'}
@@ -118,16 +118,16 @@ export default function ClientsPage() {
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+ <tr className="text-left text-xs font-medium text-soft uppercase tracking-wider">
  <th className="px-6 py-3">Client</th>
  <th className="px-6 py-3">Signup Date</th>
  <th className="px-6 py-3">Plan Type</th>
  <th className="px-6 py-3 text-right">Lifetime Value</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {filteredClients.map((client) => (
- <tr key={client.id} className="hover:bg-gray-50 transition-colors">
+ <tr key={client.id} className="hover:bg-subtle transition-colors">
  <td className="px-6 py-4">
  <div className="flex items-center gap-3">
  <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
@@ -136,12 +136,12 @@ export default function ClientsPage() {
  </span>
  </div>
  <div>
- <p className="font-medium text-gray-900">{client.name}</p>
- <p className="text-gray-500 text-sm">{client.email}</p>
+ <p className="font-medium text-fg">{client.name}</p>
+ <p className="text-soft text-sm">{client.email}</p>
  </div>
  </div>
  </td>
- <td className="px-6 py-4 text-sm text-gray-600">
+ <td className="px-6 py-4 text-sm text-soft">
  {new Date(client.signupDate).toLocaleDateString()}
  </td>
  <td className="px-6 py-4">
@@ -149,7 +149,7 @@ export default function ClientsPage() {
  {client.planType}
  </span>
  </td>
- <td className="px-6 py-4 text-right font-medium text-gray-900">
+ <td className="px-6 py-4 text-right font-medium text-fg">
  Rs {client.lifetimeValue.toLocaleString()}
  </td>
  </tr>

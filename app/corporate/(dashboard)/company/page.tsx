@@ -76,7 +76,7 @@ export default function CorporateCompanyPage() {
  )}
 
  <div className="flex items-center justify-between">
- <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+ <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
  <FaBuilding className="text-indigo-500" /> Company Profile
  </h1>
  <button
@@ -112,10 +112,10 @@ export default function CorporateCompanyPage() {
  </button>
  </div>
 
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="grid md:grid-cols-2 gap-6">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Company Name</label>
  <input
  type="text"
  value={profile.companyName}
@@ -124,7 +124,7 @@ export default function CorporateCompanyPage() {
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+ <label className="block text-sm font-medium text-soft mb-1">Industry</label>
  <input
  type="text"
  value={profile.industry}
@@ -133,7 +133,7 @@ export default function CorporateCompanyPage() {
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Registration Number</label>
+ <label className="block text-sm font-medium text-soft mb-1">Registration Number</label>
  <input
  type="text"
  value={profile.registrationNumber}
@@ -142,7 +142,7 @@ export default function CorporateCompanyPage() {
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Employee Count</label>
+ <label className="block text-sm font-medium text-soft mb-1">Employee Count</label>
  <input
  type="number"
  value={profile.employeeCount}

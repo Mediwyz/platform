@@ -24,8 +24,8 @@ export default function AdminDashboardNotFound() {
  404
  </span>
 
- <h2 className="text-2xl font-bold text-gray-900 mb-2">Page Not Found</h2>
- <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+ <h2 className="text-2xl font-bold text-fg mb-2">Page Not Found</h2>
+ <p className="text-soft mb-6 text-sm leading-relaxed">
  This admin dashboard page does not exist or has been moved.
  </p>
 
@@ -38,7 +38,7 @@ export default function AdminDashboardNotFound() {
  </Link>
  <Link
  href="/"
- className="w-full sm:w-auto px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm text-center"
+ className="w-full sm:w-auto px-5 py-2 border border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium text-sm text-center"
  >
  Go Home
  </Link>

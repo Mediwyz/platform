@@ -64,7 +64,7 @@ function getSlotProviderType(role: string): string {
  return map[role] || role.toLowerCase()
 }
 
-/** Generate Mon–Sun dates for a given week offset (0 = this week, 1 = next, etc.) */
+/** Generate MonSun dates for a given week offset (0 = this week, 1 = next, etc.) */
 function getWeekDates(weekOffset: number): { date: string; dayName: string; dayNum: number; monthShort: string; isToday: boolean; isPast: boolean }[] {
  const now = new Date()
  const dayOfWeek = now.getDay() // 0=Sun, 1=Mon
@@ -229,7 +229,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  }, [activeWorkflow])
 
  const handleSubmit = async () => {
- // NOTE: `user` is intentionally NOT required here — the booking is
+ // NOTE: `user` is intentionally NOT required here  the booking is
  // authenticated server-side via the JWT cookie (@CurrentUser), and `user`
  // (from localStorage) can legitimately be null when the modal is opened
  // outside a dashboard layout. Requiring it made Confirm a silent no-op.
@@ -312,38 +312,38 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
 
  return (
  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
  {/* Header */}
- <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
+ <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-surface z-10">
  <div className="flex items-center gap-2">
  {step > 1 && (
- <button onClick={handleBack} className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+ <button onClick={handleBack} className="p-1.5 text-faint hover:text-soft rounded-lg hover:bg-subtle">
  <FaChevronLeft className="text-xs" />
  </button>
  )}
- <h3 className="text-lg font-bold text-gray-900">Book {selectedRole?.label?.replace(/s$/, '') || 'Appointment'}</h3>
+ <h3 className="text-lg font-bold text-fg">Book {selectedRole?.label?.replace(/s$/, '') || 'Appointment'}</h3>
  </div>
- <button onClick={() => { onClose(); resetForm() }} className="p-2 text-gray-400 hover:text-gray-600"><FaTimes /></button>
+ <button onClick={() => { onClose(); resetForm() }} className="p-2 text-faint hover:text-soft"><FaTimes /></button>
  </div>
 
  <div className="p-4 space-y-4">
  {/* Step indicator */}
  <div className="flex items-center gap-1 mb-1">
  {Array.from({ length: totalSteps }, (_, i) => (
- <div key={i} className={`flex-1 h-1.5 rounded-full transition-colors ${currentStepNum >= i + 1 ? 'bg-blue-600' : 'bg-gray-200'}`} />
+ <div key={i} className={`flex-1 h-1.5 rounded-full transition-colors ${currentStepNum >= i + 1 ? 'bg-blue-600' : 'bg-line'}`} />
  ))}
  </div>
 
  {/* Step 1: Choose provider type (skipped if defaultProviderType) */}
  {step === 1 && (
  <div>
- <h4 className="text-sm font-semibold text-gray-800 mb-3">What type of provider?</h4>
+ <h4 className="text-sm font-semibold text-fg mb-3">What type of provider?</h4>
  <div className="grid grid-cols-2 gap-2">
  {roles.map(r => (
  <button key={r.role} onClick={() => { setSelectedRole(r); setStep(2) }}
  className="p-3 border rounded-xl text-left hover:border-blue-300 hover:bg-blue-50 transition">
- <p className="font-medium text-sm text-gray-900">{r.label}</p>
- <p className="text-[10px] text-gray-400">{r.providerCount} available</p>
+ <p className="font-medium text-sm text-fg">{r.label}</p>
+ <p className="text-[10px] text-faint">{r.providerCount} available</p>
  </button>
  ))}
  </div>
@@ -356,15 +356,15 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {/* Specialty filter */}
  {roleSpecialties.length > 0 && (
  <div className="mb-3">
- <h4 className="text-sm font-semibold text-gray-800 mb-2">Specialty</h4>
+ <h4 className="text-sm font-semibold text-fg mb-2">Specialty</h4>
  <div className="flex flex-wrap gap-1.5">
  <button onClick={() => setSelectedSpecialty(null)}
- className={`px-2.5 py-1 rounded-full text-xs font-medium transition ${!selectedSpecialty ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+ className={`px-2.5 py-1 rounded-full text-xs font-medium transition ${!selectedSpecialty ? 'bg-blue-600 text-white' : 'bg-subtle text-soft hover:bg-line'}`}>
  All
  </button>
  {roleSpecialties.map(s => (
  <button key={s.name} onClick={() => setSelectedSpecialty(s.name)}
- className={`px-2.5 py-1 rounded-full text-xs font-medium transition ${selectedSpecialty === s.name ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+ className={`px-2.5 py-1 rounded-full text-xs font-medium transition ${selectedSpecialty === s.name ? 'bg-blue-600 text-white' : 'bg-subtle text-soft hover:bg-line'}`}>
  {s.name}
  </button>
  ))}
@@ -372,9 +372,9 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  </div>
  )}
 
- <h4 className="text-sm font-semibold text-gray-800 mb-2">
+ <h4 className="text-sm font-semibold text-fg mb-2">
  Choose a {selectedRole?.label?.replace(/s$/, '') || 'provider'}
- {filteredProviders.length > 0 && <span className="text-gray-400 font-normal ml-1">({filteredProviders.length})</span>}
+ {filteredProviders.length > 0 && <span className="text-faint font-normal ml-1">({filteredProviders.length})</span>}
  </h4>
  {loading ? <div className="flex justify-center py-8"><FaSpinner className="animate-spin text-blue-500" /></div> : (
  <div className="space-y-2 max-h-52 overflow-y-auto">
@@ -389,16 +389,16 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  </div>
  )}
  <div className="flex-1 min-w-0">
- <p className="font-medium text-sm text-gray-900">
+ <p className="font-medium text-sm text-fg">
  {selectedRole?.role === 'DOCTOR' ? 'Dr. ' : ''}{p.firstName} {p.lastName}
- {p.verified && <span className="ml-1 text-green-500 text-[10px]">✓</span>}
+ {p.verified && <span className="ml-1 text-green-500 text-[10px]"></span>}
  </p>
  {p.specializations.length > 0 && <p className="text-[10px] text-blue-600 truncate">{p.specializations.join(', ')}</p>}
- {p.address && <p className="text-[10px] text-gray-400 truncate">{p.address}</p>}
+ {p.address && <p className="text-[10px] text-faint truncate">{p.address}</p>}
  </div>
  </button>
  ))}
- {filteredProviders.length === 0 && <p className="text-center py-4 text-gray-400 text-sm">No providers found{selectedSpecialty ? ` for "${selectedSpecialty}"` : ''}</p>}
+ {filteredProviders.length === 0 && <p className="text-center py-4 text-faint text-sm">No providers found{selectedSpecialty ? ` for "${selectedSpecialty}"` : ''}</p>}
  </div>
  )}
  </div>
@@ -407,7 +407,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {/* Step 3: Choose service - consultation type derived from service workflows */}
  {step === 3 && (
  <div>
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Select a service</h4>
+ <h4 className="text-sm font-semibold text-fg mb-3">Select a service</h4>
  {services.length > 0 ? (
  <div className="space-y-2 max-h-52 overflow-y-auto mb-3">
  {services.map(s => {
@@ -418,45 +418,45 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  setSelectedService(s)
  setSelectedWorkflowId(null) // will auto-pick when exactly one workflow
  }}
- className={`w-full p-3 border rounded-lg text-left transition ${isSelected ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-gray-50 border-gray-200'}`}>
+ className={`w-full p-3 border rounded-lg text-left transition ${isSelected ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-subtle border-line'}`}>
  <div className="flex justify-between items-start gap-2">
  <div className="min-w-0">
- <span className="font-medium text-sm text-gray-900 block">{s.serviceName}</span>
- {s.duration && <span className="text-[10px] text-gray-400">{s.duration} min</span>}
+ <span className="font-medium text-sm text-fg block">{s.serviceName}</span>
+ {s.duration && <span className="text-[10px] text-faint">{s.duration} min</span>}
  {s.workflows.length > 0 && (
  <div className="flex flex-wrap gap-1 mt-1">
  {s.workflows.map(w => (
- <span key={w.id} className={`text-[10px] px-1.5 py-0.5 rounded border font-medium ${MODE_COLORS[w.serviceMode] ?? 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+ <span key={w.id} className={`text-[10px] px-1.5 py-0.5 rounded border font-medium ${MODE_COLORS[w.serviceMode] ?? 'bg-subtle text-soft border-line'}`}>
  {MODE_LABELS[w.serviceMode] ?? w.name}
  </span>
  ))}
  </div>
  )}
  </div>
- <span className="text-gray-700 font-semibold text-xs whitespace-nowrap">Rs {(s.price ?? 0).toLocaleString()}</span>
+ <span className="text-soft font-semibold text-xs whitespace-nowrap">Rs {(s.price ?? 0).toLocaleString()}</span>
  </div>
  </button>
  )
  })}
  </div>
  ) : (
- <p className="text-xs text-gray-400 mb-3">No specific services listed - general consultation will be booked.</p>
+ <p className="text-xs text-faint mb-3">No specific services listed - general consultation will be booked.</p>
  )}
 
  {/* When there are multiple workflows, user must pick one */}
  {selectedService && selectedService.workflows.length > 1 && (
  <div className="mb-3">
- <p className="text-xs font-medium text-gray-600 mb-2">How would you like this appointment? <span className="text-red-400">*</span></p>
+ <p className="text-xs font-medium text-soft mb-2">How would you like this appointment? <span className="text-red-400">*</span></p>
  <div className="flex flex-wrap gap-2">
  {selectedService.workflows.map(w => {
  const isWfSelected = selectedWorkflowId === w.id
  return (
  <button key={w.id} onClick={() => setSelectedWorkflowId(w.id)}
- className={`flex-1 min-w-[100px] p-3 border-2 rounded-lg text-left transition ${isWfSelected ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : `border-gray-200 ${MODE_COLORS[w.serviceMode] ?? ''} hover:opacity-90`}`}>
+ className={`flex-1 min-w-[100px] p-3 border-2 rounded-lg text-left transition ${isWfSelected ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200' : `border-line ${MODE_COLORS[w.serviceMode] ?? ''} hover:opacity-90`}`}>
  <span className={`text-[10px] font-bold uppercase tracking-wide block mb-0.5 ${isWfSelected ? 'text-blue-700' : ''}`}>
  {MODE_LABELS[w.serviceMode] ?? w.serviceMode}
  </span>
- <span className="text-xs font-medium text-gray-800 leading-tight">{w.name}</span>
+ <span className="text-xs font-medium text-fg leading-tight">{w.name}</span>
  </button>
  )
  })}
@@ -467,8 +467,8 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {/* When exactly one workflow, show it as a read-only badge */}
  {selectedService && selectedService.workflows.length === 1 && (
  <div className="mb-3 flex items-center gap-2">
- <span className="text-xs text-gray-500">Format:</span>
- <span className={`text-xs font-medium px-2 py-1 rounded-full border ${MODE_COLORS[selectedService.workflows[0].serviceMode] ?? 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+ <span className="text-xs text-soft">Format:</span>
+ <span className={`text-xs font-medium px-2 py-1 rounded-full border ${MODE_COLORS[selectedService.workflows[0].serviceMode] ?? 'bg-subtle text-soft border-line'}`}>
  {MODE_LABELS[selectedService.workflows[0].serviceMode] ?? selectedService.workflows[0].name}
  </span>
  </div>
@@ -483,8 +483,8 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {/* Step 4: Weekly calendar with time slots */}
  {step === 4 && (
  <div>
- <h4 className="text-base font-semibold text-gray-800 mb-1">Choose date & time</h4>
- <p className="text-xs text-gray-500 mb-4">
+ <h4 className="text-base font-semibold text-fg mb-1">Choose date & time</h4>
+ <p className="text-xs text-soft mb-4">
   Showing the next two weeks. Days with a green dot have open slots - already-booked times are hidden.
  </p>
 
@@ -494,7 +494,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
    const rowDays = twoWeekDates.slice(rowIdx * 7, rowIdx * 7 + 7)
    return (
     <div key={rowIdx}>
-     <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+     <p className="text-[10px] font-semibold text-faint uppercase tracking-wider mb-1.5">
       {rowIdx === 0 ? 'This week' : 'Next week'}
      </p>
      <div className="grid grid-cols-7 gap-2">
@@ -508,14 +508,14 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
          disabled={day.isPast}
          className={`flex flex-col items-center py-3 rounded-lg text-center transition ${
           isSelected ? 'bg-blue-600 text-white shadow-md' :
-          day.isPast ? 'bg-gray-50 text-gray-300 cursor-not-allowed' :
+          day.isPast ? 'bg-subtle text-faint cursor-not-allowed' :
           day.isToday ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-          'bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:bg-blue-50'
+          'bg-surface border border-line text-soft hover:border-blue-400 hover:bg-blue-50'
          }`}
         >
          <span className="text-[10px] font-semibold uppercase">{day.dayName}</span>
          <span className="text-lg font-bold">{day.dayNum}</span>
-         <span className="text-[9px] text-gray-400">{day.monthShort}</span>
+         <span className="text-[9px] text-faint">{day.monthShort}</span>
          {!day.isPast && hasSlots && !isSelected && (
           <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1" />
          )}
@@ -536,7 +536,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {(() => {
  const daySlots = weekSlots[selectedDate] || []
  if (daySlots.length === 0) {
- return <p className="text-center py-4 text-gray-400 text-xs">No available slots for this day</p>
+ return <p className="text-center py-4 text-faint text-xs">No available slots for this day</p>
  }
  const morning = daySlots.filter(t => { const h = parseInt(t); return h >= 6 && h < 12 })
  const afternoon = daySlots.filter(t => { const h = parseInt(t); return h >= 12 && h < 17 })
@@ -544,12 +544,12 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
 
  const SlotGroup = ({ label, slots }: { label: string; slots: string[] }) => slots.length === 0 ? null : (
  <div className="mb-3">
- <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">{label} <span className="text-gray-400 font-normal">({slots.length})</span></p>
+ <p className="text-[11px] font-semibold text-soft uppercase tracking-wider mb-2">{label} <span className="text-faint font-normal">({slots.length})</span></p>
  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
  {slots.map(time => (
  <button key={time} onClick={() => setSelectedTime(time)}
  className={`px-2 py-2.5 border rounded-lg text-sm font-medium transition ${
- selectedTime === time ? 'border-blue-500 bg-blue-600 text-white shadow' : 'border-gray-200 text-gray-700 hover:bg-blue-50 hover:border-blue-300'
+ selectedTime === time ? 'border-blue-500 bg-blue-600 text-white shadow' : 'border-line text-soft hover:bg-blue-50 hover:border-blue-300'
  }`}>
  {time}
  </button>
@@ -570,7 +570,7 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  )}
 
  {!selectedDate && !slotsLoading && (
- <p className="text-center py-4 text-gray-400 text-xs">Select a day above to see available time slots</p>
+ <p className="text-center py-4 text-faint text-xs">Select a day above to see available time slots</p>
  )}
 
  <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Reason for visit (optional)"
@@ -584,17 +584,17 @@ export default function CreateBookingModal({ isOpen, onClose, onCreated, default
  {/* Step 5: Confirm */}
  {step === 5 && (
  <div>
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Review & Confirm</h4>
- <div className="bg-gray-50 rounded-lg p-4 space-y-2.5 text-sm mb-4">
- <div className="flex justify-between"><span className="text-gray-500">Provider</span><span className="font-medium">{selectedRole?.role === 'DOCTOR' ? 'Dr. ' : ''}{selectedProvider?.firstName || ''} {selectedProvider?.lastName || ''}</span></div>
- <div className="flex justify-between"><span className="text-gray-500">Type</span><span className="font-medium text-blue-600">{selectedRole?.label}</span></div>
- <div className="flex justify-between"><span className="text-gray-500">Service</span><span className="font-medium">{selectedService?.serviceName || 'General Consultation'}</span></div>
- <div className="flex justify-between"><span className="text-gray-500">Format</span><span className="font-medium">{consultType === 'in_person' ? 'At Office' : consultType === 'home_visit' ? 'At Home' : 'Video Call'}</span></div>
- <div className="flex justify-between"><span className="text-gray-500">Date</span><span className="font-medium">{new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span></div>
- <div className="flex justify-between"><span className="text-gray-500">Time</span><span className="font-medium">{selectedTime}</span></div>
- {reason && <div className="flex justify-between"><span className="text-gray-500">Reason</span><span className="font-medium text-right max-w-[200px] truncate">{reason}</span></div>}
+ <h4 className="text-sm font-semibold text-fg mb-3">Review & Confirm</h4>
+ <div className="bg-subtle rounded-lg p-4 space-y-2.5 text-sm mb-4">
+ <div className="flex justify-between"><span className="text-soft">Provider</span><span className="font-medium">{selectedRole?.role === 'DOCTOR' ? 'Dr. ' : ''}{selectedProvider?.firstName || ''} {selectedProvider?.lastName || ''}</span></div>
+ <div className="flex justify-between"><span className="text-soft">Type</span><span className="font-medium text-blue-600">{selectedRole?.label}</span></div>
+ <div className="flex justify-between"><span className="text-soft">Service</span><span className="font-medium">{selectedService?.serviceName || 'General Consultation'}</span></div>
+ <div className="flex justify-between"><span className="text-soft">Format</span><span className="font-medium">{consultType === 'in_person' ? 'At Office' : consultType === 'home_visit' ? 'At Home' : 'Video Call'}</span></div>
+ <div className="flex justify-between"><span className="text-soft">Date</span><span className="font-medium">{new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span></div>
+ <div className="flex justify-between"><span className="text-soft">Time</span><span className="font-medium">{selectedTime}</span></div>
+ {reason && <div className="flex justify-between"><span className="text-soft">Reason</span><span className="font-medium text-right max-w-[200px] truncate">{reason}</span></div>}
  {selectedService?.price != null && (
- <div className="flex justify-between border-t pt-2 mt-1"><span className="text-gray-600 font-medium">Estimated Price</span><span className="font-bold text-lg">Rs {(selectedService.price ?? 0).toLocaleString()}</span></div>
+ <div className="flex justify-between border-t pt-2 mt-1"><span className="text-soft font-medium">Estimated Price</span><span className="font-bold text-lg">Rs {(selectedService.price ?? 0).toLocaleString()}</span></div>
  )}
  </div>
  {error && <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3"><p className="text-red-600 text-xs">{error}</p></div>}

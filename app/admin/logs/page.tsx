@@ -108,17 +108,17 @@ export default function AdminLogsPage() {
  case 'info': return 'bg-blue-100 text-blue-800'
  case 'warning': return 'bg-yellow-100 text-yellow-800'
  case 'error': return 'bg-red-100 text-red-800'
- default: return 'bg-gray-100 text-gray-800'
+ default: return 'bg-subtle text-fg'
  }
  }
 
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900">Activity Logs</h1>
+ <h1 className="text-2xl font-bold text-fg">Activity Logs</h1>
 
  <div className="flex flex-col md:flex-row gap-4">
  <div className="flex-1 relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search logs..."
@@ -128,7 +128,7 @@ export default function AdminLogsPage() {
  />
  </div>
  <div className="flex items-center gap-2">
- <FaFilter className="text-gray-400" />
+ <FaFilter className="text-faint" />
  <select value={filter} onChange={(e) => setFilter(e.target.value)} className="px-4 py-2 border rounded-lg">
  <option value="all">All Levels</option>
  <option value="info">Info</option>
@@ -138,31 +138,31 @@ export default function AdminLogsPage() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-lg overflow-hidden">
  {loading ? (
  <div className="flex justify-center py-12">
  <FaSpinner className="animate-spin text-2xl text-blue-500" />
  </div>
  ) : filteredLogs.length === 0 ? (
- <div className="text-center py-12 text-gray-500">
+ <div className="text-center py-12 text-soft">
  <p className="text-lg font-medium">No activity logs found</p>
  <p className="text-sm mt-1">Activity logs will appear here as users interact with the platform</p>
  </div>
  ) : (
  <div className="overflow-x-auto"><table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-700">Timestamp</th>
- <th className="p-3 text-left font-medium text-gray-700">Level</th>
- <th className="p-3 text-left font-medium text-gray-700">Action</th>
- <th className="p-3 text-left font-medium text-gray-700">User</th>
- <th className="p-3 text-left font-medium text-gray-700">Details</th>
+ <th className="p-3 text-left font-medium text-soft">Timestamp</th>
+ <th className="p-3 text-left font-medium text-soft">Level</th>
+ <th className="p-3 text-left font-medium text-soft">Action</th>
+ <th className="p-3 text-left font-medium text-soft">User</th>
+ <th className="p-3 text-left font-medium text-soft">Details</th>
  </tr>
  </thead>
  <tbody>
  {filteredLogs.map((log) => (
- <tr key={log.id} className="border-b hover:bg-gray-50">
- <td className="p-3 text-gray-600 text-xs font-mono">
+ <tr key={log.id} className="border-b hover:bg-subtle">
+ <td className="p-3 text-soft text-xs font-mono">
  {new Date(log.timestamp).toLocaleString()}
  </td>
  <td className="p-3">
@@ -170,9 +170,9 @@ export default function AdminLogsPage() {
  {(log.level ?? 'info').toUpperCase()}
  </span>
  </td>
- <td className="p-3 font-medium text-gray-900">{log.action}</td>
- <td className="p-3 text-gray-600">{log.user}</td>
- <td className="p-3 text-gray-500 text-xs max-w-xs truncate">{log.details}</td>
+ <td className="p-3 font-medium text-fg">{log.action}</td>
+ <td className="p-3 text-soft">{log.user}</td>
+ <td className="p-3 text-soft text-xs max-w-xs truncate">{log.details}</td>
  </tr>
  ))}
  </tbody>

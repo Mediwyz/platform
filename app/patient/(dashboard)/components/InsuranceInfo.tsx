@@ -92,10 +92,10 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
 
  if (!patient || !patient.insuranceCoverage) {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-gray-200">
- <FaShieldAlt className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Insurance Coverage Found</h3>
- <p className="text-gray-500 text-sm sm:text-base">Your insurance information is not yet linked to your profile</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-line">
+ <FaShieldAlt className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2">No Insurance Coverage Found</h3>
+ <p className="text-soft text-sm sm:text-base">Your insurance information is not yet linked to your profile</p>
  </div>
  )
  }
@@ -162,62 +162,62 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
 
  {/* Coverage Status */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-green-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-green-200">
  <div className="flex items-center justify-between mb-2">
  <FaHospital className="text-green-600 text-lg sm:text-xl" />
  <span className={`text-xs font-medium ${patient.insuranceCoverage.emergencyCoverage ? 'text-green-600' : 'text-red-600'}`}>
  {patient.insuranceCoverage.emergencyCoverage ? 'Active' : 'Not Covered'}
  </span>
  </div>
- <p className="text-xs sm:text-sm text-gray-600">Emergency Care</p>
- <p className="text-base sm:text-lg font-bold text-gray-900">
+ <p className="text-xs sm:text-sm text-soft">Emergency Care</p>
+ <p className="text-base sm:text-lg font-bold text-fg">
  {patient.insuranceCoverage.emergencyCoverage ? '100% Covered' : 'Not Available'}
  </p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-purple-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-purple-200">
  <div className="flex items-center justify-between mb-2">
  <FaPills className="text-purple-600 text-lg sm:text-xl" />
  <span className={`text-xs font-medium ${patient.insuranceCoverage.pharmacyCoverage ? 'text-green-600' : 'text-red-600'}`}>
  {patient.insuranceCoverage.pharmacyCoverage ? 'Active' : 'Not Covered'}
  </span>
  </div>
- <p className="text-xs sm:text-sm text-gray-600">Pharmacy</p>
- <p className="text-base sm:text-lg font-bold text-gray-900">
+ <p className="text-xs sm:text-sm text-soft">Pharmacy</p>
+ <p className="text-base sm:text-lg font-bold text-fg">
  {patient.insuranceCoverage.pharmacyCoverage ? '80% Covered' : 'Not Available'}
  </p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-yellow-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-yellow-200">
  <div className="flex items-center justify-between mb-2">
  <FaTooth className="text-yellow-600 text-lg sm:text-xl" />
  <span className={`text-xs font-medium ${patient.insuranceCoverage.dentalCoverage ? 'text-green-600' : 'text-red-600'}`}>
  {patient.insuranceCoverage.dentalCoverage ? 'Active' : 'Not Covered'}
  </span>
  </div>
- <p className="text-xs sm:text-sm text-gray-600">Dental</p>
- <p className="text-base sm:text-lg font-bold text-gray-900">
+ <p className="text-xs sm:text-sm text-soft">Dental</p>
+ <p className="text-base sm:text-lg font-bold text-fg">
  {patient.insuranceCoverage.dentalCoverage ? '70% Covered' : 'Not Available'}
  </p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-cyan-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-cyan-200">
  <div className="flex items-center justify-between mb-2">
  <FaEye className="text-cyan-600 text-lg sm:text-xl" />
  <span className={`text-xs font-medium ${patient.insuranceCoverage.visionCoverage ? 'text-green-600' : 'text-red-600'}`}>
  {patient.insuranceCoverage.visionCoverage ? 'Active' : 'Not Covered'}
  </span>
  </div>
- <p className="text-xs sm:text-sm text-gray-600">Vision</p>
- <p className="text-base sm:text-lg font-bold text-gray-900">
+ <p className="text-xs sm:text-sm text-soft">Vision</p>
+ <p className="text-base sm:text-lg font-bold text-fg">
  {patient.insuranceCoverage.visionCoverage ? '60% Covered' : 'Not Available'}
  </p>
  </div>
  </div>
 
  {/* Deductible and Copay Information */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-indigo-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-indigo-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaMoneyBillWave className="mr-2 text-indigo-600" />
  Deductible & Out-of-Pocket
  </h4>
@@ -225,32 +225,32 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-4">
  <div>
  <div className="flex justify-between items-center mb-2">
- <span className="text-xs sm:text-sm text-gray-600">Annual Deductible</span>
- <span className="text-sm sm:text-base font-bold text-gray-900">
+ <span className="text-xs sm:text-sm text-soft">Annual Deductible</span>
+ <span className="text-sm sm:text-base font-bold text-fg">
  Rs {coverageUsage.deductibleUsed.toFixed(0)} / Rs {patient.insuranceCoverage.deductible}
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5">
+ <div className="w-full bg-line rounded-full h-2 sm:h-2.5">
  <div 
- className="bg-white h-2 sm:h-2.5 rounded-full transition-all duration-500"
+ className="bg-surface h-2 sm:h-2.5 rounded-full transition-all duration-500"
  style={{ width: `${coverageUsage.deductiblePercentage}%` }}
  ></div>
  </div>
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Rs {coverageUsage.remainingDeductible.toFixed(0)} remaining
  </p>
  </div>
 
  <div className="grid grid-cols-2 gap-4">
- <div className="bg-white bg-opacity-70 rounded-lg p-3">
- <p className="text-xs sm:text-sm text-gray-600">Standard Copay</p>
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3">
+ <p className="text-xs sm:text-sm text-soft">Standard Copay</p>
  <p className="text-lg sm:text-xl font-bold text-indigo-600">Rs {patient.insuranceCoverage.copay}</p>
- <p className="text-xs text-gray-500">Per visit</p>
+ <p className="text-xs text-soft">Per visit</p>
  </div>
- <div className="bg-white bg-opacity-70 rounded-lg p-3">
- <p className="text-xs sm:text-sm text-gray-600">Out-of-Pocket Max</p>
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3">
+ <p className="text-xs sm:text-sm text-soft">Out-of-Pocket Max</p>
  <p className="text-lg sm:text-xl font-bold text-purple-600">Rs 50,000</p>
- <p className="text-xs text-gray-500">Annual limit</p>
+ <p className="text-xs text-soft">Annual limit</p>
  </div>
  </div>
  </div>
@@ -261,8 +261,8 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  const renderBillingPayment = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Payment Methods */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-green-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-green-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaCreditCard className="mr-2 text-green-600" />
  Payment Methods
  </h4>
@@ -271,8 +271,8 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  {patient.billingInformation.map((billing) => (
  <div 
  key={billing.id}
- className={`bg-white bg-opacity-80 rounded-xl p-3 sm:p-4 border-2 transition-all cursor-pointer hover:shadow-md ${
- billing.isDefault ? 'border-green-400' : 'border-gray-200'
+ className={`bg-surface bg-opacity-80 rounded-xl p-3 sm:p-4 border-2 transition-all cursor-pointer hover:shadow-md ${
+ billing.isDefault ? 'border-green-400' : 'border-line'
  }`}
  onClick={() => setSelectedBillingMethod(billing.id)}
  >
@@ -286,13 +286,13 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  }`} />
  </div>
  <div>
- <p className="font-medium text-gray-900 text-sm sm:text-base">
+ <p className="font-medium text-fg text-sm sm:text-base">
  {billing.type === 'mcb_juice' ? 'MCB Juice' : 'Credit Card'}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">
- {billing.cardNumber} • Exp: {billing.expiryDate}
+ <p className="text-xs sm:text-sm text-soft">
+ {billing.cardNumber}  Exp: {billing.expiryDate}
  </p>
- <p className="text-xs text-gray-500">{billing.cardHolder}</p>
+ <p className="text-xs text-soft">{billing.cardHolder}</p>
  </div>
  </div>
  <div className="text-right">
@@ -301,7 +301,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  Default
  </span>
  )}
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Added {new Date(billing.addedDate).toLocaleDateString()}
  </p>
  </div>
@@ -310,36 +310,36 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  ))}
  </div>
 
- <Link href="/patient/settings" className="mt-4 w-full px-4 py-2 bg-white transition flex items-center justify-center gap-2 text-sm sm:text-base hover:bg-gray-50 rounded-lg border border-gray-200">
+ <Link href="/patient/settings" className="mt-4 w-full px-4 py-2 bg-surface transition flex items-center justify-center gap-2 text-sm sm:text-base hover:bg-subtle rounded-lg border border-line">
  <FaCreditCard />
  Add New Payment Method
  </Link>
  </div>
 
  {/* Recent Transactions */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-blue-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-blue-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaReceipt className="mr-2 text-blue-600" />
  Recent Transactions
  </h4>
  
  <div className="space-y-3">
  {patient.medicineOrders && patient.medicineOrders.slice(0, 3).map((order) => (
- <div key={order.id} className="bg-white bg-opacity-80 rounded-lg p-3 sm:p-4 border border-gray-200">
+ <div key={order.id} className="bg-surface bg-opacity-80 rounded-lg p-3 sm:p-4 border border-line">
  <div className="flex items-center justify-between">
  <div>
- <p className="font-medium text-gray-900 text-sm sm:text-base">Medicine Order #{order.id}</p>
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="font-medium text-fg text-sm sm:text-base">Medicine Order #{order.id}</p>
+ <p className="text-xs sm:text-sm text-soft">
  {new Date(order.orderDate).toLocaleDateString()}
  </p>
  <div className="mt-1">
  {order.medicines.slice(0, 2).map((med, index) => (
- <p key={index} className="text-xs text-gray-500">• {med.name}</p>
+ <p key={index} className="text-xs text-soft"> {med.name}</p>
  ))}
  </div>
  </div>
  <div className="text-right">
- <p className="text-base sm:text-lg font-bold text-gray-900">Rs {order.totalAmount}</p>
+ <p className="text-base sm:text-lg font-bold text-fg">Rs {order.totalAmount}</p>
  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
  order.status === 'delivered' ? 'bg-green-100 text-green-700' :
  order.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :
@@ -367,7 +367,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <h3 className="text-lg sm:text-xl md:text-2xl font-bold">{patient.subscriptionPlan.planName}</h3>
  </div>
  <p className="text-xs sm:text-sm opacity-90 capitalize">
- {patient.subscriptionPlan.type} Plan • {patient.subscriptionPlan.billingCycle} Billing
+ {patient.subscriptionPlan.type} Plan  {patient.subscriptionPlan.billingCycle} Billing
  </p>
  {patient.subscriptionPlan.corporateName && (
  <p className="text-xs sm:text-sm mt-1 opacity-80">
@@ -381,7 +381,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </p>
  <p className="text-xs sm:text-sm opacity-80">per {patient.subscriptionPlan.billingCycle}</p>
  {patient.subscriptionPlan.corporateDiscount && (
- <p className="text-xs sm:text-sm mt-1 bg-white bg-opacity-20 rounded px-2 py-1 inline-block">
+ <p className="text-xs sm:text-sm mt-1 bg-surface bg-opacity-20 rounded px-2 py-1 inline-block">
  {patient.subscriptionPlan.corporateDiscount}% Corporate Discount
  </p>
  )}
@@ -394,8 +394,8 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Plan Features */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-purple-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-purple-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaGift className="mr-2 text-purple-600" />
  Plan Benefits & Features
  </h4>
@@ -404,7 +404,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  {patient.subscriptionPlan.features.map((feature, index) => (
  <div key={index} className="flex items-start gap-2">
  <FaCheckCircle className="text-green-500 mt-0.5 flex-shrink-0" />
- <p className="text-xs sm:text-sm text-gray-700">{feature}</p>
+ <p className="text-xs sm:text-sm text-soft">{feature}</p>
  </div>
  ))}
  </div>
@@ -412,38 +412,38 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
 
  {/* Usage Stats */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-blue-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-blue-200">
  <FaUserMd className="text-blue-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs text-gray-600">Consultations</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">
+ <p className="text-xs text-soft">Consultations</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">
  {patient.pastAppointments ? patient.pastAppointments.length : 0}
  </p>
- <p className="text-xs text-gray-500">This period</p>
+ <p className="text-xs text-soft">This period</p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-green-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-green-200">
  <FaPills className="text-green-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs text-gray-600">Prescriptions</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">
+ <p className="text-xs text-soft">Prescriptions</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">
  {patient.activePrescriptions ? patient.activePrescriptions.length : 0}
  </p>
- <p className="text-xs text-gray-500">Active</p>
+ <p className="text-xs text-soft">Active</p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-purple-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-purple-200">
  <FaFlask className="text-purple-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs text-gray-600">Lab Tests</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">
+ <p className="text-xs text-soft">Lab Tests</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">
  {patient.labTests ? patient.labTests.length : 0}
  </p>
- <p className="text-xs text-gray-500">Completed</p>
+ <p className="text-xs text-soft">Completed</p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-orange-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-orange-200">
  <FaHeartbeat className="text-orange-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs text-gray-600">Wellness Score</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">{patient.healthScore}%</p>
- <p className="text-xs text-gray-500">Current</p>
+ <p className="text-xs text-soft">Wellness Score</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">{patient.healthScore}%</p>
+ <p className="text-xs text-soft">Current</p>
  </div>
  </div>
  </div>
@@ -453,32 +453,32 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Claims Summary */}
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-green-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-green-200">
  <FaMoneyBillWave className="text-green-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs sm:text-sm text-gray-600">Total Claims</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">Rs {totalClaimsAmount.toFixed(0)}</p>
- <p className="text-xs text-gray-500">All time</p>
+ <p className="text-xs sm:text-sm text-soft">Total Claims</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">Rs {totalClaimsAmount.toFixed(0)}</p>
+ <p className="text-xs text-soft">All time</p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-blue-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-blue-200">
  <FaShieldAlt className="text-blue-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs sm:text-sm text-gray-600">Insurance Paid</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">Rs {totalCoveredAmount.toFixed(0)}</p>
- <p className="text-xs text-gray-500">Approved claims</p>
+ <p className="text-xs sm:text-sm text-soft">Insurance Paid</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">Rs {totalCoveredAmount.toFixed(0)}</p>
+ <p className="text-xs text-soft">Approved claims</p>
  </div>
 
- <div className="bg-white rounded-xl p-3 sm:p-4 border border-purple-200">
+ <div className="bg-surface rounded-xl p-3 sm:p-4 border border-purple-200">
  <FaPercentage className="text-purple-600 text-lg sm:text-xl mb-2" />
- <p className="text-xs sm:text-sm text-gray-600">You Saved</p>
- <p className="text-lg sm:text-xl font-bold text-gray-900">Rs {totalSavings.toFixed(0)}</p>
- <p className="text-xs text-gray-500">With insurance</p>
+ <p className="text-xs sm:text-sm text-soft">You Saved</p>
+ <p className="text-lg sm:text-xl font-bold text-fg">Rs {totalSavings.toFixed(0)}</p>
+ <p className="text-xs text-soft">With insurance</p>
  </div>
  </div>
 
  {/* Claims List */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-orange-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-orange-200">
  <div className="flex items-center justify-between mb-4">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 flex items-center">
+ <h4 className="text-base sm:text-lg font-semibold text-fg flex items-center">
  <FaFileInvoice className="mr-2 text-orange-600" />
  Recent Claims
  </h4>
@@ -493,22 +493,22 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  {claimsLoading ? (
  <div className="text-center py-8">
  <div className="w-8 h-8 border-2 border-orange-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
- <p className="text-gray-500 text-sm">Loading claims...</p>
+ <p className="text-soft text-sm">Loading claims...</p>
  </div>
  ) : realClaims.length === 0 ? (
  <div className="text-center py-8">
- <FaFileInvoice className="text-gray-300 text-4xl mx-auto mb-3" />
- <p className="text-gray-500 font-medium">No claims yet</p>
- <p className="text-gray-400 text-sm mt-1">Your insurance claims will appear here once submitted.</p>
+ <FaFileInvoice className="text-faint text-4xl mx-auto mb-3" />
+ <p className="text-soft font-medium">No claims yet</p>
+ <p className="text-faint text-sm mt-1">Your insurance claims will appear here once submitted.</p>
  </div>
  ) : (
  <div className="space-y-3">
  {realClaims.slice(0, 5).map((claim) => (
- <div key={claim.id} className="bg-white bg-opacity-80 rounded-lg p-3 sm:p-4 border border-gray-200">
+ <div key={claim.id} className="bg-surface bg-opacity-80 rounded-lg p-3 sm:p-4 border border-line">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
  <div className="flex-1">
  <div className="flex items-center gap-2 mb-1">
- <p className="font-medium text-gray-900 text-sm sm:text-base">{claim.description}</p>
+ <p className="font-medium text-fg text-sm sm:text-base">{claim.description}</p>
  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
  claim.status === 'approved' ? 'bg-green-100 text-green-700' :
  claim.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
@@ -517,20 +517,20 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  {claim.status}
  </span>
  </div>
- <p className="text-xs sm:text-sm text-gray-600">
+ <p className="text-xs sm:text-sm text-soft">
  {claim.policyType}
- {claim.insuranceRep ? ` • ${claim.insuranceRep.companyName}` : ''}
- {' • '}{new Date(claim.submittedDate).toLocaleDateString()}
+ {claim.insuranceRep ? `  ${claim.insuranceRep.companyName}` : ''}
+ {'  '}{new Date(claim.submittedDate).toLocaleDateString()}
  </p>
- <p className="text-xs text-gray-500 mt-1">Claim ID: {claim.claimId}</p>
+ <p className="text-xs text-soft mt-1">Claim ID: {claim.claimId}</p>
  </div>
  <div className="flex sm:flex-col gap-4 sm:gap-1 sm:text-right">
  <div>
- <p className="text-xs text-gray-500">Claimed</p>
- <p className="text-sm sm:text-base font-semibold text-gray-900">Rs {claim.claimAmount.toFixed(0)}</p>
+ <p className="text-xs text-soft">Claimed</p>
+ <p className="text-sm sm:text-base font-semibold text-fg">Rs {claim.claimAmount.toFixed(0)}</p>
  </div>
  <div>
- <p className="text-xs text-gray-500">Status</p>
+ <p className="text-xs text-soft">Status</p>
  <p className={`text-sm sm:text-base font-semibold ${
  claim.status === 'approved' ? 'text-green-600' :
  claim.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
@@ -557,8 +557,8 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  const renderBenefitsUsage = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Annual Benefits Overview */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-pink-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-pink-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaChartLine className="mr-2 text-pink-600" />
  Annual Benefits Usage
  </h4>
@@ -569,14 +569,14 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="flex justify-between items-center mb-2">
  <div className="flex items-center gap-2">
  <FaUserMd className="text-blue-600" />
- <span className="text-xs sm:text-sm text-gray-700">Doctor Consultations</span>
+ <span className="text-xs sm:text-sm text-soft">Doctor Consultations</span>
  </div>
- <span className="text-xs sm:text-sm font-medium text-gray-900">
+ <span className="text-xs sm:text-sm font-medium text-fg">
  {patient.pastAppointments ? patient.pastAppointments.length : 0} / Unlimited
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
- <div className="bg-white h-2 rounded-full" style={{ width: '25%' }}></div>
+ <div className="w-full bg-line rounded-full h-2">
+ <div className="bg-surface h-2 rounded-full" style={{ width: '25%' }}></div>
  </div>
  </div>
 
@@ -585,15 +585,15 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="flex justify-between items-center mb-2">
  <div className="flex items-center gap-2">
  <FaFlask className="text-purple-600" />
- <span className="text-xs sm:text-sm text-gray-700">Free Lab Tests</span>
+ <span className="text-xs sm:text-sm text-soft">Free Lab Tests</span>
  </div>
- <span className="text-xs sm:text-sm font-medium text-gray-900">
+ <span className="text-xs sm:text-sm font-medium text-fg">
  {patient.labTests ? patient.labTests.length : 0} / 4 per year
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div 
- className="bg-white h-2 rounded-full" 
+ className="bg-surface h-2 rounded-full" 
  style={{ width: `${Math.min((patient.labTests ? patient.labTests.length : 0) / 4 * 100, 100)}%` }}
  ></div>
  </div>
@@ -604,12 +604,12 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="flex justify-between items-center mb-2">
  <div className="flex items-center gap-2">
  <FaHeartbeat className="text-green-600" />
- <span className="text-xs sm:text-sm text-gray-700">Wellness Programs</span>
+ <span className="text-xs sm:text-sm text-soft">Wellness Programs</span>
  </div>
- <span className="text-xs sm:text-sm font-medium text-gray-900">3 / 12 sessions</span>
+ <span className="text-xs sm:text-sm font-medium text-fg">3 / 12 sessions</span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
- <div className="bg-white h-2 rounded-full" style={{ width: '25%' }}></div>
+ <div className="w-full bg-line rounded-full h-2">
+ <div className="bg-surface h-2 rounded-full" style={{ width: '25%' }}></div>
  </div>
  </div>
 
@@ -618,15 +618,15 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  <div className="flex justify-between items-center mb-2">
  <div className="flex items-center gap-2">
  <FaUserNurse className="text-pink-600" />
- <span className="text-xs sm:text-sm text-gray-700">Home Nurse Visits</span>
+ <span className="text-xs sm:text-sm text-soft">Home Nurse Visits</span>
  </div>
- <span className="text-xs sm:text-sm font-medium text-gray-900">
+ <span className="text-xs sm:text-sm font-medium text-fg">
  {patient.nurseBookings ? patient.nurseBookings.length : 0} / 24 per year
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div 
- className="bg-white h-2 rounded-full" 
+ className="bg-surface h-2 rounded-full" 
  style={{ width: `${Math.min((patient.nurseBookings ? patient.nurseBookings.length : 0) / 24 * 100, 100)}%` }}
  ></div>
  </div>
@@ -635,53 +635,53 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Additional Benefits */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-cyan-200">
- <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-cyan-200">
+ <h4 className="text-base sm:text-lg font-semibold text-fg mb-4 flex items-center">
  <FaGift className="mr-2 text-cyan-600" />
  Additional Benefits Available
  </h4>
  
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
- <div className="bg-white bg-opacity-70 rounded-lg p-3 border border-gray-200">
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3 border border-line">
  <div className="flex items-start gap-3">
  <FaStethoscope className="text-blue-600 mt-1" />
  <div>
- <p className="font-medium text-gray-900 text-sm">Annual Health Screening</p>
- <p className="text-xs text-gray-600">Comprehensive checkup included</p>
- <button className="mt-2 text-xs text-blue-600 hover:underline">Schedule Now →</button>
+ <p className="font-medium text-fg text-sm">Annual Health Screening</p>
+ <p className="text-xs text-soft">Comprehensive checkup included</p>
+ <button className="mt-2 text-xs text-blue-600 hover:underline">Schedule Now </button>
  </div>
  </div>
  </div>
 
- <div className="bg-white bg-opacity-70 rounded-lg p-3 border border-gray-200">
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3 border border-line">
  <div className="flex items-start gap-3">
  <FaBaby className="text-pink-600 mt-1" />
  <div>
- <p className="font-medium text-gray-900 text-sm">Childcare Services</p>
- <p className="text-xs text-gray-600">Nanny services available</p>
- <button className="mt-2 text-xs text-pink-600 hover:underline">Learn More →</button>
+ <p className="font-medium text-fg text-sm">Childcare Services</p>
+ <p className="text-xs text-soft">Nanny services available</p>
+ <button className="mt-2 text-xs text-pink-600 hover:underline">Learn More </button>
  </div>
  </div>
  </div>
 
- <div className="bg-white bg-opacity-70 rounded-lg p-3 border border-gray-200">
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3 border border-line">
  <div className="flex items-start gap-3">
  <FaTooth className="text-yellow-600 mt-1" />
  <div>
- <p className="font-medium text-gray-900 text-sm">Dental Care</p>
- <p className="text-xs text-gray-600">70% coverage on treatments</p>
- <button className="mt-2 text-xs text-yellow-600 hover:underline">Find Dentist →</button>
+ <p className="font-medium text-fg text-sm">Dental Care</p>
+ <p className="text-xs text-soft">70% coverage on treatments</p>
+ <button className="mt-2 text-xs text-yellow-600 hover:underline">Find Dentist </button>
  </div>
  </div>
  </div>
 
- <div className="bg-white bg-opacity-70 rounded-lg p-3 border border-gray-200">
+ <div className="bg-surface bg-opacity-70 rounded-lg p-3 border border-line">
  <div className="flex items-start gap-3">
  <FaAmbulance className="text-red-600 mt-1" />
  <div>
- <p className="font-medium text-gray-900 text-sm">Emergency Services</p>
- <p className="text-xs text-gray-600">24/7 ambulance service</p>
- <button className="mt-2 text-xs text-red-600 hover:underline">View Details →</button>
+ <p className="font-medium text-fg text-sm">Emergency Services</p>
+ <p className="text-xs text-soft">24/7 ambulance service</p>
+ <button className="mt-2 text-xs text-red-600 hover:underline">View Details </button>
  </div>
  </div>
  </div>
@@ -720,7 +720,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Mobile Accordion / Desktop Tabs */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden">
  {/* Desktop Tab Navigation */}
  <div className="hidden sm:block border-b">
  <div className="flex overflow-x-auto">
@@ -731,7 +731,7 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  className={`flex-shrink-0 px-4 md:px-6 py-3 md:py-4 text-center font-medium transition-all ${
  expandedSection === section.id 
  ? `text-${section.color}-600 border-b-2 border-current bg-${section.color}-50` 
- : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+ : 'text-soft hover:text-fg hover:bg-subtle'
  }`}
  >
  <section.icon className="inline mr-2 text-sm md:text-base" />
@@ -786,14 +786,14 @@ const InsuranceInfo: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Fixed Bottom Tab Bar - Mobile */}
- <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center py-2 px-1 z-50 shadow-lg">
+ <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-line flex justify-around items-center py-2 px-1 z-50 shadow-lg">
  {sections.map((section) => {
  const Icon = section.icon
  const isActive = expandedSection === section.id
  return (
  <button key={section.id} onClick={() => setExpandedSection(section.id)}
- className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-gray-400'}`}>
- <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+ className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${isActive ? 'text-blue-600' : 'text-faint'}`}>
+ <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-faint'}`} />
  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-1" />}
  </button>
  )

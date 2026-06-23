@@ -130,7 +130,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  
  return (
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">{label}</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">{label}</label>
  <div className="flex items-center gap-1.5 sm:gap-2">
  {isEditing ? (
  <>
@@ -141,7 +141,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  ...prev,
  [field]: { ...prev[field], value: e.target.value }
  }))}
- className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-xs sm:text-sm md:text-base"
+ className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-xs sm:text-sm md:text-base"
  />
  <button
  onClick={() => saveField(field)}
@@ -161,7 +161,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  <input
  type={type}
  value={value}
- className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg bg-white text-xs sm:text-sm md:text-base"
+ className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg bg-surface text-xs sm:text-sm md:text-base"
  readOnly
  />
  <button
@@ -180,8 +180,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderProfileSettings = () => (
  <div className="space-y-4 sm:space-y-6 md:space-y-8">
  {/* Basic Information */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaUser className="mr-2 text-blue-500" />
  Basic Information
  </h3>
@@ -193,12 +193,12 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {renderEditableField('phone', 'Phone Number', patientData.phone, 'tel')}
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Date of Birth</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Date of Birth</label>
  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
  <input
  type="date"
  value={patientData.dateOfBirth}
- className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg bg-white text-xs sm:text-sm md:text-base"
+ className="flex-1 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg bg-surface text-xs sm:text-sm md:text-base"
  readOnly
  />
  <div className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-sky-50 text-blue-700 rounded-lg text-xs sm:text-sm">
@@ -209,11 +209,11 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Gender</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Gender</label>
  <input
  type="text"
  value={patientData.gender}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg bg-white text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg bg-surface text-xs sm:text-sm md:text-base"
  readOnly
  />
  </div>
@@ -241,8 +241,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  {/* ID Documents */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaIdCard className="mr-2 text-green-500" />
  Identification Documents
  </h3>
@@ -254,15 +254,15 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  {/* Emergency Contact */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaPhone className="mr-2 text-red-500" />
  Emergency Contact
  </h3>
  
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 md:gap-6">
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Name</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Name</label>
  <input 
  onChange={(e) =>
  setPatientData(prev => {
@@ -278,12 +278,12 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  }
  type="text"
  value={patientData.emergencyContact.name}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
  />
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Relationship</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Relationship</label>
  <input
  onChange={(e) =>
  setPatientData(prev => {
@@ -299,12 +299,12 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  }
  type="text"
  value={patientData.emergencyContact.relationship}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
  />
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Phone</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Phone</label>
  <input
  onChange={(e) =>
  setPatientData(prev => {
@@ -320,12 +320,12 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  }
  type="tel"
  value={patientData.emergencyContact.phone}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
  />
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Address</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Address</label>
  <input
  onChange={(e) =>
  setPatientData(prev => {
@@ -341,7 +341,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  }
  type="text"
  value={patientData.emergencyContact.address}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
  />
  </div>
  </div>
@@ -352,15 +352,15 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderHealthSettings = () => (
  <div className="space-y-4 sm:space-y-6 md:space-y-8">
  {/* Medical Information */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaHeart className="mr-2 text-red-500" />
  Medical Information
  </h3>
  
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 md:gap-6">
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Blood Type</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Blood Type</label>
  <div className="flex items-center gap-2">
  <div className="px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-sky-50 text-red-700 rounded-lg font-bold text-center flex-1 text-xs sm:text-sm md:text-base">
  <FaTint className="inline mr-1 sm:mr-2" />
@@ -370,7 +370,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Health Score</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Health Score</label>
  <div className="flex items-center gap-2">
  <div className="px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-sky-50 text-green-700 rounded-lg font-bold text-center flex-1 text-xs sm:text-sm md:text-base">
  <FaHeart className="inline mr-1 sm:mr-2" />
@@ -380,7 +380,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Body Age</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Body Age</label>
  <div className="flex items-center gap-2">
  <div className="px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-sky-50 text-blue-700 rounded-lg font-bold text-center flex-1 text-xs sm:text-sm md:text-base">
  <FaBirthdayCake className="inline mr-1 sm:mr-2" />
@@ -392,7 +392,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Allergies */}
  <div className="mt-4 sm:mt-6">
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Allergies</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2 sm:mb-3">Allergies</label>
  <div className="flex flex-wrap gap-1.5 sm:gap-2">
  {patientData.allergies.map((allergy, index) => (
  <span key={index} className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-red-800 rounded-full text-xs sm:text-sm flex items-center gap-1 sm:gap-2">
@@ -403,7 +403,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </button>
  </span>
  ))}
- <button className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-gray-600 rounded-full text-xs sm:text-sm transition">
+ <button className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-soft rounded-full text-xs sm:text-sm transition">
  <FaPlus className="inline mr-1" />
  Add Allergy
  </button>
@@ -412,7 +412,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Chronic Conditions */}
  <div className="mt-4 sm:mt-6">
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Chronic Conditions</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2 sm:mb-3">Chronic Conditions</label>
  <div className="flex flex-wrap gap-1.5 sm:gap-2">
  {patientData.chronicConditions.map((condition, index) => (
  <span key={index} className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-yellow-800 rounded-full text-xs sm:text-sm flex items-center gap-1 sm:gap-2">
@@ -423,7 +423,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </button>
  </span>
  ))}
- <button className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-gray-600 rounded-full text-xs sm:text-sm transition">
+ <button className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-soft rounded-full text-xs sm:text-sm transition">
  <FaPlus className="inline mr-1" />
  Add Condition
  </button>
@@ -433,8 +433,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Latest Vital Signs */}
  {patientData.vitalSigns && patientData.vitalSigns.length > 0 && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-orange-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-orange-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaThermometerHalf className="mr-2 text-orange-500" />
  Latest Vital Signs
  </h3>
@@ -443,14 +443,14 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const latestVitals = patientData.vitalSigns[0]
  return (
  <div>
- <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+ <p className="text-xs sm:text-sm text-soft mb-3 sm:mb-4">
  Recorded on {new Date(latestVitals.date).toLocaleDateString()} at {latestVitals.time}
  </p>
  
  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
  <FaHeart className="text-red-500 text-base sm:text-lg md:text-xl mx-auto mb-1 sm:mb-2" />
- <p className="text-xs text-gray-600">Blood Pressure</p>
+ <p className="text-xs text-soft">Blood Pressure</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-red-600">
  {latestVitals.bloodPressure.systolic}/{latestVitals.bloodPressure.diastolic}
  </p>
@@ -458,20 +458,20 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
  <FaWeight className="text-blue-500 text-base sm:text-lg md:text-xl mx-auto mb-1 sm:mb-2" />
- <p className="text-xs text-gray-600">Weight</p>
+ <p className="text-xs text-soft">Weight</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-blue-600">{latestVitals.weight} kg</p>
  </div>
  
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
  <FaRuler className="text-green-500 text-base sm:text-lg md:text-xl mx-auto mb-1 sm:mb-2" />
- <p className="text-xs text-gray-600">Height</p>
+ <p className="text-xs text-soft">Height</p>
  <p className="text-sm sm:text-base md:text-lg font-bold text-green-600">{latestVitals.height} cm</p>
  </div>
  
  <div className="bg-sky-50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
  <FaThermometerHalf className="text-orange-500 text-base sm:text-lg md:text-xl mx-auto mb-1 sm:mb-2" />
- <p className="text-xs text-gray-600">Temperature</p>
- <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}°C</p>
+ <p className="text-xs text-soft">Temperature</p>
+ <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600">{latestVitals.temperature}C</p>
  </div>
  </div>
  </div>
@@ -482,8 +482,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Health Metrics */}
  {patientData.healthMetrics && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaNutritionix className="mr-2 text-purple-500" />
  Health Metrics & Analytics
  </h3>
@@ -565,8 +565,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  const renderNotificationSettings = () => (
  <div className="space-y-4 sm:space-y-6">
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-yellow-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-yellow-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaBell className="mr-2 text-yellow-500" />
  Notification Preferences
  </h3>
@@ -583,14 +583,14 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  dietReminders: { label: 'Diet & Nutrition Reminders', desc: 'Meal and hydration reminders', icon: FaNutritionix, color: 'text-orange-500' },
  exerciseReminders: { label: 'Exercise Reminders', desc: 'Exercise and activity reminders', icon: FaHeart, color: 'text-pink-500' }
  }).map(([key, config]) => (
- <div key={key} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-gray-200 rounded-lg sm:rounded-xl hover:border-gray-300 transition gap-3">
+ <div key={key} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-line rounded-lg sm:rounded-xl hover:border-line transition gap-3">
  <div className="flex items-center gap-3 sm:gap-4">
- <div className={`p-2 sm:p-3 bg-white rounded-lg ${config.color}`}>
+ <div className={`p-2 sm:p-3 bg-surface rounded-lg ${config.color}`}>
  <config.icon className="text-base sm:text-lg md:text-xl" />
  </div>
  <div>
- <p className="font-medium text-gray-900 text-xs sm:text-sm md:text-base">{config.label}</p>
- <p className="text-xs sm:text-sm text-gray-600">{config.desc}</p>
+ <p className="font-medium text-fg text-xs sm:text-sm md:text-base">{config.label}</p>
+ <p className="text-xs sm:text-sm text-soft">{config.desc}</p>
  </div>
  </div>
  <button
@@ -600,7 +600,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {patientData.notificationPreferences[key as keyof typeof patientData.notificationPreferences] ? (
  <FaToggleOn className="text-green-500" />
  ) : (
- <FaToggleOff className="text-gray-400" />
+ <FaToggleOff className="text-faint" />
  )}
  </button>
  </div>
@@ -609,10 +609,10 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Notification Timing */}
  <div className="mt-4 sm:mt-6 md:mt-8 pt-4 sm:pt-6 border-t">
- <h4 className="font-medium text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">Notification Timing</h4>
+ <h4 className="font-medium text-fg mb-3 sm:mb-4 text-sm sm:text-base">Notification Timing</h4>
  <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Preferred Time</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft">Preferred Time</label>
  <input
  onChange={(e) =>
  setPatientData((prev) => {
@@ -628,7 +628,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  }
  type="time"
  value={patientData.notificationPreferences.notificationTime}
- className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
+ className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base"
  />
  </div>
  </div>
@@ -636,14 +636,14 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
 
  {/* Notification Channels */}
  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
- <h4 className="font-medium text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">Notification Channels</h4>
+ <h4 className="font-medium text-fg mb-3 sm:mb-4 text-sm sm:text-base">Notification Channels</h4>
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-3 md:gap-4">
  {[
  { key: 'emailNotifications', label: 'Email', icon: FaEnvelope, color: 'text-blue-500' },
  { key: 'smsNotifications', label: 'SMS', icon: FaSms, color: 'text-green-500' },
  { key: 'pushNotifications', label: 'Push Notifications', icon: FaMobile, color: 'text-purple-500' }
  ].map(channel => (
- <div key={channel.key} className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg sm:rounded-xl">
+ <div key={channel.key} className="flex items-center justify-between p-3 sm:p-4 border border-line rounded-lg sm:rounded-xl">
  <div className="flex items-center gap-2 sm:gap-3">
  <channel.icon className={`${channel.color} text-base sm:text-lg md:text-xl`} />
  <span className="font-medium text-xs sm:text-sm md:text-base">{channel.label}</span>
@@ -655,7 +655,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {patientData.notificationPreferences[channel.key as keyof typeof patientData.notificationPreferences] ? (
  <FaToggleOn className="text-green-500" />
  ) : (
- <FaToggleOff className="text-gray-400" />
+ <FaToggleOff className="text-faint" />
  )}
  </button>
  </div>
@@ -669,17 +669,17 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderSecuritySettings = () => (
  <div className="space-y-4 sm:space-y-6">
  {/* Security Features */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaShieldAlt className="mr-2 text-green-500" />
  Security Features
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
- <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-gray-200 rounded-lg sm:rounded-xl gap-3">
+ <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-line rounded-lg sm:rounded-xl gap-3">
  <div>
- <h4 className="font-medium text-gray-900 text-sm sm:text-base">Two-Factor Authentication</h4>
- <p className="text-xs sm:text-sm text-gray-600">Add an extra layer of security to your account</p>
+ <h4 className="font-medium text-fg text-sm sm:text-base">Two-Factor Authentication</h4>
+ <p className="text-xs sm:text-sm text-soft">Add an extra layer of security to your account</p>
  </div>
  <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
  {patientData.securitySettings.twoFactorEnabled ? (
@@ -688,7 +688,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  Enabled
  </span>
  ) : (
- <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-gray-800 rounded-full text-xs sm:text-sm font-medium">
+ <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-fg rounded-full text-xs sm:text-sm font-medium">
  Disabled
  </span>
  )}
@@ -699,16 +699,16 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {patientData.securitySettings.twoFactorEnabled ? (
  <FaToggleOn className="text-green-500" />
  ) : (
- <FaToggleOff className="text-gray-400" />
+ <FaToggleOff className="text-faint" />
  )}
  </button>
  </div>
  </div>
 
- <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-gray-200 rounded-lg sm:rounded-xl gap-3">
+ <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-line rounded-lg sm:rounded-xl gap-3">
  <div>
- <h4 className="font-medium text-gray-900 text-sm sm:text-base">Biometric Authentication</h4>
- <p className="text-xs sm:text-sm text-gray-600">Use fingerprint or face recognition to access your account</p>
+ <h4 className="font-medium text-fg text-sm sm:text-base">Biometric Authentication</h4>
+ <p className="text-xs sm:text-sm text-soft">Use fingerprint or face recognition to access your account</p>
  </div>
  <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
  {patientData.securitySettings.biometricEnabled ? (
@@ -717,7 +717,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  Enabled
  </span>
  ) : (
- <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-gray-800 rounded-full text-xs sm:text-sm font-medium">
+ <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-sky-50 text-fg rounded-full text-xs sm:text-sm font-medium">
  Disabled
  </span>
  )}
@@ -728,7 +728,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {patientData.securitySettings.biometricEnabled ? (
  <FaToggleOn className="text-green-500" />
  ) : (
- <FaToggleOff className="text-gray-400" />
+ <FaToggleOff className="text-faint" />
  )}
  </button>
  </div>
@@ -743,15 +743,15 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderBillingSettings = () => (
  <div className="space-y-4 sm:space-y-6">
  {/* Payment Methods */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaCreditCard className="mr-2 text-purple-500" />
  Payment Methods
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
  {patientData.billingInformation.map((billing) => (
- <div key={billing.id} className="border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
+ <div key={billing.id} className="border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
  <div className="flex items-center gap-3 sm:gap-4">
  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center ${
@@ -760,12 +760,12 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  <FaCreditCard className="text-base sm:text-lg md:text-xl" />
  </div>
  <div>
- <p className="font-medium text-gray-900 text-sm sm:text-base">
+ <p className="font-medium text-fg text-sm sm:text-base">
  {billing.type === 'credit_card' ? 'Credit Card' : 'MCB Juice'}
  </p>
- <p className="text-xs sm:text-sm text-gray-600">{billing.cardNumber}</p>
- <p className="text-xs text-gray-500">
- Expires: {billing.expiryDate} • Added: {new Date(billing.addedDate).toLocaleDateString()}
+ <p className="text-xs sm:text-sm text-soft">{billing.cardNumber}</p>
+ <p className="text-xs text-soft">
+ Expires: {billing.expiryDate}  Added: {new Date(billing.addedDate).toLocaleDateString()}
  </p>
  </div>
  </div>
@@ -787,7 +787,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
  ))}
  
- <button className="w-full p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl text-gray-600 hover:border-purple-400 hover:text-purple-600 transition text-xs sm:text-sm md:text-base">
+ <button className="w-full p-3 sm:p-4 border-2 border-dashed border-line rounded-lg sm:rounded-xl text-soft hover:border-purple-400 hover:text-purple-600 transition text-xs sm:text-sm md:text-base">
  <FaPlus className="inline mr-1 sm:mr-2" />
  Add Payment Method
  </button>
@@ -829,8 +829,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  {/* Plan Features */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6">Plan Features</h3>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6">Plan Features</h3>
  
  <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3 md:gap-4">
  {patientData.subscriptionPlan.features.map((feature, index) => (
@@ -847,8 +847,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderDocumentsSettings = () => (
  <div className="space-y-4 sm:space-y-6">
  {/* Document Upload */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-indigo-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-indigo-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaUpload className="mr-2 text-blue-500" />
  Upload Documents
  </h3>
@@ -863,7 +863,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  ].map((docType) => (
  <button
  key={docType.type}
- className={`p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl hover:border-blue-400 transition ${docType.gradient} ${docType.textColor}`}
+ className={`p-3 sm:p-4 border-2 border-dashed border-line rounded-lg sm:rounded-xl hover:border-blue-400 transition ${docType.gradient} ${docType.textColor}`}
  >
  <docType.icon className="text-xl sm:text-2xl mx-auto mb-1 sm:mb-2" />
  <p className="font-medium text-xs sm:text-sm md:text-base">{docType.label}</p>
@@ -878,17 +878,17 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  const renderPreferencesSettings = () => (
  <div className="space-y-4 sm:space-y-6">
  {/* General Preferences */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-gray-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
- <FaCog className="mr-2 text-gray-500" />
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-line">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <FaCog className="mr-2 text-soft" />
  General Preferences
  </h3>
  
  <div className="space-y-4 sm:space-y-6">
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 md:gap-6">
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Language</label>
- <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
+ <label className="block text-xs sm:text-sm font-medium text-soft">Language</label>
+ <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
  <option value="en">English</option>
  <option value="fr">French</option>
  <option value="hi">Hindi</option>
@@ -897,8 +897,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Time Zone</label>
- <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
+ <label className="block text-xs sm:text-sm font-medium text-soft">Time Zone</label>
+ <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
  <option value="indian/mauritius">Indian/Mauritius</option>
  <option value="utc">UTC</option>
  <option value="asia/kolkata">Asia/Kolkata</option>
@@ -906,8 +906,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Date Format</label>
- <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
+ <label className="block text-xs sm:text-sm font-medium text-soft">Date Format</label>
+ <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
  <option value="dd/mm/yyyy">DD/MM/YYYY</option>
  <option value="mm/dd/yyyy">MM/DD/YYYY</option>
  <option value="yyyy-mm-dd">YYYY-MM-DD</option>
@@ -915,8 +915,8 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
  
  <div className="space-y-1.5 sm:space-y-2">
- <label className="block text-xs sm:text-sm font-medium text-gray-700">Theme</label>
- <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
+ <label className="block text-xs sm:text-sm font-medium text-soft">Theme</label>
+ <select className="w-full px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 border border-line rounded-lg focus:outline-none focus:border-blue-500 text-xs sm:text-sm md:text-base">
  <option value="light">Light</option>
  <option value="dark">Dark</option>
  <option value="auto">Auto</option>
@@ -950,7 +950,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  </div>
 
  {/* Settings Navigation - Accordion on Mobile, Tabs on Desktop */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden">
  {/* Desktop Tab Navigation */}
  <div className="hidden sm:block border-b">
  <div className="flex overflow-x-auto">
@@ -961,7 +961,7 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  className={`flex-shrink-0 px-3 md:px-4 lg:px-6 py-3 md:py-4 text-center font-medium transition-all text-xs md:text-sm lg:text-base ${
  activeTab === tab.id 
  ? `text-${tab.color}-600 border-b-2 border-current ${tab.gradient}` 
- : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+ : 'text-soft hover:text-fg hover:bg-subtle'
  }`}
  >
  <tab.icon className="inline mr-1 md:mr-2 text-sm md:text-base" />
@@ -974,17 +974,17 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {/* Mobile Accordion */}
  <div className="sm:hidden">
  {tabs.map((tab) => (
- <div key={tab.id} className="border-b border-gray-200">
+ <div key={tab.id} className="border-b border-line">
  <button
  onClick={() => toggleSection(tab.id)}
  className={`w-full px-4 py-3 flex items-center justify-between transition-all ${
- expandedSection === tab.id ? ` ${tab.gradient}` : 'bg-white'
+ expandedSection === tab.id ? ` ${tab.gradient}` : 'bg-surface'
  }`}
  >
  <div className="flex items-center gap-2">
  <tab.icon className={`text-${tab.color}-500`} />
  <span className={`font-medium ${
- expandedSection === tab.id ? `text-${tab.color}-700` : 'text-gray-700'
+ expandedSection === tab.id ? `text-${tab.color}-700` : 'text-soft'
  } text-sm`}>
  {tab.label}
  </span>
@@ -992,11 +992,11 @@ const SettingsComponent: React.FC<Props> = ({ patientData, setPatientData }) => 
  {expandedSection === tab.id ? (
  <FaChevronUp className={`text-${tab.color}-500`} />
  ) : (
- <FaChevronDown className="text-gray-400" />
+ <FaChevronDown className="text-faint" />
  )}
  </button>
  {expandedSection === tab.id && (
- <div className="p-4 bg-white">
+ <div className="p-4 bg-surface">
  {tab.id === 'profile' && renderProfileSettings()}
  {tab.id === 'health' && renderHealthSettings()}
  {tab.id === 'notifications' && renderNotificationSettings()}

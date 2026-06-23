@@ -179,11 +179,11 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  {/* Upload area */}
  <button
  onClick={() => uploadInputRef.current?.click()}
- className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-400 hover:bg-blue-50/50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full flex flex-col items-center justify-center gap-2 p-5 border-2 border-dashed border-line rounded-xl hover:border-blue-400 hover:bg-blue-50/50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
- <FaCamera className="text-3xl text-gray-400" />
- <div className="text-sm text-gray-500 text-center">
- <span className="font-medium text-gray-700">Snap or upload a photo of your food</span>
+ <FaCamera className="text-3xl text-faint" />
+ <div className="text-sm text-soft text-center">
+ <span className="font-medium text-soft">Snap or upload a photo of your food</span>
  <br />
  <span className="text-xs">AI will identify and estimate nutrition</span>
  </div>
@@ -200,7 +200,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  </button>
  <button
  onClick={() => uploadInputRef.current?.click()}
- className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-subtle text-soft text-sm font-medium rounded-lg hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  <FaUpload className="text-sm" />
  Upload Image
@@ -217,7 +217,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  {fileInputs}
  {/* Image preview */}
  {previewUrl && (
- <div className="relative rounded-xl overflow-hidden border border-gray-200">
+ <div className="relative rounded-xl overflow-hidden border border-line">
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img src={previewUrl} alt="Food being analyzed" className="w-full max-h-48 object-cover" />
  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-2">
@@ -236,7 +236,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  <div className="space-y-3">
  {fileInputs}
  {previewUrl && (
- <div className="rounded-xl overflow-hidden border border-gray-200">
+ <div className="rounded-xl overflow-hidden border border-line">
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img src={previewUrl} alt="Food photo" className="w-full max-h-48 object-cover" />
  </div>
@@ -247,7 +247,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  </div>
  <button
  onClick={handleReset}
- className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-subtle text-soft text-sm font-medium rounded-lg hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  <FaRedo className="text-sm" />
  Try Again
@@ -262,7 +262,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  {fileInputs}
  {/* Image preview */}
  {previewUrl && (
- <div className="rounded-xl overflow-hidden border border-gray-200">
+ <div className="rounded-xl overflow-hidden border border-line">
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img src={previewUrl} alt="Scanned food" className="w-full max-h-48 object-cover" />
  </div>
@@ -272,8 +272,8 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  {aiData && (
  <div className="flex items-center justify-between">
  <div>
- <p className="text-sm font-semibold text-gray-800">{aiData.name}</p>
- <p className="text-xs text-gray-500">{aiData.description}</p>
+ <p className="text-sm font-semibold text-fg">{aiData.name}</p>
+ <p className="text-xs text-soft">{aiData.description}</p>
  </div>
  {confidenceBadge(aiData.confidence)}
  </div>
@@ -282,56 +282,56 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  {/* Editable fields */}
  <div className="space-y-2">
  <div>
- <label className="block text-xs font-medium text-gray-500 mb-1">Food Name</label>
+ <label className="block text-xs font-medium text-soft mb-1">Food Name</label>
  <input
  type="text"
  value={editName}
  onChange={(e) => setEditName(e.target.value)}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
  <div className="grid grid-cols-2 gap-2">
  <div>
- <label className="block text-xs font-medium text-gray-500 mb-1">Calories</label>
+ <label className="block text-xs font-medium text-soft mb-1">Calories</label>
  <input
  type="number"
  min={0}
  value={editCalories}
  onChange={(e) => setEditCalories(Number(e.target.value))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-500 mb-1">Protein (g)</label>
+ <label className="block text-xs font-medium text-soft mb-1">Protein (g)</label>
  <input
  type="number"
  min={0}
  step={0.1}
  value={editProtein}
  onChange={(e) => setEditProtein(Number(e.target.value))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-500 mb-1">Carbs (g)</label>
+ <label className="block text-xs font-medium text-soft mb-1">Carbs (g)</label>
  <input
  type="number"
  min={0}
  step={0.1}
  value={editCarbs}
  onChange={(e) => setEditCarbs(Number(e.target.value))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-500 mb-1">Fat (g)</label>
+ <label className="block text-xs font-medium text-soft mb-1">Fat (g)</label>
  <input
  type="number"
  min={0}
  step={0.1}
  value={editFat}
  onChange={(e) => setEditFat(Number(e.target.value))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
  </div>
@@ -341,7 +341,7 @@ export default function FoodScanPanel({ onResult }: FoodScanPanelProps) {
  <div className="flex gap-2">
  <button
  onClick={handleReset}
- className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="flex items-center justify-center gap-2 px-4 py-2.5 bg-subtle text-soft text-sm font-medium rounded-lg hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  <FaRedo className="text-sm" />
  Retry

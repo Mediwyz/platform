@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa'
 import { getUserId } from '@/hooks/useUser'
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+//  Types 
 
 export interface StatusOption {
  value: string
@@ -73,7 +73,7 @@ export interface ColumnDef {
  className?: string
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
  return path.split('.').reduce((acc: unknown, key) => {
@@ -94,7 +94,7 @@ function formatTime(dateStr: string) {
  })
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────
+//  Component 
 
 export default function ServiceBookingManager({ config }: { config: ServiceBookingConfig }) {
  const [bookings, setBookings] = useState<Record<string, unknown>[]>([])
@@ -203,7 +203,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  const getStatusBadge = (status: string) => {
  const found = config.statuses.find((s) => s.value === status)
  if (found) return found
- return { value: status, label: status, color: 'bg-gray-100 text-gray-800' }
+ return { value: status, label: status, color: 'bg-subtle text-fg' }
  }
 
  const getStatusIcon = (status: string) => {
@@ -243,20 +243,20 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
  {/* Header */}
  <div>
- <h1 className="text-2xl font-bold text-gray-900">{config.title}</h1>
- {config.subtitle && <p className="text-sm text-gray-500 mt-1">{config.subtitle}</p>}
+ <h1 className="text-2xl font-bold text-fg">{config.title}</h1>
+ {config.subtitle && <p className="text-sm text-soft mt-1">{config.subtitle}</p>}
  </div>
 
  {/* Stats Bar */}
  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
- <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
- <p className="text-2xl font-bold text-gray-900">{bookings.length}</p>
- <p className="text-xs text-gray-500">Total</p>
+ <div className="bg-surface rounded-lg border border-line p-3 text-center">
+ <p className="text-2xl font-bold text-fg">{bookings.length}</p>
+ <p className="text-xs text-soft">Total</p>
  </div>
  {config.statuses.slice(0, 4).map((s) => (
- <div key={s.value} className="bg-white rounded-lg border border-gray-200 p-3 text-center">
- <p className="text-2xl font-bold text-gray-900">{stats[s.value] || 0}</p>
- <p className="text-xs text-gray-500">{s.label}</p>
+ <div key={s.value} className="bg-surface rounded-lg border border-line p-3 text-center">
+ <p className="text-2xl font-bold text-fg">{stats[s.value] || 0}</p>
+ <p className="text-xs text-soft">{s.label}</p>
  </div>
  ))}
  </div>
@@ -277,19 +277,19 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  {/* Filters */}
  <div className="flex flex-col sm:flex-row gap-3">
  <div className="relative flex-1">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search bookings..."
  value={searchTerm}
  onChange={(e) => setSearchTerm(e.target.value)}
- className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+ className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
  />
  </div>
  <select
  value={statusFilter}
  onChange={(e) => setStatusFilter(e.target.value)}
- className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+ className="px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-surface"
  >
  <option value="">All Statuses</option>
  {config.statuses.map((s) => (
@@ -300,7 +300,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  <select
  value={categoryFilter}
  onChange={(e) => setCategoryFilter(e.target.value)}
- className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+ className="px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-surface"
  >
  <option value="">All Categories</option>
  {config.categories.map((c) => (
@@ -315,7 +315,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  <button
  onClick={() => setStatusFilter('')}
  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
- !statusFilter ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+ !statusFilter ? 'bg-blue-600 text-white' : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  All ({bookings.length})
@@ -335,35 +335,35 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
 
  {/* Table */}
  {filteredBookings.length === 0 ? (
- <div className="text-center py-16 bg-gray-50 rounded-xl border border-dashed border-gray-300">
- <FaCalendarAlt className="mx-auto text-4xl text-gray-300 mb-4" />
- <h3 className="text-lg font-medium text-gray-600 mb-1">No bookings found</h3>
- <p className="text-sm text-gray-400">
+ <div className="text-center py-16 bg-subtle rounded-xl border border-dashed border-line">
+ <FaCalendarAlt className="mx-auto text-4xl text-faint mb-4" />
+ <h3 className="text-lg font-medium text-soft mb-1">No bookings found</h3>
+ <p className="text-sm text-faint">
  {searchTerm || statusFilter || categoryFilter
  ? 'Try adjusting your search or filters.'
  : 'Bookings will appear here.'}
  </p>
  </div>
  ) : (
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm border border-line overflow-hidden">
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="bg-gray-50 border-b border-gray-200">
+ <tr className="bg-subtle border-b border-line">
  {config.columns.map((col) => (
- <th key={col.key} className={`text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider ${col.className || ''}`}>
+ <th key={col.key} className={`text-left px-4 py-3 text-xs font-semibold text-soft uppercase tracking-wider ${col.className || ''}`}>
  {col.label}
  </th>
  ))}
- <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase tracking-wider">
  Status
  </th>
- <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+ <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase tracking-wider">
  Actions
  </th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {filteredBookings.map((booking) => {
  const id = booking.id as string
  const status = (booking.status as string) || 'pending'
@@ -372,7 +372,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  const showResult = config.resultButton && config.resultButton.visibleForStatuses.includes(status)
 
  return (
- <tr key={id} className="hover:bg-gray-50 transition-colors">
+ <tr key={id} className="hover:bg-subtle transition-colors">
  {config.columns.map((col) => (
  <td key={col.key} className={`px-4 py-4 ${col.className || ''}`}>
  {typeof col.accessor === 'function'
@@ -382,12 +382,12 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  if (col.accessor.includes('At') || col.accessor.includes('timestamp') || col.accessor.includes('date') || col.accessor === 'createdAt' || col.accessor === 'scheduledAt') {
  return val ? (
  <div>
- <div className="text-sm text-gray-900">{formatDate(val as string)}</div>
- <div className="text-xs text-gray-500">{formatTime(val as string)}</div>
+ <div className="text-sm text-fg">{formatDate(val as string)}</div>
+ <div className="text-xs text-soft">{formatTime(val as string)}</div>
  </div>
- ) : <span className="text-gray-400">-</span>
+ ) : <span className="text-faint">-</span>
  }
- return <span className="text-sm text-gray-700">{val != null ? String(val) : '-'}</span>
+ return <span className="text-sm text-soft">{val != null ? String(val) : '-'}</span>
  })()
  }
  </td>
@@ -439,7 +439,7 @@ export default function ServiceBookingManager({ config }: { config: ServiceBooki
  )
 }
 
-// ─── Preset Configs ─────────────────────────────────────────────────────────
+//  Preset Configs 
 
 const COMMON_STATUSES: StatusOption[] = [
  { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
@@ -470,7 +470,7 @@ const ACCEPT_DENY_ACTIONS: ActionButton[] = [
  {
  action: 'cancel', label: 'Cancel',
  icon: <FaBan className="text-[10px]" />,
- className: 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+ className: 'bg-line text-soft hover:bg-gray-300',
  visibleForStatuses: ['pending', 'upcoming'],
  confirmMessage: 'Are you sure you want to cancel this booking?',
  },
@@ -482,11 +482,11 @@ function patientColumn(): ColumnDef {
  label: 'Patient',
  accessor: (booking) => {
  const patient = booking.patient as { user?: { firstName?: string; lastName?: string; phone?: string; email?: string }; userId?: string } | undefined
- if (!patient?.user) return <span className="text-gray-400">-</span>
+ if (!patient?.user) return <span className="text-faint">-</span>
  return (
  <div>
- <div className="font-medium text-gray-900">{patient.user.firstName} {patient.user.lastName}</div>
- <div className="text-xs text-gray-500 flex items-center gap-1">
+ <div className="font-medium text-fg">{patient.user.firstName} {patient.user.lastName}</div>
+ <div className="text-xs text-soft flex items-center gap-1">
  <FaPhone className="text-[9px]" /> {patient.user.phone || patient.user.email || '-'}
  </div>
  </div>
@@ -512,9 +512,9 @@ export function doctorBookingConfig(): ServiceBookingConfig {
  { key: 'type', label: 'Type', accessor: (b) => {
  const type = (b.type as string) || '-'
  const styles: Record<string, string> = { video: 'bg-blue-100 text-blue-800', in_person: 'bg-green-100 text-green-800' }
- return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-gray-100 text-gray-800'}`}>{type.replace(/_/g, ' ')}</span>
+ return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-subtle text-fg'}`}>{type.replace(/_/g, ' ')}</span>
  }},
- { key: 'reason', label: 'Reason', accessor: (b) => <span className="text-sm text-gray-700 line-clamp-1">{(b.reason as string) || '-'}</span> },
+ { key: 'reason', label: 'Reason', accessor: (b) => <span className="text-sm text-soft line-clamp-1">{(b.reason as string) || '-'}</span> },
  { key: 'scheduledAt', label: 'Date', accessor: 'scheduledAt' },
  ],
  resultButton: {
@@ -541,9 +541,9 @@ export function nurseBookingConfig(): ServiceBookingConfig {
  { key: 'type', label: 'Type', accessor: (b) => {
  const type = (b.type as string) || '-'
  const styles: Record<string, string> = { video: 'bg-blue-100 text-blue-800', in_person: 'bg-green-100 text-green-800', home_visit: 'bg-purple-100 text-purple-800' }
- return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-gray-100 text-gray-800'}`}>{type.replace(/_/g, ' ')}</span>
+ return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-subtle text-fg'}`}>{type.replace(/_/g, ' ')}</span>
  }},
- { key: 'reason', label: 'Reason', accessor: (b) => <span className="text-sm text-gray-700 line-clamp-1">{(b.reason as string) || '-'}</span> },
+ { key: 'reason', label: 'Reason', accessor: (b) => <span className="text-sm text-soft line-clamp-1">{(b.reason as string) || '-'}</span> },
  { key: 'scheduledAt', label: 'Date', accessor: 'scheduledAt' },
  ],
  }
@@ -567,7 +567,7 @@ export function nannyBookingConfig(): ServiceBookingConfig {
  }},
  { key: 'children', label: 'Children', accessor: (b) => {
  const names = (b.children ?? b.childrenNames) as string[] | undefined
- return <span className="text-sm text-gray-700">{names?.join(', ') || '-'}</span>
+ return <span className="text-sm text-soft">{names?.join(', ') || '-'}</span>
  }},
  { key: 'scheduledAt', label: 'Date', accessor: 'scheduledAt' },
  ],
@@ -586,8 +586,8 @@ export function labTestBookingConfig(): ServiceBookingConfig {
  actions: ACCEPT_DENY_ACTIONS,
  columns: [
  patientColumn(),
- { key: 'testName', label: 'Test', accessor: (b) => <span className="text-sm font-medium text-gray-900">{(b.testName as string) || '-'}</span> },
- { key: 'sampleType', label: 'Sample', accessor: (b) => <span className="text-sm text-gray-700">{(b.sampleType as string) || '-'}</span> },
+ { key: 'testName', label: 'Test', accessor: (b) => <span className="text-sm font-medium text-fg">{(b.testName as string) || '-'}</span> },
+ { key: 'sampleType', label: 'Sample', accessor: (b) => <span className="text-sm text-soft">{(b.sampleType as string) || '-'}</span> },
  { key: 'scheduledAt', label: 'Date', accessor: 'scheduledAt' },
  ],
  resultButton: {
@@ -642,7 +642,7 @@ export function emergencyBookingConfig(): ServiceBookingConfig {
  {
  action: 'cancel', label: 'Cancel',
  icon: <FaBan className="text-[10px]" />,
- className: 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+ className: 'bg-line text-soft hover:bg-gray-300',
  visibleForStatuses: ['pending', 'dispatched'],
  confirmMessage: 'Are you sure you want to cancel this emergency booking?',
  },
@@ -658,16 +658,16 @@ export function emergencyBookingConfig(): ServiceBookingConfig {
  key: 'incident', label: 'Incident',
  accessor: (b) => (
  <div>
- <div className="font-medium text-gray-900">{(b.incidentType as string) || (b.emergencyType as string) || '-'}</div>
- {b.patientName ? <div className="text-xs text-gray-500">{String(b.patientName)}</div> : null}
+ <div className="font-medium text-fg">{(b.incidentType as string) || (b.emergencyType as string) || '-'}</div>
+ {b.patientName ? <div className="text-xs text-soft">{String(b.patientName)}</div> : null}
  </div>
  ),
  },
  {
  key: 'location', label: 'Location',
  accessor: (b) => (
- <span className="inline-flex items-center gap-1.5 text-sm text-gray-700">
- <FaMapMarkerAlt className="text-gray-400 text-xs" />
+ <span className="inline-flex items-center gap-1.5 text-sm text-soft">
+ <FaMapMarkerAlt className="text-faint text-xs" />
  {(b.location as string) || '-'}
  </span>
  ),
@@ -675,7 +675,7 @@ export function emergencyBookingConfig(): ServiceBookingConfig {
  { key: 'urgency', label: 'Urgency', accessor: (b) => {
  const urgency = (b.urgency as string) || '-'
  const styles: Record<string, string> = { critical: 'bg-red-100 text-red-800', high: 'bg-orange-100 text-orange-800', medium: 'bg-yellow-100 text-yellow-800', low: 'bg-green-100 text-green-800' }
- return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[urgency.toLowerCase()] || 'bg-gray-100 text-gray-800'}`}>{urgency}</span>
+ return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${styles[urgency.toLowerCase()] || 'bg-subtle text-fg'}`}>{urgency}</span>
  }},
  { key: 'timestamp', label: 'Date', accessor: 'timestamp' },
  ],

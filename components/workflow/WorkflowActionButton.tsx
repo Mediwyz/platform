@@ -27,7 +27,7 @@ interface WorkflowActionButtonProps {
   onTransition?: (result: unknown) => void
   disabled?: boolean
   stepFlags?: StepFlags
-  /** Status-code → label on this template, used to render "→ next: X". */
+  /** Status-code  label on this template, used to render " next: X". */
   nextStepLabel?: string
   /** Pre-formatted price string, e.g. "Rs 500" - used in confirmation copy. */
   amountLabel?: string
@@ -40,7 +40,7 @@ interface WorkflowActionButtonProps {
 const STYLE_MAP = {
   primary: 'bg-brand-navy hover:bg-brand-teal text-white',
   danger: 'bg-red-500 hover:bg-red-600 text-white',
-  secondary: 'bg-gray-100 hover:bg-gray-200 text-gray-700',
+  secondary: 'bg-subtle hover:bg-line text-soft',
 }
 
 /**
@@ -208,8 +208,8 @@ export default function WorkflowActionButton({
           {loading ? 'Processing...' : action.label}
         </button>
         {nextStepLabel && (
-          <span className="text-[11px] text-gray-400 pl-1" aria-hidden="true">
-            → next: {nextStepLabel}
+          <span className="text-[11px] text-faint pl-1" aria-hidden="true">
+             next: {nextStepLabel}
           </span>
         )}
       </div>
@@ -222,25 +222,25 @@ export default function WorkflowActionButton({
           aria-labelledby="wf-confirm-title"
           onClick={(e) => { if (e.target === e.currentTarget) setShowConfirm(false) }}
         >
-          <div ref={confirmRef} tabIndex={-1} className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl outline-none">
+          <div ref={confirmRef} tabIndex={-1} className="bg-surface rounded-xl p-6 w-full max-w-md shadow-2xl outline-none">
             <div className="flex items-start gap-3">
               {isDanger && <FiAlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" aria-hidden="true" />}
               <div className="flex-1">
-                <h3 id="wf-confirm-title" className="text-lg font-semibold text-gray-900">{action.label}</h3>
-                <p className="mt-2 text-sm text-gray-600">{confirmCopy}</p>
+                <h3 id="wf-confirm-title" className="text-lg font-semibold text-fg">{action.label}</h3>
+                <p className="mt-2 text-sm text-soft">{confirmCopy}</p>
               </div>
             </div>
 
             {needsContent && (
               <div className="mt-4 space-y-2">
-                <label className="block text-xs font-medium text-gray-700">
+                <label className="block text-xs font-medium text-soft">
                   {String(stepFlags.requires_content).replace(/_/g, ' ')} - notes
                 </label>
                 <textarea
                   value={contentText}
                   onChange={(e) => setContentText(e.target.value)}
                   rows={3}
-                  className="w-full rounded-lg border border-gray-200 p-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none"
+                  className="w-full rounded-lg border border-line p-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none"
                   placeholder="Type your notes here..."
                 />
                 <div className="flex items-center gap-2">
@@ -255,13 +255,13 @@ export default function WorkflowActionButton({
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg border border-gray-200"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-subtle hover:bg-subtle text-soft rounded-lg border border-line"
                   >
                     <FiPaperclip className="w-3.5 h-3.5" />
                     {attachedFileName ? 'Replace file' : 'Attach file'}
                   </button>
                   {attachedFileName && (
-                    <span className="text-xs text-gray-500 truncate">{attachedFileName}</span>
+                    <span className="text-xs text-soft truncate">{attachedFileName}</span>
                   )}
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function WorkflowActionButton({
               <button
                 onClick={() => setShowConfirm(false)}
                 disabled={loading}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-50"
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-subtle hover:bg-line text-soft disabled:opacity-50"
               >
                 Cancel
               </button>

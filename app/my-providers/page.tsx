@@ -49,20 +49,20 @@ export default function MyProvidersPage() {
   return (
     <div className="max-w-3xl mx-auto py-6 px-4 space-y-5">
       <div className="flex items-center gap-3">
-        <Link href="/" className="text-gray-400 hover:text-gray-600"><FaArrowLeft /></Link>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <Link href="/" className="text-faint hover:text-soft"><FaArrowLeft /></Link>
+        <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
           <FaStar className="text-amber-500" /> My Providers
         </h1>
       </div>
 
       {loading ? (
-        <div className="py-16 text-center text-gray-400 text-sm">Loading…</div>
+        <div className="py-16 text-center text-faint text-sm">Loading</div>
       ) : favorites.length === 0 ? (
         <div className="py-16 text-center space-y-3">
           <FaStar className="mx-auto text-5xl text-gray-200" />
-          <p className="text-gray-500">No saved providers yet.</p>
-          <p className="text-xs text-gray-400">
-            Tap the ⭐ on any provider card to save them for one-tap rebooking.
+          <p className="text-soft">No saved providers yet.</p>
+          <p className="text-xs text-faint">
+            Tap the  on any provider card to save them for one-tap rebooking.
           </p>
           <Link
             href="/search/doctors"
@@ -74,19 +74,19 @@ export default function MyProvidersPage() {
       ) : (
         <div className="space-y-3">
           {favorites.map(f => (
-            <div key={f.id} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4">
+            <div key={f.id} className="bg-surface border border-line rounded-xl p-4 flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-sky-50 flex items-center justify-center overflow-hidden flex-shrink-0">
                 {f.provider.profileImage
                   ? <Image src={f.provider.profileImage} alt="" width={48} height={48} className="w-full h-full object-cover" />
-                  : <span className="text-lg font-bold text-[#001E40]">
+                  : <span className="text-lg font-bold text-fg">
                       {(f.provider.firstName[0] || '') + (f.provider.lastName[0] || '')}
                     </span>}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate">
+                <p className="font-semibold text-fg truncate">
                   {f.provider.firstName} {f.provider.lastName}
                 </p>
-                <p className="text-xs text-gray-500 capitalize">
+                <p className="text-xs text-soft capitalize">
                   {f.provider.userType.replace('_', ' ').toLowerCase()}
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default function MyProvidersPage() {
               <button
                 onClick={() => remove(f.providerId)}
                 aria-label="Unsave"
-                className="p-2 rounded-full hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-subtle"
               >
                 <FaStar className="text-amber-500" />
               </button>

@@ -45,16 +45,16 @@ export interface UnifiedSearchResult {
 
 function ResultCardSkeleton() {
  return (
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 animate-pulse flex items-center gap-4">
- <div className="w-14 h-14 rounded-full bg-gray-200 flex-shrink-0" />
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-4 animate-pulse flex items-center gap-4">
+ <div className="w-14 h-14 rounded-full bg-line flex-shrink-0" />
  <div className="flex-1 min-w-0">
- <div className="h-5 bg-gray-200 rounded w-1/3 mb-2" />
- <div className="h-4 bg-gray-200 rounded w-1/4 mb-2" />
- <div className="h-3 bg-gray-200 rounded w-1/2" />
+ <div className="h-5 bg-line rounded w-1/3 mb-2" />
+ <div className="h-4 bg-line rounded w-1/4 mb-2" />
+ <div className="h-3 bg-line rounded w-1/2" />
  </div>
  <div className="flex flex-col gap-2 flex-shrink-0">
- <div className="h-8 bg-gray-200 rounded w-20" />
- <div className="h-8 bg-gray-200 rounded w-20" />
+ <div className="h-8 bg-line rounded w-20" />
+ <div className="h-8 bg-line rounded w-20" />
  </div>
  </div>
  )
@@ -81,8 +81,8 @@ export function NoResults({ query, onClear }: NoResultsProps) {
  return (
  <div className="text-center py-16">
  <FaSearch className="text-6xl text-gray-200 mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-700 mb-2">No results found</h3>
- <p className="text-gray-500 mb-6 max-w-md mx-auto">
+ <h3 className="text-xl font-semibold text-soft mb-2">No results found</h3>
+ <p className="text-soft mb-6 max-w-md mx-auto">
  {query
  ? `We couldn't find anything matching "${query}". Try different keywords or adjust your filters.`
  : 'Use the search bar above to find doctors, nurses, medicines, and more.'}
@@ -128,7 +128,7 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  const config = TYPE_CONFIG[result.type] || TYPE_CONFIG.doctor
 
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4">
  {/* Left: Avatar + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -140,10 +140,10 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  alt={result.name}
  width={52}
  height={52}
- className="rounded-full object-cover border-2 border-gray-100"
+ className="rounded-full object-cover border-2 border-line"
  />
  ) : (
- <div className="w-13 h-13 rounded-full bg-gray-100 flex items-center justify-center text-xl text-gray-400" style={{ width: 52, height: 52 }}>
+ <div className="w-13 h-13 rounded-full bg-subtle flex items-center justify-center text-xl text-faint" style={{ width: 52, height: 52 }}>
  {config.icon}
  </div>
  )}
@@ -157,7 +157,7 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  {/* Info */}
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5">
- <h3 className="text-sm font-bold text-gray-900 truncate">{result.name}</h3>
+ <h3 className="text-sm font-bold text-fg truncate">{result.name}</h3>
  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium border whitespace-nowrap ${config.badgeColor}`}>
  {config.badge}
  </span>
@@ -167,23 +167,23 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  </p>
 
  {/* Meta row: rating, location, languages */}
- <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+ <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-soft">
  {result.rating > 0 && (
  <span className="flex items-center gap-1">
  <FaStar className="text-yellow-500 text-[10px]" />
- <span className="font-semibold text-gray-700">{result.rating.toFixed(1)}</span>
- {result.reviewCount > 0 && <span className="text-gray-400">({result.reviewCount})</span>}
+ <span className="font-semibold text-soft">{result.rating.toFixed(1)}</span>
+ {result.reviewCount > 0 && <span className="text-faint">({result.reviewCount})</span>}
  </span>
  )}
  {result.city && (
  <span className="flex items-center gap-1">
- <FaMapMarkerAlt className="text-[10px] text-gray-400" />
+ <FaMapMarkerAlt className="text-[10px] text-faint" />
  <span className="truncate max-w-[120px]">{result.city}</span>
  </span>
  )}
  {result.languages.length > 0 && (
  <span className="flex items-center gap-1">
- <FaLanguage className="text-[10px] text-gray-400" />
+ <FaLanguage className="text-[10px] text-faint" />
  <span className="truncate max-w-[120px]">{result.languages.slice(0, 3).join(', ')}</span>
  </span>
  )}
@@ -202,7 +202,7 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  : `Next: ${result.nextAvailable}`}
  </span>
  {result.type !== 'medicine' && result.consultationTypes.includes('In-Person') && (
- <span className="inline-flex items-center gap-1 text-[10px] bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200">
+ <span className="inline-flex items-center gap-1 text-[10px] bg-subtle text-soft px-2 py-0.5 rounded-full border border-line">
  <FaHome className="text-[8px]" /> In-Person
  </span>
  )}
@@ -221,16 +221,16 @@ function ResultCard({ result }: { result: UnifiedSearchResult }) {
  </div>
 
  {/* Right: Price + Action buttons */}
- <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-4 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+ <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-4 border-t sm:border-t-0 border-line pt-3 sm:pt-0">
  <div className="sm:text-right">
  {result.consultationFee !== null && result.consultationFee > 0 && (
- <p className="text-sm font-bold text-gray-900 whitespace-nowrap">
+ <p className="text-sm font-bold text-fg whitespace-nowrap">
  Rs {(result.consultationFee ?? 0).toLocaleString()}
- {result.type === 'medicine' ? '' : <span className="text-[10px] font-normal text-gray-400"> /session</span>}
+ {result.type === 'medicine' ? '' : <span className="text-[10px] font-normal text-faint"> /session</span>}
  </p>
  )}
  {result.videoConsultationFee != null && result.videoConsultationFee > 0 && (
- <p className="text-[10px] text-gray-400 whitespace-nowrap">
+ <p className="text-[10px] text-faint whitespace-nowrap">
  Video: Rs {(result.videoConsultationFee ?? 0).toLocaleString()}
  </p>
  )}
@@ -269,7 +269,7 @@ function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
  <button
  onClick={() => onPageChange(page - 1)}
  disabled={page <= 1}
- className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+ className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-line text-soft hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed"
  >
  <FaChevronLeft className="text-xs" />
  Prev
@@ -277,8 +277,8 @@ function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
 
  {start > 1 && (
  <>
- <button onClick={() => onPageChange(1)} className="w-9 h-9 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50">1</button>
- {start > 2 && <span className="text-gray-400 text-sm">...</span>}
+ <button onClick={() => onPageChange(1)} className="w-9 h-9 text-sm rounded-lg border border-line text-soft hover:bg-subtle">1</button>
+ {start > 2 && <span className="text-faint text-sm">...</span>}
  </>
  )}
 
@@ -289,7 +289,7 @@ function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
  className={`w-9 h-9 text-sm rounded-lg border transition-colors ${
  p === page
  ? 'bg-blue-600 text-white border-blue-600'
- : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+ : 'border-line text-soft hover:bg-subtle'
  }`}
  >
  {p}
@@ -298,15 +298,15 @@ function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
 
  {end < totalPages && (
  <>
- {end < totalPages - 1 && <span className="text-gray-400 text-sm">...</span>}
- <button onClick={() => onPageChange(totalPages)} className="w-9 h-9 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50">{totalPages}</button>
+ {end < totalPages - 1 && <span className="text-faint text-sm">...</span>}
+ <button onClick={() => onPageChange(totalPages)} className="w-9 h-9 text-sm rounded-lg border border-line text-soft hover:bg-subtle">{totalPages}</button>
  </>
  )}
 
  <button
  onClick={() => onPageChange(page + 1)}
  disabled={page >= totalPages}
- className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+ className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-line text-soft hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed"
  >
  Next
  <FaChevronRight className="text-xs" />
@@ -350,9 +350,9 @@ export default function SearchResults({
  <div>
  {/* Result count */}
  <div className="flex items-center justify-between mb-4">
- <p className="text-sm text-gray-600">
- Showing <span className="font-semibold text-gray-900">{results.length}</span> of{' '}
- <span className="font-semibold text-gray-900">{total}</span> results
+ <p className="text-sm text-soft">
+ Showing <span className="font-semibold text-fg">{results.length}</span> of{' '}
+ <span className="font-semibold text-fg">{total}</span> results
  {query && <> for &quot;{query}&quot;</>}
  </p>
  {query && (

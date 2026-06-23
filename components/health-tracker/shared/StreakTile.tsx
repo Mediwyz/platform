@@ -45,22 +45,22 @@ export default function StreakTile() {
 
   return (
     <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-amber-100 rounded-xl p-4 flex items-center gap-4">
-      <div className="p-3 rounded-full bg-white shadow-sm">
+      <div className="p-3 rounded-full bg-surface shadow-sm">
         <FaFire className="text-3xl text-amber-500" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-gray-900">{currentStreak}</span>
-          <span className="text-sm text-gray-600">day streak</span>
+          <span className="text-2xl font-bold text-fg">{currentStreak}</span>
+          <span className="text-sm text-soft">day streak</span>
         </div>
-        <p className="text-xs text-gray-500 flex items-center gap-1">
+        <p className="text-xs text-soft flex items-center gap-1">
           <FaTrophy className="text-amber-400 text-[10px]" />
           Longest: {longestStreak} days
         </p>
       </div>
       {checkedInToday ? (
         <span className="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-          ✓ Today done
+           Today done
         </span>
       ) : (
         <button
@@ -68,7 +68,7 @@ export default function StreakTile() {
           disabled={busy}
           className="px-4 py-2 bg-amber-500 text-white rounded-lg text-xs font-semibold hover:bg-amber-600 disabled:opacity-50"
         >
-          {busy ? '…' : 'Check in'}
+          {busy ? '' : 'Check in'}
         </button>
       )}
     </div>

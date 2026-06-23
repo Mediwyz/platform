@@ -127,8 +127,8 @@ export default function RequiredDocumentsPage() {
   <div className="p-6 max-w-6xl">
    <div className="flex items-center justify-between mb-6">
     <div>
-     <h1 className="text-2xl font-bold text-[#001E40]">Required Documents Configuration</h1>
-     <p className="text-gray-600 mt-1">Configure which documents are required for each provider role during registration</p>
+     <h1 className="text-2xl font-bold text-fg">Required Documents Configuration</h1>
+     <p className="text-soft mt-1">Configure which documents are required for each provider role during registration</p>
     </div>
     <button
      onClick={handleSave}
@@ -147,7 +147,7 @@ export default function RequiredDocumentsPage() {
    )}
 
    {/* Add new document */}
-   <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+   <div className="bg-surface rounded-xl shadow-lg p-6 mb-6">
     <h3 className="text-lg font-semibold mb-3">Add New Document Requirement</h3>
     <div className="flex gap-3 flex-wrap">
      <select
@@ -179,11 +179,11 @@ export default function RequiredDocumentsPage() {
    {/* Documents per role */}
    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {roles.map(role => (
-     <div key={role.code} className="bg-white rounded-xl shadow-lg p-6">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900">{role.name}</h3>
+     <div key={role.code} className="bg-surface rounded-xl shadow-lg p-6">
+      <h3 className="text-lg font-semibold mb-4 text-fg">{role.name}</h3>
       <div className="space-y-3">
        {(configs[role.code] || []).map(doc => (
-        <div key={doc.documentName} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+        <div key={doc.documentName} className="flex items-center justify-between p-3 bg-subtle rounded-lg">
          <div className="flex items-center gap-3">
           <input
            type="checkbox"
@@ -191,7 +191,7 @@ export default function RequiredDocumentsPage() {
            onChange={() => toggleRequired(role.code, doc.documentName)}
            className="w-4 h-4 text-blue-600 rounded"
           />
-          <span className={`text-sm ${doc.required ? 'text-gray-900' : 'text-gray-400 line-through'}`}>
+          <span className={`text-sm ${doc.required ? 'text-fg' : 'text-faint line-through'}`}>
            {doc.documentName}
           </span>
          </div>
@@ -205,7 +205,7 @@ export default function RequiredDocumentsPage() {
         </div>
        ))}
        {(!configs[role.code] || configs[role.code].length === 0) && (
-        <p className="text-gray-400 text-sm italic">No documents configured</p>
+        <p className="text-faint text-sm italic">No documents configured</p>
        )}
       </div>
      </div>

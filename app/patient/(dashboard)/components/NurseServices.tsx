@@ -233,13 +233,13 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
 
  const renderBookingForm = () => (
  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
  <div className="p-4 sm:p-5 md:p-6 border-b border-pink-200">
  <div className="flex items-center justify-between">
- <h3 className="text-lg sm:text-xl font-bold text-gray-900">Book Nurse Service</h3>
+ <h3 className="text-lg sm:text-xl font-bold text-fg">Book Nurse Service</h3>
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+ className="p-1.5 sm:p-2 text-faint hover:text-soft rounded-lg hover:bg-subtle"
  >
  <FaTimes className="text-lg sm:text-xl" />
  </button>
@@ -252,8 +252,8 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
  <FaCheckCircle className="text-green-500 text-3xl" />
  </div>
- <h4 className="text-lg font-semibold text-gray-900 mb-2">Booking Submitted!</h4>
- <p className="text-gray-600 text-sm">Your nurse booking request has been sent. You will be notified once the nurse confirms.</p>
+ <h4 className="text-lg font-semibold text-fg mb-2">Booking Submitted!</h4>
+ <p className="text-soft text-sm">Your nurse booking request has been sent. You will be notified once the nurse confirms.</p>
  </div>
  ) : (
  <>
@@ -277,18 +277,18 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Step 2: Service Selection */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  Select Service <span className="text-red-500">*</span>
  </h4>
  {!selectedNurseId ? (
- <p className="text-sm text-gray-400 py-3">Select a nurse first to see available services</p>
+ <p className="text-sm text-faint py-3">Select a nurse first to see available services</p>
  ) : loadingServices ? (
  <div className="flex items-center gap-2 py-3">
  <FaSpinner className="animate-spin text-pink-500" />
- <span className="text-sm text-gray-500">Loading services...</span>
+ <span className="text-sm text-soft">Loading services...</span>
  </div>
  ) : nurseServices.length === 0 ? (
- <p className="text-sm text-gray-400 py-3">No services available from this nurse</p>
+ <p className="text-sm text-faint py-3">No services available from this nurse</p>
  ) : (
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
  {nurseServices.map((service) => (
@@ -298,14 +298,14 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  className={`p-2.5 sm:p-3 border rounded-lg text-left transition ${
  selectedService === service.serviceName
  ? 'bg-pink-100 border-pink-500 ring-2 ring-pink-300'
- : 'bg-white'
+ : 'bg-surface'
  }`}
  >
- <p className="font-medium text-gray-900 text-xs sm:text-sm">{service.serviceName}</p>
- {service.description && <p className="text-xs text-gray-500 mt-0.5">{service.description}</p>}
+ <p className="font-medium text-fg text-xs sm:text-sm">{service.serviceName}</p>
+ {service.description && <p className="text-xs text-soft mt-0.5">{service.description}</p>}
  <div className="flex items-center gap-2 mt-1">
  <span className="text-xs text-pink-600 font-medium">{service.currency} {service.price}</span>
- <span className="text-xs text-gray-400">{service.duration}</span>
+ <span className="text-xs text-faint">{service.duration}</span>
  </div>
  </button>
  ))}
@@ -315,7 +315,7 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Step 3: Consultation Type */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">Service Type</h4>
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">Service Type</h4>
  <div className="grid grid-cols-3 gap-2 sm:gap-3">
  {[
  { value: 'home_visit' as const, label: 'Home Visit', icon: FaHome },
@@ -328,10 +328,10 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  className={`p-3 border rounded-lg text-center transition ${
  consultationType === type.value
  ? 'bg-pink-100 border-pink-500 ring-2 ring-pink-300'
- : 'border-gray-200 hover:border-pink-300 hover:bg-pink-50'
+ : 'border-line hover:border-pink-300 hover:bg-pink-50'
  }`}
  >
- <type.icon className={`mx-auto text-lg mb-1 ${consultationType === type.value ? 'text-pink-600' : 'text-gray-400'}`} />
+ <type.icon className={`mx-auto text-lg mb-1 ${consultationType === type.value ? 'text-pink-600' : 'text-faint'}`} />
  <p className="text-xs sm:text-sm font-medium">{type.label}</p>
  </button>
  ))}
@@ -340,11 +340,11 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Step 4: Weekly Time Slot Selection */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  Select Time Slot <span className="text-red-500">*</span>
  </h4>
  {!selectedNurseId ? (
- <p className="text-sm text-gray-400 py-3">Select a nurse first to see available times</p>
+ <p className="text-sm text-faint py-3">Select a nurse first to see available times</p>
  ) : (
  <WeeklySlotPicker
  providerId={selectedNurseId}
@@ -360,27 +360,27 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
 
  {/* Notes */}
  <div>
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Special Instructions (optional)</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2">Special Instructions (optional)</label>
  <textarea
  rows={3}
  value={notes}
  onChange={(e) => setNotes(e.target.value)}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-500 text-sm"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-pink-500 text-sm"
  placeholder="Any specific requirements or notes for the nurse..."
  />
  </div>
 
  {/* Summary */}
  {canSubmit && (
- <div className="bg-white rounded-lg p-4 border border-pink-200">
- <h4 className="font-semibold text-gray-800 mb-2 text-sm">Booking Summary</h4>
+ <div className="bg-surface rounded-lg p-4 border border-pink-200">
+ <h4 className="font-semibold text-fg mb-2 text-sm">Booking Summary</h4>
  <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
- <div><span className="text-gray-500">Nurse:</span> <span className="font-medium">{selectedNurse?.name}</span></div>
- <div><span className="text-gray-500">Service:</span> <span className="font-medium">{selectedService}{nurseServices.find(s => s.serviceName === selectedService)?.price ? ` - ${nurseServices.find(s => s.serviceName === selectedService)?.currency} ${nurseServices.find(s => s.serviceName === selectedService)?.price}` : ''}</span></div>
- <div className="col-span-2"><span className="text-gray-500">Slots ({selectedSlots.length}):</span>{' '}
- <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join(' • ')}</span>
+ <div><span className="text-soft">Nurse:</span> <span className="font-medium">{selectedNurse?.name}</span></div>
+ <div><span className="text-soft">Service:</span> <span className="font-medium">{selectedService}{nurseServices.find(s => s.serviceName === selectedService)?.price ? ` - ${nurseServices.find(s => s.serviceName === selectedService)?.currency} ${nurseServices.find(s => s.serviceName === selectedService)?.price}` : ''}</span></div>
+ <div className="col-span-2"><span className="text-soft">Slots ({selectedSlots.length}):</span>{' '}
+ <span className="font-medium">{selectedSlots.map(s => `${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${s.time}`).join('  ')}</span>
  </div>
- <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
+ <div><span className="text-soft">Type:</span> <span className="font-medium capitalize">{consultationType.replace('_', ' ')}</span></div>
  </div>
  </div>
  )}
@@ -396,14 +396,14 @@ const NurseServices: React.FC<Props> = ({ onVideoCall }) => {
  <div className="flex gap-3 sm:gap-4">
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-gray-700 rounded-lg transition text-sm sm:text-base"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-soft rounded-lg transition text-sm sm:text-base"
  >
  Cancel
  </button>
  <button
  onClick={handleBookingSubmit}
  disabled={!canSubmit}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-white transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-surface transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
  >
  {isSubmitting ? (
  <>

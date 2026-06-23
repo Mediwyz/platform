@@ -56,7 +56,7 @@ const InsurancePlanCard = ({ plan }: InsurancePlanProps) => {
  const TypeIcon = typeIcons[plan.type as keyof typeof typeIcons] || FaShieldAlt
 
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
  {/* Left: Icon + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -72,7 +72,7 @@ const InsurancePlanCard = ({ plan }: InsurancePlanProps) => {
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
- <h3 className="text-sm font-bold text-gray-900 truncate">{plan.name}</h3>
+ <h3 className="text-sm font-bold text-fg truncate">{plan.name}</h3>
  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium border whitespace-nowrap bg-blue-50 text-blue-700 border-blue-200">
  {plan.type}
  </span>
@@ -82,18 +82,18 @@ const InsurancePlanCard = ({ plan }: InsurancePlanProps) => {
  </p>
 
  {/* Meta row */}
- <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-1.5">
+ <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-soft mb-1.5">
  <span className="flex items-center gap-1">
  <FaStar className="text-yellow-500 text-[10px]" />
- <span className="font-semibold text-gray-700">{plan.rating}</span>
- <span className="text-gray-400">({plan.reviews})</span>
+ <span className="font-semibold text-soft">{plan.rating}</span>
+ <span className="text-faint">({plan.reviews})</span>
  </span>
  <span className="flex items-center gap-1">
- <FaMoneyBillWave className="text-[10px] text-gray-400" />
+ <FaMoneyBillWave className="text-[10px] text-faint" />
  <span>Max: {plan.maxCoverage}</span>
  </span>
  <span className="flex items-center gap-1">
- <FaBuilding className="text-[10px] text-gray-400" />
+ <FaBuilding className="text-[10px] text-faint" />
  <span>{plan.networkHospitals} Hospitals</span>
  </span>
  </div>
@@ -125,13 +125,13 @@ const InsurancePlanCard = ({ plan }: InsurancePlanProps) => {
  </div>
 
  {/* Right: Price + Buttons */}
- <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-4 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+ <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-4 border-t sm:border-t-0 border-line pt-3 sm:pt-0">
  <div className="sm:text-right">
- <p className="text-sm font-bold text-gray-900 whitespace-nowrap">{plan.monthlyPremium}<span className="text-[10px] font-normal text-gray-400">/mo</span></p>
- <p className="text-[10px] text-gray-400 line-through whitespace-nowrap">{plan.originalPrice}/yr</p>
+ <p className="text-sm font-bold text-fg whitespace-nowrap">{plan.monthlyPremium}<span className="text-[10px] font-normal text-faint">/mo</span></p>
+ <p className="text-[10px] text-faint line-through whitespace-nowrap">{plan.originalPrice}/yr</p>
  </div>
  <div className="flex items-center gap-2">
- <button className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors">
+ <button className="flex-1 sm:flex-none bg-subtle hover:bg-line text-soft px-3 py-2 rounded-lg text-xs font-medium transition-colors">
  Compare
  </button>
  <button className="flex-1 sm:flex-none bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors inline-flex items-center gap-1">
@@ -153,7 +153,7 @@ const LoadingAnimation = () => {
  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
  <FaShieldAlt className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 text-2xl" />
  </div>
- <p className="mt-4 text-gray-600 font-medium animate-pulse">AI is finding the best insurance plans for you...</p>
+ <p className="mt-4 text-soft font-medium animate-pulse">AI is finding the best insurance plans for you...</p>
  <div className="flex gap-1 mt-2">
  <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
  <span className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -171,9 +171,9 @@ interface EmptyStateProps {
 const EmptyState = ({ onClear }: EmptyStateProps) => {
  return (
  <div className="text-center py-12">
- <FaShieldAlt className="text-6xl text-gray-300 mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-700 mb-2">No insurance plans found</h3>
- <p className="text-gray-500 mb-6">Try adjusting your search criteria or browse all available plans</p>
+ <FaShieldAlt className="text-6xl text-faint mx-auto mb-4" />
+ <h3 className="text-xl font-semibold text-soft mb-2">No insurance plans found</h3>
+ <p className="text-soft mb-6">Try adjusting your search criteria or browse all available plans</p>
  <button 
  onClick={onClear}
  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -346,7 +346,7 @@ export default function InsurancePage() {
  <div className="min-h-screen to-white">
  <div className="container mx-auto px-4 py-8">
  <div>
- <div className="bg-white rounded-xl shadow-xl p-4">
+ <div className="bg-surface rounded-xl shadow-xl p-4">
  <div>
  <div className="flex flex-col gap-4">
  <div className="relative">
@@ -355,21 +355,21 @@ export default function InsurancePage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Search insurance plans (e.g., 'family health insurance', 'senior citizen plan', 'maternity cover')"
- className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors text-base"
+ className="w-full px-4 py-3 pr-12 border-2 border-line rounded-xl focus:outline-none focus:border-blue-500 transition-colors text-base"
  />
- <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
  
  {/* Example Searches */}
  {!hasSearched && (
  <div className="flex flex-wrap gap-2">
- <span className="text-sm text-gray-500">Popular searches:</span>
+ <span className="text-sm text-soft">Popular searches:</span>
  {searchExamples.map((example, index) => (
  <button
  key={index}
  type="button"
  onClick={() => handleExampleClick(example)}
- className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full transition-colors"
+ className="text-sm bg-subtle hover:bg-line text-soft px-3 py-1 rounded-full transition-colors"
  >
  {example}
  </button>
@@ -381,7 +381,7 @@ export default function InsurancePage() {
  <select 
  value={insuranceType}
  onChange={(e) => setInsuranceType(e.target.value)}
- className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+ className="flex-1 px-4 py-2.5 border-2 border-line rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
  >
  <option value="all">All Insurance Types</option>
  <option value="individual">Individual Plans</option>
@@ -394,7 +394,7 @@ export default function InsurancePage() {
  <select 
  value={budget}
  onChange={(e) => setBudget(e.target.value)}
- className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+ className="flex-1 px-4 py-2.5 border-2 border-line rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
  >
  <option value="all">All Budgets</option>
  <option value="2000">Under Rs 2,000/month</option>
@@ -418,25 +418,25 @@ export default function InsurancePage() {
  </div>
  
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 mb-8">
- <div className="bg-white rounded-lg shadow p-4 text-center">
+ <div className="bg-surface rounded-lg shadow p-4 text-center">
  <FaShieldAlt className="text-3xl text-blue-600 mx-auto mb-2" />
- <p className="text-lg font-bold text-gray-900">200+</p>
- <p className="text-sm text-gray-600">Insurance Plans</p>
+ <p className="text-lg font-bold text-fg">200+</p>
+ <p className="text-sm text-soft">Insurance Plans</p>
  </div>
- <div className="bg-white rounded-lg shadow p-4 text-center">
+ <div className="bg-surface rounded-lg shadow p-4 text-center">
  <FaBuilding className="text-3xl text-green-600 mx-auto mb-2" />
- <p className="text-lg font-bold text-gray-900">500+</p>
- <p className="text-sm text-gray-600">Network Hospitals</p>
+ <p className="text-lg font-bold text-fg">500+</p>
+ <p className="text-sm text-soft">Network Hospitals</p>
  </div>
- <div className="bg-white rounded-lg shadow p-4 text-center">
+ <div className="bg-surface rounded-lg shadow p-4 text-center">
  <FaCheckCircle className="text-3xl text-purple-600 mx-auto mb-2" />
- <p className="text-lg font-bold text-gray-900">98%</p>
- <p className="text-sm text-gray-600">Claim Settlement</p>
+ <p className="text-lg font-bold text-fg">98%</p>
+ <p className="text-sm text-soft">Claim Settlement</p>
  </div>
- <div className="bg-white rounded-lg shadow p-4 text-center">
+ <div className="bg-surface rounded-lg shadow p-4 text-center">
  <FaUsers className="text-3xl text-orange-600 mx-auto mb-2" />
- <p className="text-lg font-bold text-gray-900">50,000+</p>
- <p className="text-sm text-gray-600">Happy Customers</p>
+ <p className="text-lg font-bold text-fg">50,000+</p>
+ <p className="text-sm text-soft">Happy Customers</p>
  </div>
  </div>
  
@@ -460,8 +460,8 @@ export default function InsurancePage() {
  <>
  {hasSearched && (
  <div className="mb-6 flex items-center justify-between">
- <p className="text-gray-600">
- Found <span className="font-semibold text-gray-900">{searchResults.length}</span> insurance plans matching your search
+ <p className="text-soft">
+ Found <span className="font-semibold text-fg">{searchResults.length}</span> insurance plans matching your search
  </p>
  <button
  onClick={handleClearFilters}
@@ -484,29 +484,29 @@ export default function InsurancePage() {
  </div>
  
  <div className="mt-16">
- <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Types of Health Insurance</h2>
+ <h2 className="text-2xl font-bold text-fg mb-8 text-center">Types of Health Insurance</h2>
  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaUserShield className="text-3xl text-blue-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Individual</h3>
  </div>
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaUsers className="text-3xl text-green-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Family</h3>
  </div>
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaHeart className="text-3xl text-red-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Senior Citizen</h3>
  </div>
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaBuilding className="text-3xl text-purple-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Corporate</h3>
  </div>
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaBaby className="text-3xl text-pink-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Maternity</h3>
  </div>
- <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
+ <div className="bg-surface rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer text-center">
  <FaHandHoldingMedical className="text-3xl text-orange-500 mx-auto mb-2" />
  <h3 className="font-semibold text-sm">Critical Illness</h3>
  </div>
@@ -515,15 +515,15 @@ export default function InsurancePage() {
  
  {/* Popular Insurance Packages */}
  <div className="mt-16">
- <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Compare Popular Plans</h2>
+ <h2 className="text-2xl font-bold text-fg mb-8 text-center">Compare Popular Plans</h2>
  <div className="overflow-x-auto">
- <table className="w-full bg-white rounded-lg shadow-lg overflow-hidden">
+ <table className="w-full bg-surface rounded-lg shadow-lg overflow-hidden">
  <thead className="bg-blue-50">
  <tr>
- <th className="px-6 py-4 text-left font-semibold text-gray-900">Features</th>
- <th className="px-6 py-4 text-center font-semibold text-gray-900">Basic Plan</th>
- <th className="px-6 py-4 text-center font-semibold text-gray-900 bg-blue-100">Premium Plan</th>
- <th className="px-6 py-4 text-center font-semibold text-gray-900">Family Plan</th>
+ <th className="px-6 py-4 text-left font-semibold text-fg">Features</th>
+ <th className="px-6 py-4 text-center font-semibold text-fg">Basic Plan</th>
+ <th className="px-6 py-4 text-center font-semibold text-fg bg-blue-100">Premium Plan</th>
+ <th className="px-6 py-4 text-center font-semibold text-fg">Family Plan</th>
  </tr>
  </thead>
  <tbody>
@@ -570,97 +570,97 @@ export default function InsurancePage() {
  
  {/* How Insurance Works */}
  <div className="mt-16 rounded-2xl p-8">
- <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">How Health Insurance Works</h2>
+ <h2 className="text-2xl font-bold text-fg mb-8 text-center">How Health Insurance Works</h2>
  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
  <div className="text-center">
- <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+ <div className="bg-surface rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
  <span className="text-2xl font-bold text-blue-600">1</span>
  </div>
  <h3 className="font-semibold mb-2">Choose Plan</h3>
- <p className="text-sm text-gray-600">Select the right insurance plan based on your needs and budget</p>
+ <p className="text-sm text-soft">Select the right insurance plan based on your needs and budget</p>
  </div>
  <div className="text-center">
- <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+ <div className="bg-surface rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
  <span className="text-2xl font-bold text-blue-600">2</span>
  </div>
  <h3 className="font-semibold mb-2">Pay Premium</h3>
- <p className="text-sm text-gray-600">Make regular premium payments to keep your policy active</p>
+ <p className="text-sm text-soft">Make regular premium payments to keep your policy active</p>
  </div>
  <div className="text-center">
- <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+ <div className="bg-surface rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
  <span className="text-2xl font-bold text-blue-600">3</span>
  </div>
  <h3 className="font-semibold mb-2">Get Treatment</h3>
- <p className="text-sm text-gray-600">Receive cashless treatment at network hospitals or get reimbursed</p>
+ <p className="text-sm text-soft">Receive cashless treatment at network hospitals or get reimbursed</p>
  </div>
  <div className="text-center">
- <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+ <div className="bg-surface rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
  <span className="text-2xl font-bold text-blue-600">4</span>
  </div>
  <h3 className="font-semibold mb-2">File Claims</h3>
- <p className="text-sm text-gray-600">Submit required documents for claim settlement if needed</p>
+ <p className="text-sm text-soft">Submit required documents for claim settlement if needed</p>
  </div>
  </div>
  </div>
  
  {/* Insurance Benefits */}
  <div className="mt-16">
- <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Why Choose Health Insurance</h2>
+ <h2 className="text-2xl font-bold text-fg mb-8 text-center">Why Choose Health Insurance</h2>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <FaMoneyBillWave className="text-4xl text-green-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Financial Protection</h3>
- <p className="text-gray-600 text-sm mb-4">Protect yourself from high medical costs and unexpected health expenses</p>
- <button className="text-green-600 font-medium text-sm">Learn More →</button>
+ <p className="text-soft text-sm mb-4">Protect yourself from high medical costs and unexpected health expenses</p>
+ <button className="text-green-600 font-medium text-sm">Learn More </button>
  </div>
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <FaBuilding className="text-4xl text-blue-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Cashless Treatment</h3>
- <p className="text-gray-600 text-sm mb-4">Get treatment at network hospitals without paying upfront</p>
- <button className="text-blue-600 font-medium text-sm">Find Hospitals →</button>
+ <p className="text-soft text-sm mb-4">Get treatment at network hospitals without paying upfront</p>
+ <button className="text-blue-600 font-medium text-sm">Find Hospitals </button>
  </div>
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <FaCreditCard className="text-4xl text-purple-600 mb-4" />
  <h3 className="text-lg font-semibold mb-2">Tax Benefits</h3>
- <p className="text-gray-600 text-sm mb-4">Save taxes up to Rs 75,000 under Section 80D of Income Tax Act</p>
- <button className="text-purple-600 font-medium text-sm">Calculate Tax →</button>
+ <p className="text-soft text-sm mb-4">Save taxes up to Rs 75,000 under Section 80D of Income Tax Act</p>
+ <button className="text-purple-600 font-medium text-sm">Calculate Tax </button>
  </div>
  </div>
  </div>
  
  {/* Customer Testimonials */}
  <div className="mt-16">
- <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Customer Reviews</h2>
+ <h2 className="text-2xl font-bold text-fg mb-8 text-center">Customer Reviews</h2>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <div className="flex items-center gap-1 text-yellow-500 mb-3">
  {[...Array(5)].map((_, i) => (
  <FaStar key={i} className="text-sm" />
  ))}
  </div>
- <p className="text-gray-600 text-sm mb-4">Excellent service! Got my claim settled within 3 days. The cashless treatment at Apollo was seamless.</p>
- <p className="font-semibold text-gray-900">- Rajesh M.</p>
- <p className="text-xs text-gray-500">Port Louis</p>
+ <p className="text-soft text-sm mb-4">Excellent service! Got my claim settled within 3 days. The cashless treatment at Apollo was seamless.</p>
+ <p className="font-semibold text-fg">- Rajesh M.</p>
+ <p className="text-xs text-soft">Port Louis</p>
  </div>
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <div className="flex items-center gap-1 text-yellow-500 mb-3">
  {[...Array(5)].map((_, i) => (
  <FaStar key={i} className="text-sm" />
  ))}
  </div>
- <p className="text-gray-600 text-sm mb-4">Great family coverage. The maternity benefits covered all our expenses during childbirth.</p>
- <p className="font-semibold text-gray-900">- Kavita S.</p>
- <p className="text-xs text-gray-500">Curepipe</p>
+ <p className="text-soft text-sm mb-4">Great family coverage. The maternity benefits covered all our expenses during childbirth.</p>
+ <p className="font-semibold text-fg">- Kavita S.</p>
+ <p className="text-xs text-soft">Curepipe</p>
  </div>
- <div className="bg-white rounded-lg p-6 shadow-lg">
+ <div className="bg-surface rounded-lg p-6 shadow-lg">
  <div className="flex items-center gap-1 text-yellow-500 mb-3">
  {[...Array(5)].map((_, i) => (
  <FaStar key={i} className="text-sm" />
  ))}
  </div>
- <p className="text-gray-600 text-sm mb-4">Affordable premiums with comprehensive coverage. Customer support is very helpful and responsive.</p>
- <p className="font-semibold text-gray-900">- David L.</p>
- <p className="text-xs text-gray-500">Rose Hill</p>
+ <p className="text-soft text-sm mb-4">Affordable premiums with comprehensive coverage. Customer support is very helpful and responsive.</p>
+ <p className="font-semibold text-fg">- David L.</p>
+ <p className="text-xs text-soft">Rose Hill</p>
  </div>
  </div>
  </div>
@@ -673,11 +673,11 @@ export default function InsurancePage() {
  Immediate support for emergency hospitalizations and urgent medical situations.
  </p>
  <div className="flex gap-4">
- <button className="bg-white text-red-700 px-6 py-3 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center gap-2">
+ <button className="bg-surface text-red-700 px-6 py-3 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center gap-2">
  <FaAmbulance />
  Emergency Claims
  </button>
- <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-red-700 transition-colors">
+ <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-surface hover:text-red-700 transition-colors">
  Call Helpline
  </button>
  </div>
@@ -690,10 +690,10 @@ export default function InsurancePage() {
  Join our network of trusted insurance providers.
  </p>
  <div className="flex gap-4">
- <button className="bg-white text-green-700 px-6 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors">
- Become a Partner →
+ <button className="bg-surface text-green-700 px-6 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors">
+ Become a Partner 
  </button>
- <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-green-700 transition-colors">
+ <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-surface hover:text-green-700 transition-colors">
  Learn More
  </button>
  </div>

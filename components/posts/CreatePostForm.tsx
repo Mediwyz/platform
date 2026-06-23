@@ -128,7 +128,7 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
             value={content}
             onChange={handleContentChange}
             onFocus={() => content.trim() && setShowOptions(true)}
-            placeholder="Share health tips, articles, or knowledge…"
+            placeholder="Share health tips, articles, or knowledge"
             rows={1}
             className="flex-1 bg-subtle/60 dark:bg-subtle rounded-2xl px-4 py-2.5 text-[15px] text-fg focus:outline-none focus:ring-2 focus:ring-brand-teal/40 resize-none overflow-hidden transition-all placeholder:text-faint"
             style={{ minHeight: '44px' }}
@@ -179,7 +179,7 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
                     type="text"
                     value={tagsInput}
                     onChange={(e) => setTagsInput(e.target.value)}
-                    placeholder="Tags…"
+                    placeholder="Tags"
                     className={cn(chip, 'pl-6 w-28 placeholder:text-faint')}
                     disabled={submitting}
                   />
@@ -211,7 +211,7 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
             {submitting ? (
               <>
                 <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                <span className="hidden sm:inline">Publishing…</span>
+                <span className="hidden sm:inline">Publishing</span>
               </>
             ) : (
               <>

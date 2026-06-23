@@ -32,7 +32,7 @@ const userTypeBadgeColors: Record<string, string> = {
  LAB_TECHNICIAN: 'bg-yellow-100 text-yellow-700',
  EMERGENCY_WORKER: 'bg-red-100 text-red-700',
  INSURANCE_REP: 'bg-indigo-100 text-indigo-700',
- CORPORATE_ADMIN: 'bg-gray-100 text-gray-700',
+ CORPORATE_ADMIN: 'bg-subtle text-soft',
  REFERRAL_PARTNER: 'bg-teal-100 text-teal-700',
  REGIONAL_ADMIN: 'bg-cyan-100 text-cyan-700',
 }
@@ -173,7 +173,7 @@ export default function CommentSection({
  </span>
  <span
  className={`text-xs font-medium rounded-full px-2 py-0.5 ${
- userTypeBadgeColors[comment.author.userType] || 'bg-gray-100 text-gray-700'
+ userTypeBadgeColors[comment.author.userType] || 'bg-subtle text-soft'
  }`}
  >
  {userTypeLabels[comment.author.userType] || comment.author.userType}
@@ -195,7 +195,7 @@ export default function CommentSection({
  disabled={loading}
  className="w-full text-center text-sm text-[#0C6780] dark:text-accent hover:underline font-medium py-2 disabled:opacity-50"
  >
- {loading ? 'Loading…' : `Load more comments (${total - comments.length} remaining)`}
+ {loading ? 'Loading' : `Load more comments (${total - comments.length} remaining)`}
  </button>
  )}
  </div>
@@ -208,7 +208,7 @@ export default function CommentSection({
  type="text"
  value={newComment}
  onChange={(e) => setNewComment(e.target.value)}
- placeholder="Add a comment…"
+ placeholder="Add a comment"
  className="flex-1 text-sm bg-surface text-fg border border-line rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
  disabled={submitting}
  />

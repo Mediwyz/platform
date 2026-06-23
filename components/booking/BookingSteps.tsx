@@ -14,7 +14,7 @@ const steps = [
 
 export default function BookingSteps({ currentStep }: BookingStepsProps) {
  return (
- <div className="bg-white border-b">
+ <div className="bg-surface border-b">
  <div className="container mx-auto px-4 py-6">
  <div className="flex items-center justify-between max-w-4xl mx-auto">
  {steps.map((step, index) => (
@@ -23,12 +23,12 @@ export default function BookingSteps({ currentStep }: BookingStepsProps) {
  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold ${
  currentStep > step.number ? "bg-green-500 text-white" :
  currentStep === step.number ? "bg-blue-600 text-white" :
- "bg-gray-200 text-gray-600"
+ "bg-line text-soft"
  }`}>
  {currentStep > step.number ? <FaCheck /> : <step.icon />}
  </div>
  <span className={`text-xs mt-2 text-center ${
- currentStep >= step.number ? "text-blue-600 font-medium" : "text-gray-500"
+ currentStep >= step.number ? "text-blue-600 font-medium" : "text-soft"
  }`}>
  
  {step.title}
@@ -36,7 +36,7 @@ export default function BookingSteps({ currentStep }: BookingStepsProps) {
  </div>
  {index < steps.length - 1 && (
  <div className={`w-16 h-1 mx-2 ${
- currentStep > step.number ? "bg-green-500" : "bg-gray-200"
+ currentStep > step.number ? "bg-green-500" : "bg-line"
  }`} />
  )}
  </div>

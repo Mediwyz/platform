@@ -10,9 +10,9 @@ interface Turn {
 }
 
 const SUGGESTED = [
-  'Comment réserver un médecin ?',
+  'Comment rserver un mdecin ?',
   'Quels services propose MediWyz ?',
-  'Livrez-vous des médicaments ?',
+  'Livrez-vous des mdicaments ?',
   'Comment fonctionne le Health Shop ?',
   'What types of doctors are available?',
   'How much does a consultation cost?',
@@ -23,7 +23,7 @@ export default function FloatingChatWidget() {
   const [turns, setTurns] = useState<Turn[]>([
     {
       role: 'agent',
-      text: "Bonjour 👋 Je suis Wyzo, votre Assistant Santé IA. Je peux vous aider à réserver un médecin, trouver des médicaments dans le Health Shop, ou répondre à toutes vos questions sur la plateforme.",
+      text: "Bonjour  Je suis Wyzo, votre Assistant Sant IA. Je peux vous aider  rserver un mdecin, trouver des mdicaments dans le Health Shop, ou rpondre  toutes vos questions sur la plateforme.",
     },
   ])
   const [input, setInput] = useState('')
@@ -58,10 +58,10 @@ export default function FloatingChatWidget() {
         body: JSON.stringify({ message: clean }),
       })
       const json = await res.json()
-      const reply = json?.data?.response ?? "Je n'ai pas pu traiter votre question. Reformulez-la ou réservez directement un professionnel."
+      const reply = json?.data?.response ?? "Je n'ai pas pu traiter votre question. Reformulez-la ou rservez directement un professionnel."
       setTurns(prev => [...prev, { role: 'agent', text: String(reply) }])
     } catch {
-      setTurns(prev => [...prev, { role: 'agent', text: "Problème de connexion. Veuillez réessayer dans un moment." }])
+      setTurns(prev => [...prev, { role: 'agent', text: "Problme de connexion. Veuillez ressayer dans un moment." }])
     } finally {
       setSending(false)
     }
@@ -69,7 +69,7 @@ export default function FloatingChatWidget() {
 
   return (
     <>
-      {/* ─── Full-page overlay when open ─────────────────────────────── */}
+      {/*  Full-page overlay when open  */}
       {open && (
         <>
           {/* Dark backdrop */}
@@ -82,7 +82,7 @@ export default function FloatingChatWidget() {
           {/* Chat panel - fills most of the screen, comfortable reading width */}
           <div
             className="fixed inset-0 sm:inset-2 md:inset-4 lg:inset-6 xl:inset-10 z-50
-              flex flex-col bg-white rounded-none sm:rounded-3xl
+              flex flex-col bg-surface rounded-none sm:rounded-3xl
               shadow-[0_40px_100px_-12px_rgba(0,30,64,0.45)]
               overflow-hidden"
             role="dialog"
@@ -98,7 +98,7 @@ export default function FloatingChatWidget() {
                 <p className="text-white font-bold text-lg sm:text-xl">Wyzo - Health AI Assistant</p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
-                  <p className="text-white/80 text-sm sm:text-base">En ligne • Réponses instantanées</p>
+                  <p className="text-white/80 text-sm sm:text-base">En ligne  Rponses instantanes</p>
                 </div>
               </div>
               <button
@@ -111,7 +111,7 @@ export default function FloatingChatWidget() {
             </div>
 
             {/* Messages area */}
-            <div className="flex-1 overflow-y-auto px-5 sm:px-10 py-6 sm:py-8 space-y-5 min-h-0 bg-gray-50/50">
+            <div className="flex-1 overflow-y-auto px-5 sm:px-10 py-6 sm:py-8 space-y-5 min-h-0 bg-subtle/50">
               {turns.map((t, i) => (
                 <div key={i} className={`flex gap-3 ${t.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {t.role === 'agent' && (
@@ -123,7 +123,7 @@ export default function FloatingChatWidget() {
                     className={`max-w-[78%] sm:max-w-[68%] px-5 py-4 rounded-2xl text-base sm:text-lg leading-relaxed shadow-sm ${
                       t.role === 'user'
                         ? 'bg-brand-navy text-white rounded-br-sm'
-                        : 'bg-white text-gray-800 border border-gray-100 rounded-bl-sm'
+                        : 'bg-surface text-fg border border-line rounded-bl-sm'
                     }`}
                   >
                     {t.text}
@@ -136,9 +136,9 @@ export default function FloatingChatWidget() {
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-navy to-brand-teal flex items-center justify-center flex-shrink-0">
                     <FaRobot className="text-white text-sm" />
                   </div>
-                  <div className="bg-white border border-gray-100 px-5 py-4 rounded-2xl rounded-bl-sm text-base inline-flex items-center gap-2 shadow-sm">
+                  <div className="bg-surface border border-line px-5 py-4 rounded-2xl rounded-bl-sm text-base inline-flex items-center gap-2 shadow-sm">
                     <FaSpinner className="animate-spin text-brand-teal text-sm" />
-                    <span className="text-gray-500">En train de répondre...</span>
+                    <span className="text-soft">En train de rpondre...</span>
                   </div>
                 </div>
               )}
@@ -147,8 +147,8 @@ export default function FloatingChatWidget() {
 
             {/* Suggested questions - first turn only */}
             {turns.length === 1 && (
-              <div className="px-5 sm:px-10 py-4 flex flex-wrap gap-2.5 border-t border-gray-100 bg-white flex-shrink-0">
-                <p className="w-full text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Questions fréquentes</p>
+              <div className="px-5 sm:px-10 py-4 flex flex-wrap gap-2.5 border-t border-line bg-surface flex-shrink-0">
+                <p className="w-full text-xs font-semibold text-faint uppercase tracking-wider mb-1">Questions frquentes</p>
                 {SUGGESTED.map(q => (
                   <button
                     key={q}
@@ -165,7 +165,7 @@ export default function FloatingChatWidget() {
             {/* Input */}
             <form
               onSubmit={e => { e.preventDefault(); ask(input) }}
-              className="border-t border-gray-200 px-5 sm:px-10 py-5 flex items-center gap-3 bg-white flex-shrink-0"
+              className="border-t border-line px-5 sm:px-10 py-5 flex items-center gap-3 bg-surface flex-shrink-0"
             >
               <input
                 ref={inputRef}
@@ -173,7 +173,7 @@ export default function FloatingChatWidget() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Posez votre question sur MediWyz..."
-                className="flex-1 px-5 py-3.5 text-base sm:text-lg bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-teal focus:bg-white focus:border-brand-teal outline-none transition"
+                className="flex-1 px-5 py-3.5 text-base sm:text-lg bg-subtle rounded-xl border border-line focus:ring-2 focus:ring-brand-teal focus:bg-surface focus:border-brand-teal outline-none transition"
                 disabled={sending}
               />
               <button
@@ -189,7 +189,7 @@ export default function FloatingChatWidget() {
         </>
       )}
 
-      {/* ─── Floating trigger - pill button, slot 1 (lowest) ────────── */}
+      {/*  Floating trigger - pill button, slot 1 (lowest)  */}
       <button
         onClick={() => setOpen(v => !v)}
         title={open ? 'Close Wyzo' : 'Wyzo - Health AI Assistant'}

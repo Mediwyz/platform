@@ -83,10 +83,10 @@ export default function DocumentQueuePage() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#001E40] flex items-center gap-3">
+        <h1 className="text-2xl font-bold text-fg flex items-center gap-3">
           <FaFileAlt className="text-[#0C6780]" /> Document verification queue
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-soft mt-1">
           Review documents uploaded by users. Approving every required document auto-verifies the account.
         </p>
       </div>
@@ -100,16 +100,16 @@ export default function DocumentQueuePage() {
           <div className="animate-spin h-8 w-8 border-4 border-[#0C6780] border-t-transparent rounded-full" />
         </div>
       ) : docs.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+        <div className="text-center py-20 bg-subtle rounded-xl border border-dashed border-line">
           <FaCheck className="mx-auto text-4xl text-green-400 mb-3" />
-          <h3 className="text-lg font-medium text-gray-700">All caught up</h3>
-          <p className="text-sm text-gray-500">No documents are awaiting review.</p>
+          <h3 className="text-lg font-medium text-soft">All caught up</h3>
+          <p className="text-sm text-soft">No documents are awaiting review.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
           <div className="overflow-x-auto"><table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <tr className="bg-subtle border-b border-line text-left text-xs font-semibold text-soft uppercase tracking-wider">
                 <th className="px-5 py-3">User</th>
                 <th className="px-5 py-3">Document</th>
                 <th className="px-5 py-3">Type</th>
@@ -117,21 +117,21 @@ export default function DocumentQueuePage() {
                 <th className="px-5 py-3 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-line">
               {docs.map(d => (
-                <tr key={d.id} className="hover:bg-gray-50">
+                <tr key={d.id} className="hover:bg-subtle">
                   <td className="px-5 py-3">
-                    <p className="font-medium text-gray-900">{d.user.firstName} {d.user.lastName}</p>
-                    <p className="text-xs text-gray-500">{d.user.email}</p>
-                    <p className="text-[10px] uppercase text-gray-400">{d.user.userType.replace(/_/g, ' ')}</p>
+                    <p className="font-medium text-fg">{d.user.firstName} {d.user.lastName}</p>
+                    <p className="text-xs text-soft">{d.user.email}</p>
+                    <p className="text-[10px] uppercase text-faint">{d.user.userType.replace(/_/g, ' ')}</p>
                   </td>
-                  <td className="px-5 py-3 text-sm text-gray-700">{d.name}</td>
+                  <td className="px-5 py-3 text-sm text-soft">{d.name}</td>
                   <td className="px-5 py-3 text-sm">
                     <span className="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 font-medium">
                       {TYPE_LABELS[d.type] || d.type}
                     </span>
                   </td>
-                  <td className="px-5 py-3 text-xs text-gray-500">
+                  <td className="px-5 py-3 text-xs text-soft">
                     {new Date(d.uploadedAt).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-3">
@@ -166,13 +166,13 @@ export default function DocumentQueuePage() {
       {/* Viewer modal */}
       {viewing && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setViewing(null)}>
-          <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[85vh] overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="bg-surface rounded-xl shadow-xl max-w-4xl w-full max-h-[85vh] overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-line">
               <div>
                 <p className="font-semibold">{viewing.name}</p>
-                <p className="text-xs text-gray-500">{viewing.user.firstName} {viewing.user.lastName}</p>
+                <p className="text-xs text-soft">{viewing.user.firstName} {viewing.user.lastName}</p>
               </div>
-              <button onClick={() => setViewing(null)} className="p-2 text-gray-400 hover:text-gray-600"><FaTimes /></button>
+              <button onClick={() => setViewing(null)} className="p-2 text-faint hover:text-soft"><FaTimes /></button>
             </div>
             <div className="p-4 overflow-auto" style={{ maxHeight: '70vh' }}>
               {viewing.url.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ? (
@@ -189,19 +189,19 @@ export default function DocumentQueuePage() {
       {/* Rejection modal */}
       {rejectingId && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+          <div className="bg-surface rounded-xl shadow-xl max-w-md w-full p-6">
             <h3 className="font-bold text-lg mb-1">Reject document</h3>
-            <p className="text-sm text-gray-500 mb-4">Tell the user why so they can correct it.</p>
+            <p className="text-sm text-soft mb-4">Tell the user why so they can correct it.</p>
             <textarea
               rows={4}
               value={rejectionReason}
               onChange={e => setRejectionReason(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none"
               placeholder="e.g. Document is blurry, please re-upload a clearer photo."
             />
             <div className="flex justify-end gap-2 mt-4">
               <button onClick={() => { setRejectingId(null); setRejectionReason('') }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
+                className="px-4 py-2 border border-line rounded-lg text-sm hover:bg-subtle">
                 Cancel
               </button>
               <button

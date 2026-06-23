@@ -9,7 +9,7 @@ import {
   FaUserMd, FaFire, FaComments, FaArrowRight,
 } from 'react-icons/fa'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface Post {
   id: string
@@ -39,7 +39,7 @@ interface SuggestedUser {
   verified: boolean
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function getRelativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -68,7 +68,7 @@ const CATEGORY_TABS = [
   { value: 'news', label: 'News' },
 ]
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+//  Sub-components 
 
 function PostCard({ post }: { post: Post }) {
   const authorName = post.company
@@ -76,7 +76,7 @@ function PostCard({ post }: { post: Post }) {
     : `${post.author.firstName} ${post.author.lastName}`
 
   return (
-    <article className="bg-white rounded-2xl border border-gray-200 hover:shadow-md transition-all overflow-hidden">
+    <article className="bg-surface rounded-2xl border border-line hover:shadow-md transition-all overflow-hidden">
       {post.imageUrl && (
         <div className="h-40 overflow-hidden">
           <Image src={post.imageUrl} alt="" width={400} height={160} className="w-full h-full object-cover" />
@@ -93,22 +93,22 @@ function PostCard({ post }: { post: Post }) {
           )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-gray-900 truncate">{authorName}</span>
+              <span className="text-sm font-semibold text-fg truncate">{authorName}</span>
               {post.author.verified && <FaCheckCircle className="text-blue-500 text-[10px] flex-shrink-0" />}
             </div>
-            <p className="text-[10px] text-gray-400">{getRelativeTime(post.createdAt)}</p>
+            <p className="text-[10px] text-faint">{getRelativeTime(post.createdAt)}</p>
           </div>
           {post.category && (
-            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 flex-shrink-0">
+            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-subtle text-soft flex-shrink-0">
               {CATEGORY_LABELS[post.category] || post.category}
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-700 line-clamp-3 mb-3">{post.content}</p>
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+        <p className="text-sm text-soft line-clamp-3 mb-3">{post.content}</p>
+        <div className="flex items-center gap-4 text-xs text-faint">
           <span className="flex items-center gap-1"><FaHeart className="text-red-400" /> {post.likeCount}</span>
           <span className="flex items-center gap-1"><FaComment /> {post._count.comments}</span>
-          <span className="ml-auto text-[#0C6780] font-medium cursor-default">Read more →</span>
+          <span className="ml-auto text-[#0C6780] font-medium cursor-default">Read more </span>
         </div>
       </div>
     </article>
@@ -117,14 +117,14 @@ function PostCard({ post }: { post: Post }) {
 
 function PeopleYouMayKnow({ users }: { users: SuggestedUser[] }) {
   return (
-    <aside className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+    <aside className="bg-surface rounded-2xl border border-line overflow-hidden">
+      <div className="px-4 py-3 border-b border-line flex items-center gap-2">
         <FaUserMd className="text-[#0C6780] text-sm" />
-        <h2 className="text-sm font-bold text-gray-900">People You May Know</h2>
+        <h2 className="text-sm font-bold text-fg">People You May Know</h2>
       </div>
       <div className="p-3 flex flex-col gap-1">
         {users.length > 0 ? users.map(u => (
-          <div key={u.id} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors">
+          <div key={u.id} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-subtle transition-colors">
             {u.profileImage ? (
               <Image src={u.profileImage} alt="" width={32} height={32} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
             ) : (
@@ -133,11 +133,11 @@ function PeopleYouMayKnow({ users }: { users: SuggestedUser[] }) {
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-gray-900 truncate flex items-center gap-1">
+              <p className="text-xs font-semibold text-fg truncate flex items-center gap-1">
                 {u.firstName} {u.lastName}
                 {u.verified && <FaCheckCircle className="text-blue-500 text-[8px]" />}
               </p>
-              <p className="text-[10px] text-gray-400 truncate">{u.userType.replace(/_/g, ' ').toLowerCase()}</p>
+              <p className="text-[10px] text-faint truncate">{u.userType.replace(/_/g, ' ').toLowerCase()}</p>
             </div>
             <Link
               href="/signup"
@@ -148,11 +148,11 @@ function PeopleYouMayKnow({ users }: { users: SuggestedUser[] }) {
           </div>
         )) : (
           <div className="px-3 py-4 text-center">
-            <p className="text-xs text-gray-500">Find and connect with health professionals</p>
+            <p className="text-xs text-soft">Find and connect with health professionals</p>
           </div>
         )}
       </div>
-      <div className="p-3 border-t border-gray-100">
+      <div className="p-3 border-t border-line">
         <Link
           href="/signup"
           className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-[#0C6780] text-white text-xs font-semibold rounded-xl hover:bg-[#001E40] transition-colors"
@@ -166,17 +166,17 @@ function PeopleYouMayKnow({ users }: { users: SuggestedUser[] }) {
 
 function MessagesPanel() {
   return (
-    <aside className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+    <aside className="bg-surface rounded-2xl border border-line overflow-hidden">
+      <div className="px-4 py-3 border-b border-line flex items-center gap-2">
         <FaComments className="text-pink-500 text-sm" />
-        <h2 className="text-sm font-bold text-gray-900">Messages</h2>
+        <h2 className="text-sm font-bold text-fg">Messages</h2>
       </div>
       <div className="p-4 text-center space-y-3">
         <div className="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center mx-auto">
           <FaComments className="text-pink-400 text-xl" />
         </div>
-        <p className="text-xs text-gray-600 font-medium">Chat with health professionals</p>
-        <p className="text-[11px] text-gray-400">Sign in to access your messages and connect with providers.</p>
+        <p className="text-xs text-soft font-medium">Chat with health professionals</p>
+        <p className="text-[11px] text-faint">Sign in to access your messages and connect with providers.</p>
         <Link
           href="/login"
           className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-pink-50 text-pink-700 text-xs font-semibold rounded-xl hover:bg-pink-100 transition-colors border border-pink-200"
@@ -188,7 +188,7 @@ function MessagesPanel() {
   )
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+//  Main page 
 
 export default function PublicFeedPage() {
   const router = useRouter()
@@ -302,13 +302,13 @@ export default function PublicFeedPage() {
         <div className="flex items-center gap-2 mb-4">
           <FaFire className="text-orange-500" />
           <div>
-            <h1 className="text-lg font-bold text-gray-900">Community Health Feed</h1>
-            <p className="text-xs text-gray-500">Most reacted posts - no account needed to browse</p>
+            <h1 className="text-lg font-bold text-fg">Community Health Feed</h1>
+            <p className="text-xs text-soft">Most reacted posts - no account needed to browse</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <Link
               href="/login"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-gray-200 rounded-lg hover:border-[#0C6780] hover:text-[#0C6780] transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-line rounded-lg hover:border-[#0C6780] hover:text-[#0C6780] transition-colors"
             >
               <FaSignInAlt /> Sign in
             </Link>
@@ -323,7 +323,7 @@ export default function PublicFeedPage() {
 
         {/* Guest banner */}
         <div className="bg-[#9AE1FF]/20 border border-[#9AE1FF]/40 rounded-xl py-2 px-4 mb-4">
-          <p className="text-xs text-[#001E40]">
+          <p className="text-xs text-fg">
             <span className="font-semibold">You&apos;re browsing as a guest.</span>{' '}
             <Link href="/signup" className="underline font-medium hover:text-[#0C6780]">
               Create a free account
@@ -341,7 +341,7 @@ export default function PublicFeedPage() {
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 activeCategory === tab.value
                   ? 'bg-[#0C6780] text-white shadow-sm'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'
+                  : 'bg-surface text-soft border border-line hover:border-[#0C6780] hover:text-[#0C6780]'
               }`}
             >
               {tab.label}
@@ -353,26 +353,26 @@ export default function PublicFeedPage() {
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-4 animate-pulse">
+              <div key={i} className="bg-surface rounded-2xl border border-line p-4 animate-pulse">
                 <div className="flex gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-full bg-gray-200" />
+                  <div className="w-9 h-9 rounded-full bg-line" />
                   <div className="flex-1 space-y-1.5">
-                    <div className="h-3.5 bg-gray-200 rounded w-1/3" />
-                    <div className="h-2.5 bg-gray-100 rounded w-1/5" />
+                    <div className="h-3.5 bg-line rounded w-1/3" />
+                    <div className="h-2.5 bg-subtle rounded w-1/5" />
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <div className="h-3 bg-gray-200 rounded w-full" />
-                  <div className="h-3 bg-gray-200 rounded w-5/6" />
-                  <div className="h-3 bg-gray-100 rounded w-3/4" />
+                  <div className="h-3 bg-line rounded w-full" />
+                  <div className="h-3 bg-line rounded w-5/6" />
+                  <div className="h-3 bg-subtle rounded w-3/4" />
                 </div>
               </div>
             ))}
           </div>
         ) : posts.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center">
-            <div className="text-4xl mb-3">📭</div>
-            <p className="text-gray-500 text-sm">No posts yet in this category.</p>
+          <div className="bg-surface rounded-2xl border border-line p-10 text-center">
+            <div className="text-4xl mb-3"></div>
+            <p className="text-soft text-sm">No posts yet in this category.</p>
             <button onClick={() => setActiveCategory('')} className="mt-3 text-sm text-[#0C6780] underline">
               View all posts
             </button>
@@ -385,9 +385,9 @@ export default function PublicFeedPage() {
                 <button
                   onClick={loadMore}
                   disabled={loadingMore}
-                  className="px-6 py-2.5 bg-white border border-gray-200 text-sm font-semibold text-gray-700 rounded-xl hover:border-[#0C6780] hover:text-[#0C6780] transition-colors disabled:opacity-50"
+                  className="px-6 py-2.5 bg-surface border border-line text-sm font-semibold text-soft rounded-xl hover:border-[#0C6780] hover:text-[#0C6780] transition-colors disabled:opacity-50"
                 >
-                  {loadingMore ? 'Loading…' : 'Load more posts'}
+                  {loadingMore ? 'Loading' : 'Load more posts'}
                 </button>
               </div>
             )}
@@ -407,7 +407,7 @@ export default function PublicFeedPage() {
             <p className="text-sm font-bold mb-3">Find and book a health provider in minutes</p>
             <Link
               href="/search/results?category=providers"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white text-[#001E40] px-3 py-1.5 rounded-lg hover:bg-white/90 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold bg-surface text-fg px-3 py-1.5 rounded-lg hover:bg-white/90 transition-colors"
             >
               Book now <FaArrowRight className="text-[10px]" />
             </Link>

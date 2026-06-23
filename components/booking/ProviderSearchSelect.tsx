@@ -69,11 +69,11 @@ export default function ProviderSearchSelect({
  if (loading) {
  return (
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  {label} <span className="text-red-500">*</span>
  </h4>
- <div className="flex items-center gap-2 py-4 text-gray-500">
- <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+ <div className="flex items-center gap-2 py-4 text-soft">
+ <div className="w-4 h-4 border-2 border-line border-t-gray-600 rounded-full animate-spin" />
  <span className="text-sm">Loading...</span>
  </div>
  </div>
@@ -83,17 +83,17 @@ export default function ProviderSearchSelect({
  if (providers.length === 0) {
  return (
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  {label} <span className="text-red-500">*</span>
  </h4>
- <p className="text-gray-500 text-sm py-4">No providers available at the moment.</p>
+ <p className="text-soft text-sm py-4">No providers available at the moment.</p>
  </div>
  )
  }
 
  return (
  <div ref={wrapperRef}>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  {label} <span className="text-red-500">*</span>
  </h4>
 
@@ -105,12 +105,12 @@ export default function ProviderSearchSelect({
  {selected.name.replace('Dr. ', '').split(' ').map(n => n[0]).join('').slice(0, 2)}
  </div>
  <div className="flex-1 min-w-0">
- <h5 className="font-semibold text-gray-900 text-sm">{selected.name}</h5>
- {selected.subtitle && <p className="text-xs text-gray-600">{selected.subtitle}</p>}
+ <h5 className="font-semibold text-fg text-sm">{selected.name}</h5>
+ {selected.subtitle && <p className="text-xs text-soft">{selected.subtitle}</p>}
  </div>
  <button
  onClick={() => { setIsOpen(true); setSearch('') }}
- className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 bg-white/60 rounded"
+ className="text-xs text-soft hover:text-soft px-2 py-1 bg-white/60 rounded"
  >
  Change
  </button>
@@ -122,19 +122,19 @@ export default function ProviderSearchSelect({
  {(!selected || isOpen) && (
  <div className="relative">
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  value={search}
  onChange={(e) => { setSearch(e.target.value); setIsOpen(true) }}
  onFocus={() => setIsOpen(true)}
  placeholder={placeholder}
- className={`w-full pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg ${accent.focus} focus:outline-none text-sm`}
+ className={`w-full pl-9 pr-8 py-2.5 border border-line rounded-lg ${accent.focus} focus:outline-none text-sm`}
  />
  {search && (
  <button
  onClick={() => setSearch('')}
- className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+ className="absolute right-3 top-1/2 -translate-y-1/2 text-faint hover:text-soft"
  >
  <FaTimes className="text-xs" />
  </button>
@@ -143,9 +143,9 @@ export default function ProviderSearchSelect({
 
  {/* Dropdown */}
  {isOpen && (
- <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+ <div className="absolute z-10 w-full mt-1 bg-surface border border-line rounded-lg shadow-lg max-h-56 overflow-y-auto">
  {filtered.length === 0 ? (
- <div className="p-3 text-center text-gray-500 text-sm">No results found</div>
+ <div className="p-3 text-center text-soft text-sm">No results found</div>
  ) : (
  filtered.map((provider) => (
  <button
@@ -155,7 +155,7 @@ export default function ProviderSearchSelect({
  setIsOpen(false)
  setSearch('')
  }}
- className={`w-full p-3 text-left hover:bg-gray-50 transition border-b border-gray-100 last:border-0 ${
+ className={`w-full p-3 text-left hover:bg-subtle transition border-b border-line last:border-0 ${
  selectedId === provider.userId ? ` ${accent.bg}` : ''
  }`}
  >
@@ -164,8 +164,8 @@ export default function ProviderSearchSelect({
  {provider.name.replace('Dr. ', '').split(' ').map(n => n[0]).join('').slice(0, 2)}
  </div>
  <div className="flex-1 min-w-0">
- <h5 className="font-semibold text-gray-900 text-sm">{provider.name}</h5>
- {provider.subtitle && <p className="text-xs text-gray-600">{provider.subtitle}</p>}
+ <h5 className="font-semibold text-fg text-sm">{provider.name}</h5>
+ {provider.subtitle && <p className="text-xs text-soft">{provider.subtitle}</p>}
  {provider.tags && provider.tags.length > 0 && (
  <div className="mt-1 flex flex-wrap gap-1">
  {provider.tags.slice(0, 3).map((tag, i) => (

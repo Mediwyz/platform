@@ -86,11 +86,11 @@ export default function MessageButton({ providerId, className = '' }: MessageBut
  <button
  onClick={handleMessage}
  disabled={loading}
- className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition-colors ${className}`}
+ className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-subtle text-soft hover:bg-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition-colors ${className}`}
  aria-label="Send a message"
  >
  <FaEnvelope className="w-4 h-4" />
- {loading ? 'Opening…' : 'Message'}
+ {loading ? 'Opening' : 'Message'}
  </button>
  {error && (
  <span className="text-xs text-red-500 col-span-2" role="alert">

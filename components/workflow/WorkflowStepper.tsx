@@ -34,7 +34,7 @@ export default function WorkflowStepper({
   steps, currentStatus, variant = 'compact',
 }: WorkflowStepperProps) {
   if (!steps || steps.length === 0) {
-    return <p className="text-xs text-gray-400">No steps defined yet.</p>
+    return <p className="text-xs text-faint">No steps defined yet.</p>
   }
 
   // Hide terminal-danger (cancelled) from the happy-path view. It's still
@@ -76,8 +76,8 @@ export default function WorkflowStepper({
               <div
                 className={`flex items-center gap-1 px-2 py-1 rounded-full border ${
                   isCurrent
-                    ? 'bg-white border-brand-teal ring-2 ring-brand-teal/20'
-                    : 'bg-gray-50 border-gray-200'
+                    ? 'bg-surface border-brand-teal ring-2 ring-brand-teal/20'
+                    : 'bg-subtle border-line'
                 }`}
                 title={`${idx + 1}. ${step.label} - ${label}`}
               >
@@ -85,10 +85,10 @@ export default function WorkflowStepper({
                   {idx + 1}
                 </span>
                 <span className="text-sm leading-none" aria-hidden="true">{emoji}</span>
-                <span className="text-[11px] text-gray-700 truncate max-w-[120px]">{step.label}</span>
+                <span className="text-[11px] text-soft truncate max-w-[120px]">{step.label}</span>
               </div>
               {idx < happyPath.length - 1 && (
-                <span className="text-gray-300 text-xs flex-shrink-0">→</span>
+                <span className="text-faint text-xs flex-shrink-0"></span>
               )}
             </div>
           )
@@ -98,7 +98,7 @@ export default function WorkflowStepper({
             className="flex items-center gap-1 ml-2 px-2 py-1 rounded-full bg-red-50 border border-red-200 text-[11px] text-red-700 flex-shrink-0"
             title={`Cancel path: ${dangerStep.label}`}
           >
-            <span aria-hidden="true">❌</span>
+            <span aria-hidden="true"></span>
             <span>{dangerStep.label}</span>
           </span>
         )}
@@ -127,12 +127,12 @@ export default function WorkflowStepper({
             </span>
             <span className="text-xl leading-none flex-shrink-0" aria-hidden="true">{emoji}</span>
             <div className="min-w-0 flex-1">
-              <p className={`text-sm font-medium ${isCurrent ? 'text-brand-navy' : 'text-gray-900'}`}>
+              <p className={`text-sm font-medium ${isCurrent ? 'text-brand-navy' : 'text-fg'}`}>
                 {step.label}
               </p>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[11px] text-soft">
                 <span className="font-mono">{step.statusCode}</span>
-                <span className="mx-1.5">·</span>
+                <span className="mx-1.5"></span>
                 <span>{label}</span>
               </p>
             </div>

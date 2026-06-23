@@ -33,7 +33,7 @@ export interface WorkflowStep {
   /** Emoji icon chosen by the admin for a custom milestone step. */
   customEmoji?: string
   /** Optional visual bucket. When omitted, the engine derives one from the
-   *  step's shape (first → pending, terminal → success/danger, else active).
+   *  step's shape (first  pending, terminal  success/danger, else active).
    *  Authors only need to set this to override the derived value. */
   category?: StepCategory
   /** Optional explicit icon - authors pick from a closed set when the
@@ -147,10 +147,10 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
   }
 
   return (
-    <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
+    <div className="border border-line rounded-xl bg-surface overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-50" onClick={() => setExpanded(!expanded)}>
-        <FiMenu className="text-gray-400 flex-shrink-0" />
+      <div className="flex items-center gap-3 p-4 cursor-pointer hover:bg-subtle" onClick={() => setExpanded(!expanded)}>
+        <FiMenu className="text-faint flex-shrink-0" />
         <div className="w-7 h-7 bg-brand-navy text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
           {step.order}
         </div>
@@ -166,9 +166,9 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
               onChange={(e) => updateField('label', e.target.value)}
               onClick={(e) => e.stopPropagation()}
               placeholder="Step label"
-              className="font-medium text-sm text-gray-900 border-0 border-b border-transparent hover:border-gray-300 focus:border-brand-teal focus:ring-0 p-0 bg-transparent"
+              className="font-medium text-sm text-fg border-0 border-b border-transparent hover:border-line focus:border-brand-teal focus:ring-0 p-0 bg-transparent"
             />
-            <code className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">{step.statusCode}</code>
+            <code className="text-xs bg-subtle text-soft px-1.5 py-0.5 rounded">{step.statusCode}</code>
           </div>
           {/* Flag badges */}
           <div className="flex flex-wrap gap-1 mt-1">
@@ -179,24 +179,24 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
             ))}
           </div>
         </div>
-        <button onClick={(e) => { e.stopPropagation(); onRemove() }} disabled={isFirst} className="text-gray-400 hover:text-red-500 disabled:opacity-30 p-1">
+        <button onClick={(e) => { e.stopPropagation(); onRemove() }} disabled={isFirst} className="text-faint hover:text-red-500 disabled:opacity-30 p-1">
           <FiTrash2 className="w-4 h-4" />
         </button>
-        {expanded ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
+        {expanded ? <FiChevronUp className="text-faint" /> : <FiChevronDown className="text-faint" />}
       </div>
 
       {/* Expanded content */}
       {expanded && (
-        <div className="border-t border-gray-100 p-4 space-y-4 bg-gray-50/50">
+        <div className="border-t border-line p-4 space-y-4 bg-subtle/50">
           {/* Basic info */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-gray-500 block mb-1">Status Code</label>
+              <label className="text-xs font-medium text-soft block mb-1">Status Code</label>
               <input
                 type="text"
                 value={step.statusCode}
                 onChange={(e) => handleStatusCodeChange(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal font-mono"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal font-mono"
                 placeholder="e.g. sample_collected"
               />
               {autoFillHint && (
@@ -212,27 +212,27 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
               )}
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-500 block mb-1">Description (optional)</label>
+              <label className="text-xs font-medium text-soft block mb-1">Description (optional)</label>
               <input
                 type="text"
                 value={step.description || ''}
                 onChange={(e) => updateField('description', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
               />
             </div>
           </div>
 
           {/* Icon picker - override the auto-inferred icon if needed */}
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">
+            <label className="text-xs font-medium text-soft block mb-1">
               Visual icon
-              <span className="ml-1 text-gray-400 font-normal">(auto-inferred - override if needed)</span>
+              <span className="ml-1 text-faint font-normal">(auto-inferred - override if needed)</span>
             </label>
             <div className="flex flex-wrap gap-1.5">
               <button
                 type="button"
                 onClick={() => updateField('icon', undefined)}
-                className={`px-2 py-1 rounded-lg border text-[11px] ${!step.icon ? 'border-brand-teal bg-brand-teal/10 text-brand-navy' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                className={`px-2 py-1 rounded-lg border text-[11px] ${!step.icon ? 'border-brand-teal bg-brand-teal/10 text-brand-navy' : 'border-line text-soft hover:bg-subtle'}`}
                 title="Let the engine infer from flags + label"
               >
                 Auto
@@ -242,7 +242,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                   key={key}
                   type="button"
                   onClick={() => updateField('icon', key)}
-                  className={`px-2 py-1 rounded-lg border text-sm flex items-center gap-1 ${step.icon === key ? 'border-brand-teal bg-brand-teal/10' : 'border-gray-200 hover:bg-gray-50'}`}
+                  className={`px-2 py-1 rounded-lg border text-sm flex items-center gap-1 ${step.icon === key ? 'border-brand-teal bg-brand-teal/10' : 'border-line hover:bg-subtle'}`}
                   title={STEP_ICON_LABEL[key]}
                 >
                   <span aria-hidden="true">{STEP_ICON_EMOJI[key]}</span>
@@ -258,7 +258,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
           {(['provider', 'patient'] as const).map(role => (
             <div key={role}>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <p className="text-xs font-semibold text-soft uppercase tracking-wider">
                   {role === 'provider' ? 'Provider Actions' : 'Patient Actions'}
                 </p>
                 <button type="button" onClick={() => addAction(role)} className="text-xs text-brand-teal hover:text-brand-navy flex items-center gap-1">
@@ -267,19 +267,19 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
               </div>
               <div className="space-y-2">
                 {(step[role === 'patient' ? 'actionsForPatient' : 'actionsForProvider'] ?? []).map((action, idx) => (
-                  <div key={idx} className="flex items-center gap-2 bg-white rounded-lg p-2 border border-gray-100">
-                    <input type="text" value={action.action} onChange={(e) => updateAction(role, idx, { ...action, action: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} placeholder="action_code" className="flex-1 border border-gray-200 rounded px-2 py-1.5 text-xs font-mono focus:ring-1 focus:ring-brand-teal" />
-                    <input type="text" value={action.label} onChange={(e) => updateAction(role, idx, { ...action, label: e.target.value })} placeholder="Button Label" className="flex-1 border border-gray-200 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal" />
-                    <select value={action.targetStatus} onChange={(e) => updateAction(role, idx, { ...action, targetStatus: e.target.value })} className="border border-gray-200 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal">
+                  <div key={idx} className="flex items-center gap-2 bg-surface rounded-lg p-2 border border-line">
+                    <input type="text" value={action.action} onChange={(e) => updateAction(role, idx, { ...action, action: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} placeholder="action_code" className="flex-1 border border-line rounded px-2 py-1.5 text-xs font-mono focus:ring-1 focus:ring-brand-teal" />
+                    <input type="text" value={action.label} onChange={(e) => updateAction(role, idx, { ...action, label: e.target.value })} placeholder="Button Label" className="flex-1 border border-line rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal" />
+                    <select value={action.targetStatus} onChange={(e) => updateAction(role, idx, { ...action, targetStatus: e.target.value })} className="border border-line rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-brand-teal">
                       <option value="">Target...</option>
                       {allStatusCodes.map(sc => <option key={sc} value={sc}>{sc}</option>)}
                     </select>
-                    <select value={action.style} onChange={(e) => updateAction(role, idx, { ...action, style: e.target.value as StepAction['style'] })} className="border border-gray-200 rounded px-2 py-1.5 text-xs w-20 focus:ring-1 focus:ring-brand-teal">
+                    <select value={action.style} onChange={(e) => updateAction(role, idx, { ...action, style: e.target.value as StepAction['style'] })} className="border border-line rounded px-2 py-1.5 text-xs w-20 focus:ring-1 focus:ring-brand-teal">
                       <option value="primary">Primary</option>
                       <option value="danger">Danger</option>
                       <option value="secondary">Secondary</option>
                     </select>
-                    <button type="button" onClick={() => removeAction(role, idx)} className="text-gray-400 hover:text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                    <button type="button" onClick={() => removeAction(role, idx)} className="text-faint hover:text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
                   </div>
                 ))}
               </div>
@@ -325,8 +325,8 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                           value={notif.title}
                           onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, title: e.target.value } as never)}
                           onFocus={() => setFocusedNotifField(titleKey)}
-                          placeholder="e.g. Consultation confirmée"
-                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-white transition ${
+                          placeholder="e.g. Consultation confirme"
+                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-surface transition ${
                             isTitleFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
                           }`}
                         />
@@ -339,8 +339,8 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                           value={notif.message}
                           onChange={(e) => updateField(dataKey as keyof WorkflowStep, { ...notif, message: e.target.value } as never)}
                           onFocus={() => setFocusedNotifField(msgKey)}
-                          placeholder="e.g. Bonjour {{patientName}}, votre rendez-vous…"
-                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-white transition ${
+                          placeholder="e.g. Bonjour {{patientName}}, votre rendez-vous"
+                          className={`w-full border rounded px-2 py-1.5 text-xs focus:ring-1 bg-surface transition ${
                             isMsgFocused ? 'border-indigo-400 ring-1 ring-indigo-300' : 'border-indigo-200 focus:ring-brand-teal'
                           }`}
                         />
@@ -357,7 +357,7 @@ export default function StepEditor({ step, allStatusCodes, onChange, onRemove, i
                             key={p}
                             type="button"
                             onMouseDown={(e) => { e.preventDefault(); insertPlaceholder(p) }}
-                            className="text-[10px] font-mono bg-white border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-400 text-indigo-700 rounded px-1.5 py-0.5 transition"
+                            className="text-[10px] font-mono bg-surface border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-400 text-indigo-700 rounded px-1.5 py-0.5 transition"
                           >
                             {p}
                           </button>

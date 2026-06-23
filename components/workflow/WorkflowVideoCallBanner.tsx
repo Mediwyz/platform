@@ -36,7 +36,7 @@ export default function WorkflowVideoCallBanner({
         </div>
         <Link
           href={`/video/${videoCallId}`}
-          className="bg-white text-brand-teal px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-50 transition-colors"
+          className="bg-surface text-brand-teal px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-50 transition-colors"
         >
           Join Call
         </Link>
@@ -57,7 +57,7 @@ export default function WorkflowVideoCallBanner({
       </div>
       <Link
         href={`/video/${videoCallId}`}
-        className="bg-white text-brand-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-50 transition-colors"
+        className="bg-surface text-brand-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-50 transition-colors"
       >
         Join Call
       </Link>

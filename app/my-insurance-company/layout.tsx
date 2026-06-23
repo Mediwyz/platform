@@ -34,25 +34,25 @@ export default function MyInsuranceCompanyLayout({ children }: { children: React
   if (!has) return null
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-subtle">
+      <header className="bg-surface border-b border-line">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.back()}
-              className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+              className="p-2 hover:bg-subtle rounded-lg text-soft"
               aria-label="Back"
             >
               <FaArrowLeft />
             </button>
-            <h1 className="text-sm font-bold text-gray-900">My Insurance Company</h1>
+            <h1 className="text-sm font-bold text-fg">My Insurance Company</h1>
           </div>
           <nav className="flex gap-1">
             {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs font-medium text-soft hover:bg-subtle rounded-lg inline-flex items-center gap-1.5"
               >
                 <item.icon className="text-[10px]" /> {item.label}
               </Link>

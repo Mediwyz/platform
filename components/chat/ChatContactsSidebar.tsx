@@ -136,7 +136,7 @@ export default function ChatContactsSidebar({ currentUserId, messagesPath }: Cha
  {conversations.map((conv) => {
  const other = getOtherParticipant(conv)
  if (!other) return null
- const typeColor = USER_TYPE_COLORS[other.userType] || 'text-gray-500'
+ const typeColor = USER_TYPE_COLORS[other.userType] || 'text-soft'
  const typeLabel = USER_TYPE_LABELS[other.userType] || other.userType
 
  return (

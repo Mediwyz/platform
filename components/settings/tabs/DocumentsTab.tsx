@@ -138,7 +138,7 @@ const DocumentsTab: React.FC<DocumentsTabProps> = ({ documents }) => {
  case 'failed':
  return 'border-red-300 bg-red-50'
  default:
- return 'border-gray-200'
+ return 'border-line'
  }
  }
 
@@ -153,22 +153,22 @@ const DocumentsTab: React.FC<DocumentsTabProps> = ({ documents }) => {
 
  return (
  <div>
- <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-2 flex items-center gap-2">
  <FaFileAlt className="text-blue-600" /> Document Upload
  </h2>
- <p className="text-gray-600 mb-6">Upload required documents for verification.</p>
+ <p className="text-soft mb-6">Upload required documents for verification.</p>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {documents.map((doc) => {
  const state = uploadStates[doc.key] || { file: null, status: 'idle' as const }
  return (
  <div key={doc.key} className={`border rounded-lg p-4 ${getStatusBorderColor(state.status)}`}>
  <div className="flex items-start justify-between mb-1">
- <h4 className="font-semibold text-gray-800">
+ <h4 className="font-semibold text-fg">
  {doc.title} {doc.required && <span className="text-red-500">*</span>}
  </h4>
  {getStatusIcon(state.status)}
  </div>
- <p className="text-sm text-gray-500 mb-2">{doc.description}</p>
+ <p className="text-sm text-soft mb-2">{doc.description}</p>
  <label className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer block hover:border-blue-500 hover:bg-blue-50 transition ${state.status === 'uploading' ? 'pointer-events-none opacity-60' : ''}`}>
  <input
  type="file"
@@ -184,15 +184,15 @@ const DocumentsTab: React.FC<DocumentsTabProps> = ({ documents }) => {
  </>
  ) : (
  <>
- <FaUpload className="mx-auto text-gray-400 text-2xl mb-2" />
+ <FaUpload className="mx-auto text-faint text-2xl mb-2" />
  {state.file ? (
  <p className="text-sm text-green-600 font-semibold">{state.file.name}</p>
  ) : (
- <p className="text-sm text-gray-600">Drag & drop, or click to browse</p>
+ <p className="text-sm text-soft">Drag & drop, or click to browse</p>
  )}
  </>
  )}
- <p className="text-xs text-gray-500 mt-1">Accepted: {doc.acceptedFormats}</p>
+ <p className="text-xs text-soft mt-1">Accepted: {doc.acceptedFormats}</p>
  </label>
  {state.message && (
  <div className={`mt-2 text-xs flex items-center gap-1 ${state.status === 'verified' ? 'text-green-600' : 'text-red-600'}`}>
@@ -223,7 +223,7 @@ const DocumentsTab: React.FC<DocumentsTabProps> = ({ documents }) => {
  }`}>
  {state.analysisReport}
  </p>
- <p className="text-[9px] text-gray-400 mt-1.5 italic">
+ <p className="text-[9px] text-faint mt-1.5 italic">
  This analysis was performed automatically by AI. No human has reviewed this document yet.
  </p>
  </div>
@@ -246,16 +246,16 @@ const DocumentsTab: React.FC<DocumentsTabProps> = ({ documents }) => {
  )
  })}
  </div>
- <div className="mt-6 p-4 bg-gray-50 rounded-lg">
- <h3 className="font-semibold text-gray-800 mb-2">Upload Progress</h3>
+ <div className="mt-6 p-4 bg-subtle rounded-lg">
+ <h3 className="font-semibold text-fg mb-2">Upload Progress</h3>
  <div className="space-y-1">
- <p className="text-sm text-gray-600">
+ <p className="text-sm text-soft">
  Required: {requiredWithFile} / {requiredCount} uploaded
  {requiredUploaded > 0 && (
  <span className="text-green-600 ml-1">({requiredUploaded} verified)</span>
  )}
  </p>
- <p className="text-sm text-gray-600">
+ <p className="text-sm text-soft">
  Optional: {optionalWithFile} / {optionalCount} uploaded
  {optionalUploaded > 0 && (
  <span className="text-green-600 ml-1">({optionalUploaded} verified)</span>

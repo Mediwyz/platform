@@ -20,7 +20,7 @@ export default function BillingDashboard({ userId }: BillingDashboardProps) {
  />
 
  {/* Subscription Plan - current plan + change */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-4 sm:p-6">
  <SubscriptionTab userId={userId} />
  </div>
 
@@ -28,8 +28,8 @@ export default function BillingDashboard({ userId }: BillingDashboardProps) {
  <WalletBalanceCard userId={userId} />
 
  {/* Payment Methods */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
- <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Methods</h2>
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
+ <h2 className="text-lg font-semibold text-fg mb-4">Payment Methods</h2>
  <PaymentMethodForm />
  </div>
  </div>

@@ -84,7 +84,7 @@ export default function ActivityHeatmap() {
  return (
  <div className="mb-8 flex items-center justify-center py-12">
  <FaSpinner className="animate-spin text-2xl text-blue-600 mr-2" />
- <span className="text-gray-500">Loading regional activity...</span>
+ <span className="text-soft">Loading regional activity...</span>
  </div>
  )
  }
@@ -93,7 +93,7 @@ export default function ActivityHeatmap() {
  return (
  <div className="mb-8">
  <h2 className="text-2xl font-bold mb-4">Cross-Region Activity Heatmap</h2>
- <div className="bg-white rounded-xl p-8 shadow-lg text-center text-gray-500">
+ <div className="bg-surface rounded-xl p-8 shadow-lg text-center text-soft">
  No regional activity data available yet.
  </div>
  </div>
@@ -104,13 +104,13 @@ export default function ActivityHeatmap() {
  <div className="mb-8">
  <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
  <h2 className="text-2xl font-bold">Cross-Region Activity Heatmap</h2>
- <div className="flex items-center gap-2 p-1 bg-gray-100 rounded-lg">
+ <div className="flex items-center gap-2 p-1 bg-subtle rounded-lg">
  {metrics.map(({ key, label, icon: Icon }) => (
  <button
  key={key}
  onClick={() => setSelectedMetric(key)}
  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
- selectedMetric === key ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:bg-gray-200'
+ selectedMetric === key ? 'bg-surface shadow text-blue-600' : 'text-soft hover:bg-line'
  }`}
  >
  <Icon />
@@ -120,7 +120,7 @@ export default function ActivityHeatmap() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
  {regionActivities.map((region) => {
  const maxValue = getMaxValue()
@@ -128,31 +128,31 @@ export default function ActivityHeatmap() {
  const colorClass = getHeatmapColor(value, maxValue)
 
  return (
- <div key={region.code} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow">
+ <div key={region.code} className="border border-line rounded-xl p-4 hover:shadow-md transition-shadow">
  <div className="flex items-center justify-between mb-3">
  <div className="flex items-center gap-2">
  <span className="text-2xl">{region.flag}</span>
- <h3 className="font-semibold text-gray-900">{region.region}</h3>
+ <h3 className="font-semibold text-fg">{region.region}</h3>
  </div>
  <div className={`w-4 h-4 rounded-full ${colorClass}`} title={`Activity: ${Math.round((value / maxValue) * 100)}%`} />
  </div>
 
  <div className="space-y-2">
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Active Users</span>
+ <span className="text-soft">Active Users</span>
  <span className="font-medium">{(region.activeUsers ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Transactions</span>
+ <span className="text-soft">Transactions</span>
  <span className="font-medium">{(region.transactions ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Revenue</span>
+ <span className="text-soft">Revenue</span>
  <span className="font-medium">Rs {(region.revenue ?? 0).toLocaleString()}</span>
  </div>
  {region.growth !== 0 && (
  <div className="flex justify-between text-sm">
- <span className="text-gray-500">Growth</span>
+ <span className="text-soft">Growth</span>
  <span className={`font-medium ${region.growth > 0 ? 'text-green-600' : 'text-red-500'}`}>
  {region.growth > 0 ? '+' : ''}{region.growth}%
  </span>
@@ -160,10 +160,10 @@ export default function ActivityHeatmap() {
  )}
 
  <div className="pt-2 border-t mt-2">
- {region.peakTime && <p className="text-xs text-gray-500 mb-1">Peak Time: {region.peakTime}</p>}
+ {region.peakTime && <p className="text-xs text-soft mb-1">Peak Time: {region.peakTime}</p>}
  <div className="flex flex-wrap gap-1">
  {(region.popularServices ?? []).map((service, sIdx) => (
- <span key={sIdx} className="text-xs bg-gray-100 px-2 py-1 rounded">
+ <span key={sIdx} className="text-xs bg-subtle px-2 py-1 rounded">
  {service}
  </span>
  ))}

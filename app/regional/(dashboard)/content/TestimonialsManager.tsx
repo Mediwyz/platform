@@ -123,7 +123,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  >
  <FaStar
  className={`${
- star <= rating ? 'text-yellow-500' : 'text-gray-300'
+ star <= rating ? 'text-yellow-500' : 'text-faint'
  } ${interactive ? 'text-lg hover:text-yellow-400' : 'text-sm'}`}
  />
  </button>
@@ -135,7 +135,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  return (
  <div className="space-y-6">
  <div className="flex items-center justify-between">
- <h2 className="text-xl font-bold text-gray-900">Testimonials</h2>
+ <h2 className="text-xl font-bold text-fg">Testimonials</h2>
  <button
  onClick={openAddForm}
  className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition"
@@ -146,57 +146,57 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
 
  {/* Add/Edit Form */}
  {showForm && (
- <div className="bg-white rounded-xl shadow p-6 border-2 border-blue-200">
+ <div className="bg-surface rounded-xl shadow p-6 border-2 border-blue-200">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-semibold text-gray-900">
+ <h3 className="text-lg font-semibold text-fg">
  {editingId ? 'Edit Testimonial' : 'Add New Testimonial'}
  </h3>
- <button onClick={closeForm} className="p-2 text-gray-400 hover:text-gray-600">
+ <button onClick={closeForm} className="p-2 text-faint hover:text-soft">
  <FaTimes />
  </button>
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Name</label>
  <input
  type="text"
  value={formData.name}
  onChange={(e) => handleFormChange('name', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Full name"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+ <label className="block text-sm font-medium text-soft mb-1">Role</label>
  <input
  type="text"
  value={formData.role}
  onChange={(e) => handleFormChange('role', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., Patient, Family Member"
  />
  </div>
  <div className="md:col-span-2">
- <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+ <label className="block text-sm font-medium text-soft mb-1">Content</label>
  <textarea
  value={formData.content}
  onChange={(e) => handleFormChange('content', e.target.value)}
  rows={3}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Testimonial content..."
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+ <label className="block text-sm font-medium text-soft mb-1">Rating</label>
  <div className="mt-1">{renderStars(formData.rating, true)}</div>
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+ <label className="block text-sm font-medium text-soft mb-1">Image URL</label>
  <input
  type="text"
  value={formData.imageUrl}
  onChange={(e) => handleFormChange('imageUrl', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="https://example.com/avatar.jpg"
  />
  </div>
@@ -204,7 +204,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  <div className="flex justify-end gap-3 mt-4">
  <button
  onClick={closeForm}
- className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium text-sm transition"
+ className="px-4 py-2 border border-line rounded-lg text-soft hover:bg-subtle font-medium text-sm transition"
  >
  Cancel
  </button>
@@ -222,8 +222,8 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
 
  {/* Testimonials Grid */}
  {testimonials.length === 0 && !showForm && (
- <div className="bg-white rounded-xl shadow p-10 text-center text-gray-500">
- <FaQuoteLeft className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="bg-surface rounded-xl shadow p-10 text-center text-soft">
+ <FaQuoteLeft className="text-4xl mx-auto mb-3 text-faint" />
  <p className="text-lg font-medium">No testimonials yet</p>
  <p className="text-sm mt-1">Click &quot;Add Testimonial&quot; to create your first one</p>
  </div>
@@ -231,10 +231,10 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
 
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {testimonials.map((t) => (
- <div key={t.id} className="bg-white rounded-xl p-6 shadow">
+ <div key={t.id} className="bg-surface rounded-xl p-6 shadow">
  <div className="flex items-start gap-4">
  {/* Avatar */}
- <div className="w-14 h-14 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+ <div className="w-14 h-14 rounded-full bg-subtle flex-shrink-0 overflow-hidden flex items-center justify-center">
  {t.imageUrl ? (
  <Image
  src={t.imageUrl}
@@ -247,7 +247,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  }}
  />
  ) : (
- <span className="text-xl font-bold text-gray-400">
+ <span className="text-xl font-bold text-faint">
  {(t.name || '?').charAt(0).toUpperCase()}
  </span>
  )}
@@ -257,12 +257,12 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  <div className="flex-1 min-w-0">
  <div className="flex items-start justify-between gap-2">
  <div>
- <h3 className="font-semibold text-gray-900">{t.name}</h3>
- <p className="text-sm text-gray-600">{t.role}</p>
+ <h3 className="font-semibold text-fg">{t.name}</h3>
+ <p className="text-sm text-soft">{t.role}</p>
  </div>
  <div className="flex items-center gap-1">
  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
- t.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+ t.isActive ? 'bg-green-100 text-green-700' : 'bg-subtle text-soft'
  }`}>
  {t.isActive ? 'Active' : 'Inactive'}
  </span>
@@ -273,7 +273,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  <div className="mt-2">{renderStars(t.rating)}</div>
 
  {/* Quote */}
- <p className="text-gray-700 mt-3 text-sm italic line-clamp-3">
+ <p className="text-soft mt-3 text-sm italic line-clamp-3">
  &quot;{t.content}&quot;
  </p>
 
@@ -286,7 +286,7 @@ export default function TestimonialsManager({ testimonials, onRefresh }: Testimo
  {t.isActive ? (
  <FaToggleOn className="text-2xl text-green-500 hover:text-green-600" />
  ) : (
- <FaToggleOff className="text-2xl text-gray-400 hover:text-gray-500" />
+ <FaToggleOff className="text-2xl text-faint hover:text-soft" />
  )}
  </button>
  <button

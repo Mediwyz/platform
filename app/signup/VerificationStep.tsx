@@ -25,30 +25,30 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <FaCheck className="text-green-600 text-3xl" />
  </div>
- <h2 className="text-3xl font-bold text-gray-900 mb-2">Review & Submit</h2>
- <p className="text-gray-600">Please review your information before submitting your registration</p>
+ <h2 className="text-3xl font-bold text-fg mb-2">Review & Submit</h2>
+ <p className="text-soft">Please review your information before submitting your registration</p>
  </div>
 
  {/* Summary */}
  <div className="space-y-6">
  {/* Account Type */}
- <div className="bg-gray-50 rounded-xl p-6">
- <h3 className="font-bold text-lg text-gray-900 mb-4">Account Information</h3>
+ <div className="bg-subtle rounded-xl p-6">
+ <h3 className="font-bold text-lg text-fg mb-4">Account Information</h3>
  <div className="grid md:grid-cols-2 gap-4">
  <div>
- <span className="text-gray-600">Account Type:</span>
+ <span className="text-soft">Account Type:</span>
  <p className="font-semibold">{selectedType?.label}</p>
  </div>
  <div>
- <span className="text-gray-600">Full Name:</span>
+ <span className="text-soft">Full Name:</span>
  <p className="font-semibold">{formData.fullName}</p>
  </div>
  <div>
- <span className="text-gray-600">Email:</span>
+ <span className="text-soft">Email:</span>
  <p className="font-semibold">{formData.email}</p>
  </div>
  <div>
- <span className="text-gray-600">Phone:</span>
+ <span className="text-soft">Phone:</span>
  <p className="font-semibold">{formData.phone}</p>
  </div>
  </div>
@@ -57,29 +57,29 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  {/* Professional Info (if applicable) */}
  {formData.userType !== 'patient' && (formData.licenseNumber || formData.specialization) && (
  <div className="bg-blue-50 rounded-xl p-6">
- <h3 className="font-bold text-lg text-gray-900 mb-4">Professional Information</h3>
+ <h3 className="font-bold text-lg text-fg mb-4">Professional Information</h3>
  <div className="grid md:grid-cols-2 gap-4">
  {formData.licenseNumber && (
  <div>
- <span className="text-gray-600">License Number:</span>
+ <span className="text-soft">License Number:</span>
  <p className="font-semibold">{formData.licenseNumber}</p>
  </div>
  )}
  {formData.specialization && (
  <div>
- <span className="text-gray-600">Specialization:</span>
+ <span className="text-soft">Specialization:</span>
  <p className="font-semibold">{formData.specialization}</p>
  </div>
  )}
  {formData.institution && (
  <div>
- <span className="text-gray-600">Institution:</span>
+ <span className="text-soft">Institution:</span>
  <p className="font-semibold">{formData.institution}</p>
  </div>
  )}
  {formData.experience && (
  <div>
- <span className="text-gray-600">Experience:</span>
+ <span className="text-soft">Experience:</span>
  <p className="font-semibold">{formData.experience} years</p>
  </div>
  )}
@@ -89,7 +89,7 @@ export default function VerificationStep({ formData, selectedType, documents, ve
 
  {/* Documents Summary with Verification */}
  <div className="bg-green-50 rounded-xl p-6">
- <h3 className="font-bold text-lg text-gray-900 mb-4">Document Verification</h3>
+ <h3 className="font-bold text-lg text-fg mb-4">Document Verification</h3>
  {/* Overall status */}
  {verifyingCount > 0 && (
  <div className="flex items-center gap-2 text-blue-700 bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-sm">
@@ -123,7 +123,7 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  const vr = verificationResults[doc.id]
  return (
  <div key={doc.id} className="flex items-center justify-between">
- <span className="text-gray-700">{doc.name}</span>
+ <span className="text-soft">{doc.name}</span>
  <span className={`font-medium flex items-center gap-1 text-sm ${
  !vr ? 'text-green-600' :
  vr.status === 'verified' ? 'text-emerald-600' :
@@ -143,7 +143,7 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  {/* Show skipped/deferred documents */}
  {documents.filter(doc => doc.skipped).map((doc) => (
  <div key={doc.id} className="flex items-center justify-between">
- <span className="text-gray-400">{doc.name}</span>
+ <span className="text-faint">{doc.name}</span>
  <span className="font-medium flex items-center gap-1 text-sm text-amber-500">
  <FaClock className="text-sm" /> Provide later
  </span>
@@ -151,7 +151,7 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  ))}
  </div>
  {/* Counts */}
- <div className="mt-4 pt-4 border-t border-green-200 flex gap-4 text-xs text-gray-600">
+ <div className="mt-4 pt-4 border-t border-green-200 flex gap-4 text-xs text-soft">
  <span>Verified: {verifiedCount}</span>
  <span>Manual review: {failedCount + errorCount}</span>
  <span>Total uploaded: {documents.filter(d => d.uploaded).length}</span>
@@ -163,8 +163,8 @@ export default function VerificationStep({ formData, selectedType, documents, ve
 
  {/* Terms and Conditions */}
  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
- <h3 className="font-bold text-lg text-gray-900 mb-4">Terms and Conditions</h3>
- <div className="space-y-4 text-sm text-gray-700">
+ <h3 className="font-bold text-lg text-fg mb-4">Terms and Conditions</h3>
+ <div className="space-y-4 text-sm text-soft">
  <div className="flex items-start gap-3">
  <input type="checkbox" id="agreeToTerms" name="agreeToTerms" className="mt-1" checked={formData.agreeToTerms} onChange={onFormChange} required />
  <label htmlFor="agreeToTerms" className="flex-1">
@@ -197,31 +197,31 @@ export default function VerificationStep({ formData, selectedType, documents, ve
  <h4 className="font-bold text-blue-800 mb-2">What happens next?</h4>
  {documents.filter(d => d.skipped).length > 0 ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li>• Your account will be created with pending status</li>
- <li>• You can upload deferred documents from your account settings</li>
- <li>• Your account will be fully activated once all required documents are provided and verified</li>
- <li>• You will receive a confirmation email with instructions</li>
+ <li> Your account will be created with pending status</li>
+ <li> You can upload deferred documents from your account settings</li>
+ <li> Your account will be fully activated once all required documents are provided and verified</li>
+ <li> You will receive a confirmation email with instructions</li>
  </ul>
  ) : allVerified && !requiresManualApproval ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li>• All your documents have been verified automatically</li>
- <li>• Your account will be activated immediately upon submission</li>
- <li>• You will receive a confirmation email shortly</li>
- <li>• You can start using MediWyz right away</li>
+ <li> All your documents have been verified automatically</li>
+ <li> Your account will be activated immediately upon submission</li>
+ <li> You will receive a confirmation email shortly</li>
+ <li> You can start using MediWyz right away</li>
  </ul>
  ) : requiresManualApproval ? (
  <ul className="text-blue-700 text-sm space-y-1">
- <li>• Your account type requires administrator approval</li>
- <li>• Your documents and application will be reviewed within 2-5 business days</li>
- <li>• You will receive an email once your account is approved</li>
- <li>• We may contact you for additional information if needed</li>
+ <li> Your account type requires administrator approval</li>
+ <li> Your documents and application will be reviewed within 2-5 business days</li>
+ <li> You will receive an email once your account is approved</li>
+ <li> We may contact you for additional information if needed</li>
  </ul>
  ) : (
  <ul className="text-blue-700 text-sm space-y-1">
- <li>• Some documents require manual verification by our team</li>
- <li>• Verification typically takes 2-5 business days</li>
- <li>• You will receive an email once your account is approved</li>
- <li>• Professional credentials will be verified with relevant authorities</li>
+ <li> Some documents require manual verification by our team</li>
+ <li> Verification typically takes 2-5 business days</li>
+ <li> You will receive an email once your account is approved</li>
+ <li> Professional credentials will be verified with relevant authorities</li>
  </ul>
  )}
  </div>

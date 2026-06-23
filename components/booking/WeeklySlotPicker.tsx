@@ -129,7 +129,7 @@ export default function WeeklySlotPicker({
  useEffect(() => { fetchAllSlots() }, [fetchAllSlots])
 
  if (loading) return (
-  <div className="flex items-center gap-2 py-6 text-gray-500 justify-center">
+  <div className="flex items-center gap-2 py-6 text-soft justify-center">
    <FaSpinner className="animate-spin" />
    <span className="text-sm">Loading available time slots...</span>
   </div>
@@ -161,26 +161,26 @@ export default function WeeklySlotPicker({
  return (
   <div className="space-y-3">
    {durLabel && (
-    <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
-     <FaClock className="text-gray-400" />
-     Each slot reserves <strong className="text-gray-700">{durLabel}</strong> - only start times with the full block free are shown
+    <div className="flex items-center gap-1.5 text-xs text-soft bg-subtle rounded-lg px-3 py-2 border border-line">
+     <FaClock className="text-faint" />
+     Each slot reserves <strong className="text-soft">{durLabel}</strong> - only start times with the full block free are shown
     </div>
    )}
    {multiSelect && selectedSlots.length > 0 && (
-    <div className="text-xs font-medium text-gray-600 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
+    <div className="text-xs font-medium text-soft bg-subtle rounded-lg px-3 py-2 border border-line">
      {selectedSlots.length} time slot{selectedSlots.length !== 1 ? 's' : ''} selected
     </div>
    )}
    {daySlots.map((day) => (
-    <div key={day.date} className="border border-gray-200 rounded-lg overflow-hidden">
-     <div className={`px-3 py-2 bg-gray-50 border-b border-gray-200 flex items-center gap-2 ${dayHasSelection(day.date) ? colors.tab : ''}`}>
-      <FaClock className="text-xs text-gray-400" />
-      <span className="text-sm font-medium text-gray-700">{day.dateLabel}</span>
-      <span className="text-xs text-gray-400">({day.slots.length} slot{day.slots.length !== 1 ? 's' : ''} available)</span>
+    <div key={day.date} className="border border-line rounded-lg overflow-hidden">
+     <div className={`px-3 py-2 bg-subtle border-b border-line flex items-center gap-2 ${dayHasSelection(day.date) ? colors.tab : ''}`}>
+      <FaClock className="text-xs text-faint" />
+      <span className="text-sm font-medium text-soft">{day.dateLabel}</span>
+      <span className="text-xs text-faint">({day.slots.length} slot{day.slots.length !== 1 ? 's' : ''} available)</span>
      </div>
      <div className="p-2 flex flex-wrap gap-1.5">
       {day.slots.length === 0 ? (
-       <span className="text-xs text-gray-400 italic px-2 py-1">No free slots on this day</span>
+       <span className="text-xs text-faint italic px-2 py-1">No free slots on this day</span>
       ) : (
        day.slots.map(slot => {
         const selected = isSlotSelected(day.date, slot)
@@ -189,7 +189,7 @@ export default function WeeklySlotPicker({
           key={`${day.date}-${slot}`}
           type="button"
           onClick={() => handleSlotClick(day.date, slot)}
-          className={`px-2.5 py-1.5 border-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${selected ? `${colors.selected} shadow-md` : `border-gray-200 text-gray-700 ${colors.hover}`}`}
+          className={`px-2.5 py-1.5 border-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${selected ? `${colors.selected} shadow-md` : `border-line text-soft ${colors.hover}`}`}
          >
           <span>{formatTime(slot)}</span>
           {durLabel && selected && <span className={`ml-1 text-[10px] opacity-80`}>+{durLabel}</span>}

@@ -104,10 +104,10 @@ export default function GlobalMetrics({ timeRange, region }: { timeRange: string
  return (
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
  {[1, 2, 3, 4].map(i => (
- <div key={i} className="bg-white rounded-xl p-6 shadow-lg animate-pulse">
- <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
- <div className="h-8 bg-gray-200 rounded w-3/4 mb-2"></div>
- <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+ <div key={i} className="bg-surface rounded-xl p-6 shadow-lg animate-pulse">
+ <div className="h-4 bg-line rounded w-1/2 mb-4"></div>
+ <div className="h-8 bg-line rounded w-3/4 mb-2"></div>
+ <div className="h-3 bg-line rounded w-1/3"></div>
  </div>
  ))}
  </div>
@@ -119,7 +119,7 @@ export default function GlobalMetrics({ timeRange, region }: { timeRange: string
  <h2 className="text-2xl font-bold mb-6">Global Platform Metrics</h2>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
  {metrics.map((metric, idx) => (
- <div key={idx} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow group">
+ <div key={idx} className="bg-surface rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow group">
  <div className="flex items-start justify-between mb-4">
  <div className={`p-3 rounded-lg ${metric.color} bg-opacity-10 group-hover:scale-110 transition-transform`}>
  <metric.icon className={`text-2xl ${metric.color.replace('bg-', 'text-')}`} />
@@ -132,22 +132,22 @@ export default function GlobalMetrics({ timeRange, region }: { timeRange: string
  ) : null}
  <span className={`text-sm font-medium ${
  metric.trend === 'up' ? 'text-green-500' : 
- metric.trend === 'down' ? 'text-red-500' : 'text-gray-500'
+ metric.trend === 'down' ? 'text-red-500' : 'text-soft'
  }`}>
  {metric.change > 0 ? '+' : ''}{metric.change}%
  </span>
  </div>
  </div>
  
- <h3 className="text-gray-600 text-sm mb-1">{metric.title}</h3>
- <p className="text-3xl font-bold text-gray-900 mb-4">{metric.value}</p>
+ <h3 className="text-soft text-sm mb-1">{metric.title}</h3>
+ <p className="text-3xl font-bold text-fg mb-4">{metric.value}</p>
  
  {metric.subMetrics && (
  <div className="pt-4 border-t space-y-2">
  {metric.subMetrics.map((sub, subIdx) => (
  <div key={subIdx} className="flex justify-between text-sm">
- <span className="text-gray-500">{sub.label}</span>
- <span className="font-medium text-gray-700">{sub.value}</span>
+ <span className="text-soft">{sub.label}</span>
+ <span className="font-medium text-soft">{sub.value}</span>
  </div>
  ))}
  </div>

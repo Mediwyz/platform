@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fa'
 import { FiArrowRight } from 'react-icons/fi'
 
-// ─── Types ──────────────────────────────────────────────────────────────────────
+//  Types 
 
 export interface BookingSubmitData {
  scheduledDate: string
@@ -77,7 +77,7 @@ interface BookingFormProps {
  walletBalance?: number
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────────
+//  Helpers 
 
 const MODE_LABELS: Record<string, string> = { office: 'In-Person', home: 'Home Visit', video: 'Video' }
 const MODE_COLORS: Record<string, string> = {
@@ -188,7 +188,7 @@ function getStepLabels(providerType: BookingFormProps['providerType']): string[]
  }
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────────
+//  Component 
 
 export default function BookingForm({
  providerType,
@@ -249,7 +249,7 @@ export default function BookingForm({
 
  const isReasonRequired = providerType === 'doctor' || providerType === 'nurse'
 
- // ── Validation ──────────────────────────────────────────────────────────────
+ //  Validation 
 
  const canAdvanceStep1 = useMemo(() => {
  switch (providerType) {
@@ -313,7 +313,7 @@ export default function BookingForm({
  return null
  }, [step, canAdvanceStep1, canAdvanceStep2, providerType, testName, sampleType, emergencyType, location, contactNumber, scheduledDate, scheduledTime, reason, isReasonRequired])
 
- // ── Build submit data ───────────────────────────────────────────────────────
+ //  Build submit data 
 
  function buildSubmitData(): BookingSubmitData {
  const data: BookingSubmitData = {
@@ -349,7 +349,7 @@ export default function BookingForm({
  }
  }
 
- // ── Navigation ──────────────────────────────────────────────────────────────
+ //  Navigation 
 
  function goNext() {
  if (step < totalSteps) setStep(step + 1)
@@ -359,18 +359,18 @@ export default function BookingForm({
  if (step > 1) setStep(step - 1)
  }
 
- // ── JSX ─────────────────────────────────────────────────────────────────────
+ //  JSX 
 
  // Auth gate - show sign-in prompt if not authenticated
  if (!authLoading && !user) {
   return (
-   <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-md mx-auto text-center space-y-5">
+   <div className="bg-surface rounded-2xl p-8 shadow-lg border border-line max-w-md mx-auto text-center space-y-5">
     <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto">
      <FaLock className="text-blue-600 text-xl" />
     </div>
     <div>
-     <h2 className="text-xl font-bold text-gray-900 mb-2">Sign in to book</h2>
-     <p className="text-gray-500 text-sm">
+     <h2 className="text-xl font-bold text-fg mb-2">Sign in to book</h2>
+     <p className="text-soft text-sm">
       You need to be signed in to book an appointment with {providerName || 'this provider'}.
      </p>
     </div>
@@ -380,7 +380,7 @@ export default function BookingForm({
     >
      Sign in to continue <FiArrowRight />
     </Link>
-    <p className="text-xs text-gray-400">
+    <p className="text-xs text-faint">
      Don&apos;t have an account?{' '}
      <Link href="/signup" className="text-blue-600 hover:underline">Sign up free</Link>
     </p>
@@ -390,9 +390,9 @@ export default function BookingForm({
 
  return (
  <div className="space-y-6">
- {/* ── Provider Info Card ─────────────────────────────────────────────── */}
+ {/*  Provider Info Card  */}
  {providerName && (
- <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg border border-line">
  <div className="flex items-center gap-4">
  {/* Avatar / initials */}
  {providerImage ? (
@@ -410,21 +410,21 @@ export default function BookingForm({
  )}
 
  <div className="flex-1 min-w-0">
- <h3 className="text-lg font-bold text-gray-900 truncate">{providerName}</h3>
+ <h3 className="text-lg font-bold text-fg truncate">{providerName}</h3>
  {providerSpecialty && (
  <p className="text-sm text-blue-600 font-medium">{providerSpecialty}</p>
  )}
  {providerLocation && (
- <p className="text-sm text-gray-500 truncate">{providerLocation}</p>
+ <p className="text-sm text-soft truncate">{providerLocation}</p>
  )}
  </div>
 
  {displayPrice !== undefined && displayPrice > 0 && (
  <div className="text-right flex-shrink-0">
- <p className="text-xs text-gray-500 uppercase tracking-wide">Fee</p>
+ <p className="text-xs text-soft uppercase tracking-wide">Fee</p>
  <p className="text-lg font-bold text-green-600">Rs {displayPrice.toLocaleString()}</p>
  {selectedService && (
- <p className="text-xs text-gray-400">{selectedService.serviceName}</p>
+ <p className="text-xs text-faint">{selectedService.serviceName}</p>
  )}
  </div>
  )}
@@ -432,8 +432,8 @@ export default function BookingForm({
  </div>
  )}
 
- {/* ── Step Indicator ────────────────────────────────────────────────── */}
- <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+ {/*  Step Indicator  */}
+ <div className="bg-surface rounded-2xl p-5 shadow-lg border border-line">
  <div className="flex items-center justify-between max-w-lg mx-auto">
  {stepLabels.map((label, index) => {
  const stepNum = index + 1
@@ -448,14 +448,14 @@ export default function BookingForm({
  ? 'bg-green-500 text-white'
  : isCurrent
  ? 'bg-blue-600 text-white'
- : 'bg-gray-200 text-gray-500'
+ : 'bg-line text-soft'
  }`}
  >
  {isCompleted ? <FaCheck className="text-sm" /> : stepNum}
  </div>
  <span
  className={`text-xs mt-1.5 text-center whitespace-nowrap ${
- isCurrent ? 'text-blue-600 font-semibold' : isCompleted ? 'text-green-600 font-medium' : 'text-gray-400'
+ isCurrent ? 'text-blue-600 font-semibold' : isCompleted ? 'text-green-600 font-medium' : 'text-faint'
  }`}
  >
  {label}
@@ -464,7 +464,7 @@ export default function BookingForm({
  {index < stepLabels.length - 1 && (
  <div
  className={`w-12 sm:w-20 h-0.5 mx-2 transition-colors ${
- isCompleted ? 'bg-green-500' : 'bg-gray-200'
+ isCompleted ? 'bg-green-500' : 'bg-line'
  }`}
  />
  )}
@@ -474,10 +474,10 @@ export default function BookingForm({
  </div>
  </div>
 
- {/* ── Step 1 ────────────────────────────────────────────────────────── */}
+ {/*  Step 1  */}
  {step === 1 && (
- <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
- <h2 className="text-xl font-bold text-gray-900 mb-6">
+ <div className="bg-surface rounded-2xl p-6 sm:p-8 shadow-lg border border-line">
+ <h2 className="text-xl font-bold text-fg mb-6">
  {providerType === 'lab-test'
  ? 'Test Details'
  : providerType === 'emergency'
@@ -504,7 +504,7 @@ export default function BookingForm({
        className={`rounded-xl border-2 transition-all ${
         isSelected
          ? 'border-[#0C6780] bg-sky-50 ring-2 ring-[#0C6780]/20'
-         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+         : 'border-line hover:border-line hover:bg-subtle'
        }`}
       >
        {/* Service header row - clickable to select */}
@@ -520,24 +520,24 @@ export default function BookingForm({
         <div className="flex justify-between items-start gap-2">
          <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5 mb-1">
-           <p className={`font-semibold text-sm ${isSelected ? 'text-[#0C6780]' : 'text-gray-900'}`}>
+           <p className={`font-semibold text-sm ${isSelected ? 'text-[#0C6780]' : 'text-fg'}`}>
             {svc.serviceName}
            </p>
            {/* Mode badges - one per workflow */}
            {svc.workflows.map(wf => (
-            <span key={wf.id} className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[wf.serviceMode] || 'bg-gray-100 text-gray-600'}`}>
+            <span key={wf.id} className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[wf.serviceMode] || 'bg-subtle text-soft'}`}>
              {MODE_LABELS[wf.serviceMode] || wf.serviceMode}
             </span>
            ))}
           </div>
-          <p className="text-xs text-gray-500">{svc.category}</p>
-          {svc.description && <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">{svc.description}</p>}
+          <p className="text-xs text-soft">{svc.category}</p>
+          {svc.description && <p className="text-xs text-faint mt-0.5 line-clamp-2">{svc.description}</p>}
          </div>
          <div className="flex-shrink-0 text-right">
-          <p className={`font-bold text-sm ${isSelected ? 'text-green-600' : 'text-gray-700'}`}>
+          <p className={`font-bold text-sm ${isSelected ? 'text-green-600' : 'text-soft'}`}>
            Rs {(svc.price ?? 0).toLocaleString()}
           </p>
-          {svc.duration && <p className="text-xs text-gray-400">{svc.duration} min</p>}
+          {svc.duration && <p className="text-xs text-faint">{svc.duration} min</p>}
          </div>
         </div>
        </button>
@@ -549,7 +549,7 @@ export default function BookingForm({
          {/* Workflow step timeline - show for the active / first workflow */}
          {primaryWorkflow && primaryWorkflow.steps.length > 0 && (
           <div>
-           <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-2">
+           <p className="text-[11px] font-semibold text-soft uppercase tracking-wide mb-2">
             How this works
            </p>
            <div className="flex flex-wrap items-center gap-1">
@@ -557,7 +557,7 @@ export default function BookingForm({
              .sort((a, b) => a.order - b.order)
              .map((s, i, arr) => (
               <div key={s.statusCode} className="flex items-center">
-               <span className="px-2 py-1 bg-white border border-gray-200 rounded-lg text-[10px] text-gray-600 whitespace-nowrap shadow-sm">
+               <span className="px-2 py-1 bg-surface border border-line rounded-lg text-[10px] text-soft whitespace-nowrap shadow-sm">
                 {s.label}
                </span>
                {i < arr.length - 1 && (
@@ -572,7 +572,7 @@ export default function BookingForm({
          {/* Multiple-workflow delivery-mode picker */}
          {svc.workflows.length > 1 && (
           <div>
-           <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-2">
+           <p className="text-[11px] font-semibold text-soft uppercase tracking-wide mb-2">
             Choose delivery mode <span className="text-red-400">*</span>
            </p>
            <div className="flex flex-wrap gap-2">
@@ -585,22 +585,22 @@ export default function BookingForm({
                onClick={() => setSelectedWorkflowId(wf.id)}
                className={`flex items-start gap-2 px-3 py-2 rounded-lg border-2 text-left transition-all ${
                 isWfSelected
-                 ? 'border-[#0C6780] bg-white shadow-sm'
-                 : 'border-gray-200 hover:border-gray-300'
+                 ? 'border-[#0C6780] bg-surface shadow-sm'
+                 : 'border-line hover:border-line'
                }`}
               >
                <div>
                 <div className="flex items-center gap-1.5">
-                 <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[wf.serviceMode] || 'bg-gray-100 text-gray-600'}`}>
+                 <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[wf.serviceMode] || 'bg-subtle text-soft'}`}>
                   {MODE_LABELS[wf.serviceMode] || wf.serviceMode}
                  </span>
                  {isWfSelected && <FaCheck className="w-2.5 h-2.5 text-[#0C6780]" />}
                 </div>
-                <p className="text-xs text-gray-700 font-medium mt-0.5">{wf.name}</p>
+                <p className="text-xs text-soft font-medium mt-0.5">{wf.name}</p>
                 {/* Mini step list for this specific workflow */}
                 {wf.steps.length > 0 && (
-                 <p className="text-[9px] text-gray-400 mt-0.5 max-w-[160px]">
-                  {[...wf.steps].sort((a,b)=>a.order-b.order).map(s=>s.label).join(' → ')}
+                 <p className="text-[9px] text-faint mt-0.5 max-w-[160px]">
+                  {[...wf.steps].sort((a,b)=>a.order-b.order).map(s=>s.label).join('  ')}
                  </p>
                 )}
                </div>
@@ -624,7 +624,7 @@ export default function BookingForm({
  {providerType === 'lab-test' && (
  <div className="space-y-5">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Test Name <span className="text-red-500">*</span>
  </label>
  <input
@@ -632,11 +632,11 @@ export default function BookingForm({
  value={testName}
  onChange={(e) => setTestName(e.target.value)}
  placeholder="e.g. Complete Blood Count, Lipid Panel"
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Sample Type <span className="text-red-500">*</span>
  </label>
  <input
@@ -644,7 +644,7 @@ export default function BookingForm({
  value={sampleType}
  onChange={(e) => setSampleType(e.target.value)}
  placeholder="e.g. Blood, Urine, Saliva"
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
  </div>
@@ -654,13 +654,13 @@ export default function BookingForm({
  {providerType === 'emergency' && (
  <div className="space-y-5">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Emergency Type <span className="text-red-500">*</span>
  </label>
  <select
  value={emergencyType}
  onChange={(e) => setEmergencyType(e.target.value)}
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors bg-white"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors bg-surface"
  >
  <option value="">Select emergency type</option>
  {EMERGENCY_TYPES.map((type) => (
@@ -672,7 +672,7 @@ export default function BookingForm({
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Location <span className="text-red-500">*</span>
  </label>
  <input
@@ -680,12 +680,12 @@ export default function BookingForm({
  value={location}
  onChange={(e) => setLocation(e.target.value)}
  placeholder="Full address or landmark"
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Contact Number <span className="text-red-500">*</span>
  </label>
  <input
@@ -693,12 +693,12 @@ export default function BookingForm({
  value={contactNumber}
  onChange={(e) => setContactNumber(e.target.value)}
  placeholder="+230 5XXX XXXX"
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-3">Priority</label>
+ <label className="block text-sm font-medium text-soft mb-3">Priority</label>
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
  {PRIORITY_OPTIONS.map((opt) => (
  <button
@@ -708,7 +708,7 @@ export default function BookingForm({
  className={`px-4 py-2.5 rounded-lg border-2 text-sm font-semibold transition-all ${
  priority === opt.value
  ? opt.color + ' ring-2 ring-offset-1'
- : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+ : 'border-line text-soft hover:bg-subtle'
  }`}
  >
  {opt.label}
@@ -721,15 +721,15 @@ export default function BookingForm({
  </div>
  )}
 
- {/* ── Step 2 - Schedule ─────────────────────────────────────────────── */}
+ {/*  Step 2 - Schedule  */}
  {step === 2 && (
- <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
- <h2 className="text-xl font-bold text-gray-900 mb-6">Schedule Appointment</h2>
+ <div className="bg-surface rounded-2xl p-6 sm:p-8 shadow-lg border border-line">
+ <h2 className="text-xl font-bold text-fg mb-6">Schedule Appointment</h2>
 
  <div className="space-y-6">
  {/* Weekly Slot Picker or Emergency Slots */}
  <div>
- <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+ <label className="flex items-center gap-2 text-sm font-medium text-soft mb-3">
  <FaClock className="text-teal-600" />
  {useEmergencySlots ? 'Response Time' : 'Select a Time Slot'} <span className="text-red-500">*</span>
  </label>
@@ -747,7 +747,7 @@ export default function BookingForm({
  ) : useEmergencySlots ? (
  <>
  <div className="mb-4">
- <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+ <label className="flex items-center gap-2 text-sm font-medium text-soft mb-2">
  <FaCalendarAlt className="text-blue-600" />
  Date
  </label>
@@ -756,7 +756,7 @@ export default function BookingForm({
  value={scheduledDate}
  onChange={(e) => setScheduledDate(e.target.value)}
  min={todayISO()}
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -768,11 +768,11 @@ export default function BookingForm({
  className={`flex flex-col items-center p-4 border-2 rounded-xl text-sm font-medium transition-all ${
  scheduledTime === slot.value
  ? 'bg-red-600 text-white border-red-600 shadow-md'
- : 'border-gray-300 text-gray-700 hover:border-red-400 hover:bg-red-50'
+ : 'border-line text-soft hover:border-red-400 hover:bg-red-50'
  }`}
  >
  <span className="font-semibold">{slot.label}</span>
- <span className={`text-xs mt-0.5 ${scheduledTime === slot.value ? 'text-red-100' : 'text-gray-400'}`}>
+ <span className={`text-xs mt-0.5 ${scheduledTime === slot.value ? 'text-red-100' : 'text-faint'}`}>
  {slot.description}
  </span>
  </button>
@@ -782,7 +782,7 @@ export default function BookingForm({
  ) : (
  <div className="grid sm:grid-cols-2 gap-4">
  <div>
- <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+ <label className="flex items-center gap-2 text-sm font-medium text-soft mb-2">
  <FaCalendarAlt className="text-blue-600" />
  Date
  </label>
@@ -791,11 +791,11 @@ export default function BookingForm({
  value={scheduledDate}
  onChange={(e) => setScheduledDate(e.target.value)}
  min={todayISO()}
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
  <div>
- <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+ <label className="flex items-center gap-2 text-sm font-medium text-soft mb-2">
  <FaClock className="text-teal-600" />
  Time
  </label>
@@ -803,7 +803,7 @@ export default function BookingForm({
  type="time"
  value={scheduledTime}
  onChange={(e) => setScheduledTime(e.target.value)}
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors"
  />
  </div>
  </div>
@@ -812,7 +812,7 @@ export default function BookingForm({
 
  {/* Reason */}
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Reason for Visit{isReasonRequired && <span className="text-red-500"> *</span>}
  </label>
  <textarea
@@ -830,38 +830,38 @@ export default function BookingForm({
  ? 'Any additional context for the lab test (optional)...'
  : 'Describe the situation (optional)...'
  }
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors resize-none"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors resize-none"
  />
  </div>
  </div>
  </div>
  )}
 
- {/* ── Step 3 - Review & Submit ──────────────────────────────────────── */}
+ {/*  Step 3 - Review & Submit  */}
  {step === 3 && (
  <div className="space-y-6">
  {/* Summary card */}
- <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
- <h2 className="text-xl font-bold text-gray-900 mb-6">Review Booking</h2>
+ <div className="bg-surface rounded-2xl p-6 sm:p-8 shadow-lg border border-line">
+ <h2 className="text-xl font-bold text-fg mb-6">Review Booking</h2>
 
  <div className=" rounded-xl p-5 border border-blue-100">
  <div className="grid sm:grid-cols-2 gap-4 text-sm">
  {/* Provider */}
  {providerName && (
  <div>
- <span className="text-gray-500">{getProviderLabel(providerType)}</span>
- <p className="font-semibold text-gray-900">{providerName}</p>
+ <span className="text-soft">{getProviderLabel(providerType)}</span>
+ <p className="font-semibold text-fg">{providerName}</p>
  </div>
  )}
 
  {/* Selected service + delivery mode */}
  {selectedService && (
  <div>
- <span className="text-gray-500">Service</span>
- <p className="font-semibold text-gray-900 flex flex-wrap items-center gap-2">
+ <span className="text-soft">Service</span>
+ <p className="font-semibold text-fg flex flex-wrap items-center gap-2">
  {selectedService.serviceName}
  {activeWorkflow && (
- <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[activeWorkflow.serviceMode] || 'bg-gray-100 text-gray-600'}`}>
+ <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${MODE_COLORS[activeWorkflow.serviceMode] || 'bg-subtle text-soft'}`}>
   {MODE_LABELS[activeWorkflow.serviceMode] || activeWorkflow.serviceMode}
  </span>
  )}
@@ -870,8 +870,8 @@ export default function BookingForm({
  <div className="flex flex-wrap items-center gap-0.5 mt-1">
   {[...activeWorkflow.steps].sort((a,b)=>a.order-b.order).map((s,i,arr)=>(
    <span key={s.statusCode} className="flex items-center gap-0.5">
-    <span className="text-[9px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">{s.label}</span>
-    {i < arr.length-1 && <FiArrowRight className="w-2 h-2 text-gray-300" />}
+    <span className="text-[9px] text-faint bg-subtle px-1.5 py-0.5 rounded">{s.label}</span>
+    {i < arr.length-1 && <FiArrowRight className="w-2 h-2 text-faint" />}
    </span>
   ))}
  </div>
@@ -883,12 +883,12 @@ export default function BookingForm({
  {providerType === 'lab-test' && (
  <>
  <div>
- <span className="text-gray-500">Test Name</span>
- <p className="font-semibold text-gray-900">{testName}</p>
+ <span className="text-soft">Test Name</span>
+ <p className="font-semibold text-fg">{testName}</p>
  </div>
  <div>
- <span className="text-gray-500">Sample Type</span>
- <p className="font-semibold text-gray-900">{sampleType}</p>
+ <span className="text-soft">Sample Type</span>
+ <p className="font-semibold text-fg">{sampleType}</p>
  </div>
  </>
  )}
@@ -897,36 +897,36 @@ export default function BookingForm({
  {providerType === 'emergency' && (
  <>
  <div>
- <span className="text-gray-500">Emergency Type</span>
- <p className="font-semibold text-gray-900">{emergencyType}</p>
+ <span className="text-soft">Emergency Type</span>
+ <p className="font-semibold text-fg">{emergencyType}</p>
  </div>
  <div>
- <span className="text-gray-500">Location</span>
- <p className="font-semibold text-gray-900">{location}</p>
+ <span className="text-soft">Location</span>
+ <p className="font-semibold text-fg">{location}</p>
  </div>
  <div>
- <span className="text-gray-500">Contact Number</span>
- <p className="font-semibold text-gray-900">{contactNumber}</p>
+ <span className="text-soft">Contact Number</span>
+ <p className="font-semibold text-fg">{contactNumber}</p>
  </div>
  <div>
- <span className="text-gray-500">Priority</span>
- <p className="font-semibold text-gray-900 capitalize">{priority}</p>
+ <span className="text-soft">Priority</span>
+ <p className="font-semibold text-fg capitalize">{priority}</p>
  </div>
  </>
  )}
 
  {/* Schedule */}
  <div>
- <span className="text-gray-500">Date</span>
- <p className="font-semibold text-gray-900">{formatDate(scheduledDate)}</p>
+ <span className="text-soft">Date</span>
+ <p className="font-semibold text-fg">{formatDate(scheduledDate)}</p>
  </div>
  <div>
- <span className="text-gray-500">Time</span>
- <p className="font-semibold text-gray-900">{formatTime(scheduledTime)}</p>
+ <span className="text-soft">Time</span>
+ <p className="font-semibold text-fg">{formatTime(scheduledTime)}</p>
  </div>
  <div>
- <span className="text-gray-500">Duration</span>
- <p className="font-semibold text-gray-900">
+ <span className="text-soft">Duration</span>
+ <p className="font-semibold text-fg">
  {DURATION_OPTIONS.find((d) => d.value === duration)?.label ?? `${duration} min`}
  </p>
  </div>
@@ -934,23 +934,23 @@ export default function BookingForm({
  {/* Reason */}
  {reason && (
  <div className="sm:col-span-2">
- <span className="text-gray-500">Reason</span>
- <p className="font-semibold text-gray-900">{reason}</p>
+ <span className="text-soft">Reason</span>
+ <p className="font-semibold text-fg">{reason}</p>
  </div>
  )}
 
  {/* Service */}
  {selectedService && (
  <div>
- <span className="text-gray-500">Service</span>
- <p className="font-semibold text-gray-900">{selectedService.serviceName}</p>
+ <span className="text-soft">Service</span>
+ <p className="font-semibold text-fg">{selectedService.serviceName}</p>
  </div>
  )}
 
  {/* Fee */}
  {displayPrice !== undefined && displayPrice > 0 && (
  <div>
- <span className="text-gray-500">Consultation Fee</span>
+ <span className="text-soft">Consultation Fee</span>
  <p className="font-bold text-green-600 text-base">
  Rs {displayPrice.toLocaleString()}
  </p>
@@ -962,12 +962,12 @@ export default function BookingForm({
 
  {/* Wallet balance */}
  {walletBalance !== undefined && (
- <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg border border-line">
  <div className="flex items-center gap-3 mb-3">
  <FaWallet className="text-blue-600 text-lg" />
- <h3 className="font-semibold text-gray-900">Wallet</h3>
+ <h3 className="font-semibold text-fg">Wallet</h3>
  </div>
- <p className="text-gray-700">
+ <p className="text-soft">
  Your trial balance:{' '}
  <span className="font-bold text-blue-600">Rs {walletBalance.toLocaleString()}</span>
  </p>
@@ -985,8 +985,8 @@ export default function BookingForm({
  )}
 
  {/* Notes */}
- <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg border border-line">
+ <label className="block text-sm font-medium text-soft mb-2">
  Additional Notes (optional)
  </label>
  <textarea
@@ -994,13 +994,13 @@ export default function BookingForm({
  onChange={(e) => setNotes(e.target.value)}
  rows={3}
  placeholder="Any additional information for the provider..."
- className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors resize-none"
+ className="w-full px-4 py-3 border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-colors resize-none"
  />
  </div>
  </div>
  )}
 
- {/* ── Submission Error ──────────────────────────────────────────────── */}
+ {/*  Submission Error  */}
  {submitError && (
  <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
  <span className="text-red-500 text-lg font-bold leading-none mt-0.5">!</span>
@@ -1011,13 +1011,13 @@ export default function BookingForm({
  </div>
  )}
 
- {/* ── Navigation Buttons ────────────────────────────────────────────── */}
+ {/*  Navigation Buttons  */}
  <div className="flex justify-between items-center">
  {step > 1 ? (
  <button
  type="button"
  onClick={goBack}
- className="flex items-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+ className="flex items-center gap-2 px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium"
  >
  <FaArrowLeft className="text-sm" />
  Back

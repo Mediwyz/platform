@@ -34,25 +34,25 @@ export default function SupportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="min-h-screen bg-subtle py-10 px-4">
       <div className="max-w-xl mx-auto">
-        <Link href="/help" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6">
+        <Link href="/help" className="inline-flex items-center gap-2 text-sm text-soft hover:text-soft mb-6">
           <FaArrowLeft /> Back to help
         </Link>
 
-        <div className="bg-white rounded-2xl shadow-sm p-8">
-          <h1 className="text-2xl font-bold text-[#001E40] flex items-center gap-3 mb-2">
+        <div className="bg-surface rounded-2xl shadow-sm p-8">
+          <h1 className="text-2xl font-bold text-fg flex items-center gap-3 mb-2">
             <FaLifeRing className="text-[#0C6780]" /> Contact support
           </h1>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-soft mb-6">
             Your message reaches the MediWyz admin team via in-app notification. We&apos;ll respond inside the app.
           </p>
 
           {sent ? (
             <div className="text-center py-8">
               <FaCheckCircle className="mx-auto text-green-500 text-5xl mb-3" />
-              <p className="text-lg font-semibold text-[#001E40] mb-1">Message sent</p>
-              <p className="text-sm text-gray-500">We&apos;ll get back to you inside the app.</p>
+              <p className="text-lg font-semibold text-fg mb-1">Message sent</p>
+              <p className="text-sm text-soft">We&apos;ll get back to you inside the app.</p>
               <button
                 onClick={() => { setSent(false); setForm({ name: '', email: '', subject: '', message: '', website: '' }) }}
                 className="mt-5 text-[#0C6780] hover:underline text-sm"
@@ -64,42 +64,42 @@ export default function SupportPage() {
             <form onSubmit={submit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Your name</label>
+                  <label className="block text-sm font-medium text-soft mb-1">Your name</label>
                   <input
                     required
                     value={form.name}
                     onChange={e => setForm(s => ({ ...s, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
+                    className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-soft mb-1">Email</label>
                   <input
                     type="email"
                     required
                     value={form.email}
                     onChange={e => setForm(s => ({ ...s, email: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
+                    className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                <label className="block text-sm font-medium text-soft mb-1">Subject</label>
                 <input
                   required
                   value={form.subject}
                   onChange={e => setForm(s => ({ ...s, subject: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
+                  className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <label className="block text-sm font-medium text-soft mb-1">Message</label>
                 <textarea
                   required
                   rows={5}
                   value={form.message}
                   onChange={e => setForm(s => ({ ...s, message: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-y"
+                  className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-y"
                 />
               </div>
 
@@ -126,7 +126,7 @@ export default function SupportPage() {
                 disabled={busy}
                 className="w-full py-2.5 bg-[#0C6780] text-white rounded-lg font-medium hover:bg-[#0a5568] disabled:bg-gray-300"
               >
-                {busy ? 'Sending…' : 'Send message'}
+                {busy ? 'Sending' : 'Send message'}
               </button>
             </form>
           )}

@@ -55,7 +55,7 @@ export default function CorporateClaimsPage() {
  case 'approved': return { text: 'Approved', color: 'bg-green-100 text-green-800', icon: FaCheckCircle }
  case 'pending': return { text: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: FaClock }
  case 'rejected': return { text: 'Rejected', color: 'bg-red-100 text-red-800', icon: FaTimes }
- default: return { text: status, color: 'bg-gray-100 text-gray-800', icon: FaClock }
+ default: return { text: status, color: 'bg-subtle text-fg', icon: FaClock }
  }
  }
 
@@ -70,13 +70,13 @@ export default function CorporateClaimsPage() {
  </div>
  )}
 
- <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+ <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
  <FaFileAlt className="text-purple-500" /> Claims Management
  </h1>
 
  <div className="flex flex-col md:flex-row gap-4">
  <div className="flex-1 relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
  <input
  type="text"
  placeholder="Search by employee name..."
@@ -86,7 +86,7 @@ export default function CorporateClaimsPage() {
  />
  </div>
  <div className="flex items-center gap-2">
- <FaFilter className="text-gray-400" />
+ <FaFilter className="text-faint" />
  <select value={filter} onChange={(e) => setFilter(e.target.value)} className="px-4 py-2 border rounded-lg">
  <option value="all">All Status</option>
  <option value="approved">Approved</option>
@@ -96,42 +96,42 @@ export default function CorporateClaimsPage() {
  </div>
  </div>
 
- <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-lg overflow-hidden">
  {loading ? (
  <div className="flex items-center justify-center min-h-[400px]">
  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto" />
  </div>
  ) : filteredClaims.length === 0 ? (
- <div className="text-center py-12 text-gray-500">
- <FaFileAlt className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="text-center py-12 text-soft">
+ <FaFileAlt className="text-4xl mx-auto mb-3 text-faint" />
  <p className="text-lg font-medium">No claims found</p>
  <p className="text-sm mt-1">Claims will appear here when employees submit them</p>
  </div>
  ) : (
  <div className="overflow-x-auto"><table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-700">Employee</th>
- <th className="p-3 text-left font-medium text-gray-700">Type</th>
- <th className="p-3 text-left font-medium text-gray-700">Amount</th>
- <th className="p-3 text-left font-medium text-gray-700">Status</th>
- <th className="p-3 text-left font-medium text-gray-700">Date</th>
+ <th className="p-3 text-left font-medium text-soft">Employee</th>
+ <th className="p-3 text-left font-medium text-soft">Type</th>
+ <th className="p-3 text-left font-medium text-soft">Amount</th>
+ <th className="p-3 text-left font-medium text-soft">Status</th>
+ <th className="p-3 text-left font-medium text-soft">Date</th>
  </tr>
  </thead>
  <tbody>
  {filteredClaims.map((claim) => {
  const statusInfo = getStatusInfo(claim.status)
  return (
- <tr key={claim.id} className="border-b hover:bg-gray-50">
- <td className="p-3 font-medium text-gray-900">{claim.employeeName}</td>
- <td className="p-3 text-gray-600">{claim.claimType}</td>
+ <tr key={claim.id} className="border-b hover:bg-subtle">
+ <td className="p-3 font-medium text-fg">{claim.employeeName}</td>
+ <td className="p-3 text-soft">{claim.claimType}</td>
  <td className="p-3 font-medium">Rs {claim.amount.toLocaleString()}</td>
  <td className="p-3">
  <span className={`px-2 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1 ${statusInfo.color}`}>
  <statusInfo.icon className="text-xs" /> {statusInfo.text}
  </span>
  </td>
- <td className="p-3 text-gray-600 text-xs">{claim.date}</td>
+ <td className="p-3 text-soft text-xs">{claim.date}</td>
  </tr>
  )
  })}

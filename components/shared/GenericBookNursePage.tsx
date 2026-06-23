@@ -131,7 +131,7 @@ export default function GenericBookNursePage({ params }: { params: Promise<{ id:
  <div className="flex items-center justify-center min-h-[400px]">
  <div className="text-center">
  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4" />
- <p className="text-gray-600">Loading nurse information...</p>
+ <p className="text-soft">Loading nurse information...</p>
  </div>
  </div>
  )
@@ -173,13 +173,13 @@ export default function GenericBookNursePage({ params }: { params: Promise<{ id:
  <div className="mb-6">
  <Link
  href={`/${baseSlug}/find-nurse`}
- className="inline-flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors"
+ className="inline-flex items-center gap-2 text-soft hover:text-pink-600 transition-colors"
  >
  <FaArrowLeft /> Back to Find Nurse
  </Link>
  </div>
 
- <h1 className="text-2xl font-bold text-gray-900 mb-6">
+ <h1 className="text-2xl font-bold text-fg mb-6">
  Book Nurse Service with {nurse.firstName} {nurse.lastName}
  </h1>
 

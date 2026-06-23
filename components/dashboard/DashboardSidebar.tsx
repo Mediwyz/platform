@@ -76,20 +76,20 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  className={`
  fixed inset-y-0 left-0 z-[60]
  ${isOpen ? 'w-[85%]' : 'w-0'}
- bg-gray-50 dark:bg-surface shadow-2xl
+ bg-subtle dark:bg-surface shadow-2xl
  transform transition-all duration-150 ease-out
  overflow-hidden
  `}
  >
  {/* Close button */}
  <div className="flex items-center justify-between px-4 pt-4 pb-2">
- <span className="text-sm font-bold text-gray-900 dark:text-fg">Menu</span>
+ <span className="text-sm font-bold text-fg dark:text-fg">Menu</span>
  <button
  onClick={onClose}
- className="p-2 rounded-lg bg-white dark:bg-subtle hover:bg-gray-100 dark:hover:bg-line transition shadow-sm"
+ className="p-2 rounded-lg bg-surface dark:bg-subtle hover:bg-subtle dark:hover:bg-line transition shadow-sm"
  aria-label="Close sidebar"
  >
- <FaTimes className="text-base text-gray-600 dark:text-soft" />
+ <FaTimes className="text-base text-soft dark:text-soft" />
  </button>
  </div>
 
@@ -97,7 +97,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  {sections.map((section, si) => (
  <div key={si} className="mb-4">
  {section.label && (
- <p className="text-[10px] font-semibold text-gray-400 dark:text-faint uppercase tracking-wider px-1 mb-2">
+ <p className="text-[10px] font-semibold text-faint dark:text-faint uppercase tracking-wider px-1 mb-2">
  {section.label}
  </p>
  )}
@@ -116,11 +116,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  className={`relative flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl transition-all ${
  isActive
  ? `${item.bgColor} ${item.color} shadow-md ring-1 ring-blue-200 dark:ring-accent/40`
- : 'bg-white dark:bg-subtle shadow-sm hover:shadow-md text-gray-600 dark:text-soft hover:text-gray-900 dark:hover:text-fg'
+ : 'bg-surface dark:bg-subtle shadow-sm hover:shadow-md text-soft dark:text-soft hover:text-fg dark:hover:text-fg'
  }`}
  >
- <Icon className={`text-xl ${isActive ? item.color : 'text-gray-500 dark:text-faint'}`} aria-hidden="true" />
- <span className={`text-[10px] font-medium text-center leading-tight line-clamp-2 ${isActive ? item.color : 'text-gray-700 dark:text-soft'}`}>
+ <Icon className={`text-xl ${isActive ? item.color : 'text-soft dark:text-faint'}`} aria-hidden="true" />
+ <span className={`text-[10px] font-medium text-center leading-tight line-clamp-2 ${isActive ? item.color : 'text-soft dark:text-soft'}`}>
  {label}
  </span>
  {item.count != null && item.count > 0 && (
@@ -136,7 +136,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  ))}
 
  {footer && (
- <div className="mt-4 pt-4 border-t border-gray-200 dark:border-line">
+ <div className="mt-4 pt-4 border-t border-line dark:border-line">
  {footer}
  </div>
  )}
@@ -168,10 +168,10 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  className={`
  flex-shrink-0
  ${isOpen ? 'w-64 lg:w-72 xl:w-80' : 'w-16'}
- bg-gray-50 dark:bg-surface
+ bg-subtle dark:bg-surface
  transition-all duration-300 ease-in-out
  overflow-hidden
- m-3 sm:m-4 md:m-5 lg:m-6 xl:m-8 rounded-2xl border border-gray-200 dark:border-line shadow-sm
+ m-3 sm:m-4 md:m-5 lg:m-6 xl:m-8 rounded-2xl border border-line dark:border-line shadow-sm
  `}
  >
  <div className={`h-full overflow-y-auto scrollbar-hidden ${isCollapsedDesktop ? 'p-2' : 'p-3 md:p-4 lg:p-5'}`}>
@@ -188,7 +188,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  title={getLabel(item)}
  aria-current={isActive ? 'page' : undefined}
  className={`relative flex items-center justify-center p-2.5 rounded-xl transition-all ${
- isActive ? `${item.bgColor} ${item.color} shadow-md` : 'bg-white dark:bg-subtle shadow-sm hover:shadow-md text-gray-500 dark:text-soft'
+ isActive ? `${item.bgColor} ${item.color} shadow-md` : 'bg-surface dark:bg-subtle shadow-sm hover:shadow-md text-soft dark:text-soft'
  }`}
  >
  <Icon className="text-lg" />
@@ -205,7 +205,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  {desktopSections.map((section, si) => (
  <div key={si} className="mb-4">
  {section.label && (
- <p className="text-[10px] font-semibold text-gray-400 dark:text-faint uppercase tracking-wider px-1 mb-2">
+ <p className="text-[10px] font-semibold text-faint dark:text-faint uppercase tracking-wider px-1 mb-2">
  {section.label}
  </p>
  )}
@@ -223,11 +223,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  className={`relative flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl transition-all hover:scale-105 ${
  isActive
  ? `${item.bgColor} ${item.color} shadow-md ring-1 ring-blue-200 dark:ring-accent/40`
- : 'bg-white dark:bg-subtle shadow-sm hover:shadow-md text-gray-600 dark:text-soft hover:text-gray-900 dark:hover:text-fg'
+ : 'bg-surface dark:bg-subtle shadow-sm hover:shadow-md text-soft dark:text-soft hover:text-fg dark:hover:text-fg'
  }`}
  >
- <Icon className={`text-xl ${isActive ? item.color : 'text-gray-500 dark:text-faint'}`} aria-hidden="true" />
- <span className={`text-[10px] lg:text-xs font-medium text-center leading-tight line-clamp-2 ${isActive ? item.color : 'text-gray-700 dark:text-soft'}`}>
+ <Icon className={`text-xl ${isActive ? item.color : 'text-soft dark:text-faint'}`} aria-hidden="true" />
+ <span className={`text-[10px] lg:text-xs font-medium text-center leading-tight line-clamp-2 ${isActive ? item.color : 'text-soft dark:text-soft'}`}>
  {label}
  </span>
  {item.count != null && item.count > 0 && (
@@ -245,7 +245,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
  )}
 
  {footer && !isCollapsedDesktop && (
- <div className="mt-4 md:mt-6 pt-4 md:pt-5 border-t border-gray-200 dark:border-line">
+ <div className="mt-4 md:mt-6 pt-4 md:pt-5 border-t border-line dark:border-line">
  {footer}
  </div>
  )}

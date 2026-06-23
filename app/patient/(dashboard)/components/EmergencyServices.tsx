@@ -117,7 +117,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
    return
  }
  setIsEmergencyCall(true)
- toast.info(`Connecting to ${service.name}…`, { autoClose: 3000 })
+ toast.info(`Connecting to ${service.name}`, { autoClose: 3000 })
  setTimeout(() => setIsEmergencyCall(false), 3000)
  }
 
@@ -150,7 +150,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="bg-brand-navy rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 lg:p-8 text-white shadow-2xl">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <div className="flex items-center space-x-3 sm:space-x-4">
- <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center animate-pulse">
+ <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-surface bg-opacity-20 rounded-full flex items-center justify-center animate-pulse">
  <FaBell className="text-xl sm:text-2xl md:text-3xl" />
  </div>
  <div>
@@ -161,7 +161,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <button 
  onClick={() => emergencyServices[0] && initiateEmergencyCall(emergencyServices[0])}
  disabled={isEmergencyCall || emergencyServices.length === 0}
- className="bg-white text-red-600 px-4 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-red-50 transition-all transform hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
+ className="bg-surface text-red-600 px-4 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-red-50 transition-all transform hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
  >
  <FaPhone className={isEmergencyCall ? 'animate-bounce' : ''} />
  {isEmergencyCall ? 'Calling...' : 'Emergency: 999'}
@@ -173,7 +173,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4">
  <button 
  onClick={shareLocation}
- className="w-full bg-white transition-all group flex sm:block items-center gap-3"
+ className="w-full bg-surface transition-all group flex sm:block items-center gap-3"
  >
  <FaLocationArrow className="text-xl sm:text-2xl text-blue-500 sm:mx-auto sm:mb-2 group-hover:animate-bounce" />
  <div className="text-left sm:text-center">
@@ -184,7 +184,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
 
  <button 
  onClick={() => setShowMedicalInfo(!showMedicalInfo)}
- className="w-full bg-white transition-all group flex sm:block items-center gap-3"
+ className="w-full bg-surface transition-all group flex sm:block items-center gap-3"
  >
  <FaMedkit className="text-xl sm:text-2xl text-green-500 sm:mx-auto sm:mb-2 group-hover:animate-bounce" />
  <div className="text-left sm:text-center">
@@ -193,7 +193,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
  </button>
 
- <button className="w-full bg-white transition-all group flex sm:block items-center gap-3">
+ <button className="w-full bg-surface transition-all group flex sm:block items-center gap-3">
  <FaVideo className="text-xl sm:text-2xl text-purple-500 sm:mx-auto sm:mb-2 group-hover:animate-bounce" />
  <div className="text-left sm:text-center">
  <p className="font-medium text-purple-700 text-sm sm:text-base">Video Call</p>
@@ -201,7 +201,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
  </button>
 
- <button className="w-full bg-white transition-all group flex sm:block items-center gap-3">
+ <button className="w-full bg-surface transition-all group flex sm:block items-center gap-3">
  <FaComments className="text-xl sm:text-2xl text-orange-500 sm:mx-auto sm:mb-2 group-hover:animate-bounce" />
  <div className="text-left sm:text-center">
  <p className="font-medium text-orange-700 text-sm sm:text-base">Text Support</p>
@@ -212,7 +212,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
 
  {/* Medical Information Panel */}
  {showMedicalInfo && (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border-2 border-red-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border-2 border-red-200">
  <div className="flex items-center justify-between mb-3 sm:mb-4">
  <h3 className="text-base sm:text-lg font-semibold text-red-800 flex items-center">
  <FaFirstAid className="mr-2" />
@@ -241,7 +241,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="flex flex-wrap gap-1 mt-1">
  {(patientData.allergies || []).map((allergy, index) => (
  <span key={index} className="px-2 py-0.5 sm:py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs font-medium">
- ⚠️ {allergy}
+  {allergy}
  </span>
  ))}
  </div>
@@ -266,7 +266,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-1 mt-1">
  {activeMedications?.slice(0, 3).map((prescription, index) => (
  <p key={index} className="text-xs text-green-800">
- • {prescription.medicines[0]?.name} - {prescription.medicines[0]?.dosage}
+  {prescription.medicines[0]?.name} - {prescription.medicines[0]?.dosage}
  </p>
  ))}
  </div>
@@ -275,7 +275,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
 
  <div className="mt-4 pt-4 border-t border-red-200 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
- <p className="text-xs sm:text-sm text-gray-700">Emergency Contact: {patientData.emergencyContact?.name || 'Not set'}</p>
+ <p className="text-xs sm:text-sm text-soft">Emergency Contact: {patientData.emergencyContact?.name || 'Not set'}</p>
  <div className="flex gap-2">
  <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs sm:text-sm hover:bg-blue-200 transition">
  <FaShare className="inline mr-1" />
@@ -291,15 +291,15 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  )}
 
  {/* Emergency Services List */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-gray-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-line">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaLifeRing className="mr-2 text-blue-500" />
  Available Emergency Services
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
  {emergencyServices.map((service) => (
- <div key={service.id} className="bg-white bg-opacity-80 border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition-all">
+ <div key={service.id} className="bg-surface bg-opacity-80 border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition-all">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
  <div className="flex items-start gap-3 sm:gap-4 flex-1">
  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -313,7 +313,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  
  <div className="flex-1 min-w-0">
  <div className="flex flex-wrap items-center gap-2 mb-2">
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{service.name}</h4>
+ <h4 className="font-semibold text-fg text-sm sm:text-base">{service.name}</h4>
  {service.available24h && (
  <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
  24/7
@@ -321,22 +321,22 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  )}
  </div>
  
- <p className="text-xs sm:text-sm text-gray-600 mb-2">{service.service}</p>
+ <p className="text-xs sm:text-sm text-soft mb-2">{service.service}</p>
  
  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2">
- <div className="flex items-center gap-1 text-gray-600">
+ <div className="flex items-center gap-1 text-soft">
  <FaStopwatch className="text-orange-500" />
  <span className="truncate">{service.responseTime}</span>
  </div>
- <div className="flex items-center gap-1 text-gray-600">
+ <div className="flex items-center gap-1 text-soft">
  <FaMapMarkerAlt className="text-blue-500" />
  <span className="truncate">{service.distance}</span>
  </div>
- <div className="flex items-center gap-1 text-gray-600">
+ <div className="flex items-center gap-1 text-soft">
  <FaHospital className="text-green-500" />
  <span className="truncate">{service.location}</span>
  </div>
- <div className="flex items-center gap-1 text-gray-600">
+ <div className="flex items-center gap-1 text-soft">
  <FaPhone className="text-purple-500" />
  <span className="truncate">{service.phone}</span>
  </div>
@@ -377,25 +377,25 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Stats Overview - Vertical on Mobile */}
  <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4">
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-200">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-200">
  <FaAmbulance className="text-red-500 text-xl sm:text-2xl mb-2" />
- <p className="text-gray-700 text-xs sm:text-sm">Total Incidents</p>
+ <p className="text-soft text-xs sm:text-sm">Total Incidents</p>
  <p className="text-xl sm:text-2xl font-bold text-red-600">
  {hasEmergencyContacts ? patientData.emergencyServiceContacts!.length : 0}
  </p>
  </div>
  
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-green-200">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-green-200">
  <FaCheckCircle className="text-green-500 text-xl sm:text-2xl mb-2" />
- <p className="text-gray-700 text-xs sm:text-sm">Resolved</p>
+ <p className="text-soft text-xs sm:text-sm">Resolved</p>
  <p className="text-xl sm:text-2xl font-bold text-green-600">
  {hasEmergencyContacts ? patientData.emergencyServiceContacts!.filter(e => e.status === 'resolved').length : 0}
  </p>
  </div>
  
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-yellow-200">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-yellow-200">
  <FaClock className="text-yellow-500 text-xl sm:text-2xl mb-2" />
- <p className="text-gray-700 text-xs sm:text-sm">Avg Response</p>
+ <p className="text-soft text-xs sm:text-sm">Avg Response</p>
  <p className="text-xl sm:text-2xl font-bold text-yellow-600">
  {hasEmergencyContacts ? 
  Math.round(patientData.emergencyServiceContacts!.reduce((sum, e) => sum + e.responseTime, 0) / 
@@ -403,9 +403,9 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </p>
  </div>
  
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-blue-200">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-blue-200">
  <FaUsers className="text-blue-500 text-xl sm:text-2xl mb-2" />
- <p className="text-gray-700 text-xs sm:text-sm">Services Used</p>
+ <p className="text-soft text-xs sm:text-sm">Services Used</p>
  <p className="text-xl sm:text-2xl font-bold text-blue-600">
  {hasEmergencyContacts ? 
  new Set(patientData.emergencyServiceContacts!.map(e => e.serviceName)).size : 0}
@@ -415,15 +415,15 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
 
  {/* Emergency History */}
  {hasEmergencyContacts ? (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-purple-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaHistory className="mr-2 text-purple-500" />
  Emergency Service History
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
  {patientData.emergencyServiceContacts!.map((contact) => (
- <div key={contact.id} className="bg-white bg-opacity-80 border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
+ <div key={contact.id} className="bg-surface bg-opacity-80 border border-line rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-md transition">
  <div className="flex items-start justify-between">
  <div className="flex-1">
  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
@@ -431,8 +431,8 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  <FaAmbulance className="text-red-600 text-sm sm:text-base" />
  </div>
  <div className="flex-1 min-w-0">
- <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Incident #{contact.id}</h4>
- <p className="text-xs sm:text-sm text-gray-600">{contact.serviceName}</p>
+ <h4 className="font-semibold text-fg text-sm sm:text-base">Incident #{contact.id}</h4>
+ <p className="text-xs sm:text-sm text-soft">{contact.serviceName}</p>
  </div>
  <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
  contact.status === 'resolved' ? 'bg-green-100 text-green-800' :
@@ -444,28 +444,28 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  
  <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
  <div className="space-y-1 sm:space-y-2">
- <div className="flex items-center gap-2 text-gray-600">
+ <div className="flex items-center gap-2 text-soft">
  <FaCalendarAlt className="text-blue-500" />
  <span>{new Date(contact.date).toLocaleDateString()}</span>
  </div>
- <div className="flex items-center gap-2 text-gray-600">
+ <div className="flex items-center gap-2 text-soft">
  <FaClock className="text-green-500" />
  <span>{contact.time}</span>
  </div>
  </div>
  <div className="space-y-1 sm:space-y-2">
- <div className="flex items-center gap-2 text-gray-600">
+ <div className="flex items-center gap-2 text-soft">
  <FaStopwatch className="text-orange-500" />
  <span>Response: {contact.responseTime} minutes</span>
  </div>
- <div className="flex items-center gap-2 text-gray-600">
+ <div className="flex items-center gap-2 text-soft">
  <FaHospital className="text-purple-500" />
  <span>{contact.serviceName}</span>
  </div>
  </div>
  </div>
 
- <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-200">
+ <div className="bg-surface rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-200">
  <h5 className="font-medium text-red-800 mb-2 flex items-center text-sm sm:text-base">
  <FaExclamationTriangle className="mr-2" />
  Reason for Emergency
@@ -486,10 +486,10 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
  ) : (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-gray-200">
- <FaHistory className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Emergency History</h3>
- <p className="text-gray-500 text-sm">You have not used emergency services yet. We hope it stays that way!</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-line">
+ <FaHistory className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-base sm:text-lg font-semibold text-soft mb-2">No Emergency History</h3>
+ <p className="text-soft text-sm">You have not used emergency services yet. We hope it stays that way!</p>
  </div>
  )}
  </div>
@@ -498,8 +498,8 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  const renderEmergencyContacts = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {/* Personal Emergency Contact */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-pink-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-pink-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaUserNurse className="mr-2 text-pink-500" />
  Personal Emergency Contact
  </h3>
@@ -547,8 +547,8 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Medical Information for Emergencies */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-red-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaMedkit className="mr-2 text-red-500" />
  Critical Medical Information
  </h3>
@@ -642,8 +642,8 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Additional Emergency Services */}
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-blue-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaShieldAlt className="mr-2 text-blue-500" />
  Emergency Service Contacts
  </h3>
@@ -682,15 +682,15 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  const renderEmergencyChat = () => (
  <div className="space-y-4 sm:space-y-5 md:space-y-6">
  {hasEmergencyChat ? (
- <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
- <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-5 md:mb-6 flex items-center">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg border border-green-200">
+ <h3 className="text-base sm:text-lg font-semibold text-fg mb-4 sm:mb-5 md:mb-6 flex items-center">
  <FaComments className="mr-2 text-green-500" />
  Emergency Service Communications
  </h3>
  
  <div className="space-y-3 sm:space-y-4">
  {patientData.chatHistory!.emergencyServices!.map((emergencyChat) => (
- <div key={emergencyChat.serviceId} className="border border-red-200 rounded-lg sm:rounded-xl p-3 sm:p-4 bg-white">
+ <div key={emergencyChat.serviceId} className="border border-red-200 rounded-lg sm:rounded-xl p-3 sm:p-4 bg-surface">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3 sm:mb-4">
  <div className="flex items-center gap-2 sm:gap-3">
  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-sky-50 rounded-lg flex items-center justify-center">
@@ -711,23 +711,23 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
  
- <div className="bg-white bg-opacity-80 rounded-lg p-2.5 sm:p-3 mb-3">
- <p className="text-xs sm:text-sm font-medium text-gray-900">Last Message:</p>
- <p className="text-gray-700 text-xs sm:text-sm">{emergencyChat.lastMessage}</p>
- <p className="text-xs text-gray-500 mt-1">{emergencyChat.lastMessageTime}</p>
+ <div className="bg-surface bg-opacity-80 rounded-lg p-2.5 sm:p-3 mb-3">
+ <p className="text-xs sm:text-sm font-medium text-fg">Last Message:</p>
+ <p className="text-soft text-xs sm:text-sm">{emergencyChat.lastMessage}</p>
+ <p className="text-xs text-soft mt-1">{emergencyChat.lastMessageTime}</p>
  </div>
  
  {emergencyChat.messages && emergencyChat.messages.length > 0 && (
  <div className="space-y-1.5 sm:space-y-2">
  <p className="text-xs sm:text-sm font-medium text-red-800">Recent Messages:</p>
  {emergencyChat.messages.slice(0, 3).map((msg) => (
- <div key={msg.id} className="bg-white bg-opacity-80 rounded-lg p-2.5 sm:p-3 border border-red-200">
+ <div key={msg.id} className="bg-surface bg-opacity-80 rounded-lg p-2.5 sm:p-3 border border-red-200">
  <div className="flex items-start justify-between">
  <div className="flex-1">
- <p className="text-xs sm:text-sm text-gray-900">{msg.message}</p>
+ <p className="text-xs sm:text-sm text-fg">{msg.message}</p>
  <div className="flex items-center gap-2 mt-1">
- <span className="text-xs text-gray-600">{msg.senderName}</span>
- <span className="text-xs text-gray-500">{msg.timestamp}</span>
+ <span className="text-xs text-soft">{msg.senderName}</span>
+ <span className="text-xs text-soft">{msg.timestamp}</span>
  </div>
  </div>
  {msg.senderType === 'emergency' && (
@@ -745,10 +745,10 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
  </div>
  ) : (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-gray-200">
- <FaComments className="text-gray-400 text-3xl sm:text-4xl mx-auto mb-4" />
- <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Emergency Communications</h3>
- <p className="text-gray-500 text-sm">No emergency service communications found</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center shadow-lg border border-line">
+ <FaComments className="text-faint text-3xl sm:text-4xl mx-auto mb-4" />
+ <h3 className="text-base sm:text-lg font-semibold text-soft mb-2">No Emergency Communications</h3>
+ <p className="text-soft text-sm">No emergency service communications found</p>
  </div>
  )}
  </div>
@@ -756,14 +756,14 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
 
  if (!hasEmergencyContacts && !hasEmergencyChat && activeTab === 'history') {
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-gray-200">
- <div className="bg-white rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-4">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-line">
+ <div className="bg-surface rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-4">
  <FaAmbulance className="text-green-500 text-2xl sm:text-3xl" />
  </div>
- <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">Emergency Services</h3>
- <p className="text-gray-500 mb-6 text-sm sm:text-base">No emergency service history - That is good news!</p>
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2">Emergency Services</h3>
+ <p className="text-soft mb-6 text-sm sm:text-base">No emergency service history - That is good news!</p>
  
- <div className="bg-white border border-red-200 rounded-xl p-4 sm:p-6 mt-6">
+ <div className="bg-surface border border-red-200 rounded-xl p-4 sm:p-6 mt-6">
  <FaExclamationTriangle className="text-red-500 text-2xl sm:text-3xl mx-auto mb-3" />
  <h4 className="font-semibold text-red-800 mb-2 text-sm sm:text-base">In Case of Emergency</h4>
  <p className="text-red-700 mb-4 text-xs sm:text-sm">Call emergency services immediately</p>
@@ -799,7 +799,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Desktop/Mobile Tabs + Content */}
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden pb-20 sm:pb-0">
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden pb-20 sm:pb-0">
  {/* Desktop Tab Navigation */}
  <div className="hidden sm:block border-b">
  <div className="flex overflow-x-auto">
@@ -810,7 +810,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  className={`flex-shrink-0 px-4 md:px-6 py-3 md:py-4 text-center font-medium transition-all ${
  activeTab === tab.id
  ? `text-${tab.color}-600 border-b-2 border-current bg-${tab.color}-50`
- : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+ : 'text-soft hover:text-fg hover:bg-subtle'
  }`}
  >
  <tab.icon className="inline mr-2 text-sm md:text-base" />
@@ -830,7 +830,7 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  </div>
 
  {/* Mobile Bottom Tab Bar */}
- <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-2 px-1 z-50">
+ <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface border-t flex justify-around items-center py-2 px-1 z-50">
  {sections.map((section) => {
  const Icon = section.icon
  const isActive = activeTab === section.id
@@ -839,10 +839,10 @@ const EmergencyServices: React.FC<Props> = ({ patientData }) => {
  key={section.id}
  onClick={() => setActiveTab(section.id as typeof activeTab)}
  className={`flex flex-col items-center justify-center p-1 min-w-[40px] ${
- isActive ? 'text-blue-600' : 'text-gray-400'
+ isActive ? 'text-blue-600' : 'text-faint'
  }`}
  >
- <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+ <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-faint'}`} />
  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-1" />}
  </button>
  )

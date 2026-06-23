@@ -10,7 +10,7 @@ interface ClaimsTableProps {
 export default function ClaimsTable({ claims, onUpdateClaim }: ClaimsTableProps) {
  const getStatusInfo = (status: string) => {
  const statusConfig = claimStatuses.find(s => s.value === status)
- return statusConfig || { label: status, color: 'bg-gray-100 text-gray-800' }
+ return statusConfig || { label: status, color: 'bg-subtle text-fg' }
  }
 
  const getStatusIcon = (status: string) => {
@@ -24,23 +24,23 @@ export default function ClaimsTable({ claims, onUpdateClaim }: ClaimsTableProps)
  }
 
  return (
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Recent Claims</h2>
+ <h2 className="text-xl font-bold text-fg">Recent Claims</h2>
  <button className="text-blue-600 hover:underline font-medium">View All</button>
  </div>
  
  <div className="overflow-x-auto">
  <table className="w-full text-sm text-left">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 font-medium text-gray-600">Claim ID</th>
- <th className="p-3 font-medium text-gray-600">Policy Holder</th>
- <th className="p-3 font-medium text-gray-600">Policy Type</th>
- <th className="p-3 font-medium text-gray-600">Amount</th>
- <th className="p-3 font-medium text-gray-600">Status</th>
- <th className="p-3 font-medium text-gray-600">Date</th>
- <th className="p-3 font-medium text-gray-600">Actions</th>
+ <th className="p-3 font-medium text-soft">Claim ID</th>
+ <th className="p-3 font-medium text-soft">Policy Holder</th>
+ <th className="p-3 font-medium text-soft">Policy Type</th>
+ <th className="p-3 font-medium text-soft">Amount</th>
+ <th className="p-3 font-medium text-soft">Status</th>
+ <th className="p-3 font-medium text-soft">Date</th>
+ <th className="p-3 font-medium text-soft">Actions</th>
  </tr>
  </thead>
  <tbody>
@@ -49,10 +49,10 @@ export default function ClaimsTable({ claims, onUpdateClaim }: ClaimsTableProps)
  const StatusIcon = getStatusIcon(claim.status)
  
  return (
- <tr key={claim.id} className="border-b hover:bg-gray-50">
+ <tr key={claim.id} className="border-b hover:bg-subtle">
  <td className="p-3 font-mono text-xs">{claim.claimId}</td>
  <td className="p-3 font-medium">{claim.policyHolderName}</td>
- <td className="p-3 text-gray-600">{claim.policyType}</td>
+ <td className="p-3 text-soft">{claim.policyType}</td>
  <td className="p-3 font-semibold">Rs {claim.claimAmount.toLocaleString()}</td>
  <td className="p-3">
  <span className={`px-2 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 ${statusInfo.color}`}>
@@ -60,7 +60,7 @@ export default function ClaimsTable({ claims, onUpdateClaim }: ClaimsTableProps)
  {statusInfo.label}
  </span>
  </td>
- <td className="p-3 text-gray-500">{claim.submittedDate}</td>
+ <td className="p-3 text-soft">{claim.submittedDate}</td>
  <td className="p-3">
  <div className="flex items-center gap-2">
  <button className="bg-blue-500 text-white text-xs font-bold py-2 px-3 rounded-lg hover:bg-blue-600 transition-colors">

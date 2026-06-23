@@ -41,13 +41,13 @@ export default function BookingSuccessTicket({
 
  return (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
+ <div className="bg-surface rounded-2xl p-8 shadow-lg text-center">
  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <FaCheckCircle className="text-green-600 text-4xl" />
  </div>
 
- <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
- <p className="text-gray-600 mb-8">
+ <h2 className="text-2xl font-bold text-fg mb-2">Booking Confirmed!</h2>
+ <p className="text-soft mb-8">
  Your {typeLabels[providerType] || 'appointment'} has been successfully booked.
  </p>
 
@@ -126,7 +126,7 @@ export default function BookingSuccessTicket({
  </Link>
  <Link
  href={resolvedViewPath}
- className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-all text-center"
+ className="flex-1 border-2 border-line text-soft py-3 px-6 rounded-lg font-semibold hover:bg-subtle transition-all text-center"
  >
  {viewLabel}
  </Link>

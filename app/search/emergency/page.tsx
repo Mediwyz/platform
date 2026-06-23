@@ -53,7 +53,7 @@ const EmergencyCard = ({ service }: { service: EmergencyService }) => {
  const CategoryIcon = categoryIcons[service.category] || FaAmbulance
 
  return (
- <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-line overflow-hidden">
  <div className="p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
  {/* Left: Avatar + Info */}
  <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -72,7 +72,7 @@ const EmergencyCard = ({ service }: { service: EmergencyService }) => {
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
- <h3 className="text-sm font-bold text-gray-900 truncate">{service.name}</h3>
+ <h3 className="text-sm font-bold text-fg truncate">{service.name}</h3>
  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium border whitespace-nowrap bg-blue-50 text-blue-700 border-blue-200">
  {service.type}
  </span>
@@ -87,14 +87,14 @@ const EmergencyCard = ({ service }: { service: EmergencyService }) => {
  </p>
 
  {/* Meta row */}
- <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-1.5">
+ <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-soft mb-1.5">
  <span className="flex items-center gap-1">
  <FaStar className="text-yellow-500 text-[10px]" />
- <span className="font-semibold text-gray-700">{service.rating}</span>
- <span className="text-gray-400">({service.reviews})</span>
+ <span className="font-semibold text-soft">{service.rating}</span>
+ <span className="text-faint">({service.reviews})</span>
  </span>
  <span className="flex items-center gap-1">
- <FaMapMarkerAlt className="text-[10px] text-gray-400" />
+ <FaMapMarkerAlt className="text-[10px] text-faint" />
  <span className="truncate max-w-[120px]">{service.location}</span>
  </span>
  <span className="flex items-center gap-1 font-semibold text-blue-600">
@@ -122,7 +122,7 @@ const EmergencyCard = ({ service }: { service: EmergencyService }) => {
  </div>
 
  {/* Right: Phone + Buttons */}
- <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-gray-100 sm:pl-4 border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0">
+ <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 sm:border-l sm:border-line sm:pl-4 border-t sm:border-t-0 border-line pt-3 sm:pt-0">
  <div className="sm:text-right">
  <a href={`tel:${service.phone}`} className="text-sm font-bold text-blue-600 whitespace-nowrap hover:underline">
  {service.phone}
@@ -153,7 +153,7 @@ const LoadingAnimation = () => {
  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
  <FaAmbulance className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 text-2xl animate-pulse" />
  </div>
- <p className="mt-4 text-gray-600 font-medium animate-pulse">Locating emergency services...</p>
+ <p className="mt-4 text-soft font-medium animate-pulse">Locating emergency services...</p>
  <div className="flex gap-1 mt-2">
  <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
  <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -167,9 +167,9 @@ const LoadingAnimation = () => {
 const EmptyState = ({ onClear }: { onClear: () => void }) => {
  return (
  <div className="text-center py-12">
- <FaExclamationTriangle className="text-6xl text-gray-300 mx-auto mb-4" />
- <h3 className="text-xl font-semibold text-gray-700 mb-2">No emergency services found</h3>
- <p className="text-gray-500 mb-6">Try adjusting your search criteria or browse all services</p>
+ <FaExclamationTriangle className="text-6xl text-faint mx-auto mb-4" />
+ <h3 className="text-xl font-semibold text-soft mb-2">No emergency services found</h3>
+ <p className="text-soft mb-6">Try adjusting your search criteria or browse all services</p>
  <button
  onClick={onClear}
  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -301,7 +301,7 @@ export default function EmergencyPage() {
  <div className="container mx-auto px-4 py-8">
  {/* Search Section */}
  <div className="relative z-10">
- <div className="bg-white rounded-xl shadow-xl p-4 border-2 border-blue-200">
+ <div className="bg-surface rounded-xl shadow-xl p-4 border-2 border-blue-200">
  <div className="flex flex-col gap-4">
  <div className="relative">
  <input
@@ -350,8 +350,8 @@ export default function EmergencyPage() {
  <>
  {hasSearched && (
  <div className="mb-6 flex items-center justify-between">
- <p className="text-gray-600">
- Found <span className="font-semibold text-gray-900">{searchResults.length}</span> emergency services
+ <p className="text-soft">
+ Found <span className="font-semibold text-fg">{searchResults.length}</span> emergency services
  </p>
  <button
  onClick={handleClearFilters}

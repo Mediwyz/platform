@@ -121,31 +121,31 @@ export default function CheckoutPage() {
  return (
  <div className="min-h-screen to-white">
  <div className="container mx-auto px-4 py-12">
- <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-8 text-center">
+ <div className="max-w-lg mx-auto bg-surface rounded-2xl shadow-lg p-8 text-center">
  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
  <FaCheckCircle className="text-green-600 text-3xl" />
  </div>
- <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h1>
- <p className="text-gray-600 mb-6">
+ <h1 className="text-2xl font-bold text-fg mb-2">Order Placed Successfully!</h1>
+ <p className="text-soft mb-6">
  Your order has been confirmed and is being processed.
  </p>
 
- <div className="bg-gray-50 rounded-xl p-5 mb-6 text-left space-y-3">
+ <div className="bg-subtle rounded-xl p-5 mb-6 text-left space-y-3">
  <div className="flex justify-between">
- <span className="text-gray-600">Order ID</span>
- <span className="font-semibold text-gray-900">{orderResult.orderId.slice(0, 8)}...</span>
+ <span className="text-soft">Order ID</span>
+ <span className="font-semibold text-fg">{orderResult.orderId.slice(0, 8)}...</span>
  </div>
  <div className="flex justify-between">
- <span className="text-gray-600">Items</span>
- <span className="font-semibold text-gray-900">{orderResult.itemCount}</span>
+ <span className="text-soft">Items</span>
+ <span className="font-semibold text-fg">{orderResult.itemCount}</span>
  </div>
  <div className="flex justify-between">
- <span className="text-gray-600">Total Paid</span>
+ <span className="text-soft">Total Paid</span>
  <span className="font-bold text-green-600">Rs {orderResult.totalAmount.toFixed(2)}</span>
  </div>
  <div className="flex justify-between border-t pt-3">
- <span className="text-gray-600">New Wallet Balance</span>
- <span className="font-semibold text-gray-900">Rs {orderResult.newBalance.toFixed(2)}</span>
+ <span className="text-soft">New Wallet Balance</span>
+ <span className="font-semibold text-fg">Rs {orderResult.newBalance.toFixed(2)}</span>
  </div>
  </div>
 
@@ -158,7 +158,7 @@ export default function CheckoutPage() {
  </Link>
  <Link
  href="/patient/search/medicines"
- className="border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-all text-center"
+ className="border-2 border-line text-soft py-3 px-6 rounded-lg font-semibold hover:bg-subtle transition-all text-center"
  >
  Continue Shopping
  </Link>
@@ -172,15 +172,15 @@ export default function CheckoutPage() {
  return (
  <div className="min-h-screen to-white">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center gap-4">
- <Link href="/patient/search/medicines" className="text-gray-600 hover:text-green-600">
+ <Link href="/patient/search/medicines" className="text-soft hover:text-green-600">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Checkout</h1>
- <p className="text-gray-600 text-sm">{cartItems.length} item(s) in your cart</p>
+ <h1 className="text-2xl font-bold text-fg">Checkout</h1>
+ <p className="text-soft text-sm">{cartItems.length} item(s) in your cart</p>
  </div>
  </div>
  </div>
@@ -189,9 +189,9 @@ export default function CheckoutPage() {
  <div className="container mx-auto px-4 py-8">
  {cartItems.length === 0 ? (
  <div className="max-w-md mx-auto text-center py-16">
- <FaShoppingCart className="text-6xl text-gray-300 mx-auto mb-4" />
- <h2 className="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h2>
- <p className="text-gray-500 mb-6">Add some medicines to get started.</p>
+ <FaShoppingCart className="text-6xl text-faint mx-auto mb-4" />
+ <h2 className="text-xl font-semibold text-soft mb-2">Your cart is empty</h2>
+ <p className="text-soft mb-6">Add some medicines to get started.</p>
  <Link
  href="/patient/search/medicines"
  className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
@@ -203,16 +203,16 @@ export default function CheckoutPage() {
  <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
  {/* Left Column -- Cart Items */}
  <div className="lg:col-span-2 space-y-4">
- <h2 className="text-lg font-bold text-gray-900 mb-2">Cart Items</h2>
+ <h2 className="text-lg font-bold text-fg mb-2">Cart Items</h2>
  {cartItems.map((item) => (
  <div
  key={item.id}
- className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
+ className="bg-surface rounded-xl shadow-sm border border-line p-5"
  >
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <h3 className="font-semibold text-gray-900">{item.name}</h3>
- <p className="text-sm text-gray-500">
+ <h3 className="font-semibold text-fg">{item.name}</h3>
+ <p className="text-sm text-soft">
  {item.genericName && <span>{item.genericName} &middot; </span>}
  {item.brand}
  </p>
@@ -230,20 +230,20 @@ export default function CheckoutPage() {
  <div className="flex items-center gap-3">
  <button
  onClick={() => updateQuantity(item.id, item.quantity - 1)}
- className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+ className="w-8 h-8 border border-line rounded-lg flex items-center justify-center hover:bg-subtle transition-colors"
  >
  <FaMinus className="text-xs" />
  </button>
  <span className="font-medium w-10 text-center">{item.quantity}</span>
  <button
  onClick={() => updateQuantity(item.id, item.quantity + 1)}
- className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+ className="w-8 h-8 border border-line rounded-lg flex items-center justify-center hover:bg-subtle transition-colors"
  >
  <FaPlus className="text-xs" />
  </button>
  </div>
  <div className="text-right">
- <p className="text-sm text-gray-500">Rs {item.price} x {item.quantity}</p>
+ <p className="text-sm text-soft">Rs {item.price} x {item.quantity}</p>
  <p className="font-bold text-green-600">Rs {(item.price * item.quantity).toFixed(2)}</p>
  </div>
  </div>
@@ -253,41 +253,41 @@ export default function CheckoutPage() {
 
  {/* Right Column -- Order Summary */}
  <div className="lg:col-span-1">
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-8">
- <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6 sticky top-8">
+ <h2 className="text-lg font-bold text-fg mb-4">Order Summary</h2>
 
  <div className="space-y-3 mb-4">
- <div className="flex justify-between text-gray-600">
+ <div className="flex justify-between text-soft">
  <span>Subtotal</span>
- <span className="font-medium text-gray-900">Rs {subtotal.toFixed(2)}</span>
+ <span className="font-medium text-fg">Rs {subtotal.toFixed(2)}</span>
  </div>
- <div className="flex justify-between text-gray-600">
+ <div className="flex justify-between text-soft">
  <span>Delivery Fee</span>
  <span className="font-medium text-green-600">Free</span>
  </div>
  <div className="border-t pt-3 flex justify-between">
- <span className="font-bold text-gray-900">Total</span>
+ <span className="font-bold text-fg">Total</span>
  <span className="font-bold text-xl text-green-600">Rs {total.toFixed(2)}</span>
  </div>
  </div>
 
  {/* Wallet Balance */}
- <div className="bg-gray-50 rounded-lg p-4 mb-4">
+ <div className="bg-subtle rounded-lg p-4 mb-4">
  <div className="flex items-center gap-2 mb-1">
  <FaWallet className="text-blue-600" />
- <span className="font-semibold text-gray-900">Wallet Balance</span>
+ <span className="font-semibold text-fg">Wallet Balance</span>
  </div>
  {walletLoading ? (
- <div className="flex items-center gap-2 text-gray-500 text-sm">
+ <div className="flex items-center gap-2 text-soft text-sm">
  <FaSpinner className="animate-spin" />
  Loading balance...
  </div>
  ) : walletData ? (
- <p className="text-lg font-bold text-gray-900">
+ <p className="text-lg font-bold text-fg">
  Rs {walletData.balance.toFixed(2)}
  </p>
  ) : (
- <p className="text-sm text-gray-500">Wallet not available</p>
+ <p className="text-sm text-soft">Wallet not available</p>
  )}
  </div>
 
@@ -315,7 +315,7 @@ export default function CheckoutPage() {
  className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
  canPlaceOrder
  ? 'bg-brand-teal'
- : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+ : 'bg-gray-300 text-soft cursor-not-allowed'
  }`}
  >
  {placing ? (

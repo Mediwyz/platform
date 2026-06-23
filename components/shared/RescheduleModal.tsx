@@ -42,38 +42,38 @@ export default function RescheduleModal({ bookingId, bookingType, onClose, onRes
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4"
+        className="bg-surface rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Reschedule booking</h2>
-            <p className="text-xs text-gray-500">Your provider will be notified of the change.</p>
+            <h2 className="text-lg font-bold text-fg">Reschedule booking</h2>
+            <p className="text-xs text-soft">Your provider will be notified of the change.</p>
           </div>
-          <button onClick={onClose} aria-label="Close" className="p-1 text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} aria-label="Close" className="p-1 text-faint hover:text-soft">
             <FaTimes />
           </button>
         </div>
 
         <label className="block">
-          <span className="text-xs font-medium text-gray-600 flex items-center gap-1.5 mb-1">
+          <span className="text-xs font-medium text-soft flex items-center gap-1.5 mb-1">
             <FaCalendarAlt /> New date
           </span>
           <input
             type="date" min={today}
             value={date} onChange={e => setDate(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
+            className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
           />
         </label>
 
         <label className="block">
-          <span className="text-xs font-medium text-gray-600 flex items-center gap-1.5 mb-1">
+          <span className="text-xs font-medium text-soft flex items-center gap-1.5 mb-1">
             <FaClock /> New time
           </span>
           <input
             type="time"
             value={time} onChange={e => setTime(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
+            className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none"
           />
         </label>
 
@@ -84,7 +84,7 @@ export default function RescheduleModal({ bookingId, bookingType, onClose, onRes
         <div className="flex gap-2 pt-2">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="flex-1 py-2.5 text-sm font-medium text-soft bg-subtle rounded-lg hover:bg-line"
           >
             Cancel
           </button>
@@ -93,7 +93,7 @@ export default function RescheduleModal({ bookingId, bookingType, onClose, onRes
             disabled={busy}
             className="flex-1 py-2.5 text-sm font-semibold text-white bg-[#0C6780] rounded-lg hover:bg-[#0a5568] disabled:opacity-50"
           >
-            {busy ? 'Rescheduling…' : 'Reschedule'}
+            {busy ? 'Rescheduling' : 'Reschedule'}
           </button>
         </div>
       </div>

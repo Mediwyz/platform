@@ -21,7 +21,7 @@ const DashboardErrorState: React.FC<DashboardErrorStateProps> = ({
 }) => {
  return (
  <div className="min-h-screen flex items-center justify-center">
- <div className="text-center bg-white rounded-2xl p-8 shadow-xl max-w-md w-full mx-4">
+ <div className="text-center bg-surface rounded-2xl p-8 shadow-xl max-w-md w-full mx-4">
  {/* Error icon */}
  <div className="mx-auto w-16 h-16 flex items-center justify-center rounded-full bg-red-100 mb-4">
  <svg

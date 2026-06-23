@@ -112,7 +112,7 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  in_person: 'bg-green-100 text-green-800',
  home_visit: 'bg-purple-100 text-purple-800',
  }
- return styles[type] || 'bg-gray-100 text-gray-800'
+ return styles[type] || 'bg-subtle text-fg'
  }
 
  if (loading) {
@@ -125,7 +125,7 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
 
  return (
  <div className="space-y-6">
- <h1 className="text-2xl font-bold text-gray-900">Booking Requests</h1>
+ <h1 className="text-2xl font-bold text-fg">Booking Requests</h1>
 
  {error && (
  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between">
@@ -143,9 +143,9 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  )}
 
  {bookings.length === 0 ? (
- <div className="rounded-lg bg-white p-12 text-center shadow-sm border border-gray-200">
- <FaCalendarAlt className="mx-auto text-4xl text-gray-300 mb-4" />
- <p className="text-gray-500 text-lg">No pending booking requests</p>
+ <div className="rounded-lg bg-surface p-12 text-center shadow-sm border border-line">
+ <FaCalendarAlt className="mx-auto text-4xl text-faint mb-4" />
+ <p className="text-soft text-lg">No pending booking requests</p>
  </div>
  ) : (
  <div className="grid gap-4">
@@ -158,7 +158,7 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  const reason = booking.reason as string | undefined
 
  return (
- <div key={id} className="rounded-lg bg-white p-6 shadow-sm border border-gray-200">
+ <div key={id} className="rounded-lg bg-surface p-6 shadow-sm border border-line">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
  <div className="flex-1 space-y-3">
  <div className="flex items-center gap-3">
@@ -166,10 +166,10 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  {patient.user.firstName[0]}{patient.user.lastName[0]}
  </div>
  <div>
- <h3 className="font-semibold text-gray-900">
+ <h3 className="font-semibold text-fg">
  {patient.user.firstName} {patient.user.lastName}
  </h3>
- <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+ <div className="flex flex-wrap items-center gap-3 text-sm text-soft">
  <span className="flex items-center gap-1">
  <FaEnvelope className="text-xs" /> {patient.user.email}
  </span>
@@ -186,17 +186,17 @@ export default function BookingRequestsManager({ config }: { config: BookingRequ
  {type.replace(/_/g, ' ')}
  </span>
  )}
- <span className="flex items-center gap-1 text-gray-600">
+ <span className="flex items-center gap-1 text-soft">
  <FaCalendarAlt className="text-xs" /> {formatDate(scheduledAt)}
  </span>
- <span className="flex items-center gap-1 text-gray-600">
+ <span className="flex items-center gap-1 text-soft">
  <FaClock className="text-xs" /> {formatTime(scheduledAt)}
  </span>
- {duration && <span className="text-gray-500">{duration} min</span>}
+ {duration && <span className="text-soft">{duration} min</span>}
  </div>
 
  {reason && (
- <p className="text-sm text-gray-600">
+ <p className="text-sm text-soft">
  <span className="font-medium">Reason:</span> {reason}
  </p>
  )}

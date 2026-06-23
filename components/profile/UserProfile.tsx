@@ -42,7 +42,7 @@ const PdfViewer = dynamic(() => import('@/components/shared/PdfViewer'), {
  ),
 })
 
-/* ─── Interfaces ─────────────────────────────────────────────────────────── */
+/*  Interfaces  */
 
 interface UserProfileProps {
  userId: string
@@ -115,7 +115,7 @@ interface UserData {
  profile?: UserProfileData | null
 }
 
-/* ─── Tab config ─────────────────────────────────────────────────────────── */
+/*  Tab config  */
 
 type TabId = 'overview' | 'documents' | 'info' | 'reviews' | 'posts'
 
@@ -150,7 +150,7 @@ function getTabsForUserType(userType: string): TabConfig[] {
  return tabs
 }
 
-/* ─── Constants ──────────────────────────────────────────────────────────── */
+/*  Constants  */
 
 const USER_TYPE_LABELS: Record<string, string> = {
  MEMBER: 'Member',
@@ -205,10 +205,10 @@ const DOCUMENT_TYPE_COLORS: Record<string, string> = {
  'nursing-license': 'bg-cyan-100 text-cyan-700',
  'registration-cert': 'bg-violet-100 text-violet-700',
  'work-certificate': 'bg-amber-100 text-amber-700',
- other: 'bg-gray-100 text-gray-700',
+ other: 'bg-subtle text-soft',
 }
 
-/* ─── Helper: format file size ───────────────────────────────────────────── */
+/*  Helper: format file size  */
 
 function formatFileSize(bytes?: number): string {
  if (!bytes) return 'Unknown size'
@@ -217,7 +217,7 @@ function formatFileSize(bytes?: number): string {
  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-/* ─── Type-specific field definitions ────────────────────────────────────── */
+/*  Type-specific field definitions  */
 
 interface EditableField {
  key: string
@@ -239,9 +239,9 @@ function getEditableFieldsForType(
 }
 
 
-/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  */
 /* Main component */
-/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  */
 
 export default function UserProfile({ userId, userType }: UserProfileProps) {
  const { updateUser } = useUser()
@@ -355,7 +355,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  // Fetched once from /api/roles and looked up by userType code.
  const [profileFieldsByCode, setProfileFieldsByCode] = useState<Record<string, EditableField[]>>({})
 
- /* ─── Fetch user data + role profile-field schema ─────────────────────── */
+ /*  Fetch user data + role profile-field schema  */
 
  useEffect(() => {
  async function fetchUser() {
@@ -375,7 +375,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }, [userId])
 
  useEffect(() => {
- // Include legacy codes (PATIENT, CORPORATE_ADMIN, INSURANCE_REP, …)
+ // Include legacy codes (PATIENT, CORPORATE_ADMIN, INSURANCE_REP, )
  // so users with any historical userType still get their form.
  fetch('/api/roles?all=true&includeLegacy=true', { credentials: 'include' })
  .then(r => r.json())
@@ -392,7 +392,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  .catch(() => { /* fall back to empty - form shows user-level fields only */ })
  }, [])
 
- /* ─── Initialize edit state when entering edit mode ────────────────────── */
+ /*  Initialize edit state when entering edit mode  */
 
  const startEditing = useCallback(() => {
  if (!userData) return
@@ -427,7 +427,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setSaveMsg(null)
  }, [userData, userType, profileFieldsByCode])
 
- /* ─── Save edits ───────────────────────────────────────────────────────── */
+ /*  Save edits  */
 
  const handleSave = async () => {
  setSaving(true)
@@ -478,7 +478,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /* ─── Fetch documents ──────────────────────────────────────────────────── */
+ /*  Fetch documents  */
 
  const fetchDocuments = useCallback(async () => {
  setDocsLoading(true)
@@ -500,7 +500,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }, [activeTab, docsFetched, fetchDocuments])
 
- /* ─── Fetch required documents for this user type ───────────────────────── */
+ /*  Fetch required documents for this user type  */
  useEffect(() => {
  if (!userType) return
  fetch(`/api/required-documents?userType=${encodeURIComponent(userType)}`)
@@ -511,7 +511,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  .catch(() => {})
  }, [userType])
 
- /* ─── Upload document ──────────────────────────────────────────────────── */
+ /*  Upload document  */
 
  const handleDocUpload = async (file: File) => {
  setUploading(true)
@@ -530,7 +530,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /* ─── Delete document ──────────────────────────────────────────────────── */
+ /*  Delete document  */
 
  const handleDeleteDoc = async (docId: string) => {
  try {
@@ -548,7 +548,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
  }
 
- /* ─── Tag helpers ──────────────────────────────────────────────────────── */
+ /*  Tag helpers  */
 
  const addTag = (fieldKey: string) => {
  const value = (tagInput[fieldKey] || '').trim()
@@ -565,9 +565,9 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setEditedProfile((prev) => ({ ...prev, [fieldKey]: current.filter((_, i) => i !== index) }))
  }
 
- /* ═══════════════════════════════════════════════════════════════════════ */
+ /*  */
  /* Render */
- /* ═══════════════════════════════════════════════════════════════════════ */
+ /*  */
 
  if (loading) {
  return (
@@ -578,66 +578,66 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  }
 
  if (!userData) {
- return <div className="text-center py-20 text-gray-500">Failed to load profile</div>
+ return <div className="text-center py-20 text-soft">Failed to load profile</div>
  }
 
- /* ─── Tab: Overview ────────────────────────────────────────────────────── */
+ /*  Tab: Overview  */
 
  const renderOverview = () => (
  <div className="space-y-6">
  {/* Contact info */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
+ <h3 className="text-lg font-semibold text-fg mb-4">Contact Information</h3>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="flex items-center gap-3">
- <FaEnvelope className="text-gray-400" />
+ <FaEnvelope className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Email</p>
- <p className="text-gray-900">{userData.email}</p>
+ <p className="text-sm text-soft">Email</p>
+ <p className="text-fg">{userData.email}</p>
  </div>
  </div>
  {userData.phone && (
  <div className="flex items-center gap-3">
- <FaPhone className="text-gray-400" />
+ <FaPhone className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Phone</p>
- <p className="text-gray-900">{userData.phone}</p>
+ <p className="text-sm text-soft">Phone</p>
+ <p className="text-fg">{userData.phone}</p>
  </div>
  </div>
  )}
  {userData.dateOfBirth && (
  <div className="flex items-center gap-3">
- <FaBirthdayCake className="text-gray-400" />
+ <FaBirthdayCake className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Date of Birth</p>
- <p className="text-gray-900">{new Date(userData.dateOfBirth).toLocaleDateString()}</p>
+ <p className="text-sm text-soft">Date of Birth</p>
+ <p className="text-fg">{new Date(userData.dateOfBirth).toLocaleDateString()}</p>
  </div>
  </div>
  )}
  {userData.gender && (
  <div className="flex items-center gap-3">
- <FaVenusMars className="text-gray-400" />
+ <FaVenusMars className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Gender</p>
- <p className="text-gray-900 capitalize">{userData.gender}</p>
+ <p className="text-sm text-soft">Gender</p>
+ <p className="text-fg capitalize">{userData.gender}</p>
  </div>
  </div>
  )}
  {userData.address && (
  <div className="flex items-center gap-3">
- <FaMapMarkerAlt className="text-gray-400" />
+ <FaMapMarkerAlt className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Address</p>
- <p className="text-gray-900">{userData.address}</p>
+ <p className="text-sm text-soft">Address</p>
+ <p className="text-fg">{userData.address}</p>
  </div>
  </div>
  )}
  {userData.createdAt && (
  <div className="flex items-center gap-3">
- <FaClock className="text-gray-400" />
+ <FaClock className="text-faint" />
  <div>
- <p className="text-sm text-gray-500">Member Since</p>
- <p className="text-gray-900">{new Date(userData.createdAt).toLocaleDateString()}</p>
+ <p className="text-sm text-soft">Member Since</p>
+ <p className="text-fg">{new Date(userData.createdAt).toLocaleDateString()}</p>
  </div>
  </div>
  )}
@@ -653,15 +653,15 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
   }))
   const missingCount = checklist.filter(c => c.required && !c.uploaded).length
   return (
-   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+   <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
     <div className="flex items-center justify-between mb-3">
      <div>
-      <h3 className="text-lg font-semibold text-gray-900">Required Documents</h3>
-      <p className="text-xs text-gray-500 mt-0.5">
+      <h3 className="text-lg font-semibold text-fg">Required Documents</h3>
+      <p className="text-xs text-soft mt-0.5">
        {checklist.length === 0
         ? 'No required documents for your account type'
         : missingCount === 0
-         ? 'All required documents uploaded ✓'
+         ? 'All required documents uploaded '
          : `${missingCount} required document${missingCount > 1 ? 's' : ''} still needed`}
       </p>
      </div>
@@ -669,27 +669,27 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
       onClick={() => setActiveTab('documents')}
       className="text-xs px-3 py-1.5 bg-[#0C6780]/10 text-[#0C6780] rounded-lg hover:bg-[#0C6780]/20 font-medium"
      >
-      Manage →
+      Manage 
      </button>
     </div>
     {checklist.length === 0 ? (
-     <p className="text-sm text-gray-400 italic py-2">No required documents are configured for your account type.</p>
+     <p className="text-sm text-faint italic py-2">No required documents are configured for your account type.</p>
     ) : (
-     <ul className="divide-y divide-gray-100">
+     <ul className="divide-y divide-line">
       {checklist.map(item => (
        <li key={item.documentName} className="flex items-center justify-between py-2.5">
         <div className="flex items-center gap-2 min-w-0">
          <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs ${
-          item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
+          item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-subtle text-soft'
          }`}>
-          {item.uploaded ? '✓' : item.required ? '!' : '•'}
+          {item.uploaded ? '' : item.required ? '!' : ''}
          </span>
-         <span className="text-sm text-gray-800 truncate">{item.documentName}</span>
+         <span className="text-sm text-fg truncate">{item.documentName}</span>
          {!item.required && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-50 text-gray-500">Optional</span>
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-subtle text-soft">Optional</span>
          )}
         </div>
-        <span className={`text-xs font-medium ${item.uploaded ? 'text-green-600' : item.required ? 'text-amber-600' : 'text-gray-400'}`}>
+        <span className={`text-xs font-medium ${item.uploaded ? 'text-green-600' : item.required ? 'text-amber-600' : 'text-faint'}`}>
          {item.uploaded ? 'Uploaded' : item.required ? 'Missing' : 'Not uploaded'}
         </span>
        </li>
@@ -705,7 +705,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </div>
  )
 
- /* ─── Tab: Documents ───────────────────────────────────────────────────── */
+ /*  Tab: Documents  */
 
  const renderDocuments = () => {
  // Compare required docs vs uploaded docs (by name, case-insensitive)
@@ -719,15 +719,15 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  return (
  <div className="space-y-6">
  {/* Required documents checklist - always visible */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
   <div className="flex items-center justify-between mb-3">
    <div>
-    <h3 className="text-lg font-semibold text-gray-900">Required Documents</h3>
-    <p className="text-xs text-gray-500 mt-0.5">
+    <h3 className="text-lg font-semibold text-fg">Required Documents</h3>
+    <p className="text-xs text-soft mt-0.5">
      {checklist.length === 0
       ? 'No required documents for your role'
       : missingRequired === 0
-       ? 'All required documents uploaded ✓'
+       ? 'All required documents uploaded '
        : `${missingRequired} required document${missingRequired > 1 ? 's' : ''} still needed`}
     </p>
    </div>
@@ -739,26 +739,26 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
    </button>
    </div>
    {checklist.length === 0 ? (
-    <p className="text-sm text-gray-400 italic py-2">No required documents are configured for your account type.</p>
+    <p className="text-sm text-faint italic py-2">No required documents are configured for your account type.</p>
    ) : (
-    <ul className="divide-y divide-gray-100">
+    <ul className="divide-y divide-line">
      {checklist.map(item => (
       <li key={item.documentName} className="flex items-center justify-between py-2.5">
        <div className="flex items-center gap-2 min-w-0">
         <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs ${
-         item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
+         item.uploaded ? 'bg-green-100 text-green-700' : item.required ? 'bg-amber-100 text-amber-700' : 'bg-subtle text-soft'
         }`}>
-         {item.uploaded ? '✓' : item.required ? '!' : '•'}
+         {item.uploaded ? '' : item.required ? '!' : ''}
         </span>
-        <span className="text-sm text-gray-800 truncate">{item.documentName}</span>
+        <span className="text-sm text-fg truncate">{item.documentName}</span>
         {item.required && !item.uploaded && (
          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">Required</span>
         )}
         {!item.required && (
-         <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-50 text-gray-500">Optional</span>
+         <span className="text-[10px] px-1.5 py-0.5 rounded bg-subtle text-soft">Optional</span>
         )}
        </div>
-       <span className={`text-xs font-medium ${item.uploaded ? 'text-green-600' : item.required ? 'text-amber-600' : 'text-gray-400'}`}>
+       <span className={`text-xs font-medium ${item.uploaded ? 'text-green-600' : item.required ? 'text-amber-600' : 'text-faint'}`}>
         {item.uploaded ? 'Uploaded' : item.required ? 'Missing' : 'Not uploaded'}
        </span>
       </li>
@@ -768,9 +768,9 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
   </div>
 
  {/* Upload section */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-semibold text-gray-900">My Documents</h3>
+ <h3 className="text-lg font-semibold text-fg">My Documents</h3>
  <button
  onClick={() => setUploadOpen(!uploadOpen)}
  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
@@ -784,7 +784,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  {/* Per-required-document upload slots */}
  {checklist.filter(c => !c.uploaded).length > 0 && (
  <div className="mb-5 space-y-3">
- <p className="text-sm font-medium text-gray-700">Upload required documents:</p>
+ <p className="text-sm font-medium text-soft">Upload required documents:</p>
  {checklist.filter(c => !c.uploaded).map(item => (
  <RequiredDocUploadSlot
  key={item.documentName}
@@ -800,24 +800,24 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )}
 
  {uploadOpen && (
- <div className="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-200 space-y-3">
- <p className="text-sm font-semibold text-gray-700">Upload additional document</p>
+ <div className="bg-subtle rounded-lg p-4 mb-4 border border-line space-y-3">
+ <p className="text-sm font-semibold text-soft">Upload additional document</p>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Document Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Document Name</label>
  <input
  type="text"
  value={uploadName}
  onChange={(e) => setUploadName(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g. Blood Test Results"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+ <label className="block text-sm font-medium text-soft mb-1">Type</label>
  <select
  value={uploadType}
  onChange={(e) => setUploadType(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  >
  {Object.entries(DOCUMENT_TYPE_LABELS).map(([val, label]) => (
  <option key={val} value={val}>
@@ -827,7 +827,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </select>
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">File</label>
+ <label className="block text-sm font-medium text-soft mb-1">File</label>
  <input
  type="file"
  accept="image/jpeg,image/png,image/webp,application/pdf"
@@ -836,10 +836,10 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  const file = e.target.files?.[0]
  if (file) handleDocUpload(file)
  }}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  {uploading && (
- <p className="text-xs text-blue-600 mt-1 flex items-center gap-1"><FaSpinner className="animate-spin text-[10px]" /> Uploading…</p>
+ <p className="text-xs text-blue-600 mt-1 flex items-center gap-1"><FaSpinner className="animate-spin text-[10px]" /> Uploading</p>
  )}
  </div>
  {docError && (
@@ -853,7 +853,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setUploadOpen(false)
  setDocError('')
  }}
- className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+ className="px-4 py-2 bg-line text-soft rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
  >
  Cancel
  </button>
@@ -867,7 +867,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  <div className="animate-spin h-6 w-6 border-4 border-blue-500 border-t-transparent rounded-full" />
  </div>
  ) : documents.length === 0 ? (
- <div className="text-center py-12 text-gray-400">
+ <div className="text-center py-12 text-faint">
  <FaFileAlt className="mx-auto text-3xl mb-2" />
  <p className="text-sm">No documents uploaded yet</p>
  </div>
@@ -876,24 +876,24 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  {documents.map((doc: DocumentData) => (
  <div
  key={doc.id}
- className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors"
+ className="flex items-center justify-between p-4 bg-subtle rounded-lg border border-line hover:border-line transition-colors"
  >
  <div className="flex items-center gap-3 min-w-0">
  <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
  <FaFileAlt className="text-blue-600" />
  </div>
  <div className="min-w-0">
- <h4 className="font-medium text-gray-900 text-sm truncate">{doc.name}</h4>
+ <h4 className="font-medium text-fg text-sm truncate">{doc.name}</h4>
  <div className="flex flex-wrap items-center gap-2 mt-1">
  <span
  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
- DOCUMENT_TYPE_COLORS[doc.type] || 'bg-gray-100 text-gray-700'
+ DOCUMENT_TYPE_COLORS[doc.type] || 'bg-subtle text-soft'
  }`}
  >
  {DOCUMENT_TYPE_LABELS[doc.type] || doc.type}
  </span>
- <span className="text-xs text-gray-500">{formatFileSize(doc.size)}</span>
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-soft">{formatFileSize(doc.size)}</span>
+ <span className="text-xs text-soft">
  {new Date(doc.uploadedAt).toLocaleDateString()}
  </span>
  </div>
@@ -932,7 +932,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /* ─── Tab: Medical / Professional Info (editable) ──────────────────────── */
+ /*  Tab: Medical / Professional Info (editable)  */
 
  const renderInfo = () => {
  const fields = getEditableFieldsForType(userType, profileFieldsByCode)
@@ -940,7 +940,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
 
  if (!profile && fields.length === 0) {
  return (
- <div className="text-center py-12 text-gray-400">
+ <div className="text-center py-12 text-faint">
  <FaBriefcaseMedical className="mx-auto text-3xl mb-2" />
  <p className="text-sm">No additional information available</p>
  </div>
@@ -949,9 +949,9 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
 
  return (
  <div className="space-y-6">
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
  <div className="flex items-center justify-between mb-6">
- <h3 className="text-lg font-semibold text-gray-900">
+ <h3 className="text-lg font-semibold text-fg">
  Personal Information
  </h3>
  {!isEditing ? (
@@ -976,7 +976,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  setIsEditing(false)
  setSaveMsg(null)
  }}
- className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+ className="flex items-center gap-2 px-4 py-2 bg-line text-soft rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
  >
  <FaTimes /> Cancel
  </button>
@@ -996,58 +996,58 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
 
  {/* General Information (name, email, phone, etc.) */}
  {isEditing ? (
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-line">
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">First Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">First Name</label>
  <input
  type="text"
  value={editedGeneral.firstName}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, firstName: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Last Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Last Name</label>
  <input
  type="text"
  value={editedGeneral.lastName}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, lastName: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+ <label className="block text-sm font-medium text-soft mb-1">Email</label>
  <input
  type="email"
  value={editedGeneral.email}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, email: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Phone</label>
+ <label className="block text-sm font-medium text-soft mb-1">Phone</label>
  <input
  type="tel"
  value={editedGeneral.phone}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, phone: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Date of Birth</label>
+ <label className="block text-sm font-medium text-soft mb-1">Date of Birth</label>
  <input
  type="date"
  value={editedGeneral.dateOfBirth}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, dateOfBirth: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Gender</label>
+ <label className="block text-sm font-medium text-soft mb-1">Gender</label>
  <select
  value={editedGeneral.gender}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, gender: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-surface"
  >
  <option value="">Select gender</option>
  <option value="male">Male</option>
@@ -1056,17 +1056,17 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </select>
  </div>
  <div className="md:col-span-2">
- <label className="block text-sm font-medium text-gray-600 mb-1">Address</label>
+ <label className="block text-sm font-medium text-soft mb-1">Address</label>
  <input
  type="text"
  value={editedGeneral.address}
  onChange={(e) => setEditedGeneral((prev) => ({ ...prev, address: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
  </div>
  ) : (
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-line">
  {[
  { label: 'First Name', value: userData.firstName, icon: FaUser },
  { label: 'Last Name', value: userData.lastName, icon: FaUser },
@@ -1077,10 +1077,10 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  { label: 'Address', value: userData.address, icon: FaMapMarkerAlt },
  ].filter(f => f.value).map((f) => (
  <div key={f.label} className="flex items-center gap-3">
- <f.icon className="text-gray-400 flex-shrink-0" />
+ <f.icon className="text-faint flex-shrink-0" />
  <div>
- <p className="text-sm text-gray-500">{f.label}</p>
- <p className="text-gray-900 capitalize">{f.value}</p>
+ <p className="text-sm text-soft">{f.label}</p>
+ <p className="text-fg capitalize">{f.value}</p>
  </div>
  </div>
  ))}
@@ -1094,12 +1094,12 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  ? editedProfile[field.key]
  : (profile as Record<string, unknown> | null)?.[field.key]
 
- /* ── Tags field ── */
+ /*  Tags field  */
  if (field.type === 'tags') {
  const tags = (isEditing ? (editedProfile[field.key] as string[]) : (rawValue as string[])) || []
  return (
  <div key={field.key} className="md:col-span-2">
- <label className="block text-sm font-medium text-gray-600 mb-1">{field.label}</label>
+ <label className="block text-sm font-medium text-soft mb-1">{field.label}</label>
  <div className="flex flex-wrap gap-2 mb-2">
  {tags.map((tag, idx) => (
  <span
@@ -1118,7 +1118,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </span>
  ))}
  {tags.length === 0 && !isEditing && (
- <span className="text-sm text-gray-400">None specified</span>
+ <span className="text-sm text-faint">None specified</span>
  )}
  </div>
  {isEditing && (
@@ -1133,7 +1133,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  addTag(field.key)
  }
  }}
- className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="flex-1 px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder={`Add ${field.label.toLowerCase()}...`}
  />
  <button
@@ -1148,15 +1148,15 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /* ── Select field ── */
+ /*  Select field  */
  if (field.type === 'select' && isEditing) {
  return (
  <div key={field.key}>
- <label className="block text-sm font-medium text-gray-600 mb-1">{field.label}</label>
+ <label className="block text-sm font-medium text-soft mb-1">{field.label}</label>
  <select
  value={(editedProfile[field.key] as string) || ''}
  onChange={(e) => setEditedProfile((prev) => ({ ...prev, [field.key]: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  >
  <option value="">Select...</option>
  {field.options?.map((opt) => (
@@ -1169,12 +1169,12 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /* ── Readonly field ── */
+ /*  Readonly field  */
  if (field.type === 'readonly') {
  return (
  <div key={field.key}>
- <label className="block text-sm font-medium text-gray-600 mb-1">{field.label}</label>
- <p className="text-gray-900 font-medium px-3 py-2">
+ <label className="block text-sm font-medium text-soft mb-1">{field.label}</label>
+ <p className="text-fg font-medium px-3 py-2">
  {field.suffix && rawValue ? `${field.suffix} ` : ''}
  {rawValue != null ? String(rawValue) : 'N/A'}
  </p>
@@ -1182,10 +1182,10 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /* ── Text / Number field ── */
+ /*  Text / Number field  */
  return (
  <div key={field.key}>
- <label className="block text-sm font-medium text-gray-600 mb-1">{field.label}</label>
+ <label className="block text-sm font-medium text-soft mb-1">{field.label}</label>
  {isEditing ? (
  <input
  type={field.type === 'number' ? 'number' : 'text'}
@@ -1196,10 +1196,10 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  [field.key]: field.type === 'number' ? (e.target.value ? Number(e.target.value) : '') : e.target.value,
  }))
  }
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  ) : (
- <p className="text-gray-900 font-medium px-3 py-2">
+ <p className="text-fg font-medium px-3 py-2">
  {field.suffix && rawValue ? `${field.suffix} ` : ''}
  {rawValue != null && rawValue !== '' ? String(rawValue) : 'N/A'}
  </p>
@@ -1212,40 +1212,40 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
 
  {/* Emergency Contact (Patient only) */}
  {userType === 'MEMBER' && (
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
+ <h3 className="text-lg font-semibold text-fg mb-4 flex items-center gap-2">
  <FaExclamationTriangle className="text-orange-500" />
  Emergency Contact
  </h3>
  {isEditing ? (
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Name</label>
  <input
  type="text"
  value={editedEmergency.name}
  onChange={(e) => setEditedEmergency((prev) => ({ ...prev, name: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Contact name"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Relationship</label>
+ <label className="block text-sm font-medium text-soft mb-1">Relationship</label>
  <input
  type="text"
  value={editedEmergency.relationship}
  onChange={(e) => setEditedEmergency((prev) => ({ ...prev, relationship: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g. Spouse, Parent"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-600 mb-1">Phone</label>
+ <label className="block text-sm font-medium text-soft mb-1">Phone</label>
  <input
  type="tel"
  value={editedEmergency.phone}
  onChange={(e) => setEditedEmergency((prev) => ({ ...prev, phone: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="+230 5xxx xxxx"
  />
  </div>
@@ -1253,16 +1253,16 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  ) : (
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  <div>
- <p className="text-sm text-gray-500">Name</p>
- <p className="text-gray-900 font-medium">{userData.profile?.emergencyContact?.name || 'N/A'}</p>
+ <p className="text-sm text-soft">Name</p>
+ <p className="text-fg font-medium">{userData.profile?.emergencyContact?.name || 'N/A'}</p>
  </div>
  <div>
- <p className="text-sm text-gray-500">Relationship</p>
- <p className="text-gray-900 font-medium">{userData.profile?.emergencyContact?.relationship || 'N/A'}</p>
+ <p className="text-sm text-soft">Relationship</p>
+ <p className="text-fg font-medium">{userData.profile?.emergencyContact?.relationship || 'N/A'}</p>
  </div>
  <div>
- <p className="text-sm text-gray-500">Phone</p>
- <p className="text-gray-900 font-medium">{userData.profile?.emergencyContact?.phone || 'N/A'}</p>
+ <p className="text-sm text-soft">Phone</p>
+ <p className="text-fg font-medium">{userData.profile?.emergencyContact?.phone || 'N/A'}</p>
  </div>
  </div>
  )}
@@ -1272,14 +1272,14 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
  }
 
- /* ═══════════════════════════════════════════════════════════════════════ */
+ /*  */
  /* Full layout */
- /* ═══════════════════════════════════════════════════════════════════════ */
+ /*  */
 
  return (
  <div className="space-y-6">
  {/* Header card */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
  <div
  className="relative w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 cursor-pointer group overflow-hidden"
@@ -1318,7 +1318,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )}
  <div className="flex-1">
  <div className="flex items-center gap-2">
- <h2 className="text-2xl font-bold text-gray-900">
+ <h2 className="text-2xl font-bold text-fg">
  {userData.firstName} {userData.lastName}
  </h2>
  {userData.verified && <FaCheckCircle className="text-blue-500" title="Verified" />}
@@ -1340,8 +1340,8 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  </div>
 
  {/* Tab navigation */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
- <div className="border-b border-gray-200">
+ <div className="bg-surface rounded-xl shadow-sm border border-line overflow-hidden">
+ <div className="border-b border-line">
  <div className="flex">
  {tabs.map((tab) => {
  const Icon = tab.icon
@@ -1353,10 +1353,10 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  className={`flex-1 sm:flex-initial flex items-center justify-center sm:justify-start gap-0 sm:gap-2 px-3 sm:px-5 py-3 text-center font-medium transition-all border-b-2 ${
  isActive
  ? 'text-blue-600 border-blue-600 bg-blue-50/50'
- : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
+ : 'text-soft border-transparent hover:text-soft hover:bg-subtle'
  }`}
  >
- <Icon className={`text-base sm:text-sm ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+ <Icon className={`text-base sm:text-sm ${isActive ? 'text-blue-600' : 'text-faint'}`} />
  <span className="hidden sm:inline text-sm">{tab.label}</span>
  </button>
  )
@@ -1389,12 +1389,12 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  {viewingDoc && (
  viewingDoc.url.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ? (
  <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onClick={() => setViewingDoc(null)}>
- <div className="bg-white rounded-xl max-w-3xl max-h-[90vh] overflow-auto p-4" onClick={(e) => e.stopPropagation()}>
+ <div className="bg-surface rounded-xl max-w-3xl max-h-[90vh] overflow-auto p-4" onClick={(e) => e.stopPropagation()}>
  <div className="flex items-center justify-between mb-3">
- <h3 className="font-semibold text-gray-900">{viewingDoc.name}</h3>
+ <h3 className="font-semibold text-fg">{viewingDoc.name}</h3>
  <div className="flex items-center gap-2">
  <a href={viewingDoc.url} download className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Download</a>
- <button onClick={() => setViewingDoc(null)} className="p-2 text-gray-500 hover:text-gray-700"><FaTimes /></button>
+ <button onClick={() => setViewingDoc(null)} className="p-2 text-soft hover:text-soft"><FaTimes /></button>
  </div>
  </div>
  <Image src={viewingDoc.url} alt={viewingDoc.name} width={800} height={600} className="max-w-full rounded-lg" />
@@ -1412,7 +1412,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  )
 }
 
-/* ─── Helper: type-specific read-only summary (used in Overview tab) ─────── */
+/*  Helper: type-specific read-only summary (used in Overview tab)  */
 
 function renderTypeSpecificSummary(userType: string, profile: UserProfileData | null | undefined) {
  if (!profile) return null
@@ -1490,15 +1490,15 @@ function renderTypeSpecificSummary(userType: string, profile: UserProfileData | 
  if (validFields.length === 0) return null
 
  return (
- <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4">
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-6">
+ <h3 className="text-lg font-semibold text-fg mb-4">
  {userType === 'MEMBER' ? 'Medical Summary' : 'Professional Details'}
  </h3>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {validFields.map((field) => (
  <div key={field.label}>
- <p className="text-sm text-gray-500">{field.label}</p>
- <p className="text-gray-900 font-medium">
+ <p className="text-sm text-soft">{field.label}</p>
+ <p className="text-fg font-medium">
  {Array.isArray(field.value) ? field.value.join(', ') : String(field.value)}
  </p>
  </div>
@@ -1508,7 +1508,7 @@ function renderTypeSpecificSummary(userType: string, profile: UserProfileData | 
  )
 }
 
-/* ─── Per-required-document upload slot ─────────────────────────────────── */
+/*  Per-required-document upload slot  */
 
 function RequiredDocUploadSlot({
  documentName,
@@ -1548,8 +1548,8 @@ function RequiredDocUploadSlot({
  if (done) return null
 
  return (
-  <div className="border border-dashed border-gray-300 rounded-lg p-3 bg-gray-50">
-   <p className="text-sm font-medium text-gray-800 mb-1.5">
+  <div className="border border-dashed border-line rounded-lg p-3 bg-subtle">
+   <p className="text-sm font-medium text-fg mb-1.5">
     {documentName}
     {required && <span className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-medium">Required</span>}
    </p>
@@ -1561,9 +1561,9 @@ function RequiredDocUploadSlot({
      disabled={uploading}
      onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
     />
-    <div className={`flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors ${uploading ? 'opacity-50 cursor-default' : 'cursor-pointer'}`}>
+    <div className={`flex items-center gap-2 px-3 py-2 border border-line rounded-lg text-sm text-soft hover:border-blue-400 hover:text-blue-600 transition-colors ${uploading ? 'opacity-50 cursor-default' : 'cursor-pointer'}`}>
      {uploading ? <FaSpinner className="animate-spin text-xs" /> : <FaUpload className="text-xs" />}
-     <span>{uploading ? 'Uploading…' : 'Choose file (JPG, PNG, PDF)'}</span>
+     <span>{uploading ? 'Uploading' : 'Choose file (JPG, PNG, PDF)'}</span>
     </div>
    </label>
    {error && <p className="text-xs text-red-600 mt-1 flex items-center gap-1"><FaExclamationTriangle className="text-[10px]" /> {error}</p>}

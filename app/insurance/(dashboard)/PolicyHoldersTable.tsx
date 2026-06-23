@@ -19,7 +19,7 @@ export default function PolicyHoldersTable({
 }: PolicyHoldersTableProps) {
  const getStatusInfo = (status: string) => {
  const statusConfig = policyStatuses.find(s => s.value === status)
- return statusConfig || { label: status, color: 'bg-gray-100 text-gray-800' }
+ return statusConfig || { label: status, color: 'bg-subtle text-fg' }
  }
 
  const isExpiringSoon = (expiryDate: string) => {
@@ -31,9 +31,9 @@ export default function PolicyHoldersTable({
  }
 
  return (
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Policy Holders Management</h2>
+ <h2 className="text-xl font-bold text-fg">Policy Holders Management</h2>
  <div className="flex gap-3">
  <button className="text-blue-600 hover:underline font-medium">View All</button>
  {onAdd && (
@@ -50,16 +50,16 @@ export default function PolicyHoldersTable({
  
  <div className="overflow-x-auto">
  <table className="w-full text-sm text-left">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 font-medium text-gray-600">Policy Number</th>
- <th className="p-3 font-medium text-gray-600">Name</th>
- <th className="p-3 font-medium text-gray-600">Policy Type</th>
- <th className="p-3 font-medium text-gray-600">Premium</th>
- <th className="p-3 font-medium text-gray-600">Coverage</th>
- <th className="p-3 font-medium text-gray-600">Status</th>
- <th className="p-3 font-medium text-gray-600">Expiry</th>
- <th className="p-3 font-medium text-gray-600">Actions</th>
+ <th className="p-3 font-medium text-soft">Policy Number</th>
+ <th className="p-3 font-medium text-soft">Name</th>
+ <th className="p-3 font-medium text-soft">Policy Type</th>
+ <th className="p-3 font-medium text-soft">Premium</th>
+ <th className="p-3 font-medium text-soft">Coverage</th>
+ <th className="p-3 font-medium text-soft">Status</th>
+ <th className="p-3 font-medium text-soft">Expiry</th>
+ <th className="p-3 font-medium text-soft">Actions</th>
  </tr>
  </thead>
  <tbody>
@@ -68,16 +68,16 @@ export default function PolicyHoldersTable({
  const expiringSoon = isExpiringSoon(holder.expiryDate)
  
  return (
- <tr key={holder.id} className="border-b hover:bg-gray-50">
+ <tr key={holder.id} className="border-b hover:bg-subtle">
  <td className="p-3 font-mono text-xs">{holder.policyNumber}</td>
  <td className="p-3">
  <div>
  <p className="font-medium">{holder.name}</p>
- <p className="text-gray-500 text-xs">{holder.email}</p>
- <p className="text-gray-500 text-xs">{holder.phone}</p>
+ <p className="text-soft text-xs">{holder.email}</p>
+ <p className="text-soft text-xs">{holder.phone}</p>
  </div>
  </td>
- <td className="p-3 text-gray-600">{holder.policyType}</td>
+ <td className="p-3 text-soft">{holder.policyType}</td>
  <td className="p-3 font-semibold">Rs {holder.premium.toLocaleString()}</td>
  <td className="p-3 font-semibold">Rs {holder.coverageAmount.toLocaleString()}</td>
  <td className="p-3">
@@ -87,7 +87,7 @@ export default function PolicyHoldersTable({
  </td>
  <td className="p-3">
  <div>
- <p className={`text-xs ${expiringSoon ? 'text-red-600 font-semibold' : 'text-gray-500'}`}>
+ <p className={`text-xs ${expiringSoon ? 'text-red-600 font-semibold' : 'text-soft'}`}>
  {holder.expiryDate}
  </p>
  {expiringSoon && (

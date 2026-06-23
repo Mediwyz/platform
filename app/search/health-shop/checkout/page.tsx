@@ -64,7 +64,7 @@ export default function CheckoutPage() {
     setError(null)
 
     try {
-      // Place one order per provider (multi-provider cart → multiple orders)
+      // Place one order per provider (multi-provider cart  multiple orders)
       const orderIds: string[] = []
 
       for (const [providerUserId, providerItems] of providerGroups) {
@@ -104,10 +104,10 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-lg mx-auto py-20 text-center space-y-4">
         <FaCheckCircle className="text-green-500 text-5xl mx-auto" />
-        <h1 className="text-2xl font-bold text-gray-900">Order Placed!</h1>
-        <p className="text-gray-500">Your order has been placed successfully.</p>
-        <p className="text-sm text-gray-400">Order ID: {success.orderId}</p>
-        <p className="text-lg font-bold text-gray-900">Total: Rs {success.total.toLocaleString()}</p>
+        <h1 className="text-2xl font-bold text-fg">Order Placed!</h1>
+        <p className="text-soft">Your order has been placed successfully.</p>
+        <p className="text-sm text-faint">Order ID: {success.orderId}</p>
+        <p className="text-lg font-bold text-fg">Total: Rs {success.total.toLocaleString()}</p>
         <Link href="/search/health-shop" className="inline-block mt-4 px-6 py-2.5 bg-[#0C6780] text-white rounded-xl text-sm font-medium hover:bg-[#0a5568]">
           Continue Shopping
         </Link>
@@ -119,8 +119,8 @@ export default function CheckoutPage() {
   if (totalItems === 0) {
     return (
       <div className="max-w-lg mx-auto py-20 text-center space-y-4">
-        <FaShoppingCart className="text-gray-300 text-5xl mx-auto" />
-        <h1 className="text-xl font-bold text-gray-900">Your cart is empty</h1>
+        <FaShoppingCart className="text-faint text-5xl mx-auto" />
+        <h1 className="text-xl font-bold text-fg">Your cart is empty</h1>
         <Link href="/search/health-shop" className="inline-block px-6 py-2.5 bg-[#0C6780] text-white rounded-xl text-sm font-medium hover:bg-[#0a5568]">
           Browse Health Shop
         </Link>
@@ -133,8 +133,8 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-4xl mx-auto py-6 px-4 space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/search/health-shop" className="text-gray-400 hover:text-gray-600"><FaArrowLeft /></Link>
-        <h1 className="text-2xl font-bold text-gray-900">Checkout</h1>
+        <Link href="/search/health-shop" className="text-faint hover:text-soft"><FaArrowLeft /></Link>
+        <h1 className="text-2xl font-bold text-fg">Checkout</h1>
       </div>
 
       {error && (
@@ -144,26 +144,26 @@ export default function CheckoutPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="p-4 border-b bg-gray-50">
-              <h2 className="font-semibold text-gray-900 text-sm">Items ({totalItems})</h2>
+          <div className="bg-surface rounded-xl border border-line overflow-hidden">
+            <div className="p-4 border-b bg-subtle">
+              <h2 className="font-semibold text-fg text-sm">Items ({totalItems})</h2>
             </div>
             <div className="divide-y">
               {items.map(item => (
                 <div key={item.id} className="p-4 flex items-center gap-4">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 text-sm">{item.name}</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                    <p className="font-medium text-fg text-sm">{item.name}</p>
+                    <div className="flex items-center gap-2 text-xs text-faint mt-0.5">
                       <span>{item.category}</span>
                       {item.requiresPrescription && (
                         <span className="flex items-center gap-0.5 text-amber-600"><FaPrescription className="text-[9px]" /> Rx</span>
                       )}
                     </div>
-                    <p className="text-sm font-medium text-gray-700 mt-1">Rs {item.price} x {item.quantity} = Rs {(item.price * item.quantity).toLocaleString()}</p>
+                    <p className="text-sm font-medium text-soft mt-1">Rs {item.price} x {item.quantity} = Rs {(item.price * item.quantity).toLocaleString()}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200"><FaMinus className="text-[10px]" /></button>
+                      className="w-7 h-7 rounded-lg bg-subtle flex items-center justify-center hover:bg-line"><FaMinus className="text-[10px]" /></button>
                     <span className="text-sm font-bold w-6 text-center">{item.quantity}</span>
                     <button onClick={() => updateQuantity(item.id, item.quantity + 1)} disabled={item.quantity >= item.maxQuantity}
                       className="w-7 h-7 rounded-lg bg-[#0C6780] text-white flex items-center justify-center hover:bg-[#0a5568] disabled:opacity-40"><FaPlus className="text-[10px]" /></button>
@@ -194,27 +194,27 @@ export default function CheckoutPage() {
           )}
 
           {/* Delivery Options */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-            <h2 className="font-semibold text-gray-900 text-sm">Delivery Method</h2>
+          <div className="bg-surface rounded-xl border border-line p-4 space-y-3">
+            <h2 className="font-semibold text-fg text-sm">Delivery Method</h2>
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => setDeliveryType('pickup')}
-                className={`p-3 rounded-xl border-2 text-left transition-all ${deliveryType === 'pickup' ? 'border-[#0C6780] bg-[#0C6780]/5' : 'border-gray-200 hover:border-gray-300'}`}>
-                <FaStore className={`text-lg mb-1 ${deliveryType === 'pickup' ? 'text-[#0C6780]' : 'text-gray-400'}`} />
-                <p className="font-medium text-sm text-gray-900">Pickup</p>
-                <p className="text-xs text-gray-500">Collect from provider</p>
+                className={`p-3 rounded-xl border-2 text-left transition-all ${deliveryType === 'pickup' ? 'border-[#0C6780] bg-[#0C6780]/5' : 'border-line hover:border-line'}`}>
+                <FaStore className={`text-lg mb-1 ${deliveryType === 'pickup' ? 'text-[#0C6780]' : 'text-faint'}`} />
+                <p className="font-medium text-sm text-fg">Pickup</p>
+                <p className="text-xs text-soft">Collect from provider</p>
                 <p className="text-xs font-medium text-green-600 mt-1">Free</p>
               </button>
               <button onClick={() => setDeliveryType('delivery')}
-                className={`p-3 rounded-xl border-2 text-left transition-all ${deliveryType === 'delivery' ? 'border-[#0C6780] bg-[#0C6780]/5' : 'border-gray-200 hover:border-gray-300'}`}>
-                <FaTruck className={`text-lg mb-1 ${deliveryType === 'delivery' ? 'text-[#0C6780]' : 'text-gray-400'}`} />
-                <p className="font-medium text-sm text-gray-900">Home Delivery</p>
-                <p className="text-xs text-gray-500">Delivered to your door</p>
-                <p className="text-xs font-medium text-gray-700 mt-1">Rs 150</p>
+                className={`p-3 rounded-xl border-2 text-left transition-all ${deliveryType === 'delivery' ? 'border-[#0C6780] bg-[#0C6780]/5' : 'border-line hover:border-line'}`}>
+                <FaTruck className={`text-lg mb-1 ${deliveryType === 'delivery' ? 'text-[#0C6780]' : 'text-faint'}`} />
+                <p className="font-medium text-sm text-fg">Home Delivery</p>
+                <p className="text-xs text-soft">Delivered to your door</p>
+                <p className="text-xs font-medium text-soft mt-1">Rs 150</p>
               </button>
             </div>
             {deliveryType === 'delivery' && (
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1"><FaMapMarkerAlt className="inline mr-1" />Delivery Address</label>
+                <label className="block text-xs font-medium text-soft mb-1"><FaMapMarkerAlt className="inline mr-1" />Delivery Address</label>
                 <textarea value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)}
                   rows={2} placeholder="Enter your full address..."
                   className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780] outline-none resize-none" />
@@ -225,11 +225,11 @@ export default function CheckoutPage() {
 
         {/* Order Summary */}
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3 sticky top-6">
-            <h2 className="font-semibold text-gray-900 text-sm">Order Summary</h2>
+          <div className="bg-surface rounded-xl border border-line p-4 space-y-3 sticky top-6">
+            <h2 className="font-semibold text-fg text-sm">Order Summary</h2>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-gray-500">Subtotal ({totalItems} items)</span><span>Rs {totalPrice.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Delivery</span><span>{deliveryFee > 0 ? `Rs ${deliveryFee}` : 'Free'}</span></div>
+              <div className="flex justify-between"><span className="text-soft">Subtotal ({totalItems} items)</span><span>Rs {totalPrice.toLocaleString()}</span></div>
+              <div className="flex justify-between"><span className="text-soft">Delivery</span><span>{deliveryFee > 0 ? `Rs ${deliveryFee}` : 'Free'}</span></div>
               <hr />
               <div className="flex justify-between font-bold text-lg"><span>Total</span><span>Rs {grandTotal.toLocaleString()}</span></div>
             </div>
@@ -239,7 +239,7 @@ export default function CheckoutPage() {
               <FaWallet className={insufficientBalance ? 'text-red-500' : 'text-green-600'} />
               <div>
                 <p className="font-medium">{walletBalance !== null ? `Rs ${walletBalance.toLocaleString()}` : 'Loading...'}</p>
-                <p className="text-xs text-gray-500">Wallet balance</p>
+                <p className="text-xs text-soft">Wallet balance</p>
               </div>
             </div>
             {insufficientBalance && (
@@ -255,7 +255,7 @@ export default function CheckoutPage() {
             </button>
 
             {!user && (
-              <p className="text-xs text-center text-gray-400">Please <Link href="/login" className="text-[#0C6780] underline">log in</Link> to place an order.</p>
+              <p className="text-xs text-center text-faint">Please <Link href="/login" className="text-[#0C6780] underline">log in</Link> to place an order.</p>
             )}
           </div>
         </div>

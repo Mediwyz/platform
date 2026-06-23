@@ -68,12 +68,12 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  }
 
  return (
- <div className="mt-3 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+ <div className="mt-3 bg-surface rounded-xl border border-line p-4 shadow-sm">
  <div className="flex items-center justify-between mb-3">
- <h4 className="text-sm font-semibold text-gray-900">Top Up Balance</h4>
+ <h4 className="text-sm font-semibold text-fg">Top Up Balance</h4>
  <button
  onClick={() => { setShowForm(false); setError(null) }}
- className="p-1 text-gray-400 hover:text-gray-600"
+ className="p-1 text-faint hover:text-soft"
  >
  <FaTimes className="text-xs" />
  </button>
@@ -88,7 +88,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
  amount === qa.toString()
  ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {symbol} {qa.toLocaleString()}
@@ -98,7 +98,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
 
  {/* Custom amount */}
  <div className="relative mb-3">
- <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">{symbol}</span>
+ <span className="absolute left-3 top-1/2 -translate-y-1/2 text-soft text-sm font-medium">{symbol}</span>
  <input
  type="number"
  value={amount}
@@ -106,7 +106,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  placeholder="Enter amount"
  min="1"
  max="50000"
- className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full pl-10 pr-4 py-2.5 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
 
@@ -117,7 +117,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
  paymentMethod === 'card'
  ? 'border-blue-500 bg-blue-50 text-blue-700'
- : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+ : 'border-line text-soft hover:bg-subtle'
  }`}
  >
  <FaCreditCard /> Card
@@ -127,7 +127,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
  paymentMethod === 'mcb_juice'
  ? 'border-blue-500 bg-blue-50 text-blue-700'
- : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+ : 'border-line text-soft hover:bg-subtle'
  }`}
  >
  <FaMobileAlt /> MCB Juice
@@ -147,7 +147,7 @@ export default function WalletTopUp({ userId, currency = 'MUR', onSuccess }: Wal
  {loading ? 'Processing...' : `Top Up${amount ? ` ${symbol} ${parseFloat(amount).toLocaleString()}` : ''}`}
  </button>
 
- <p className="text-xs text-gray-400 text-center mt-2">
+ <p className="text-xs text-faint text-center mt-2">
  Simulated payment - no real charge applied
  </p>
  </div>

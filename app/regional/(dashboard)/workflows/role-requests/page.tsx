@@ -67,25 +67,25 @@ export default function RoleRequestsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
           <FiInbox className="text-brand-teal" />
           Role Requests
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-soft mt-1">
           Provider roles proposed by new users during signup. Activate to make the role
           available in public pickers and enable signups under it.
         </p>
       </div>
 
       {loading && (
-        <div className="h-24 bg-white rounded-xl border border-gray-200 animate-pulse" />
+        <div className="h-24 bg-surface rounded-xl border border-line animate-pulse" />
       )}
 
       {!loading && pending.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+        <div className="bg-surface rounded-xl border border-line p-10 text-center">
           <FiCheckCircle className="text-4xl text-green-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">No pending role requests</p>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="font-medium text-soft">No pending role requests</p>
+          <p className="text-sm text-faint mt-1">
             When someone proposes a new role on signup, it&apos;ll appear here for review.
           </p>
         </div>
@@ -93,12 +93,12 @@ export default function RoleRequestsPage() {
 
       <div className="space-y-3">
         {pending.map(role => (
-          <div key={role.id} className="bg-white rounded-xl border border-amber-200 p-4">
+          <div key={role.id} className="bg-surface rounded-xl border border-amber-200 p-4">
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-semibold text-gray-900">{role.label}</h3>
-                  <span className="font-mono text-[11px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                  <h3 className="font-semibold text-fg">{role.label}</h3>
+                  <span className="font-mono text-[11px] bg-subtle text-soft px-1.5 py-0.5 rounded">
                     {role.code}
                   </span>
                   {role.regionCode && (
@@ -111,11 +111,11 @@ export default function RoleRequestsPage() {
                   </span>
                 </div>
                 {role.description && (
-                  <p className="text-sm text-gray-600 mt-1.5">{role.description}</p>
+                  <p className="text-sm text-soft mt-1.5">{role.description}</p>
                 )}
-                <p className="text-[11px] text-gray-400 mt-1.5 inline-flex items-center gap-1">
+                <p className="text-[11px] text-faint mt-1.5 inline-flex items-center gap-1">
                   <FiUser className="w-3 h-3" />
-                  Submitted {new Date(role.createdAt).toLocaleDateString()} · slug <span className="font-mono">{role.slug}</span>
+                  Submitted {new Date(role.createdAt).toLocaleDateString()}  slug <span className="font-mono">{role.slug}</span>
                 </p>
               </div>
               <div className="flex gap-2 flex-shrink-0">
@@ -125,7 +125,7 @@ export default function RoleRequestsPage() {
                   className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50 inline-flex items-center gap-1"
                 >
                   <FiCheckCircle className="w-3 h-3" />
-                  {busyId === role.id ? 'Activating…' : 'Activate'}
+                  {busyId === role.id ? 'Activating' : 'Activate'}
                 </button>
               </div>
             </div>

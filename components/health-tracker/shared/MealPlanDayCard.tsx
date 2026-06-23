@@ -32,13 +32,13 @@ export default function MealPlanDayCard({
  onAddToDiary,
  onDelete,
 }: MealPlanDayCardProps) {
- const badgeColor = mealTypeColors[mealType.toUpperCase()] || 'bg-gray-100 text-gray-700'
+ const badgeColor = mealTypeColors[mealType.toUpperCase()] || 'bg-subtle text-soft'
 
  return (
- <div className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
+ <div className="bg-surface rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
  <div className="flex items-start gap-3">
  {/* Decorative circle */}
- <div className="mt-1 w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0" />
+ <div className="mt-1 w-5 h-5 rounded-full border-2 border-line flex-shrink-0" />
 
  <div className="flex-1 min-w-0">
  {/* Header row */}
@@ -47,21 +47,21 @@ export default function MealPlanDayCard({
  <span className={`text-xs px-2 py-0.5 rounded-full font-medium uppercase ${badgeColor}`}>
  {mealType}
  </span>
- <h4 className="text-sm font-bold text-gray-800">{name}</h4>
+ <h4 className="text-sm font-bold text-fg">{name}</h4>
  </div>
- <span className="text-sm font-semibold text-gray-700">{calories} cal</span>
+ <span className="text-sm font-semibold text-soft">{calories} cal</span>
  </div>
 
  {/* Description */}
  {description && (
- <p className="text-xs text-gray-500 mt-1">{description}</p>
+ <p className="text-xs text-soft mt-1">{description}</p>
  )}
 
  {/* Macros */}
  <div className="flex items-center gap-3 mt-2">
- <span className="text-xs text-gray-500">P: {protein}g</span>
- <span className="text-xs text-gray-500">C: {carbs}g</span>
- <span className="text-xs text-gray-500">F: {fat}g</span>
+ <span className="text-xs text-soft">P: {protein}g</span>
+ <span className="text-xs text-soft">C: {carbs}g</span>
+ <span className="text-xs text-soft">F: {fat}g</span>
  </div>
 
  {/* Buttons */}
@@ -69,7 +69,7 @@ export default function MealPlanDayCard({
  {onDelete && (
  <button
  onClick={() => onDelete(id)}
- className="px-3 py-1.5 text-xs font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="px-3 py-1.5 text-xs font-medium text-soft border border-line rounded-lg hover:bg-subtle transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  View Recipe
  </button>

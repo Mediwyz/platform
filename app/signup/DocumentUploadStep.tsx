@@ -18,8 +18,8 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  <FaUpload className="text-3xl" />
  </div>
  <div>
- <h2 className="text-2xl font-bold text-gray-900">Document Upload</h2>
- <p className="text-gray-600">Please upload the required documents for verification</p>
+ <h2 className="text-2xl font-bold text-fg">Document Upload</h2>
+ <p className="text-soft">Please upload the required documents for verification</p>
  </div>
  </div>
 
@@ -27,15 +27,15 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  {documents.map((doc) => (
  <div key={doc.id} className={`border-2 rounded-xl p-6 transition-colors ${
  doc.skipped
- ? 'border-gray-200 bg-gray-50/50'
+ ? 'border-line bg-subtle/50'
  : doc.required
  ? 'border-red-200'
- : 'border-gray-200'
+ : 'border-line'
  }`}>
  <div className="flex items-start justify-between mb-4">
  <div className="flex-1">
  <div className="flex items-center gap-3 mb-2">
- <h3 className={`font-bold text-lg ${doc.skipped ? 'text-gray-400' : 'text-gray-900'}`}>{doc.name}</h3>
+ <h3 className={`font-bold text-lg ${doc.skipped ? 'text-faint' : 'text-fg'}`}>{doc.name}</h3>
  {doc.required && !doc.skipped && (
  <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-medium">
  Required
@@ -54,8 +54,8 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  </span>
  )}
  </div>
- <p className={`text-sm mb-2 ${doc.skipped ? 'text-gray-400' : 'text-gray-600'}`}>{doc.description}</p>
- <p className={`text-xs ${doc.skipped ? 'text-gray-300' : 'text-gray-500'}`}>Accepted formats: {doc.accepted}</p>
+ <p className={`text-sm mb-2 ${doc.skipped ? 'text-faint' : 'text-soft'}`}>{doc.description}</p>
+ <p className={`text-xs ${doc.skipped ? 'text-faint' : 'text-soft'}`}>Accepted formats: {doc.accepted}</p>
  </div>
  </div>
 
@@ -66,17 +66,17 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  type="checkbox"
  checked={doc.skipped || false}
  onChange={(e) => onSkipDocument(doc.id, e.target.checked)}
- className="w-3.5 h-3.5 rounded border-gray-300 text-amber-500 focus:ring-amber-400 focus:ring-offset-0 cursor-pointer"
+ className="w-3.5 h-3.5 rounded border-line text-amber-500 focus:ring-amber-400 focus:ring-offset-0 cursor-pointer"
  />
- <span className="text-xs text-gray-400 group-hover:text-gray-500 transition-colors">
+ <span className="text-xs text-faint group-hover:text-soft transition-colors">
  I&apos;ll provide this later
  </span>
  </label>
  )}
 
  {doc.skipped ? (
- <div className="border border-dashed border-gray-200 rounded-lg p-4 text-center">
- <p className="text-gray-400 text-sm">
+ <div className="border border-dashed border-line rounded-lg p-4 text-center">
+ <p className="text-faint text-sm">
  You can upload this document from your account settings after registration.
  </p>
  </div>
@@ -132,7 +132,7 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  ? 'bg-emerald-50/50 border-emerald-200'
  : verificationResults[doc.id].status === 'failed'
  ? 'bg-amber-50/50 border-amber-200'
- : 'bg-gray-50 border-gray-200'
+ : 'bg-subtle border-line'
  }`}>
  <div className="flex items-center gap-2 mb-2">
  <FaRobot className={`text-sm ${
@@ -143,7 +143,7 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  }`}>
  AI Automated Analysis
  </span>
- <span className="text-xs text-gray-400 ml-auto">
+ <span className="text-xs text-faint ml-auto">
  Powered by MediWyz AI
  </span>
  </div>
@@ -152,7 +152,7 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  }`}>
  {verificationResults[doc.id].analysisReport}
  </p>
- <p className="text-[10px] text-gray-400 mt-2 italic">
+ <p className="text-[10px] text-faint mt-2 italic">
  This analysis was performed automatically by AI. No human has reviewed this document yet.
  </p>
  </div>
@@ -176,9 +176,9 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  )}
  </div>
  ) : (
- <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
- <FaUpload className="text-4xl text-gray-400 mx-auto mb-4" />
- <p className="text-gray-600 mb-4">Drag and drop your file here, or click to browse</p>
+ <div className="border-2 border-dashed border-line rounded-lg p-8 text-center">
+ <FaUpload className="text-4xl text-faint mx-auto mb-4" />
+ <p className="text-soft mb-4">Drag and drop your file here, or click to browse</p>
  <input
  type="file"
  accept={doc.accepted}
@@ -202,17 +202,17 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  </div>
 
  {/* Upload Progress Summary */}
- <div className="mt-8 bg-gray-50 rounded-xl p-6">
- <h3 className="font-bold text-gray-900 mb-4">Upload Progress</h3>
+ <div className="mt-8 bg-subtle rounded-xl p-6">
+ <h3 className="font-bold text-fg mb-4">Upload Progress</h3>
  <div className="grid md:grid-cols-3 gap-4 text-sm">
  <div>
- <span className="text-gray-600">Required Documents:</span>
+ <span className="text-soft">Required Documents:</span>
  <span className="font-medium ml-2">
  {documents.filter(doc => doc.required && doc.uploaded && !doc.skipped).length} / {documents.filter(doc => doc.required).length}
  </span>
  </div>
  <div>
- <span className="text-gray-600">Optional Documents:</span>
+ <span className="text-soft">Optional Documents:</span>
  <span className="font-medium ml-2">
  {documents.filter(doc => !doc.required && doc.uploaded).length} / {documents.filter(doc => !doc.required).length}
  </span>
@@ -229,7 +229,7 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
 
  <div className="mt-4">
  <div className="flex justify-between text-sm mb-2">
- <span className="text-gray-600">Required Documents Progress</span>
+ <span className="text-soft">Required Documents Progress</span>
  <span className="font-medium">
  {Math.round(
  (documents.filter(doc => doc.required && (doc.uploaded || doc.skipped)).length /
@@ -237,7 +237,7 @@ export default function DocumentUploadStep({ documents, onFileUpload, onRemoveFi
  )}%
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div
  className="bg-blue-600 h-2 rounded-full transition-all"
  style={{

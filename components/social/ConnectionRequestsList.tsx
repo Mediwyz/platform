@@ -109,19 +109,19 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  <FaUsers className="text-white text-lg" />
  </div>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">My Network</h1>
- <p className="text-sm text-gray-500">Manage your connections and requests</p>
+ <h1 className="text-2xl font-bold text-fg">My Network</h1>
+ <p className="text-sm text-soft">Manage your connections and requests</p>
  </div>
  </div>
 
  {/* Tabs */}
- <div className="flex gap-1 bg-gray-100 rounded-lg p-1 mb-6 w-fit">
+ <div className="flex gap-1 bg-subtle rounded-lg p-1 mb-6 w-fit">
  <button
  onClick={() => setTab('requests')}
  className={`px-4 py-2 rounded-md text-sm font-medium transition ${
  tab === 'requests'
- ? 'bg-white text-blue-600 shadow-sm'
- : 'text-gray-600 hover:text-gray-900'
+ ? 'bg-surface text-blue-600 shadow-sm'
+ : 'text-soft hover:text-fg'
  }`}
  >
  Requests {requests.length > 0 && (
@@ -134,8 +134,8 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  onClick={() => setTab('connections')}
  className={`px-4 py-2 rounded-md text-sm font-medium transition ${
  tab === 'connections'
- ? 'bg-white text-blue-600 shadow-sm'
- : 'text-gray-600 hover:text-gray-900'
+ ? 'bg-surface text-blue-600 shadow-sm'
+ : 'text-soft hover:text-fg'
  }`}
  >
  Connections ({connections.length})
@@ -146,24 +146,24 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  {/* Main content */}
  <div className="lg:col-span-2">
  {loading ? (
- <div className="bg-white rounded-xl shadow-sm border p-6">
+ <div className="bg-surface rounded-xl shadow-sm border p-6">
  <div className="space-y-4">
  {[1, 2, 3].map(i => (
  <div key={i} className="animate-pulse flex items-center gap-4">
- <div className="w-12 h-12 rounded-full bg-gray-200" />
+ <div className="w-12 h-12 rounded-full bg-line" />
  <div className="flex-1">
- <div className="h-4 bg-gray-200 rounded w-32 mb-2" />
- <div className="h-3 bg-gray-100 rounded w-20" />
+ <div className="h-4 bg-line rounded w-32 mb-2" />
+ <div className="h-3 bg-subtle rounded w-20" />
  </div>
  </div>
  ))}
  </div>
  </div>
  ) : tab === 'requests' ? (
- <div className="bg-white rounded-xl shadow-sm border">
+ <div className="bg-surface rounded-xl shadow-sm border">
  {requests.length === 0 ? (
- <div className="p-8 text-center text-gray-500">
- <FaUsers className="text-4xl text-gray-300 mx-auto mb-3" />
+ <div className="p-8 text-center text-soft">
+ <FaUsers className="text-4xl text-faint mx-auto mb-3" />
  <p className="font-medium">No pending requests</p>
  <p className="text-sm mt-1">When someone sends you a connection request, it will appear here.</p>
  </div>
@@ -171,24 +171,24 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  <div className="divide-y">
  {requests.map(req => {
  return (
- <div key={req.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition">
+ <div key={req.id} className="p-4 flex items-center gap-4 hover:bg-subtle transition">
  <Link href={`/profile/${req.sender.id}`} className="flex-shrink-0">
  <Image
  src={avatarSrc(req.sender.profileImage, req.sender.firstName, req.sender.lastName)}
  alt={`${req.sender.firstName} ${req.sender.lastName}`}
  width={48}
  height={48}
- className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 bg-gray-100"
+ className="w-12 h-12 rounded-full object-cover border-2 border-line bg-subtle"
  />
  </Link>
  <div className="flex-1 min-w-0">
- <Link href={`/profile/${req.sender.id}`} className="font-medium text-gray-900 hover:text-blue-600 transition">
+ <Link href={`/profile/${req.sender.id}`} className="font-medium text-fg hover:text-blue-600 transition">
  {req.sender.firstName} {req.sender.lastName}
  </Link>
  <div className="flex items-center gap-1.5">
  {typeIcons[req.sender.userType]}
- <span className="text-xs text-gray-500">{getUserTypeLabel(req.sender.userType)}</span>
- <span className="text-xs text-gray-400 ml-2">{timeAgo(req.createdAt)}</span>
+ <span className="text-xs text-soft">{getUserTypeLabel(req.sender.userType)}</span>
+ <span className="text-xs text-faint ml-2">{timeAgo(req.createdAt)}</span>
  </div>
  </div>
  <div className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  <button
  onClick={() => handleAction(req.id, 'rejected')}
  disabled={actioning === req.id}
- className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition disabled:opacity-50"
+ className="flex items-center gap-1.5 px-3 py-1.5 bg-subtle text-soft text-sm rounded-lg hover:bg-line transition disabled:opacity-50"
  >
  <FaTimes className="text-xs" /> Decline
  </button>
@@ -214,10 +214,10 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  )}
  </div>
  ) : (
- <div className="bg-white rounded-xl shadow-sm border">
+ <div className="bg-surface rounded-xl shadow-sm border">
  {connections.length === 0 ? (
- <div className="p-8 text-center text-gray-500">
- <FaUsers className="text-4xl text-gray-300 mx-auto mb-3" />
+ <div className="p-8 text-center text-soft">
+ <FaUsers className="text-4xl text-faint mx-auto mb-3" />
  <p className="font-medium">No connections yet</p>
  <p className="text-sm mt-1">Connect with healthcare professionals to grow your network.</p>
  </div>
@@ -226,23 +226,23 @@ export default function ConnectionRequestsList({ userId }: ConnectionRequestsLis
  {connections.map(conn => {
  const person = conn.senderId === userId ? conn.receiver : conn.sender
  return (
- <div key={conn.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition">
+ <div key={conn.id} className="p-4 flex items-center gap-4 hover:bg-subtle transition">
  <Link href={`/profile/${person.id}`} className="flex-shrink-0">
  <Image
  src={avatarSrc(person.profileImage, person.firstName, person.lastName)}
  alt={`${person.firstName} ${person.lastName}`}
  width={48}
  height={48}
- className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 bg-gray-100"
+ className="w-12 h-12 rounded-full object-cover border-2 border-line bg-subtle"
  />
  </Link>
  <div className="flex-1 min-w-0">
- <Link href={`/profile/${person.id}`} className="font-medium text-gray-900 hover:text-blue-600 transition">
+ <Link href={`/profile/${person.id}`} className="font-medium text-fg hover:text-blue-600 transition">
  {person.firstName} {person.lastName}
  </Link>
  <div className="flex items-center gap-1.5 mt-0.5">
  {typeIcons[person.userType]}
- <span className="text-xs text-gray-500">{getUserTypeLabel(person.userType)}</span>
+ <span className="text-xs text-soft">{getUserTypeLabel(person.userType)}</span>
  </div>
  </div>
  <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">Connected</span>

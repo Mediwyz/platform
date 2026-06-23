@@ -30,8 +30,8 @@ export default function DashboardOverview({
  case 'pending': return { text: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: FaClock };
  case 'rejected': return { text: 'Rejected', color: 'bg-red-100 text-red-800', icon: FaTimes };
  case 'active': return { text: 'Active', color: 'bg-green-100 text-green-800', icon: FaCheckCircle };
- case 'inactive': return { text: 'Inactive', color: 'bg-gray-100 text-gray-800', icon: FaTimes };
- default: return { text: status, color: 'bg-gray-100 text-gray-800', icon: FaClock };
+ case 'inactive': return { text: 'Inactive', color: 'bg-subtle text-fg', icon: FaTimes };
+ default: return { text: status, color: 'bg-subtle text-fg', icon: FaClock };
  }
  };
 
@@ -73,46 +73,46 @@ export default function DashboardOverview({
  {/* Main Content */}
  <div className="lg:col-span-2 space-y-8">
  {/* Recent Employees */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Recent Employee Additions</h2>
+ <h2 className="text-xl font-bold text-fg">Recent Employee Additions</h2>
  <Link href="/corporate/employees" className="text-blue-600 hover:underline font-medium">
  Manage All Employees
  </Link>
  </div>
  {recentEmployees.length === 0 ? (
- <p className="text-gray-500 text-center py-8">No employees added yet</p>
+ <p className="text-soft text-center py-8">No employees added yet</p>
  ) : (
  <div className="overflow-x-auto">
  <table className="w-full text-sm text-left">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 font-medium text-gray-600">Employee</th>
- <th className="p-3 font-medium text-gray-600">Department</th>
- <th className="p-3 font-medium text-gray-600">Policy Type</th>
- <th className="p-3 font-medium text-gray-600">Status</th>
- <th className="p-3 font-medium text-gray-600">Join Date</th>
+ <th className="p-3 font-medium text-soft">Employee</th>
+ <th className="p-3 font-medium text-soft">Department</th>
+ <th className="p-3 font-medium text-soft">Policy Type</th>
+ <th className="p-3 font-medium text-soft">Status</th>
+ <th className="p-3 font-medium text-soft">Join Date</th>
  </tr>
  </thead>
  <tbody>
  {recentEmployees.map((employee) => {
  const statusInfo = getStatusInfo(employee.status);
  return (
- <tr key={employee.id} className="border-b hover:bg-gray-50">
+ <tr key={employee.id} className="border-b hover:bg-subtle">
  <td className="p-3">
  <div>
- <p className="font-medium text-gray-900">{employee.name}</p>
- <p className="text-gray-500 text-xs">{employee.email}</p>
+ <p className="font-medium text-fg">{employee.name}</p>
+ <p className="text-soft text-xs">{employee.email}</p>
  </div>
  </td>
- <td className="p-3 text-gray-600">{employee.department}</td>
- <td className="p-3 text-gray-600">{employee.policyType}</td>
+ <td className="p-3 text-soft">{employee.department}</td>
+ <td className="p-3 text-soft">{employee.policyType}</td>
  <td className="p-3">
  <span className={`px-2 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 ${statusInfo.color}`}>
  <statusInfo.icon className="text-xs" /> {statusInfo.text}
  </span>
  </td>
- <td className="p-3 text-gray-600 text-xs">{employee.joinDate}</td>
+ <td className="p-3 text-soft text-xs">{employee.joinDate}</td>
  </tr>
  )
  })}
@@ -123,41 +123,41 @@ export default function DashboardOverview({
  </div>
 
  {/* Claims Overview */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl font-bold text-gray-900">Recent Claims Activity</h2>
+ <h2 className="text-xl font-bold text-fg">Recent Claims Activity</h2>
  <Link href="/corporate/claims" className="text-blue-600 hover:underline font-medium">
  View All Claims
  </Link>
  </div>
  {recentClaims.length === 0 ? (
- <p className="text-gray-500 text-center py-8">No claims submitted yet</p>
+ <p className="text-soft text-center py-8">No claims submitted yet</p>
  ) : (
  <div className="overflow-x-auto">
  <table className="w-full text-sm text-left">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 font-medium text-gray-600">Employee</th>
- <th className="p-3 font-medium text-gray-600">Claim Type</th>
- <th className="p-3 font-medium text-gray-600">Amount</th>
- <th className="p-3 font-medium text-gray-600">Status</th>
- <th className="p-3 font-medium text-gray-600">Date</th>
+ <th className="p-3 font-medium text-soft">Employee</th>
+ <th className="p-3 font-medium text-soft">Claim Type</th>
+ <th className="p-3 font-medium text-soft">Amount</th>
+ <th className="p-3 font-medium text-soft">Status</th>
+ <th className="p-3 font-medium text-soft">Date</th>
  </tr>
  </thead>
  <tbody>
  {recentClaims.map((claim) => {
  const statusInfo = getStatusInfo(claim.status);
  return (
- <tr key={claim.id} className="border-b hover:bg-gray-50">
- <td className="p-3 font-medium text-gray-900">{claim.employeeName}</td>
- <td className="p-3 text-gray-600">{claim.claimType}</td>
- <td className="p-3 font-medium text-gray-900">Rs {claim.amount.toLocaleString()}</td>
+ <tr key={claim.id} className="border-b hover:bg-subtle">
+ <td className="p-3 font-medium text-fg">{claim.employeeName}</td>
+ <td className="p-3 text-soft">{claim.claimType}</td>
+ <td className="p-3 font-medium text-fg">Rs {claim.amount.toLocaleString()}</td>
  <td className="p-3">
  <span className={`px-2 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5 ${statusInfo.color}`}>
  <statusInfo.icon className="text-xs" /> {statusInfo.text}
  </span>
  </td>
- <td className="p-3 text-gray-600 text-xs">{claim.date}</td>
+ <td className="p-3 text-soft text-xs">{claim.date}</td>
  </tr>
  )
  })}
@@ -171,23 +171,23 @@ export default function DashboardOverview({
  {/* Sidebar */}
  <div className="space-y-8">
  {/* Claims Summary */}
- <div className="bg-white rounded-2xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">Claims Summary</h3>
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">Claims Summary</h3>
  <div className="space-y-4">
  <div className="flex justify-between items-center">
- <span className="text-gray-600">Approved Claims</span>
+ <span className="text-soft">Approved Claims</span>
  <span className="font-bold text-green-600">{stats.approvedClaims}</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-gray-600">Pending Claims</span>
+ <span className="text-soft">Pending Claims</span>
  <span className="font-bold text-yellow-600">{stats.pendingClaims}</span>
  </div>
  <div className="flex justify-between items-center">
- <span className="text-gray-600">Rejected Claims</span>
+ <span className="text-soft">Rejected Claims</span>
  <span className="font-bold text-red-600">{stats.rejectedClaims}</span>
  </div>
  <div className="border-t pt-3 mt-3 flex justify-between items-center">
- <span className="font-bold text-gray-900">Total Claims</span>
+ <span className="font-bold text-fg">Total Claims</span>
  <span className="font-bold text-xl text-blue-600">{stats.totalClaims}</span>
  </div>
  </div>

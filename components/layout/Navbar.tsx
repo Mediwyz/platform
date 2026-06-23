@@ -231,24 +231,24 @@ const Navbar: React.FC = () => {
  <FaChevronDown className="text-xs" aria-hidden="true" />
  </button>
 
- <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[580px] bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+ <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[580px] bg-surface rounded-2xl shadow-2xl border border-line opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
  <div className="p-5">
  {Object.entries(serviceCategories).map(([category, services]) => (
  <div key={category} className="mb-4 last:mb-0">
- <h4 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2.5 px-1">{category}</h4>
+ <h4 className="text-[11px] font-semibold text-faint uppercase tracking-wider mb-2.5 px-1">{category}</h4>
  <div className="grid grid-cols-2 gap-2">
  {services.map((service) => (
  <Link
  key={service.href}
  href={getServiceHref(service.href)}
- className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200 group/card"
+ className="flex items-center gap-3 p-3 rounded-xl hover:bg-subtle transition-all duration-200 group/card"
  >
  <div className={`w-10 h-10 rounded-xl ${service.color} flex items-center justify-center flex-shrink-0 shadow-sm group-hover/card:shadow-md transition-shadow`}>
  <service.icon className="text-white text-sm" />
  </div>
  <div className="min-w-0">
- <p className="text-sm font-semibold text-gray-900 group-hover/card:text-brand-teal transition-colors">{service.label}</p>
- <p className="text-[11px] text-gray-400 leading-tight">{service.desc}</p>
+ <p className="text-sm font-semibold text-fg group-hover/card:text-brand-teal transition-colors">{service.label}</p>
+ <p className="text-[11px] text-faint leading-tight">{service.desc}</p>
  </div>
  </Link>
  ))}
@@ -285,7 +285,7 @@ const Navbar: React.FC = () => {
 
  <LanguageSwitcher variant="navbar" />
 
- <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-white/20" />
+ <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-surface/10 dark:text-white dark:hover:bg-white/20" />
 
  {isLoggedIn ? (
  <>
@@ -364,12 +364,12 @@ const Navbar: React.FC = () => {
 
  {/* Mobile: Icon grid - hidden when logged in */}
  {!isLoggedIn && (
- <div className="sm:hidden grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-gray-100">
+ <div className="sm:hidden grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-line">
  {Object.values(serviceCategories).flat().map((service) => (
  <Link
  key={service.href}
  href={getServiceHref(service.href)}
- className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 hover:bg-white/10 transition-colors"
+ className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-subtle hover:bg-white/10 transition-colors"
  onClick={() => setIsMenuOpen(false)}
  aria-label={service.label}
  >
@@ -441,7 +441,7 @@ const Navbar: React.FC = () => {
  {/* Mobile Language Switcher + Theme */}
  <div className="px-2 mt-3 flex items-center gap-2">
  <LanguageSwitcher variant="navbar" />
- <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white dark:hover:bg-white/20" />
+ <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white dark:bg-surface/10 dark:text-white dark:hover:bg-white/20" />
  <span className="text-xs text-white/70 font-medium">Theme</span>
  </div>
 

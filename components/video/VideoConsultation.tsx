@@ -485,7 +485,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  <span>Connection lost. Attempting to reconnect...</span>
  <button
  onClick={retryConnection}
- className="ml-4 px-3 py-1 bg-white text-red-600 rounded hover:bg-gray-100"
+ className="ml-4 px-3 py-1 bg-surface text-red-600 rounded hover:bg-subtle"
  >
  Retry Now
  </button>
@@ -509,7 +509,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  <span>Previous session found. </span>
  <button
  onClick={recoverSession}
- className="ml-4 px-3 py-1 bg-white text-blue-600 rounded hover:bg-gray-100 flex items-center"
+ className="ml-4 px-3 py-1 bg-surface text-blue-600 rounded hover:bg-subtle flex items-center"
  >
  <FaRedo className="mr-1" />
  Recover Session
@@ -567,7 +567,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  <FaVideoSlash className="text-2xl" />
  </div>
  <h2 className="text-white text-xl font-semibold mb-2">Media Access Error</h2>
- <p className="text-gray-400 mb-6">{mediaError}</p>
+ <p className="text-faint mb-6">{mediaError}</p>
  <div className="space-y-3">
  <button
  onClick={() => selectedAppointment && joinCall(selectedAppointment)}
@@ -577,7 +577,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  </button>
  <button
  onClick={endCall}
- className="w-full text-gray-400 hover:text-white transition"
+ className="w-full text-faint hover:text-white transition"
  >
  Cancel Call
  </button>
@@ -592,7 +592,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  <>
  {renderConnectionStatus()}
  <div className="space-y-6">
- <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+ <div className="bg-surface rounded-2xl shadow-xl border border-line overflow-hidden">
  <div className="bg-brand-navy text-white p-6">
  <div className="flex items-center justify-between">
  <div className="flex items-center space-x-4">
@@ -646,22 +646,22 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  className={`px-8 py-3 rounded-xl font-semibold transition-all transform ${
  connected
  ? 'bg-green-500 text-white hover:bg-green-600 hover:scale-105'
- : 'bg-gray-600 text-gray-300 cursor-not-allowed'
+ : 'bg-gray-600 text-faint cursor-not-allowed'
  }`}
  >
  {connected ? 'Join Consultation' : 'Waiting for connection...'}
  </button>
  </>
  ) : (
- <p className="text-gray-400">No video consultations scheduled</p>
+ <p className="text-faint">No video consultations scheduled</p>
  )}
  </div>
  </div>
  </div>
 
  {videoAppointments.length > 0 && (
- <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
- <h3 className="text-lg font-semibold text-gray-800 mb-4">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg border border-line">
+ <h3 className="text-lg font-semibold text-fg mb-4">
  Upcoming Video Consultations
  </h3>
  <div className="space-y-3">
@@ -672,7 +672,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  className={`cursor-pointer rounded-xl p-4 border transition-all ${
  selectedAppointment?.id === appointment.id
  ? 'border-blue-500 bg-blue-50'
- : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+ : 'border-line hover:border-blue-300 hover:bg-subtle'
  }`}
  >
  <div className="flex items-center justify-between">
@@ -681,10 +681,10 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  {effectiveType === 'patient' ? <FaUserMd /> : <FaUser />}
  </div>
  <div>
- <p className="font-medium text-gray-900">
+ <p className="font-medium text-fg">
  {getRemoteParticipantName(appointment) || 'Participant'}
  </p>
- <p className="text-sm text-gray-600">
+ <p className="text-sm text-soft">
  {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
  </p>
  </div>
@@ -765,13 +765,13 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  />
 
  {showChat && (
- <div className="fixed bottom-20 right-0 w-full sm:w-96 h-96 bg-white shadow-2xl z-50 rounded-t-2xl sm:rounded-l-2xl">
+ <div className="fixed bottom-20 right-0 w-full sm:w-96 h-96 bg-surface shadow-2xl z-50 rounded-t-2xl sm:rounded-l-2xl">
  <div className="flex flex-col h-full">
  <div className="p-4 border-b flex items-center justify-between">
  <h3 className="font-semibold">Chat</h3>
  <button
  onClick={handleToggleChat}
- className="text-gray-500 hover:text-gray-700 text-2xl"
+ className="text-soft hover:text-soft text-2xl"
  >
  &times;
  </button>
@@ -789,7 +789,7 @@ const VideoConsultation: React.FC<VideoConsultationProps> = ({ currentUser, pati
  className={`max-w-xs px-3 py-2 rounded-lg ${
  msg.socketId === socket?.id
  ? 'bg-blue-500 text-white'
- : 'bg-gray-200 text-gray-800'
+ : 'bg-line text-fg'
  }`}
  >
  <p className="text-xs opacity-75">{msg.userName}</p>

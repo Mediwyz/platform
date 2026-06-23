@@ -27,7 +27,7 @@ const paymentMethods: PaymentMethod[] = [
  type: "credit-card",
  name: "Credit/Debit Card",
  description: "Visa, Mastercard, American Express accepted",
- icon: "💳",
+ icon: "",
  available: true
  },
  {
@@ -36,7 +36,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Corporate Health Plan",
  description: "Use your company's health benefits",
  discount: 50,
- icon: "🏢",
+ icon: "",
  available: true
  },
  {
@@ -45,7 +45,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Insurance Coverage",
  description: "Apply insurance coverage (80% covered)",
  discount: 80,
- icon: "🛡️",
+ icon: "",
  available: true
  },
  {
@@ -54,7 +54,7 @@ const paymentMethods: PaymentMethod[] = [
  name: "Monthly Subscription",
  description: "Use your active healthcare subscription",
  discount: 100,
- icon: "💳",
+ icon: "",
  available: false
  }
 ]
@@ -173,21 +173,21 @@ export default function PaymentOptions({
 
  return (
  <div className="max-w-2xl mx-auto">
- <div className="bg-white rounded-2xl p-8 shadow-lg">
- <h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Options</h2>
+ <div className="bg-surface rounded-2xl p-8 shadow-lg">
+ <h2 className="text-2xl font-bold text-fg mb-6">Payment Options</h2>
  
  {/* Payment Methods */}
  <div className="space-y-4 mb-8">
- <h3 className="font-semibold text-gray-900 mb-4">Select Payment Method</h3>
+ <h3 className="font-semibold text-fg mb-4">Select Payment Method</h3>
  {paymentMethods.map((method) => (
  <label
  key={method.id}
- className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-gray-50 ${
+ className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all hover:bg-subtle ${
  !method.available ? 'opacity-50 cursor-not-allowed' : ''
  } ${
  bookingData.selectedPaymentMethod?.id === method.id 
  ? "border-blue-600 bg-blue-50" 
- : "border-gray-200"
+ : "border-line"
  }`}
  >
  <input
@@ -222,7 +222,7 @@ export default function PaymentOptions({
  </span>
  )}
  </div>
- <p className="text-sm text-gray-600 mt-1">{method.description}</p>
+ <p className="text-sm text-soft mt-1">{method.description}</p>
  </div>
  {!method.available && (
  <span className="text-sm text-red-600 font-medium">Unavailable</span>
@@ -233,15 +233,15 @@ export default function PaymentOptions({
 
  {/* Credit Card Form */}
  {showCreditCardForm && bookingData.selectedPaymentMethod?.type === 'credit-card' && (
- <div className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
+ <div className="mb-8 p-6 bg-subtle rounded-xl border border-line">
  <div className="flex items-center gap-2 mb-4">
  <FaLock className="text-green-600" />
- <h4 className="font-semibold text-gray-900">Credit Card Information</h4>
+ <h4 className="font-semibold text-fg">Credit Card Information</h4>
  </div>
  
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="md:col-span-2">
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Cardholder Name *
  </label>
  <input
@@ -250,7 +250,7 @@ export default function PaymentOptions({
  onChange={(e) => handleCreditCardChange('holderName', e.target.value)}
  placeholder="John Doe"
  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-blue-600 ${
- cardErrors.holderName ? 'border-red-500' : 'border-gray-300'
+ cardErrors.holderName ? 'border-red-500' : 'border-line'
  }`}
  />
  {cardErrors.holderName && (
@@ -259,7 +259,7 @@ export default function PaymentOptions({
  </div>
  
  <div className="md:col-span-2">
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Card Number *
  </label>
  <div className="relative">
@@ -269,7 +269,7 @@ export default function PaymentOptions({
  onChange={(e) => handleCreditCardChange('cardNumber', e.target.value)}
  placeholder="1234 5678 9012 3456"
  className={`w-full px-4 py-3 pr-12 border rounded-lg focus:outline-none focus:border-blue-600 ${
- cardErrors.cardNumber ? 'border-red-500' : 'border-gray-300'
+ cardErrors.cardNumber ? 'border-red-500' : 'border-line'
  }`}
  />
  {creditCardData.cardType && (
@@ -286,7 +286,7 @@ export default function PaymentOptions({
  </div>
  
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  Expiry Date *
  </label>
  <input
@@ -295,7 +295,7 @@ export default function PaymentOptions({
  onChange={(e) => handleCreditCardChange('expiryDate', e.target.value)}
  placeholder="MM/YY"
  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-blue-600 ${
- cardErrors.expiryDate ? 'border-red-500' : 'border-gray-300'
+ cardErrors.expiryDate ? 'border-red-500' : 'border-line'
  }`}
  />
  {cardErrors.expiryDate && (
@@ -304,7 +304,7 @@ export default function PaymentOptions({
  </div>
  
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">
+ <label className="block text-sm font-medium text-soft mb-2">
  CVV *
  </label>
  <input
@@ -313,7 +313,7 @@ export default function PaymentOptions({
  onChange={(e) => handleCreditCardChange('cvv', e.target.value)}
  placeholder="123"
  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-blue-600 ${
- cardErrors.cvv ? 'border-red-500' : 'border-gray-300'
+ cardErrors.cvv ? 'border-red-500' : 'border-line'
  }`}
  />
  {cardErrors.cvv && (
@@ -326,16 +326,16 @@ export default function PaymentOptions({
 
  {/* Payment Summary */}
  <div className=" rounded-xl p-6 mb-6 border">
- <h3 className="font-bold text-gray-900 mb-4">Payment Summary</h3>
+ <h3 className="font-bold text-fg mb-4">Payment Summary</h3>
  <div className="space-y-3">
  <div className="flex justify-between">
- <span className="text-gray-600">
+ <span className="text-soft">
  {bookingData.type === 'video' ? 'Video' : 'In-Person'} Consultation
  </span>
  <span className="font-medium">Rs {baseAmount.toLocaleString()}</span>
  </div>
  <div className="flex justify-between">
- <span className="text-gray-600">Platform Fee</span>
+ <span className="text-soft">Platform Fee</span>
  <span className="font-medium">Rs 50</span>
  </div>
  {bookingData.selectedPaymentMethod?.discount && (
@@ -369,7 +369,7 @@ export default function PaymentOptions({
  <div className="flex justify-between">
  <button
  onClick={onBack}
- className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>

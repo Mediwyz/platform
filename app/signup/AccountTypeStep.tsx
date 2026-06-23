@@ -32,7 +32,7 @@ function colorToTailwind(hex: string): string {
     '#f97316': 'bg-orange-100 text-orange-700 border-orange-300',
     '#6366f1': 'bg-indigo-100 text-indigo-700 border-indigo-300',
   }
-  return map[hex] || 'bg-gray-100 text-gray-700 border-gray-300'
+  return map[hex] || 'bg-subtle text-soft border-line'
 }
 
 function mapAPIToUserTypes(roles: RoleFromAPI[]): { types: UserType[]; docs: Record<string, Document[]> } {
@@ -100,19 +100,19 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">Select Account Type</h2>
-      <p className="text-gray-600 mb-8">Choose the type of account that best describes your role in healthcare</p>
+      <h2 className="text-2xl font-bold text-fg mb-2">Select Account Type</h2>
+      <p className="text-soft mb-8">Choose the type of account that best describes your role in healthcare</p>
 
       {loading ? (
-        <div className="h-12 bg-gray-100 rounded-xl animate-pulse" />
+        <div className="h-12 bg-subtle rounded-xl animate-pulse" />
       ) : (
         <div className="space-y-3">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700 mb-1.5 block">I&apos;m registering as</span>
+            <span className="text-sm font-medium text-soft mb-1.5 block">I&apos;m registering as</span>
             <select
               value={selectedUserType}
               onChange={(e) => onUserTypeChange(e.target.value)}
-              className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-base focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none transition-colors"
+              className="w-full px-4 py-3 bg-surface border-2 border-line rounded-xl text-base focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780] outline-none transition-colors"
             >
               <option value=""> - Choose one - </option>
               {userTypes.map((type) => (
@@ -145,7 +145,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
               <h4 className="font-bold text-blue-800 mb-2">Required Documents for {selectedType?.label}</h4>
               <ul className="text-blue-700 text-sm space-y-1">
                 {documentRequirements[selectedUserType]?.filter(doc => doc.required).map(doc => (
-                  <li key={doc.id}>• {doc.name}</li>
+                  <li key={doc.id}> {doc.name}</li>
                 ))}
               </ul>
               <p className="text-blue-600 text-xs mt-2">
@@ -159,7 +159,7 @@ export default function AccountTypeStep({ selectedUserType, onUserTypeChange }: 
       {/* Open door for roles we don't list. Submits a pending ProviderRole
           for regional admin review; user can continue signup as patient
           in the meantime. */}
-      <div className="mt-6 border-t border-gray-100 pt-5">
+      <div className="mt-6 border-t border-line pt-5">
         <RoleRequestTrigger onOpen={() => setShowRoleRequestModal(true)} />
       </div>
 
@@ -230,31 +230,31 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-        <h3 className="text-xl font-bold text-gray-900">{t('role.request.modal.title')}</h3>
-        <p className="text-sm text-gray-500 mt-1">{t('role.request.modal.subtitle')}</p>
+      <div className="bg-surface rounded-2xl max-w-md w-full p-6 shadow-2xl">
+        <h3 className="text-xl font-bold text-fg">{t('role.request.modal.title')}</h3>
+        <p className="text-sm text-soft mt-1">{t('role.request.modal.subtitle')}</p>
 
         <div className="mt-4 space-y-3">
           <div>
-            <label className="text-xs font-medium text-gray-600 block mb-1">{t('role.request.field.label')} *</label>
+            <label className="text-xs font-medium text-soft block mb-1">{t('role.request.field.label')} *</label>
             <input
               type="text"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               placeholder="e.g. Audiologist, Osteopath, Homeopath"
               maxLength={40}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 block mb-1">{t('role.request.field.description')}</label>
+            <label className="text-xs font-medium text-soft block mb-1">{t('role.request.field.description')}</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Short description for the admin reviewer"
               rows={3}
               maxLength={200}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none"
             />
           </div>
           {error && (
@@ -266,7 +266,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
           <button
             onClick={onClose}
             disabled={busy}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-50"
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-subtle hover:bg-line text-soft disabled:opacity-50"
           >
             {t('role.request.cancel')}
           </button>
@@ -275,7 +275,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
             disabled={busy}
             className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#001E40] hover:bg-[#0C6780] text-white disabled:opacity-50"
           >
-            {busy ? 'Submitting…' : t('role.request.submit')}
+            {busy ? 'Submitting' : t('role.request.submit')}
           </button>
         </div>
       </div>

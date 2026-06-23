@@ -38,7 +38,7 @@ const LINK_COLUMNS: { title: string; links: { label: string; href: string }[] }[
 ]
 
 const Footer: React.FC = () => (
-  <footer role="contentinfo" className="bg-[#001E40] text-gray-400">
+  <footer role="contentinfo" className="bg-[#001E40] text-faint">
     {/* Thin teal accent line */}
     <div className="h-1 bg-gradient-to-r from-[#0C6780] via-[#9AE1FF] to-[#0C6780]" />
 
@@ -47,7 +47,7 @@ const Footer: React.FC = () => (
         {/* Brand + contact + app badges */}
         <div className="col-span-2 lg:col-span-4">
           <span className="text-white font-bold text-2xl tracking-tight">MediWyz</span>
-          <p className="mt-3 text-sm leading-relaxed text-gray-400 max-w-xs">
+          <p className="mt-3 text-sm leading-relaxed text-faint max-w-xs">
             One secure platform for every kind of care - book providers, consult by video or audio, order medicines and manage your health across Africa, Mauritius &amp; India.
           </p>
 
@@ -62,14 +62,14 @@ const Footer: React.FC = () => (
             <a href="/MediWyz-v3.0.0-debug.apk" className="inline-flex items-center gap-2 rounded-lg bg-white/10 border border-white/15 px-3 py-2 hover:bg-white/20 transition" aria-label="Get it on Google Play">
               <FaGooglePlay className="text-base text-white" />
               <span className="flex flex-col leading-none">
-                <span className="text-[8px] uppercase tracking-wide text-gray-400">Get it on</span>
+                <span className="text-[8px] uppercase tracking-wide text-faint">Get it on</span>
                 <span className="text-xs font-bold text-white">Google Play</span>
               </span>
             </a>
             <a href="#" className="inline-flex items-center gap-2 rounded-lg bg-white/10 border border-white/15 px-3 py-2 hover:bg-white/20 transition" aria-label="App Store (coming soon)">
               <FaApple className="text-base text-white" />
               <span className="flex flex-col leading-none">
-                <span className="text-[8px] uppercase tracking-wide text-gray-400">Coming soon</span>
+                <span className="text-[8px] uppercase tracking-wide text-faint">Coming soon</span>
                 <span className="text-xs font-bold text-white">App Store</span>
               </span>
             </a>
@@ -93,7 +93,7 @@ const Footer: React.FC = () => (
         {/* Newsletter / social */}
         <div className="col-span-2 lg:col-span-2">
           <h4 className="text-white font-semibold text-sm mb-3.5">Stay connected</h4>
-          <p className="text-sm text-gray-400 mb-4">Follow us for health tips and product updates.</p>
+          <p className="text-sm text-faint mb-4">Follow us for health tips and product updates.</p>
           <div className="flex items-center gap-2.5">
             <a href="https://www.facebook.com/profile.php?id=61579689551043" aria-label="Facebook"
                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition text-[#9AE1FF]">
@@ -108,8 +108,8 @@ const Footer: React.FC = () => (
       </div>
 
       {/* Bottom legal bar */}
-      <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
-        <p>© {new Date().getFullYear()} MediWyz. All rights reserved.</p>
+      <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-soft">
+        <p> {new Date().getFullYear()} MediWyz. All rights reserved.</p>
         <p className="text-center sm:text-right max-w-2xl">
           MediWyz connects users with licensed providers and does not provide medical care directly. In an emergency, call your local emergency services.
         </p>

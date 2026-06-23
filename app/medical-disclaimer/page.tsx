@@ -32,7 +32,7 @@ export default function DisclaimerPage() {
 
  <section className="mb-6">
  <h2 className="text-2xl font-semibold mb-4">Limitation of Liability:</h2>
- <p>To the fullest extent permitted by law, MediWyz is not liable for any injury, loss, or damages resulting from consultations, tests, prescriptions, medication errors, or any services provided by independent healthcare professionals or third-party providers. Users agree that MediWyz’s role is limited to facilitating communication and logistics between users and providers.</p>
+ <p>To the fullest extent permitted by law, MediWyz is not liable for any injury, loss, or damages resulting from consultations, tests, prescriptions, medication errors, or any services provided by independent healthcare professionals or third-party providers. Users agree that MediWyzs role is limited to facilitating communication and logistics between users and providers.</p>
  </section>
 
  <section className="mb-6">

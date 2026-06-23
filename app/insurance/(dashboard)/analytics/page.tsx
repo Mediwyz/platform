@@ -75,19 +75,19 @@ export default function InsuranceAnalyticsPage() {
     healthy: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
     critical: 'bg-red-50 text-red-700 border-red-200',
-    'n/a': 'bg-gray-50 text-gray-600 border-gray-200',
+    'n/a': 'bg-subtle text-soft border-line',
   }[data.kpis.lossRatioLabel]
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <header className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{data.company.name} - Analytics</h1>
-          <p className="text-sm text-gray-600 mt-1">Operational KPIs for your insurance company.</p>
+          <h1 className="text-2xl font-bold text-fg">{data.company.name} - Analytics</h1>
+          <p className="text-sm text-soft mt-1">Operational KPIs for your insurance company.</p>
         </div>
         <button
           onClick={fetchData}
-          className="px-3 py-1.5 text-xs font-medium bg-gray-100 hover:bg-gray-200 rounded-lg"
+          className="px-3 py-1.5 text-xs font-medium bg-subtle hover:bg-line rounded-lg"
         >
           Refresh
         </button>
@@ -100,33 +100,33 @@ export default function InsuranceAnalyticsPage() {
           label="Loss Ratio (12m)"
           value={data.kpis.lossRatio == null ? ' - ' : `${(data.kpis.lossRatio * 100).toFixed(0)}%`}
           footer={<span className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${lossRatioColor}`}>{data.kpis.lossRatioLabel}</span>}
-          help="Payouts ÷ premiums collected. <60% healthy, 60–85% watch, >85% underwater."
+          help="Payouts  premiums collected. <60% healthy, 6085% watch, >85% underwater."
         />
         <KpiCard
           icon={<FaPiggyBank className="text-emerald-600" />}
           label="Treasury Balance"
           value={format(data.treasury.balance)}
-          footer={<span className="text-[11px] text-gray-500">{data.kpis.runwayMonths != null ? `≈ ${data.kpis.runwayMonths.toFixed(1)} mo runway` : 'No outflow history'}</span>}
+          footer={<span className="text-[11px] text-soft">{data.kpis.runwayMonths != null ? ` ${data.kpis.runwayMonths.toFixed(1)} mo runway` : 'No outflow history'}</span>}
           help="Money pool available to pay future claims."
         />
         <KpiCard
           icon={<FaShieldAlt className="text-blue-600" />}
           label="Active Policies"
           value={data.members.activePolicies.toLocaleString()}
-          footer={<span className="text-[11px] text-gray-500">{data.members.total} total members</span>}
+          footer={<span className="text-[11px] text-soft">{data.members.total} total members</span>}
         />
         <KpiCard
           icon={<FaExclamationTriangle className="text-amber-600" />}
           label="Flagged (30d)"
           value={data.claims.flaggedLast30d.toString()}
-          footer={<span className="text-[11px] text-gray-500">Claims w/ fraud signals</span>}
+          footer={<span className="text-[11px] text-soft">Claims w/ fraud signals</span>}
           help="Duplicate receipts, velocity spikes, or anomalous amounts routed to manual review."
         />
       </section>
 
       {/* Treasury flow */}
-      <section className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5">
-        <h2 className="text-sm font-semibold text-gray-900 mb-3">Treasury flow</h2>
+      <section className="bg-surface rounded-xl border border-line p-4 sm:p-5">
+        <h2 className="text-sm font-semibold text-fg mb-3">Treasury flow</h2>
         <div className="grid grid-cols-3 gap-3">
           <FlowCell label="Inflow (all-time)" amount={data.treasury.totalInflow} sign="+" />
           <FlowCell label="Outflow (all-time)" amount={data.treasury.totalOutflow} sign="-" />
@@ -152,7 +152,7 @@ export default function InsuranceAnalyticsPage() {
         />
       </section>
 
-      <footer className="text-[11px] text-gray-500 pt-2">
+      <footer className="text-[11px] text-soft pt-2">
         Ledger reconciliation runs nightly. If you see numbers that don&apos;t match your own records, do NOT write to the balance directly - file a ticket and wait for a compensating ledger row.
       </footer>
     </div>
@@ -164,12 +164,12 @@ function KpiCard({ icon, label, value, footer, help }: {
   footer?: React.ReactNode; help?: string;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-2 min-h-[112px]">
+    <div className="bg-surface rounded-xl border border-line p-4 flex flex-col gap-2 min-h-[112px]">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-600">{icon}{label}</div>
-        {help && <span title={help} className="text-[10px] text-gray-400 cursor-help">ⓘ</span>}
+        <div className="flex items-center gap-2 text-xs font-medium text-soft">{icon}{label}</div>
+        {help && <span title={help} className="text-[10px] text-faint cursor-help"></span>}
       </div>
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
+      <div className="text-2xl font-bold text-fg">{value}</div>
       {footer && <div>{footer}</div>}
     </div>
   )
@@ -178,8 +178,8 @@ function KpiCard({ icon, label, value, footer, help }: {
 function FlowCell({ label, amount, sign }: { label: string; amount: number; sign: '+' | '-' }) {
   const { format } = useCurrency()
   return (
-    <div className="bg-gray-50 rounded-lg p-3">
-      <div className="text-[11px] text-gray-500 mb-1">{label}</div>
+    <div className="bg-subtle rounded-lg p-3">
+      <div className="text-[11px] text-soft mb-1">{label}</div>
       <div className={`text-base font-bold flex items-center gap-1 ${sign === '+' ? 'text-emerald-700' : 'text-red-700'}`}>
         {sign === '+' ? <FaArrowUp className="text-xs" /> : <FaArrowDown className="text-xs" />}
         {format(amount)}
@@ -195,22 +195,22 @@ function FunnelCard({ title, icon, total, breakdown, statusColors }: {
   const entries = Object.entries(breakdown)
   const max = Math.max(1, ...entries.map(([, n]) => n))
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5">
+    <div className="bg-surface rounded-xl border border-line p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">{icon}{title}</div>
-        <span className="text-xs text-gray-500">{total} total</span>
+        <div className="flex items-center gap-2 text-sm font-semibold text-fg">{icon}{title}</div>
+        <span className="text-xs text-soft">{total} total</span>
       </div>
       {entries.length === 0 ? (
-        <div className="text-xs text-gray-500 py-4 text-center">No activity yet - claims will appear here as members submit them.</div>
+        <div className="text-xs text-soft py-4 text-center">No activity yet - claims will appear here as members submit them.</div>
       ) : (
         <ul className="space-y-2">
           {entries.map(([status, count]) => (
             <li key={status} className="flex items-center gap-3">
-              <span className="text-xs text-gray-700 capitalize min-w-[78px]">{status.replace('_', ' ')}</span>
-              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+              <span className="text-xs text-soft capitalize min-w-[78px]">{status.replace('_', ' ')}</span>
+              <div className="flex-1 bg-subtle rounded-full h-2 overflow-hidden">
                 <div className={`h-full ${statusColors[status] ?? 'bg-gray-400'}`} style={{ width: `${(count / max) * 100}%` }} />
               </div>
-              <span className="text-xs font-semibold text-gray-900 min-w-[28px] text-right">{count}</span>
+              <span className="text-xs font-semibold text-fg min-w-[28px] text-right">{count}</span>
             </li>
           ))}
         </ul>
@@ -222,16 +222,16 @@ function FunnelCard({ title, icon, total, breakdown, statusColors }: {
 function AnalyticsSkeleton() {
   return (
     <div className="space-y-6">
-      <div className="h-8 w-64 bg-gray-200 rounded animate-pulse" />
+      <div className="h-8 w-64 bg-line rounded animate-pulse" />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-28 bg-gray-100 rounded-xl animate-pulse" />
+          <div key={i} className="h-28 bg-subtle rounded-xl animate-pulse" />
         ))}
       </div>
-      <div className="h-32 bg-gray-100 rounded-xl animate-pulse" />
+      <div className="h-32 bg-subtle rounded-xl animate-pulse" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="h-48 bg-gray-100 rounded-xl animate-pulse" />
-        <div className="h-48 bg-gray-100 rounded-xl animate-pulse" />
+        <div className="h-48 bg-subtle rounded-xl animate-pulse" />
+        <div className="h-48 bg-subtle rounded-xl animate-pulse" />
       </div>
     </div>
   )

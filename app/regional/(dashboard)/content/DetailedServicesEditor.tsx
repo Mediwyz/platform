@@ -98,9 +98,9 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
  }
 
  return (
- <div className="bg-white rounded-xl shadow p-6 space-y-6">
+ <div className="bg-surface rounded-xl shadow p-6 space-y-6">
  <div className="flex items-center justify-between">
- <h2 className="text-xl font-bold text-gray-900">Detailed Services Section</h2>
+ <h2 className="text-xl font-bold text-fg">Detailed Services Section</h2>
  <button
  onClick={addItem}
  className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition"
@@ -112,22 +112,22 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
  {/* Section Header */}
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Section Title</label>
+ <label className="block text-sm font-medium text-soft mb-1">Section Title</label>
  <input
  type="text"
  value={formData.sectionTitle}
  onChange={(e) => handleChange('sectionTitle', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Section title"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Section Subtitle</label>
+ <label className="block text-sm font-medium text-soft mb-1">Section Subtitle</label>
  <textarea
  value={formData.sectionSubtitle}
  onChange={(e) => handleChange('sectionSubtitle', e.target.value)}
  rows={2}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Section subtitle"
  />
  </div>
@@ -135,7 +135,7 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
 
  {/* Service Items */}
  {formData.items.length === 0 && (
- <div className="text-center py-10 text-gray-500">
+ <div className="text-center py-10 text-soft">
  <p className="text-lg font-medium">No service items yet</p>
  <p className="text-sm mt-1">Click &quot;Add Service&quot; to get started</p>
  </div>
@@ -143,11 +143,11 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
 
  <div className="space-y-4">
  {formData.items.map((item, index) => (
- <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+ <div key={index} className="p-4 bg-subtle rounded-lg border border-line">
  <div className="flex items-center justify-between mb-3">
  <div className="flex items-center gap-2">
  {item.emoji && <span className="text-2xl">{item.emoji}</span>}
- <span className="text-sm font-semibold text-gray-600">
+ <span className="text-sm font-semibold text-soft">
  Service {index + 1}{item.title && `: ${item.title}`}
  </span>
  </div>
@@ -155,18 +155,18 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
  <button
  onClick={() => moveItem(index, 'up')}
  disabled={index === 0}
- className="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+ className="p-1.5 bg-surface border border-line rounded hover:bg-subtle disabled:opacity-30 disabled:cursor-not-allowed transition"
  title="Move up"
  >
- <FaArrowUp className="text-xs text-gray-600" />
+ <FaArrowUp className="text-xs text-soft" />
  </button>
  <button
  onClick={() => moveItem(index, 'down')}
  disabled={index === formData.items.length - 1}
- className="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+ className="p-1.5 bg-surface border border-line rounded hover:bg-subtle disabled:opacity-30 disabled:cursor-not-allowed transition"
  title="Move down"
  >
- <FaArrowDown className="text-xs text-gray-600" />
+ <FaArrowDown className="text-xs text-soft" />
  </button>
  <button
  onClick={() => removeItem(index)}
@@ -180,42 +180,42 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
 
  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Emoji</label>
+ <label className="block text-xs font-medium text-soft mb-1">Emoji</label>
  <input
  type="text"
  value={item.emoji}
  onChange={(e) => handleItemChange(index, 'emoji', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., \uD83C\uDFE5"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Title</label>
+ <label className="block text-xs font-medium text-soft mb-1">Title</label>
  <input
  type="text"
  value={item.title}
  onChange={(e) => handleItemChange(index, 'title', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Service title"
  />
  </div>
  <div>
- <label className="block text-xs font-medium text-gray-600 mb-1">Subtitle</label>
+ <label className="block text-xs font-medium text-soft mb-1">Subtitle</label>
  <input
  type="text"
  value={item.subtitle}
  onChange={(e) => handleItemChange(index, 'subtitle', e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Service subtitle"
  />
  </div>
  <div className="md:col-span-2">
- <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+ <label className="block text-xs font-medium text-soft mb-1">Description</label>
  <textarea
  value={item.description}
  onChange={(e) => handleItemChange(index, 'description', e.target.value)}
  rows={2}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="Service description"
  />
  </div>
@@ -225,46 +225,46 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
  </div>
 
  {/* CTA Section */}
- <div className="border-t border-gray-200 pt-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4">Call to Action</h3>
+ <div className="border-t border-line pt-6">
+ <h3 className="text-lg font-semibold text-fg mb-4">Call to Action</h3>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">CTA Title</label>
+ <label className="block text-sm font-medium text-soft mb-1">CTA Title</label>
  <input
  type="text"
  value={formData.ctaTitle}
  onChange={(e) => handleChange('ctaTitle', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="CTA title"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">CTA Description</label>
+ <label className="block text-sm font-medium text-soft mb-1">CTA Description</label>
  <textarea
  value={formData.ctaDescription}
  onChange={(e) => handleChange('ctaDescription', e.target.value)}
  rows={2}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="CTA description"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Primary Button Text</label>
+ <label className="block text-sm font-medium text-soft mb-1">Primary Button Text</label>
  <input
  type="text"
  value={formData.ctaPrimaryButton}
  onChange={(e) => handleChange('ctaPrimaryButton', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., Get Started"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Secondary Button Text</label>
+ <label className="block text-sm font-medium text-soft mb-1">Secondary Button Text</label>
  <input
  type="text"
  value={formData.ctaSecondaryButton}
  onChange={(e) => handleChange('ctaSecondaryButton', e.target.value)}
- className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ className="w-full px-4 py-2 border border-line rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  placeholder="e.g., Learn More"
  />
  </div>
@@ -272,7 +272,7 @@ export default function DetailedServicesEditor({ data, onSave }: DetailedService
  </div>
 
  {/* Save Button */}
- <div className="flex justify-end pt-4 border-t border-gray-200">
+ <div className="flex justify-end pt-4 border-t border-line">
  <button
  onClick={handleSave}
  disabled={saving}

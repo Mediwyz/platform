@@ -10,7 +10,7 @@ export interface TabItem {
 }
 
 /**
- * Tabs — horizontal, scrollable, underline-style tab bar. Controlled via
+ * Tabs  horizontal, scrollable, underline-style tab bar. Controlled via
  * `active` / `onChange`. Use for in-page section switches (profile, AI coach).
  */
 export default function Tabs({

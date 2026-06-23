@@ -28,7 +28,7 @@ export default function PrescriptionPdfButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-1.5 ${sizeClass} font-semibold bg-white border border-gray-200 text-[#0C6780] rounded-lg hover:bg-gray-50 transition-colors`}
+      className={`inline-flex items-center gap-1.5 ${sizeClass} font-semibold bg-surface border border-line text-[#0C6780] rounded-lg hover:bg-subtle transition-colors`}
     >
       <FaFilePdf /> {label}
     </a>

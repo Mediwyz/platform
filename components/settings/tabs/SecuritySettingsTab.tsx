@@ -63,7 +63,7 @@ const SecuritySettingsTab: React.FC = () => {
  return (
  <div className="space-y-8">
  <div>
- <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-6 flex items-center gap-2">
  <FaLock className="text-blue-600" /> Password Settings
  </h2>
  {message && (
@@ -73,16 +73,16 @@ const SecuritySettingsTab: React.FC = () => {
  )}
  <form onSubmit={handlePasswordChange} className="space-y-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
- <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
+ <label className="block text-sm font-medium text-soft mb-1">Current Password</label>
+ <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
- <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
+ <label className="block text-sm font-medium text-soft mb-1">New Password</label>
+ <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
- <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
+ <label className="block text-sm font-medium text-soft mb-1">Confirm New Password</label>
+ <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 border border-line rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500" required disabled={isSubmitting} />
  </div>
  <button type="submit" disabled={isSubmitting} className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
  {isSubmitting ? <FaSpinner className="animate-spin" /> : <FaSave />}
@@ -92,33 +92,33 @@ const SecuritySettingsTab: React.FC = () => {
  </div>
 
  <div className="border-t pt-6">
- <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-4 flex items-center gap-2">
  <FaShieldAlt className="text-blue-600" /> Two-Factor Authentication
  </h2>
  <div className="flex items-center justify-between p-4 border rounded-lg">
  <div>
- <p className="font-medium text-gray-800">Two-Factor Authentication (2FA)</p>
- <p className="text-sm text-gray-600">Add an extra layer of security to your account</p>
+ <p className="font-medium text-fg">Two-Factor Authentication (2FA)</p>
+ <p className="text-sm text-soft">Add an extra layer of security to your account</p>
  </div>
  <button type="button" onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}>
  {twoFactorEnabled ? (
  <FaToggleOn className="text-4xl text-green-500" />
  ) : (
- <FaToggleOff className="text-4xl text-gray-400" />
+ <FaToggleOff className="text-4xl text-faint" />
  )}
  </button>
  </div>
  </div>
 
  <div className="border-t pt-6">
- <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-fg mb-4 flex items-center gap-2">
  <FaKey className="text-blue-600" /> Active Sessions
  </h2>
  <div className="p-4 border rounded-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="font-medium text-gray-800">Current Session</p>
- <p className="text-sm text-gray-600">This device &bull; Active now</p>
+ <p className="font-medium text-fg">Current Session</p>
+ <p className="text-sm text-soft">This device &bull; Active now</p>
  </div>
  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Active</span>
  </div>

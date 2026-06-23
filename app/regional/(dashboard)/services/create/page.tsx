@@ -95,19 +95,19 @@ export default function CreateServicePage() {
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/regional/services" className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-500">
+        <Link href="/regional/services" className="p-2 rounded-lg hover:bg-subtle transition-colors text-soft">
           <FiArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Create Platform Service</h1>
-          <p className="text-sm text-gray-500">Add a new service to the catalog for all providers of a given type.</p>
+          <h1 className="text-xl font-bold text-fg">Create Platform Service</h1>
+          <p className="text-sm text-soft">Add a new service to the catalog for all providers of a given type.</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Icon picker */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-          <label className="block text-sm font-semibold text-gray-700">Service Illustration</label>
+        <div className="bg-surface rounded-xl border border-line p-4 space-y-3">
+          <label className="block text-sm font-semibold text-soft">Service Illustration</label>
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-xl bg-[#0C6780]/10 flex items-center justify-center">
               {form.iconKey ? (
@@ -127,7 +127,7 @@ export default function CreateServicePage() {
                 {iconPreview ? 'Change Icon' : 'Choose Icon'}
               </button>
               {iconPreview && (
-                <p className="text-xs text-gray-500 mt-1 font-mono">{form.iconKey || form.emoji}</p>
+                <p className="text-xs text-soft mt-1 font-mono">{form.iconKey || form.emoji}</p>
               )}
             </div>
           </div>
@@ -144,15 +144,15 @@ export default function CreateServicePage() {
         </div>
 
         {/* Core fields */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <label className="block text-sm font-semibold text-gray-700">Service Details</label>
+        <div className="bg-surface rounded-xl border border-line p-4 space-y-4">
+          <label className="block text-sm font-semibold text-soft">Service Details</label>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Provider Type *</label>
+            <label className="block text-xs font-medium text-soft mb-1">Provider Type *</label>
             <select
               value={form.providerType}
               onChange={e => set('providerType', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
               required
             >
               <option value="">Select a provider type</option>
@@ -161,75 +161,75 @@ export default function CreateServicePage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Service Name *</label>
+            <label className="block text-xs font-medium text-soft mb-1">Service Name *</label>
             <input
               type="text"
               value={form.serviceName}
               onChange={e => set('serviceName', e.target.value)}
               placeholder="e.g. General Consultation, Blood Pressure Check"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Category *</label>
+            <label className="block text-xs font-medium text-soft mb-1">Category *</label>
             <input
               type="text"
               value={form.category}
               onChange={e => set('category', e.target.value)}
               placeholder="e.g. Consultation, Screening, Wound Care"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Description *</label>
+            <label className="block text-xs font-medium text-soft mb-1">Description *</label>
             <textarea
               value={form.description}
               onChange={e => set('description', e.target.value)}
               rows={3}
               placeholder="Describe what this service includes..."
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] resize-none"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] resize-none"
               required
             />
           </div>
         </div>
 
         {/* Pricing & duration */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <label className="block text-sm font-semibold text-gray-700">Pricing &amp; Duration</label>
+        <div className="bg-surface rounded-xl border border-line p-4 space-y-4">
+          <label className="block text-sm font-semibold text-soft">Pricing &amp; Duration</label>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Default Price (MUR)</label>
+              <label className="block text-xs font-medium text-soft mb-1">Default Price (MUR)</label>
               <input
                 type="number"
                 min={0}
                 step={50}
                 value={form.defaultPrice}
                 onChange={e => set('defaultPrice', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Duration (minutes)</label>
+              <label className="block text-xs font-medium text-soft mb-1">Duration (minutes)</label>
               <input
                 type="number"
                 min={5}
                 step={5}
                 value={form.duration}
                 onChange={e => set('duration', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Currency</label>
+            <label className="block text-xs font-medium text-soft mb-1">Currency</label>
             <select
               value={form.currency}
               onChange={e => set('currency', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
             >
               <option value="MUR">MUR - Mauritian Rupee</option>
               <option value="MGA">MGA - Malagasy Ariary</option>
@@ -240,27 +240,27 @@ export default function CreateServicePage() {
         </div>
 
         {/* Advanced */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <label className="block text-sm font-semibold text-gray-700">Advanced</label>
+        <div className="bg-surface rounded-xl border border-line p-4 space-y-4">
+          <label className="block text-sm font-semibold text-soft">Advanced</label>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Country Code (leave blank for all regions)</label>
+            <label className="block text-xs font-medium text-soft mb-1">Country Code (leave blank for all regions)</label>
             <input
               type="text"
               value={form.countryCode}
               onChange={e => set('countryCode', e.target.value.toUpperCase())}
               placeholder="MU, MG, KE, ..."
               maxLength={2}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Required Content Type on Completion</label>
+            <label className="block text-xs font-medium text-soft mb-1">Required Content Type on Completion</label>
             <select
               value={form.requiredContentType}
               onChange={e => set('requiredContentType', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]"
             >
               <option value="">None</option>
               <option value="lab_result">Lab Result</option>
@@ -279,9 +279,9 @@ export default function CreateServicePage() {
               id="isDefault"
               checked={form.isDefault}
               onChange={e => set('isDefault', e.target.checked)}
-              className="rounded border-gray-300 text-[#0C6780]"
+              className="rounded border-line text-[#0C6780]"
             />
-            <label htmlFor="isDefault" className="text-xs text-gray-700">
+            <label htmlFor="isDefault" className="text-xs text-soft">
               Auto-assign to new providers of this type on registration
             </label>
           </div>
@@ -304,7 +304,7 @@ export default function CreateServicePage() {
           </button>
           <Link
             href="/regional/services"
-            className="px-5 py-2.5 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            className="px-5 py-2.5 text-sm text-soft hover:text-fg transition-colors"
           >
             Cancel
           </Link>

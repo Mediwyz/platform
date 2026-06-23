@@ -42,37 +42,37 @@ function SystemHealthCard() {
  const getBarColor = (v: number) => v > 80 ? 'bg-red-500' : v > 60 ? 'bg-yellow-500' : 'bg-green-500'
 
  return (
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">System Health</h3>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">System Health</h3>
  {health ? (
  <div className="space-y-4">
  <div>
  <div className="flex justify-between text-sm mb-1">
- <span className="text-gray-600">Server Load</span>
+ <span className="text-soft">Server Load</span>
  <span className="font-medium">{health.cpuUsage}%</span>
  </div>
- <div className="bg-gray-200 rounded-full h-2">
+ <div className="bg-line rounded-full h-2">
  <div className={`${getBarColor(health.cpuUsage)} rounded-full h-2`} style={{ width: `${health.cpuUsage}%` }} />
  </div>
  </div>
  <div>
  <div className="flex justify-between text-sm mb-1">
- <span className="text-gray-600">Database Usage</span>
+ <span className="text-soft">Database Usage</span>
  <span className="font-medium">{health.memoryUsage}%</span>
  </div>
- <div className="bg-gray-200 rounded-full h-2">
+ <div className="bg-line rounded-full h-2">
  <div className={`${getBarColor(health.memoryUsage)} rounded-full h-2`} style={{ width: `${health.memoryUsage}%` }} />
  </div>
  </div>
  <div>
  <div className="flex justify-between text-sm mb-1">
- <span className="text-gray-600">API Response Time</span>
+ <span className="text-soft">API Response Time</span>
  <span className={`font-medium ${health.responseTime < 200 ? 'text-green-600' : 'text-yellow-600'}`}>{health.responseTime}ms</span>
  </div>
  </div>
  </div>
  ) : (
- <div className="text-center py-4 text-gray-400 text-sm">Loading health data...</div>
+ <div className="text-center py-4 text-faint text-sm">Loading health data...</div>
  )}
  </div>
  )
@@ -196,11 +196,11 @@ const AdminDashboard = () => {
  { title: 'Monthly Revenue', value: loading ? '...' : `Rs ${stats.monthlyRevenue.toLocaleString()}`, icon: FaDollarSign, color: 'bg-green-500' },
  { title: 'Active Sessions', value: loading ? '...' : stats.activeSessions, icon: FaChartLine, color: 'bg-purple-500' },
  ] as const).map((stat, idx) => (
- <div key={idx} className="bg-white rounded-xl p-6 shadow-lg">
+ <div key={idx} className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">{stat.title}</p>
- <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+ <p className="text-soft text-sm">{stat.title}</p>
+ <p className="text-2xl font-bold text-fg mt-1">{stat.value}</p>
  </div>
  <div className={`p-3 rounded-full ${stat.color}`}>
  <stat.icon className="text-white text-xl" />
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
 
  {/* Platform Earnings Section */}
  <div className="mb-8">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Platform Earnings</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Platform Earnings</h2>
  {commissionLoading ? (
  <div className="flex justify-center py-8">
  <FaSpinner className="animate-spin text-2xl text-blue-500" />
@@ -247,8 +247,8 @@ const AdminDashboard = () => {
  </div>
 
  {/* Revenue Distribution */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Distribution Model</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-4 sm:p-6 mb-6">
+ <h3 className="text-lg font-semibold text-fg mb-4">Revenue Distribution Model</h3>
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
  <div className="bg-blue-50 rounded-lg p-4">
  <div className="text-2xl font-bold text-blue-700">85%</div>
@@ -270,28 +270,28 @@ const AdminDashboard = () => {
 
  {/* Regional Admin Commission Summary */}
  {commission.regionalAdmins.length > 0 && (
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
- <div className="p-4 border-b border-gray-200">
- <h3 className="text-lg font-semibold text-gray-900">Regional Admin Commissions</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line mb-6">
+ <div className="p-4 border-b border-line">
+ <h3 className="text-lg font-semibold text-fg">Regional Admin Commissions</h3>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="bg-gray-50 border-b border-gray-200">
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Admin</th>
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Region</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Rate</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Total Earned</th>
+ <tr className="bg-subtle border-b border-line">
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Admin</th>
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Region</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Rate</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Total Earned</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {commission.regionalAdmins.map((admin) => (
- <tr key={admin.id} className="hover:bg-gray-50">
+ <tr key={admin.id} className="hover:bg-subtle">
  <td className="py-3 px-4">
- <div className="text-sm font-medium text-gray-900">{admin.name}</div>
- <div className="text-xs text-gray-500">{admin.email}</div>
+ <div className="text-sm font-medium text-fg">{admin.name}</div>
+ <div className="text-xs text-soft">{admin.email}</div>
  </td>
- <td className="py-3 px-4 text-sm text-gray-600">{admin.region}, {admin.country}</td>
+ <td className="py-3 px-4 text-sm text-soft">{admin.region}, {admin.country}</td>
  <td className="py-3 px-4 text-sm text-right">{admin.commissionRate}%</td>
  <td className="py-3 px-4 text-sm text-right font-medium text-yellow-600">
  Rs {(admin.totalCommission ?? 0).toLocaleString()}
@@ -306,26 +306,26 @@ const AdminDashboard = () => {
 
  {/* Recent Transactions */}
  {commission.recentTransactions.length > 0 && (
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
- <div className="p-4 border-b border-gray-200">
- <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line mb-6">
+ <div className="p-4 border-b border-line">
+ <h3 className="text-lg font-semibold text-fg">Recent Transactions</h3>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="bg-gray-50 border-b border-gray-200">
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Description</th>
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Type</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Total</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Platform (5%)</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Regional (10%)</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Date</th>
+ <tr className="bg-subtle border-b border-line">
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Description</th>
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Type</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Total</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Platform (5%)</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Regional (10%)</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Date</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {commission.recentTransactions.map((tx) => (
- <tr key={tx.id} className="hover:bg-gray-50">
- <td className="py-3 px-4 text-sm text-gray-900">{tx.description}</td>
+ <tr key={tx.id} className="hover:bg-subtle">
+ <td className="py-3 px-4 text-sm text-fg">{tx.description}</td>
  <td className="py-3 px-4">
  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
  {tx.serviceType || 'other'}
@@ -338,7 +338,7 @@ const AdminDashboard = () => {
  <td className="py-3 px-4 text-sm text-right text-yellow-600">
  Rs {(tx.regionalCommission ?? 0).toLocaleString()}
  </td>
- <td className="py-3 px-4 text-sm text-right text-gray-500">
+ <td className="py-3 px-4 text-sm text-right text-soft">
  {new Date(tx.createdAt).toLocaleDateString()}
  </td>
  </tr>
@@ -350,7 +350,7 @@ const AdminDashboard = () => {
  )}
  </>
  ) : (
- <div className="bg-gray-50 rounded-xl p-6 text-center text-gray-500 mb-6">
+ <div className="bg-subtle rounded-xl p-6 text-center text-soft mb-6">
  No commission data available yet
  </div>
  )}
@@ -359,19 +359,19 @@ const AdminDashboard = () => {
  <div className="grid lg:grid-cols-3 gap-8">
  {/* Quick Actions + Categories */}
  <div className="lg:col-span-2">
- <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
- <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+ <div className="bg-surface rounded-xl p-6 shadow-lg mb-8">
+ <h2 className="text-xl font-bold text-fg mb-6">Quick Actions</h2>
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
  {quickActions.map((action, idx) => (
  <Link
  key={idx}
  href={action.href}
- className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition group"
+ className="p-4 border-2 border-line rounded-lg hover:border-blue-500 hover:bg-blue-50 transition group"
  >
  <div className={`p-3 rounded-full ${action.color} w-fit mb-3`}>
  <action.icon className="text-white text-xl" />
  </div>
- <p className="font-semibold text-gray-900 group-hover:text-blue-600">
+ <p className="font-semibold text-fg group-hover:text-blue-600">
  {action.title}
  </p>
  </Link>
@@ -380,8 +380,8 @@ const AdminDashboard = () => {
  </div>
 
  {/* Category Statistics */}
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h2 className="text-xl font-bold text-gray-900 mb-6">Provider Categories</h2>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h2 className="text-xl font-bold text-fg mb-6">Provider Categories</h2>
  {loading ? (
  <div className="flex justify-center py-8">
  <FaSpinner className="animate-spin text-2xl text-blue-500" />
@@ -389,17 +389,17 @@ const AdminDashboard = () => {
  ) : (
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-700">Category</th>
- <th className="p-3 text-center font-medium text-gray-700">Total</th>
- <th className="p-3 text-center font-medium text-gray-700">Active</th>
- <th className="p-3 text-center font-medium text-gray-700">Pending</th>
+ <th className="p-3 text-left font-medium text-soft">Category</th>
+ <th className="p-3 text-center font-medium text-soft">Total</th>
+ <th className="p-3 text-center font-medium text-soft">Active</th>
+ <th className="p-3 text-center font-medium text-soft">Pending</th>
  </tr>
  </thead>
  <tbody>
  {categoryStats.map((cat, idx) => (
- <tr key={idx} className="border-b hover:bg-gray-50">
+ <tr key={idx} className="border-b hover:bg-subtle">
  <td className="p-3 font-medium">{cat.category}</td>
  <td className="p-3 text-center">{(cat.count ?? 0).toLocaleString()}</td>
  <td className="p-3 text-center text-green-600">{(cat.active ?? 0).toLocaleString()}</td>
@@ -417,14 +417,14 @@ const AdminDashboard = () => {
 
  {/* Sidebar */}
  <div className="space-y-6">
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Activities</h3>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">Recent Activities</h3>
  {loading ? (
  <div className="flex justify-center py-4">
  <FaSpinner className="animate-spin text-xl text-blue-500" />
  </div>
  ) : recentActivity.length === 0 ? (
- <p className="text-gray-500 text-center py-4">No recent activity</p>
+ <p className="text-soft text-center py-4">No recent activity</p>
  ) : (
  <div className="space-y-3">
  {recentActivity.map((activity, idx) => (
@@ -433,8 +433,8 @@ const AdminDashboard = () => {
  <FaUserMd className="text-blue-600 text-sm" />
  </div>
  <div className="flex-1">
- <p className="text-sm text-gray-900">{activity.message}</p>
- <p className="text-xs text-gray-500">{new Date(activity.time).toLocaleString()}</p>
+ <p className="text-sm text-fg">{activity.message}</p>
+ <p className="text-xs text-soft">{new Date(activity.time).toLocaleString()}</p>
  </div>
  </div>
  ))}

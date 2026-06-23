@@ -76,30 +76,30 @@ interface Review {
 }
 
 const fallbackServiceTypes: ServiceType[] = [
- { id: "ST001", name: "Regular Childcare", description: "Daily childcare during working hours", icon: "👶", priceType: "daily" },
- { id: "ST002", name: "Night Nanny", description: "Overnight childcare support", icon: "🌙", priceType: "hourly" },
- { id: "ST003", name: "Weekend Care", description: "Weekend babysitting services", icon: "📅", priceType: "hourly" },
- { id: "ST004", name: "Full-Time Nanny", description: "Full-time live-in or live-out nanny", icon: "🏠", priceType: "monthly" },
- { id: "ST005", name: "Emergency Care", description: "Last-minute childcare services", icon: "🚨", priceType: "hourly" },
- { id: "ST006", name: "Special Needs Care", description: "Specialized care for children with special needs", icon: "💝", priceType: "hourly" },
+ { id: "ST001", name: "Regular Childcare", description: "Daily childcare during working hours", icon: "", priceType: "daily" },
+ { id: "ST002", name: "Night Nanny", description: "Overnight childcare support", icon: "", priceType: "hourly" },
+ { id: "ST003", name: "Weekend Care", description: "Weekend babysitting services", icon: "", priceType: "hourly" },
+ { id: "ST004", name: "Full-Time Nanny", description: "Full-time live-in or live-out nanny", icon: "", priceType: "monthly" },
+ { id: "ST005", name: "Emergency Care", description: "Last-minute childcare services", icon: "", priceType: "hourly" },
+ { id: "ST006", name: "Special Needs Care", description: "Specialized care for children with special needs", icon: "", priceType: "hourly" },
 ]
 
 // Map service name keywords to icons
 function getServiceIcon(name: string): string {
  const lower = name.toLowerCase()
- if (lower.includes('night')) return '🌙'
- if (lower.includes('weekend')) return '📅'
- if (lower.includes('full-time') || lower.includes('full time') || lower.includes('live')) return '🏠'
- if (lower.includes('emergency') || lower.includes('urgent')) return '🚨'
- if (lower.includes('special need')) return '💝'
- return '👶'
+ if (lower.includes('night')) return ''
+ if (lower.includes('weekend')) return ''
+ if (lower.includes('full-time') || lower.includes('full time') || lower.includes('live')) return ''
+ if (lower.includes('emergency') || lower.includes('urgent')) return ''
+ if (lower.includes('special need')) return ''
+ return ''
 }
 
 // Map service duration to price type
 function getPriceType(duration: number | null): "hourly" | "daily" | "monthly" {
  if (!duration) return 'hourly'
- if (duration >= 480) return 'monthly' // 8+ hours → monthly rate
- if (duration >= 240) return 'daily'   // 4+ hours → daily rate
+ if (duration >= 480) return 'monthly' // 8+ hours  monthly rate
+ if (duration >= 240) return 'daily'   // 4+ hours  daily rate
  return 'hourly'
 }
 
@@ -123,7 +123,7 @@ export default function NannyBookingPage() {
  setNannies(data.data.map((n: any) => ({
  id: n.id,
  name: `${n.firstName} ${n.lastName}`,
- avatar: n.profileImage || '👩',
+ avatar: n.profileImage || '',
  age: n.age || 28,
  experience: n.experience || '2+ years',
  rating: n.rating || 4.5,
@@ -241,18 +241,18 @@ export default function NannyBookingPage() {
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
- <Link href="/patient" className="text-gray-600 hover:text-primary-blue">
+ <Link href="/patient" className="text-soft hover:text-primary-blue">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Nanny Services</h1>
- <p className="text-gray-600">Find trusted nannies for your children</p>
+ <h1 className="text-2xl font-bold text-fg">Nanny Services</h1>
+ <p className="text-soft">Find trusted nannies for your children</p>
  </div>
  </div>
  </div>
@@ -270,7 +270,7 @@ export default function NannyBookingPage() {
  <button
  key={service.id}
  onClick={() => setSelectedService(service)}
- className={`p-4 bg-white rounded-lg shadow-lg text-center hover:shadow-xl transition ${
+ className={`p-4 bg-surface rounded-lg shadow-lg text-center hover:shadow-xl transition ${
  selectedService?.id === service.id ? "border-2 border-primary-blue" : ""
  }`}
  >
@@ -282,7 +282,7 @@ export default function NannyBookingPage() {
  </div>
 
  {/* Search and Filters */}
- <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg mb-6">
  <div className="flex flex-col md:flex-row gap-4">
  <div className="flex-1 relative">
  <input
@@ -292,7 +292,7 @@ export default function NannyBookingPage() {
  onChange={(e) => setSearchQuery(e.target.value)}
  className="w-full px-4 py-3 pl-10 border rounded-lg focus:outline-none focus:border-primary-blue"
  />
- <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
  <select
  value={filterAgeGroup}
@@ -304,7 +304,7 @@ export default function NannyBookingPage() {
  <option key={age} value={age}>{age}</option>
  ))}
  </select>
- <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+ <button className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle flex items-center gap-2">
  <FaFilter />
  More Filters
  </button>
@@ -314,14 +314,14 @@ export default function NannyBookingPage() {
  {/* Nanny Profiles */}
  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
  {filteredNannies.map((nanny) => (
- <div key={nanny.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
+ <div key={nanny.id} className="bg-surface rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
  <div className="p-6">
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center gap-3">
  <div className="text-4xl">{nanny.avatar}</div>
  <div>
  <h3 className="font-semibold text-lg">{nanny.name}</h3>
- <p className="text-gray-600 text-sm">{nanny.age} years • {nanny.experience}</p>
+ <p className="text-soft text-sm">{nanny.age} years  {nanny.experience}</p>
  </div>
  </div>
  <div className="text-right">
@@ -329,7 +329,7 @@ export default function NannyBookingPage() {
  <FaStar className="text-yellow-500" />
  <span className="font-semibold">{nanny.rating}</span>
  </div>
- <p className="text-xs text-gray-500">({nanny.reviews} reviews)</p>
+ <p className="text-xs text-soft">({nanny.reviews} reviews)</p>
  </div>
  </div>
 
@@ -349,19 +349,19 @@ export default function NannyBookingPage() {
  )}
  </div>
 
- <p className="text-gray-600 text-sm mb-3 line-clamp-2">{nanny.bio}</p>
+ <p className="text-soft text-sm mb-3 line-clamp-2">{nanny.bio}</p>
 
  {/* Skills */}
  <div className="flex flex-wrap gap-2 mb-3">
  {nanny.skills.slice(0, 3).map((skill, idx) => (
- <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+ <span key={idx} className="px-2 py-1 bg-subtle text-soft rounded text-xs">
  {skill}
  </span>
  ))}
  </div>
 
  {/* Languages */}
- <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+ <div className="flex items-center gap-2 text-sm text-soft mb-3">
  <FaLanguage />
  <span>{nanny.languages.join(", ")}</span>
  </div>
@@ -369,11 +369,11 @@ export default function NannyBookingPage() {
  {/* Pricing */}
  <div className="border-t pt-3 mb-3">
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Hourly</span>
+ <span className="text-soft">Hourly</span>
  <span className="font-semibold">Rs {nanny.hourlyRate}/hr</span>
  </div>
  <div className="flex justify-between text-sm">
- <span className="text-gray-600">Daily</span>
+ <span className="text-soft">Daily</span>
  <span className="font-semibold">Rs {nanny.dailyRate}/day</span>
  </div>
  </div>
@@ -392,17 +392,17 @@ export default function NannyBookingPage() {
  ) : (
  /* Booking Form */
  <div className="max-w-3xl mx-auto">
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <h2 className="text-xl font-bold mb-6">Complete Your Booking</h2>
  
  {/* Selected Nanny and Service */}
- <div className="bg-gray-50 rounded-lg p-4 mb-6">
+ <div className="bg-subtle rounded-lg p-4 mb-6">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-3">
  <div className="text-3xl">{selectedNanny?.avatar}</div>
  <div>
  <p className="font-semibold">{selectedNanny?.name}</p>
- <p className="text-sm text-gray-600">{selectedService?.name}</p>
+ <p className="text-sm text-soft">{selectedService?.name}</p>
  </div>
  </div>
  <button
@@ -417,7 +417,7 @@ export default function NannyBookingPage() {
  {/* Booking Dates */}
  <div className="grid md:grid-cols-2 gap-4 mb-6">
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Start Date</label>
+ <label className="block text-soft text-sm font-medium mb-2">Start Date</label>
  <input
  type="date"
  value={bookingDetails.startDate}
@@ -426,7 +426,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">End Date</label>
+ <label className="block text-soft text-sm font-medium mb-2">End Date</label>
  <input
  type="date"
  value={bookingDetails.endDate}
@@ -435,7 +435,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Start Time</label>
+ <label className="block text-soft text-sm font-medium mb-2">Start Time</label>
  <input
  type="time"
  value={bookingDetails.startTime}
@@ -444,7 +444,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">End Time</label>
+ <label className="block text-soft text-sm font-medium mb-2">End Time</label>
  <input
  type="time"
  value={bookingDetails.endTime}
@@ -459,7 +459,7 @@ export default function NannyBookingPage() {
  <h3 className="font-semibold mb-3">Children Information</h3>
  <div className="grid md:grid-cols-2 gap-4">
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Number of Children</label>
+ <label className="block text-soft text-sm font-medium mb-2">Number of Children</label>
  <input
  type="number"
  min="1"
@@ -473,7 +473,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Ages</label>
+ <label className="block text-soft text-sm font-medium mb-2">Ages</label>
  <input
  type="text"
  placeholder="e.g., 2, 5, 8"
@@ -485,7 +485,7 @@ export default function NannyBookingPage() {
 
  {/* Service Address */}
  <div className="mb-6">
- <label className="block text-gray-700 text-sm font-medium mb-2">Service Address</label>
+ <label className="block text-soft text-sm font-medium mb-2">Service Address</label>
  <textarea
  value={bookingDetails.address}
  onChange={(e) => setBookingDetails({ ...bookingDetails, address: e.target.value })}
@@ -500,7 +500,7 @@ export default function NannyBookingPage() {
  <h3 className="font-semibold mb-3">Emergency Contact</h3>
  <div className="grid md:grid-cols-3 gap-4">
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Name</label>
+ <label className="block text-soft text-sm font-medium mb-2">Name</label>
  <input
  type="text"
  value={bookingDetails.emergencyContact.name}
@@ -512,7 +512,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Phone</label>
+ <label className="block text-soft text-sm font-medium mb-2">Phone</label>
  <input
  type="tel"
  value={bookingDetails.emergencyContact.phone}
@@ -524,7 +524,7 @@ export default function NannyBookingPage() {
  />
  </div>
  <div>
- <label className="block text-gray-700 text-sm font-medium mb-2">Relationship</label>
+ <label className="block text-soft text-sm font-medium mb-2">Relationship</label>
  <input
  type="text"
  value={bookingDetails.emergencyContact.relationship}
@@ -540,7 +540,7 @@ export default function NannyBookingPage() {
 
  {/* Special Requirements */}
  <div className="mb-6">
- <label className="block text-gray-700 text-sm font-medium mb-2">Special Requirements (Optional)</label>
+ <label className="block text-soft text-sm font-medium mb-2">Special Requirements (Optional)</label>
  <textarea
  value={bookingDetails.specialRequirements}
  onChange={(e) => setBookingDetails({ ...bookingDetails, specialRequirements: e.target.value })}
@@ -553,17 +553,17 @@ export default function NannyBookingPage() {
  {/* Total Amount */}
  <div className="bg-blue-50 rounded-lg p-4 mb-6">
  <div className="flex justify-between items-center">
- <span className="text-gray-700">Estimated Total</span>
+ <span className="text-soft">Estimated Total</span>
  <span className="text-2xl font-bold text-primary-blue">Rs {calculateTotal()}</span>
  </div>
- <p className="text-xs text-gray-600 mt-2">Final amount will be calculated based on actual hours</p>
+ <p className="text-xs text-soft mt-2">Final amount will be calculated based on actual hours</p>
  </div>
 
  {/* Actions */}
  <div className="flex gap-4">
  <button
  onClick={() => setShowBookingForm(false)}
- className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Back
  </button>
@@ -578,10 +578,10 @@ export default function NannyBookingPage() {
  <FaShieldAlt className="text-green-500 mb-2" />
  <h4 className="font-semibold text-green-900 mb-2">Safety & Trust</h4>
  <ul className="text-sm text-green-800 space-y-1">
- <li>• All nannies undergo thorough background checks</li>
- <li>• Regular training on child safety and first aid</li>
- <li>• 24/7 support available for any concerns</li>
- <li>• Insurance coverage for all bookings</li>
+ <li> All nannies undergo thorough background checks</li>
+ <li> Regular training on child safety and first aid</li>
+ <li> 24/7 support available for any concerns</li>
+ <li> Insurance coverage for all bookings</li>
  </ul>
  </div>
  </div>
@@ -590,20 +590,20 @@ export default function NannyBookingPage() {
  {/* Nanny Details Modal */}
  {showNannyDetails && selectedNanny && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
  <div className="flex justify-between items-start mb-6">
  <div className="flex items-center gap-4">
  <div className="text-5xl">{selectedNanny.avatar}</div>
  <div>
  <h2 className="text-2xl font-bold">{selectedNanny.name}</h2>
- <p className="text-gray-600">{selectedNanny.age} years • {selectedNanny.experience}</p>
+ <p className="text-soft">{selectedNanny.age} years  {selectedNanny.experience}</p>
  </div>
  </div>
  <button
  onClick={() => setShowNannyDetails(false)}
- className="text-gray-500 hover:text-gray-700 text-2xl"
+ className="text-soft hover:text-soft text-2xl"
  >
- ×
+ 
  </button>
  </div>
 
@@ -612,7 +612,7 @@ export default function NannyBookingPage() {
  {/* Bio */}
  <div>
  <h3 className="font-semibold mb-2">About</h3>
- <p className="text-gray-600">{selectedNanny.bio}</p>
+ <p className="text-soft">{selectedNanny.bio}</p>
  </div>
 
  {/* Qualifications */}
@@ -651,7 +651,7 @@ export default function NannyBookingPage() {
  {selectedNanny.skills.map((skill, idx) => (
  <div key={idx} className="flex items-center gap-2">
  <FaCheckCircle className="text-green-500" />
- <span className="text-gray-700">{skill}</span>
+ <span className="text-soft">{skill}</span>
  </div>
  ))}
  </div>
@@ -667,7 +667,7 @@ export default function NannyBookingPage() {
  className={`px-3 py-1 rounded ${
  selectedNanny.availability.includes(day)
  ? "bg-green-100 text-green-800"
- : "bg-gray-100 text-gray-400"
+ : "bg-subtle text-faint"
  }`}
  >
  {day}
@@ -686,12 +686,12 @@ export default function NannyBookingPage() {
  <p className="font-medium">{review.parentName}</p>
  <div className="flex items-center gap-1">
  {[...Array(5)].map((_, i) => (
- <FaStar key={i} className={i < review.rating ? "text-yellow-500" : "text-gray-300"} />
+ <FaStar key={i} className={i < review.rating ? "text-yellow-500" : "text-faint"} />
  ))}
  </div>
  </div>
- <p className="text-gray-600 text-sm">{review.comment}</p>
- <p className="text-gray-500 text-xs mt-1">{review.date}</p>
+ <p className="text-soft text-sm">{review.comment}</p>
+ <p className="text-soft text-xs mt-1">{review.date}</p>
  </div>
  ))}
  </div>
@@ -701,7 +701,7 @@ export default function NannyBookingPage() {
  <div className="flex gap-4">
  <button
  onClick={() => setShowNannyDetails(false)}
- className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Close
  </button>

@@ -42,7 +42,7 @@ function WeeklyBarChart({
  return (
   <div className="bg-surface rounded-xl shadow-sm p-4">
    <div className="flex items-center justify-between mb-4">
-    <h3 className="text-sm font-semibold text-[#001E40]">{label}</h3>
+    <h3 className="text-sm font-semibold text-fg">{label}</h3>
     <span className="text-xs text-faint">avg {avg} {unit}</span>
    </div>
    <div className="flex items-end gap-1.5 h-28">
@@ -63,7 +63,7 @@ function WeeklyBarChart({
          <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-current" style={{ color: 'transparent', borderTop: '3px solid #0C6780' }} />
         )}
        </div>
-       <span className={`text-[9px] font-medium ${isToday ? 'text-[#001E40]' : 'text-faint'}`}>{entry.day}</span>
+       <span className={`text-[9px] font-medium ${isToday ? 'text-fg' : 'text-faint'}`}>{entry.day}</span>
       </div>
      )
     })}
@@ -233,7 +233,7 @@ export default function ProgressTab() {
 
    {/* Weekly Insights table */}
    <div className="bg-surface rounded-xl shadow-sm p-4">
-    <h3 className="text-sm font-semibold text-[#001E40] mb-3">Summary</h3>
+    <h3 className="text-sm font-semibold text-fg mb-3">Summary</h3>
     <div className="space-y-3 divide-y divide-line">
      {[
       { label: `Avg. daily calories`, value: `${data.weeklyAvgCalories} cal`, icon: FaFire, color: 'text-[#0C6780]', trend: 0, positiveUp: false },

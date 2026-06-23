@@ -27,28 +27,28 @@ export default function ExerciseEntryCard({
  notes,
  onDelete,
 }: ExerciseEntryCardProps) {
- const badgeClass = intensityColors[intensity.toLowerCase()] || 'bg-gray-100 text-gray-700'
+ const badgeClass = intensityColors[intensity.toLowerCase()] || 'bg-subtle text-soft'
 
  return (
- <div className="bg-white rounded-lg shadow-sm p-3 border-l-4 border-purple-400 flex items-center justify-between gap-3 hover:shadow-md transition-shadow duration-200">
+ <div className="bg-surface rounded-lg shadow-sm p-3 border-l-4 border-purple-400 flex items-center justify-between gap-3 hover:shadow-md transition-shadow duration-200">
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
- <h4 className="text-sm font-bold text-gray-800">{exerciseType}</h4>
+ <h4 className="text-sm font-bold text-fg">{exerciseType}</h4>
  <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${badgeClass}`}>
  {intensity}
  </span>
  </div>
  <div className="flex items-center gap-3 mt-1">
- <span className="text-xs text-gray-500">{durationMin} min</span>
+ <span className="text-xs text-soft">{durationMin} min</span>
  <span className="text-xs text-orange-500 font-medium">{caloriesBurned} cal burned</span>
  </div>
  {notes && (
- <p className="text-xs text-gray-400 mt-1 truncate">{notes}</p>
+ <p className="text-xs text-faint mt-1 truncate">{notes}</p>
  )}
  </div>
  <button
  onClick={() => onDelete(id)}
- className="p-2 text-gray-300 hover:text-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 rounded"
+ className="p-2 text-faint hover:text-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 rounded"
  aria-label={`Delete ${exerciseType}`}
  >
  <FaTrash className="text-sm" />

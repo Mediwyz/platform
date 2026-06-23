@@ -116,8 +116,8 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
     return (
       <div className="max-w-2xl mx-auto py-20 text-center">
         <FiCheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Suggestion submitted!</h2>
-        <p className="text-gray-500 mb-6">Your regional admin will review your workflow and notify you when it is approved.</p>
+        <h2 className="text-2xl font-bold text-fg mb-2">Suggestion submitted!</h2>
+        <p className="text-soft mb-6">Your regional admin will review your workflow and notify you when it is approved.</p>
         <Link href={`/provider/${slug}/workflows`} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-teal text-white rounded-lg hover:bg-brand-teal/90">
           Back to Workflows
         </Link>
@@ -144,32 +144,32 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
       )}
 
       {/* Meta */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      <div className="bg-surface rounded-xl border border-line p-5 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Workflow name *</label>
+          <label className="block text-sm font-medium text-soft mb-1">Workflow name *</label>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="e.g. Home Visit with Lab Sample"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
+            className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-medium text-soft mb-1">Description</label>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
             rows={2}
             placeholder="Briefly explain when this workflow is used"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
+            className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Service mode</label>
+          <label className="block text-sm font-medium text-soft mb-1">Service mode</label>
           <select
             value={serviceMode}
             onChange={e => setServiceMode(e.target.value)}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
+            className="rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
           >
             <option value="office">Office</option>
             <option value="home">Home visit</option>
@@ -184,18 +184,18 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
       {/* Steps */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-700">Steps ({steps.length})</h2>
+          <h2 className="text-sm font-semibold text-soft">Steps ({steps.length})</h2>
           <button onClick={addStep} className="flex items-center gap-1.5 text-sm text-brand-teal hover:text-brand-teal/80 font-medium">
             <FiPlus className="w-4 h-4" /> Add step
           </button>
         </div>
 
         {steps.map((step, idx) => (
-          <div key={idx} className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+          <div key={idx} className="bg-surface rounded-xl border border-line p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Step {step.order}</span>
+              <span className="text-xs font-semibold text-faint uppercase tracking-wide">Step {step.order}</span>
               {steps.length > 1 && (
-                <button onClick={() => removeStep(idx)} className="text-gray-400 hover:text-red-500">
+                <button onClick={() => removeStep(idx)} className="text-faint hover:text-red-500">
                   <FiTrash2 className="w-4 h-4" />
                 </button>
               )}
@@ -203,11 +203,11 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Use a preset step type</label>
+                <label className="block text-xs text-soft mb-1">Use a preset step type</label>
                 <select
                   value={step.stepType || ''}
                   onChange={e => applyStepType(idx, e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                  className="w-full rounded-lg border border-line px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
                 >
                   <option value=""> - Custom - </option>
                   {Object.entries(grouped).map(([cat, types]) => (
@@ -218,17 +218,17 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Step label</label>
+                <label className="block text-xs text-soft mb-1">Step label</label>
                 <input
                   value={step.label}
                   onChange={e => updateStep(idx, 'label', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
+                  className="w-full rounded-lg border border-line px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal"
                 />
               </div>
             </div>
 
             {step.stepType && stepTypes.find(t => t.code === step.stepType)?.description && (
-              <p className="text-xs text-gray-400 italic">{stepTypes.find(t => t.code === step.stepType)?.description}</p>
+              <p className="text-xs text-faint italic">{stepTypes.find(t => t.code === step.stepType)?.description}</p>
             )}
           </div>
         ))}
@@ -241,7 +241,7 @@ export default function SuggestWorkflowPage({ params }: { params: Promise<{ slug
           className="flex items-center gap-2 px-5 py-2.5 bg-brand-teal text-white rounded-lg font-medium hover:bg-brand-teal/90 disabled:opacity-50"
         >
           <FiSend className="w-4 h-4" />
-          {submitting ? 'Submitting…' : 'Submit suggestion'}
+          {submitting ? 'Submitting' : 'Submit suggestion'}
         </button>
       </div>
     </div>

@@ -46,7 +46,7 @@ export default function DynamicSearchPage() {
 
   if (!role) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] text-gray-500">
+      <div className="flex items-center justify-center min-h-[60vh] text-soft">
         <p>Provider type not found</p>
       </div>
     )

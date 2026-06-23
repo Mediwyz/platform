@@ -21,7 +21,7 @@ type WizardData = {
  *
  * Reads the canonical ProviderRole.code from `/api/auth/me.user.userTypeCode`
  * (resolved server-side via the DB-driven RolesResolverService). We NEVER
- * hardcode cookie→code maps on the frontend - provider roles are authored
+ * hardcode cookiecode maps on the frontend - provider roles are authored
  * dynamically by regional admins, so any hardcoded list goes stale the
  * moment a new role is created.
  */
@@ -62,7 +62,7 @@ export default function CreateWorkflowPage() {
   }
 
   if (loading) {
-    return <div className="p-6 text-sm text-gray-500">Loading...</div>
+    return <div className="p-6 text-sm text-soft">Loading...</div>
   }
 
   if (showWizard) {

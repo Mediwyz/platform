@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+//  Types 
 
 export type LocationType = 'home' | 'office' | 'video' | 'audio' | 'async'
 export type SampleType = 'none' | 'home' | 'office' | 'self_kit'
@@ -59,50 +59,50 @@ export interface WorkflowWizardProps {
   platformServiceId?: string
   /** Override the primary save button label (e.g. "Create service"). */
   saveLabel?: string
-  /** Hide the secondary "Build Template →" button — for contexts (like service
+  /** Hide the secondary "Build Template " button  for contexts (like service
    *  creation) where there's no builder to fall back to. */
   hideBuilderButton?: boolean
 }
 
-// ── Option card data ──────────────────────────────────────────────────────────
+//  Option card data 
 
 const LOCATION_OPTIONS: Array<{ value: LocationType; emoji: string; title: string; description: string }> = [
-  { value: 'home',   emoji: '🏠', title: 'Home Visit',     description: "Provider visits the patient at home" },
-  { value: 'office', emoji: '🏥', title: 'Office Visit',   description: "Patient comes to the provider's office" },
-  { value: 'video',  emoji: '📹', title: 'Video Call',     description: "Real-time video consultation" },
-  { value: 'audio',  emoji: '🎧', title: 'Audio Call',     description: "Voice-only consultation" },
-  { value: 'async',  emoji: '📋', title: 'Async / Remote', description: "No real-time session (prescription renewal, second opinion)" },
+  { value: 'home',   emoji: '', title: 'Home Visit',     description: "Provider visits the patient at home" },
+  { value: 'office', emoji: '', title: 'Office Visit',   description: "Patient comes to the provider's office" },
+  { value: 'video',  emoji: '', title: 'Video Call',     description: "Real-time video consultation" },
+  { value: 'audio',  emoji: '', title: 'Audio Call',     description: "Voice-only consultation" },
+  { value: 'async',  emoji: '', title: 'Async / Remote', description: "No real-time session (prescription renewal, second opinion)" },
 ]
 
 const SAMPLE_OPTIONS: Array<{ value: SampleType; emoji: string; title: string; description: string }> = [
-  { value: 'none',     emoji: '🚫', title: 'No Sample',            description: "No biological collection required" },
-  { value: 'home',     emoji: '🏠', title: 'Home Collection',      description: "Provider collects sample at patient's home" },
-  { value: 'office',   emoji: '🏥', title: 'Office Collection',    description: "Patient provides sample at the office" },
-  { value: 'self_kit', emoji: '📦', title: 'Self-collection Kit',  description: "Patient collects and ships the sample" },
+  { value: 'none',     emoji: '', title: 'No Sample',            description: "No biological collection required" },
+  { value: 'home',     emoji: '', title: 'Home Collection',      description: "Provider collects sample at patient's home" },
+  { value: 'office',   emoji: '', title: 'Office Collection',    description: "Patient provides sample at the office" },
+  { value: 'self_kit', emoji: '', title: 'Self-collection Kit',  description: "Patient collects and ships the sample" },
 ]
 
 const CARE_MODEL_OPTIONS: Array<{ value: CareModelType; emoji: string; title: string; description: string }> = [
-  { value: 'single',    emoji: '👤',  title: 'Single Provider',   description: "One provider handles the entire service" },
-  { value: 'delegated', emoji: '👨‍⚕️', title: 'Delegated Visit',  description: "Doctor assigns a nurse to visit on their behalf" },
-  { value: 'multi',     emoji: '👥',  title: 'Multi-provider',    description: "Multiple providers involved in the same session" },
-  { value: 'group',     emoji: '🏫',  title: 'Group Session',     description: "One provider, multiple patients simultaneously" },
+  { value: 'single',    emoji: '',  title: 'Single Provider',   description: "One provider handles the entire service" },
+  { value: 'delegated', emoji: '', title: 'Delegated Visit',  description: "Doctor assigns a nurse to visit on their behalf" },
+  { value: 'multi',     emoji: '',  title: 'Multi-provider',    description: "Multiple providers involved in the same session" },
+  { value: 'group',     emoji: '',  title: 'Group Session',     description: "One provider, multiple patients simultaneously" },
 ]
 
 const URGENCY_OPTIONS: Array<{ value: UrgencyType; emoji: string; title: string; description: string }> = [
-  { value: 'scheduled', emoji: '🗓️', title: 'Scheduled',       description: "Standard booking with advance scheduling" },
-  { value: 'urgent',    emoji: '⚡',  title: 'Urgent / Same-day', description: "Requires same-day response" },
-  { value: 'emergency', emoji: '🚨', title: 'Emergency',        description: "Immediate response required" },
+  { value: 'scheduled', emoji: '', title: 'Scheduled',       description: "Standard booking with advance scheduling" },
+  { value: 'urgent',    emoji: '',  title: 'Urgent / Same-day', description: "Requires same-day response" },
+  { value: 'emergency', emoji: '', title: 'Emergency',        description: "Immediate response required" },
 ]
 
 const OUTPUT_OPTIONS: Array<{ value: OutputType; emoji: string; title: string; description: string }> = [
-  { value: 'none',           emoji: '🗒️', title: 'General Consultation', description: "No specific document produced" },
-  { value: 'exam_report',    emoji: '📋', title: 'Exam Report',           description: "Medical assessment or examination report" },
-  { value: 'lab_result',     emoji: '🧪', title: 'Lab Results',           description: "Test results uploaded by the provider" },
-  { value: 'prescription',   emoji: '💊', title: 'Prescription',          description: "Medication prescription issued" },
-  { value: 'eye_prescription', emoji: '👁️', title: 'Eye Prescription',  description: "Optical prescription (optometrist)" },
-  { value: 'care_notes',     emoji: '📝', title: 'Care Notes',            description: "Nursing or caregiver session notes" },
-  { value: 'exercise_plan',  emoji: '🏃', title: 'Exercise Plan',         description: "Physiotherapy or rehabilitation plan" },
-  { value: 'meal_plan',      emoji: '🥗', title: 'Meal Plan',             description: "Nutrition and dietary plan" },
+  { value: 'none',           emoji: '', title: 'General Consultation', description: "No specific document produced" },
+  { value: 'exam_report',    emoji: '', title: 'Exam Report',           description: "Medical assessment or examination report" },
+  { value: 'lab_result',     emoji: '', title: 'Lab Results',           description: "Test results uploaded by the provider" },
+  { value: 'prescription',   emoji: '', title: 'Prescription',          description: "Medication prescription issued" },
+  { value: 'eye_prescription', emoji: '', title: 'Eye Prescription',  description: "Optical prescription (optometrist)" },
+  { value: 'care_notes',     emoji: '', title: 'Care Notes',            description: "Nursing or caregiver session notes" },
+  { value: 'exercise_plan',  emoji: '', title: 'Exercise Plan',         description: "Physiotherapy or rehabilitation plan" },
+  { value: 'meal_plan',      emoji: '', title: 'Meal Plan',             description: "Nutrition and dietary plan" },
 ]
 
 const STEP_LABELS = [
@@ -118,7 +118,7 @@ const STEP_LABELS = [
 
 const TOTAL_STEPS = 8
 
-// ── Option Card ───────────────────────────────────────────────────────────────
+//  Option Card 
 
 function OptionCard({
   emoji, title, description, selected, onClick,
@@ -132,33 +132,33 @@ function OptionCard({
       className={`text-left p-4 rounded-xl border-2 transition-all ${
         selected
           ? 'border-[#0C6780] bg-[#0C6780]/5 ring-2 ring-[#0C6780]/30'
-          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+          : 'border-line hover:border-line hover:bg-subtle'
       }`}
     >
       <div className="text-3xl mb-2" aria-hidden="true">{emoji}</div>
-      <div className="font-semibold text-sm text-gray-900">{title}</div>
-      <div className="text-xs text-gray-500 mt-0.5 leading-snug">{description}</div>
+      <div className="font-semibold text-sm text-fg">{title}</div>
+      <div className="text-xs text-soft mt-0.5 leading-snug">{description}</div>
     </button>
   )
 }
 
 function Toggle({ label, description, checked, onChange }: { label: string; description: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors">
+    <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl border border-line hover:border-line transition-colors">
       <div className="relative mt-0.5 flex-shrink-0">
         <input type="checkbox" className="sr-only" checked={checked} onChange={e => onChange(e.target.checked)} />
-        <div className={`w-10 h-6 rounded-full transition-colors ${checked ? 'bg-[#0C6780]' : 'bg-gray-200'}`} />
-        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-4' : ''}`} />
+        <div className={`w-10 h-6 rounded-full transition-colors ${checked ? 'bg-[#0C6780]' : 'bg-line'}`} />
+        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-surface shadow transition-transform ${checked ? 'translate-x-4' : ''}`} />
       </div>
       <div>
-        <div className="text-sm font-medium text-gray-900">{label}</div>
-        <div className="text-xs text-gray-500 mt-0.5">{description}</div>
+        <div className="text-sm font-medium text-fg">{label}</div>
+        <div className="text-xs text-soft mt-0.5">{description}</div>
       </div>
     </label>
   )
 }
 
-// ── Step components ───────────────────────────────────────────────────────────
+//  Step components 
 
 function LocationStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
@@ -173,14 +173,14 @@ function LocationStep({ state, setState }: { state: WizardState; setState: (s: W
 function RecurrenceStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
     <div className="space-y-6">
-      <div className="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+      <div className="inline-flex rounded-full bg-subtle p-1 gap-1">
         {(['once', 'recurring'] as RecurrenceType[]).map(type => (
           <button
             key={type}
             type="button"
             onClick={() => setState({ ...state, recurrenceType: type })}
             className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-              state.recurrenceType === type ? 'bg-[#0C6780] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              state.recurrenceType === type ? 'bg-[#0C6780] text-white shadow-sm' : 'text-soft hover:text-fg'
             }`}
           >
             {type === 'once' ? 'One-time' : 'Recurring'}
@@ -189,13 +189,13 @@ function RecurrenceStep({ state, setState }: { state: WizardState; setState: (s:
       </div>
 
       {state.recurrenceType === 'recurring' && (
-        <div className="space-y-4 bg-gray-50 rounded-xl p-4 border border-gray-200">
+        <div className="space-y-4 bg-subtle rounded-xl p-4 border border-line">
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1.5">Frequency</label>
+            <label className="text-xs font-medium text-soft block mb-1.5">Frequency</label>
             <select
               value={state.recurrenceFrequency}
               onChange={e => setState({ ...state, recurrenceFrequency: e.target.value as WizardState['recurrenceFrequency'] })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
@@ -205,30 +205,30 @@ function RecurrenceStep({ state, setState }: { state: WizardState; setState: (s:
           </div>
 
           <div className="flex items-center gap-3">
-            <label className="text-xs font-medium text-gray-500 whitespace-nowrap">Every</label>
+            <label className="text-xs font-medium text-soft whitespace-nowrap">Every</label>
             <input
               type="number" min={1} max={52} value={state.recurrenceInterval}
               onChange={e => setState({ ...state, recurrenceInterval: Math.max(1, parseInt(e.target.value, 10) || 1) })}
-              className="w-20 border border-gray-300 rounded-lg px-3 py-2 text-sm text-center focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
+              className="w-20 border border-line rounded-lg px-3 py-2 text-sm text-center focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
             />
-            <span className="text-sm text-gray-600 capitalize">{state.recurrenceFrequency === 'biweekly' ? 'bi-week(s)' : state.recurrenceFrequency.replace('ly', '(s)')}</span>
+            <span className="text-sm text-soft capitalize">{state.recurrenceFrequency === 'biweekly' ? 'bi-week(s)' : state.recurrenceFrequency.replace('ly', '(s)')}</span>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1.5">Number of sessions</label>
+            <label className="text-xs font-medium text-soft block mb-1.5">Number of sessions</label>
             <input
               type="number" min={1} placeholder="Open-ended" value={state.sessionCount ?? ''}
               onChange={e => setState({ ...state, sessionCount: e.target.value ? parseInt(e.target.value, 10) : null })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1.5">Slot duration</label>
+            <label className="text-xs font-medium text-soft block mb-1.5">Slot duration</label>
             <select
               value={state.slotDuration}
               onChange={e => setState({ ...state, slotDuration: parseInt(e.target.value, 10) })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0C6780] focus:border-[#0C6780]"
             >
               {[15, 30, 45, 60, 90, 120].map(m => (
                 <option key={m} value={m}>{m} minutes</option>
@@ -274,7 +274,7 @@ function UrgencyStep({ state, setState }: { state: WizardState; setState: (s: Wi
 function OutputStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
     <div className="space-y-3">
-      <p className="text-xs text-gray-500">Select what document or result this service produces. This controls which upload requirement appears at the end of the workflow.</p>
+      <p className="text-xs text-soft">Select what document or result this service produces. This controls which upload requirement appears at the end of the workflow.</p>
       <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
         {OUTPUT_OPTIONS.map(opt => (
           <OptionCard key={opt.value} {...opt} selected={state.outputType === opt.value} onClick={() => setState({ ...state, outputType: opt.value })} />
@@ -289,7 +289,7 @@ function PaymentStep({ state, setState }: { state: WizardState; setState: (s: Wi
     <div className="space-y-5">
       {/* Access restrictions */}
       <div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Access restrictions</div>
+        <div className="text-xs font-semibold text-soft uppercase tracking-wide mb-2">Access restrictions</div>
         <div className="space-y-2">
           <Toggle
             label="Requires existing prescription"
@@ -308,14 +308,14 @@ function PaymentStep({ state, setState }: { state: WizardState; setState: (s: Wi
 
       {/* Payment timing */}
       <div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Payment timing</div>
+        <div className="text-xs font-semibold text-soft uppercase tracking-wide mb-2">Payment timing</div>
         <div className="space-y-2">
           {([
-            { value: 'auto',           label: 'Auto-detect',       description: 'Office/async → charge after; all others → charge on acceptance' },
+            { value: 'auto',           label: 'Auto-detect',       description: 'Office/async  charge after; all others  charge on acceptance' },
             { value: 'ON_ACCEPTANCE',  label: 'Charge on acceptance', description: 'Patient is charged as soon as the provider accepts the booking' },
             { value: 'ON_COMPLETION',  label: 'Charge on completion', description: 'Patient is charged only after the service is delivered' },
           ] as Array<{ value: PaymentTimingOverride; label: string; description: string }>).map(opt => (
-            <label key={opt.value} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors">
+            <label key={opt.value} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl border border-line hover:border-line transition-colors">
               <input
                 type="radio"
                 name="paymentTiming"
@@ -325,8 +325,8 @@ function PaymentStep({ state, setState }: { state: WizardState; setState: (s: Wi
                 className="mt-1 accent-[#0C6780]"
               />
               <div>
-                <div className="text-sm font-medium text-gray-900">{opt.label}</div>
-                <div className="text-xs text-gray-500 mt-0.5">{opt.description}</div>
+                <div className="text-sm font-medium text-fg">{opt.label}</div>
+                <div className="text-xs text-soft mt-0.5">{opt.description}</div>
               </div>
             </label>
           ))}
@@ -370,26 +370,26 @@ function ReviewStep({
   const outputOpt = OUTPUT_OPTIONS.find(o => o.value === state.outputType)
 
   const summaryItems = [
-    { label: 'Location',   value: locationOpt?.title ?? ' - ', emoji: locationOpt?.emoji ?? '📍' },
-    { label: 'Recurrence', value: state.recurrenceType === 'once' ? 'One-time' : `Recurring (${state.recurrenceFrequency})`, emoji: state.recurrenceType === 'once' ? '1️⃣' : '🔄' },
-    { label: 'Sample',     value: sampleOpt?.title ?? ' - ',  emoji: sampleOpt?.emoji ?? '🧪' },
-    { label: 'Care model', value: careOpt?.title ?? ' - ',    emoji: careOpt?.emoji ?? '👤' },
-    { label: 'Urgency',    value: urgencyOpt?.title ?? ' - ', emoji: urgencyOpt?.emoji ?? '⏱️' },
-    { label: 'Output',     value: outputOpt?.title ?? ' - ',  emoji: outputOpt?.emoji ?? '📄' },
-    ...(state.requiresPrescription ? [{ label: 'Requires', value: 'Prescription gate', emoji: '💊' }] : []),
-    ...(state.isHealthShop ? [{ label: 'Mode', value: 'Health Shop order', emoji: '🛒' }] : []),
-    { label: 'Payment',    value: state.paymentTimingOverride === 'auto' ? 'Auto-detect' : state.paymentTimingOverride === 'ON_ACCEPTANCE' ? 'On acceptance' : 'On completion', emoji: '💳' },
+    { label: 'Location',   value: locationOpt?.title ?? ' - ', emoji: locationOpt?.emoji ?? '' },
+    { label: 'Recurrence', value: state.recurrenceType === 'once' ? 'One-time' : `Recurring (${state.recurrenceFrequency})`, emoji: state.recurrenceType === 'once' ? '1' : '' },
+    { label: 'Sample',     value: sampleOpt?.title ?? ' - ',  emoji: sampleOpt?.emoji ?? '' },
+    { label: 'Care model', value: careOpt?.title ?? ' - ',    emoji: careOpt?.emoji ?? '' },
+    { label: 'Urgency',    value: urgencyOpt?.title ?? ' - ', emoji: urgencyOpt?.emoji ?? '' },
+    { label: 'Output',     value: outputOpt?.title ?? ' - ',  emoji: outputOpt?.emoji ?? '' },
+    ...(state.requiresPrescription ? [{ label: 'Requires', value: 'Prescription gate', emoji: '' }] : []),
+    ...(state.isHealthShop ? [{ label: 'Mode', value: 'Health Shop order', emoji: '' }] : []),
+    { label: 'Payment',    value: state.paymentTimingOverride === 'auto' ? 'Auto-detect' : state.paymentTimingOverride === 'ON_ACCEPTANCE' ? 'On acceptance' : 'On completion', emoji: '' },
   ]
 
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-2">
         {summaryItems.map(item => (
-          <div key={item.label} className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-start gap-2">
+          <div key={item.label} className="bg-subtle border border-line rounded-xl p-3 flex items-start gap-2">
             <span className="text-lg" aria-hidden="true">{item.emoji}</span>
             <div>
-              <div className="text-xs text-gray-500 font-medium">{item.label}</div>
-              <div className="text-sm font-semibold text-gray-900 mt-0.5 leading-tight">{item.value}</div>
+              <div className="text-xs text-soft font-medium">{item.label}</div>
+              <div className="text-sm font-semibold text-fg mt-0.5 leading-tight">{item.value}</div>
             </div>
           </div>
         ))}
@@ -405,26 +405,26 @@ function ReviewStep({
       {loading && (
         <div className="bg-[#9AE1FF]/20 border border-[#9AE1FF] rounded-xl p-4 flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-[#0C6780] border-t-transparent rounded-full animate-spin flex-shrink-0" />
-          <span className="text-sm text-[#001E40] font-medium">Generating template...</span>
+          <span className="text-sm text-fg font-medium">Generating template...</span>
         </div>
       )}
 
       {generated && !loading && (
-        <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+        <div className="bg-surface border border-line rounded-xl p-4 space-y-3">
           <div>
-            <div className="text-xs text-gray-500 font-medium">Generated template</div>
-            <div className="text-base font-bold text-[#001E40] mt-0.5">{generated.name}</div>
-            {generated.description && <div className="text-sm text-gray-600 mt-1">{generated.description}</div>}
+            <div className="text-xs text-soft font-medium">Generated template</div>
+            <div className="text-base font-bold text-fg mt-0.5">{generated.name}</div>
+            {generated.description && <div className="text-sm text-soft mt-1">{generated.description}</div>}
           </div>
 
           {Array.isArray(generated.steps) && generated.steps.length > 0 && (
             <div>
-              <div className="text-xs text-gray-500 font-medium mb-2">{generated.steps.length} steps</div>
+              <div className="text-xs text-soft font-medium mb-2">{generated.steps.length} steps</div>
               <div className="flex flex-wrap gap-2">
                 {(generated.steps as Array<{ statusCode?: string; label?: string; order?: number }>).map((step, i) => (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-1 text-xs bg-[#9AE1FF]/20 border border-[#9AE1FF] text-[#001E40] rounded-full px-2.5 py-1 font-medium"
+                    className="inline-flex items-center gap-1 text-xs bg-[#9AE1FF]/20 border border-[#9AE1FF] text-fg rounded-full px-2.5 py-1 font-medium"
                   >
                     {i + 1}. {step.label || step.statusCode || `Step ${i + 1}`}
                   </span>
@@ -451,7 +451,7 @@ function ReviewStep({
                     Saving...
                   </>
                 ) : (
-                  saveLabel ?? '✓ Save & Publish'
+                  saveLabel ?? ' Save & Publish'
                 )}
               </button>
             )}
@@ -459,9 +459,9 @@ function ReviewStep({
               <button
                 type="button"
                 onClick={onComplete}
-                className={`w-full font-semibold text-sm py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${onSave ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' : 'bg-[#001E40] hover:bg-[#0C6780] text-white'}`}
+                className={`w-full font-semibold text-sm py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${onSave ? 'border border-line text-soft hover:bg-subtle' : 'bg-[#001E40] hover:bg-[#0C6780] text-white'}`}
               >
-                {onSave ? 'Customize in Builder →' : 'Build Template →'}
+                {onSave ? 'Customize in Builder ' : 'Build Template '}
               </button>
             )}
           </div>
@@ -471,7 +471,7 @@ function ReviewStep({
   )
 }
 
-// ── Main wizard ───────────────────────────────────────────────────────────────
+//  Main wizard 
 
 const INITIAL_STATE: WizardState = {
   location: null,
@@ -602,7 +602,7 @@ export default function WorkflowWizard({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden max-w-2xl mx-auto">
+    <div className="bg-surface rounded-2xl border border-line shadow-sm overflow-hidden max-w-2xl mx-auto">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#001E40] to-[#0C6780] px-6 py-4 text-white">
         <div className="flex items-center justify-between mb-3">
@@ -625,7 +625,7 @@ export default function WorkflowWizard({
 
       {/* Step content */}
       <div className="px-6 py-5">
-        <h3 className="text-sm font-semibold text-[#001E40] mb-4">{stepQuestion[currentStep]}</h3>
+        <h3 className="text-sm font-semibold text-fg mb-4">{stepQuestion[currentStep]}</h3>
 
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -662,14 +662,14 @@ export default function WorkflowWizard({
       </div>
 
       {/* Footer navigation */}
-      <div className="border-t border-gray-100 px-6 py-4 flex items-center justify-between">
+      <div className="border-t border-line px-6 py-4 flex items-center justify-between">
         <button
           type="button"
           onClick={goBack}
           disabled={currentStep === 1}
-          className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-0 disabled:pointer-events-none transition"
+          className="px-4 py-2 text-sm font-medium text-soft hover:text-fg disabled:opacity-0 disabled:pointer-events-none transition"
         >
-          ← Back
+           Back
         </button>
 
         {currentStep < TOTAL_STEPS && (
@@ -679,12 +679,12 @@ export default function WorkflowWizard({
             disabled={!canNext}
             className="px-5 py-2 bg-[#0C6780] hover:bg-[#001E40] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
           >
-            Next →
+            Next 
           </button>
         )}
 
         {currentStep === TOTAL_STEPS && !generated && !generating && !generateError && (
-          <span className="text-xs text-gray-400">Generating...</span>
+          <span className="text-xs text-faint">Generating...</span>
         )}
       </div>
     </div>

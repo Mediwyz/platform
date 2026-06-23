@@ -52,18 +52,18 @@ const QuickActions = () => {
 
  return (
  <div className="mb-8">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Quick Actions</h2>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
  {actions.map((action) => (
  <Link
  key={action.name}
  href={action.href}
- className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
+ className="bg-surface p-6 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
  >
  <action.icon className={`text-3xl ${action.color}`} />
  <div>
- <p className="font-semibold text-lg text-gray-900">{action.name}</p>
- <p className="text-sm text-gray-500">Go to {action.name.toLowerCase()}</p>
+ <p className="font-semibold text-lg text-fg">{action.name}</p>
+ <p className="text-sm text-soft">Go to {action.name.toLowerCase()}</p>
  </div>
  </Link>
  ))}
@@ -168,7 +168,7 @@ export default function RegionalAdminDashboard() {
  <select
  value={timeRange}
  onChange={(e) => setTimeRange(e.target.value)}
- className="px-4 py-2 border rounded-lg bg-white"
+ className="px-4 py-2 border rounded-lg bg-surface"
  >
  <option value="1h">Last Hour</option>
  <option value="24h">Last 24 Hours</option>
@@ -178,7 +178,7 @@ export default function RegionalAdminDashboard() {
  <select
  value={selectedRegion}
  onChange={(e) => setSelectedRegion(e.target.value)}
- className="px-4 py-2 border rounded-lg bg-white"
+ className="px-4 py-2 border rounded-lg bg-surface"
  >
  {regions.map(region => (
  <option key={region.code} value={region.code}>
@@ -195,13 +195,13 @@ export default function RegionalAdminDashboard() {
  <div className="flex items-center gap-4 overflow-x-auto">
  <FaExclamationTriangle className="text-yellow-600 flex-shrink-0" />
  {criticalAlerts.map((alert, idx) => (
- <div key={idx} className="flex items-center gap-2 px-3 py-1 bg-white rounded-lg flex-shrink-0">
+ <div key={idx} className="flex items-center gap-2 px-3 py-1 bg-surface rounded-lg flex-shrink-0">
  <span className={`w-2 h-2 rounded-full ${
  alert.type === 'error' ? 'bg-red-500' :
  alert.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
  }`} />
  <span className="text-sm">{alert.message}</span>
- <span className="text-xs text-gray-500">{alert.time}</span>
+ <span className="text-xs text-soft">{alert.time}</span>
  </div>
  ))}
  </div>
@@ -213,7 +213,7 @@ export default function RegionalAdminDashboard() {
 
  {/* Commission Earnings Section */}
  <div className="mb-8">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Commission Earnings</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Commission Earnings</h2>
  {commissionLoading ? (
  <div className="flex justify-center py-8">
  <FaSpinner className="animate-spin text-2xl text-blue-500" />
@@ -248,8 +248,8 @@ export default function RegionalAdminDashboard() {
  </div>
 
  {/* Commission Breakdown */}
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
- <h3 className="text-lg font-semibold text-gray-900 mb-4">How Commissions Work</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line p-4 sm:p-6 mb-6">
+ <h3 className="text-lg font-semibold text-fg mb-4">How Commissions Work</h3>
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
  <div className="bg-blue-50 rounded-lg p-4">
  <div className="text-2xl font-bold text-blue-700">85%</div>
@@ -271,25 +271,25 @@ export default function RegionalAdminDashboard() {
 
  {/* Recent Commission Transactions */}
  {commission.recentTransactions.length > 0 && (
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
- <div className="p-4 border-b border-gray-200">
- <h3 className="text-lg font-semibold text-gray-900">Recent Commission Transactions</h3>
+ <div className="bg-surface rounded-xl shadow-sm border border-line mb-6">
+ <div className="p-4 border-b border-line">
+ <h3 className="text-lg font-semibold text-fg">Recent Commission Transactions</h3>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead>
- <tr className="bg-gray-50 border-b border-gray-200">
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Description</th>
- <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Type</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Total</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Your Share</th>
- <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Date</th>
+ <tr className="bg-subtle border-b border-line">
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Description</th>
+ <th className="text-left py-3 px-4 text-xs font-medium text-soft uppercase">Type</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Total</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Your Share</th>
+ <th className="text-right py-3 px-4 text-xs font-medium text-soft uppercase">Date</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-line">
  {commission.recentTransactions.map((tx) => (
- <tr key={tx.id} className="hover:bg-gray-50">
- <td className="py-3 px-4 text-sm text-gray-900">{tx.description}</td>
+ <tr key={tx.id} className="hover:bg-subtle">
+ <td className="py-3 px-4 text-sm text-fg">{tx.description}</td>
  <td className="py-3 px-4">
  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
  {tx.serviceType || 'other'}
@@ -299,7 +299,7 @@ export default function RegionalAdminDashboard() {
  <td className="py-3 px-4 text-sm text-right font-medium text-yellow-600">
  Rs {(tx.regionalCommission ?? 0).toLocaleString()}
  </td>
- <td className="py-3 px-4 text-sm text-right text-gray-500">
+ <td className="py-3 px-4 text-sm text-right text-soft">
  {new Date(tx.createdAt).toLocaleDateString()}
  </td>
  </tr>
@@ -311,7 +311,7 @@ export default function RegionalAdminDashboard() {
  )}
  </>
  ) : (
- <div className="bg-gray-50 rounded-xl p-6 text-center text-gray-500 mb-6">
+ <div className="bg-subtle rounded-xl p-6 text-center text-soft mb-6">
  No commission data available yet
  </div>
  )}
@@ -319,7 +319,7 @@ export default function RegionalAdminDashboard() {
 
  {/* Analytics Section */}
  <div className="mb-8">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Platform Analytics</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Platform Analytics</h2>
  {metricsLoading ? (
  <div className="flex justify-center py-8">
  <FaSpinner className="animate-spin text-2xl text-blue-500" />
@@ -328,36 +328,36 @@ export default function RegionalAdminDashboard() {
  <>
  {/* Top Stats */}
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-4">
  <div className="p-3 rounded-lg bg-blue-50"><FaUsers className="text-xl text-blue-600" /></div>
  </div>
- <h3 className="text-sm text-gray-600 mb-1">Total Users</h3>
- <p className="text-2xl font-bold text-gray-900">{(metrics.users.total ?? 0).toLocaleString()}</p>
+ <h3 className="text-sm text-soft mb-1">Total Users</h3>
+ <p className="text-2xl font-bold text-fg">{(metrics.users.total ?? 0).toLocaleString()}</p>
  <p className="text-xs text-green-600 mt-2">+{metrics.recentActivity.newUsersThisWeek} this week</p>
  </div>
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-4">
  <div className="p-3 rounded-lg bg-green-50"><FaUserMd className="text-xl text-green-600" /></div>
  </div>
- <h3 className="text-sm text-gray-600 mb-1">Healthcare Providers</h3>
- <p className="text-2xl font-bold text-gray-900">{(providers ?? 0).toLocaleString()}</p>
- <p className="text-xs text-gray-500 mt-2">{metrics.users.doctors} doctors, {metrics.users.nurses} nurses</p>
+ <h3 className="text-sm text-soft mb-1">Healthcare Providers</h3>
+ <p className="text-2xl font-bold text-fg">{(providers ?? 0).toLocaleString()}</p>
+ <p className="text-xs text-soft mt-2">{metrics.users.doctors} doctors, {metrics.users.nurses} nurses</p>
  </div>
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-4">
  <div className="p-3 rounded-lg bg-purple-50"><FaHandshake className="text-xl text-purple-600" /></div>
  </div>
- <h3 className="text-sm text-gray-600 mb-1">Total Bookings</h3>
- <p className="text-2xl font-bold text-gray-900">{(metrics.bookings.total ?? 0).toLocaleString()}</p>
+ <h3 className="text-sm text-soft mb-1">Total Bookings</h3>
+ <p className="text-2xl font-bold text-fg">{(metrics.bookings.total ?? 0).toLocaleString()}</p>
  <p className="text-xs text-green-600 mt-2">+{metrics.recentActivity.bookingsThisWeek} this week</p>
  </div>
- <div className="bg-white rounded-xl p-6 shadow-lg">
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
  <div className="flex items-center justify-between mb-4">
  <div className="p-3 rounded-lg bg-orange-50"><FaChartLine className="text-xl text-orange-600" /></div>
  </div>
- <h3 className="text-sm text-gray-600 mb-1">Revenue This Month</h3>
- <p className="text-2xl font-bold text-gray-900">Rs {(metrics.revenue.thisMonth ?? 0).toLocaleString()}</p>
+ <h3 className="text-sm text-soft mb-1">Revenue This Month</h3>
+ <p className="text-2xl font-bold text-fg">Rs {(metrics.revenue.thisMonth ?? 0).toLocaleString()}</p>
  <p className={`text-xs mt-2 ${revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
  {revenueGrowth >= 0 ? '+' : ''}{revenueGrowth}% vs last month
  </p>
@@ -366,8 +366,8 @@ export default function RegionalAdminDashboard() {
 
  {/* User Breakdown + Bookings */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">User Breakdown</h3>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">User Breakdown</h3>
  <div className="space-y-3">
  {userBreakdown.map((item) => {
  const percentage = metrics.users.total > 0
@@ -376,10 +376,10 @@ export default function RegionalAdminDashboard() {
  return (
  <div key={item.label}>
  <div className="flex justify-between items-center mb-1">
- <span className="text-sm font-medium text-gray-700">{item.label}</span>
- <span className="text-sm text-gray-600">{(item.count ?? 0).toLocaleString()} ({percentage}%)</span>
+ <span className="text-sm font-medium text-soft">{item.label}</span>
+ <span className="text-sm text-soft">{(item.count ?? 0).toLocaleString()} ({percentage}%)</span>
  </div>
- <div className="bg-gray-200 rounded-full h-2">
+ <div className="bg-line rounded-full h-2">
  <div
  className={`${item.color} rounded-full h-2 transition-all duration-500`}
  style={{ width: `${Math.max(percentage, 1)}%` }}
@@ -392,8 +392,8 @@ export default function RegionalAdminDashboard() {
  </div>
 
  <div className="space-y-6">
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">Bookings Overview</h3>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">Bookings Overview</h3>
  <div className="grid grid-cols-2 gap-4">
  {[
  { label: 'Pending', value: metrics.bookings.pending, color: 'text-yellow-600', bg: 'bg-yellow-50' },
@@ -402,27 +402,27 @@ export default function RegionalAdminDashboard() {
  { label: 'Cancelled', value: metrics.bookings.cancelled, color: 'text-red-600', bg: 'bg-red-50' },
  ].map((item) => (
  <div key={item.label} className={`${item.bg} rounded-lg p-4`}>
- <p className="text-sm text-gray-600">{item.label}</p>
+ <p className="text-sm text-soft">{item.label}</p>
  <p className={`text-xl font-bold ${item.color}`}>{(item.value ?? 0).toLocaleString()}</p>
  </div>
  ))}
  </div>
  </div>
 
- <div className="bg-white rounded-xl p-6 shadow-lg">
- <h3 className="text-lg font-bold text-gray-900 mb-4">Revenue Summary</h3>
+ <div className="bg-surface rounded-xl p-6 shadow-lg">
+ <h3 className="text-lg font-bold text-fg mb-4">Revenue Summary</h3>
  <div className="space-y-3">
- <div className="flex justify-between py-2 border-b border-gray-100">
- <span className="text-gray-600">Total Revenue</span>
- <span className="font-bold text-gray-900">Rs {(metrics.revenue.total ?? 0).toLocaleString()}</span>
+ <div className="flex justify-between py-2 border-b border-line">
+ <span className="text-soft">Total Revenue</span>
+ <span className="font-bold text-fg">Rs {(metrics.revenue.total ?? 0).toLocaleString()}</span>
  </div>
- <div className="flex justify-between py-2 border-b border-gray-100">
- <span className="text-gray-600">This Month</span>
+ <div className="flex justify-between py-2 border-b border-line">
+ <span className="text-soft">This Month</span>
  <span className="font-bold text-green-600">Rs {(metrics.revenue.thisMonth ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between py-2">
- <span className="text-gray-600">Last Month</span>
- <span className="font-bold text-gray-700">Rs {(metrics.revenue.lastMonth ?? 0).toLocaleString()}</span>
+ <span className="text-soft">Last Month</span>
+ <span className="font-bold text-soft">Rs {(metrics.revenue.lastMonth ?? 0).toLocaleString()}</span>
  </div>
  </div>
  </div>
@@ -430,8 +430,8 @@ export default function RegionalAdminDashboard() {
  </div>
  </>
  ) : (
- <div className="bg-gray-50 rounded-xl p-6 text-center text-gray-500 mb-6">
- <FaChartBar className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="bg-subtle rounded-xl p-6 text-center text-soft mb-6">
+ <FaChartBar className="text-4xl mx-auto mb-3 text-faint" />
  <p>Unable to load analytics data</p>
  </div>
  )}

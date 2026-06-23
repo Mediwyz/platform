@@ -87,20 +87,20 @@ export default function FoodSearchPanel({ onSelect }: FoodSearchPanelProps) {
  Beverages: 'bg-cyan-100 text-cyan-700',
  Snacks: 'bg-orange-100 text-orange-700',
  }
- return colors[cat] || 'bg-gray-100 text-gray-700'
+ return colors[cat] || 'bg-subtle text-soft'
  }
 
  return (
  <div className="space-y-3">
  {/* Search input */}
  <div className="relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  placeholder="Search foods..."
  value={query}
  onChange={(e) => setQuery(e.target.value)}
- className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
+ className="w-full pl-9 pr-4 py-2 border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-colors"
  />
  </div>
 
@@ -113,7 +113,7 @@ export default function FoodSearchPanel({ onSelect }: FoodSearchPanelProps) {
  className={`px-3 py-1 text-xs rounded-full font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 ${
  category === cat
  ? 'bg-blue-600 text-white'
- : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+ : 'bg-subtle text-soft hover:bg-line'
  }`}
  >
  {cat}
@@ -124,28 +124,28 @@ export default function FoodSearchPanel({ onSelect }: FoodSearchPanelProps) {
  {/* Results */}
  <div className="max-h-64 overflow-y-auto space-y-2">
  {loading && (
- <div className="text-center py-4 text-sm text-gray-400">Searching...</div>
+ <div className="text-center py-4 text-sm text-faint">Searching...</div>
  )}
  {!loading && searched && results.length === 0 && (
- <div className="text-center py-4 text-sm text-gray-400">No results found</div>
+ <div className="text-center py-4 text-sm text-faint">No results found</div>
  )}
  {!loading &&
  results.map((food, idx) => (
  <button
  key={`${food.id ?? 'f'}-${idx}`}
  onClick={() => onSelect(food)}
- className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+ className="w-full text-left p-3 bg-subtle rounded-lg hover:bg-blue-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
  >
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
- <span className="text-sm font-medium text-gray-800">{food.name}</span>
+ <span className="text-sm font-medium text-fg">{food.name}</span>
  <span className={`text-xs px-1.5 py-0.5 rounded-full ${categoryBadgeColor(food.category)}`}>
  {food.category}
  </span>
  </div>
- <span className="text-sm font-semibold text-gray-700">{food.calories} cal</span>
+ <span className="text-sm font-semibold text-soft">{food.calories} cal</span>
  </div>
- <div className="flex gap-3 mt-1 text-xs text-gray-500">
+ <div className="flex gap-3 mt-1 text-xs text-soft">
  <span>P: {food.protein}g</span>
  <span>C: {food.carbs}g</span>
  <span>F: {food.fat}g</span>

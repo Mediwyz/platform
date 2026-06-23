@@ -46,49 +46,49 @@ export default function StepFlagToggles({ flags, onChange }: StepFlagTogglesProp
   return (
     <div className="space-y-4">
 
-      {/* ── Automatic behaviors (read-only) ───────────────────────────────── */}
+      {/*  Automatic behaviors (read-only)  */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <FiInfo className="w-3.5 h-3.5 text-gray-400" />
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Automatic behaviors - no configuration needed</p>
+          <FiInfo className="w-3.5 h-3.5 text-faint" />
+          <p className="text-xs font-semibold text-soft uppercase tracking-wider">Automatic behaviors - no configuration needed</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {AUTOMATIC_BEHAVIORS.map(({ icon: Icon, color, label, desc }) => (
-            <div key={label} className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 bg-gray-50">
+            <div key={label} className="flex items-start gap-3 p-3 rounded-lg border border-line bg-subtle">
               <div className={`p-1.5 rounded-lg ${color} flex-shrink-0`}>
                 <Icon className="w-3.5 h-3.5" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-700">{label}</p>
-                <p className="text-xs text-gray-400 mt-0.5 leading-snug">{desc}</p>
+                <p className="text-sm font-medium text-soft">{label}</p>
+                <p className="text-xs text-faint mt-0.5 leading-snug">{desc}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Step-type-driven overrides ─────────────────────────────────────
+      {/*  Step-type-driven overrides 
            These two are set automatically when you pick a step type that
            carries defaultFlags (RESULTS_READY, CARE_NOTES, etc.).
            Use the dropdowns below only when your step type doesn't set them
            and you need an explicit content or prescription requirement.      */}
       <div className="space-y-3">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Step-type overrides</p>
-        <p className="text-xs text-gray-400 leading-snug">
+        <p className="text-xs font-semibold text-soft uppercase tracking-wider">Step-type overrides</p>
+        <p className="text-xs text-faint leading-snug">
           These are set automatically by the step type you chose above. Override here only if you need
           a different content requirement than the step type provides.
         </p>
 
         {/* required content type */}
-        <div className="p-3 rounded-lg border border-gray-200 bg-white">
+        <div className="p-3 rounded-lg border border-line bg-surface">
           <div className="flex items-center gap-2 mb-2">
             <FiFileText className="w-4 h-4 text-indigo-500" />
-            <span className="text-sm font-medium text-gray-800">Required content attachment</span>
+            <span className="text-sm font-medium text-fg">Required content attachment</span>
           </div>
           <select
             value={typeof flags.requires_content === 'string' ? flags.requires_content : ''}
             onChange={(e) => onChange({ ...flags, requires_content: e.target.value || undefined })}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
+            className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-teal focus:border-brand-teal"
           >
             {CONTENT_TYPES.map(ct => (
               <option key={ct.value} value={ct.value}>{ct.label}</option>
@@ -97,21 +97,21 @@ export default function StepFlagToggles({ flags, onChange }: StepFlagTogglesProp
         </div>
 
         {/* requires prescription (mid-workflow, not upfront) */}
-        <div className="p-3 rounded-lg border border-gray-200 bg-white">
+        <div className="p-3 rounded-lg border border-line bg-surface">
           <button
             type="button"
             onClick={() => onChange({ ...flags, requires_prescription: !flags.requires_prescription })}
             className="flex items-start gap-3 w-full text-left"
           >
-            <div className={`p-1.5 rounded-lg flex-shrink-0 ${flags.requires_prescription ? 'text-pink-600 bg-pink-50' : 'text-gray-400 bg-gray-50'}`}>
+            <div className={`p-1.5 rounded-lg flex-shrink-0 ${flags.requires_prescription ? 'text-pink-600 bg-pink-50' : 'text-faint bg-subtle'}`}>
               <FiShield className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-800">Mid-workflow prescription check</span>
-                <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${flags.requires_prescription ? 'bg-brand-teal border-brand-teal' : 'border-gray-300'}`} />
+                <span className="text-sm font-medium text-fg">Mid-workflow prescription check</span>
+                <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${flags.requires_prescription ? 'bg-brand-teal border-brand-teal' : 'border-line'}`} />
               </div>
-              <p className="text-xs text-gray-400 mt-0.5 leading-snug">
+              <p className="text-xs text-faint mt-0.5 leading-snug">
                 Requires the provider to explicitly confirm a prescription at this step.
                 For upfront eligibility checks, use serviceConfig.preflight instead.
               </p>

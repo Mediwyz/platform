@@ -5,7 +5,7 @@ import { FaPlus, FaTrash, FaCheck, FaBan, FaEdit, FaBook } from 'react-icons/fa'
 
 /**
  * Regional admin CRUD for the AI assistant's clinical knowledge base.
- * Each row maps a condition → one-line dietary guidance that gets
+ * Each row maps a condition  one-line dietary guidance that gets
  * injected into the AI prompt when a user has the condition on file.
  * Any mutation triggers backend cache invalidation so the next AI call
  * picks up the change.
@@ -103,8 +103,8 @@ export default function ClinicalKnowledgePage() {
         <div className="flex items-center gap-3">
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><FaBook /></div>
           <div>
-            <h1 className="text-2xl font-bold text-[#001E40]">AI Clinical Knowledge</h1>
-            <p className="text-sm text-gray-600 mt-1">
+            <h1 className="text-2xl font-bold text-fg">AI Clinical Knowledge</h1>
+            <p className="text-sm text-soft mt-1">
               One-line dietary / wellness guidance the AI injects when a user has the matching condition.
               Keep lines under 200 chars - prompt has a 4KB soft budget.
             </p>
@@ -121,113 +121,113 @@ export default function ClinicalKnowledgePage() {
       </header>
 
       {creating && (
-        <section className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-900">{editingId ? 'Edit entry' : 'New entry'}</h2>
+        <section className="bg-surface border border-line rounded-xl p-4 sm:p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-fg">{editingId ? 'Edit entry' : 'New entry'}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Condition key</label>
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Condition key</label>
               <input
                 value={draft.conditionKey}
                 onChange={(e) => setDraft({ ...draft, conditionKey: e.target.value })}
                 placeholder="e.g. diabetes"
-                className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5"
+                className="w-full text-sm border border-line rounded-lg px-2 py-1.5"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Category</label>
+              <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Category</label>
               <select
                 value={draft.category}
                 onChange={(e) => setDraft({ ...draft, category: e.target.value })}
-                className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 bg-white"
+                className="w-full text-sm border border-line rounded-lg px-2 py-1.5 bg-surface"
               >
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Aliases (comma separated)</label>
+            <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Aliases (comma separated)</label>
             <input
               value={draft.aliases.join(', ')}
               onChange={(e) => setDraft({ ...draft, aliases: e.target.value.split(',').map((s) => s.trim()).filter(Boolean) })}
               placeholder="diabetic, type 2 diabetes, t2dm"
-              className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5"
+              className="w-full text-sm border border-line rounded-lg px-2 py-1.5"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">
+            <label className="block text-[11px] font-semibold uppercase text-soft mb-1">
               Dietary / wellness guidance ({draft.dietaryGuidance.length}/200)
             </label>
             <textarea
               value={draft.dietaryGuidance}
               onChange={(e) => setDraft({ ...draft, dietaryGuidance: e.target.value })}
               rows={2} maxLength={200}
-              placeholder="Diabetes: low-GI foods, limit added sugars, emphasise fibre-rich veg…"
-              className="w-full text-sm border border-gray-300 rounded-lg p-2"
+              placeholder="Diabetes: low-GI foods, limit added sugars, emphasise fibre-rich veg"
+              className="w-full text-sm border border-line rounded-lg p-2"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold uppercase text-gray-500 mb-1">Sources (comma separated, optional)</label>
+            <label className="block text-[11px] font-semibold uppercase text-soft mb-1">Sources (comma separated, optional)</label>
             <input
               value={draft.sources.join(', ')}
               onChange={(e) => setDraft({ ...draft, sources: e.target.value.split(',').map((s) => s.trim()).filter(Boolean) })}
               placeholder="ADA 2024 Standards of Care, NIH DASH Diet"
-              className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5"
+              className="w-full text-sm border border-line rounded-lg px-2 py-1.5"
             />
           </div>
           <div className="flex items-center justify-between gap-2 pt-2">
-            <label className="flex items-center gap-2 text-xs text-gray-700">
+            <label className="flex items-center gap-2 text-xs text-soft">
               <input type="checkbox" checked={draft.active} onChange={(e) => setDraft({ ...draft, active: e.target.checked })} />
               Active (included in AI prompts)
             </label>
             <div className="flex gap-2">
               <button
                 onClick={() => { setCreating(false); setEditingId(null); setDraft(EMPTY_DRAFT) }}
-                className="px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded-lg"
+                className="px-3 py-1.5 text-sm text-soft hover:bg-subtle rounded-lg"
                 disabled={saving}
               >Cancel</button>
               <button
                 onClick={save}
                 disabled={saving || !draft.conditionKey || !draft.dietaryGuidance}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-[#0C6780] hover:bg-[#001E40] text-white rounded-lg disabled:opacity-50"
-              ><FaCheck /> {saving ? 'Saving…' : 'Save'}</button>
+              ><FaCheck /> {saving ? 'Saving' : 'Save'}</button>
             </div>
           </div>
         </section>
       )}
 
       {loading ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-sm text-gray-500">Loading…</div>
+        <div className="bg-surface border border-line rounded-xl p-8 text-center text-sm text-soft">Loading</div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-sm">{error}</div>
       ) : entries.length === 0 ? (
-        <div className="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center text-sm text-gray-500">
+        <div className="bg-surface border border-dashed border-line rounded-xl p-8 text-center text-sm text-soft">
           No entries yet. Add one so the AI can tailor its responses to users with that condition.
         </div>
       ) : (
-        <section className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <ul className="divide-y divide-gray-100">
+        <section className="bg-surface border border-line rounded-xl overflow-hidden">
+          <ul className="divide-y divide-line">
             {entries.map((entry) => (
               <li key={entry.id} className={`p-4 ${!entry.active ? 'opacity-50' : ''}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="font-semibold text-gray-900">{entry.conditionKey}</span>
-                      <span className="text-[10px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{entry.category}</span>
+                      <span className="font-semibold text-fg">{entry.conditionKey}</span>
+                      <span className="text-[10px] font-medium bg-subtle text-soft px-2 py-0.5 rounded-full">{entry.category}</span>
                       {!entry.active && <span className="text-[10px] font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">inactive</span>}
                     </div>
                     {entry.aliases.length > 0 && (
-                      <div className="text-[11px] text-gray-500 mb-1">aliases: {entry.aliases.join(', ')}</div>
+                      <div className="text-[11px] text-soft mb-1">aliases: {entry.aliases.join(', ')}</div>
                     )}
-                    <p className="text-sm text-gray-800">{entry.dietaryGuidance}</p>
+                    <p className="text-sm text-fg">{entry.dietaryGuidance}</p>
                     {entry.sources.length > 0 && (
-                      <div className="text-[11px] text-gray-500 mt-1">Sources: {entry.sources.join(', ')}</div>
+                      <div className="text-[11px] text-soft mt-1">Sources: {entry.sources.join(', ')}</div>
                     )}
                   </div>
                   <div className="flex gap-1 flex-shrink-0">
-                    <button onClick={() => toggleActive(entry)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-600" title={entry.active ? 'Deactivate' : 'Activate'}>
+                    <button onClick={() => toggleActive(entry)} className="p-2 hover:bg-subtle rounded-lg text-soft" title={entry.active ? 'Deactivate' : 'Activate'}>
                       {entry.active ? <FaBan /> : <FaCheck />}
                     </button>
-                    <button onClick={() => startEdit(entry)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-600" title="Edit">
+                    <button onClick={() => startEdit(entry)} className="p-2 hover:bg-subtle rounded-lg text-soft" title="Edit">
                       <FaEdit />
                     </button>
                     <button onClick={() => remove(entry)} className="p-2 hover:bg-red-50 rounded-lg text-red-600" title="Delete">
@@ -241,7 +241,7 @@ export default function ClinicalKnowledgePage() {
         </section>
       )}
 
-      <footer className="text-[11px] text-gray-500 pt-1">
+      <footer className="text-[11px] text-soft pt-1">
         Changes apply on the next AI chat - the service cache refreshes automatically.
       </footer>
     </div>

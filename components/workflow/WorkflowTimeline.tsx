@@ -19,7 +19,7 @@ interface StepLogEntry {
 interface WorkflowTimelineProps {
  steps: StepLogEntry[]
  currentStatus: string
- /** Status code → category lookup (from engine's allSteps). Optional;
+ /** Status code  category lookup (from engine's allSteps). Optional;
   *  timeline falls back to legacy derivation when absent. */
  categoryByStatus?: Record<string, StepCategory>
 }
@@ -43,7 +43,7 @@ function resolveCategory(
 
 export default function WorkflowTimeline({ steps, currentStatus, categoryByStatus }: WorkflowTimelineProps) {
  if (!steps || steps.length === 0) {
- return <p className="text-gray-500 text-sm">No workflow history yet.</p>
+ return <p className="text-soft text-sm">No workflow history yet.</p>
  }
 
  return (
@@ -61,7 +61,7 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  <li key={step.id}>
  <div className="relative pb-8">
  {!isLast && (
- <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
+ <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-line" aria-hidden="true" />
  )}
  <div className="relative flex space-x-3">
  <div>
@@ -71,11 +71,11 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  </div>
  <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1">
  <div>
- <p className={`text-sm font-medium ${isCurrent ? 'text-gray-900' : 'text-gray-600'}`}>
+ <p className={`text-sm font-medium ${isCurrent ? 'text-fg' : 'text-soft'}`}>
  {step.label}
  </p>
  {step.message && (
- <p className="mt-0.5 text-xs text-gray-500">{step.message}</p>
+ <p className="mt-0.5 text-xs text-soft">{step.message}</p>
  )}
  {step.contentType && (
  <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
@@ -90,11 +90,11 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  </span>
  )}
  </div>
- <div className="whitespace-nowrap text-right text-xs text-gray-400">
+ <div className="whitespace-nowrap text-right text-xs text-faint">
  <time dateTime={step.createdAt}>
  {new Date(step.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
  </time>
- <p className="text-gray-300">
+ <p className="text-faint">
  {step.actionByRole === 'patient' ? 'Patient' : step.actionByRole === 'provider' ? 'Provider' : 'System'}
  </p>
  </div>

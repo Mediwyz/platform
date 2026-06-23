@@ -129,7 +129,7 @@ export default function CreateCompanyBanner({
           {!open ? (
             <button
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-2 bg-white text-[#0C6780] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center gap-2 bg-surface text-[#0C6780] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-subtle transition-colors"
             >
               <FaPlus className="text-xs" /> Create Company
             </button>
@@ -141,7 +141,7 @@ export default function CreateCompanyBanner({
                   required
                   value={form.companyName}
                   onChange={e => setForm(s => ({ ...s, companyName: e.target.value }))}
-                  className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                  className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                 />
               </label>
               <label className="block">
@@ -149,7 +149,7 @@ export default function CreateCompanyBanner({
                 <input
                   value={form.registrationNumber}
                   onChange={e => setForm(s => ({ ...s, registrationNumber: e.target.value }))}
-                  className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                  className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                 />
               </label>
               <label className="block">
@@ -157,7 +157,7 @@ export default function CreateCompanyBanner({
                 <input
                   value={form.industry}
                   onChange={e => setForm(s => ({ ...s, industry: e.target.value }))}
-                  className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                  className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                 />
               </label>
               <label className="block">
@@ -166,7 +166,7 @@ export default function CreateCompanyBanner({
                   type="number" min="1"
                   value={form.employeeCount}
                   onChange={e => setForm(s => ({ ...s, employeeCount: e.target.value }))}
-                  className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                  className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                 />
               </label>
 
@@ -175,7 +175,7 @@ export default function CreateCompanyBanner({
                 <select
                   value={form.subscriptionPlanId}
                   onChange={e => setForm(s => ({ ...s, subscriptionPlanId: e.target.value }))}
-                  className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                  className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                 >
                   <option value=""> - No group plan - </option>
                   {plans.map(p => (
@@ -206,7 +206,7 @@ export default function CreateCompanyBanner({
                       required
                       value={form.monthlyContribution}
                       onChange={e => setForm(s => ({ ...s, monthlyContribution: e.target.value }))}
-                      className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                      className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                     />
                   </label>
                   <label className="block">
@@ -215,7 +215,7 @@ export default function CreateCompanyBanner({
                       value={form.coverageDescription}
                       onChange={e => setForm(s => ({ ...s, coverageDescription: e.target.value }))}
                       placeholder="e.g. Hospitalization, outpatient, dental"
-                      className="mt-1 w-full px-3 py-2 rounded-lg bg-white text-gray-900 text-sm"
+                      className="mt-1 w-full px-3 py-2 rounded-lg bg-surface text-fg text-sm"
                     />
                   </label>
                 </>
@@ -238,9 +238,9 @@ export default function CreateCompanyBanner({
                 <button
                   type="submit"
                   disabled={busy || !form.companyName.trim()}
-                  className="px-4 py-2 rounded-lg bg-white text-[#0C6780] text-sm font-semibold hover:bg-gray-100 disabled:bg-gray-300 disabled:text-gray-500"
+                  className="px-4 py-2 rounded-lg bg-surface text-[#0C6780] text-sm font-semibold hover:bg-subtle disabled:bg-gray-300 disabled:text-soft"
                 >
-                  {busy ? 'Creating…' : 'Create'}
+                  {busy ? 'Creating' : 'Create'}
                 </button>
               </div>
             </form>

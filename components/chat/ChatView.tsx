@@ -77,7 +77,7 @@ function getUserTypeColor(userType: string): { bg: string; text: string; label: 
  REFERRAL_PARTNER: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Referral' },
  REGIONAL_ADMIN: { bg: 'bg-slate-100', text: 'text-slate-700', label: 'Admin' },
  }
- return map[userType] ?? { bg: 'bg-gray-100', text: 'text-gray-600', label: userType }
+ return map[userType] ?? { bg: 'bg-subtle', text: 'text-soft', label: userType }
 }
 
 function formatMessageTime(dateStr: string): string {
@@ -859,7 +859,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
  <input
  type="text"
- placeholder="Search conversations…"
+ placeholder="Search conversations"
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  className="w-full pl-9 pr-3 py-2 text-sm bg-subtle text-fg border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent placeholder:text-faint"
@@ -870,7 +870,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  {/* Conversation list */}
  <div className="flex-1 overflow-y-auto relative">
  {creatingConversation && (
- <div className="absolute inset-0 bg-surface/60 z-10 flex items-center justify-center">
+ <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center">
  <div className="w-6 h-6 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
  </div>
  )}
@@ -901,7 +901,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <div className="border-t border-line">
  <div className="px-4 py-2 bg-subtle">
  <p className="text-xs font-semibold text-soft uppercase tracking-wide">
- {searchingUsers ? 'Searching users…' : 'Start a new conversation'}
+ {searchingUsers ? 'Searching users' : 'Start a new conversation'}
  </p>
  </div>
  {userSearchResults.map((user) => {
@@ -937,7 +937,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <div className="px-4 py-2 border-t border-line">
  <div className="flex items-center gap-1.5">
  <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-faint'}`} />
- <span className="text-xs text-faint">{connected ? 'Connected' : 'Reconnecting…'}</span>
+ <span className="text-xs text-faint">{connected ? 'Connected' : 'Reconnecting'}</span>
  </div>
  </div>
  </div>
@@ -1033,7 +1033,7 @@ export default function ChatView({ currentUser, initialConversationId }: ChatVie
  <input
  ref={inputRef}
  type="text"
- placeholder="Type a message…"
+ placeholder="Type a message"
  value={inputText}
  onChange={handleInputChange}
  onKeyDown={handleKeyDown}

@@ -228,8 +228,8 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  <div className="bg-gray-800 rounded-lg p-6 text-center">
  <FaSync className="text-yellow-500 text-4xl animate-spin mx-auto mb-4" />
  <p className="text-white text-lg font-semibold">Reconnecting...</p>
- <p className="text-gray-400 text-sm mt-2">Please wait while we restore your connection</p>
- <p className="text-gray-500 text-xs mt-2">Video will resume automatically</p>
+ <p className="text-faint text-sm mt-2">Please wait while we restore your connection</p>
+ <p className="text-soft text-xs mt-2">Video will resume automatically</p>
  </div>
  </div>
  )}
@@ -258,7 +258,7 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  <button
  onClick={toggleFullscreen}
  aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
- className="text-white hover:text-gray-300 transition hidden sm:block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded"
+ className="text-white hover:text-faint transition hidden sm:block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded"
  >
  {isFullscreen ? <FaCompress aria-hidden="true" /> : <FaExpand aria-hidden="true" />}
  </button>
@@ -299,9 +299,9 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  <div className="absolute inset-0 flex items-center justify-center">
  <div className="text-center">
  <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
- <FaVideo className="text-gray-500 text-3xl sm:text-4xl" />
+ <FaVideo className="text-soft text-3xl sm:text-4xl" />
  </div>
- <p className="text-gray-400 text-sm sm:text-base">
+ <p className="text-faint text-sm sm:text-base">
  {isReconnecting ? 'Reconnecting to participant...' : 'Waiting for other participant...'}
  </p>
  </div>
@@ -330,7 +330,7 @@ const VideoCallRoom: React.FC<VideoCallRoomProps> = ({
  />
  ) : (
  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
- <FaVideoSlash className="text-gray-500 text-2xl" />
+ <FaVideoSlash className="text-soft text-2xl" />
  </div>
  )}
 

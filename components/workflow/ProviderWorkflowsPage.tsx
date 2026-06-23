@@ -116,13 +116,13 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
           <>
             <Link
               href={createHref.replace('/create', '/library')}
-              className="bg-white hover:bg-gray-50 border border-gray-200 text-brand-navy px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+              className="bg-surface hover:bg-subtle border border-line text-brand-navy px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
             >
               <FiBookOpen className="w-4 h-4" /> Browse library
             </Link>
             <Link
               href={createHref.replace('/create', '/my-suggestions')}
-              className="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
+              className="bg-surface hover:bg-subtle border border-line text-soft px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition"
             >
               <FiInbox className="w-4 h-4" /> My suggestions
             </Link>
@@ -148,7 +148,7 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
             href={createHref.replace('/create', '/my-suggestions')}
             className="text-sm font-medium text-amber-800 underline underline-offset-2 hover:text-amber-900"
           >
-            View status →
+            View status 
           </Link>
         </div>
       )}
@@ -171,7 +171,7 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
 
           {/* Default workflows */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-500 mb-3">System Default Workflows</h2>
+            <h2 className="text-sm font-semibold text-soft mb-3">System Default Workflows</h2>
             <div className="space-y-2">
               {defaultTemplates.map(tpl => (
                 <TemplateCard key={tpl.id} tpl={tpl} expanded={expandedId === tpl.id} onToggle={() => setExpandedId(expandedId === tpl.id ? null : tpl.id)} />
@@ -186,8 +186,8 @@ export default function ProviderWorkflowsPage({ userType, createHref }: Provider
 
 function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: WorkflowTemplate; expanded: boolean; onToggle: () => void; editable?: boolean; onDelete?: () => void }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-      <button onClick={onToggle} className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+    <div className="bg-surface border border-line rounded-xl overflow-hidden">
+      <button onClick={onToggle} className="w-full flex items-center justify-between p-4 hover:bg-subtle transition">
         <div className="flex items-center gap-3 flex-wrap">
           <span className={`px-2 py-1 rounded text-xs font-medium ${MODE_COLORS[tpl.serviceMode] ?? 'bg-sky-100 text-sky-700'}`}>
             {MODE_LABELS[tpl.serviceMode] ?? tpl.serviceMode}
@@ -202,13 +202,13 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
               Programme
             </span>
           )}
-          <span className="font-medium text-gray-900 text-sm">{tpl.name}</span>
-          <span className="text-xs text-gray-400">{(tpl.steps ?? []).length} steps</span>
+          <span className="font-medium text-fg text-sm">{tpl.name}</span>
+          <span className="text-xs text-faint">{(tpl.steps ?? []).length} steps</span>
           {editable && <span className="text-xs bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded">Custom</span>}
         </div>
         <div className="flex items-center gap-2">
           {editable && onDelete && (
-            <span onClick={(e) => { e.stopPropagation(); onDelete() }} className="text-gray-400 hover:text-red-500 p-1 transition cursor-pointer" title="Delete">
+            <span onClick={(e) => { e.stopPropagation(); onDelete() }} className="text-faint hover:text-red-500 p-1 transition cursor-pointer" title="Delete">
               <FiTrash2 className="w-4 h-4" />
             </span>
           )}
@@ -218,16 +218,16 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 p-4 bg-gray-50">
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><FiList className="inline w-3 h-3 mr-1" />Steps & Flags</h4>
+        <div className="border-t border-line p-4 bg-subtle">
+          <h4 className="text-xs font-semibold text-soft uppercase tracking-wider mb-3"><FiList className="inline w-3 h-3 mr-1" />Steps & Flags</h4>
           <div className="space-y-2">
             {[...(tpl.steps ?? [])].sort((a, b) => a.order - b.order).map((step, idx) => (
-              <div key={step.statusCode} className="flex items-start gap-3 bg-white rounded-lg p-3 border border-gray-100">
+              <div key={step.statusCode} className="flex items-start gap-3 bg-surface rounded-lg p-3 border border-line">
                 <div className="w-7 h-7 bg-brand-navy text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">{idx + 1}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-sm text-gray-900">{step.label}</span>
-                    <code className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">{step.statusCode}</code>
+                    <span className="font-medium text-sm text-fg">{step.label}</span>
+                    <code className="text-xs bg-subtle text-soft px-1.5 py-0.5 rounded">{step.statusCode}</code>
                   </div>
                   {Object.entries(step.flags ?? {}).filter(([, v]) => v).length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
@@ -240,7 +240,7 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
                   )}
                   <div className="flex flex-wrap gap-1 mt-1.5">
                     {(step.actionsForProvider ?? []).map(a => <span key={a.action} className="px-1.5 py-0.5 bg-brand-navy/10 text-brand-navy text-xs rounded">Provider: {a.label}</span>)}
-                    {(step.actionsForPatient ?? []).map(a => <span key={a.action} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">Patient: {a.label}</span>)}
+                    {(step.actionsForPatient ?? []).map(a => <span key={a.action} className="px-1.5 py-0.5 bg-subtle text-soft text-xs rounded">Patient: {a.label}</span>)}
                   </div>
                 </div>
               </div>
@@ -248,9 +248,9 @@ function TemplateCard({ tpl, expanded, onToggle, editable, onDelete }: { tpl: Wo
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {(tpl.transitions ?? []).map((tr, i) => (
-              <span key={i} className="text-xs bg-white border border-gray-200 rounded px-2 py-1 text-gray-600">
+              <span key={i} className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
                 {tr.from} <span className="text-brand-teal font-bold mx-1">&rarr;</span> {tr.to}
-                <span className="text-gray-400 ml-1">({tr.action})</span>
+                <span className="text-faint ml-1">({tr.action})</span>
               </span>
             ))}
           </div>

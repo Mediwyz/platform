@@ -277,7 +277,7 @@ export default function PostFeed({
  {loadingMore ? (
  <span className="flex items-center gap-2">
  <div className="w-4 h-4 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
- Loading…
+ Loading
  </span>
  ) : (
  'Load More'

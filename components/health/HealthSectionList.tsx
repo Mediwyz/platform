@@ -62,7 +62,7 @@ export default function HealthSectionList({ title, icon: Icon, apiUrl, mapData, 
  return (
  <div className="p-4">
  <div className="flex items-center justify-between mb-4">
- <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+ <h2 className="text-lg font-bold text-fg flex items-center gap-2">
  <Icon className="text-blue-500" /> {title}
  </h2>
  {showCreateButton && (
@@ -77,7 +77,7 @@ export default function HealthSectionList({ title, icon: Icon, apiUrl, mapData, 
 
  {items.length === 0 ? (
  <div className="text-center py-8">
- <p className="text-gray-400 text-sm">{emptyMessage || `No ${title.toLowerCase()} yet.`}</p>
+ <p className="text-faint text-sm">{emptyMessage || `No ${title.toLowerCase()} yet.`}</p>
  {showCreateButton && (
  <button onClick={() => setShowBookingModal(true)}
  className="mt-3 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100">
@@ -88,16 +88,16 @@ export default function HealthSectionList({ title, icon: Icon, apiUrl, mapData, 
  ) : (
  <div className="space-y-2">
  {items.map(item => (
- <div key={item.id} className="bg-white rounded-lg border border-gray-200 p-3 flex items-center justify-between">
+ <div key={item.id} className="bg-surface rounded-lg border border-line p-3 flex items-center justify-between">
  <div className="min-w-0 flex-1">
- <p className="font-medium text-gray-900 text-sm truncate">{item.title}</p>
- {item.subtitle && <p className="text-xs text-gray-500 truncate">{item.subtitle}</p>}
- <p className="text-xs text-gray-400">{item.date}</p>
+ <p className="font-medium text-fg text-sm truncate">{item.title}</p>
+ {item.subtitle && <p className="text-xs text-soft truncate">{item.subtitle}</p>}
+ <p className="text-xs text-faint">{item.date}</p>
  </div>
  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColor(item.status)}`}>{item.status}</span>
  {item.price != null && item.price > 0 && (
- <span className="text-xs font-medium text-gray-600">Rs {(item.price ?? 0).toLocaleString()}</span>
+ <span className="text-xs font-medium text-soft">Rs {(item.price ?? 0).toLocaleString()}</span>
  )}
  {/* Action buttons */}
  {item.status === 'completed' && (

@@ -15,15 +15,15 @@ function Modal({ isOpen, onClose, onAccept, children, title, icon: Icon, showAcc
 
  return (
  <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
- <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
+ <div className="bg-surface rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+ <div className="flex items-center justify-between p-6 border-b border-line bg-subtle">
  <div className="flex items-center gap-3">
  <Icon className="text-blue-600 text-xl" />
- <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+ <h2 className="text-xl font-bold text-fg">{title}</h2>
  </div>
  <button
  onClick={onClose}
- className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200"
+ className="text-faint hover:text-soft p-2 rounded-full hover:bg-line"
  >
  <FaTimes />
  </button>
@@ -31,7 +31,7 @@ function Modal({ isOpen, onClose, onAccept, children, title, icon: Icon, showAcc
  <div className="p-6 overflow-y-auto max-h-[70vh]">
  {children}
  </div>
- <div className="p-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3">
+ <div className="p-4 border-t border-line bg-subtle flex justify-end gap-3">
  {showAcceptButton && onAccept && (
  <button
  onClick={onAccept}
@@ -86,7 +86,7 @@ export default function LegalModals({
  icon={FaExclamationTriangle}
  showAcceptButton={!!onAcceptDisclaimer}
  >
- <div className="space-y-6 text-gray-700">
+ <div className="space-y-6 text-soft">
  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
  <h3 className="font-bold text-red-800 mb-3">Medical Disclaimer</h3>
  <p className="text-red-700">
@@ -95,35 +95,35 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">No Provider-Patient Relationship with MediWyz</h3>
+ <h3 className="font-bold text-fg mb-3">No Provider-Patient Relationship with MediWyz</h3>
  <p>
  Any consultation or advice you receive via MediWyz is delivered by independent, licensed practitioners. <strong>MediWyz does not control or interfere with their professional judgment.</strong> Your healthcare provider is solely responsible for the medical advice, quality of care, and services they provide.
  </p>
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">Tests, Medications, and Third-Party Services</h3>
+ <h3 className="font-bold text-fg mb-3">Tests, Medications, and Third-Party Services</h3>
  <p>
  Diagnostic tests, lab results, and medication dispensing are provided by independent laboratories and licensed pharmacies. <strong>MediWyz does not warrant the accuracy, completeness, or safety of any diagnostic tests or medications.</strong> Any issues or disputes related to these services should be addressed directly with the relevant service provider.
  </p>
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">No Emergency or Substitute for In-Person Care</h3>
+ <h3 className="font-bold text-fg mb-3">No Emergency or Substitute for In-Person Care</h3>
  <p>
  MediWyz is not designed for emergency medical situations. If you are experiencing a medical emergency, please contact your local emergency number or go to the nearest hospital. MediWyz should not be used as a substitute for in-person examination and treatment when required.
  </p>
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">Limitation of Liability</h3>
+ <h3 className="font-bold text-fg mb-3">Limitation of Liability</h3>
  <p>
  To the fullest extent permitted by law, <strong>MediWyz is not liable for any injury, loss, or damages resulting from consultations, tests, prescriptions, medication errors, or any services provided by independent healthcare professionals or third-party providers.</strong> Users agree that MediWyz role is limited to facilitating communication and logistics between users and providers.
  </p>
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">Data Privacy</h3>
+ <h3 className="font-bold text-fg mb-3">Data Privacy</h3>
  <p>
  MediWyz complies with applicable data protection laws and takes reasonable measures to safeguard personal health information. Please refer to our Privacy Policy for details.
  </p>
@@ -147,9 +147,9 @@ export default function LegalModals({
  icon={FaFileAlt}
  showAcceptButton={!!onAcceptTerms}
  >
- <div className="space-y-6 text-gray-700">
+ <div className="space-y-6 text-soft">
  <div>
- <h3 className="font-bold text-gray-800 mb-3">1. Introduction</h3>
+ <h3 className="font-bold text-fg mb-3">1. Introduction</h3>
  <p>
  Welcome to <strong>MediWyz</strong>. We provide a digital platform connecting users with licensed healthcare providers, diagnostic laboratories, and pharmacies. By using our website, mobile app, or any related services, you agree to abide by these Terms of Service and our Privacy Policy.
  </p>
@@ -159,7 +159,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">2. Nature of Services</h3>
+ <h3 className="font-bold text-fg mb-3">2. Nature of Services</h3>
  <ul className="space-y-2 list-disc pl-6">
  <li>MediWyz is <strong>not a medical provider</strong>. It facilitates connections between users and independent licensed healthcare professionals and service providers.</li>
  <li>MediWyz does <strong>not control, direct, or interfere</strong> with the professional judgment of providers.</li>
@@ -168,7 +168,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">3. No Liability Clause</h3>
+ <h3 className="font-bold text-fg mb-3">3. No Liability Clause</h3>
  <p className="mb-2">MediWyz <strong>disclaims all liability</strong> for:</p>
  <ul className="space-y-2 list-disc pl-6">
  <li>The accuracy or completeness of any consultation, medical advice, test result, or product recommendation.</li>
@@ -183,7 +183,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">4. Eligibility and Use by Children</h3>
+ <h3 className="font-bold text-fg mb-3">4. Eligibility and Use by Children</h3>
  <ul className="space-y-2 list-disc pl-6">
  <li>Users must be <strong>18 years or older</strong> to register and use MediWyz independently.</li>
  <li>Minors may only use MediWyz under the <strong>supervision and consent of a parent or legal guardian</strong>, who assumes full responsibility for the minor use of the platform.</li>
@@ -191,7 +191,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">5. Data Protection & Privacy (Mauritius DPA 2017)</h3>
+ <h3 className="font-bold text-fg mb-3">5. Data Protection & Privacy (Mauritius DPA 2017)</h3>
  <ul className="space-y-2 list-disc pl-6">
  <li>MediWyz complies with the <strong>Mauritius Data Protection Act 2017</strong>.</li>
  <li>We collect and process personal and health information solely for providing services and as required by law.</li>
@@ -205,7 +205,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">6. Emergency Use Disclaimer</h3>
+ <h3 className="font-bold text-fg mb-3">6. Emergency Use Disclaimer</h3>
  <ul className="space-y-2 list-disc pl-6">
  <li>MediWyz is <strong>not for emergency medical care</strong>.</li>
  <li>In case of an emergency, you must call your local emergency services or go to the nearest hospital.</li>
@@ -213,7 +213,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">7. Prohibited Uses</h3>
+ <h3 className="font-bold text-fg mb-3">7. Prohibited Uses</h3>
  <p>Users agree <strong>not to misuse</strong> the platform, including:</p>
  <ul className="space-y-1 list-disc pl-6 mt-2">
  <li>Providing false information.</li>
@@ -223,12 +223,12 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">8. Termination of Use</h3>
+ <h3 className="font-bold text-fg mb-3">8. Termination of Use</h3>
  <p>MediWyz may suspend or terminate access if you violate these terms or engage in abusive or unlawful conduct.</p>
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">9. Amendments</h3>
+ <h3 className="font-bold text-fg mb-3">9. Amendments</h3>
  <p>MediWyz may update these Terms from time to time. Users will be notified of significant changes.</p>
  </div>
  </div>
@@ -243,9 +243,9 @@ export default function LegalModals({
  icon={FaShieldAlt}
  showAcceptButton={!!onAcceptPrivacy}
  >
- <div className="space-y-6 text-gray-700">
+ <div className="space-y-6 text-soft">
  <div>
- <h3 className="font-bold text-gray-800 mb-3">1. Introduction</h3>
+ <h3 className="font-bold text-fg mb-3">1. Introduction</h3>
  <p>
  MediWyz is committed to safeguarding your privacy and protecting your personal data. This Privacy Policy explains how we collect, use, store, and share your information in compliance with the Mauritius Data Protection Act 2017 and any other applicable healthcare data regulations.
  </p>
@@ -255,7 +255,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">2. What Data We Collect</h3>
+ <h3 className="font-bold text-fg mb-3">2. What Data We Collect</h3>
  <p>We may collect the following types of data:</p>
  <ul className="space-y-2 list-disc pl-6 mt-2">
  <li><strong>Personal Identification Data:</strong> Name, contact information (phone number, email), date of birth, address.</li>
@@ -266,7 +266,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">3. How We Use Your Data</h3>
+ <h3 className="font-bold text-fg mb-3">3. How We Use Your Data</h3>
  <p>We process your personal and health data for the following purposes:</p>
  <ul className="space-y-1 list-disc pl-6 mt-2">
  <li>To connect you with licensed healthcare providers and facilitate consultations.</li>
@@ -278,7 +278,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">4. Legal Basis for Processing (Mauritius DPA 2017)</h3>
+ <h3 className="font-bold text-fg mb-3">4. Legal Basis for Processing (Mauritius DPA 2017)</h3>
  <p>MediWyz processes your data only when:</p>
  <ul className="space-y-1 list-disc pl-6 mt-2">
  <li>You have given explicit consent (especially for health-related data).</li>
@@ -290,7 +290,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">5. Data Sharing and Third Parties</h3>
+ <h3 className="font-bold text-fg mb-3">5. Data Sharing and Third Parties</h3>
  <ul className="space-y-2 list-disc pl-6">
  <li>Your information may be shared with licensed healthcare professionals, diagnostic labs, and pharmacies to fulfill the services you request.</li>
  <li>We may share limited, anonymized analytics with technology providers for improving platform performance.</li>
@@ -300,7 +300,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">6. Data Storage and Security</h3>
+ <h3 className="font-bold text-fg mb-3">6. Data Storage and Security</h3>
  <ul className="space-y-1 list-disc pl-6">
  <li>All personal and health data are stored securely using encryption and access controls.</li>
  <li>Only authorized staff and providers have access to your data on a need-to-know basis.</li>
@@ -310,7 +310,7 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">7. Your Rights Under Mauritius DPA 2017</h3>
+ <h3 className="font-bold text-fg mb-3">7. Your Rights Under Mauritius DPA 2017</h3>
  <p>You have the right to:</p>
  <ul className="space-y-1 list-disc pl-6 mt-2">
  <li>Access and obtain a copy of your personal data.</li>
@@ -322,9 +322,9 @@ export default function LegalModals({
  </div>
 
  <div>
- <h3 className="font-bold text-gray-800 mb-3">8. Contact Us</h3>
+ <h3 className="font-bold text-fg mb-3">8. Contact Us</h3>
  <p>If you have any questions about this Privacy Policy or want to exercise your rights, contact us at:</p>
- <div className="mt-2 bg-gray-50 p-4 rounded-lg">
+ <div className="mt-2 bg-subtle p-4 rounded-lg">
  <p><strong>Email:</strong> privacy@mediwyz.com</p>
  <p><strong>Address:</strong> MediWyz Office, Mauritius</p>
  <p><strong>Phone:</strong> +230 400 4000</p>

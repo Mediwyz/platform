@@ -298,13 +298,13 @@ const LabResults: React.FC<Props> = () => {
 
  const renderBookingForm = () => (
  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
  <div className="p-4 sm:p-5 md:p-6 border-b border-cyan-200">
  <div className="flex items-center justify-between">
- <h3 className="text-lg sm:text-xl font-bold text-gray-900">Book Lab Test</h3>
+ <h3 className="text-lg sm:text-xl font-bold text-fg">Book Lab Test</h3>
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+ className="p-1.5 sm:p-2 text-faint hover:text-soft rounded-lg hover:bg-subtle"
  >
  <FaTimes className="text-lg sm:text-xl" />
  </button>
@@ -317,8 +317,8 @@ const LabResults: React.FC<Props> = () => {
  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
  <FaCheckCircle className="text-green-500 text-3xl" />
  </div>
- <h4 className="text-lg font-semibold text-gray-900 mb-2">Booking Submitted!</h4>
- <p className="text-gray-600 text-sm">Your lab test booking has been confirmed. You will receive details shortly.</p>
+ <h4 className="text-lg font-semibold text-fg mb-2">Booking Submitted!</h4>
+ <p className="text-soft text-sm">Your lab test booking has been confirmed. You will receive details shortly.</p>
  </div>
  ) : (
  <>
@@ -336,36 +336,36 @@ const LabResults: React.FC<Props> = () => {
 
  {/* Step 2: Select Tests */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  Select Tests <span className="text-red-500">*</span>
  </h4>
 
  {!selectedLabTechId ? (
- <p className="text-sm text-gray-400 py-3">Select a laboratory first to see available tests</p>
+ <p className="text-sm text-faint py-3">Select a laboratory first to see available tests</p>
  ) : loadingTests ? (
  <div className="flex items-center justify-center py-6">
  <FaSpinner className="animate-spin text-cyan-500 mr-2" />
- <span className="text-sm text-gray-500">Loading available tests...</span>
+ <span className="text-sm text-soft">Loading available tests...</span>
  </div>
  ) : availableTests.length === 0 ? (
- <p className="text-sm text-gray-500 py-3">No tests available from this laboratory</p>
+ <p className="text-sm text-soft py-3">No tests available from this laboratory</p>
  ) : (
  <>
  {/* Search & Filter */}
  <div className="flex gap-2 mb-3">
  <div className="flex-1 relative">
- <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+ <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
  <input
  type="text"
  placeholder="Search tests..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500 text-sm"
+ className="w-full pl-9 pr-3 py-2 border border-line rounded-lg focus:outline-none focus:border-cyan-500 text-sm"
  />
  </div>
  <button
  onClick={() => setShowFilters(!showFilters)}
- className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center gap-1.5 text-sm"
+ className="px-3 py-2 bg-subtle text-soft rounded-lg hover:bg-line transition flex items-center gap-1.5 text-sm"
  >
  <FaFilter />
  {showFilters ? <FaChevronUp /> : <FaChevronDown />}
@@ -376,7 +376,7 @@ const LabResults: React.FC<Props> = () => {
  <select
  value={selectedCategory}
  onChange={(e) => setSelectedCategory(e.target.value)}
- className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  >
  {categories.map(cat => (
  <option key={cat} value={cat}>{cat === 'all' ? 'All Categories' : cat}</option>
@@ -398,18 +398,18 @@ const LabResults: React.FC<Props> = () => {
  className={`w-full p-3 text-left transition ${
  isSelected
  ? 'bg-cyan-100 border-cyan-500 ring-1 ring-cyan-300'
- : 'bg-white'
+ : 'bg-surface'
  }`}
  >
  <div className="flex items-center gap-3">
  <div className={`w-5 h-5 border-2 rounded flex items-center justify-center flex-shrink-0 ${
- isSelected ? 'bg-cyan-600 border-cyan-600' : 'border-gray-300'
+ isSelected ? 'bg-cyan-600 border-cyan-600' : 'border-line'
  }`}>
  {isSelected && <FaCheckCircle className="text-white text-xs" />}
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
- <h5 className="font-semibold text-gray-900 text-sm">{test.name}</h5>
+ <h5 className="font-semibold text-fg text-sm">{test.name}</h5>
  {test.popular && (
  <span className="px-1.5 py-0.5 bg-yellow-100 text-yellow-800 rounded text-xs flex items-center gap-0.5">
  <FaStar className="text-xs" /> Popular
@@ -421,7 +421,7 @@ const LabResults: React.FC<Props> = () => {
  </span>
  )}
  </div>
- <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
+ <div className="flex items-center gap-3 text-xs text-soft mt-1">
  <span>{test.category}</span>
  <span>{test.duration}</span>
  <span>{test.sampleType}</span>
@@ -431,10 +431,10 @@ const LabResults: React.FC<Props> = () => {
  {test.discount ? (
  <>
  <p className="font-bold text-green-600 text-sm">Rs {discountedPrice}</p>
- <p className="text-xs text-gray-400 line-through">Rs {test.price}</p>
+ <p className="text-xs text-faint line-through">Rs {test.price}</p>
  </>
  ) : (
- <p className="font-bold text-gray-900 text-sm">Rs {test.price}</p>
+ <p className="font-bold text-fg text-sm">Rs {test.price}</p>
  )}
  </div>
  </div>
@@ -449,8 +449,8 @@ const LabResults: React.FC<Props> = () => {
  </button>
  )}
  {expandedTest === test.id && (
- <div className="px-3 py-2 bg-gray-50 border-t text-xs space-y-1">
- <p className="text-gray-600">{test.description}</p>
+ <div className="px-3 py-2 bg-subtle border-t text-xs space-y-1">
+ <p className="text-soft">{test.description}</p>
  <p><span className="font-medium">Preparation:</span> {test.preparation}</p>
  <p><span className="font-medium">Methodology:</span> {test.methodology} ({test.accuracy}% accuracy)</p>
  </div>
@@ -468,17 +468,17 @@ const LabResults: React.FC<Props> = () => {
 
  {/* Step 3: Collection Type */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">Collection Type</h4>
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">Collection Type</h4>
  <div className="grid grid-cols-2 gap-2 sm:gap-3">
  <button
  onClick={() => setCollectionType('clinic')}
  className={`p-3 border rounded-lg text-center transition ${
  collectionType === 'clinic'
  ? 'bg-cyan-100 border-cyan-500 ring-2 ring-cyan-300'
- : 'border-gray-200 hover:border-cyan-300 hover:bg-cyan-50'
+ : 'border-line hover:border-cyan-300 hover:bg-cyan-50'
  }`}
  >
- <FaHospital className={`mx-auto text-lg mb-1 ${collectionType === 'clinic' ? 'text-cyan-600' : 'text-gray-400'}`} />
+ <FaHospital className={`mx-auto text-lg mb-1 ${collectionType === 'clinic' ? 'text-cyan-600' : 'text-faint'}`} />
  <p className="text-xs sm:text-sm font-medium">Visit Lab</p>
  <p className="text-xs text-green-600">No extra charge</p>
  </button>
@@ -487,10 +487,10 @@ const LabResults: React.FC<Props> = () => {
  className={`p-3 border rounded-lg text-center transition ${
  collectionType === 'home'
  ? 'bg-cyan-100 border-cyan-500 ring-2 ring-cyan-300'
- : 'border-gray-200 hover:border-cyan-300 hover:bg-cyan-50'
+ : 'border-line hover:border-cyan-300 hover:bg-cyan-50'
  }`}
  >
- <FaHome className={`mx-auto text-lg mb-1 ${collectionType === 'home' ? 'text-cyan-600' : 'text-gray-400'}`} />
+ <FaHome className={`mx-auto text-lg mb-1 ${collectionType === 'home' ? 'text-cyan-600' : 'text-faint'}`} />
  <p className="text-xs sm:text-sm font-medium">Home Collection</p>
  <p className="text-xs text-orange-600">+Rs 200</p>
  </button>
@@ -499,7 +499,7 @@ const LabResults: React.FC<Props> = () => {
 
  {/* Step 3: Date & Time */}
  <div>
- <h4 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+ <h4 className="font-semibold text-fg mb-3 text-sm sm:text-base">
  Select Date & Time <span className="text-red-500">*</span>
  </h4>
  <div className="space-y-3">
@@ -511,7 +511,7 @@ const LabResults: React.FC<Props> = () => {
  className={`px-3 py-2 border-2 rounded-lg text-xs sm:text-sm font-medium transition ${
  scheduledDate === d.date
  ? 'bg-cyan-600 text-white border-cyan-600 shadow-md'
- : 'border-gray-200 text-gray-700 hover:border-cyan-400 hover:bg-cyan-50'
+ : 'border-line text-soft hover:border-cyan-400 hover:bg-cyan-50'
  }`}
  >
  {d.label}
@@ -527,7 +527,7 @@ const LabResults: React.FC<Props> = () => {
  className={`px-2.5 py-1.5 border-2 rounded-lg text-xs sm:text-sm font-medium transition ${
  scheduledTime === time
  ? 'bg-cyan-600 text-white border-cyan-600 shadow-md'
- : 'border-gray-200 text-gray-700 hover:border-cyan-400 hover:bg-cyan-50'
+ : 'border-line text-soft hover:border-cyan-400 hover:bg-cyan-50'
  }`}
  >
  {(() => {
@@ -544,27 +544,27 @@ const LabResults: React.FC<Props> = () => {
 
  {/* Notes */}
  <div>
- <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Additional Notes (optional)</label>
+ <label className="block text-xs sm:text-sm font-medium text-soft mb-2">Additional Notes (optional)</label>
  <textarea
  rows={2}
  value={notes}
  onChange={(e) => setNotes(e.target.value)}
- className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500 text-sm"
+ className="w-full px-3 sm:px-4 py-2 border border-line rounded-lg focus:outline-none focus:border-cyan-500 text-sm"
  placeholder="Any specific requirements or medical conditions..."
  />
  </div>
 
  {/* Summary */}
  {canSubmit && (
- <div className="bg-white rounded-lg p-4 border border-cyan-200">
- <h4 className="font-semibold text-gray-800 mb-2 text-sm">Booking Summary</h4>
+ <div className="bg-surface rounded-lg p-4 border border-cyan-200">
+ <h4 className="font-semibold text-fg mb-2 text-sm">Booking Summary</h4>
  <div className="space-y-1 text-xs sm:text-sm">
- <div><span className="text-gray-500">Tests:</span> <span className="font-medium">{selectedTests.map(id => availableTests.find(t => t.id === id)?.name).join(', ')}</span></div>
+ <div><span className="text-soft">Tests:</span> <span className="font-medium">{selectedTests.map(id => availableTests.find(t => t.id === id)?.name).join(', ')}</span></div>
  <div className="grid grid-cols-2 gap-2">
- <div><span className="text-gray-500">Date:</span> <span className="font-medium">{new Date(scheduledDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span></div>
- <div><span className="text-gray-500">Time:</span> <span className="font-medium">{scheduledTime}</span></div>
- <div><span className="text-gray-500">Collection:</span> <span className="font-medium capitalize">{collectionType === 'home' ? 'Home Collection' : 'Lab Visit'}</span></div>
- <div><span className="text-gray-500">Total:</span> <span className="font-bold text-cyan-700">Rs {calculateTotal()}</span></div>
+ <div><span className="text-soft">Date:</span> <span className="font-medium">{new Date(scheduledDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span></div>
+ <div><span className="text-soft">Time:</span> <span className="font-medium">{scheduledTime}</span></div>
+ <div><span className="text-soft">Collection:</span> <span className="font-medium capitalize">{collectionType === 'home' ? 'Home Collection' : 'Lab Visit'}</span></div>
+ <div><span className="text-soft">Total:</span> <span className="font-bold text-cyan-700">Rs {calculateTotal()}</span></div>
  </div>
  </div>
  </div>
@@ -581,14 +581,14 @@ const LabResults: React.FC<Props> = () => {
  <div className="flex gap-3 sm:gap-4">
  <button
  onClick={() => { setShowBookingForm(false); resetBookingForm() }}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-gray-700 rounded-lg transition text-sm sm:text-base"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-sky-50 text-soft rounded-lg transition text-sm sm:text-base"
  >
  Cancel
  </button>
  <button
  onClick={handleBookingSubmit}
  disabled={!canSubmit}
- className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-white transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+ className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-surface transition text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
  >
  {isSubmitting ? (
  <>
@@ -618,15 +618,15 @@ const LabResults: React.FC<Props> = () => {
  if (labBookings.length === 0) {
  return (
  <div className="space-y-4">
- <div className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-cyan-200">
+ <div className="bg-surface rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg text-center border border-cyan-200">
  <div className="bg-sky-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-4">
  <FaFlask className="text-cyan-500 text-2xl sm:text-3xl" />
  </div>
- <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No Lab Tests Yet</h3>
- <p className="text-gray-500 mb-6 text-sm sm:text-base">Book your first lab test to start tracking your health</p>
+ <h3 className="text-lg sm:text-xl font-semibold text-soft mb-2">No Lab Tests Yet</h3>
+ <p className="text-soft mb-6 text-sm sm:text-base">Book your first lab test to start tracking your health</p>
  <button
  onClick={() => setShowBookingForm(true)}
- className="bg-white transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base w-fit"
+ className="bg-surface transition-all transform hover:scale-105 flex items-center gap-2 mx-auto text-sm sm:text-base w-fit"
  >
  <FaPlus />
  Book Your First Lab Test
@@ -658,18 +658,18 @@ const LabResults: React.FC<Props> = () => {
 
  {/* Lab Results Section */}
  {completedWithResults.length > 0 && (
- <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
- <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+ <div className="bg-surface rounded-xl shadow-sm border border-line overflow-hidden">
+ <div className="p-4 border-b border-line flex items-center gap-2">
  <FaClipboardCheck className="text-green-600" />
- <h3 className="font-semibold text-gray-900">Lab Test Results</h3>
+ <h3 className="font-semibold text-fg">Lab Test Results</h3>
  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{completedWithResults.length}</span>
  </div>
- <div className="divide-y divide-gray-100">
+ <div className="divide-y divide-line">
  {completedWithResults.map((b) => (
- <div key={b.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition">
+ <div key={b.id} className="p-4 flex items-center justify-between hover:bg-subtle transition">
  <div className="flex-1 min-w-0">
- <p className="font-medium text-gray-900 text-sm">{b.testName}</p>
- <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
+ <p className="font-medium text-fg text-sm">{b.testName}</p>
+ <div className="flex items-center gap-3 text-xs text-soft mt-1">
  <span>{b.facility}</span>
  <span>{new Date(b.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
  {b.resultDate && (
@@ -697,15 +697,15 @@ const LabResults: React.FC<Props> = () => {
  {/* View Result Modal */}
  {viewResultModal && viewResultData && (
  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl max-w-lg w-full shadow-2xl">
- <div className="p-5 border-b border-gray-200 flex items-center justify-between">
+ <div className="bg-surface rounded-xl max-w-lg w-full shadow-2xl">
+ <div className="p-5 border-b border-line flex items-center justify-between">
  <div>
- <h3 className="text-lg font-bold text-gray-900">Test Result</h3>
- <p className="text-sm text-gray-500 mt-0.5">{viewResultData.testName}</p>
+ <h3 className="text-lg font-bold text-fg">Test Result</h3>
+ <p className="text-sm text-soft mt-0.5">{viewResultData.testName}</p>
  </div>
  <button
  onClick={() => setViewResultModal(false)}
- className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+ className="p-2 text-faint hover:text-soft rounded-lg hover:bg-subtle"
  >
  <FaTimes />
  </button>
@@ -713,32 +713,32 @@ const LabResults: React.FC<Props> = () => {
  <div className="p-5 space-y-4">
  <div className="grid grid-cols-2 gap-3 text-sm">
  <div>
- <span className="text-gray-500">Laboratory:</span>{' '}
+ <span className="text-soft">Laboratory:</span>{' '}
  <span className="font-medium">{viewResultData.facility}</span>
  </div>
  <div>
- <span className="text-gray-500">Test Date:</span>{' '}
+ <span className="text-soft">Test Date:</span>{' '}
  <span className="font-medium">{new Date(viewResultData.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
  </div>
  {viewResultData.resultDate && (
  <div className="col-span-2">
- <span className="text-gray-500">Result Date:</span>{' '}
+ <span className="text-soft">Result Date:</span>{' '}
  <span className="font-medium">{new Date(viewResultData.resultDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
  </div>
  )}
  </div>
 
  <div>
- <h4 className="text-sm font-semibold text-gray-700 mb-1.5">Findings</h4>
- <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-800 whitespace-pre-wrap border">
+ <h4 className="text-sm font-semibold text-soft mb-1.5">Findings</h4>
+ <div className="bg-subtle rounded-lg p-4 text-sm text-fg whitespace-pre-wrap border">
  {viewResultData.resultFindings}
  </div>
  </div>
 
  {viewResultData.resultNotes && (
  <div>
- <h4 className="text-sm font-semibold text-gray-700 mb-1.5">Notes</h4>
- <div className="bg-blue-50 rounded-lg p-4 text-sm text-gray-800 whitespace-pre-wrap border border-blue-100">
+ <h4 className="text-sm font-semibold text-soft mb-1.5">Notes</h4>
+ <div className="bg-blue-50 rounded-lg p-4 text-sm text-fg whitespace-pre-wrap border border-blue-100">
  {viewResultData.resultNotes}
  </div>
  </div>
@@ -746,7 +746,7 @@ const LabResults: React.FC<Props> = () => {
 
  <button
  onClick={() => setViewResultModal(false)}
- className="w-full px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
+ className="w-full px-4 py-2.5 bg-subtle text-soft rounded-lg hover:bg-line transition text-sm font-medium"
  >
  Close
  </button>

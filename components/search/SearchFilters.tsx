@@ -27,7 +27,7 @@ interface SearchFiltersProps {
 }
 
 const DEFAULT_TYPES: { value: string; label: string; icon: React.ReactNode; color: string }[] = [
- { value: 'all', label: 'All', icon: <FaFilter className="text-xs" />, color: 'bg-gray-100 text-gray-700 border-gray-200' },
+ { value: 'all', label: 'All', icon: <FaFilter className="text-xs" />, color: 'bg-subtle text-soft border-line' },
  { value: 'doctors', label: 'Doctors', icon: <FaUserMd className="text-xs" />, color: 'bg-blue-50 text-blue-700 border-blue-200' },
  { value: 'nurses', label: 'Nurses', icon: <FaUserNurse className="text-xs" />, color: 'bg-teal-50 text-teal-700 border-teal-200' },
  { value: 'nannies', label: 'Childcare', icon: <FaBaby className="text-xs" />, color: 'bg-pink-50 text-pink-700 border-pink-200' },
@@ -102,8 +102,8 @@ export default function SearchFilters({
  {/* ---- Mobile: Horizontal scrollable chips ---- */}
  <div className="lg:hidden">
  <div className="flex items-center gap-2 mb-3">
- <FaFilter className="text-gray-400 text-sm flex-shrink-0" />
- <span className="text-sm font-medium text-gray-600 flex-shrink-0">Filters</span>
+ <FaFilter className="text-faint text-sm flex-shrink-0" />
+ <span className="text-sm font-medium text-soft flex-shrink-0">Filters</span>
  {activeFilterCount > 0 && (
  <button
  onClick={onClearAll}
@@ -124,7 +124,7 @@ export default function SearchFilters({
  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap transition-all ${
  filters.type === t.value
  ? `${t.color} border-current shadow-sm`
- : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+ : 'bg-surface text-soft border-line hover:border-line'
  }`}
  >
  {t.icon}
@@ -138,7 +138,7 @@ export default function SearchFilters({
  <select
  value={filters.specialty}
  onChange={e => onFilterChange('specialty', e.target.value)}
- className="text-xs border border-gray-200 rounded-full px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-blue-400 appearance-none min-w-[130px]"
+ className="text-xs border border-line rounded-full px-3 py-1.5 bg-surface text-soft focus:outline-none focus:border-blue-400 appearance-none min-w-[130px]"
  >
  {specialties.map(s => (
  <option key={s.value} value={s.value}>{s.label}</option>
@@ -148,7 +148,7 @@ export default function SearchFilters({
  <select
  value={filters.city}
  onChange={e => onFilterChange('city', e.target.value)}
- className="text-xs border border-gray-200 rounded-full px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-blue-400 appearance-none min-w-[120px]"
+ className="text-xs border border-line rounded-full px-3 py-1.5 bg-surface text-soft focus:outline-none focus:border-blue-400 appearance-none min-w-[120px]"
  >
  {cities.map(c => (
  <option key={c.value} value={c.value}>{c.label}</option>
@@ -158,7 +158,7 @@ export default function SearchFilters({
  <select
  value={filters.minRating}
  onChange={e => onFilterChange('minRating', e.target.value)}
- className="text-xs border border-gray-200 rounded-full px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-blue-400 appearance-none min-w-[100px]"
+ className="text-xs border border-line rounded-full px-3 py-1.5 bg-surface text-soft focus:outline-none focus:border-blue-400 appearance-none min-w-[100px]"
  >
  {RATING_OPTIONS.map(r => (
  <option key={r.value} value={r.value}>{r.label}</option>
@@ -170,7 +170,7 @@ export default function SearchFilters({
  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap transition-all ${
  filters.available === 'true'
  ? 'bg-green-50 text-green-700 border-green-200'
- : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+ : 'bg-surface text-soft border-line hover:border-line'
  }`}
  >
  <FaCheckCircle className="text-[10px]" />
@@ -181,10 +181,10 @@ export default function SearchFilters({
 
  {/* ---- Desktop: Sidebar ---- */}
  <div className="hidden lg:block lg:w-64 flex-shrink-0">
- <div className="bg-white rounded-xl shadow-sm p-5 sticky top-24 border border-gray-100">
+ <div className="bg-surface rounded-xl shadow-sm p-5 sticky top-24 border border-line">
  <div className="flex items-center justify-between mb-4">
- <h3 className="font-semibold text-gray-900 flex items-center gap-2">
- <FaFilter className="text-sm text-gray-400" />
+ <h3 className="font-semibold text-fg flex items-center gap-2">
+ <FaFilter className="text-sm text-faint" />
  Filters
  </h3>
  {activeFilterCount > 0 && (
@@ -200,7 +200,7 @@ export default function SearchFilters({
 
  {/* Provider Type */}
  <div className="mb-5">
- <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+ <label className="block text-xs font-medium text-soft uppercase tracking-wide mb-2">
  Provider Type
  </label>
  <div className="space-y-1">
@@ -211,7 +211,7 @@ export default function SearchFilters({
  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
  filters.type === t.value
  ? 'bg-blue-50 text-blue-700 font-medium'
- : 'text-gray-600 hover:bg-gray-50'
+ : 'text-soft hover:bg-subtle'
  }`}
  >
  {t.icon}
@@ -223,13 +223,13 @@ export default function SearchFilters({
 
  {/* Specialty */}
  <div className="mb-5">
- <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+ <label className="block text-xs font-medium text-soft uppercase tracking-wide mb-2">
  Specialty
  </label>
  <select
  value={filters.specialty}
  onChange={e => onFilterChange('specialty', e.target.value)}
- className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
+ className="w-full text-sm border border-line rounded-lg px-3 py-2 bg-surface text-soft focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
  >
  {specialties.map(s => (
  <option key={s.value} value={s.value}>{s.label}</option>
@@ -239,14 +239,14 @@ export default function SearchFilters({
 
  {/* Location */}
  <div className="mb-5">
- <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+ <label className="block text-xs font-medium text-soft uppercase tracking-wide mb-2">
  <FaMapMarkerAlt className="inline text-xs mr-1" />
  Location
  </label>
  <select
  value={filters.city}
  onChange={e => onFilterChange('city', e.target.value)}
- className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
+ className="w-full text-sm border border-line rounded-lg px-3 py-2 bg-surface text-soft focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
  >
  {cities.map(c => (
  <option key={c.value} value={c.value}>{c.label}</option>
@@ -256,14 +256,14 @@ export default function SearchFilters({
 
  {/* Rating */}
  <div className="mb-5">
- <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+ <label className="block text-xs font-medium text-soft uppercase tracking-wide mb-2">
  <FaStar className="inline text-xs mr-1 text-yellow-500" />
  Minimum Rating
  </label>
  <select
  value={filters.minRating}
  onChange={e => onFilterChange('minRating', e.target.value)}
- className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
+ className="w-full text-sm border border-line rounded-lg px-3 py-2 bg-surface text-soft focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100"
  >
  {RATING_OPTIONS.map(r => (
  <option key={r.value} value={r.value}>{r.label}</option>
@@ -273,7 +273,7 @@ export default function SearchFilters({
 
  {/* Availability Toggle */}
  <div className="mb-2">
- <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+ <label className="block text-xs font-medium text-soft uppercase tracking-wide mb-2">
  Availability
  </label>
  <button
@@ -281,17 +281,17 @@ export default function SearchFilters({
  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm border transition-all ${
  filters.available === 'true'
  ? 'bg-green-50 text-green-700 border-green-200'
- : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+ : 'bg-surface text-soft border-line hover:border-line'
  }`}
  >
  <span className="flex items-center gap-2">
- <FaCheckCircle className={`text-sm ${filters.available === 'true' ? 'text-green-500' : 'text-gray-300'}`} />
+ <FaCheckCircle className={`text-sm ${filters.available === 'true' ? 'text-green-500' : 'text-faint'}`} />
  Available Now
  </span>
  <div className={`w-8 h-5 rounded-full transition-colors relative ${
  filters.available === 'true' ? 'bg-green-500' : 'bg-gray-300'
  }`}>
- <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+ <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-surface shadow transition-transform ${
  filters.available === 'true' ? 'translate-x-3.5' : 'translate-x-0.5'
  }`} />
  </div>

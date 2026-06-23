@@ -98,7 +98,7 @@ export default function ReferralsPage() {
 
  return (
   <div className="space-y-6">
-   <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+   <h1 className="text-2xl font-bold text-fg flex items-center gap-2">
     <FaHandshake className="text-indigo-500" /> My Referrals
    </h1>
 
@@ -109,28 +109,28 @@ export default function ReferralsPage() {
    ) : (
     <>
      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div className="bg-white rounded-xl p-5 shadow-lg">
-       <p className="text-gray-600 text-sm">Total Clicks</p>
-       <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
+      <div className="bg-surface rounded-xl p-5 shadow-lg">
+       <p className="text-soft text-sm">Total Clicks</p>
+       <p className="text-2xl font-bold text-fg mt-1">{stats.total}</p>
       </div>
-      <div className="bg-white rounded-xl p-5 shadow-lg">
-       <p className="text-gray-600 text-sm">Converted</p>
+      <div className="bg-surface rounded-xl p-5 shadow-lg">
+       <p className="text-soft text-sm">Converted</p>
        <p className="text-2xl font-bold text-green-600 mt-1">{stats.converted}</p>
       </div>
-      <div className="bg-white rounded-xl p-5 shadow-lg">
-       <p className="text-gray-600 text-sm">Pending</p>
+      <div className="bg-surface rounded-xl p-5 shadow-lg">
+       <p className="text-soft text-sm">Pending</p>
        <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.pending}</p>
       </div>
-      <div className="bg-white rounded-xl p-5 shadow-lg">
-       <p className="text-gray-600 text-sm">Total Commission</p>
+      <div className="bg-surface rounded-xl p-5 shadow-lg">
+       <p className="text-soft text-sm">Total Commission</p>
        <p className="text-2xl font-bold text-indigo-600 mt-1">Rs {stats.totalCommission.toLocaleString()}</p>
       </div>
      </div>
 
-     <div className="bg-white rounded-xl shadow-lg">
+     <div className="bg-surface rounded-xl shadow-lg">
       <div className="p-4 border-b flex flex-col sm:flex-row gap-3">
        <div className="relative flex-1">
-        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
         <input
          type="text"
          placeholder="Search referrals..."
@@ -153,39 +153,39 @@ export default function ReferralsPage() {
 
       {filteredReferrals.length === 0 ? (
        <div className="p-12 text-center">
-        <FaHandshake className="mx-auto text-4xl text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-600 mb-2">No referral clicks yet</h3>
-        <p className="text-gray-500 text-sm">Share your promo code to start earning!</p>
+        <FaHandshake className="mx-auto text-4xl text-faint mb-4" />
+        <h3 className="text-lg font-semibold text-soft mb-2">No referral clicks yet</h3>
+        <p className="text-soft text-sm">Share your promo code to start earning!</p>
        </div>
       ) : (
        <div className="overflow-x-auto">
         <table className="w-full">
          <thead>
-          <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <tr className="text-left text-xs font-medium text-soft uppercase tracking-wider">
            <th className="px-6 py-3">Source</th>
            <th className="px-6 py-3">Date</th>
            <th className="px-6 py-3">Status</th>
            <th className="px-6 py-3 text-right">Commission Earned</th>
           </tr>
          </thead>
-         <tbody className="divide-y divide-gray-100">
+         <tbody className="divide-y divide-line">
           {filteredReferrals.map((referral) => (
-           <tr key={referral.id} className="hover:bg-gray-50 transition-colors">
+           <tr key={referral.id} className="hover:bg-subtle transition-colors">
             <td className="px-6 py-4">
              <div>
-              <p className="font-medium text-gray-900">{referral.referredName}</p>
+              <p className="font-medium text-fg">{referral.referredName}</p>
               {referral.referredEmail && (
-               <p className="text-gray-500 text-sm">{referral.referredEmail}</p>
+               <p className="text-soft text-sm">{referral.referredEmail}</p>
               )}
              </div>
             </td>
-            <td className="px-6 py-4 text-sm text-gray-600">
+            <td className="px-6 py-4 text-sm text-soft">
              {new Date(referral.date).toLocaleDateString()}
             </td>
             <td className="px-6 py-4">
              {statusBadge(referral.status)}
             </td>
-            <td className="px-6 py-4 text-right font-medium text-gray-900">
+            <td className="px-6 py-4 text-right font-medium text-fg">
              Rs {referral.commissionEarned.toLocaleString()}
             </td>
            </tr>

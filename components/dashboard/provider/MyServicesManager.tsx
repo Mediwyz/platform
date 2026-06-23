@@ -440,7 +440,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
             </button>
           )}
 
-          <h1 className="text-2xl font-bold text-[#001E40]">
+          <h1 className="text-2xl font-bold text-fg">
             {panel === 'list'             && 'My Services'}
             {panel === 'add-catalog'      && 'Add from Catalog'}
             {panel === 'create-service'   && 'Create a Service'}
@@ -578,7 +578,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-[#001E40] truncate">{svc.serviceName}</p>
+                                <p className="text-sm font-semibold text-fg truncate">{svc.serviceName}</p>
                                 <p className="text-xs text-faint">Rs {svc.defaultPrice.toLocaleString()}
                                   {svc.duration ? `  ${svc.duration}m` : ''}
                                 </p>
@@ -611,7 +611,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-[#001E40]">{selectedCatalogSvc.serviceName}</p>
+                  <p className="text-sm font-bold text-fg">{selectedCatalogSvc.serviceName}</p>
                   <p className="text-xs text-soft">Default price: Rs {selectedCatalogSvc.defaultPrice.toLocaleString()}</p>
                 </div>
                 <button
@@ -624,7 +624,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
               {/* Workflow selection */}
               <div>
-                <p className="text-sm font-semibold text-[#001E40] mb-1">
+                <p className="text-sm font-semibold text-fg mb-1">
                   Appointment types <span className="text-red-500">*</span>
                 </p>
                 <p className="text-xs text-faint mb-3">
@@ -639,7 +639,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
               {/* Price override */}
               <div>
-                <p className="text-sm font-semibold text-[#001E40] mb-1">Your price (optional)</p>
+                <p className="text-sm font-semibold text-fg mb-1">Your price (optional)</p>
                 <p className="text-xs text-faint mb-2">Leave blank to use the default price of Rs {selectedCatalogSvc.defaultPrice.toLocaleString()}</p>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-soft font-medium">Rs</span>
@@ -729,7 +729,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Service name <span className="text-red-500">*</span></label>
+              <label className="text-sm font-semibold text-fg mb-1.5 block">Service name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={createName}
@@ -742,7 +742,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Service icon</label>
+                <label className="text-sm font-semibold text-fg mb-1.5 block">Service icon</label>
                 <button
                   type="button"
                   onClick={() => setShowIconPicker(true)}
@@ -763,7 +763,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                 </button>
               </div>
               <div>
-                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Category</label>
+                <label className="text-sm font-semibold text-fg mb-1.5 block">Category</label>
                 <input
                   type="text"
                   value={createCategory}
@@ -784,7 +784,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
             )}
 
             <div>
-              <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Description</label>
+              <label className="text-sm font-semibold text-fg mb-1.5 block">Description</label>
               <textarea
                 value={createDescription}
                 onChange={e => setCreateDescription(e.target.value)}
@@ -796,7 +796,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Default price (Rs)</label>
+                <label className="text-sm font-semibold text-fg mb-1.5 block">Default price (Rs)</label>
                 <input
                   type="number"
                   value={createPrice}
@@ -806,7 +806,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
                 />
               </div>
               <div>
-                <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Duration (minutes)</label>
+                <label className="text-sm font-semibold text-fg mb-1.5 block">Duration (minutes)</label>
                 <input
                   type="number"
                   value={createDuration}
@@ -849,7 +849,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
             <FaArrowLeft className="text-xs" /> Back to service details
           </button>
           <div className="px-4 py-3 bg-purple-50 border border-purple-100 rounded-xl">
-            <p className="text-sm font-semibold text-[#001E40]">{createName || 'New service'}</p>
+            <p className="text-sm font-semibold text-fg">{createName || 'New service'}</p>
             <p className="text-xs text-soft">Step 2 of 2  choose how patients book this service</p>
           </div>
 
@@ -913,7 +913,7 @@ export default function MyServicesManager({ providerType }: { providerType: stri
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-[#001E40] mb-1.5 block">Your price (Rs)</label>
+            <label className="text-sm font-semibold text-fg mb-1.5 block">Your price (Rs)</label>
             <p className="text-xs text-faint mb-2">Leave blank to use the platform default price.</p>
             <div className="flex items-center gap-2">
               <span className="text-sm text-soft font-medium">Rs</span>
@@ -990,13 +990,13 @@ function ServiceCard({
       <div className="p-4 flex-1 flex flex-col gap-3">
         {/* Title row */}
         <div>
-          <h3 className="font-bold text-[#001E40] text-sm leading-tight line-clamp-2">{svc.serviceName}</h3>
+          <h3 className="font-bold text-fg text-sm leading-tight line-clamp-2">{svc.serviceName}</h3>
           <span className="text-[10px] text-[#0C6780] font-semibold uppercase tracking-wider">{svc.category}</span>
         </div>
 
         {/* Price */}
         <div className="flex items-center gap-2">
-          <span className="text-base font-black text-[#001E40]">Rs {price.toLocaleString()}</span>
+          <span className="text-base font-black text-fg">Rs {price.toLocaleString()}</span>
           {hasPriceOverride && (
             <span className="text-[9px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full font-semibold">YOUR PRICE</span>
           )}
@@ -1118,7 +1118,7 @@ function WorkflowSelector({
                       {MODE_EMOJI[mode] ?? ''}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-semibold truncate ${selected ? 'text-[#0C6780]' : 'text-[#001E40]'}`}>{wf.name}</p>
+                      <p className={`text-sm font-semibold truncate ${selected ? 'text-[#0C6780]' : 'text-fg'}`}>{wf.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${MODE_COLOR[mode] ?? 'bg-subtle text-soft border-line'} border`}>
                           {MODE_LABEL[mode] ?? mode}
@@ -1167,7 +1167,7 @@ function EmptyServicesState({ onAdd, onCreate }: { onAdd: () => void; onCreate: 
       <div className="w-16 h-16 bg-[#0C6780]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
         <FaListAlt className="text-[#0C6780] text-2xl" />
       </div>
-      <h3 className="text-base font-bold text-[#001E40] mb-1">No services yet</h3>
+      <h3 className="text-base font-bold text-fg mb-1">No services yet</h3>
       <p className="text-sm text-faint max-w-xs mx-auto mb-5">
         Add from the service catalog or create your own. For each service, you choose which appointment types patients can book.
       </p>

@@ -218,7 +218,7 @@ export default function SleepTab() {
     <button onClick={() => changeDate(-1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Previous day">
      <FaChevronLeft className="w-4 h-4" />
     </button>
-    <span className="text-sm font-semibold text-[#001E40]">{formatDate(selectedDate)}</span>
+    <span className="text-sm font-semibold text-fg">{formatDate(selectedDate)}</span>
     <button onClick={() => changeDate(1)} className="p-2 text-soft hover:text-[#0C6780] rounded-lg hover:bg-subtle" aria-label="Next day">
      <FaChevronRight className="w-4 h-4" />
     </button>
@@ -286,7 +286,7 @@ export default function SleepTab() {
 
         {/* Sleep arc progress bar */}
         <div className="mb-3">
-         <div className="h-2 bg-surface/10 rounded-full overflow-hidden">
+         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
           <div
            className={`h-full rounded-full transition-all duration-700 ${
             entry.durationMin / targetMin >= 0.9 ? 'bg-emerald-400' :
@@ -354,7 +354,7 @@ export default function SleepTab() {
    {/* Sleep tips when no entry */}
    {!loading && !entry && (
     <div className="bg-surface rounded-xl p-4 shadow-sm">
-     <p className="text-xs font-semibold text-[#001E40] mb-3 flex items-center gap-1.5">
+     <p className="text-xs font-semibold text-fg mb-3 flex items-center gap-1.5">
       <FaStar className="text-amber-400" /> Sleep tips
      </p>
      <ul className="space-y-2">
@@ -378,7 +378,7 @@ export default function SleepTab() {
      <div className="bg-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
       <div className="flex items-center justify-between p-4 border-b">
        <div>
-        <h3 className="text-base font-bold text-[#001E40]">Log Sleep</h3>
+        <h3 className="text-base font-bold text-fg">Log Sleep</h3>
         <p className="text-xs text-faint">Enter bedtime & wake time - duration is calculated automatically</p>
        </div>
        <button onClick={() => { setShowAddModal(false); resetForm() }} className="p-2 text-faint hover:text-soft">&times;</button>
@@ -387,25 +387,25 @@ export default function SleepTab() {
        {/* Bedtime + Wake time - side by side */}
        <div className="grid grid-cols-2 gap-4">
         <div>
-         <label className="block text-sm font-medium text-[#001E40] mb-1.5 flex items-center gap-1.5">
+         <label className="block text-sm font-medium text-fg mb-1.5 flex items-center gap-1.5">
           <FaMoon className="text-indigo-400 text-xs" /> Bedtime
          </label>
          <input
           type="time"
           value={formBedtime}
           onChange={(e) => setFormBedtime(e.target.value)}
-          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-fg focus:outline-none focus:border-[#0C6780] text-center"
          />
         </div>
         <div>
-         <label className="block text-sm font-medium text-[#001E40] mb-1.5 flex items-center gap-1.5">
+         <label className="block text-sm font-medium text-fg mb-1.5 flex items-center gap-1.5">
           <FaClock className="text-amber-400 text-xs" /> Wake up
          </label>
          <input
           type="time"
           value={formWakeTime}
           onChange={(e) => setFormWakeTime(e.target.value)}
-          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-[#001E40] focus:outline-none focus:border-[#0C6780] text-center"
+          className="w-full px-3 py-3 border-2 border-line rounded-xl text-sm font-semibold text-fg focus:outline-none focus:border-[#0C6780] text-center"
          />
         </div>
        </div>
@@ -416,7 +416,7 @@ export default function SleepTab() {
          <FaBed className="text-indigo-500 text-lg flex-shrink-0" />
          <div>
           <p className="text-xs text-soft">Sleep duration</p>
-          <p className="text-2xl font-black text-[#001E40]">{formatDuration(derivedDuration)}</p>
+          <p className="text-2xl font-black text-fg">{formatDuration(derivedDuration)}</p>
          </div>
          {derivedDuration < 360 && (
           <p className="text-xs text-amber-600 ml-auto text-right">Less than 6 hours<br/>Consider an earlier bedtime</p>
@@ -429,7 +429,7 @@ export default function SleepTab() {
 
        {/* Quality */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-2">How did you sleep?</label>
+        <label className="block text-sm font-medium text-fg mb-2">How did you sleep?</label>
         <div className="grid grid-cols-5 gap-1.5">
          {QUALITIES.map((q) => (
           <button
@@ -447,7 +447,7 @@ export default function SleepTab() {
 
        {/* Notes */}
        <div>
-        <label className="block text-sm font-medium text-[#001E40] mb-1">Notes (optional)</label>
+        <label className="block text-sm font-medium text-fg mb-1">Notes (optional)</label>
         <textarea
          value={formNotes}
          onChange={(e) => setFormNotes(e.target.value)}

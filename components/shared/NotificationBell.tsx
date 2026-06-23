@@ -55,21 +55,21 @@ function NotifIcon({ type }: { type: string }) {
     case 'order':
       return <FaBoxOpen className={`${cls} text-orange-500`} aria-hidden="true" />
     case 'system':
-      return <FaBell className={`${cls} text-gray-400`} aria-hidden="true" />
+      return <FaBell className={`${cls} text-faint`} aria-hidden="true" />
     default:
-      return <FaInfoCircle className={`${cls} text-gray-400`} aria-hidden="true" />
+      return <FaInfoCircle className={`${cls} text-faint`} aria-hidden="true" />
   }
 }
 
 function SkeletonRow() {
   return (
-    <div className="px-4 py-3 border-b border-gray-100 animate-pulse">
+    <div className="px-4 py-3 border-b border-line animate-pulse">
       <div className="flex gap-3">
-        <div className="w-4 h-4 bg-gray-200 rounded-full mt-0.5 flex-shrink-0" />
+        <div className="w-4 h-4 bg-line rounded-full mt-0.5 flex-shrink-0" />
         <div className="flex-1 space-y-1.5">
-          <div className="h-3 bg-gray-200 rounded w-3/4" />
-          <div className="h-3 bg-gray-200 rounded w-full" />
-          <div className="h-2 bg-gray-100 rounded w-1/4" />
+          <div className="h-3 bg-line rounded w-3/4" />
+          <div className="h-3 bg-line rounded w-full" />
+          <div className="h-2 bg-subtle rounded w-1/4" />
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
       {/* Bell button */}
       <button
         onClick={handleBellClick}
-        className={`relative p-2.5 md:p-3 text-gray-600 hover:text-brand-teal bg-gray-100 rounded-lg hover:bg-sky-100 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal ${pulse ? 'animate-bounce' : ''}`}
+        className={`relative p-2.5 md:p-3 text-soft hover:text-brand-teal bg-subtle rounded-lg hover:bg-sky-100 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal ${pulse ? 'animate-bounce' : ''}`}
         aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
         aria-expanded={open}
         aria-haspopup="true"
@@ -157,11 +157,11 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
           role="region"
           aria-label="Notifications"
           aria-live="polite"
-          className="fixed left-0 right-0 top-[60px] max-h-[calc(100vh-60px)] sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 w-full sm:w-96 bg-white sm:rounded-xl shadow-2xl border border-gray-200 z-50 sm:max-h-[480px] overflow-hidden flex flex-col"
+          className="fixed left-0 right-0 top-[60px] max-h-[calc(100vh-60px)] sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 w-full sm:w-96 bg-surface sm:rounded-xl shadow-2xl border border-line z-50 sm:max-h-[480px] overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50 flex-shrink-0">
-            <h3 className="font-semibold text-gray-900 text-sm" id="notif-panel-heading">
+          <div className="flex items-center justify-between px-4 py-3 border-b bg-subtle flex-shrink-0">
+            <h3 className="font-semibold text-fg text-sm" id="notif-panel-heading">
               Notifications
               {unreadCount > 0 && (
                 <span className="ml-2 text-[10px] font-bold bg-red-100 text-red-600 rounded-full px-1.5 py-0.5">
@@ -196,8 +196,8 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
             ) : notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
                 <FaBell className="text-3xl text-gray-200 mb-3" aria-hidden="true" />
-                <p className="text-sm font-medium text-gray-500">You&apos;re all caught up!</p>
-                <p className="text-xs text-gray-400 mt-1">No new notifications right now.</p>
+                <p className="text-sm font-medium text-soft">You&apos;re all caught up!</p>
+                <p className="text-xs text-faint mt-1">No new notifications right now.</p>
               </div>
             ) : (
               notifications.map(n => (
@@ -207,7 +207,7 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
           </div>
 
           {/* Footer */}
-          <div className="border-t bg-gray-50 px-4 py-2.5 flex-shrink-0">
+          <div className="border-t bg-subtle px-4 py-2.5 flex-shrink-0">
             <Link
               href="/notifications"
               onClick={() => setOpen(false)}
@@ -222,7 +222,7 @@ export default function NotificationBell({ userId, profileHref }: NotificationBe
   )
 }
 
-// ─── Notification row ─────────────────────────────────────────────────────────
+//  Notification row 
 
 interface NotifRowProps {
   notif: NotificationItem
@@ -235,15 +235,15 @@ function NotifRow({ notif, onClick }: NotifRowProps) {
       type="button"
       role="listitem"
       onClick={() => onClick(notif)}
-      className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition flex gap-3 items-start ${!notif.isRead ? 'bg-sky-50/60 border-l-2 border-l-brand-teal' : ''}`}
+      className={`w-full text-left px-4 py-3 border-b border-line hover:bg-subtle transition flex gap-3 items-start ${!notif.isRead ? 'bg-sky-50/60 border-l-2 border-l-brand-teal' : ''}`}
     >
       <NotifIcon type={notif.type} />
       <div className="flex-1 min-w-0">
-        <p className={`text-sm truncate ${!notif.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+        <p className={`text-sm truncate ${!notif.isRead ? 'font-semibold text-fg' : 'font-medium text-soft'}`}>
           {notif.title}
         </p>
-        <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{notif.message}</p>
-        <p className="text-[10px] text-gray-400 mt-1">{timeAgo(notif.createdAt)}</p>
+        <p className="text-xs text-soft mt-0.5 line-clamp-2">{notif.message}</p>
+        <p className="text-[10px] text-faint mt-1">{timeAgo(notif.createdAt)}</p>
       </div>
       {!notif.isRead && (
         <span className="w-2 h-2 bg-brand-teal rounded-full flex-shrink-0 mt-1.5" aria-label="Unread" />
@@ -252,7 +252,7 @@ function NotifRow({ notif, onClick }: NotifRowProps) {
   )
 }
 
-// ─── URL resolution helper ────────────────────────────────────────────────────
+//  URL resolution helper 
 
 function resolveHref(n: NotificationItem, profileHref?: string): string | null {
   // Payload may carry an explicit href
@@ -264,7 +264,7 @@ function resolveHref(n: NotificationItem, profileHref?: string): string | null {
 
   const base = profileHref ? profileHref.replace(/\/profile$/, '') : ''
 
-  // Workflow notifications → booking detail
+  // Workflow notifications  booking detail
   if ((n.type === 'workflow' || n.type === 'review_request') && n.referenceId && n.referenceType) {
     return `${base}/bookings/${n.referenceType}/${n.referenceId}`
   }

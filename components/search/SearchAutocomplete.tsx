@@ -200,7 +200,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  }}
  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
  category === cat.id
- ? 'bg-white text-blue-700 shadow-md'
+ ? 'bg-surface text-blue-700 shadow-md'
  : 'bg-white/15 text-white/90 hover:bg-white/25'
  }`}
  >
@@ -235,8 +235,8 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  : `Search ${categories.find(c => c.id === category)?.label.toLowerCase() ?? ''}...`)}
  className={
  isHero
- ? 'w-full px-4 py-2.5 sm:py-3 text-gray-700 outline-none rounded-l-xl text-sm sm:text-base bg-white/90 placeholder-gray-400'
- : 'w-full pl-10 pr-8 py-2.5 border-2 border-gray-200 rounded-full focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm'
+ ? 'w-full px-4 py-2.5 sm:py-3 text-soft outline-none rounded-l-xl text-sm sm:text-base bg-white/90 placeholder-gray-400'
+ : 'w-full pl-10 pr-8 py-2.5 border-2 border-line rounded-full focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-sm'
  }
  autoComplete="off"
  role="combobox"
@@ -244,12 +244,12 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  aria-haspopup="listbox"
  aria-controls="search-results-list"
  />
- {!isHero && <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />}
+ {!isHero && <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint text-sm" />}
  {query && (
  <button
  type="button"
  onClick={() => { setQuery(''); setResults([]); setIsOpen(false) }}
- className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 ${
+ className={`absolute top-1/2 -translate-y-1/2 text-faint hover:text-soft ${
  isHero ? 'right-2' : 'right-3'
  }`}
  >
@@ -274,17 +274,17 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  <div
  id="search-results-list"
  role="listbox"
- className={`absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden ${
+ className={`absolute z-50 w-full mt-2 bg-surface rounded-xl shadow-2xl border border-line overflow-hidden ${
  isHero ? 'max-h-96' : 'max-h-80'
  }`}
  >
  {loading ? (
- <div className="p-4 text-center text-gray-500 text-sm">
+ <div className="p-4 text-center text-soft text-sm">
  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
  Searching...
  </div>
  ) : results.length === 0 ? (
- <div className="p-4 text-center text-gray-500 text-sm">
+ <div className="p-4 text-center text-soft text-sm">
  No results found for &quot;{query}&quot;
  {category !== 'all' && (
  <button
@@ -299,7 +299,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  <div className="max-h-80 overflow-y-auto">
  {results.map((result, index) => {
  const CategoryIcon = CATEGORY_ICONS[result.category] || FaSearch
- const colorClass = CATEGORY_COLORS[result.category] || 'text-gray-600 bg-gray-50'
+ const colorClass = CATEGORY_COLORS[result.category] || 'text-soft bg-subtle'
  return (
  <button
  key={`${result.category}-${result.id}`}
@@ -308,7 +308,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  onClick={() => handleResultClick(result)}
  onMouseEnter={() => setHighlightIndex(index)}
  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
- index === highlightIndex ? 'bg-blue-50' : 'hover:bg-gray-50'
+ index === highlightIndex ? 'bg-blue-50' : 'hover:bg-subtle'
  }`}
  >
  {/* Avatar or icon */}
@@ -330,8 +330,8 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
 
  {/* Text */}
  <div className="flex-1 min-w-0">
- <div className="text-sm font-medium text-gray-900 truncate">{result.label}</div>
- <div className="text-xs text-gray-500 truncate">{result.sublabel}</div>
+ <div className="text-sm font-medium text-fg truncate">{result.label}</div>
+ <div className="text-xs text-soft truncate">{result.sublabel}</div>
  </div>
 
  {/* Category badge */}
@@ -345,7 +345,7 @@ export default function SearchAutocomplete({ variant = 'hero', placeholder }: Se
  {/* View all results link */}
  <button
  onClick={handleSubmit as unknown as () => void}
- className="w-full px-4 py-3 text-center text-sm text-blue-600 hover:bg-blue-50 font-medium border-t border-gray-100"
+ className="w-full px-4 py-3 text-center text-sm text-blue-600 hover:bg-blue-50 font-medium border-t border-line"
  >
  View all results for &quot;{query}&quot;
  </button>

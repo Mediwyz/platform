@@ -209,7 +209,7 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  return (
  <div className="flex items-center justify-center py-16">
  <FaSpinner className="animate-spin text-3xl text-blue-500" />
- <span className="ml-3 text-gray-500">Loading availability schedule...</span>
+ <span className="ml-3 text-soft">Loading availability schedule...</span>
  </div>
  )
  }
@@ -217,11 +217,11 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  return (
  <div>
  <div className="mb-6">
- <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+ <h2 className="text-2xl font-bold text-fg flex items-center gap-2">
  <FaClock className="text-blue-500" />
  Weekly Availability Schedule
  </h2>
- <p className="text-sm text-gray-500 mt-1">
+ <p className="text-sm text-soft mt-1">
  Set your recurring weekly availability. Patients will only be able to book during these times.
  </p>
  </div>
@@ -245,16 +245,16 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  <div
  key={dayOfWeek}
  className={`border rounded-lg overflow-hidden transition-colors ${
- day.isWorking ? 'border-blue-200 bg-white' : 'border-gray-200 bg-gray-50'
+ day.isWorking ? 'border-blue-200 bg-surface' : 'border-line bg-subtle'
  }`}
  >
  {/* Day header */}
- <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
- <span className={`font-semibold text-lg ${day.isWorking ? 'text-gray-800' : 'text-gray-400'}`}>
+ <div className="flex items-center justify-between px-4 py-3 border-b border-line">
+ <span className={`font-semibold text-lg ${day.isWorking ? 'text-fg' : 'text-faint'}`}>
  {DAY_NAMES[dayOfWeek]}
  </span>
  <label className="flex items-center gap-2 cursor-pointer">
- <span className={`text-sm font-medium ${day.isWorking ? 'text-blue-600' : 'text-gray-400'}`}>
+ <span className={`text-sm font-medium ${day.isWorking ? 'text-blue-600' : 'text-faint'}`}>
  Working Day
  </span>
  <button
@@ -267,7 +267,7 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  }`}
  >
  <span
- className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+ className={`inline-block h-4 w-4 transform rounded-full bg-surface transition-transform ${
  day.isWorking ? 'translate-x-6' : 'translate-x-1'
  }`}
  />
@@ -283,7 +283,7 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  <select
  value={slot.startTime}
  onChange={(e) => updateSlotTime(dayOfWeek, slotIndex, 'startTime', e.target.value)}
- className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+ className="border border-line rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
  >
  {START_TIMES.map((t) => (
  <option key={t} value={t}>
@@ -291,11 +291,11 @@ export default function AvailabilitySettingsTab({ userId }: AvailabilitySettings
  </option>
  ))}
  </select>
- <span className="text-gray-400 text-sm font-medium">to</span>
+ <span className="text-faint text-sm font-medium">to</span>
  <select
  value={slot.endTime}
  onChange={(e) => updateSlotTime(dayOfWeek, slotIndex, 'endTime', e.target.value)}
- className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+ className="border border-line rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
  >
  {END_TIMES.map((t) => (
  <option key={t} value={t}>

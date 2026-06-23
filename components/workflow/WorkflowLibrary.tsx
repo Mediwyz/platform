@@ -141,26 +141,26 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
       <DashboardPageHeader
         icon={FiBookOpen}
         title="Workflow Library"
-        description="Browse every workflow on the platform — system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point."
+        description="Browse every workflow on the platform  system defaults, regional admin templates, and provider customisations. Clone any to use as your own starting point."
       />
 
       {/* Filter bar */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+      <div className="bg-surface border border-line rounded-xl p-4 space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
             <input
               type="text"
               placeholder="Search name, slug, description..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none"
+              className="w-full pl-9 pr-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal focus:border-transparent outline-none"
             />
           </div>
           <select
             value={filterRole}
             onChange={e => setFilterRole(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-white"
+            className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-surface"
           >
             <option value="">All provider roles</option>
             {roleOptions.map(r => (
@@ -170,7 +170,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
           <select
             value={filterMode}
             onChange={e => setFilterMode(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-white"
+            className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-surface"
           >
             <option value="">All service modes</option>
             {modeOptions.map(m => (
@@ -180,7 +180,7 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
           <select
             value={filterSource}
             onChange={e => setFilterSource(e.target.value as any)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-white"
+            className="px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none bg-surface"
           >
             <option value="">All sources</option>
             <option value="system">System defaults</option>
@@ -194,26 +194,26 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
             value={filterContainsStatus}
             onChange={e => setFilterContainsStatus(e.target.value)}
             placeholder="Contains status (e.g. sample_collected, en_route)"
-            className="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none font-mono"
+            className="flex-1 min-w-[200px] px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-brand-teal outline-none font-mono"
           />
-          <div className="inline-flex rounded-lg bg-gray-100 p-1 text-xs font-medium">
+          <div className="inline-flex rounded-lg bg-subtle p-1 text-xs font-medium">
             <button
               onClick={() => setScope('all')}
-              className={`px-3 py-1.5 rounded-md ${scope === 'all' ? 'bg-white shadow text-gray-900' : 'text-gray-600'}`}
+              className={`px-3 py-1.5 rounded-md ${scope === 'all' ? 'bg-surface shadow text-fg' : 'text-soft'}`}
             >Everyone</button>
             <button
               onClick={() => setScope('mine')}
               disabled={!currentUserId}
-              className={`px-3 py-1.5 rounded-md ${scope === 'mine' ? 'bg-white shadow text-gray-900' : 'text-gray-600'} disabled:opacity-50`}
+              className={`px-3 py-1.5 rounded-md ${scope === 'mine' ? 'bg-surface shadow text-fg' : 'text-soft'} disabled:opacity-50`}
             >Mine</button>
           </div>
           <button
             onClick={resetFilters}
-            className="px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-100 rounded-lg flex items-center gap-1"
+            className="px-3 py-1.5 text-xs text-soft hover:bg-subtle rounded-lg flex items-center gap-1"
           >
             <FiX className="w-3 h-3" /> Reset
           </button>
-          <span className="text-xs text-gray-400 ml-auto">
+          <span className="text-xs text-faint ml-auto">
             {loading ? 'Loading...' : `${visible.length} result${visible.length !== 1 ? 's' : ''}`}
           </span>
         </div>
@@ -221,10 +221,10 @@ export default function WorkflowLibrary({ builderPathBase, currentUserId }: Work
 
       {/* Cards */}
       {visible.length === 0 && !loading && (
-        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
-          <FiFilter className="text-4xl text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">No workflows match your filters</p>
-          <p className="text-sm text-gray-400 mt-1">Try widening the search or resetting the filters.</p>
+        <div className="bg-surface border border-line rounded-xl p-10 text-center">
+          <FiFilter className="text-4xl text-faint mx-auto mb-3" />
+          <p className="font-medium text-soft">No workflows match your filters</p>
+          <p className="text-sm text-faint mt-1">Try widening the search or resetting the filters.</p>
         </div>
       )}
 
@@ -271,22 +271,22 @@ function TemplateCard({
   const CreatorIcon = tpl.creator.kind === 'system' ? FiServer : tpl.creator.kind === 'admin' ? FiShield : FiUser
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 hover:border-brand-teal/40 transition">
+    <div className="bg-surface border border-line rounded-xl p-4 hover:border-brand-teal/40 transition">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{tpl.name}</h3>
-          <div className="flex items-center gap-2 mt-1 flex-wrap text-[11px] text-gray-500">
-            <span className="font-mono bg-gray-50 px-1.5 py-0.5 rounded">{tpl.providerType.replace(/_/g, ' ')}</span>
-            <span>·</span>
+          <h3 className="font-semibold text-fg truncate">{tpl.name}</h3>
+          <div className="flex items-center gap-2 mt-1 flex-wrap text-[11px] text-soft">
+            <span className="font-mono bg-subtle px-1.5 py-0.5 rounded">{tpl.providerType.replace(/_/g, ' ')}</span>
+            <span></span>
             <span>{tpl.serviceMode}</span>
-            <span>·</span>
+            <span></span>
             <span className="inline-flex items-center gap-1">
               <CreatorIcon className="w-3 h-3" />
               {creatorLabel}
             </span>
             {tpl.linkedService && (
               <>
-                <span>·</span>
+                <span></span>
                 <span className="inline-flex items-center gap-1 text-brand-teal">
                   {tpl.linkedService.serviceName}
                 </span>
@@ -294,14 +294,14 @@ function TemplateCard({
             )}
           </div>
           {tpl.description && (
-            <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{tpl.description}</p>
+            <p className="text-xs text-soft mt-1.5 line-clamp-2">{tpl.description}</p>
           )}
         </div>
         <div className="flex-shrink-0 flex items-center gap-1">
           {canEdit && (
             <button
               onClick={onEdit}
-              className="px-2 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 rounded-lg border border-gray-200 inline-flex items-center gap-1"
+              className="px-2 py-1.5 text-xs font-medium text-soft hover:bg-subtle rounded-lg border border-line inline-flex items-center gap-1"
             >
               <FiEdit2 className="w-3 h-3" /> Edit
             </button>

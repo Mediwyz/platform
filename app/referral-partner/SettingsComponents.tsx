@@ -28,7 +28,7 @@ export const TabButton = ({ icon: Icon, label, tabName, activeTab, setActiveTab 
  className={`flex items-center w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
  activeTab === tabName
  ? ' text-white shadow-md'
- : 'text-gray-600 hover:bg-gray-100'
+ : 'text-soft hover:bg-subtle'
  }`}
  >
  <Icon className="mr-3 text-lg" />
@@ -44,60 +44,60 @@ interface ProfileSettingsProps {
 export const ProfileSettings = ({ profile, onProfileChange }: ProfileSettingsProps) => (
  <form className="space-y-8">
  <div className="pb-6 border-b">
- <h2 className="text-xl font-bold text-gray-800 mb-4">Personal Information</h2>
+ <h2 className="text-xl font-bold text-fg mb-4">Personal Information</h2>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
  <div>
- <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+ <label htmlFor="name" className="block text-sm font-medium text-soft">Full Name</label>
  <input
  type="text"
  id="name"
  name="name"
  value={profile.name}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  <div>
- <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+ <label htmlFor="email" className="block text-sm font-medium text-soft">Email Address</label>
  <input
  type="email"
  id="email"
  name="email"
  value={profile.email}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  <div>
- <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+ <label htmlFor="phone" className="block text-sm font-medium text-soft">Phone Number</label>
  <input
  type="tel"
  id="phone"
  name="phone"
  value={profile.phone}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  <div>
- <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">Date of Birth</label>
+ <label htmlFor="dateOfBirth" className="block text-sm font-medium text-soft">Date of Birth</label>
  <input
  type="date"
  id="dateOfBirth"
  name="dateOfBirth"
  value={profile.dateOfBirth}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  <div>
- <label htmlFor="businessType" className="block text-sm font-medium text-gray-700">Business Type</label>
+ <label htmlFor="businessType" className="block text-sm font-medium text-soft">Business Type</label>
  <select
  id="businessType"
  name="businessType"
  value={profile.businessType}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  >
  <option value="Individual Marketer">Individual Marketer</option>
  <option value="Marketing Agency">Marketing Agency</option>
@@ -107,25 +107,25 @@ export const ProfileSettings = ({ profile, onProfileChange }: ProfileSettingsPro
  </select>
  </div>
  <div>
- <label htmlFor="taxId" className="block text-sm font-medium text-gray-700">Tax ID (Optional)</label>
+ <label htmlFor="taxId" className="block text-sm font-medium text-soft">Tax ID (Optional)</label>
  <input
  type="text"
  id="taxId"
  name="taxId"
  value={profile.taxId}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  <div className="md:col-span-2">
- <label htmlFor="address" className="block text-sm font-medium text-gray-700">Full Address</label>
+ <label htmlFor="address" className="block text-sm font-medium text-soft">Full Address</label>
  <input
  type="text"
  id="address"
  name="address"
  value={profile.address}
  onChange={onProfileChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  />
  </div>
  </div>
@@ -146,7 +146,7 @@ interface BillingSettingsProps {
 
 export const BillingSettingsComponent = ({ billing, onBillingChange }: BillingSettingsProps) => (
  <div>
- <h2 className="text-2xl font-bold text-gray-800 mb-6">Billing & Payment Settings</h2>
+ <h2 className="text-2xl font-bold text-fg mb-6">Billing & Payment Settings</h2>
  
  {/* MCB Juice Integration */}
  <div className=" border border-green-200 p-6 rounded-lg mb-6">
@@ -156,7 +156,7 @@ export const BillingSettingsComponent = ({ billing, onBillingChange }: BillingSe
  <FaUniversity className="text-xl" /> 
  Primary Payout Account
  </h3>
- <div className="space-y-1 text-sm text-gray-700">
+ <div className="space-y-1 text-sm text-soft">
  <p><span className="font-medium">Type:</span> {billing.accountType}</p>
  <p><span className="font-medium">Account:</span> {billing.accountDetails.accountNumber}</p>
  <p><span className="font-medium">Name:</span> {billing.accountDetails.accountName}</p>
@@ -175,15 +175,15 @@ export const BillingSettingsComponent = ({ billing, onBillingChange }: BillingSe
 
  {/* MCB Juice Configuration */}
  <div className="border rounded-lg p-6 mb-6">
- <h3 className="font-bold text-gray-800 mb-4">MCB Juice Integration</h3>
+ <h3 className="font-bold text-fg mb-4">MCB Juice Integration</h3>
  <div className="flex items-center justify-between mb-4">
  <div className="flex items-center gap-3">
  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
  <span className="text-green-600 font-bold">MCB</span>
  </div>
  <div>
- <p className="font-medium text-gray-800">MCB Juice</p>
- <p className="text-sm text-gray-600">Linked to: {billing.mcbJuiceNumber}</p>
+ <p className="font-medium text-fg">MCB Juice</p>
+ <p className="text-sm text-soft">Linked to: {billing.mcbJuiceNumber}</p>
  </div>
  </div>
  <FaToggleOn className="text-4xl text-green-500" />
@@ -197,22 +197,22 @@ export const BillingSettingsComponent = ({ billing, onBillingChange }: BillingSe
 
  {/* Payout Settings */}
  <div className="mb-6">
- <h3 className="font-bold text-gray-800 mb-4">Payout Preferences</h3>
+ <h3 className="font-bold text-fg mb-4">Payout Preferences</h3>
  <div className="space-y-4">
  <div>
- <label htmlFor="payoutFrequency" className="block text-sm font-medium text-gray-700">Payout Frequency</label>
+ <label htmlFor="payoutFrequency" className="block text-sm font-medium text-soft">Payout Frequency</label>
  <select
  id="payoutFrequency"
  name="payoutFrequency"
  value={billing.payoutFrequency}
  onChange={onBillingChange}
- className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+ className="mt-1 block w-full rounded-md border-line shadow-sm focus:border-purple-500 focus:ring-purple-500"
  >
  <option value="weekly">Weekly (Minimum Rs 1,000)</option>
  <option value="monthly">Monthly (Minimum Rs 500)</option>
  <option value="quarterly">Quarterly (No Minimum)</option>
  </select>
- <p className="text-xs text-gray-500 mt-1">
+ <p className="text-xs text-soft mt-1">
  Current setting: {billing.payoutFrequency} payouts
  </p>
  </div>
@@ -248,8 +248,8 @@ interface NotificationSettingsProps {
 
 export const NotificationSettingsComponent = ({ notifications, onNotificationToggle }: NotificationSettingsProps) => (
  <div>
- <h2 className="text-2xl font-bold text-gray-800 mb-6">Notification Preferences</h2>
- <p className="text-gray-600 mb-6">Manage how you receive updates about your referral performance and earnings.</p>
+ <h2 className="text-2xl font-bold text-fg mb-6">Notification Preferences</h2>
+ <p className="text-soft mb-6">Manage how you receive updates about your referral performance and earnings.</p>
  
  <div className="space-y-4">
  {Object.entries({
@@ -260,10 +260,10 @@ export const NotificationSettingsComponent = ({ notifications, onNotificationTog
  weeklyReports: "Weekly Performance Reports",
  marketingTips: "Marketing Tips & Best Practices"
  }).map(([key, label]) => (
- <div key={key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+ <div key={key} className="flex items-center justify-between p-4 border rounded-lg hover:bg-subtle transition">
  <div>
- <p className="font-medium text-gray-800">{label}</p>
- <p className="text-sm text-gray-600">
+ <p className="font-medium text-fg">{label}</p>
+ <p className="text-sm text-soft">
  {key === 'conversionAlerts' && 'Get notified immediately when someone converts through your link'}
  {key === 'payoutNotifications' && 'Receive updates about payout processing and completion'}
  {key === 'weeklyReports' && 'Weekly summary of your referral performance and earnings'}
@@ -279,7 +279,7 @@ export const NotificationSettingsComponent = ({ notifications, onNotificationTog
  {notifications[key as keyof NotificationSettings] ? (
  <FaToggleOn className="text-3xl text-green-500" />
  ) : (
- <FaToggleOff className="text-3xl text-gray-400" />
+ <FaToggleOff className="text-3xl text-faint" />
  )}
  </button>
  </div>
@@ -297,8 +297,8 @@ export const NotificationSettingsComponent = ({ notifications, onNotificationTog
 
 export const DocumentSettings = () => (
  <div>
- <h2 className="text-2xl font-bold text-gray-800 mb-6">Document Management</h2>
- <p className="text-gray-600 mb-6">Upload and manage your referral partner verification documents.</p>
+ <h2 className="text-2xl font-bold text-fg mb-6">Document Management</h2>
+ <p className="text-soft mb-6">Upload and manage your referral partner verification documents.</p>
  
  <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6">
  <div className="flex items-center gap-3">
@@ -316,10 +316,10 @@ export const DocumentSettings = () => (
  {id: 'd2', name: 'Business-Registration.pdf', type: 'Business Document', status: 'Verified', uploadDate: '2024-01-15'},
  {id: 'd3', name: 'Tax-Certificate.pdf', type: 'Tax Document', status: 'Verified', uploadDate: '2024-01-16'}
  ].map(doc => (
- <div key={doc.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border rounded-lg hover:bg-gray-50">
+ <div key={doc.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border rounded-lg hover:bg-subtle">
  <div>
- <p className="font-medium text-gray-900">{doc.name}</p>
- <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mt-1">
+ <p className="font-medium text-fg">{doc.name}</p>
+ <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-soft mt-1">
  <span>Type: {doc.type}</span>
  <span>Uploaded: {doc.uploadDate}</span>
  <span className="flex items-center gap-1 text-green-600 font-medium">
@@ -340,18 +340,18 @@ export const DocumentSettings = () => (
  </div>
 
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-2">Upload Additional Document</label>
- <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+ <label className="block text-sm font-medium text-soft mb-2">Upload Additional Document</label>
+ <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-line border-dashed rounded-md">
  <div className="space-y-1 text-center">
- <FaFileUpload className="mx-auto h-12 w-12 text-gray-400" />
- <div className="flex text-sm text-gray-600">
- <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none">
+ <FaFileUpload className="mx-auto h-12 w-12 text-faint" />
+ <div className="flex text-sm text-soft">
+ <label htmlFor="file-upload" className="relative cursor-pointer bg-surface rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none">
  <span>Click to upload</span>
  <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
  </label>
  <p className="pl-1">or drag and drop</p>
  </div>
- <p className="text-xs text-gray-500">PDF, PNG, JPG up to 10MB</p>
+ <p className="text-xs text-soft">PDF, PNG, JPG up to 10MB</p>
  </div>
  </div>
  </div>

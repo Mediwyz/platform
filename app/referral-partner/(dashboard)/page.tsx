@@ -171,30 +171,30 @@ export default function ReferralPartnerDashboard() {
       </p>
       <button
        onClick={() => navigator.clipboard.writeText(partnerData.promoCode)}
-       className="bg-white text-purple-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition w-full"
+       className="bg-surface text-purple-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-subtle transition w-full"
       >
        Copy Code
       </button>
      </div>
 
-     <div className="bg-white rounded-2xl p-6 shadow-lg">
+     <div className="bg-surface rounded-2xl p-6 shadow-lg">
       <div className="flex items-center justify-between mb-4">
-       <h3 className="text-lg font-bold text-gray-900">Earnings Summary</h3>
+       <h3 className="text-lg font-bold text-fg">Earnings Summary</h3>
        <Link href="/referral-partner/billing" className="text-purple-600 text-sm hover:underline">
         View Details
        </Link>
       </div>
       <div className="space-y-3">
        <div className="flex justify-between text-sm">
-        <span className="text-gray-600">Total Revenue</span>
+        <span className="text-soft">Total Revenue</span>
         <span className="font-medium">Rs {partnerData.earnings.totalRevenue.toLocaleString()}</span>
        </div>
        <div className="flex justify-between text-sm">
-        <span className="text-gray-600">Paid Out</span>
+        <span className="text-soft">Paid Out</span>
         <span className="font-medium text-green-600">Rs {partnerData.earnings.paidOut.toLocaleString()}</span>
        </div>
        <div className="flex justify-between text-sm">
-        <span className="text-gray-600">Pending</span>
+        <span className="text-soft">Pending</span>
         <span className="font-medium text-orange-600">Rs {partnerData.earnings.pending.toLocaleString()}</span>
        </div>
        <div className="border-t pt-3 mt-3 flex justify-between">

@@ -17,11 +17,11 @@ const variantClasses: Record<ButtonVariant, string> = {
  primary:
  ' text-white shadow-sm',
  secondary:
- 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200',
+ 'bg-subtle text-soft hover:bg-line border border-line',
  outline:
- 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400',
+ 'border-2 border-line text-soft hover:bg-subtle hover:border-gray-400',
  ghost:
- 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+ 'text-soft hover:bg-subtle hover:text-fg',
  danger:
  ' text-white shadow-sm',
 }

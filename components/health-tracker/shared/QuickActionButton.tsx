@@ -25,7 +25,7 @@ export default function QuickActionButton({
  >
  <Icon className="text-lg" />
  </div>
- <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 transition-colors">
+ <span className="text-xs font-medium text-soft group-hover:text-fg transition-colors">
  {label}
  </span>
  </button>

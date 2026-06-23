@@ -40,7 +40,7 @@ function getServiceIcon(serviceType: string) {
  const key = Object.keys(SERVICE_ICON_MAP).find(k =>
  serviceType.toLowerCase().includes(k)
  )
- return key ? SERVICE_ICON_MAP[key] : <FaPercentage className="text-gray-600" />
+ return key ? SERVICE_ICON_MAP[key] : <FaPercentage className="text-soft" />
 }
 
 function formatServiceLabel(serviceType: string) {
@@ -77,7 +77,7 @@ export default function CommissionManagement() {
 
  if (loading) {
  return (
- <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+ <div className="min-h-screen bg-subtle flex items-center justify-center">
  <FaSpinner className="animate-spin text-3xl text-blue-600" />
  </div>
  )
@@ -90,16 +90,16 @@ export default function CommissionManagement() {
  const byServiceType = metrics?.revenue.byServiceType ?? []
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-2xl font-bold text-gray-900">Revenue &amp; Commissions</h1>
- <p className="text-gray-600">Platform revenue breakdown by service category</p>
+ <h1 className="text-2xl font-bold text-fg">Revenue &amp; Commissions</h1>
+ <p className="text-soft">Platform revenue breakdown by service category</p>
  </div>
- <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-gray-50">
+ <Link href="/admin" className="px-4 py-2 border rounded-lg hover:bg-subtle">
  Back to Dashboard
  </Link>
  </div>
@@ -129,39 +129,39 @@ export default function CommissionManagement() {
 
  {/* Summary Cards */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
- <div className="bg-white rounded-xl p-6 shadow">
+ <div className="bg-surface rounded-xl p-6 shadow">
  <div className="flex items-center justify-between mb-2">
- <span className="text-gray-600 text-sm">Total Revenue (All Time)</span>
+ <span className="text-soft text-sm">Total Revenue (All Time)</span>
  <FaDollarSign className="text-green-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">Rs {totalRevenue.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-fg">Rs {totalRevenue.toLocaleString()}</p>
  </div>
- <div className="bg-white rounded-xl p-6 shadow">
+ <div className="bg-surface rounded-xl p-6 shadow">
  <div className="flex items-center justify-between mb-2">
- <span className="text-gray-600 text-sm">This Month</span>
+ <span className="text-soft text-sm">This Month</span>
  <FaDollarSign className="text-blue-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">Rs {thisMonth.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-fg">Rs {thisMonth.toLocaleString()}</p>
  <p className={`text-sm flex items-center gap-1 mt-2 ${monthGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
  {monthGrowth >= 0 ? <FaArrowUp /> : <FaArrowDown />}
  {Math.abs(monthGrowth).toFixed(1)}% vs last month
  </p>
  </div>
- <div className="bg-white rounded-xl p-6 shadow">
+ <div className="bg-surface rounded-xl p-6 shadow">
  <div className="flex items-center justify-between mb-2">
- <span className="text-gray-600 text-sm">Last Month</span>
+ <span className="text-soft text-sm">Last Month</span>
  <FaDollarSign className="text-purple-600" />
  </div>
- <p className="text-2xl font-bold text-gray-900">Rs {lastMonth.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-fg">Rs {lastMonth.toLocaleString()}</p>
  </div>
  </div>
 
  {/* Revenue by Service Type */}
- <div className="bg-white rounded-xl p-6 shadow mb-6">
- <h2 className="text-xl font-bold text-gray-900 mb-6">Revenue by Service Type</h2>
+ <div className="bg-surface rounded-xl p-6 shadow mb-6">
+ <h2 className="text-xl font-bold text-fg mb-6">Revenue by Service Type</h2>
  {byServiceType.length === 0 ? (
- <div className="text-center py-12 text-gray-500">
- <FaDollarSign className="text-4xl mx-auto mb-3 text-gray-300" />
+ <div className="text-center py-12 text-soft">
+ <FaDollarSign className="text-4xl mx-auto mb-3 text-faint" />
  <p className="text-lg font-medium">No revenue data yet</p>
  <p className="text-sm mt-1">Revenue from completed transactions will appear here</p>
  </div>
@@ -170,25 +170,25 @@ export default function CommissionManagement() {
  {byServiceType.map(row => {
  const percentage = totalRevenue > 0 ? (row.total / totalRevenue) * 100 : 0
  return (
- <div key={row.serviceType} className="border rounded-xl p-5 bg-white hover:shadow-md transition">
+ <div key={row.serviceType} className="border rounded-xl p-5 bg-surface hover:shadow-md transition">
  <div className="flex items-center justify-between mb-3">
  <div className="flex items-center gap-3">
  <span className="text-2xl">{getServiceIcon(row.serviceType)}</span>
- <h3 className="font-semibold text-gray-900">
+ <h3 className="font-semibold text-fg">
  {formatServiceLabel(row.serviceType)}
  </h3>
  </div>
- <span className="text-xl font-bold text-gray-900">
+ <span className="text-xl font-bold text-fg">
  Rs {row.total.toLocaleString()}
  </span>
  </div>
- <div className="w-full bg-gray-200 rounded-full h-2">
+ <div className="w-full bg-line rounded-full h-2">
  <div
  className="bg-blue-600 h-2 rounded-full"
  style={{ width: `${Math.min(percentage, 100)}%` }}
  />
  </div>
- <p className="text-xs text-gray-500 mt-2 text-right">
+ <p className="text-xs text-soft mt-2 text-right">
  {percentage.toFixed(1)}% of total revenue
  </p>
  </div>
@@ -200,16 +200,16 @@ export default function CommissionManagement() {
 
  {/* Booking Completion Summary */}
  {metrics && (
- <div className="bg-white rounded-xl p-6 shadow">
- <h2 className="text-xl font-bold text-gray-900 mb-4">Booking Completion Summary</h2>
+ <div className="bg-surface rounded-xl p-6 shadow">
+ <h2 className="text-xl font-bold text-fg mb-4">Booking Completion Summary</h2>
  <div className="grid grid-cols-2 gap-6">
- <div className="text-center p-4 bg-gray-50 rounded-lg">
- <p className="text-3xl font-bold text-gray-900">{metrics.bookings.total.toLocaleString()}</p>
- <p className="text-sm text-gray-600 mt-1">Total Bookings</p>
+ <div className="text-center p-4 bg-subtle rounded-lg">
+ <p className="text-3xl font-bold text-fg">{metrics.bookings.total.toLocaleString()}</p>
+ <p className="text-sm text-soft mt-1">Total Bookings</p>
  </div>
  <div className="text-center p-4 bg-green-50 rounded-lg">
  <p className="text-3xl font-bold text-green-600">{metrics.bookings.completed.toLocaleString()}</p>
- <p className="text-sm text-gray-600 mt-1">Completed (Revenue-Generating)</p>
+ <p className="text-sm text-soft mt-1">Completed (Revenue-Generating)</p>
  </div>
  </div>
  </div>

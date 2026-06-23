@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { Icon } from '@iconify/react'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 
-// ─── Curated medical icon sets ────────────────────────────────────────────────
+//  Curated medical icon sets 
 
 const HEALTHICONS: { key: string; label: string }[] = [
   { key: 'healthicons:ambulance', label: 'Ambulance' },
@@ -85,36 +85,36 @@ const HEALTHICONS: { key: string; label: string }[] = [
 ]
 
 const EMOJIS: { key: string; label: string }[] = [
-  { key: '🩺', label: 'Stethoscope' },
-  { key: '🫀', label: 'Anatomical Heart' },
-  { key: '🫁', label: 'Lungs' },
-  { key: '🧠', label: 'Brain' },
-  { key: '🦷', label: 'Tooth' },
-  { key: '👁️', label: 'Eye' },
-  { key: '🦴', label: 'Bone' },
-  { key: '👂', label: 'Ear' },
-  { key: '💊', label: 'Pill' },
-  { key: '💉', label: 'Syringe' },
-  { key: '🩸', label: 'Blood' },
-  { key: '🔬', label: 'Microscope' },
-  { key: '🩻', label: 'X-Ray' },
-  { key: '🩹', label: 'Bandage' },
-  { key: '🚑', label: 'Ambulance' },
-  { key: '🏥', label: 'Hospital' },
-  { key: '🏠', label: 'Home Visit' },
-  { key: '📱', label: 'Telemedicine' },
-  { key: '🤰', label: 'Pregnancy' },
-  { key: '👶', label: 'Baby' },
-  { key: '🧸', label: 'Childcare' },
-  { key: '🧓', label: 'Elderly' },
-  { key: '🧘', label: 'Mental Health' },
-  { key: '💪', label: 'Physiotherapy' },
-  { key: '🥗', label: 'Nutrition' },
-  { key: '🧬', label: 'Genetics' },
-  { key: '🎗️', label: 'Oncology' },
-  { key: '❤️', label: 'Heart Health' },
-  { key: '⚕️', label: 'Medical Symbol' },
-  { key: '🌡️', label: 'Thermometer' },
+  { key: '', label: 'Stethoscope' },
+  { key: '', label: 'Anatomical Heart' },
+  { key: '', label: 'Lungs' },
+  { key: '', label: 'Brain' },
+  { key: '', label: 'Tooth' },
+  { key: '', label: 'Eye' },
+  { key: '', label: 'Bone' },
+  { key: '', label: 'Ear' },
+  { key: '', label: 'Pill' },
+  { key: '', label: 'Syringe' },
+  { key: '', label: 'Blood' },
+  { key: '', label: 'Microscope' },
+  { key: '', label: 'X-Ray' },
+  { key: '', label: 'Bandage' },
+  { key: '', label: 'Ambulance' },
+  { key: '', label: 'Hospital' },
+  { key: '', label: 'Home Visit' },
+  { key: '', label: 'Telemedicine' },
+  { key: '', label: 'Pregnancy' },
+  { key: '', label: 'Baby' },
+  { key: '', label: 'Childcare' },
+  { key: '', label: 'Elderly' },
+  { key: '', label: 'Mental Health' },
+  { key: '', label: 'Physiotherapy' },
+  { key: '', label: 'Nutrition' },
+  { key: '', label: 'Genetics' },
+  { key: '', label: 'Oncology' },
+  { key: '', label: 'Heart Health' },
+  { key: '', label: 'Medical Symbol' },
+  { key: '', label: 'Thermometer' },
 ]
 
 type TabId = 'healthicons' | 'emoji'
@@ -165,25 +165,25 @@ export default function IconPicker({ value, onChange, onClose, color = '#0C6780'
         className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl border transition-all text-center
           ${isSelected
             ? 'border-[#0C6780] bg-[#0C6780]/10 ring-2 ring-[#0C6780]/30'
-            : 'border-gray-100 hover:border-gray-300 hover:bg-gray-50'}`}
+            : 'border-line hover:border-line hover:bg-subtle'}`}
       >
         {activeTab === 'emoji' ? (
           <span className="text-2xl leading-none select-none">{item.key}</span>
         ) : (
           <Icon icon={item.key} width={28} height={28} color={isSelected ? color : '#374151'} />
         )}
-        <span className="text-[9px] text-gray-500 leading-tight line-clamp-2 w-full">{item.label}</span>
+        <span className="text-[9px] text-soft leading-tight line-clamp-2 w-full">{item.label}</span>
       </button>
     )
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-[340px] sm:w-[400px] overflow-hidden">
+    <div className="bg-surface rounded-2xl border border-line shadow-xl w-[340px] sm:w-[400px] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <span className="text-sm font-semibold text-gray-800">Choose Icon</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line">
+        <span className="text-sm font-semibold text-fg">Choose Icon</span>
         {onClose && (
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+          <button type="button" onClick={onClose} className="text-faint hover:text-soft p-1">
             <FaTimes className="text-xs" />
           </button>
         )}
@@ -192,13 +192,13 @@ export default function IconPicker({ value, onChange, onClose, color = '#0C6780'
       {/* Search */}
       <div className="px-3 pt-3">
         <div className="relative">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
           <input
             type="text"
             placeholder="Search icons..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-gray-50"
+            className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
           />
         </div>
       </div>
@@ -213,7 +213,7 @@ export default function IconPicker({ value, onChange, onClose, color = '#0C6780'
             className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all
               ${activeTab === tab.id
                 ? 'bg-[#0C6780] text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                : 'bg-subtle text-soft hover:bg-line'}`}
           >
             {tab.label}
           </button>
@@ -223,7 +223,7 @@ export default function IconPicker({ value, onChange, onClose, color = '#0C6780'
       {/* Grid */}
       <div className="p-3 grid grid-cols-5 gap-1.5 max-h-64 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300">
         {items.length === 0 ? (
-          <div className="col-span-5 text-center py-8 text-xs text-gray-400">No icons found</div>
+          <div className="col-span-5 text-center py-8 text-xs text-faint">No icons found</div>
         ) : (
           items.map(renderItem)
         )}
@@ -231,14 +231,14 @@ export default function IconPicker({ value, onChange, onClose, color = '#0C6780'
 
       {/* Selected preview */}
       {value && (
-        <div className="flex items-center gap-2 px-4 py-2.5 border-t border-gray-100 bg-gray-50">
-          <span className="text-xs text-gray-500">Selected:</span>
+        <div className="flex items-center gap-2 px-4 py-2.5 border-t border-line bg-subtle">
+          <span className="text-xs text-soft">Selected:</span>
           {value.length <= 4 ? (
             <span className="text-lg">{value}</span>
           ) : (
             <Icon icon={value} width={20} height={20} color={color} />
           )}
-          <span className="text-xs font-mono text-gray-600 truncate flex-1">{value}</span>
+          <span className="text-xs font-mono text-soft truncate flex-1">{value}</span>
           <button
             type="button"
             onClick={() => onChange('', false)}

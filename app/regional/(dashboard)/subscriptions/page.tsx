@@ -294,19 +294,19 @@ export default function SubscriptionsManagementPage() {
  const renderPlanRow = (plan: Plan) => {
  const sym = getCurrencySymbol(plan.currency)
  return (
- <tr key={plan.id} className={`border-b border-gray-100 ${!plan.isActive ? 'opacity-50' : ''}`}>
+ <tr key={plan.id} className={`border-b border-line ${!plan.isActive ? 'opacity-50' : ''}`}>
  <td className="p-3">
- <div className="font-medium text-gray-900">{plan.name}</div>
- {plan.targetAudience && <div className="text-xs text-gray-500">{plan.targetAudience}</div>}
+ <div className="font-medium text-fg">{plan.name}</div>
+ {plan.targetAudience && <div className="text-xs text-soft">{plan.targetAudience}</div>}
  </td>
- <td className="p-3 font-semibold text-gray-900">{sym} {plan.price.toLocaleString()}/mo</td>
- <td className="p-3 text-sm text-gray-600">
- GP: {plan.gpConsultsPerMonth === -1 ? '∞' : plan.gpConsultsPerMonth},
- Nurse: {plan.nurseConsultsPerMonth === -1 ? '∞' : plan.nurseConsultsPerMonth},
- Mental: {plan.mentalHealthConsultsPerMonth === -1 ? '∞' : plan.mentalHealthConsultsPerMonth}
+ <td className="p-3 font-semibold text-fg">{sym} {plan.price.toLocaleString()}/mo</td>
+ <td className="p-3 text-sm text-soft">
+ GP: {plan.gpConsultsPerMonth === -1 ? '' : plan.gpConsultsPerMonth},
+ Nurse: {plan.nurseConsultsPerMonth === -1 ? '' : plan.nurseConsultsPerMonth},
+ Mental: {plan.mentalHealthConsultsPerMonth === -1 ? '' : plan.mentalHealthConsultsPerMonth}
  </td>
  <td className="p-3">
- <span className={`px-2 py-1 rounded-full text-xs font-medium ${plan.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+ <span className={`px-2 py-1 rounded-full text-xs font-medium ${plan.isActive ? 'bg-green-100 text-green-700' : 'bg-subtle text-soft'}`}>
  {plan.isActive ? 'Active' : 'Inactive'}
  </span>
  </td>
@@ -315,8 +315,8 @@ export default function SubscriptionsManagementPage() {
  <button onClick={() => handleEdit(plan)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded">
  <FaEdit className="text-sm" />
  </button>
- <button onClick={() => toggleActive(plan)} className="p-1.5 text-gray-500 hover:bg-gray-50 rounded">
- {plan.isActive ? <FaToggleOn className="text-green-600 text-lg" /> : <FaToggleOff className="text-gray-400 text-lg" />}
+ <button onClick={() => toggleActive(plan)} className="p-1.5 text-soft hover:bg-subtle rounded">
+ {plan.isActive ? <FaToggleOn className="text-green-600 text-lg" /> : <FaToggleOff className="text-faint text-lg" />}
  </button>
  </div>
  </td>
@@ -326,19 +326,19 @@ export default function SubscriptionsManagementPage() {
 
  const renderPlanTable = (planList: Plan[], title: string) => (
  <div className="mb-8">
- <h3 className="text-lg font-semibold text-gray-800 mb-3">{title}</h3>
+ <h3 className="text-lg font-semibold text-fg mb-3">{title}</h3>
  {planList.length === 0 ? (
- <p className="text-gray-500 text-sm">No plans yet.</p>
+ <p className="text-soft text-sm">No plans yet.</p>
  ) : (
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-600">Plan</th>
- <th className="p-3 text-left font-medium text-gray-600">Price</th>
- <th className="p-3 text-left font-medium text-gray-600">Consults</th>
- <th className="p-3 text-left font-medium text-gray-600">Status</th>
- <th className="p-3 text-left font-medium text-gray-600">Actions</th>
+ <th className="p-3 text-left font-medium text-soft">Plan</th>
+ <th className="p-3 text-left font-medium text-soft">Price</th>
+ <th className="p-3 text-left font-medium text-soft">Consults</th>
+ <th className="p-3 text-left font-medium text-soft">Status</th>
+ <th className="p-3 text-left font-medium text-soft">Actions</th>
  </tr>
  </thead>
  <tbody>
@@ -355,7 +355,7 @@ export default function SubscriptionsManagementPage() {
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
  <FaCrown className="text-yellow-500 text-xl" />
- <h2 className="text-xl font-bold text-gray-800">Subscription Plans</h2>
+ <h2 className="text-xl font-bold text-fg">Subscription Plans</h2>
  </div>
  <button
  onClick={handleCreate}
@@ -370,7 +370,7 @@ export default function SubscriptionsManagementPage() {
  <FaSpinner className="animate-spin text-blue-500 text-xl" />
  </div>
  ) : (
- <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+ <div className="bg-surface rounded-xl border border-line p-4 sm:p-6">
  {renderPlanTable(individualPlans, 'MediWyz For You - Individual Plans')}
  {renderPlanTable(corporatePlans, 'MediWyz For Business - Corporate Plans')}
  </div>
@@ -378,18 +378,18 @@ export default function SubscriptionsManagementPage() {
 
  {/* Available Services Reference */}
  {services.length > 0 && (
- <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
- <h3 className="text-lg font-semibold text-gray-800 mb-3">Available Provider Services</h3>
- <p className="text-sm text-gray-500 mb-4">Reference list of services from providers in your region. Use these when configuring plan features and discounts.</p>
+ <div className="bg-surface rounded-xl border border-line p-4 sm:p-6">
+ <h3 className="text-lg font-semibold text-fg mb-3">Available Provider Services</h3>
+ <p className="text-sm text-soft mb-4">Reference list of services from providers in your region. Use these when configuring plan features and discounts.</p>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
  {services.map((cat) => (
- <div key={cat.category} className="border border-gray-100 rounded-lg p-3">
- <h4 className="text-sm font-medium text-gray-800 mb-2">{cat.category}</h4>
+ <div key={cat.category} className="border border-line rounded-lg p-3">
+ <h4 className="text-sm font-medium text-fg mb-2">{cat.category}</h4>
  <ul className="space-y-1">
  {cat.services.map((svc) => (
- <li key={svc.serviceName} className="text-xs text-gray-600 flex justify-between">
+ <li key={svc.serviceName} className="text-xs text-soft flex justify-between">
  <span>{svc.serviceName}</span>
- <span className="text-gray-400">{svc.defaultPrice > 0 ? svc.defaultPrice.toLocaleString() : 'Free'}</span>
+ <span className="text-faint">{svc.defaultPrice > 0 ? svc.defaultPrice.toLocaleString() : 'Free'}</span>
  </li>
  ))}
  </ul>
@@ -402,12 +402,12 @@ export default function SubscriptionsManagementPage() {
  {/* Create / Edit Form Modal */}
  {showForm && (
  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
- <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+ <div className="bg-surface rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
  <div className="flex items-center justify-between mb-6">
- <h3 className="text-lg font-bold text-gray-900">
+ <h3 className="text-lg font-bold text-fg">
  {editingPlan ? 'Edit Plan' : 'Create New Plan'}
  </h3>
- <button onClick={() => setShowForm(false)} className="p-2 text-gray-400 hover:text-gray-600">
+ <button onClick={() => setShowForm(false)} className="p-2 text-faint hover:text-soft">
  <FaTimes />
  </button>
  </div>
@@ -415,21 +415,21 @@ export default function SubscriptionsManagementPage() {
  <div className="space-y-4">
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Plan Name</label>
+ <label className="block text-sm font-medium text-soft mb-1">Plan Name</label>
  <input
  type="text"
  value={form.name}
  onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  placeholder="e.g. Premium"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+ <label className="block text-sm font-medium text-soft mb-1">Type</label>
  <select
  value={form.type}
  onChange={(e) => setForm(prev => ({ ...prev, type: e.target.value as 'individual' | 'corporate' }))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  >
  <option value="individual">Individual</option>
  <option value="corporate">Corporate</option>
@@ -439,22 +439,22 @@ export default function SubscriptionsManagementPage() {
 
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Price/month</label>
+ <label className="block text-sm font-medium text-soft mb-1">Price/month</label>
  <input
  type="number"
  value={form.price}
  onChange={(e) => setForm(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  min="0"
  />
  </div>
  <div>
- <label className="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
+ <label className="block text-sm font-medium text-soft mb-1">Target Audience</label>
  <input
  type="text"
  value={form.targetAudience}
  onChange={(e) => setForm(prev => ({ ...prev, targetAudience: e.target.value }))}
- className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm"
  placeholder="e.g. families"
  />
  </div>
@@ -462,12 +462,12 @@ export default function SubscriptionsManagementPage() {
 
  {/* Dynamic quotas by role + specialty */}
  <div className="border-t pt-4">
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Monthly Consultation Quotas (-1 = unlimited)</h4>
- <p className="text-xs text-gray-500 mb-3">Set free consultation limits per provider role and specialty.</p>
+ <h4 className="text-sm font-semibold text-fg mb-3">Monthly Consultation Quotas (-1 = unlimited)</h4>
+ <p className="text-xs text-soft mb-3">Set free consultation limits per provider role and specialty.</p>
  <div className="space-y-2 max-h-48 overflow-y-auto">
  {form.quotas.map((q, i) => (
  <div key={i} className="flex items-center gap-2 text-sm">
- <span className="flex-1 text-gray-700 text-xs">{q.specialty ? `${q.role} - ${q.specialty}` : q.role}</span>
+ <span className="flex-1 text-soft text-xs">{q.specialty ? `${q.role} - ${q.specialty}` : q.role}</span>
  <input
  type="number"
  value={q.limit}
@@ -475,7 +475,7 @@ export default function SubscriptionsManagementPage() {
  ...prev,
  quotas: prev.quotas.map((qq, j) => j === i ? { ...qq, limit: parseInt(e.target.value) || 0 } : qq),
  }))}
- className="w-16 px-2 py-1 border border-gray-200 rounded text-xs text-center"
+ className="w-16 px-2 py-1 border border-line rounded text-xs text-center"
  min="-1"
  />
  <button onClick={() => setForm(prev => ({ ...prev, quotas: prev.quotas.filter((_, j) => j !== i) }))} className="text-red-400 hover:text-red-600 text-xs">
@@ -489,7 +489,7 @@ export default function SubscriptionsManagementPage() {
  <select
  value={quotaToAdd}
  onChange={(e) => setQuotaToAdd(e.target.value)}
- className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-xs"
+ className="flex-1 px-2 py-1.5 border border-line rounded text-xs"
  >
  <option value="">Add quota for...</option>
  {providerRoles.map(r => (
@@ -518,12 +518,12 @@ export default function SubscriptionsManagementPage() {
  </div>
 
  <div className="border-t pt-4">
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Discounts (%) - by role, specialty, or service category</h4>
- <p className="text-xs text-gray-500 mb-3">Set discount % off provider market price. Applies when quota is exhausted.</p>
+ <h4 className="text-sm font-semibold text-fg mb-3">Discounts (%) - by role, specialty, or service category</h4>
+ <p className="text-xs text-soft mb-3">Set discount % off provider market price. Applies when quota is exhausted.</p>
  <div className="space-y-2 max-h-48 overflow-y-auto">
  {Object.entries(form.discounts).filter(([k]) => !k.startsWith('volume_')).map(([key, val]) => (
  <div key={key} className="flex items-center gap-2 text-sm">
- <span className="flex-1 text-gray-700 text-xs">{key}</span>
+ <span className="flex-1 text-soft text-xs">{key}</span>
  <div className="flex items-center gap-1">
  <input
  type="number"
@@ -537,10 +537,10 @@ export default function SubscriptionsManagementPage() {
  return { ...prev, discounts: d }
  })
  }}
- className="w-14 px-2 py-1 border border-gray-200 rounded text-xs text-center"
+ className="w-14 px-2 py-1 border border-line rounded text-xs text-center"
  min="0" max="100"
  />
- <span className="text-xs text-gray-400">%</span>
+ <span className="text-xs text-faint">%</span>
  </div>
  <button onClick={() => setForm(prev => {
  const d = { ...prev.discounts }; delete d[key]; return { ...prev, discounts: d }
@@ -553,7 +553,7 @@ export default function SubscriptionsManagementPage() {
  <select
  value={discountToAdd}
  onChange={(e) => setDiscountToAdd(e.target.value)}
- className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-xs"
+ className="flex-1 px-2 py-1.5 border border-line rounded text-xs"
  >
  <option value="">Add discount for...</option>
  <optgroup label="Service Categories">
@@ -583,8 +583,8 @@ export default function SubscriptionsManagementPage() {
  </div>
  <div className="border-t pt-3">
  {form.type === 'corporate' && (
- <div className="mt-3 pt-3 border-t border-gray-100">
- <h5 className="text-xs font-semibold text-gray-700 mb-2">Volume Discounts (Corporate)</h5>
+ <div className="mt-3 pt-3 border-t border-line">
+ <h5 className="text-xs font-semibold text-soft mb-2">Volume Discounts (Corporate)</h5>
  <div className="grid grid-cols-4 gap-3">
  {[
  { key: 'volume_50', label: '50+ emp' },
@@ -593,7 +593,7 @@ export default function SubscriptionsManagementPage() {
  { key: 'volume_1000', label: '1000+ emp' },
  ].map(({ key, label }) => (
  <div key={key}>
- <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+ <label className="block text-xs font-medium text-soft mb-1">{label}</label>
  <div className="flex items-center gap-1">
  <input
  type="number"
@@ -611,11 +611,11 @@ export default function SubscriptionsManagementPage() {
  })
  }}
  placeholder="0"
- className="w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-center"
+ className="w-full px-2 py-1.5 border border-line rounded text-sm text-center"
  min="0"
  max="100"
  />
- <span className="text-xs text-gray-400">%</span>
+ <span className="text-xs text-faint">%</span>
  </div>
  </div>
  ))}
@@ -626,14 +626,14 @@ export default function SubscriptionsManagementPage() {
 
  {/* Services to include in plan */}
  <div className="border-t pt-4">
- <h4 className="text-sm font-semibold text-gray-800 mb-3">Included Services & Discounts</h4>
- <p className="text-xs text-gray-500 mb-3">Select services to include. For each: mark as free, set a discount %, an admin price, and monthly limit.</p>
+ <h4 className="text-sm font-semibold text-fg mb-3">Included Services & Discounts</h4>
+ <p className="text-xs text-soft mb-3">Select services to include. For each: mark as free, set a discount %, an admin price, and monthly limit.</p>
  {services.length > 0 ? (
- <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg divide-y divide-gray-100">
+ <div className="max-h-60 overflow-y-auto border border-line rounded-lg divide-y divide-line">
  {services.flatMap(cat => cat.services).map(svc => {
  const linked = form.serviceLinks.find(sl => sl.platformServiceId === svc.id)
  return (
- <div key={svc.id} className="flex items-center gap-3 p-2 text-sm hover:bg-gray-50">
+ <div key={svc.id} className="flex items-center gap-3 p-2 text-sm hover:bg-subtle">
  <input
  type="checkbox"
  checked={!!linked}
@@ -659,8 +659,8 @@ export default function SubscriptionsManagementPage() {
  }}
  className="rounded text-blue-600"
  />
- <span className="flex-1 text-gray-700">{svc.serviceName}</span>
- <span className="text-xs text-gray-400">{svc.defaultPrice.toLocaleString()}</span>
+ <span className="flex-1 text-soft">{svc.serviceName}</span>
+ <span className="text-xs text-faint">{svc.defaultPrice.toLocaleString()}</span>
  {linked && (
  <div className="flex items-center gap-1.5 flex-wrap">
  <label className="flex items-center gap-1 text-xs whitespace-nowrap">
@@ -693,11 +693,11 @@ export default function SubscriptionsManagementPage() {
  }))}
  placeholder="0"
  title="Discount % off provider's market price"
- className="w-12 px-1 py-1 border border-gray-200 rounded text-xs text-center"
+ className="w-12 px-1 py-1 border border-line rounded text-xs text-center"
  min="0"
  max="100"
  />
- <span className="text-xs text-gray-400">%</span>
+ <span className="text-xs text-faint">%</span>
  </div>
  <input
  type="number"
@@ -712,7 +712,7 @@ export default function SubscriptionsManagementPage() {
  }))}
  placeholder="Price"
  title="Admin-set fixed price (overrides discount)"
- className="w-16 px-1 py-1 border border-gray-200 rounded text-xs"
+ className="w-16 px-1 py-1 border border-line rounded text-xs"
  min="0"
  />
  </>
@@ -730,7 +730,7 @@ export default function SubscriptionsManagementPage() {
  }))}
  placeholder="Lim"
  title="Monthly limit (-1 = unlimited, 0 = pay per use)"
- className="w-12 px-1 py-1 border border-gray-200 rounded text-xs text-center"
+ className="w-12 px-1 py-1 border border-line rounded text-xs text-center"
  min="-1"
  />
  </div>
@@ -740,14 +740,14 @@ export default function SubscriptionsManagementPage() {
  })}
  </div>
  ) : (
- <p className="text-xs text-gray-400">No services loaded. Services will be available after platform services are seeded.</p>
+ <p className="text-xs text-faint">No services loaded. Services will be available after platform services are seeded.</p>
  )}
  </div>
 
  {/* Features - generated from all config above */}
  <div className="border-t pt-4">
  <div className="flex items-center justify-between mb-3">
- <h4 className="text-sm font-semibold text-gray-800">Features (Display Text)</h4>
+ <h4 className="text-sm font-semibold text-fg">Features (Display Text)</h4>
  <button
  type="button"
  onClick={generateFeatures}
@@ -758,23 +758,23 @@ export default function SubscriptionsManagementPage() {
  {generatingFeatures ? 'Generating...' : 'Generate with AI'}
  </button>
  </div>
- <p className="text-xs text-gray-400 mb-2">Click &quot;Generate with AI&quot; to create feature text from quotas, discounts, and selected services above.</p>
+ <p className="text-xs text-faint mb-2">Click &quot;Generate with AI&quot; to create feature text from quotas, discounts, and selected services above.</p>
  <div className="flex gap-2 mb-2">
  <input
  type="text"
  value={featureInput}
  onChange={(e) => setFeatureInput(e.target.value)}
  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
- className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm"
+ className="flex-1 px-3 py-2 border border-line rounded-lg text-sm"
  placeholder="Add a feature..."
  />
- <button onClick={addFeature} className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200">
+ <button onClick={addFeature} className="px-3 py-2 bg-subtle text-soft rounded-lg text-sm hover:bg-line">
  Add
  </button>
  </div>
  <div className="space-y-1">
  {form.features.map((feat, i) => (
- <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+ <div key={i} className="flex items-center gap-2 text-sm text-soft">
  <FaCheckCircle className="text-green-500 text-xs flex-shrink-0" />
  <span className="flex-1">{feat}</span>
  <button onClick={() => removeFeature(i)} className="text-red-400 hover:text-red-600 text-xs">
@@ -790,7 +790,7 @@ export default function SubscriptionsManagementPage() {
  <div className="flex justify-end gap-3 border-t pt-4">
  <button
  onClick={() => setShowForm(false)}
- className="px-4 py-2 text-gray-600 border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
+ className="px-4 py-2 text-soft border border-line rounded-lg text-sm hover:bg-subtle"
  >
  Cancel
  </button>

@@ -20,7 +20,7 @@ export default function EditWorkflowPage({ params }: { params: Promise<{ id: str
   }, [id])
 
   if (loading) return <DashboardLoadingState />
-  if (!template) return <div className="p-8 text-center text-gray-500">Template not found</div>
+  if (!template) return <div className="p-8 text-center text-soft">Template not found</div>
 
   // Normalise steps defensively - old seeded templates can have missing
   // action arrays / flags, which used to crash the builder with

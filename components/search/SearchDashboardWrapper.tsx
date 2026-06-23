@@ -71,14 +71,14 @@ function SearchGuestLayout({
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Guest header */}
-      <header className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between z-40">
+      <header className="flex-shrink-0 bg-surface border-b border-line px-4 py-2 flex items-center justify-between z-40">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSidebarOpen(v => !v)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition"
+            className="p-2 rounded-lg hover:bg-subtle transition"
             aria-label="Toggle sidebar"
           >
-            <FaBars className="text-gray-600" />
+            <FaBars className="text-soft" />
           </button>
           <Link href="/" aria-label="MediWyz home" className="flex items-center rounded-lg hover:opacity-80 transition">
             <HealthwyzLogo height={36} />
@@ -87,7 +87,7 @@ function SearchGuestLayout({
         <div className="flex items-center gap-2">
           <Link
             href="/"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-soft hover:bg-subtle rounded-lg transition"
           >
             <FaHome className="text-xs" /> Home
           </Link>
@@ -175,7 +175,7 @@ export default function SearchDashboardWrapper({ children }: { children: React.R
     return <DashboardLoadingState />
   }
 
-  // ── GUEST: no user ────────────────────────────────────────────────────────
+  //  GUEST: no user 
   // Always show the layout with the search sidebar so visitors can browse
   // provider types without needing to log in.
   if (!user) {
@@ -186,7 +186,7 @@ export default function SearchDashboardWrapper({ children }: { children: React.R
     )
   }
 
-  // ── AUTHENTICATED ─────────────────────────────────────────────────────────
+  //  AUTHENTICATED 
   const registryConfig = getSidebarConfig(user.userType)
 
   let sidebarItems: SidebarItem[]

@@ -11,7 +11,7 @@ import {
   FaVideo, FaPhone, FaUser, FaHome, FaHospital, FaBolt, FaExternalLinkAlt,
 } from 'react-icons/fa'
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+//  Types 
 
 interface Booking {
   id: string
@@ -35,7 +35,7 @@ interface Booking {
   providerType?: string
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────
+//  Component 
 
 export default function UnifiedPracticePage() {
   const user = useDashboardUser()
@@ -68,7 +68,7 @@ export default function UnifiedPracticePage() {
 
   useEffect(() => { fetchBookings() }, [fetchBookings])
 
-  // ─── Actions ────────────────────────────────────────────────────────────
+  //  Actions 
 
   const handleAction = async (bookingId: string, bookingType: string, action: string) => {
     if (!user) return
@@ -142,7 +142,7 @@ export default function UnifiedPracticePage() {
     }
   }
 
-  // ─── Bulk action ─────────────────────────────────────────────────────────
+  //  Bulk action 
 
   const runBulk = async (action: 'accept' | 'deny' | 'complete') => {
     if (selected.size === 0 || bulkBusy) return
@@ -184,7 +184,7 @@ export default function UnifiedPracticePage() {
     })
   }
 
-  // ─── Filters ────────────────────────────────────────────────────────────
+  //  Filters 
 
   const filtered = useMemo(() => {
     return bookings.filter(b => {
@@ -212,7 +212,7 @@ export default function UnifiedPracticePage() {
     return actions.length > 0 && !['completed', 'resolved', 'cancelled'].includes(b.status)
   }), [bookings])
 
-  // ─── Stats ──────────────────────────────────────────────────────────────
+  //  Stats 
 
   const stats = useMemo(() => ({
     pending: bookings.filter(b => b.status === 'pending').length,
@@ -226,7 +226,7 @@ export default function UnifiedPracticePage() {
     completed: bookings.filter(b => ['completed', 'resolved'].includes(b.status)).length,
   }), [bookings])
 
-  // ─── Render ─────────────────────────────────────────────────────────────
+  //  Render 
 
   if (!user) return null
 
@@ -242,7 +242,7 @@ export default function UnifiedPracticePage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">My Practice</h1>
+        <h1 className="text-2xl font-bold text-fg">My Practice</h1>
       </div>
 
       {/* Needs-Action Rail - surfaces actionable bookings across all statuses */}
@@ -262,7 +262,7 @@ export default function UnifiedPracticePage() {
             </div>
             <button
               onClick={() => setStatusFilter('pending')}
-              className="px-3 py-1.5 bg-white text-brand-navy text-xs font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+              className="px-3 py-1.5 bg-surface text-brand-navy text-xs font-semibold rounded-lg hover:bg-subtle transition-colors"
             >
               Show pending only
             </button>
@@ -300,7 +300,7 @@ export default function UnifiedPracticePage() {
             </button>
             <button
               onClick={() => setSelected(new Set())}
-              className="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-100 border border-gray-200"
+              className="px-3 py-1.5 bg-surface text-soft text-xs font-medium rounded-lg hover:bg-subtle border border-line"
             >
               Clear
             </button>
@@ -313,25 +313,25 @@ export default function UnifiedPracticePage() {
         <StatCard icon={FaClock} label="Pending" value={stats.pending} color="text-yellow-600" bgColor="bg-yellow-50" onClick={() => setStatusFilter(statusFilter === 'pending' ? 'all' : 'pending')} active={statusFilter === 'pending'} />
         <StatCard icon={FaCalendarAlt} label="Today" value={stats.today} color="text-blue-600" bgColor="bg-blue-50" onClick={() => setStatusFilter('all')} active={false} />
         <StatCard icon={FaClipboardList} label="Active" value={stats.active} color="text-green-600" bgColor="bg-green-50" onClick={() => setStatusFilter(statusFilter === 'accepted' ? 'all' : 'accepted')} active={statusFilter === 'accepted'} />
-        <StatCard icon={FaHistory} label="Completed" value={stats.completed} color="text-gray-600" bgColor="bg-gray-50" onClick={() => setStatusFilter(statusFilter === 'completed' ? 'all' : 'completed')} active={statusFilter === 'completed'} />
+        <StatCard icon={FaHistory} label="Completed" value={stats.completed} color="text-soft" bgColor="bg-subtle" onClick={() => setStatusFilter(statusFilter === 'completed' ? 'all' : 'completed')} active={statusFilter === 'completed'} />
       </div>
 
       {/* Search + Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
           <input
             type="text"
             placeholder="Search patient, service, reason..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none text-sm bg-white"
+            className="w-full pl-9 pr-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none text-sm bg-surface"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none bg-white text-sm"
+          className="px-4 py-2.5 border border-line rounded-xl focus:ring-2 focus:ring-[#0C6780] focus:border-transparent outline-none bg-surface text-sm"
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
@@ -345,10 +345,10 @@ export default function UnifiedPracticePage() {
 
       {/* Empty State */}
       {filtered.length === 0 && !loading && (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <FaCalendarAlt className="text-4xl text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-600">No bookings found</p>
-          <p className="text-sm text-gray-400 mt-1">When patients book your services, they will appear here.</p>
+        <div className="bg-surface rounded-xl border border-line p-12 text-center">
+          <FaCalendarAlt className="text-4xl text-faint mx-auto mb-3" />
+          <p className="font-medium text-soft">No bookings found</p>
+          <p className="text-sm text-faint mt-1">When patients book your services, they will appear here.</p>
         </div>
       )}
 
@@ -369,7 +369,7 @@ export default function UnifiedPracticePage() {
   )
 }
 
-// ─── Sub-components ─────────────────────────────────────────────────────────
+//  Sub-components 
 
 function StatCard({ icon: Icon, label, value, color, bgColor, onClick, active }: {
   icon: React.ComponentType<{ className?: string }>
@@ -380,15 +380,15 @@ function StatCard({ icon: Icon, label, value, color, bgColor, onClick, active }:
     <button
       onClick={onClick}
       className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
-        active ? 'border-[#0C6780] ring-2 ring-[#0C6780]/20 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'
+        active ? 'border-[#0C6780] ring-2 ring-[#0C6780]/20 bg-surface' : 'border-line bg-surface hover:border-line'
       }`}
     >
       <div className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center`}>
         <Icon className={`${color} text-lg`} />
       </div>
       <div className="text-left">
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        <p className="text-xs text-gray-500">{label}</p>
+        <p className="text-2xl font-bold text-fg">{value}</p>
+        <p className="text-xs text-soft">{label}</p>
       </div>
     </button>
   )
@@ -399,38 +399,38 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
   bookings: Booking[]; onAction: (id: string, type: string, action: string) => void; actionLoading: string | null
   selected: Set<string>; onToggleSelect: (id: string) => void
 }) {
-  const borderColor = color === 'yellow' ? 'border-yellow-200' : color === 'green' ? 'border-green-200' : color === 'red' ? 'border-red-200' : 'border-gray-200'
-  const headerColor = color === 'yellow' ? 'text-yellow-700' : color === 'green' ? 'text-green-700' : color === 'red' ? 'text-red-700' : 'text-gray-500'
+  const borderColor = color === 'yellow' ? 'border-yellow-200' : color === 'green' ? 'border-green-200' : color === 'red' ? 'border-red-200' : 'border-line'
+  const headerColor = color === 'yellow' ? 'text-yellow-700' : color === 'green' ? 'text-green-700' : color === 'red' ? 'text-red-700' : 'text-soft'
 
   return (
     <div>
       <h2 className={`text-sm font-semibold ${headerColor} mb-2`}>{title} ({count})</h2>
 
       {/* Desktop Table */}
-      <div className={`hidden sm:block bg-white rounded-xl border ${borderColor} overflow-hidden`}>
+      <div className={`hidden sm:block bg-surface rounded-xl border ${borderColor} overflow-hidden`}>
         <div className="overflow-x-auto"><table className="w-full">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
+            <tr className="bg-subtle border-b border-line">
               <th className="w-10 px-3 py-3"></th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Patient</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Service</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Date & Time</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Type</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
-              <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Price</th>
-              <th className="text-center px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase">Patient</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase">Service</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase">Date & Time</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase">Type</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-soft uppercase">Status</th>
+              <th className="text-right px-4 py-3 text-xs font-semibold text-soft uppercase">Price</th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-soft uppercase">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {bookings.map(b => (
-              <tr key={b.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(b.id) ? 'bg-amber-50/40' : ''}`}>
+              <tr key={b.id} className={`hover:bg-subtle/50 transition-colors ${selected.has(b.id) ? 'bg-amber-50/40' : ''}`}>
                 <td className="px-3 py-3 w-10">
                   <input
                     type="checkbox"
                     checked={selected.has(b.id)}
                     onChange={() => onToggleSelect(b.id)}
                     aria-label={`Select booking for ${b.patientName || 'patient'}`}
-                    className="w-4 h-4 rounded border-gray-300 text-brand-teal focus:ring-brand-teal"
+                    className="w-4 h-4 rounded border-line text-brand-teal focus:ring-brand-teal"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -438,21 +438,21 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
                     <div className="w-8 h-8 rounded-full bg-[#0C6780]/10 flex items-center justify-center text-xs font-bold text-[#0C6780]">
                       {(b.patientName || 'P').split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </div>
-                    <span className="text-sm font-medium text-gray-900">{b.patientName || 'Patient'}</span>
+                    <span className="text-sm font-medium text-fg">{b.patientName || 'Patient'}</span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <p className="text-sm text-gray-900">{b.serviceName || b.providerSpecialty || 'Consultation'}</p>
-                  {b.reason && <p className="text-xs text-gray-400 truncate max-w-[180px]">{b.reason}</p>}
+                  <p className="text-sm text-fg">{b.serviceName || b.providerSpecialty || 'Consultation'}</p>
+                  {b.reason && <p className="text-xs text-faint truncate max-w-[180px]">{b.reason}</p>}
                 </td>
                 <td className="px-4 py-3">
                   {b.scheduledAt ? (
                     <>
-                      <p className="text-sm text-gray-700">{new Date(b.scheduledAt!).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
-                      <p className="text-xs text-gray-400">{new Date(b.scheduledAt!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                      <p className="text-sm text-soft">{new Date(b.scheduledAt!).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                      <p className="text-xs text-faint">{new Date(b.scheduledAt!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     </>
                   ) : (
-                    <p className="text-xs text-gray-400">{b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : ' - '}</p>
+                    <p className="text-xs text-faint">{b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : ' - '}</p>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -463,9 +463,9 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
                 </td>
                 <td className="px-4 py-3 text-right">
                   {b.price != null && b.price > 0 ? (
-                    <span className="text-sm font-medium text-gray-700">Rs {b.price.toLocaleString()}</span>
+                    <span className="text-sm font-medium text-soft">Rs {b.price.toLocaleString()}</span>
                   ) : (
-                    <span className="text-xs text-gray-400">-</span>
+                    <span className="text-xs text-faint">-</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -478,7 +478,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
       </div>
 
       {/* Mobile Cards */}
-      <div className={`sm:hidden bg-white rounded-xl border ${borderColor} divide-y divide-gray-100`}>
+      <div className={`sm:hidden bg-surface rounded-xl border ${borderColor} divide-y divide-line`}>
         {bookings.map(b => (
           <div key={b.id} className={`p-4 space-y-2 ${selected.has(b.id) ? 'bg-amber-50/40' : ''}`}>
             <div className="flex items-center justify-between">
@@ -488,19 +488,19 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
                   checked={selected.has(b.id)}
                   onChange={() => onToggleSelect(b.id)}
                   aria-label={`Select booking for ${b.patientName || 'patient'}`}
-                  className="w-4 h-4 rounded border-gray-300 text-brand-teal focus:ring-brand-teal"
+                  className="w-4 h-4 rounded border-line text-brand-teal focus:ring-brand-teal"
                 />
                 <div className="w-8 h-8 rounded-full bg-[#0C6780]/10 flex items-center justify-center text-xs font-bold text-[#0C6780]">
                   {(b.patientName || 'P').split(' ').map(n => n[0]).join('').slice(0, 2)}
                 </div>
-                <span className="text-sm font-medium text-gray-900">{b.patientName || 'Patient'}</span>
+                <span className="text-sm font-medium text-fg">{b.patientName || 'Patient'}</span>
               </div>
               <StatusBadge status={b.status} />
             </div>
-            <p className="text-sm text-gray-700">{b.serviceName || 'Consultation'}</p>
-            <div className="flex items-center justify-between text-xs text-gray-400">
+            <p className="text-sm text-soft">{b.serviceName || 'Consultation'}</p>
+            <div className="flex items-center justify-between text-xs text-faint">
               <span>{b.scheduledAt ? `${new Date(b.scheduledAt).toLocaleDateString('en-GB')} at ${new Date(b.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : (b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-GB') : ' - ')}</span>
-              {b.price != null && b.price > 0 && <span className="font-medium text-gray-600">Rs {b.price.toLocaleString()}</span>}
+              {b.price != null && b.price > 0 && <span className="font-medium text-soft">Rs {b.price.toLocaleString()}</span>}
             </div>
             <div className="flex items-center gap-2 pt-1">
               <TypeBadge type={b.type} />
@@ -514,7 +514,7 @@ function BookingSection({ title, count, color, bookings, onAction, actionLoading
 }
 
 // Booking-list status pill. Uses the same category buckets as the workflow
-// detail page so custom status codes (sample_collected, eye_test_done, …)
+// detail page so custom status codes (sample_collected, eye_test_done, )
 // still light up with colour. Falls back to categoryFromLegacyStatus when
 // the booking doesn't carry a category (older rows).
 function StatusBadge({ status }: { status: string }) {
@@ -547,7 +547,7 @@ function ActionButtons({ booking, onAction, loading }: {
   booking: Booking; onAction: (id: string, type: string, action: string) => void; loading: boolean
 }) {
   const b = booking
-  if (loading) return <FaSpinner className="animate-spin text-gray-400 text-sm" />
+  if (loading) return <FaSpinner className="animate-spin text-faint text-sm" />
 
   // Derive available actions from status (since API may not include availableActions)
   const actions: string[] = (b.availableActions && b.availableActions.length > 0)
@@ -591,7 +591,7 @@ function deriveActionsFromStatus(status: string): string[] {
   }
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function mapBookingType(type: string): string {
   const map: Record<string, string> = {

@@ -79,14 +79,14 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
   if (loading) {
     return (
       <div className="mt-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">People You May Know</h2>
+        <h2 className="text-lg font-semibold text-fg mb-4">People You May Know</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse bg-white rounded-xl border p-4 flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-gray-200" />
-              <div className="h-3 bg-gray-200 rounded w-20" />
-              <div className="h-2.5 bg-gray-100 rounded w-14" />
-              <div className="h-7 bg-gray-100 rounded w-full mt-1" />
+            <div key={i} className="animate-pulse bg-surface rounded-xl border p-4 flex flex-col items-center gap-2">
+              <div className="w-14 h-14 rounded-full bg-line" />
+              <div className="h-3 bg-line rounded w-20" />
+              <div className="h-2.5 bg-subtle rounded w-14" />
+              <div className="h-7 bg-subtle rounded w-full mt-1" />
             </div>
           ))}
         </div>
@@ -99,15 +99,15 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">People You May Know</h2>
-        <span className="text-xs text-gray-400">{items.length} shown</span>
+        <h2 className="text-lg font-semibold text-fg">People You May Know</h2>
+        <span className="text-xs text-faint">{items.length} shown</span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {items.map(user => {
           const status: ConnStatus = statuses[user.id] ?? 'none'
           return (
-            <div key={user.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+            <div key={user.id} className="bg-surface rounded-xl border border-line shadow-sm p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
               {/* Avatar - links to profile */}
               <Link href={`/profile/${user.id}`} className="flex-shrink-0 mb-2">
                 <Image
@@ -115,7 +115,7 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
                   alt={`${user.firstName} ${user.lastName}`}
                   width={56}
                   height={56}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 bg-gray-100"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-line bg-subtle"
                   onError={e => { e.currentTarget.src = initialsAvatar(user.firstName, user.lastName) }}
                 />
               </Link>
@@ -123,13 +123,13 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
               {/* Name - links to profile */}
               <Link
                 href={`/profile/${user.id}`}
-                className="text-sm font-medium text-gray-900 hover:text-blue-600 transition leading-tight line-clamp-2 mb-0.5"
+                className="text-sm font-medium text-fg hover:text-blue-600 transition leading-tight line-clamp-2 mb-0.5"
               >
                 {user.firstName} {user.lastName}
               </Link>
 
               {/* Role badge */}
-              <span className="text-[10px] text-gray-500 mb-2 truncate w-full">
+              <span className="text-[10px] text-soft mb-2 truncate w-full">
                 {getUserTypeLabel(user.userType)}
               </span>
 
@@ -166,10 +166,10 @@ export default function SuggestionsGrid({ currentUserId }: { currentUserId: stri
           <button
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition disabled:opacity-50 shadow-sm"
+            className="flex items-center gap-2 px-6 py-2.5 bg-surface border border-line text-soft text-sm font-medium rounded-lg hover:bg-subtle transition disabled:opacity-50 shadow-sm"
           >
             {loadingMore ? <FaSpinner className="animate-spin text-xs" /> : null}
-            {loadingMore ? 'Loading…' : 'Load more'}
+            {loadingMore ? 'Loading' : 'Load more'}
           </button>
         </div>
       )}

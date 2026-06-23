@@ -32,10 +32,10 @@ export default function PatientDashboardError({
  Dashboard Error
  </span>
 
- <h2 className="text-2xl font-bold text-gray-900 mb-2">
+ <h2 className="text-2xl font-bold text-fg mb-2">
  Error Loading Patient Dashboard
  </h2>
- <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+ <p className="text-soft mb-6 text-sm leading-relaxed">
  {error.message || 'An unexpected error occurred while loading this page.'}
  </p>
 
@@ -48,13 +48,13 @@ export default function PatientDashboardError({
  </button>
  <button
  onClick={() => window.history.back()}
- className="w-full sm:w-auto px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm"
+ className="w-full sm:w-auto px-5 py-2 border border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium text-sm"
  >
  Go Back
  </button>
  <Link
  href="/patient"
- className="w-full sm:w-auto px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm text-center"
+ className="w-full sm:w-auto px-5 py-2 border border-line text-soft rounded-lg hover:bg-subtle transition-colors font-medium text-sm text-center"
  >
  Dashboard Home
  </Link>

@@ -132,7 +132,7 @@ export default function GenericBookNannyPage({ params }: { params: Promise<{ id:
  <div className="flex items-center justify-center min-h-[400px]">
  <div className="text-center">
  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4" />
- <p className="text-gray-600">Loading nanny information...</p>
+ <p className="text-soft">Loading nanny information...</p>
  </div>
  </div>
  )
@@ -174,13 +174,13 @@ export default function GenericBookNannyPage({ params }: { params: Promise<{ id:
  <div className="mb-6">
  <Link
  href={`/${baseSlug}/find-childcare`}
- className="inline-flex items-center gap-2 text-gray-600 hover:text-yellow-600 transition-colors"
+ className="inline-flex items-center gap-2 text-soft hover:text-yellow-600 transition-colors"
  >
  <FaArrowLeft /> Back to Find Childcare
  </Link>
  </div>
 
- <h1 className="text-2xl font-bold text-gray-900 mb-6">
+ <h1 className="text-2xl font-bold text-fg mb-6">
  Book Childcare with {nanny.firstName} {nanny.lastName}
  </h1>
 

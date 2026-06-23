@@ -111,14 +111,14 @@ export default function MemberPaymentsPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-[#001E40]">Member Payments</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            {data.company.name} · {data.currentMonth} · {format(data.company.monthlyContribution)}/month per member
+          <h1 className="text-2xl font-bold text-fg">Member Payments</h1>
+          <p className="text-sm text-soft mt-0.5">
+            {data.company.name}  {data.currentMonth}  {format(data.company.monthlyContribution)}/month per member
           </p>
         </div>
         <button
           onClick={exportCsv}
-          className="flex items-center gap-2 text-sm border border-gray-300 hover:border-[#0C6780] text-gray-700 hover:text-[#0C6780] px-4 py-2 rounded-lg transition"
+          className="flex items-center gap-2 text-sm border border-line hover:border-[#0C6780] text-soft hover:text-[#0C6780] px-4 py-2 rounded-lg transition"
         >
           <FaDownload className="w-3.5 h-3.5" />
           Export CSV
@@ -127,14 +127,14 @@ export default function MemberPaymentsPage() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">
+        <div className="bg-surface rounded-xl border border-line p-4">
+          <div className="flex items-center gap-2 text-soft text-xs font-medium uppercase tracking-wide mb-1">
             <FaUsers className="w-3.5 h-3.5" /> Members
           </div>
-          <div className="text-2xl font-bold text-[#001E40]">{data.summary.total}</div>
+          <div className="text-2xl font-bold text-fg">{data.summary.total}</div>
         </div>
 
-        <div className="bg-white rounded-xl border border-emerald-200 p-4">
+        <div className="bg-surface rounded-xl border border-emerald-200 p-4">
           <div className="flex items-center gap-2 text-emerald-600 text-xs font-medium uppercase tracking-wide mb-1">
             <FaCheckCircle className="w-3.5 h-3.5" /> Paid
           </div>
@@ -142,29 +142,29 @@ export default function MemberPaymentsPage() {
           <div className="text-xs text-emerald-500 mt-0.5">{collectionRate}% collection</div>
         </div>
 
-        <div className="bg-white rounded-xl border border-amber-200 p-4">
+        <div className="bg-surface rounded-xl border border-amber-200 p-4">
           <div className="flex items-center gap-2 text-amber-600 text-xs font-medium uppercase tracking-wide mb-1">
             <FaExclamationCircle className="w-3.5 h-3.5" /> Unpaid
           </div>
           <div className="text-2xl font-bold text-amber-700">{data.summary.unpaid}</div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-2 text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">
+        <div className="bg-surface rounded-xl border border-line p-4">
+          <div className="flex items-center gap-2 text-soft text-xs font-medium uppercase tracking-wide mb-1">
             <FaMoneyBillWave className="w-3.5 h-3.5" /> Collected
           </div>
-          <div className="text-lg font-bold text-[#001E40]">{format(data.summary.collectedRevenue)}</div>
-          <div className="text-xs text-gray-400 mt-0.5">of {format(data.summary.expectedRevenue)}</div>
+          <div className="text-lg font-bold text-fg">{format(data.summary.collectedRevenue)}</div>
+          <div className="text-xs text-faint mt-0.5">of {format(data.summary.expectedRevenue)}</div>
         </div>
       </div>
 
       {/* Collection progress bar */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-surface rounded-xl border border-line p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Monthly collection</span>
+          <span className="text-sm font-medium text-soft">Monthly collection</span>
           <span className="text-sm font-bold text-[#0C6780]">{collectionRate}%</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-3">
+        <div className="w-full bg-subtle rounded-full h-3">
           <div
             className={`h-3 rounded-full transition-all ${
               collectionRate >= 90 ? 'bg-emerald-500' :
@@ -178,24 +178,24 @@ export default function MemberPaymentsPage() {
       {/* Search + filter */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint w-3.5 h-3.5" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name or email…"
-            className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none"
+            placeholder="Search by name or email"
+            className="w-full pl-9 pr-4 py-2.5 border border-line rounded-lg text-sm focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] outline-none"
           />
         </div>
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+        <div className="flex gap-1 bg-subtle rounded-lg p-1">
           {(['all', 'paid', 'unpaid'] as const).map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`px-4 py-1.5 rounded-md text-sm font-medium capitalize transition ${
                 filter === f
-                  ? 'bg-white shadow-sm text-[#001E40]'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-surface shadow-sm text-fg'
+                  : 'text-soft hover:text-soft'
               }`}
             >
               {f}
@@ -206,30 +206,30 @@ export default function MemberPaymentsPage() {
 
       {/* Members table */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 border border-dashed border-gray-200 rounded-xl bg-gray-50">
-          <FaUsers className="mx-auto text-3xl text-gray-300 mb-3" />
-          <p className="text-gray-500 text-sm">
+        <div className="text-center py-16 border border-dashed border-line rounded-xl bg-subtle">
+          <FaUsers className="mx-auto text-3xl text-faint mb-3" />
+          <p className="text-soft text-sm">
             {search || filter !== 'all' ? 'No members match your filter.' : 'No members yet.'}
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-surface rounded-xl border border-line overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Member</th>
-                  <th className="text-center px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">This Month</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Payment</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
+                <tr className="bg-subtle border-b border-line">
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-soft uppercase tracking-wider">Member</th>
+                  <th className="text-center px-5 py-3 text-xs font-semibold text-soft uppercase tracking-wider">This Month</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-soft uppercase tracking-wider">Last Payment</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-soft uppercase tracking-wider">Joined</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {filtered.map(m => (
-                  <tr key={m.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={m.id} className="hover:bg-subtle transition-colors">
                     <td className="px-5 py-4">
-                      <div className="font-medium text-sm text-gray-900">{m.name}</div>
-                      <div className="text-xs text-gray-500">{m.email}</div>
+                      <div className="font-medium text-sm text-fg">{m.name}</div>
+                      <div className="text-xs text-soft">{m.email}</div>
                     </td>
                     <td className="px-5 py-4 text-center">
                       {m.paidThisMonth ? (
@@ -242,13 +242,13 @@ export default function MemberPaymentsPage() {
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">
+                    <td className="px-5 py-4 text-sm text-soft">
                       {m.lastContributionAt
                         ? new Date(m.lastContributionAt).toLocaleDateString()
-                        : <span className="text-gray-400">Never</span>
+                        : <span className="text-faint">Never</span>
                       }
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">
+                    <td className="px-5 py-4 text-sm text-soft">
                       {new Date(m.joinedAt).toLocaleDateString()}
                     </td>
                   </tr>

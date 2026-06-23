@@ -145,7 +145,7 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  {/* Progress Bar */}
  <div className="w-full bg-white/20 rounded-full h-2 sm:h-2.5 mb-2">
  <div
- className="bg-white rounded-full h-2 sm:h-2.5 transition-all duration-500"
+ className="bg-surface rounded-full h-2 sm:h-2.5 transition-all duration-500"
  style={{ width: `${Math.min(percentage, 100)}%` }}
  />
  </div>
@@ -163,7 +163,7 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  </button>
  </div>
 
- {/* Reset credit panel — pick a preset, restore the trial, or set a custom
+ {/* Reset credit panel  pick a preset, restore the trial, or set a custom
      amount. Uses the reliable reset endpoint (no payment gateway). */}
  {showReset && (
  <div className="mt-3 bg-white/10 rounded-xl p-3">
@@ -195,12 +195,12 @@ const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ userId }) => {
  value={customReset}
  onChange={(e) => setCustomReset(e.target.value)}
  placeholder="Custom amount"
- className="flex-1 px-3 py-1.5 rounded-lg text-xs text-gray-900 placeholder-gray-400 outline-none"
+ className="flex-1 px-3 py-1.5 rounded-lg text-xs text-fg placeholder-gray-400 outline-none"
  />
  <button
  onClick={() => { const a = parseFloat(customReset); if (a >= 0) handleReset(a) }}
  disabled={resetting || customReset === ''}
- className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-brand-navy hover:bg-white/90 disabled:opacity-50 transition-colors"
+ className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-surface text-brand-navy hover:bg-white/90 disabled:opacity-50 transition-colors"
  >
  Set
  </button>

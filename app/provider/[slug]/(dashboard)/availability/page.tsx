@@ -24,7 +24,7 @@ export default function AvailabilityPage({ params }: { params: Promise<{ slug: s
       ) : (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
+            <div key={i} className="h-16 bg-subtle rounded-xl animate-pulse" />
           ))}
         </div>
       )}

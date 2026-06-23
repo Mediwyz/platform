@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { FaHospital, FaSpinner, FaCheckCircle, FaTimesCircle, FaSignInAlt } from 'react-icons/fa'
 import Link from 'next/link'
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+//  Types 
 
 interface InvitationInfo {
   id: string
@@ -26,7 +26,7 @@ interface InvitationInfo {
   }
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -39,7 +39,7 @@ function isExpired(expiresAt: string | null): boolean {
   return new Date(expiresAt) < new Date()
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
+//  Page 
 
 export default function OrganizationJoinPage() {
   const params = useParams()
@@ -94,22 +94,22 @@ export default function OrganizationJoinPage() {
     }
   }
 
-  // ── Loading ──
+  //  Loading 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-subtle flex items-center justify-center">
         <FaSpinner className="text-[#0C6780] text-3xl animate-spin" />
       </div>
     )
   }
 
-  // ── Fetch error ──
+  //  Fetch error 
   if (fetchError) {
     return (
       <Shell>
         <FaTimesCircle className="text-5xl text-red-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Invitation Not Found</h2>
-        <p className="text-gray-500 text-sm mb-6">{fetchError}</p>
+        <h2 className="text-xl font-bold text-fg mb-2">Invitation Not Found</h2>
+        <p className="text-soft text-sm mb-6">{fetchError}</p>
         <Link href="/" className="text-sm font-medium text-[#0C6780] hover:underline">
           Back to home
         </Link>
@@ -119,13 +119,13 @@ export default function OrganizationJoinPage() {
 
   if (!info) return null
 
-  // ── Already accepted ──
+  //  Already accepted 
   if (info.alreadyAccepted) {
     return (
       <Shell>
         <FaCheckCircle className="text-5xl text-green-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Already Accepted</h2>
-        <p className="text-gray-500 text-sm mb-6">This invitation has already been accepted.</p>
+        <h2 className="text-xl font-bold text-fg mb-2">Already Accepted</h2>
+        <p className="text-soft text-sm mb-6">This invitation has already been accepted.</p>
         <Link href="/" className="text-sm font-medium text-[#0C6780] hover:underline">
           Go to home
         </Link>
@@ -133,13 +133,13 @@ export default function OrganizationJoinPage() {
     )
   }
 
-  // ── Expired ──
+  //  Expired 
   if (info.isExpired || isExpired(info.expiresAt)) {
     return (
       <Shell>
         <FaTimesCircle className="text-5xl text-amber-400 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Invitation Expired</h2>
-        <p className="text-gray-500 text-sm mb-6">This invitation link has expired. Ask the entity admin to send a new one.</p>
+        <h2 className="text-xl font-bold text-fg mb-2">Invitation Expired</h2>
+        <p className="text-soft text-sm mb-6">This invitation link has expired. Ask the entity admin to send a new one.</p>
         <Link href="/" className="text-sm font-medium text-[#0C6780] hover:underline">
           Back to home
         </Link>
@@ -147,22 +147,22 @@ export default function OrganizationJoinPage() {
     )
   }
 
-  // ── Success state ──
+  //  Success state 
   if (accepted) {
     return (
       <Shell>
         <FaCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Welcome to {info.entity.name}!</h2>
-        <p className="text-gray-500 text-sm">Your membership request is pending approval by the admin.</p>
-        <p className="text-gray-400 text-xs mt-3">Redirecting to your dashboard…</p>
+        <h2 className="text-xl font-bold text-fg mb-2">Welcome to {info.entity.name}!</h2>
+        <p className="text-soft text-sm">Your membership request is pending approval by the admin.</p>
+        <p className="text-faint text-xs mt-3">Redirecting to your dashboard</p>
       </Shell>
     )
   }
 
-  // ── Main invitation view ──
+  //  Main invitation view 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 max-w-md w-full overflow-hidden">
+    <div className="min-h-screen bg-subtle flex items-center justify-center p-4">
+      <div className="bg-surface rounded-2xl shadow-xl border border-line max-w-md w-full overflow-hidden">
         {/* Header banner */}
         <div className="bg-gradient-to-br from-[#001E40] to-[#0C6780] px-6 py-8 text-center">
           <div className="w-20 h-20 mx-auto rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden">
@@ -185,7 +185,7 @@ export default function OrganizationJoinPage() {
 
         {/* Body */}
         <div className="px-6 py-6">
-          <p className="text-center text-gray-700 text-sm leading-relaxed">
+          <p className="text-center text-soft text-sm leading-relaxed">
             {info.inviterName ? (
               <><strong>{info.inviterName}</strong> has invited you to join <strong>{info.entity.name}</strong>.</>
             ) : (
@@ -195,13 +195,13 @@ export default function OrganizationJoinPage() {
 
           {info.suggestedRole && (
             <div className="mt-4 bg-[#9AE1FF]/20 border border-[#9AE1FF]/40 rounded-xl px-4 py-3 text-center">
-              <p className="text-xs font-medium text-[#001E40] uppercase tracking-wide">Suggested Role</p>
+              <p className="text-xs font-medium text-fg uppercase tracking-wide">Suggested Role</p>
               <p className="text-[#0C6780] font-semibold mt-0.5">{info.suggestedRole}</p>
             </div>
           )}
 
           {info.expiresAt && (
-            <p className="text-xs text-gray-400 text-center mt-3">
+            <p className="text-xs text-faint text-center mt-3">
               Expires {new Date(info.expiresAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
             </p>
           )}
@@ -209,7 +209,7 @@ export default function OrganizationJoinPage() {
           <div className="mt-6 space-y-3">
             {!isLoggedIn ? (
               <>
-                <p className="text-sm text-center text-gray-500">You need to log in to accept this invitation.</p>
+                <p className="text-sm text-center text-soft">You need to log in to accept this invitation.</p>
                 <Link
                   href={`/login?redirect=/organization/join/${token}`}
                   className="flex items-center justify-center gap-2 w-full bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-3 rounded-xl font-semibold text-sm transition-colors"
@@ -236,14 +236,14 @@ export default function OrganizationJoinPage() {
                   className="flex items-center justify-center gap-2 w-full bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-3 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
                 >
                   {accepting ? (
-                    <><FaSpinner className="animate-spin" /> Accepting…</>
+                    <><FaSpinner className="animate-spin" /> Accepting</>
                   ) : (
                     <><FaCheckCircle /> Accept Invitation</>
                   )}
                 </button>
                 <Link
                   href="/"
-                  className="flex items-center justify-center w-full text-gray-500 hover:text-gray-700 text-sm py-2 transition-colors"
+                  className="flex items-center justify-center w-full text-soft hover:text-soft text-sm py-2 transition-colors"
                 >
                   Decline
                 </Link>
@@ -256,12 +256,12 @@ export default function OrganizationJoinPage() {
   )
 }
 
-// ─── Shell layout ─────────────────────────────────────────────────────────────
+//  Shell layout 
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 max-w-sm w-full p-8 text-center">
+    <div className="min-h-screen bg-subtle flex items-center justify-center p-4">
+      <div className="bg-surface rounded-2xl shadow-xl border border-line max-w-sm w-full p-8 text-center">
         {children}
       </div>
     </div>

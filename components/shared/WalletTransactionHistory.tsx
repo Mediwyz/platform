@@ -44,7 +44,7 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  pharmacy: 'bg-green-100 text-green-700',
  initial_credit: 'bg-teal-100 text-teal-700',
  }
- const color = colorMap[serviceType] || 'bg-gray-100 text-gray-700'
+ const color = colorMap[serviceType] || 'bg-subtle text-soft'
  return (
  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${color}`}>
  {serviceType.replace(/_/g, ' ')}
@@ -54,39 +54,39 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
 
  if (transactions.length === 0) {
  return (
- <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center text-gray-500 text-sm">
+ <div className="bg-surface rounded-xl p-6 shadow-lg border border-line text-center text-soft text-sm">
  No transactions yet.
  </div>
  )
  }
 
  return (
- <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
- <div className="p-4 sm:p-5 border-b border-gray-100">
- <h3 className="text-sm sm:text-base font-bold text-gray-900">Transaction History</h3>
- <p className="text-xs text-gray-500 mt-1">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''}</p>
+ <div className="bg-surface rounded-xl sm:rounded-2xl shadow-lg border border-line overflow-hidden">
+ <div className="p-4 sm:p-5 border-b border-line">
+ <h3 className="text-sm sm:text-base font-bold text-fg">Transaction History</h3>
+ <p className="text-xs text-soft mt-1">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''}</p>
  </div>
 
  {/* Desktop Table */}
  <div className="hidden md:block overflow-x-auto">
  <table className="w-full text-sm">
- <thead className="bg-gray-50">
+ <thead className="bg-subtle">
  <tr>
- <th className="p-3 text-left font-medium text-gray-600">Date</th>
- <th className="p-3 text-left font-medium text-gray-600">Description</th>
- <th className="p-3 text-left font-medium text-gray-600">Service</th>
- <th className="p-3 text-right font-medium text-gray-600">Amount</th>
- <th className="p-3 text-right font-medium text-gray-600">Balance After</th>
+ <th className="p-3 text-left font-medium text-soft">Date</th>
+ <th className="p-3 text-left font-medium text-soft">Description</th>
+ <th className="p-3 text-left font-medium text-soft">Service</th>
+ <th className="p-3 text-right font-medium text-soft">Amount</th>
+ <th className="p-3 text-right font-medium text-soft">Balance After</th>
  </tr>
  </thead>
  <tbody>
  {transactions.map((tx) => {
  const isCredit = tx.type === 'CREDIT'
  return (
- <tr key={tx.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+ <tr key={tx.id} className="border-b border-gray-50 hover:bg-subtle transition-colors">
  <td className="p-3">
- <p className="text-gray-900 text-sm">{formatDate(tx.createdAt)}</p>
- <p className="text-gray-500 text-xs">{formatTime(tx.createdAt)}</p>
+ <p className="text-fg text-sm">{formatDate(tx.createdAt)}</p>
+ <p className="text-soft text-xs">{formatTime(tx.createdAt)}</p>
  </td>
  <td className="p-3">
  <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  <FaArrowDown className="text-red-600 text-xs" />
  )}
  </div>
- <span className="text-gray-900">{tx.description}</span>
+ <span className="text-fg">{tx.description}</span>
  </div>
  </td>
  <td className="p-3">
@@ -106,7 +106,7 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  <td className={`p-3 text-right font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
  {isCredit ? '+' : '-'}{symbol} {Math.abs(tx.amount).toLocaleString()}
  </td>
- <td className="p-3 text-right text-gray-700 font-medium">
+ <td className="p-3 text-right text-soft font-medium">
  {symbol} {tx.balanceAfter.toLocaleString()}
  </td>
  </tr>
@@ -117,11 +117,11 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  </div>
 
  {/* Mobile Card List */}
- <div className="md:hidden divide-y divide-gray-100">
+ <div className="md:hidden divide-y divide-line">
  {transactions.map((tx) => {
  const isCredit = tx.type === 'CREDIT'
  return (
- <div key={tx.id} className="p-4 hover:bg-gray-50 transition-colors">
+ <div key={tx.id} className="p-4 hover:bg-subtle transition-colors">
  <div className="flex items-start justify-between gap-3 mb-2">
  <div className="flex items-center gap-2 flex-1 min-w-0">
  <div className={`p-1.5 rounded-full flex-shrink-0 ${isCredit ? 'bg-green-100' : 'bg-red-100'}`}>
@@ -131,7 +131,7 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  <FaArrowDown className="text-red-600 text-xs" />
  )}
  </div>
- <p className="text-sm font-medium text-gray-900 truncate">{tx.description}</p>
+ <p className="text-sm font-medium text-fg truncate">{tx.description}</p>
  </div>
  <p className={`text-sm font-bold whitespace-nowrap ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
  {isCredit ? '+' : '-'}{symbol} {Math.abs(tx.amount).toLocaleString()}
@@ -140,11 +140,11 @@ const WalletTransactionHistory: React.FC<WalletTransactionHistoryProps> = ({ tra
  <div className="flex items-center justify-between ml-8">
  <div className="flex items-center gap-2">
  {getServiceTypeBadge(tx.serviceType)}
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-soft">
  {formatDate(tx.createdAt)}
  </span>
  </div>
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-soft">
  Bal: {symbol} {tx.balanceAfter.toLocaleString()}
  </span>
  </div>

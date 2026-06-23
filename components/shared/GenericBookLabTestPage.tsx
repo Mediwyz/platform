@@ -128,7 +128,7 @@ export default function GenericBookLabTestPage({ params }: { params: Promise<{ i
  <div className="flex items-center justify-center min-h-[400px]">
  <div className="text-center">
  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600 mx-auto mb-4" />
- <p className="text-gray-600">Loading lab test information...</p>
+ <p className="text-soft">Loading lab test information...</p>
  </div>
  </div>
  )
@@ -170,16 +170,16 @@ export default function GenericBookLabTestPage({ params }: { params: Promise<{ i
  <div className="mb-6">
  <Link
  href={`/${baseSlug}/find-lab`}
- className="inline-flex items-center gap-2 text-gray-600 hover:text-cyan-600 transition-colors"
+ className="inline-flex items-center gap-2 text-soft hover:text-cyan-600 transition-colors"
  >
  <FaArrowLeft /> Back to Find Lab Tests
  </Link>
  </div>
 
- <h1 className="text-2xl font-bold text-gray-900 mb-2">
+ <h1 className="text-2xl font-bold text-fg mb-2">
  Book Lab Test: {labTest.testName}
  </h1>
- <div className="flex flex-wrap gap-3 text-sm text-gray-500 mb-6">
+ <div className="flex flex-wrap gap-3 text-sm text-soft mb-6">
  <span>Lab: {labTest.lab}</span>
  <span>|</span>
  <span>Category: {labTest.category}</span>

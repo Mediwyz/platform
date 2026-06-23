@@ -57,7 +57,7 @@ function mapApiPrescription(p: any): Prescription {
  doctor: {
  name: docUser ? `Dr. ${docUser.firstName} ${docUser.lastName}` : 'Unknown',
  specialty: '',
- avatar: '👨‍⚕️',
+ avatar: '',
  regNumber: '',
  },
  date: new Date(p.date).toISOString().split('T')[0],
@@ -103,8 +103,8 @@ export default function PrescriptionManagementPage() {
  switch (status) {
  case "active": return "bg-green-100 text-green-800"
  case "expired": return "bg-red-100 text-red-800"
- case "completed": return "bg-gray-100 text-gray-800"
- default: return "bg-gray-100 text-gray-800"
+ case "completed": return "bg-subtle text-fg"
+ default: return "bg-subtle text-fg"
  }
  }
 
@@ -112,7 +112,7 @@ export default function PrescriptionManagementPage() {
  switch (status) {
  case "active": return <FaCheckCircle className="text-green-500" />
  case "expired": return <FaExclamationTriangle className="text-red-500" />
- case "completed": return <FaClock className="text-gray-500" />
+ case "completed": return <FaClock className="text-soft" />
  default: return null
  }
  }
@@ -136,22 +136,22 @@ export default function PrescriptionManagementPage() {
  }
 
  return (
- <div className="min-h-screen bg-gray-50">
+ <div className="min-h-screen bg-subtle">
  {/* Header */}
- <div className="bg-white shadow-sm border-b">
+ <div className="bg-surface shadow-sm border-b">
  <div className="container mx-auto px-4 py-4">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
- <Link href="/patient" className="text-gray-600 hover:text-primary-blue">
+ <Link href="/patient" className="text-soft hover:text-primary-blue">
  <FaArrowLeft className="text-xl" />
  </Link>
  <div>
- <h1 className="text-2xl font-bold text-gray-900">My Prescriptions</h1>
- <p className="text-gray-600">Manage and refill your prescriptions</p>
+ <h1 className="text-2xl font-bold text-fg">My Prescriptions</h1>
+ <p className="text-soft">Manage and refill your prescriptions</p>
  </div>
  </div>
  <div className="flex items-center gap-4">
- <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+ <button className="px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle flex items-center gap-2">
  <FaHistory />
  History
  </button>
@@ -167,10 +167,10 @@ export default function PrescriptionManagementPage() {
  <div className="container mx-auto px-4 py-8">
  {/* Summary Cards */}
  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Active Prescriptions</p>
+ <p className="text-soft text-sm">Active Prescriptions</p>
  <p className="text-2xl font-bold text-green-600">
  {prescriptions.filter(rx => rx.status === "active").length}
  </p>
@@ -179,10 +179,10 @@ export default function PrescriptionManagementPage() {
  </div>
  </div>
  
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Refills Available</p>
+ <p className="text-soft text-sm">Refills Available</p>
  <p className="text-2xl font-bold text-blue-600">
  {prescriptions.reduce((sum, rx) => sum + rx.refillsRemaining, 0)}
  </p>
@@ -191,20 +191,20 @@ export default function PrescriptionManagementPage() {
  </div>
  </div>
  
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Expiring Soon</p>
+ <p className="text-soft text-sm">Expiring Soon</p>
  <p className="text-2xl font-bold text-yellow-600">1</p>
  </div>
  <FaExclamationTriangle className="text-yellow-500 text-2xl" />
  </div>
  </div>
  
- <div className="bg-white rounded-2xl p-6 shadow-lg">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg">
  <div className="flex items-center justify-between">
  <div>
- <p className="text-gray-600 text-sm">Total Medications</p>
+ <p className="text-soft text-sm">Total Medications</p>
  <p className="text-2xl font-bold text-purple-600">
  {prescriptions.reduce((sum, rx) => sum + rx.medications.length, 0)}
  </p>
@@ -215,7 +215,7 @@ export default function PrescriptionManagementPage() {
  </div>
 
  {/* Filters and Search */}
- <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
+ <div className="bg-surface rounded-2xl p-6 shadow-lg mb-8">
  <div className="flex flex-col md:flex-row gap-4">
  <div className="flex-1">
  <div className="relative">
@@ -226,7 +226,7 @@ export default function PrescriptionManagementPage() {
  onChange={(e) => setSearchQuery(e.target.value)}
  className="w-full px-4 py-3 pl-10 border rounded-lg focus:outline-none focus:border-primary-blue"
  />
- <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+ <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-faint" />
  </div>
  </div>
  <select
@@ -239,7 +239,7 @@ export default function PrescriptionManagementPage() {
  <option value="expired">Expired</option>
  <option value="completed">Completed</option>
  </select>
- <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+ <button className="px-6 py-3 border border-line text-soft rounded-lg hover:bg-subtle flex items-center gap-2">
  <FaFilter />
  More Filters
  </button>
@@ -249,14 +249,14 @@ export default function PrescriptionManagementPage() {
  {/* Prescriptions List */}
  <div className="space-y-6">
  {filteredPrescriptions.map((prescription) => (
- <div key={prescription.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+ <div key={prescription.id} className="bg-surface rounded-2xl shadow-lg overflow-hidden">
  <div className="p-6">
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-start gap-4">
  <div className="text-3xl">{prescription.doctor.avatar}</div>
  <div>
  <div className="flex items-center gap-3 mb-1">
- <h3 className="text-lg font-semibold text-gray-900">
+ <h3 className="text-lg font-semibold text-fg">
  Prescription #{prescription.id}
  </h3>
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(prescription.status)}`}>
@@ -264,10 +264,10 @@ export default function PrescriptionManagementPage() {
  <span className="ml-1">{prescription.status}</span>
  </span>
  </div>
- <p className="text-gray-600">
- {prescription.doctor.name} • {prescription.doctor.specialty}
+ <p className="text-soft">
+ {prescription.doctor.name}  {prescription.doctor.specialty}
  </p>
- <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+ <div className="flex items-center gap-4 mt-2 text-sm text-soft">
  <div className="flex items-center gap-1">
  <FaCalendarAlt />
  <span>Prescribed: {prescription.date}</span>
@@ -281,16 +281,16 @@ export default function PrescriptionManagementPage() {
  </div>
  
  <div className="flex items-center gap-2">
- <button className="p-2 text-gray-600 hover:text-primary-blue">
+ <button className="p-2 text-soft hover:text-primary-blue">
  <FaEye />
  </button>
- <button className="p-2 text-gray-600 hover:text-primary-blue">
+ <button className="p-2 text-soft hover:text-primary-blue">
  <FaFileDownload />
  </button>
- <button className="p-2 text-gray-600 hover:text-primary-blue">
+ <button className="p-2 text-soft hover:text-primary-blue">
  <FaPrint />
  </button>
- <button className="p-2 text-gray-600 hover:text-primary-blue">
+ <button className="p-2 text-soft hover:text-primary-blue">
  <FaShare />
  </button>
  </div>
@@ -298,27 +298,27 @@ export default function PrescriptionManagementPage() {
 
  {/* Diagnosis */}
  <div className="mb-4">
- <p className="text-sm text-gray-600">Diagnosis</p>
- <p className="font-medium text-gray-900">{prescription.diagnosis}</p>
+ <p className="text-sm text-soft">Diagnosis</p>
+ <p className="font-medium text-fg">{prescription.diagnosis}</p>
  </div>
 
  {/* Medications */}
  <div className="mb-4">
- <h4 className="font-semibold text-gray-900 mb-3">Medications</h4>
+ <h4 className="font-semibold text-fg mb-3">Medications</h4>
  <div className="space-y-3">
  {prescription.medications.map((med, index) => (
- <div key={index} className="bg-gray-50 rounded-lg p-4">
+ <div key={index} className="bg-subtle rounded-lg p-4">
  <div className="flex items-start justify-between">
  <div className="flex items-start gap-3">
  <FaPills className="text-primary-blue mt-1" />
  <div>
- <h5 className="font-medium text-gray-900">
+ <h5 className="font-medium text-fg">
  {med.name} {med.dosage}
  </h5>
- <p className="text-sm text-gray-600">
- {med.frequency} • {med.duration} • Qty: {med.quantity}
+ <p className="text-sm text-soft">
+ {med.frequency}  {med.duration}  Qty: {med.quantity}
  </p>
- <p className="text-sm text-gray-500 mt-1">
+ <p className="text-sm text-soft mt-1">
  Instructions: {med.instructions}
  </p>
  </div>
@@ -348,7 +348,7 @@ export default function PrescriptionManagementPage() {
 
  {/* Actions */}
  <div className="flex items-center justify-between pt-4 border-t">
- <div className="flex items-center gap-2 text-sm text-gray-600">
+ <div className="flex items-center gap-2 text-sm text-soft">
  <FaBell />
  <span>Refills remaining: {prescription.refillsRemaining}</span>
  </div>
@@ -379,25 +379,25 @@ export default function PrescriptionManagementPage() {
  {/* Prescription Detail Modal */}
  {selectedPrescription && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+ <div className="bg-surface rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
  <div className="flex items-center justify-between mb-6">
  <h2 className="text-xl font-bold">Prescription Details</h2>
  <button
  onClick={() => setSelectedPrescription(null)}
- className="text-gray-500 hover:text-gray-700 text-2xl"
+ className="text-soft hover:text-soft text-2xl"
  >
- ×
+ 
  </button>
  </div>
  
  <div className="space-y-6">
  {/* Doctor Info */}
- <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+ <div className="flex items-center gap-4 p-4 bg-subtle rounded-lg">
  <div className="text-4xl">{selectedPrescription.doctor.avatar}</div>
  <div>
  <h3 className="font-semibold">{selectedPrescription.doctor.name}</h3>
- <p className="text-gray-600">{selectedPrescription.doctor.specialty}</p>
- <p className="text-sm text-gray-500">Reg. No: {selectedPrescription.doctor.regNumber}</p>
+ <p className="text-soft">{selectedPrescription.doctor.specialty}</p>
+ <p className="text-sm text-soft">Reg. No: {selectedPrescription.doctor.regNumber}</p>
  </div>
  </div>
 
@@ -406,19 +406,19 @@ export default function PrescriptionManagementPage() {
  <h3 className="font-semibold mb-3">Prescription Information</h3>
  <div className="grid grid-cols-2 gap-4">
  <div>
- <p className="text-sm text-gray-600">Prescription ID</p>
+ <p className="text-sm text-soft">Prescription ID</p>
  <p className="font-medium">{selectedPrescription.id}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Date Issued</p>
+ <p className="text-sm text-soft">Date Issued</p>
  <p className="font-medium">{selectedPrescription.date}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Valid Until</p>
+ <p className="text-sm text-soft">Valid Until</p>
  <p className="font-medium">{selectedPrescription.validUntil}</p>
  </div>
  <div>
- <p className="text-sm text-gray-600">Status</p>
+ <p className="text-sm text-soft">Status</p>
  <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedPrescription.status)}`}>
  {selectedPrescription.status}
  </span>
@@ -432,7 +432,7 @@ export default function PrescriptionManagementPage() {
  <FaFileDownload />
  Download PDF
  </button>
- <button className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2">
+ <button className="flex-1 border border-line text-soft py-2 rounded-lg hover:bg-subtle flex items-center justify-center gap-2">
  <FaPrint />
  Print
  </button>
@@ -445,21 +445,21 @@ export default function PrescriptionManagementPage() {
  {/* Refill Request Modal */}
  {showRefillModal && selectedRefillPrescription && (
  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
- <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+ <div className="bg-surface rounded-2xl p-6 max-w-md w-full">
  <h3 className="text-lg font-semibold mb-4">Request Prescription Refill</h3>
- <p className="text-gray-600 mb-4">
+ <p className="text-soft mb-4">
  You are requesting a refill for prescription #{selectedRefillPrescription.id}
  </p>
- <div className="bg-gray-50 rounded-lg p-4 mb-6">
- <p className="text-sm text-gray-600">Doctor</p>
+ <div className="bg-subtle rounded-lg p-4 mb-6">
+ <p className="text-sm text-soft">Doctor</p>
  <p className="font-medium">{selectedRefillPrescription.doctor.name}</p>
- <p className="text-sm text-gray-600 mt-2">Refills Remaining</p>
+ <p className="text-sm text-soft mt-2">Refills Remaining</p>
  <p className="font-medium">{selectedRefillPrescription.refillsRemaining}</p>
  </div>
  <div className="flex gap-3">
  <button
  onClick={() => setShowRefillModal(false)}
- className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+ className="flex-1 px-4 py-2 border border-line text-soft rounded-lg hover:bg-subtle"
  >
  Cancel
  </button>

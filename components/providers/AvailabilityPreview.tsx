@@ -54,7 +54,7 @@ export default function AvailabilityPreview({ providerId, roleSlug }: Props) {
     return (
       <div className="space-y-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-6 bg-gray-100 rounded animate-pulse" />
+          <div key={i} className="h-6 bg-subtle rounded animate-pulse" />
         ))}
       </div>
     )
@@ -64,7 +64,7 @@ export default function AvailabilityPreview({ providerId, roleSlug }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 text-sm font-semibold text-gray-800">
+      <div className="flex items-center gap-2 text-sm font-semibold text-fg">
         <FaCalendarAlt className="text-[#0C6780]" />
         Weekly availability
       </div>
@@ -72,9 +72,9 @@ export default function AvailabilityPreview({ providerId, roleSlug }: Props) {
       <ul className="space-y-1.5">
         {rows.map((r) => (
           <li key={r.dayOfWeek} className="flex items-center gap-3 text-sm">
-            <span className="w-24 font-medium text-gray-700">{DAY_NAMES[r.dayOfWeek]}</span>
-            <span className="text-gray-600">
-              {formatTime(r.startTime)} – {formatTime(r.endTime)}
+            <span className="w-24 font-medium text-soft">{DAY_NAMES[r.dayOfWeek]}</span>
+            <span className="text-soft">
+              {formatTime(r.startTime)}  {formatTime(r.endTime)}
             </span>
           </li>
         ))}
@@ -83,7 +83,7 @@ export default function AvailabilityPreview({ providerId, roleSlug }: Props) {
       {roleSlug && (
         <Link
           href={`/search/${roleSlug}`}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] hover:text-[#001E40] transition-colors mt-1"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0C6780] hover:text-fg transition-colors mt-1"
         >
           Book an appointment <FaArrowRight className="text-xs" />
         </Link>

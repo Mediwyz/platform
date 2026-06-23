@@ -234,7 +234,7 @@ export default function AdminContentManagementPage() {
  return (
  <div className="flex items-center justify-center py-20">
  <FaSpinner className="animate-spin text-blue-600 text-3xl" />
- <span className="ml-3 text-gray-600 text-lg">Loading your profile...</span>
+ <span className="ml-3 text-soft text-lg">Loading your profile...</span>
  </div>
  )
  }
@@ -259,7 +259,7 @@ export default function AdminContentManagementPage() {
  return (
  <div className="flex items-center justify-center py-20">
  <FaSpinner className="animate-spin text-blue-600 text-3xl" />
- <span className="ml-3 text-gray-600 text-lg">Loading CMS data...</span>
+ <span className="ml-3 text-soft text-lg">Loading CMS data...</span>
  </div>
  )
  }
@@ -335,8 +335,8 @@ export default function AdminContentManagementPage() {
  <>
  {/* Header */}
  <div className="mb-6">
- <h1 className="text-2xl font-bold text-[#001E40]">Content Management</h1>
- <p className="text-gray-600 mt-1">
+ <h1 className="text-2xl font-bold text-fg">Content Management</h1>
+ <p className="text-soft mt-1">
  Manage landing page content for your country
  <span className="ml-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
  <FaGlobe className="text-xs" />
@@ -359,7 +359,7 @@ export default function AdminContentManagementPage() {
  )}
 
  {/* Tab Navigation */}
- <div className="bg-white rounded-xl p-1.5 shadow mb-6">
+ <div className="bg-surface rounded-xl p-1.5 shadow mb-6">
  <div className="flex gap-1 overflow-x-auto">
  {TABS.map((tab) => {
  const Icon = tab.icon
@@ -370,7 +370,7 @@ export default function AdminContentManagementPage() {
  className={`px-2 sm:px-4 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition flex items-center justify-center gap-1.5 ${
  activeTab === tab.id
  ? 'bg-blue-600 text-white shadow-sm'
- : 'text-gray-600 hover:bg-gray-100'
+ : 'text-soft hover:bg-subtle'
  }`}
  title={tab.label}
  >
