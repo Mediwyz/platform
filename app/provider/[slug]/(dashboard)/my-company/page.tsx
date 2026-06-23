@@ -11,6 +11,7 @@ import CompanyAnalytics from '@/components/corporate/CompanyAnalytics'
 import CompanyDangerZone from '@/components/corporate/CompanyDangerZone'
 import MyOrganisationsOverview from '@/components/corporate/MyOrganisationsOverview'
 import MyOrganisationsList from '@/components/corporate/MyOrganisationsList'
+import CompanyMembershipsList from '@/components/corporate/CompanyMembershipsList'
 
 interface Company {
   id: string
@@ -191,6 +192,8 @@ export default function MyCompanyPage() {
       <div className="p-6 max-w-2xl mx-auto">
         {/* 1  Organisations you belong to (clinics, pharmacies, labs) */}
         <MyOrganisationsList />
+        {/* 1b  Companies you're a member of (employer/insurer) */}
+        <CompanyMembershipsList />
         {/* 2  Create or join a healthcare organisation */}
         <MyOrganisationsOverview />
 
@@ -376,6 +379,7 @@ export default function MyCompanyPage() {
 
       {/* Organisations you belong to, then create/join more */}
       <MyOrganisationsList />
+      <CompanyMembershipsList />
       <MyOrganisationsOverview />
 
       {/* Stats */}

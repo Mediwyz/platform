@@ -55,7 +55,7 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  // Current / latest step gets its real category colour. Earlier steps
  // fade to grey so the eye lands on "where am I now?".
  const category = resolveCategory(step, categoryByStatus)
- const color = (isCurrent || isLast) ? CATEGORY_DOT[category] : 'bg-gray-400'
+ const color = (isCurrent || isLast) ? CATEGORY_DOT[category] : 'bg-faint'
 
  return (
  <li key={step.id}>
@@ -65,7 +65,7 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  )}
  <div className="relative flex space-x-3">
  <div>
- <span className={`${color} h-8 w-8 rounded-full flex items-center justify-center ring-4 ring-white text-white`}>
+ <span className={`${color} h-8 w-8 rounded-full flex items-center justify-center text-white transition-all ${isCurrent ? 'ring-2 ring-offset-2 ring-offset-surface ring-[#0C6780] dark:ring-accent shadow-md' : 'ring-4 ring-surface'}`}>
  {getStepIcon(step)}
  </span>
  </div>
@@ -78,13 +78,13 @@ export default function WorkflowTimeline({ steps, currentStatus, categoryByStatu
  <p className="mt-0.5 text-xs text-soft">{step.message}</p>
  )}
  {step.contentType && (
- <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+ <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300">
  <FiFileText className="w-3 h-3" />
  {step.contentType.replace(/_/g, ' ')}
  </span>
  )}
  {step.triggeredVideoCallId && (
- <span className="inline-flex items-center gap-1 mt-1 ml-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+ <span className="inline-flex items-center gap-1 mt-1 ml-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300">
  <FiVideo className="w-3 h-3" />
  Video call
  </span>
