@@ -26,7 +26,8 @@ import SearchAutocomplete from '@/components/search/SearchAutocomplete'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import ThemeToggle from '@/components/ui/theme/ThemeToggle'
 import { useCapacitor } from '@/hooks/useCapacitor'
-import { getProfilePath } from '@/lib/navigation/profilePath'
+import { getProfilePath, getDashboardBase } from '@/lib/navigation/profilePath'
+import { FaRss, FaTachometerAlt, FaHeartbeat } from 'react-icons/fa'
 import * as FaIcons from 'react-icons/fa'
 
 type ServiceItem = { href: string; label: string; desc: string; icon: React.ComponentType<{ className?: string }>; color: string }
@@ -114,6 +115,7 @@ const Navbar: React.FC = () => {
  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
  const [isMobile, setIsMobile] = useState<boolean>(false)
  const [profileHref, setProfileHref] = useState('/login')
+ const [dashboardBase, setDashboardBase] = useState<string | null>(null)
  const [serviceCategories, setServiceCategories] = useState<ServiceCategories>(staticCategories)
  const [cookieToSlug, setCookieToSlug] = useState<Record<string, string>>(STATIC_COOKIE_TO_SLUG)
 
@@ -155,6 +157,7 @@ const Navbar: React.FC = () => {
  if (match) {
  const cookieVal = decodeURIComponent(match.trim().split('=')[1] ?? '')
  setProfileHref(getProfilePath(cookieVal))
+ setDashboardBase(getDashboardBase(cookieVal))
  }
  }, [cookieToSlug])
 
@@ -286,19 +289,25 @@ const Navbar: React.FC = () => {
 
  {isLoggedIn ? (
  <>
- <Link
- href={profileHref}
- className="flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium"
- >
- <FaUser className="text-sm" />
- <span>My Profile</span>
+ {/* Most-used destinations when already signed in (once base resolves) */}
+ {dashboardBase && (
+ <>
+ <Link href={`${dashboardBase}/feed`} className="flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium">
+ <FaRss className="text-sm" /> <span>Feed</span>
  </Link>
- <button
- onClick={handleLogout}
- className="flex items-center gap-1.5 px-3 py-2 text-white rounded-lg transition text-sm font-medium"
- >
+ <Link href={dashboardBase} className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium">
+ <FaTachometerAlt className="text-sm" /> <span>Dashboard</span>
+ </Link>
+ <Link href={`${dashboardBase}/my-health`} className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium">
+ <FaHeartbeat className="text-sm" /> <span>My Health</span>
+ </Link>
+ </>
+ )}
+ <Link href={profileHref} aria-label="My Profile" className="p-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors">
+ <FaUser className="text-sm" />
+ </Link>
+ <button onClick={handleLogout} aria-label="Logout" className="p-2 text-white hover:bg-white/10 rounded-lg transition">
  <FaSignOutAlt className="text-sm" />
- <span>Logout</span>
  </button>
  </>
  ) : (
@@ -437,6 +446,19 @@ const Navbar: React.FC = () => {
  <div className="pt-4 px-2 space-y-3 border-t border-white/10 mt-4">
  {isLoggedIn ? (
  <>
+ {dashboardBase && (
+ <div className="grid grid-cols-3 gap-2">
+ <Link href={`${dashboardBase}/feed`} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
+ <FaRss /> Feed
+ </Link>
+ <Link href={dashboardBase} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
+ <FaTachometerAlt /> Dashboard
+ </Link>
+ <Link href={`${dashboardBase}/my-health`} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
+ <FaHeartbeat /> My Health
+ </Link>
+ </div>
+ )}
  <Link
  href={profileHref}
  className="flex items-center justify-center gap-2 py-3 border-2 border-white/50 text-white rounded-full font-medium hover:bg-white/10 transition-colors"

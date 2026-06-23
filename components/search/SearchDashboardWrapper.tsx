@@ -14,7 +14,7 @@ import { getSearchItems } from '@/lib/dashboard/patientHealthItems'
 import {
   FaHome, FaRss, FaBriefcaseMedical, FaMoneyBillWave, FaCubes,
   FaCogs, FaProjectDiagram, FaVideo, FaPhone, FaComments, FaBuilding,
-  FaBars,
+  FaBars, FaCalendarAlt,
 } from 'react-icons/fa'
 import { getPatientHealthItems } from '@/lib/dashboard/patientHealthItems'
 
@@ -25,6 +25,7 @@ function getProviderSidebarItems(base: string): SidebarItem[] {
     { id: 'feed', label: 'Feed', icon: FaRss, color: 'text-orange-600', bgColor: 'bg-orange-50', href: `${base}/feed` },
     { id: 'overview', label: 'Dashboard', icon: FaHome, color: 'text-blue-600', bgColor: 'bg-blue-50', href: base },
     { id: 'practice', label: 'My Practice', icon: FaBriefcaseMedical, color: 'text-cyan-600', bgColor: 'bg-cyan-50', href: `${base}/practice` },
+    { id: 'availability', label: 'My Availability', icon: FaCalendarAlt, color: 'text-teal-600', bgColor: 'bg-teal-50', href: `${base}/availability` },
     { id: 'billing', label: 'Billing', icon: FaMoneyBillWave, color: 'text-green-600', bgColor: 'bg-green-50', href: `${base}/billing` },
     { id: 'services', label: 'My Services', icon: FaCogs, color: 'text-purple-600', bgColor: 'bg-purple-50', href: `${base}/services` },
     { id: 'inventory', label: 'My Inventory', icon: FaCubes, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/inventory` },
