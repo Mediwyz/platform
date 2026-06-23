@@ -119,7 +119,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
  <button
  onClick={onToggleSidebar}
- className="md:hidden p-2.5 sm:p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+ className="md:hidden p-2.5 sm:p-2 rounded-lg bg-gray-100 dark:bg-subtle hover:bg-gray-200 dark:hover:bg-line text-gray-700 dark:text-soft transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
  aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
  aria-expanded={sidebarOpen}
  >
@@ -130,9 +130,10 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  )}
  </button>
 
- {/* Logo */}
+ {/* Logo — smaller on mobile so the header never overflows */}
  <Link href="/" className="flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal rounded-md">
- <HealthwyzLogo width={220} height={64} />
+ <span className="sm:hidden"><HealthwyzLogo width={128} height={38} /></span>
+ <span className="hidden sm:block"><HealthwyzLogo width={200} height={56} /></span>
  </Link>
 
  <div className="hidden sm:flex items-center gap-2 sm:gap-3 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-gray-200">
@@ -181,7 +182,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  {wallet && (
  <Link
  href={billingHref || '#'}
- className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+ className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/15 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
  aria-label={`Wallet balance ${getCurrencySymbol(wallet.currency)} ${wallet.balance.toLocaleString()}`}
  title="Your account balance"
  >
@@ -222,7 +223,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  {/* Home button - always visible, returns to landing page */}
  <Link
    href="/"
-   className="p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-100 hover:bg-sky-100 text-gray-600 hover:text-brand-teal flex items-center gap-1.5 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+   className="hidden sm:flex p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-100 dark:bg-subtle hover:bg-sky-100 text-gray-600 dark:text-soft hover:text-brand-teal items-center gap-1.5 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
    aria-label="Return to home page"
  >
    <FaHome className="text-sm" aria-hidden="true" />
