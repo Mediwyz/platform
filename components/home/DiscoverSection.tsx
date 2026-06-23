@@ -489,7 +489,7 @@ export default function DiscoverSection() {
               }}
               className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border-2 text-sm font-semibold transition-all duration-200 ${
                 activeTab === tab.id
-                  ? 'border-[#9AE1FF] bg-[#9AE1FF] text-[#001E40] shadow-lg shadow-[#9AE1FF]/25'
+                  ? 'border-[#9AE1FF] bg-[#9AE1FF] text-fg shadow-lg shadow-[#9AE1FF]/25'
                   : 'border-white/25 text-white/75 hover:border-[#9AE1FF]/60 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -627,7 +627,7 @@ export default function DiscoverSection() {
                             <p className="text-xs text-soft capitalize">{selected.userType.toLowerCase().replace(/_/g, ' ')}</p>
                             {selected.specialty?.length > 0 && <p className="text-xs text-[#0C6780] mt-0.5">{selected.specialty.slice(0, 2).join(', ')}</p>}
                             {selected.address && <p className="text-xs text-faint mt-0.5">{selected.address}</p>}
-                            {selected.distanceKm > 0 && <p className="text-xs font-semibold text-[#001E40] mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
+                            {selected.distanceKm > 0 && <p className="text-xs font-semibold text-fg mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
                             <div className="flex gap-1.5 mt-2">
                               <Link href={`/profile/${selected.id}`} className="flex-1 text-xs text-center py-1 px-2 bg-[#001E40] text-white rounded-lg">Profile </Link>
                               {userPos && (
@@ -643,7 +643,7 @@ export default function DiscoverSection() {
                             <p className="text-xs text-soft capitalize">{'type' in selected ? selected.type : ''}</p>
                             {'address' in selected && selected.address && <p className="text-xs text-faint mt-0.5">{selected.address}</p>}
                             {'city' in selected && selected.city && <p className="text-xs text-faint">{selected.city}</p>}
-                            {selected.distanceKm > 0 && <p className="text-xs font-semibold text-[#001E40] mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
+                            {selected.distanceKm > 0 && <p className="text-xs font-semibold text-fg mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
                             {userPos && (
                               <button onClick={() => requestRoute(selected)} className="mt-2 w-full text-xs py-1 px-2 bg-[#0C6780] text-white rounded-lg flex items-center justify-center gap-1">
                                 <FaRoute className="text-[9px]" /> Directions
@@ -735,7 +735,7 @@ export default function DiscoverSection() {
                   </div>
                   {tabRoleFilter !== 'ALL' && activeRoleInfo && (
                     <Link href={`/search/${activeRoleInfo.slug}`}
-                      className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
+                      className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-fg whitespace-nowrap">
                       See All <FaArrowRight className="text-xs" />
                     </Link>
                   )}
@@ -786,7 +786,7 @@ export default function DiscoverSection() {
                               <h4 className="text-sm font-bold text-fg">{group.label}</h4>
                               <span className="text-xs text-faint">({group.providers.length})</span>
                             </div>
-                            <Link href={`/search/${group.slug}`} className="text-xs font-medium text-[#0C6780] hover:text-[#001E40] flex items-center gap-0.5">
+                            <Link href={`/search/${group.slug}`} className="text-xs font-medium text-[#0C6780] hover:text-fg flex items-center gap-0.5">
                               See All <FaArrowRight className="text-[9px]" />
                             </Link>
                           </div>
@@ -838,7 +838,7 @@ export default function DiscoverSection() {
                     </h3>
                     <p className="text-xs text-faint mt-0.5">Browse what every provider type offers</p>
                   </div>
-                  <Link href="/search/services" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
+                  <Link href="/search/services" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-fg whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
                   </Link>
                 </div>
@@ -911,7 +911,7 @@ export default function DiscoverSection() {
                     </h3>
                     <p className="text-xs text-faint mt-0.5">Find clinics, hospitals, laboratories & pharmacies near you</p>
                   </div>
-                  <Link href="/search/providers" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
+                  <Link href="/search/providers" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-fg whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
                   </Link>
                 </div>
@@ -999,7 +999,7 @@ export default function DiscoverSection() {
                     </h3>
                     <p className="text-xs text-faint mt-0.5">Medicines, vitamins, devices &amp; more - from verified providers</p>
                   </div>
-                  <Link href="/search/health-shop" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
+                  <Link href="/search/health-shop" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-fg whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
                   </Link>
                 </div>

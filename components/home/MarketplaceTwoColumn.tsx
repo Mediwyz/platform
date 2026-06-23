@@ -8,7 +8,7 @@ const CARD_HEIGHT = 'h-[780px] sm:h-[840px] lg:h-[880px]'
 
 export default function MarketplaceTwoColumn() {
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-gray-50 to-canvas">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 xl:gap-8 items-stretch">
 

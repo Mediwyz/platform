@@ -28,7 +28,7 @@ export default function FinalCtaSection() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-surface text-[#001E40] px-7 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-sky"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-surface text-fg px-7 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-sky"
               >
                 Create your free account <FaArrowRight />
               </Link>

@@ -33,7 +33,7 @@ export default function TrustSecuritySection() {
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             Trust &amp; security
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
             Your health, protected at every step
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
@@ -46,12 +46,12 @@ export default function TrustSecuritySection() {
           {PILLARS.map(p => {
             const Icon = p.Icon
             return (
-              <div key={p.title} className="rounded-2xl border border-line bg-[#F4FBFF] p-6 hover:shadow-lg transition-shadow">
+              <div key={p.title} className="rounded-2xl border border-line bg-canvas p-6 hover:shadow-lg transition-shadow">
                 <span className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                       style={{ background: 'rgba(12,103,128,0.10)', color: '#0C6780' }}>
                   <Icon className="text-xl" />
                 </span>
-                <h3 className="text-base font-bold text-[#001E40] mb-1.5">{p.title}</h3>
+                <h3 className="text-base font-bold text-fg mb-1.5">{p.title}</h3>
                 <p className="text-sm text-soft leading-relaxed">{p.desc}</p>
               </div>
             )
@@ -60,7 +60,7 @@ export default function TrustSecuritySection() {
 
         {/* FAQ accordion */}
         <div className="max-w-3xl mx-auto">
-          <h3 className="text-xl sm:text-2xl font-bold text-[#001E40] text-center mb-7">
+          <h3 className="text-xl sm:text-2xl font-bold text-fg text-center mb-7">
             Frequently asked questions
           </h3>
           <div className="divide-y divide-line rounded-2xl border border-line overflow-hidden">
@@ -71,9 +71,9 @@ export default function TrustSecuritySection() {
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
-                    className="w-full flex items-center justify-between gap-4 text-left px-5 sm:px-6 py-5 cursor-pointer hover:bg-[#F4FBFF] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0C6780]"
+                    className="w-full flex items-center justify-between gap-4 text-left px-5 sm:px-6 py-5 cursor-pointer hover:bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0C6780]"
                   >
-                    <span className="text-base font-semibold text-[#001E40]">{f.q}</span>
+                    <span className="text-base font-semibold text-fg">{f.q}</span>
                     <FaChevronDown className={`flex-shrink-0 text-[#0C6780] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>

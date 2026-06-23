@@ -175,14 +175,14 @@ export default function CategoryNavigator() {
   const activeEntity = ENTITIES.find(e => e.key === entity) ?? null
 
   return (
-    <section id="discover-section" className="relative py-16 sm:py-24 bg-gradient-to-b from-white to-[#F4FBFF]">
+    <section id="discover-section" className="relative py-16 sm:py-24 bg-canvas">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-14">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             Discover
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
             What are you looking for?
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
@@ -195,7 +195,7 @@ export default function CategoryNavigator() {
           <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 mb-5 text-sm">
             <button
               onClick={reset}
-              className="font-medium text-[#0C6780] hover:text-[#001E40] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
+              className="font-medium text-[#0C6780] hover:text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
             >
               All categories
             </button>
@@ -204,7 +204,7 @@ export default function CategoryNavigator() {
               onClick={backToRoles}
               disabled={!role}
               className={`font-medium rounded px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40
-                ${role ? 'text-[#0C6780] hover:text-[#001E40]' : 'text-soft cursor-default'}`}
+                ${role ? 'text-[#0C6780] hover:text-fg' : 'text-soft cursor-default'}`}
             >
               {activeEntity?.label}
             </button>
@@ -286,7 +286,7 @@ export default function CategoryNavigator() {
           <div>
             <button
               onClick={backToRoles}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] hover:text-[#001E40] mb-4
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0C6780] hover:text-fg mb-4
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
             >
               <MdArrowBack size={16} aria-hidden /> Back to provider types
@@ -332,7 +332,7 @@ export default function CategoryNavigator() {
         <div className="text-center mt-12">
           <button
             onClick={() => router.push('/search/services')}
-            className="inline-flex items-center gap-2 text-base font-semibold text-[#0C6780] hover:text-[#001E40]
+            className="inline-flex items-center gap-2 text-base font-semibold text-[#0C6780] hover:text-fg
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-2 py-1 cursor-pointer"
           >
             Or browse the full catalogue <MdArrowForward size={16} aria-hidden />
@@ -422,7 +422,7 @@ function TileGrid({
             <span className="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style={{ background: 'rgba(12,103,128,0.10)', color: TEAL }}>
               <Icon size={20} aria-hidden />
             </span>
-            <span className="text-sm font-bold text-[#001E40]">{it.label}</span>
+            <span className="text-sm font-bold text-fg">{it.label}</span>
             <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#0C6780] group-hover:gap-2 transition-all">
               Browse <MdArrowForward size={11} aria-hidden />
             </span>

@@ -67,7 +67,7 @@ export default function ForProvidersSection() {
             <div className="mt-8">
               <Link
                 href="/signup?type=provider"
-                className="inline-flex items-center gap-2 rounded-xl bg-surface text-[#001E40] px-7 py-3.5 text-sm font-bold hover:bg-brand-sky transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#001E40] focus-visible:ring-brand-sky"
+                className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg px-7 py-3.5 text-sm font-bold hover:bg-brand-sky transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#001E40] focus-visible:ring-brand-sky"
               >
                 <FaUserMd /> Join as a provider <FaArrowRight className="text-xs" />
               </Link>

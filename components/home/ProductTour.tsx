@@ -58,7 +58,7 @@ export default function ProductTour() {
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             See it in action
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
             Every feature, one platform
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
@@ -118,7 +118,7 @@ export default function ProductTour() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`text-sm font-bold ${i === index ? 'text-[#0C6780]' : 'text-[#001E40]'}`}>{s.title}</span>
+                  <span className={`text-sm font-bold ${i === index ? 'text-[#0C6780]' : 'text-fg'}`}>{s.title}</span>
                   {i === index && <MdArrowForward className="text-[#0C6780] flex-shrink-0" aria-hidden />}
                 </div>
                 <p className="text-xs text-soft mt-0.5">{s.desc}</p>

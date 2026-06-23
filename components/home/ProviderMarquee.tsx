@@ -41,7 +41,7 @@ export default function ProviderMarquee() {
         <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
           Browse by provider
         </span>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-fg">
           Care for every need
         </h2>
         <p className="mt-2 text-sm sm:text-base text-soft max-w-xl mx-auto">
@@ -50,8 +50,8 @@ export default function ProviderMarquee() {
       </div>
 
       <div className="mw-marquee relative w-full">
-        <div aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-16 sm:w-24 z-10 bg-gradient-to-r from-white to-transparent" />
-        <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-full w-16 sm:w-24 z-10 bg-gradient-to-l from-white to-transparent" />
+        <div aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-16 sm:w-24 z-10 bg-gradient-to-r from-canvas to-transparent" />
+        <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-full w-16 sm:w-24 z-10 bg-gradient-to-l from-canvas to-transparent" />
 
         <div className="mw-marquee-track flex gap-4 px-4">
           {loop.map((r, i) => (

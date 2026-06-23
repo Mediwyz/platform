@@ -14,7 +14,7 @@ const WhoWeAreSection: React.FC = () => {
  title: 'Community Focus',
  description: 'Born from a desire to support the Mauritian community',
  color: 'text-blue-500',
- bgColor: 'bg-blue-50'
+ bgColor: 'bg-blue-50 dark:bg-subtle'
  },
  {
  icon: FaLightbulb,

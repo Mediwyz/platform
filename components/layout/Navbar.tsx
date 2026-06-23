@@ -301,6 +301,9 @@ const Navbar: React.FC = () => {
  <Link href={`${dashboardBase}/my-health`} className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium">
  <FaHeartbeat className="text-sm" /> <span>My Health</span>
  </Link>
+ <Link href={`${dashboardBase}/ai-assistant`} className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors text-sm font-medium">
+ <FaRobot className="text-sm" /> <span>AI Assistant</span>
+ </Link>
  </>
  )}
  <Link href={profileHref} aria-label="My Profile" className="p-2 text-white/90 hover:text-brand-teal hover:bg-white/10 rounded-lg transition-colors">
@@ -447,7 +450,7 @@ const Navbar: React.FC = () => {
  {isLoggedIn ? (
  <>
  {dashboardBase && (
- <div className="grid grid-cols-3 gap-2">
+ <div className="grid grid-cols-2 gap-2">
  <Link href={`${dashboardBase}/feed`} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
  <FaRss /> Feed
  </Link>
@@ -456,6 +459,9 @@ const Navbar: React.FC = () => {
  </Link>
  <Link href={`${dashboardBase}/my-health`} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
  <FaHeartbeat /> My Health
+ </Link>
+ <Link href={`${dashboardBase}/ai-assistant`} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-1 py-3 bg-white/10 text-white rounded-xl text-xs font-medium hover:bg-white/20 transition-colors">
+ <FaRobot /> AI Assistant
  </Link>
  </div>
  )}

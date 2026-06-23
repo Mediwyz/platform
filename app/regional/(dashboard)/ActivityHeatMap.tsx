@@ -140,15 +140,15 @@ export default function ActivityHeatmap() {
  <div className="space-y-2">
  <div className="flex justify-between text-sm">
  <span className="text-gray-500">Active Users</span>
- <span className="font-medium">{region.activeUsers.toLocaleString()}</span>
+ <span className="font-medium">{(region.activeUsers ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between text-sm">
  <span className="text-gray-500">Transactions</span>
- <span className="font-medium">{region.transactions.toLocaleString()}</span>
+ <span className="font-medium">{(region.transactions ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between text-sm">
  <span className="text-gray-500">Revenue</span>
- <span className="font-medium">Rs {region.revenue.toLocaleString()}</span>
+ <span className="font-medium">Rs {(region.revenue ?? 0).toLocaleString()}</span>
  </div>
  {region.growth !== 0 && (
  <div className="flex justify-between text-sm">

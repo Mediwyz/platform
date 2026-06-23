@@ -42,7 +42,7 @@ function useHeroStats(): HeroStats {
   return stats
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+//  Props 
 
 interface HeroSectionProps {
   content?: {
@@ -61,7 +61,7 @@ interface HeroSectionProps {
   countryCode?: string
 }
 
-// Full-bleed background scenes — each illustrates a core capability, with the
+// Full-bleed background scenes  each illustrates a core capability, with the
 // caption (moved here from the old right-side card) that animates in as the
 // background changes.
 const DEFAULT_BG = [
@@ -71,7 +71,7 @@ const DEFAULT_BG = [
   { src: '/images/landing/paramedics.jpg',   title: 'Vaccination & home nursing', sub: 'Preventive care and home visits' },
 ]
 
-// ─── Component ────────────────────────────────────────────────────────────────
+//  Component 
 
 const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
   const { config } = useAppConfig()
@@ -96,7 +96,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
       className="relative overflow-hidden isolate"
       style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 560 }}
     >
-      {/* ── Full-bleed background slider (Ken-Burns cross-fade) ─────────── */}
+      {/*  Full-bleed background slider (Ken-Burns cross-fade)  */}
       <div aria-hidden className="absolute inset-0 -z-10">
         <AnimatePresence>
           <motion.div
@@ -123,13 +123,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
              style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
-      {/* ── Content (single column over the photo) ─────────────────────── */}
+      {/*  Content (single column over the photo)  */}
       <div className="relative flex items-center" style={{ minHeight: 'inherit' }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="w-full max-w-5xl px-6 sm:px-10 lg:px-14 xl:pl-20 py-12 sm:py-16 lg:py-20"
+          className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-14 sm:py-20 text-center flex flex-col items-center"
         >
           {/* animated caption synced to the background image */}
           <div className="h-7 mb-5">
@@ -144,7 +144,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
                 <span className="text-xs font-semibold text-white">{caption.title}</span>
-                {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55">· {caption.sub}</span>}
+                {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55"> {caption.sub}</span>}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -158,16 +158,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl xl:text-2xl text-white/80 leading-relaxed max-w-3xl mb-8">
+          <p className="text-lg sm:text-xl xl:text-2xl text-white/80 leading-relaxed max-w-3xl mx-auto mb-8">
             {content?.subtitle ||
               "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India - all in one secure platform."}
           </p>
 
           {/* App download badges */}
-          <div className="flex flex-wrap items-center gap-3 mb-7">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-7">
             <a
               href="/MediWyz-v3.0.0-debug.apk"
-              className="inline-flex items-center gap-2 rounded-xl bg-white text-[#001E40] pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              className="inline-flex items-center gap-2 rounded-xl bg-white text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               aria-label="Get it on Google Play"
             >
               <FaGooglePlay className="text-lg" />
@@ -190,7 +190,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           </div>
 
           {/* Feature pills */}
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
             {[
               { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
               { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'discover-section' },
@@ -212,7 +212,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           </div>
 
           {/* Trust stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
             {[
               { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
               { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },

@@ -63,7 +63,7 @@ const MissionVisionSection: React.FC = () => {
  </div>
  
  <div className="grid grid-cols-1 gap-3">
- <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+ <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-subtle rounded-lg">
  <span className="w-2 h-2 bg-primary-blue rounded-full"></span>
  <span className="text-soft font-medium">Healthcare services/Telehealth</span>
  </div>

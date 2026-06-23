@@ -82,7 +82,7 @@ function getSpecialtyEmoji(name: string): string {
 function colorToCardStyle(hex: string): { bg: string; text: string; border: string; accent: string } {
   const map: Record<string, { bg: string; text: string; border: string; accent: string }> = {
     '#0C6780': { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', accent: 'bg-teal-100' },
-    '#001E40': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', accent: 'bg-blue-100' },
+    '#001E40': { bg: 'bg-blue-50 dark:bg-subtle', text: 'text-blue-700', border: 'border-blue-200', accent: 'bg-blue-100' },
     '#22c55e': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', accent: 'bg-green-100' },
     '#8b5cf6': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', accent: 'bg-purple-100' },
     '#ec4899': { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200', accent: 'bg-pink-100' },
@@ -90,7 +90,7 @@ function colorToCardStyle(hex: string): { bg: string; text: string; border: stri
     '#f97316': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', accent: 'bg-orange-100' },
     '#6366f1': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', accent: 'bg-indigo-100' },
     '#14b8a6': { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', accent: 'bg-teal-100' },
-    '#0ea5e9': { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200', accent: 'bg-sky-100' },
+    '#0ea5e9': { bg: 'bg-sky-50 dark:bg-subtle', text: 'text-sky-700', border: 'border-sky-200', accent: 'bg-sky-100' },
   }
   return map[hex] || { bg: 'bg-subtle', text: 'text-soft', border: 'border-line', accent: 'bg-subtle' }
 }

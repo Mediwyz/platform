@@ -115,14 +115,14 @@ const FEATURES: Feature[] = [
 
 export default function FeatureShowcase() {
   return (
-    <section className="bg-[#F4FBFF] border-b border-line py-16 sm:py-24">
+    <section className="bg-canvas border-b border-line py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             One app, everything health
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
             Everything you can do on MediWyz
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">

@@ -46,7 +46,7 @@ export default function AppDownloadSection() {
           <div className="flex flex-wrap items-center gap-3">
             <a
               href="/MediWyz-v3.0.0-debug.apk"
-              className="inline-flex items-center gap-2.5 rounded-xl bg-surface text-[#001E40] pl-3.5 pr-5 py-2.5 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              className="inline-flex items-center gap-2.5 rounded-xl bg-surface text-fg pl-3.5 pr-5 py-2.5 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               aria-label="Get it on Google Play"
             >
               <FaGooglePlay className="text-xl" />
@@ -132,7 +132,7 @@ export default function AppDownloadSection() {
                   <img src="/healthicons/specialties/cardiology.svg" alt="" aria-hidden className="w-5 h-5" />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[#001E40] text-[11px] font-bold leading-tight">Dr. Amelia Cole</p>
+                  <p className="text-fg text-[11px] font-bold leading-tight">Dr. Amelia Cole</p>
                   <p className="text-soft text-[9px]">Cardiology  Today, 4:30 PM</p>
                 </div>
                 <span className="text-[8px] font-bold text-[#0C6780] bg-[#0C6780]/10 px-1.5 py-0.5 rounded-full">Video</span>

@@ -111,7 +111,7 @@ export default function CommunityPosts() {
               href="/feed"
               className="hidden sm:flex flex-col items-end gap-0.5 group mt-1"
             >
-              <span className="flex items-center gap-1.5 text-sm font-medium text-[#0C6780] group-hover:text-[#001E40] transition-colors">
+              <span className="flex items-center gap-1.5 text-sm font-medium text-[#0C6780] group-hover:text-fg transition-colors">
                 See All <FaArrowRight className="text-xs" />
               </span>
               <span className="text-[10px] text-faint group-hover:text-soft transition-colors">No login needed</span>

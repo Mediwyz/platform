@@ -223,19 +223,19 @@ export default function RegionalAdminDashboard() {
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
  <DashboardStatCard
  title="Your Commission (10%)"
- value={`Rs ${commission.totalRegionalCommission.toLocaleString()}`}
+ value={`Rs ${(commission.totalRegionalCommission ?? 0).toLocaleString()}`}
  icon={FaPercentage}
  color="text-yellow-600"
  />
  <DashboardStatCard
  title="Platform Fee (5%)"
- value={`Rs ${commission.totalPlatformCommission.toLocaleString()}`}
+ value={`Rs ${(commission.totalPlatformCommission ?? 0).toLocaleString()}`}
  icon={FaMoneyBillWave}
  color="text-green-600"
  />
  <DashboardStatCard
  title="Total Volume"
- value={`Rs ${commission.totalTransactionVolume.toLocaleString()}`}
+ value={`Rs ${(commission.totalTransactionVolume ?? 0).toLocaleString()}`}
  icon={FaChartLine}
  color="text-blue-600"
  />
@@ -295,7 +295,7 @@ export default function RegionalAdminDashboard() {
  {tx.serviceType || 'other'}
  </span>
  </td>
- <td className="py-3 px-4 text-sm text-right font-medium">Rs {tx.amount.toLocaleString()}</td>
+ <td className="py-3 px-4 text-sm text-right font-medium">Rs {(tx.amount ?? 0).toLocaleString()}</td>
  <td className="py-3 px-4 text-sm text-right font-medium text-yellow-600">
  Rs {(tx.regionalCommission ?? 0).toLocaleString()}
  </td>
@@ -333,7 +333,7 @@ export default function RegionalAdminDashboard() {
  <div className="p-3 rounded-lg bg-blue-50"><FaUsers className="text-xl text-blue-600" /></div>
  </div>
  <h3 className="text-sm text-gray-600 mb-1">Total Users</h3>
- <p className="text-2xl font-bold text-gray-900">{metrics.users.total.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-gray-900">{(metrics.users.total ?? 0).toLocaleString()}</p>
  <p className="text-xs text-green-600 mt-2">+{metrics.recentActivity.newUsersThisWeek} this week</p>
  </div>
  <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -341,7 +341,7 @@ export default function RegionalAdminDashboard() {
  <div className="p-3 rounded-lg bg-green-50"><FaUserMd className="text-xl text-green-600" /></div>
  </div>
  <h3 className="text-sm text-gray-600 mb-1">Healthcare Providers</h3>
- <p className="text-2xl font-bold text-gray-900">{providers.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-gray-900">{(providers ?? 0).toLocaleString()}</p>
  <p className="text-xs text-gray-500 mt-2">{metrics.users.doctors} doctors, {metrics.users.nurses} nurses</p>
  </div>
  <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -349,7 +349,7 @@ export default function RegionalAdminDashboard() {
  <div className="p-3 rounded-lg bg-purple-50"><FaHandshake className="text-xl text-purple-600" /></div>
  </div>
  <h3 className="text-sm text-gray-600 mb-1">Total Bookings</h3>
- <p className="text-2xl font-bold text-gray-900">{metrics.bookings.total.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-gray-900">{(metrics.bookings.total ?? 0).toLocaleString()}</p>
  <p className="text-xs text-green-600 mt-2">+{metrics.recentActivity.bookingsThisWeek} this week</p>
  </div>
  <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -357,7 +357,7 @@ export default function RegionalAdminDashboard() {
  <div className="p-3 rounded-lg bg-orange-50"><FaChartLine className="text-xl text-orange-600" /></div>
  </div>
  <h3 className="text-sm text-gray-600 mb-1">Revenue This Month</h3>
- <p className="text-2xl font-bold text-gray-900">Rs {metrics.revenue.thisMonth.toLocaleString()}</p>
+ <p className="text-2xl font-bold text-gray-900">Rs {(metrics.revenue.thisMonth ?? 0).toLocaleString()}</p>
  <p className={`text-xs mt-2 ${revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
  {revenueGrowth >= 0 ? '+' : ''}{revenueGrowth}% vs last month
  </p>
@@ -377,7 +377,7 @@ export default function RegionalAdminDashboard() {
  <div key={item.label}>
  <div className="flex justify-between items-center mb-1">
  <span className="text-sm font-medium text-gray-700">{item.label}</span>
- <span className="text-sm text-gray-600">{item.count.toLocaleString()} ({percentage}%)</span>
+ <span className="text-sm text-gray-600">{(item.count ?? 0).toLocaleString()} ({percentage}%)</span>
  </div>
  <div className="bg-gray-200 rounded-full h-2">
  <div
@@ -403,7 +403,7 @@ export default function RegionalAdminDashboard() {
  ].map((item) => (
  <div key={item.label} className={`${item.bg} rounded-lg p-4`}>
  <p className="text-sm text-gray-600">{item.label}</p>
- <p className={`text-xl font-bold ${item.color}`}>{item.value.toLocaleString()}</p>
+ <p className={`text-xl font-bold ${item.color}`}>{(item.value ?? 0).toLocaleString()}</p>
  </div>
  ))}
  </div>
@@ -414,15 +414,15 @@ export default function RegionalAdminDashboard() {
  <div className="space-y-3">
  <div className="flex justify-between py-2 border-b border-gray-100">
  <span className="text-gray-600">Total Revenue</span>
- <span className="font-bold text-gray-900">Rs {metrics.revenue.total.toLocaleString()}</span>
+ <span className="font-bold text-gray-900">Rs {(metrics.revenue.total ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between py-2 border-b border-gray-100">
  <span className="text-gray-600">This Month</span>
- <span className="font-bold text-green-600">Rs {metrics.revenue.thisMonth.toLocaleString()}</span>
+ <span className="font-bold text-green-600">Rs {(metrics.revenue.thisMonth ?? 0).toLocaleString()}</span>
  </div>
  <div className="flex justify-between py-2">
  <span className="text-gray-600">Last Month</span>
- <span className="font-bold text-gray-700">Rs {metrics.revenue.lastMonth.toLocaleString()}</span>
+ <span className="font-bold text-gray-700">Rs {(metrics.revenue.lastMonth ?? 0).toLocaleString()}</span>
  </div>
  </div>
  </div>

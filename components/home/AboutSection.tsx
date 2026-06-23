@@ -29,7 +29,7 @@ const AboutSection: React.FC = () => {
 
  {/* Key Features */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
- <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
+ <div className="flex items-center gap-3 p-4 bg-blue-50 dark:bg-subtle rounded-lg">
  <FaMapMarkerAlt className="text-primary-blue text-xl" />
  <span className="text-sm font-medium text-soft">Locally Rooted</span>
  </div>

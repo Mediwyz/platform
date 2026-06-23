@@ -68,7 +68,7 @@ function OrgCard({ entity }: { entity: OrgEntity }) {
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1">
-                <p className="text-xs font-bold text-[#001E40] leading-tight line-clamp-2">{entity.name}</p>
+                <p className="text-xs font-bold text-fg leading-tight line-clamp-2">{entity.name}</p>
                 {entity.isVerified && <MdVerified className="text-[#0C6780] flex-shrink-0" size={13} />}
               </div>
               <span className="text-[10px] font-medium capitalize" style={{ color }}>{entity.type.replace('_', ' ')}</span>
@@ -146,7 +146,7 @@ export default function OrganizationsSection() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-xl"></span>
-          <h3 className="font-bold text-[#001E40] text-lg">Find an Organization</h3>
+          <h3 className="font-bold text-fg text-lg">Find an Organization</h3>
         </div>
         <Link href="/search/organizations" className="text-xs text-[#0C6780] font-medium hover:underline">See All </Link>
       </div>

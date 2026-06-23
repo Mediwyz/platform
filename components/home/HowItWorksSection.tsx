@@ -37,7 +37,7 @@ export default function HowItWorksSection() {
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
             How it works
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
             Care in three simple steps
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
@@ -73,7 +73,7 @@ export default function HowItWorksSection() {
                 </div>
 
                 <div className="px-7 py-7">
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#001E40] mb-2">{s.title}</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-fg mb-2">{s.title}</h3>
                   <p className="text-base text-soft leading-relaxed">{s.desc}</p>
                 </div>
               </div>
