@@ -31,52 +31,52 @@ function resolveIcon(iconName: string) {
 // Comprehensive emoji map for medical specialties
 const SPECIALTY_EMOJI: Record<string, string> = {
   // Doctor specialties
-  'General Practice': '🩺', 'Family Medicine': '👨‍👩‍👧‍👦', 'Internal Medicine': '🫀',
-  'Cardiology': '❤️', 'Dermatology': '🧴', 'Endocrinology': '🦠',
-  'Gastroenterology': '🫃', 'Geriatrics': '👴', 'Gynecology': '🤰',
-  'Neurology': '🧠', 'Oncology': '🎗️', 'Ophthalmology': '👁️',
-  'Orthopedics': '🦴', 'Pediatrics': '👶', 'Psychiatry': '🧘',
-  'Psychology': '💭', 'Pulmonology': '🫁', 'Radiology': '📡',
-  'Rheumatology': '🦵', 'Urology': '🏥', 'Anesthesiology': '💉',
-  'Pathology': '🔬', 'Sports Medicine': '⚽', 'Preventive Medicine': '🛡️',
-  'Sexual Health': '💕',
+  'General Practice': '', 'Family Medicine': '', 'Internal Medicine': '',
+  'Cardiology': '', 'Dermatology': '', 'Endocrinology': '',
+  'Gastroenterology': '', 'Geriatrics': '', 'Gynecology': '',
+  'Neurology': '', 'Oncology': '', 'Ophthalmology': '',
+  'Orthopedics': '', 'Pediatrics': '', 'Psychiatry': '',
+  'Psychology': '', 'Pulmonology': '', 'Radiology': '',
+  'Rheumatology': '', 'Urology': '', 'Anesthesiology': '',
+  'Pathology': '', 'Sports Medicine': '', 'Preventive Medicine': '',
+  'Sexual Health': '',
   // Nurse specialties
-  'General Nursing': '💊', 'ICU / Critical Care': '🚨', 'Wound Care': '🩹',
-  'Midwifery': '🤱', 'Pediatric Nursing': '👧', 'Geriatric Nursing': '🧓',
-  'Mental Health Nursing': '🧠', 'Oncology Nursing': '🎗️',
-  'Community Health': '🏘️', 'Home Care': '🏠',
+  'General Nursing': '', 'ICU / Critical Care': '', 'Wound Care': '',
+  'Midwifery': '', 'Pediatric Nursing': '', 'Geriatric Nursing': '',
+  'Mental Health Nursing': '', 'Oncology Nursing': '',
+  'Community Health': '', 'Home Care': '',
   // Childcare specialties
-  'Newborn Care': '👶', 'Toddler Care': '🧒', 'After-School': '📚',
-  'Special Needs': '♿', 'Overnight Care': '🌙',
+  'Newborn Care': '', 'Toddler Care': '', 'After-School': '',
+  'Special Needs': '', 'Overnight Care': '',
   // Pharmacist specialties
-  'Clinical Pharmacy': '💊', 'Hospital Pharmacy': '🏥', 'Geriatric Pharmacy': '💊',
-  'Oncology Pharmacy': '🎗️', 'Pediatric Pharmacy': '🧒',
+  'Clinical Pharmacy': '', 'Hospital Pharmacy': '', 'Geriatric Pharmacy': '',
+  'Oncology Pharmacy': '', 'Pediatric Pharmacy': '',
   // Lab specialties
-  'Hematology': '🩸', 'Microbiology': '🦠', 'Clinical Chemistry': '🧪',
-  'Histology': '🔬', 'Immunology': '🛡️', 'Molecular Biology': '🧬',
+  'Hematology': '', 'Microbiology': '', 'Clinical Chemistry': '',
+  'Histology': '', 'Immunology': '', 'Molecular Biology': '',
   // Emergency specialties
-  'Paramedic': '🚑', 'EMT-Basic': '🚑', 'EMT-Intermediate': '🚑',
-  'Critical Care Transport': '🚁', 'Wilderness Rescue': '⛰️',
+  'Paramedic': '', 'EMT-Basic': '', 'EMT-Intermediate': '',
+  'Critical Care Transport': '', 'Wilderness Rescue': '',
   // Caregiver specialties
-  'Elder Care': '👴', 'Disability Care': '♿', 'Dementia Care': '🧠',
-  'Post-Surgery Care': '🩹', 'Palliative Care': '🕊️',
+  'Elder Care': '', 'Disability Care': '', 'Dementia Care': '',
+  'Post-Surgery Care': '', 'Palliative Care': '',
   // Physiotherapy specialties
-  'Orthopedic': '🦴', 'Neurological': '🧠', 'Sports': '🏃',
-  'Pediatric': '👧', 'Geriatric': '🧓', 'Cardiopulmonary': '🫁',
+  'Orthopedic': '', 'Neurological': '', 'Sports': '',
+  'Pediatric': '', 'Geriatric': '', 'Cardiopulmonary': '',
   // Dentist specialties
-  'General Dentistry': '🦷', 'Orthodontics': '😁', 'Periodontics': '🪥',
-  'Endodontics': '🦷', 'Oral Surgery': '🏥', 'Cosmetic Dentistry': '✨',
-  'Pediatric Dentistry': '👧',
+  'General Dentistry': '', 'Orthodontics': '', 'Periodontics': '',
+  'Endodontics': '', 'Oral Surgery': '', 'Cosmetic Dentistry': '',
+  'Pediatric Dentistry': '',
   // Optometrist specialties
-  'General Eye Care': '👓', 'Contact Lenses': '🔵', 'Pediatric Eye Care': '👧',
-  'Low Vision': '🔍', 'Sports Vision': '🥽',
+  'General Eye Care': '', 'Contact Lenses': '', 'Pediatric Eye Care': '',
+  'Low Vision': '', 'Sports Vision': '',
   // Nutritionist specialties
-  'Clinical Nutrition': '🥗', 'Sports Nutrition': '💪', 'Weight Management': '⚖️',
-  'Pediatric Nutrition': '🍎', 'Diabetes Nutrition': '🩸', 'Prenatal Nutrition': '🤰',
+  'Clinical Nutrition': '', 'Sports Nutrition': '', 'Weight Management': '',
+  'Pediatric Nutrition': '', 'Diabetes Nutrition': '', 'Prenatal Nutrition': '',
 }
 
 function getSpecialtyEmoji(name: string): string {
-  return SPECIALTY_EMOJI[name] || '🏥'
+  return SPECIALTY_EMOJI[name] || ''
 }
 
 function colorToCardStyle(hex: string): { bg: string; text: string; border: string; accent: string } {
@@ -92,7 +92,7 @@ function colorToCardStyle(hex: string): { bg: string; text: string; border: stri
     '#14b8a6': { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', accent: 'bg-teal-100' },
     '#0ea5e9': { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200', accent: 'bg-sky-100' },
   }
-  return map[hex] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', accent: 'bg-gray-100' }
+  return map[hex] || { bg: 'bg-subtle', text: 'text-soft', border: 'border-line', accent: 'bg-subtle' }
 }
 
 export default function ProviderMarketplace({ embedded = false }: { embedded?: boolean } = {}) {
@@ -141,7 +141,7 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
   // component inside the function body is a React anti-pattern (recreates
   // the component type every render and breaks children identity).
   const scrollbarClass = `[&::-webkit-scrollbar]:w-[3px]
-    [&::-webkit-scrollbar-thumb]:bg-gray-200
+    [&::-webkit-scrollbar-thumb]:bg-line
     [&::-webkit-scrollbar-thumb]:rounded-full
     [&::-webkit-scrollbar-track]:bg-transparent`
 
@@ -149,17 +149,17 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
     if (embedded) {
       return (
         <>
-          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-100 animate-pulse">
-            <div className="h-7 bg-gray-200 rounded w-56 mb-2" />
-            <div className="h-4 bg-gray-100 rounded w-44" />
+          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 border-b border-line animate-pulse">
+            <div className="h-7 bg-line rounded w-56 mb-2" />
+            <div className="h-4 bg-subtle rounded w-44" />
           </div>
           <div className="flex-1 px-5 sm:px-7 py-4 animate-pulse space-y-8">
             {[1, 2, 3].map(i => (
               <div key={i}>
-                <div className="h-5 bg-gray-200 rounded w-32 mb-4" />
+                <div className="h-5 bg-line rounded w-32 mb-4" />
                 <div className="flex gap-4">
                   {[1, 2, 3, 4].map(j => (
-                    <div key={j} className="w-48 h-36 bg-gray-100 rounded-2xl flex-shrink-0" />
+                    <div key={j} className="w-48 h-36 bg-subtle rounded-2xl flex-shrink-0" />
                   ))}
                 </div>
               </div>
@@ -169,17 +169,17 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
       )
     }
     return (
-      <section className="py-8 sm:py-12 bg-white overflow-hidden">
+      <section className="py-8 sm:py-12 bg-surface overflow-hidden">
         <div className="w-full px-6 sm:px-12 lg:px-20 xl:px-28">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-64 mb-2" />
-            <div className="h-4 bg-gray-100 rounded w-96 mb-8" />
+            <div className="h-8 bg-line rounded w-64 mb-2" />
+            <div className="h-4 bg-subtle rounded w-96 mb-8" />
             {[1, 2, 3].map(i => (
               <div key={i} className="mb-10">
-                <div className="h-5 bg-gray-200 rounded w-32 mb-4" />
+                <div className="h-5 bg-line rounded w-32 mb-4" />
                 <div className="flex gap-4">
                   {[1, 2, 3, 4].map(j => (
-                    <div key={j} className="w-48 h-36 bg-gray-100 rounded-2xl flex-shrink-0" />
+                    <div key={j} className="w-48 h-36 bg-subtle rounded-2xl flex-shrink-0" />
                   ))}
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
               {spec.name}
             </div>
             {spec.description && (
-              <p className="text-xs text-gray-500 line-clamp-2">{spec.description}</p>
+              <p className="text-xs text-soft line-clamp-2">{spec.description}</p>
             )}
           </Link>
         ))}
@@ -234,9 +234,9 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
     return (
       <>
         {/* Header - sits above the scroll area, never moves */}
-        <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-white border-b border-gray-100">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Find Healthcare Providers</h2>
-          <p className="text-sm sm:text-base text-gray-600">Browse by specialty across all provider types</p>
+        <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-surface border-b border-line">
+          <h2 className="text-2xl sm:text-3xl font-bold text-fg mb-1 sm:mb-2">Find Healthcare Providers</h2>
+          <p className="text-sm sm:text-base text-soft">Browse by specialty across all provider types</p>
 
           {/* Role quick-jump pills - scrollable strip with prev/next buttons */}
           <div className="flex items-center gap-1.5 mt-3">
@@ -244,7 +244,7 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
               onClick={() => scrollRole('left')}
               disabled={!roleCanLeft}
               className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all
-                ${roleCanLeft ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-gray-200 text-gray-300 cursor-default'}`}
+                ${roleCanLeft ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-line text-faint cursor-default'}`}
               aria-label="Scroll roles left"
             >
               <FaChevronLeft className="text-[10px]" />
@@ -286,7 +286,7 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
               onClick={() => scrollRole('right')}
               disabled={!roleCanRight}
               className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all
-                ${roleCanRight ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-gray-200 text-gray-300 cursor-default'}`}
+                ${roleCanRight ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-line text-faint cursor-default'}`}
               aria-label="Scroll roles right"
             >
               <FaChevronRight className="text-[10px]" />
@@ -302,12 +302,12 @@ export default function ProviderMarketplace({ embedded = false }: { embedded?: b
   }
 
   return (
-    <section className="py-8 sm:py-12 bg-white overflow-hidden">
+    <section className="py-8 sm:py-12 bg-surface overflow-hidden">
       <div className="w-full px-6 sm:px-12 lg:px-20 xl:px-28">
         <div className="sticky top-0 z-20 -mx-6 sm:-mx-12 lg:-mx-20 xl:-mx-28 px-6 sm:px-12 lg:px-20 xl:px-28
-          pt-6 sm:pt-8 pb-3 sm:pb-4 mb-4 sm:mb-6 bg-white/95 backdrop-blur-sm border-b border-gray-100">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Find Healthcare Providers</h2>
-          <p className="text-sm sm:text-base text-gray-600">Browse by specialty across all provider types</p>
+          pt-6 sm:pt-8 pb-3 sm:pb-4 mb-4 sm:mb-6 bg-white/95 backdrop-blur-sm border-b border-line">
+          <h2 className="text-2xl sm:text-3xl font-bold text-fg mb-1 sm:mb-2">Find Healthcare Providers</h2>
+          <p className="text-sm sm:text-base text-soft">Browse by specialty across all provider types</p>
         </div>
         {rolesContent}
       </div>

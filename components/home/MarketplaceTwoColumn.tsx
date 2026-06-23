@@ -14,7 +14,7 @@ export default function MarketplaceTwoColumn() {
 
           {/* LEFT - Health Service Providers */}
           <div className={`min-w-0 flex flex-col
-            rounded-2xl bg-white border border-gray-100
+            rounded-2xl bg-surface border border-line
             shadow-[0_4px_32px_-4px_rgba(0,30,64,0.08)]
             hover:shadow-[0_8px_48px_-4px_rgba(0,30,64,0.14)]
             transition-shadow duration-300 overflow-hidden
@@ -24,7 +24,7 @@ export default function MarketplaceTwoColumn() {
 
           {/* RIGHT - Health Shop */}
           <div className={`min-w-0 flex flex-col
-            rounded-2xl bg-white border border-gray-100
+            rounded-2xl bg-surface border border-line
             shadow-[0_4px_32px_-4px_rgba(12,103,128,0.10)]
             hover:shadow-[0_8px_48px_-4px_rgba(12,103,128,0.18)]
             transition-shadow duration-300 overflow-hidden

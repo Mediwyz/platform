@@ -5,9 +5,9 @@
  * 1,200-line DiscoverSection on the landing page.
  *
  * Flow:
- *   Level 1  Entity      → Services | Providers | Organisations | Health Shop
- *   Level 2  Sub-group   → provider roles (Services/Providers) · org types · shop categories
- *   Level 3  Category     → service categories for the chosen role (Services path only)
+ *   Level 1  Entity       Services | Providers | Organisations | Health Shop
+ *   Level 2  Sub-group    provider roles (Services/Providers)  org types  shop categories
+ *   Level 3  Category      service categories for the chosen role (Services path only)
  *
  * The final click routes to an existing /search/* page with query params. The
  * Google-Maps "find nearest" experience lives on those search pages (the last step),
@@ -31,7 +31,7 @@ import {
 
 const TEAL = '#0C6780'
 
-// ── Level 1 · entities ──────────────────────────────────────────────────────
+//  Level 1  entities 
 type EntityKey = 'services' | 'providers' | 'organisations' | 'shop'
 
 interface Entity {
@@ -49,7 +49,7 @@ const ENTITIES: Entity[] = [
   { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart,    img: 'pharmacy.jpg' },
 ]
 
-// ── Provider role icon mapping (by role code) ───────────────────────────────
+//  Provider role icon mapping (by role code) 
 const ROLE_ICON: Record<string, IconType> = {
   DOCTOR: TbStethoscope,
   NURSE: TbNurse,
@@ -64,7 +64,7 @@ const ROLE_ICON: Record<string, IconType> = {
   NUTRITIONIST: TbApple,
 }
 
-// ── Level 2 · organisation types (redirect to /search/organizations) ────────
+//  Level 2  organisation types (redirect to /search/organizations) 
 const ORG_TYPES: { value: string; label: string; Icon: IconType }[] = [
   { value: 'clinic',     label: 'Clinics',    Icon: TbBuildingHospital },
   { value: 'hospital',   label: 'Hospitals',  Icon: MdLocalHospital },
@@ -73,7 +73,7 @@ const ORG_TYPES: { value: string; label: string; Icon: IconType }[] = [
   { value: 'insurance',  label: 'Insurance',  Icon: MdHealthAndSafety },
 ]
 
-// ── Level 2 · shop categories (redirect to /search/health-shop) ─────────────
+//  Level 2  shop categories (redirect to /search/health-shop) 
 const SHOP_CATEGORIES: { key: string; label: string; Icon: IconType }[] = [
   { key: 'medication',      label: 'Medications',   Icon: TbPill },
   { key: 'vitamins',        label: 'Vitamins',      Icon: TbApple },
@@ -137,7 +137,7 @@ export default function CategoryNavigator() {
     if (key === 'services' || key === 'providers') await ensureRoles()
   }, [ensureRoles])
 
-  // Services path · choosing a role loads that role's service categories (level 3).
+  // Services path  choosing a role loads that role's service categories (level 3).
   const pickServiceRole = useCallback(async (r: RoleData) => {
     setRole(r)
     setLoadingCats(true)
@@ -156,7 +156,7 @@ export default function CategoryNavigator() {
     }
   }, [])
 
-  // ── Redirect helpers (all targets are existing /search/* pages) ───────────
+  //  Redirect helpers (all targets are existing /search/* pages) 
   const goServicesCategory = (r: RoleData, cat?: string) =>
     router.push(`/search/services?type=${encodeURIComponent(r.code)}${cat ? `&category=${encodeURIComponent(cat)}` : ''}`)
   const goProviderRole = (r: RoleData) => router.push(`/search/${r.slug}`)
@@ -185,7 +185,7 @@ export default function CategoryNavigator() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             What are you looking for?
           </h2>
-          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
             Pick a category to jump straight to a focused search - find the nearest provider on a live map at the final step.
           </p>
         </div>
@@ -199,26 +199,26 @@ export default function CategoryNavigator() {
             >
               All categories
             </button>
-            <MdChevronRight className="text-gray-300" aria-hidden />
+            <MdChevronRight className="text-faint" aria-hidden />
             <button
               onClick={backToRoles}
               disabled={!role}
               className={`font-medium rounded px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40
-                ${role ? 'text-[#0C6780] hover:text-[#001E40]' : 'text-gray-700 cursor-default'}`}
+                ${role ? 'text-[#0C6780] hover:text-[#001E40]' : 'text-soft cursor-default'}`}
             >
               {activeEntity?.label}
             </button>
             {role && (
               <>
-                <MdChevronRight className="text-gray-300" aria-hidden />
-                <span className="font-medium text-gray-700 px-1">{role.label}</span>
+                <MdChevronRight className="text-faint" aria-hidden />
+                <span className="font-medium text-soft px-1">{role.label}</span>
               </>
             )}
           </nav>
         )}
 
-        {/* ── Level 1 · Entities ─────────────────────────────────────────── */}
-        {/* First thing a new user sees: 2×2 grid of large cards (was a single
+        {/*  Level 1  Entities  */}
+        {/* First thing a new user sees: 22 grid of large cards (was a single
             cramped row of 4). Bigger tap targets + more breathing room. */}
         {!entity && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
@@ -255,7 +255,7 @@ export default function CategoryNavigator() {
           </div>
         )}
 
-        {/* ── Level 2 · Services or Providers → role grid ────────────────── */}
+        {/*  Level 2  Services or Providers  role grid  */}
         {(entity === 'services' || entity === 'providers') && !role && (
           <RoleGrid
             roles={roles}
@@ -265,7 +265,7 @@ export default function CategoryNavigator() {
           />
         )}
 
-        {/* ── Level 2 · Organisations ────────────────────────────────────── */}
+        {/*  Level 2  Organisations  */}
         {entity === 'organisations' && (
           <TileGrid
             items={ORG_TYPES.map(o => ({ id: o.value, label: o.label, Icon: o.Icon }))}
@@ -273,7 +273,7 @@ export default function CategoryNavigator() {
           />
         )}
 
-        {/* ── Level 2 · Health Shop ──────────────────────────────────────── */}
+        {/*  Level 2  Health Shop  */}
         {entity === 'shop' && (
           <TileGrid
             items={SHOP_CATEGORIES.map(c => ({ id: c.key, label: c.label, Icon: c.Icon }))}
@@ -281,7 +281,7 @@ export default function CategoryNavigator() {
           />
         )}
 
-        {/* ── Level 3 · Service categories for the chosen role ───────────── */}
+        {/*  Level 3  Service categories for the chosen role  */}
         {entity === 'services' && role && (
           <div>
             <button
@@ -343,7 +343,7 @@ export default function CategoryNavigator() {
   )
 }
 
-// ── Role grid (Level 2 for Services / Providers) ────────────────────────────
+//  Role grid (Level 2 for Services / Providers) 
 function RoleGrid({
   roles, loaded, onPick, cta,
 }: {
@@ -356,13 +356,13 @@ function RoleGrid({
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="h-28 rounded-2xl bg-gray-100 animate-pulse" />
+          <div key={i} className="h-28 rounded-2xl bg-subtle animate-pulse" />
         ))}
       </div>
     )
   }
   if (roles.length === 0) {
-    return <p className="text-sm text-gray-400 py-6 text-center">No provider types available right now.</p>
+    return <p className="text-sm text-faint py-6 text-center">No provider types available right now.</p>
   }
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -400,7 +400,7 @@ function RoleGrid({
   )
 }
 
-// ── Generic tile grid (Level 2 for Organisations / Shop) ────────────────────
+//  Generic tile grid (Level 2 for Organisations / Shop) 
 function TileGrid({
   items, onPick,
 }: {
@@ -415,7 +415,7 @@ function TileGrid({
           <button
             key={it.id}
             onClick={() => onPick(it.id)}
-            className="group flex flex-col items-start text-left p-4 rounded-2xl bg-white border border-gray-100
+            className="group flex flex-col items-start text-left p-4 rounded-2xl bg-surface border border-line
               shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780] cursor-pointer"
           >

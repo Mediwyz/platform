@@ -30,7 +30,7 @@ export default function AppDownloadSection() {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
             Your health, in your pocket
           </h2>
-          <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed max-w-lg mb-7">
+          <p className="text-sm sm:text-base text-faint/90 leading-relaxed max-w-lg mb-7">
             Download the MediWyz app and carry your entire care network with you - book, consult and manage your health from anywhere in Mauritius and beyond.
           </p>
 
@@ -46,12 +46,12 @@ export default function AppDownloadSection() {
           <div className="flex flex-wrap items-center gap-3">
             <a
               href="/MediWyz-v3.0.0-debug.apk"
-              className="inline-flex items-center gap-2.5 rounded-xl bg-white text-[#001E40] pl-3.5 pr-5 py-2.5 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+              className="inline-flex items-center gap-2.5 rounded-xl bg-surface text-[#001E40] pl-3.5 pr-5 py-2.5 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               aria-label="Get it on Google Play"
             >
               <FaGooglePlay className="text-xl" />
               <span className="flex flex-col leading-none">
-                <span className="text-[9px] uppercase tracking-wide text-gray-500">Get it on</span>
+                <span className="text-[9px] uppercase tracking-wide text-soft">Get it on</span>
                 <span className="text-sm font-bold">Google Play</span>
               </span>
             </a>
@@ -74,7 +74,7 @@ export default function AppDownloadSection() {
           <div className="relative w-64 h-[34rem] rounded-[2.5rem] bg-[#0A1A33] border-[10px] border-[#0a2547] shadow-2xl ring-1 ring-white/10 overflow-hidden">
             {/* notch */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#0a2547] rounded-b-2xl z-20" />
-            {/* screen — a realistic mini app-home mockup */}
+            {/* screen  a realistic mini app-home mockup */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#001E40] to-[#0C6780] flex flex-col pt-9 px-4">
               {/* status bar */}
               <div className="flex items-center justify-between text-white/80 text-[9px] font-semibold mb-3">
@@ -103,7 +103,7 @@ export default function AppDownloadSection() {
               <p className="text-white/60 text-[10px] mb-2.5">How are you feeling today?</p>
               <div className="flex items-center gap-2 rounded-full bg-white/12 border border-white/15 px-3 py-2 mb-3.5">
                 <FaSearch className="text-white/60 text-[10px]" />
-                <span className="text-white/55 text-[10px]">Search doctors, medicines…</span>
+                <span className="text-white/55 text-[10px]">Search doctors, medicines</span>
               </div>
 
               {/* quick actions */}
@@ -126,14 +126,14 @@ export default function AppDownloadSection() {
 
               {/* upcoming appointment card */}
               <p className="text-white/70 text-[9px] font-semibold uppercase tracking-wide mb-1.5">Upcoming</p>
-              <div className="rounded-2xl bg-white p-2.5 flex items-center gap-2.5 shadow-lg">
+              <div className="rounded-2xl bg-surface p-2.5 flex items-center gap-2.5 shadow-lg">
                 <span className="w-9 h-9 rounded-xl bg-[#0C6780]/15 flex items-center justify-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/healthicons/specialties/cardiology.svg" alt="" aria-hidden className="w-5 h-5" />
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-[#001E40] text-[11px] font-bold leading-tight">Dr. Amelia Cole</p>
-                  <p className="text-gray-500 text-[9px]">Cardiology · Today, 4:30 PM</p>
+                  <p className="text-soft text-[9px]">Cardiology  Today, 4:30 PM</p>
                 </div>
                 <span className="text-[8px] font-bold text-[#0C6780] bg-[#0C6780]/10 px-1.5 py-0.5 rounded-full">Video</span>
               </div>

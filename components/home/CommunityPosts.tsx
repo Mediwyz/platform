@@ -76,13 +76,13 @@ export default function CommunityPosts() {
 
   if (loading) {
     return (
-      <section className="py-8 sm:py-12 bg-white">
+      <section className="py-8 sm:py-12 bg-surface">
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-64 mb-6" />
+            <div className="h-8 bg-line rounded w-64 mb-6" />
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 lg:gap-6">
               {[1, 2, 3].map(i => (
-                <div key={i} className="h-48 bg-gray-100 rounded-2xl" />
+                <div key={i} className="h-48 bg-subtle rounded-2xl" />
               ))}
             </div>
           </div>
@@ -94,16 +94,16 @@ export default function CommunityPosts() {
   if (posts.length === 0) return null
 
   return (
-    <section className="py-8 sm:py-12 bg-white">
+    <section className="py-8 sm:py-12 bg-surface">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14">
         {/* Sticky header - pinned to the top of the viewport while the user
             scrolls past the community grid. Negative horizontal margins +
             matching padding give it an edge-to-edge backdrop. */}
-        <div className="sticky top-0 z-20 -mx-4 sm:-mx-6 lg:-mx-10 xl:-mx-14 px-4 sm:px-6 lg:px-10 xl:px-14 py-4 mb-6 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <div className="sticky top-0 z-20 -mx-4 sm:-mx-6 lg:-mx-10 xl:-mx-14 px-4 sm:px-6 lg:px-10 xl:px-14 py-4 mb-6 bg-white/95 backdrop-blur-sm border-b border-line">
           <div className="flex items-start justify-between gap-4 mb-2">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">From the Community</h2>
-              <p className="text-sm sm:text-base text-gray-600 mt-0.5">
+              <h2 className="text-2xl sm:text-3xl font-bold text-fg">From the Community</h2>
+              <p className="text-sm sm:text-base text-soft mt-0.5">
                 Most reacted posts on MediWyz - browse freely, no account needed
               </p>
             </div>
@@ -114,25 +114,25 @@ export default function CommunityPosts() {
               <span className="flex items-center gap-1.5 text-sm font-medium text-[#0C6780] group-hover:text-[#001E40] transition-colors">
                 See All <FaArrowRight className="text-xs" />
               </span>
-              <span className="text-[10px] text-gray-400 group-hover:text-gray-600 transition-colors">No login needed</span>
+              <span className="text-[10px] text-faint group-hover:text-soft transition-colors">No login needed</span>
             </Link>
           </div>
           {/* Search input */}
           <div className="relative sm:w-64">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
             <input
               type="text"
               placeholder="Search posts..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-gray-50"
+              className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
             />
           </div>
         </div>
 
         {filteredPosts.length === 0 && !loading ? (
           <div className="text-center py-12">
-            <p className="text-sm text-gray-500">No posts match &ldquo;{searchQuery}&rdquo;</p>
+            <p className="text-sm text-soft">No posts match &ldquo;{searchQuery}&rdquo;</p>
             <button onClick={() => setSearchQuery('')} className="mt-2 text-xs text-[#0C6780] hover:underline">Clear search</button>
           </div>
         ) : (
@@ -140,7 +140,7 @@ export default function CommunityPosts() {
           {filteredPosts.map(post => (
             <article
               key={post.id}
-              className="bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all overflow-hidden group"
+              className="bg-surface rounded-2xl border border-line hover:shadow-lg transition-all overflow-hidden group"
             >
               {/* Post image if available */}
               {post.imageUrl && (
@@ -173,14 +173,14 @@ export default function CommunityPosts() {
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
-                      <span className="text-sm font-semibold text-gray-900 truncate">
+                      <span className="text-sm font-semibold text-fg truncate">
                         {post.company ? post.company.companyName : `${post.author.firstName} ${post.author.lastName}`}
                       </span>
                       {post.author.verified && <FaCheckCircle className="text-blue-500 text-[10px] flex-shrink-0" />}
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-400">
+                    <div className="flex items-center gap-1.5 text-[10px] text-faint">
                       <span>{ROLE_LABELS[post.author.userType] || post.author.userType}</span>
-                      <span>·</span>
+                      <span></span>
                       <span>{getRelativeTime(post.createdAt)}</span>
                     </div>
                   </div>
@@ -188,16 +188,16 @@ export default function CommunityPosts() {
 
                 {/* Category badge */}
                 {post.category && (
-                  <span className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 mb-2">
+                  <span className="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full bg-subtle text-soft mb-2">
                     {post.category.replace(/_/g, ' ')}
                   </span>
                 )}
 
                 {/* Content preview */}
-                <p className="text-sm text-gray-700 line-clamp-3 mb-3">{post.content}</p>
+                <p className="text-sm text-soft line-clamp-3 mb-3">{post.content}</p>
 
                 {/* Engagement */}
-                <div className="flex items-center gap-4 text-xs text-gray-400">
+                <div className="flex items-center gap-4 text-xs text-faint">
                   <span className="flex items-center gap-1">
                     <FaHeart className="text-[10px]" /> {post.likeCount}
                   </span>

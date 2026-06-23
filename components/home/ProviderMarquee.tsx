@@ -36,7 +36,7 @@ export default function ProviderMarquee() {
   const loop = [...roles, ...roles] // duplicate for a seamless -50% loop
 
   return (
-    <section className="bg-white border-b border-gray-100 py-14 sm:py-20 overflow-hidden">
+    <section className="bg-surface border-b border-line py-14 sm:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-9 text-center">
         <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
           Browse by provider
@@ -44,7 +44,7 @@ export default function ProviderMarquee() {
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
           Care for every need
         </h2>
-        <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
+        <p className="mt-2 text-sm sm:text-base text-soft max-w-xl mx-auto">
           From doctors and nurses to pharmacies, labs and emergency response - explore every type of provider on MediWyz.
         </p>
       </div>

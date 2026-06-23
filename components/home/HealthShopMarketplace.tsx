@@ -21,10 +21,10 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 }
 
 const CATEGORY_EMOJI: Record<string, string> = {
-  medication: '💊', vitamins: '🌿', first_aid: '🩹',
-  personal_care: '🧴', eyewear: '👓', eye_care: '👁️',
-  dental_care: '🦷', baby_care: '👶', medical_devices: '🩺',
-  monitoring: '📊', rehab_equipment: '🏋️', nutrition: '🥗', other: '📦',
+  medication: '', vitamins: '', first_aid: '',
+  personal_care: '', eyewear: '', eye_care: '',
+  dental_care: '', baby_care: '', medical_devices: '',
+  monitoring: '', rehab_equipment: '', nutrition: '', other: '',
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -32,7 +32,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   personal_care: 'text-pink-600', eyewear: 'text-purple-600', eye_care: 'text-indigo-600',
   dental_care: 'text-sky-600', baby_care: 'text-rose-600', medical_devices: 'text-teal-600',
   monitoring: 'text-amber-600', rehab_equipment: 'text-orange-600',
-  nutrition: 'text-lime-600', other: 'text-gray-600',
+  nutrition: 'text-lime-600', other: 'text-soft',
 }
 
 interface ShopItem {
@@ -141,7 +141,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
   // component inside the function body is a React anti-pattern (recreates
   // the component type every render and breaks children identity).
   const scrollbarClass = `[&::-webkit-scrollbar]:w-[3px]
-    [&::-webkit-scrollbar-thumb]:bg-gray-200
+    [&::-webkit-scrollbar-thumb]:bg-line
     [&::-webkit-scrollbar-thumb]:rounded-full
     [&::-webkit-scrollbar-track]:bg-transparent`
 
@@ -149,20 +149,20 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
     if (embedded) {
       return (
         <>
-          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-100 animate-pulse">
+          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 border-b border-line animate-pulse">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-5 h-5 bg-gray-200 rounded" />
-              <div className="h-7 bg-gray-200 rounded w-36" />
+              <div className="w-5 h-5 bg-line rounded" />
+              <div className="h-7 bg-line rounded w-36" />
             </div>
-            <div className="h-4 bg-gray-100 rounded w-72 mt-1" />
+            <div className="h-4 bg-subtle rounded w-72 mt-1" />
           </div>
           <div className="flex-1 px-5 sm:px-7 py-4 animate-pulse space-y-8">
             {[1, 2, 3].map(i => (
               <div key={i}>
-                <div className="h-5 bg-gray-200 rounded w-40 mb-4" />
+                <div className="h-5 bg-line rounded w-40 mb-4" />
                 <div className="flex gap-4">
                   {[1, 2, 3, 4].map(j => (
-                    <div key={j} className="w-52 h-48 bg-white rounded-2xl border border-gray-200 flex-shrink-0" />
+                    <div key={j} className="w-52 h-48 bg-surface rounded-2xl border border-line flex-shrink-0" />
                   ))}
                 </div>
               </div>
@@ -172,17 +172,17 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
       )
     }
     return (
-      <section className="py-8 sm:py-12 bg-gray-50 overflow-hidden">
+      <section className="py-8 sm:py-12 bg-subtle overflow-hidden">
         <div className="w-full px-6 sm:px-12 lg:px-20 xl:px-28">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-2" />
-            <div className="h-4 bg-gray-100 rounded w-80 mb-8" />
+            <div className="h-8 bg-line rounded w-48 mb-2" />
+            <div className="h-4 bg-subtle rounded w-80 mb-8" />
             {[1, 2, 3].map(i => (
               <div key={i} className="mb-10">
-                <div className="h-5 bg-gray-200 rounded w-40 mb-4" />
+                <div className="h-5 bg-line rounded w-40 mb-4" />
                 <div className="flex gap-4">
                   {[1, 2, 3, 4].map(j => (
-                    <div key={j} className="w-52 h-48 bg-white rounded-2xl border border-gray-200 flex-shrink-0" />
+                    <div key={j} className="w-52 h-48 bg-surface rounded-2xl border border-line flex-shrink-0" />
                   ))}
                 </div>
               </div>
@@ -197,19 +197,19 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
     if (embedded) {
       return (
         <>
-          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-white border-b border-gray-100">
+          <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-surface border-b border-line">
             <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
               <FaShoppingCart className="text-xl sm:text-2xl text-[#0C6780]" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Shop</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-fg">Health Shop</h2>
             </div>
-            <p className="text-sm sm:text-base text-gray-600">Order medicines, supplements &amp; health products from verified providers</p>
+            <p className="text-sm sm:text-base text-soft">Order medicines, supplements &amp; health products from verified providers</p>
           </div>
           <div className="flex-1 flex items-center justify-center px-5 sm:px-7">
             <div className="text-center">
-              <FaShoppingCart className="text-3xl text-gray-300 mx-auto mb-3" />
-              <p className="text-sm font-medium text-gray-600">Products are loading...</p>
-              <p className="text-xs text-gray-400 mt-1">
-                <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</Link>
+              <FaShoppingCart className="text-3xl text-faint mx-auto mb-3" />
+              <p className="text-sm font-medium text-soft">Products are loading...</p>
+              <p className="text-xs text-faint mt-1">
+                <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products </Link>
               </p>
             </div>
           </div>
@@ -217,17 +217,17 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
       )
     }
     return (
-      <section className="py-8 sm:py-12 bg-gray-50 overflow-hidden">
+      <section className="py-8 sm:py-12 bg-subtle overflow-hidden">
         <div className="w-full px-6 sm:px-12 lg:px-20 xl:px-28">
           <div className="flex items-center gap-2 sm:gap-3 mb-3">
             <FaShoppingCart className="text-xl text-[#0C6780]" />
-            <h2 className="text-2xl font-bold text-gray-900">Health Shop</h2>
+            <h2 className="text-2xl font-bold text-fg">Health Shop</h2>
           </div>
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-            <FaShoppingCart className="text-3xl text-gray-300 mx-auto mb-3" />
-            <p className="text-sm font-medium text-gray-600">Products are loading...</p>
-            <p className="text-xs text-gray-400 mt-1">
-              <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products →</Link>
+          <div className="bg-subtle border border-line rounded-xl p-8 text-center">
+            <FaShoppingCart className="text-3xl text-faint mx-auto mb-3" />
+            <p className="text-sm font-medium text-soft">Products are loading...</p>
+            <p className="text-xs text-faint mt-1">
+              <Link href="/search/health-shop" className="text-[#0C6780] hover:underline">Browse all health products </Link>
             </p>
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
 
   const categoriesContent = filteredCategories.map(cat => {
     const Icon = CATEGORY_ICONS[cat.key] || FaBox
-    const iconColor = CATEGORY_COLORS[cat.key] || 'text-gray-600'
+    const iconColor = CATEGORY_COLORS[cat.key] || 'text-soft'
 
     return (
       <HorizontalScrollRow
@@ -262,7 +262,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
         {cat.items.map(item => (
           <div
             key={item.id}
-            className={`flex-shrink-0 snap-start w-[160px] sm:w-52 md:w-56 bg-white
+            className={`flex-shrink-0 snap-start w-[160px] sm:w-52 md:w-56 bg-surface
               rounded-[1.5rem] border-2 overflow-hidden
               ${item.isFeatured
                 ? 'border-[#0C6780] ring-2 ring-[#0C6780]/15 shadow-[0_4px_24px_-4px_rgba(12,103,128,0.22)]'
@@ -272,7 +272,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
               transition-all duration-200 group`}
           >
             {item.imageUrl ? (
-              <div className="h-20 sm:h-28 bg-gray-100 overflow-hidden rounded-t-[1.4rem]">
+              <div className="h-20 sm:h-28 bg-subtle overflow-hidden rounded-t-[1.4rem]">
                 <Image
                   src={item.imageUrl}
                   alt={item.name}
@@ -283,13 +283,13 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
               </div>
             ) : (
               <div className="h-20 sm:h-28 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center rounded-t-[1.4rem]">
-                <span className="text-3xl sm:text-4xl">{CATEGORY_EMOJI[item.category] || '💊'}</span>
+                <span className="text-3xl sm:text-4xl">{CATEGORY_EMOJI[item.category] || ''}</span>
               </div>
             )}
 
             <div className="p-3 sm:p-4">
               <div className="flex items-start justify-between mb-1">
-                <h4 className="text-sm font-bold text-gray-900 line-clamp-2 flex-1 min-w-0">
+                <h4 className="text-sm font-bold text-fg line-clamp-2 flex-1 min-w-0">
                   {item.name}
                 </h4>
                 {item.requiresPrescription && (
@@ -300,17 +300,17 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
               </div>
 
               {item.genericName && (
-                <p className="text-[11px] text-gray-400 truncate mb-1">{item.genericName}</p>
+                <p className="text-[11px] text-faint truncate mb-1">{item.genericName}</p>
               )}
 
               {item.strength && (
-                <p className="text-[11px] text-gray-500 mb-2">{item.strength}</p>
+                <p className="text-[11px] text-soft mb-2">{item.strength}</p>
               )}
 
               <div className="flex items-end justify-between mt-2">
                 <div>
-                  <span className="text-sm sm:text-lg font-bold text-gray-900">Rs {item.price}</span>
-                  <span className="text-[10px] text-gray-400 ml-0.5">/{item.unitOfMeasure}</span>
+                  <span className="text-sm sm:text-lg font-bold text-fg">Rs {item.price}</span>
+                  <span className="text-[10px] text-faint ml-0.5">/{item.unitOfMeasure}</span>
                 </div>
                 <span className={`text-[10px] font-medium ${item.inStock ? 'text-green-600' : 'text-red-500'}`}>
                   {item.inStock ? 'In Stock' : 'Out'}
@@ -322,10 +322,10 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
                 disabled={!item.inStock}
                 className={`w-full mt-3 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                   !item.inStock
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    ? 'bg-subtle text-faint cursor-not-allowed'
                     : authenticated
                       ? 'bg-[#0C6780] text-white hover:bg-[#0a5568]'
-                      : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                      : 'bg-line text-soft hover:bg-gray-300'
                 }`}
               >
                 {!item.inStock ? (
@@ -347,19 +347,19 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
     return (
       <>
         {/* Header - sits above the scroll area, never moves */}
-        <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-white border-b border-gray-100">
+        <div className="flex-shrink-0 px-5 sm:px-7 pt-5 sm:pt-6 pb-3 sm:pb-4 bg-surface border-b border-line">
           <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
             <FaShoppingCart className="text-xl sm:text-2xl text-[#0C6780]" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Shop</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-fg">Health Shop</h2>
           </div>
-          <p className="text-sm sm:text-base text-gray-600">Order medicines, supplements &amp; health products from verified providers</p>
+          <p className="text-sm sm:text-base text-soft">Order medicines, supplements &amp; health products from verified providers</p>
           {/* Category quick links - scrollable strip with prev/next buttons */}
           <div className="flex items-center gap-1.5 mt-3">
             <button
               onClick={() => scrollCat('left')}
               disabled={!catCanLeft}
               className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all
-                ${catCanLeft ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-gray-200 text-gray-300 cursor-default'}`}
+                ${catCanLeft ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-line text-faint cursor-default'}`}
               aria-label="Scroll categories left"
             >
               <FaChevronLeft className="text-[10px]" />
@@ -383,9 +383,9 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
                   <Link
                     key={cat.key}
                     href={`/search/health-shop?category=${cat.key}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-xs text-gray-700 hover:border-[#0C6780] hover:text-[#0C6780] transition-all whitespace-nowrap flex-shrink-0"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-subtle border border-line text-xs text-soft hover:border-[#0C6780] hover:text-[#0C6780] transition-all whitespace-nowrap flex-shrink-0"
                   >
-                    <span className="text-sm">{CATEGORY_EMOJI[cat.key] || '📦'}</span>
+                    <span className="text-sm">{CATEGORY_EMOJI[cat.key] || ''}</span>
                     {cat.label}
                   </Link>
                 ))}
@@ -396,7 +396,7 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
               onClick={() => scrollCat('right')}
               disabled={!catCanRight}
               className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all
-                ${catCanRight ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-gray-200 text-gray-300 cursor-default'}`}
+                ${catCanRight ? 'border-[#0C6780] text-[#0C6780] hover:bg-[#0C6780] hover:text-white' : 'border-line text-faint cursor-default'}`}
               aria-label="Scroll categories right"
             >
               <FaChevronRight className="text-[10px]" />
@@ -421,39 +421,39 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
   }
 
   return (
-    <section className="py-8 sm:py-12 bg-gray-50 overflow-hidden">
+    <section className="py-8 sm:py-12 bg-subtle overflow-hidden">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14">
         <div className="sticky top-0 z-20 -mx-4 sm:-mx-6 lg:-mx-10 xl:-mx-14 px-4 sm:px-6 lg:px-10 xl:px-14
-          pt-4 sm:pt-6 pb-3 sm:pb-4 mb-4 sm:mb-6 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+          pt-4 sm:pt-6 pb-3 sm:pb-4 mb-4 sm:mb-6 bg-white/95 backdrop-blur-sm border-b border-line">
           <div className="flex items-start justify-between gap-4 mb-1 sm:mb-2">
             <div>
               <div className="flex items-center gap-2 sm:gap-3">
                 <FaShoppingCart className="text-xl sm:text-2xl text-[#0C6780]" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Health Shop</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-fg">Health Shop</h2>
               </div>
-              <p className="text-sm sm:text-base text-gray-600 mt-0.5">Order medicines, supplements &amp; health products</p>
+              <p className="text-sm sm:text-base text-soft mt-0.5">Order medicines, supplements &amp; health products</p>
             </div>
             {/* Search input */}
             <div className="relative hidden sm:block w-56">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-gray-50"
+                className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
               />
             </div>
           </div>
           {/* Mobile search */}
           <div className="relative sm:hidden mt-2">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-gray-50"
+              className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780] bg-subtle"
             />
           </div>
         </div>
@@ -464,9 +464,9 @@ export default function HealthShopMarketplace({ embedded = false }: { embedded?:
             <Link
               key={cat.key}
               href={`/search/health-shop?category=${cat.key}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-full bg-white border border-gray-200 text-xs sm:text-sm text-gray-700 hover:border-[#0C6780] hover:text-[#0C6780] transition-all whitespace-nowrap flex-shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-full bg-surface border border-line text-xs sm:text-sm text-soft hover:border-[#0C6780] hover:text-[#0C6780] transition-all whitespace-nowrap flex-shrink-0"
             >
-              <span className="text-base">{CATEGORY_EMOJI[cat.key] || '📦'}</span>
+              <span className="text-base">{CATEGORY_EMOJI[cat.key] || ''}</span>
               {cat.label}
             </Link>
           ))}

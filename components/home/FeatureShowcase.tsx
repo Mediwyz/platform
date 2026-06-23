@@ -115,7 +115,7 @@ const FEATURES: Feature[] = [
 
 export default function FeatureShowcase() {
   return (
-    <section className="bg-[#F4FBFF] border-b border-gray-100 py-16 sm:py-24">
+    <section className="bg-[#F4FBFF] border-b border-line py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -125,7 +125,7 @@ export default function FeatureShowcase() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             Everything you can do on MediWyz
           </h2>
-          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
             From a video consultation to ordering medicine, finding the nearest clinic, or running your practice - it all lives in one platform.
           </p>
         </div>
@@ -164,7 +164,7 @@ export default function FeatureShowcase() {
           })}
         </div>
 
-        {/* ── Craft band · the engineering & design behind the product ───────── */}
+        {/*  Craft band  the engineering & design behind the product  */}
         <div
           className="relative overflow-hidden rounded-3xl mt-12 sm:mt-16 px-6 sm:px-10 py-10 sm:py-14 text-white shadow-xl"
           style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${TEAL} 135%)` }}
@@ -211,7 +211,7 @@ export default function FeatureShowcase() {
           <Link href="/signup" className="inline-flex items-center gap-2 rounded-xl bg-[#0C6780] text-white px-6 py-3 text-sm font-semibold hover:bg-[#001E40] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780]">
             Get started as a patient <FaArrowRight className="text-xs" />
           </Link>
-          <Link href="/signup?type=provider" className="inline-flex items-center gap-2 rounded-xl bg-white border border-[#0C6780]/30 text-[#0C6780] px-6 py-3 text-sm font-semibold hover:border-[#0C6780] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]">
+          <Link href="/signup?type=provider" className="inline-flex items-center gap-2 rounded-xl bg-surface border border-[#0C6780]/30 text-[#0C6780] px-6 py-3 text-sm font-semibold hover:border-[#0C6780] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]">
             <FaUserMd className="text-xs" /> Join as a provider
           </Link>
         </div>

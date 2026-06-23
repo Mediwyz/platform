@@ -30,7 +30,7 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="bg-white border-b border-gray-100 py-16 sm:py-24">
+    <section className="bg-surface border-b border-line py-16 sm:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -40,7 +40,7 @@ export default function HowItWorksSection() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             Care in three simple steps
           </h2>
-          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
             From finding the right provider to your consultation - the whole journey takes minutes.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function HowItWorksSection() {
             return (
               <div
                 key={s.title}
-                className="group relative flex flex-col bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-200 overflow-hidden"
+                className="group relative flex flex-col bg-surface rounded-3xl border border-line shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-200 overflow-hidden"
               >
                 {/* Photo header with icon + step number */}
                 <div className="relative h-44 w-full overflow-hidden">
@@ -74,7 +74,7 @@ export default function HowItWorksSection() {
 
                 <div className="px-7 py-7">
                   <h3 className="text-xl sm:text-2xl font-bold text-[#001E40] mb-2">{s.title}</h3>
-                  <p className="text-base text-gray-500 leading-relaxed">{s.desc}</p>
+                  <p className="text-base text-soft leading-relaxed">{s.desc}</p>
                 </div>
               </div>
             )

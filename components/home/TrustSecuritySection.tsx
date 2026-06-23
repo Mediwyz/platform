@@ -27,7 +27,7 @@ const FAQ = [
 export default function TrustSecuritySection() {
   const [open, setOpen] = useState<number | null>(0)
   return (
-    <section className="bg-white border-b border-gray-100 py-16 sm:py-24">
+    <section className="bg-surface border-b border-line py-16 sm:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
@@ -36,7 +36,7 @@ export default function TrustSecuritySection() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#001E40]">
             Your health, protected at every step
           </h2>
-          <p className="mt-3 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
             Privacy and safety are built into the platform, not added on. Here&apos;s how we keep your care secure.
           </p>
         </div>
@@ -46,13 +46,13 @@ export default function TrustSecuritySection() {
           {PILLARS.map(p => {
             const Icon = p.Icon
             return (
-              <div key={p.title} className="rounded-2xl border border-gray-100 bg-[#F4FBFF] p-6 hover:shadow-lg transition-shadow">
+              <div key={p.title} className="rounded-2xl border border-line bg-[#F4FBFF] p-6 hover:shadow-lg transition-shadow">
                 <span className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                       style={{ background: 'rgba(12,103,128,0.10)', color: '#0C6780' }}>
                   <Icon className="text-xl" />
                 </span>
                 <h3 className="text-base font-bold text-[#001E40] mb-1.5">{p.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{p.desc}</p>
+                <p className="text-sm text-soft leading-relaxed">{p.desc}</p>
               </div>
             )
           })}
@@ -63,11 +63,11 @@ export default function TrustSecuritySection() {
           <h3 className="text-xl sm:text-2xl font-bold text-[#001E40] text-center mb-7">
             Frequently asked questions
           </h3>
-          <div className="divide-y divide-gray-100 rounded-2xl border border-gray-100 overflow-hidden">
+          <div className="divide-y divide-line rounded-2xl border border-line overflow-hidden">
             {FAQ.map((f, i) => {
               const isOpen = open === i
               return (
-                <div key={f.q} className="bg-white">
+                <div key={f.q} className="bg-surface">
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
@@ -78,7 +78,7 @@ export default function TrustSecuritySection() {
                   </button>
                   <div className={`grid transition-all duration-200 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
-                      <p className="px-5 sm:px-6 pb-5 -mt-1 text-sm sm:text-base text-gray-500 leading-relaxed">{f.a}</p>
+                      <p className="px-5 sm:px-6 pb-5 -mt-1 text-sm sm:text-base text-soft leading-relaxed">{f.a}</p>
                     </div>
                   </div>
                 </div>

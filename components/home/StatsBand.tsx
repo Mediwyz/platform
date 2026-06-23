@@ -2,7 +2,7 @@
 
 /**
  * StatsBand - an animated impact band that builds trust with concrete numbers.
- * Counters count up when scrolled into view. Brand navy→teal gradient + sky glows.
+ * Counters count up when scrolled into view. Brand navyteal gradient + sky glows.
  */
 
 import { useEffect, useRef, useState } from 'react'

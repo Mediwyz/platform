@@ -17,7 +17,7 @@ import { useBookingDrawer } from '@/lib/contexts/booking-drawer-context'
 import { avatarSrc } from '@/lib/utils/avatar'
 import { trackEvent } from '@/lib/analytics'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface ProviderPin {
   id: string; firstName: string; lastName: string
@@ -54,40 +54,40 @@ interface ShopItem {
   unitOfMeasure: string; strength?: string; description?: string
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+//  Constants 
 
 const TABS = [
-  { id: 'services'      as const, label: 'Services',      emoji: '🩺',  desc: 'Consultations & treatments' },
-  { id: 'providers'     as const, label: 'Providers',     emoji: '👨‍⚕️', desc: 'Qualified professionals'    },
-  { id: 'organisations' as const, label: 'Organisations', emoji: '🏥',  desc: 'Clinics, hospitals & labs'  },
-  { id: 'shop'          as const, label: 'Health Shop',   emoji: '🛒',  desc: 'Medicines & health products' },
+  { id: 'services'      as const, label: 'Services',      emoji: '',  desc: 'Consultations & treatments' },
+  { id: 'providers'     as const, label: 'Providers',     emoji: '', desc: 'Qualified professionals'    },
+  { id: 'organisations' as const, label: 'Organisations', emoji: '',  desc: 'Clinics, hospitals & labs'  },
+  { id: 'shop'          as const, label: 'Health Shop',   emoji: '',  desc: 'Medicines & health products' },
 ]
 type TabId = 'services' | 'providers' | 'organisations' | 'shop'
 
 const ENTITY_MODES = [
-  { value: 'clinic',     label: 'Clinics',   color: '#DC2626', emoji: '🏥' },
-  { value: 'hospital',   label: 'Hospitals', color: '#B45309', emoji: '🏨' },
-  { value: 'laboratory', label: 'Labs',      color: '#6D28D9', emoji: '🔬' },
+  { value: 'clinic',     label: 'Clinics',   color: '#DC2626', emoji: '' },
+  { value: 'hospital',   label: 'Hospitals', color: '#B45309', emoji: '' },
+  { value: 'laboratory', label: 'Labs',      color: '#6D28D9', emoji: '' },
 ]
 const ENTITY_TYPES = new Set(['clinic', 'hospital', 'laboratory', 'pharmacy'])
 
 const ROLE_EMOJI_FALLBACK: Record<string, string> = {
-  DOCTOR: '👨‍⚕️', NURSE: '👩‍⚕️', DENTIST: '🦷', PHARMACIST: '💊',
-  NANNY: '🧸', CAREGIVER: '🤝', PHYSIOTHERAPIST: '🏃', OPTOMETRIST: '👁️',
-  NUTRITIONIST: '🥗', LAB_TECHNICIAN: '🧪', EMERGENCY_WORKER: '🚑',
+  DOCTOR: '', NURSE: '', DENTIST: '', PHARMACIST: '',
+  NANNY: '', CAREGIVER: '', PHYSIOTHERAPIST: '', OPTOMETRIST: '',
+  NUTRITIONIST: '', LAB_TECHNICIAN: '', EMERGENCY_WORKER: '',
 }
 
 const SHOP_CATEGORIES = [
-  { key: 'ALL',            label: 'All',          emoji: '🏥' },
-  { key: 'medication',     label: 'Medications',  emoji: '💊' },
-  { key: 'vitamins',       label: 'Vitamins',     emoji: '🌿' },
-  { key: 'first_aid',      label: 'First Aid',    emoji: '🩹' },
-  { key: 'personal_care',  label: 'Personal Care',emoji: '🧴' },
-  { key: 'dental_care',    label: 'Dental',       emoji: '🦷' },
-  { key: 'baby_care',      label: 'Baby Care',    emoji: '👶' },
-  { key: 'nutrition',      label: 'Nutrition',    emoji: '🥗' },
-  { key: 'eyewear',        label: 'Eyewear',      emoji: '👓' },
-  { key: 'medical_devices',label: 'Devices',      emoji: '🩺' },
+  { key: 'ALL',            label: 'All',          emoji: '' },
+  { key: 'medication',     label: 'Medications',  emoji: '' },
+  { key: 'vitamins',       label: 'Vitamins',     emoji: '' },
+  { key: 'first_aid',      label: 'First Aid',    emoji: '' },
+  { key: 'personal_care',  label: 'Personal Care',emoji: '' },
+  { key: 'dental_care',    label: 'Dental',       emoji: '' },
+  { key: 'baby_care',      label: 'Baby Care',    emoji: '' },
+  { key: 'nutrition',      label: 'Nutrition',    emoji: '' },
+  { key: 'eyewear',        label: 'Eyewear',      emoji: '' },
+  { key: 'medical_devices',label: 'Devices',      emoji: '' },
 ]
 
 const MAURITIUS_CENTER = { lat: -20.2, lng: 57.5 }
@@ -105,7 +105,7 @@ const MAP_STYLES: google.maps.MapTypeStyle[] = [
   { featureType: 'landscape',      elementType: 'geometry',  stylers: [{ color: '#0d2f4a' }] },
 ]
 
-// ─── Utils ────────────────────────────────────────────────────────────────────
+//  Utils 
 
 function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   const R = 6371
@@ -148,7 +148,7 @@ function isLoggedIn() {
   return document.cookie.split(';').some(c => c.trim().startsWith('mediwyz_userType='))
 }
 
-// ─── Map Error Panel ──────────────────────────────────────────────────────────
+//  Map Error Panel 
 
 function MapErrorPanel({ error, apiKey }: { error: Error | null; apiKey: string }) {
   if (!apiKey) return (
@@ -177,7 +177,7 @@ function MapErrorPanel({ error, apiKey }: { error: Error | null; apiKey: string 
   )
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+//  Main Component 
 
 export default function DiscoverSection() {
   const { openDrawer } = useBookingDrawer()
@@ -192,11 +192,11 @@ export default function DiscoverSection() {
   const mapRef = useRef<google.maps.Map | null>(null)
   const onMapLoad = useCallback((map: google.maps.Map) => { mapRef.current = map }, [])
 
-  // ── Tab state ──────────────────────────────────────────────────────────────
+  //  Tab state 
   const [activeTab, setActiveTab] = useState<TabId>('services')
   const [mobileMapOpen, setMobileMapOpen] = useState(false)
 
-  // ── Shared role data (fetched once, used by all tabs + map) ────────────────
+  //  Shared role data (fetched once, used by all tabs + map) 
   const [roles, setRoles] = useState<RoleData[]>([])
 
   useEffect(() => {
@@ -210,18 +210,18 @@ export default function DiscoverSection() {
     value: r.code,
     label: r.label,
     color: r.color ?? '#0C6780',
-    emoji: r.emoji ?? ROLE_EMOJI_FALLBACK[r.code] ?? '👨‍⚕️',
+    emoji: r.emoji ?? ROLE_EMOJI_FALLBACK[r.code] ?? '',
   })), [roles])
 
   const allModes = useMemo(() => [
-    { value: 'ALL', label: 'All', color: '#0C6780', emoji: '🏥' },
+    { value: 'ALL', label: 'All', color: '#0C6780', emoji: '' },
     ...roleModes,
     ...ENTITY_MODES,
   ], [roleModes])
 
   const providerTypeCodes = useMemo(() => new Set(roleModes.map(r => r.value)), [roleModes])
 
-  // ── Map state ──────────────────────────────────────────────────────────────
+  //  Map state 
   const [mapMode, setMapMode]         = useState('ALL')
   const [userPos, setUserPos]         = useState<{ lat: number; lng: number } | null>(null)
   const [locating, setLocating]       = useState(false)
@@ -312,9 +312,9 @@ export default function DiscoverSection() {
   )
 
   const modeColor = (type: string) => allModes.find(m => m.value === type)?.color ?? '#0C6780'
-  const modeEmoji = (type: string) => allModes.find(m => m.value === type)?.emoji ?? '🏥'
+  const modeEmoji = (type: string) => allModes.find(m => m.value === type)?.emoji ?? ''
 
-  // ─── Services tab state ────────────────────────────────────────────────────
+  //  Services tab state 
   const [services, setServices]           = useState<ServiceItem[]>([])
   const [servicesLoading, setServicesLoading] = useState(false)
   const [servicesError, setServicesError]     = useState(false)
@@ -350,7 +350,7 @@ export default function DiscoverSection() {
     return list
   }, [services, tabServiceRole, svcSearch])
 
-  // ─── Providers tab state ───────────────────────────────────────────────────
+  //  Providers tab state 
   const [providerGroups, setProviderGroups] = useState<{ code: string; label: string; slug: string; color: string; providers: ProviderCard[] }[]>([])
   const [gridProviders, setGridProviders]   = useState<ProviderCard[]>([])
   const [gridLoading, setGridLoading]       = useState(false)
@@ -414,7 +414,7 @@ export default function DiscoverSection() {
 
   const activeRoleInfo = roles.find(r => r.code === tabRoleFilter)
 
-  // ─── Shop tab state ────────────────────────────────────────────────────────
+  //  Shop tab state 
   const [shopItems, setShopItems]     = useState<ShopItem[]>([])
   const [shopLoading, setShopLoading] = useState(false)
   const [shopCat, setShopCat]         = useState('ALL')
@@ -444,7 +444,7 @@ export default function DiscoverSection() {
     return shopItems.filter(i => i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q))
   }, [shopItems, shopSearch])
 
-  // ─── Organisations tab state ───────────────────────────────────────────────
+  //  Organisations tab state 
   const [orgSearch, setOrgSearch] = useState('')
 
   const filteredOrgs = useMemo(() => {
@@ -461,12 +461,12 @@ export default function DiscoverSection() {
     return list
   }, [allEntities, orgTypeFilter, orgSearch])
 
-  // ─── Layout ────────────────────────────────────────────────────────────────
+  //  Layout 
 
   return (
     <section id="discover-section" className="bg-[#001E40]">
 
-      {/* ── Section header + tab pills ──────────────────────────────────────── */}
+      {/*  Section header + tab pills  */}
       <div className="px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 pb-5">
         <div className="text-center mb-6">
           <p className="text-[#9AE1FF]/70 text-xs font-semibold uppercase tracking-widest mb-1">Discover</p>
@@ -511,10 +511,10 @@ export default function DiscoverSection() {
         </div>
       </div>
 
-      {/* ── Main body: map left + content right ─────────────────────────────── */}
+      {/*  Main body: map left + content right  */}
       <div className="flex flex-col lg:flex-row">
 
-        {/* ── Left: Google Map ──────────────────────────────────────────────── */}
+        {/*  Left: Google Map  */}
         {/* Desktop: sticky alongside scrolling content */}
         <div className={`lg:w-[38%] xl:w-[36%] bg-[#001830] ${mobileMapOpen ? 'block' : 'hidden lg:block'}`}>
           <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col">
@@ -525,9 +525,9 @@ export default function DiscoverSection() {
                 <div>
                   <p className="text-xs font-bold text-white">
                     {activeTab === 'providers' && tabRoleFilter !== 'ALL'
-                      ? `${allModes.find(m => m.value === tabRoleFilter)?.emoji ?? '👨‍⚕️'} ${activeRoleInfo?.label ?? ''} near you`
+                      ? `${allModes.find(m => m.value === tabRoleFilter)?.emoji ?? ''} ${activeRoleInfo?.label ?? ''} near you`
                       : activeTab === 'organisations'
-                        ? `🏥 Clinics, hospitals & labs near you`
+                        ? ` Clinics, hospitals & labs near you`
                         : 'Find nearby healthcare'}
                   </p>
                   <p className="text-[10px] text-white/40 mt-0.5">Tap a pin for directions</p>
@@ -548,7 +548,7 @@ export default function DiscoverSection() {
               {/* Map mode chips (only in providers tab) */}
               {activeTab === 'providers' && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
-                  {[{ value: 'ALL', label: 'All', color: '#0C6780', emoji: '🏥' }, ...roleModes.slice(0, 6)].map(m => (
+                  {[{ value: 'ALL', label: 'All', color: '#0C6780', emoji: '' }, ...roleModes.slice(0, 6)].map(m => (
                     <button
                       key={m.value}
                       onClick={() => setTabRoleFilter(m.value)}
@@ -571,7 +571,7 @@ export default function DiscoverSection() {
               <div className="mx-3 my-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0C6780]/20 border border-[#0C6780]/40 flex-shrink-0">
                 <FaRoute className="text-[#9AE1FF] flex-shrink-0 text-xs" />
                 <div className="flex-1">
-                  <p className="text-[10px] font-bold text-white">{routeInfo.distance} · {routeInfo.duration}</p>
+                  <p className="text-[10px] font-bold text-white">{routeInfo.distance}  {routeInfo.duration}</p>
                 </div>
                 <button onClick={clearRoute} className="text-white/40 hover:text-white p-0.5">
                   <FaTimes className="text-[9px]" />
@@ -623,13 +623,13 @@ export default function DiscoverSection() {
                       <div className="min-w-[180px] text-sm p-1">
                         {'firstName' in selected ? (
                           <>
-                            <p className="font-bold text-gray-900">{selected.firstName} {selected.lastName}</p>
-                            <p className="text-xs text-gray-500 capitalize">{selected.userType.toLowerCase().replace(/_/g, ' ')}</p>
+                            <p className="font-bold text-fg">{selected.firstName} {selected.lastName}</p>
+                            <p className="text-xs text-soft capitalize">{selected.userType.toLowerCase().replace(/_/g, ' ')}</p>
                             {selected.specialty?.length > 0 && <p className="text-xs text-[#0C6780] mt-0.5">{selected.specialty.slice(0, 2).join(', ')}</p>}
-                            {selected.address && <p className="text-xs text-gray-400 mt-0.5">{selected.address}</p>}
+                            {selected.address && <p className="text-xs text-faint mt-0.5">{selected.address}</p>}
                             {selected.distanceKm > 0 && <p className="text-xs font-semibold text-[#001E40] mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
                             <div className="flex gap-1.5 mt-2">
-                              <Link href={`/profile/${selected.id}`} className="flex-1 text-xs text-center py-1 px-2 bg-[#001E40] text-white rounded-lg">Profile →</Link>
+                              <Link href={`/profile/${selected.id}`} className="flex-1 text-xs text-center py-1 px-2 bg-[#001E40] text-white rounded-lg">Profile </Link>
                               {userPos && (
                                 <button onClick={() => requestRoute(selected)} className="flex-1 text-xs py-1 px-2 bg-[#0C6780] text-white rounded-lg flex items-center justify-center gap-1">
                                   <FaRoute className="text-[9px]" /> Route
@@ -639,10 +639,10 @@ export default function DiscoverSection() {
                           </>
                         ) : (
                           <>
-                            <p className="font-bold text-gray-900">{'name' in selected ? selected.name : ''}</p>
-                            <p className="text-xs text-gray-500 capitalize">{'type' in selected ? selected.type : ''}</p>
-                            {'address' in selected && selected.address && <p className="text-xs text-gray-400 mt-0.5">{selected.address}</p>}
-                            {'city' in selected && selected.city && <p className="text-xs text-gray-400">{selected.city}</p>}
+                            <p className="font-bold text-fg">{'name' in selected ? selected.name : ''}</p>
+                            <p className="text-xs text-soft capitalize">{'type' in selected ? selected.type : ''}</p>
+                            {'address' in selected && selected.address && <p className="text-xs text-faint mt-0.5">{selected.address}</p>}
+                            {'city' in selected && selected.city && <p className="text-xs text-faint">{selected.city}</p>}
                             {selected.distanceKm > 0 && <p className="text-xs font-semibold text-[#001E40] mt-1">{selected.distanceKm.toFixed(1)} km away</p>}
                             {userPos && (
                               <button onClick={() => requestRoute(selected)} className="mt-2 w-full text-xs py-1 px-2 bg-[#0C6780] text-white rounded-lg flex items-center justify-center gap-1">
@@ -696,7 +696,7 @@ export default function DiscoverSection() {
                     </p>
                     <p className="text-[9px] text-white/40 truncate capitalize">
                       {'userType' in item ? item.userType.replace(/_/g, ' ').toLowerCase() : ('type' in item ? item.type : '')}
-                      {'specialty' in item && item.specialty?.length > 0 ? ` · ${item.specialty[0]}` : ''}
+                      {'specialty' in item && item.specialty?.length > 0 ? `  ${item.specialty[0]}` : ''}
                     </p>
                   </div>
                   {userPos && item.distanceKm > 0 && (
@@ -709,17 +709,17 @@ export default function DiscoverSection() {
               ))}
               <div className="px-3 py-2 text-center">
                 <Link href="/search/providers" className="text-[10px] font-semibold text-[#9AE1FF] hover:text-white transition-colors">
-                  Browse all providers →
+                  Browse all providers 
                 </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Right: Tab content ──────────────────────────────────────────────── */}
-        <div className="flex-1 bg-white overflow-hidden">
+        {/*  Right: Tab content  */}
+        <div className="flex-1 bg-surface overflow-hidden">
 
-          {/* ── Providers tab ──────────────────────────────────────────────── */}
+          {/*  Providers tab  */}
           {activeTab === 'providers' && (
             <div className="py-6 sm:py-8 overflow-hidden">
               <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
@@ -727,11 +727,11 @@ export default function DiscoverSection() {
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-fg flex items-center gap-2">
                       <FaUserMd className="text-[#0C6780] text-lg" />
                       Browse Providers
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5">Find qualified healthcare professionals near you</p>
+                    <p className="text-xs text-faint mt-0.5">Find qualified healthcare professionals near you</p>
                   </div>
                   {tabRoleFilter !== 'ALL' && activeRoleInfo && (
                     <Link href={`/search/${activeRoleInfo.slug}`}
@@ -744,23 +744,23 @@ export default function DiscoverSection() {
                 {/* Search + role chips */}
                 <div className="flex flex-col sm:flex-row gap-2 mb-5">
                   <div className="relative flex-shrink-0 sm:w-56">
-                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                    <input type="text" placeholder="Name or specialty…" value={provSearch}
+                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
+                    <input type="text" placeholder="Name or specialty" value={provSearch}
                       onChange={e => setProvSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+                      className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
                   </div>
                   <div className="flex gap-1.5 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
                     <button
                       onClick={() => handleRoleSelect('ALL')}
                       className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border
-                        ${tabRoleFilter === 'ALL' ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                        ${tabRoleFilter === 'ALL' ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'}`}
                     >All</button>
                     {roles.map(role => (
                       <button key={role.code}
                         onClick={() => handleRoleSelect(role.code)}
                         style={tabRoleFilter === role.code ? { backgroundColor: role.color, borderColor: role.color } : {}}
                         className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border
-                          ${tabRoleFilter === role.code ? 'text-white' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400 hover:text-gray-800'}`}
+                          ${tabRoleFilter === role.code ? 'text-white' : 'bg-surface text-soft border-line hover:border-gray-400 hover:text-fg'}`}
                       >
                         {ROLE_EMOJI_FALLBACK[role.code] ?? ''} {role.label}
                       </button>
@@ -773,7 +773,7 @@ export default function DiscoverSection() {
                   filteredGroups.length === 0 ? (
                     <div className="text-center py-12">
                       <FaUserMd className="text-4xl text-gray-200 mx-auto mb-3" />
-                      <p className="text-sm text-gray-500">No providers match your search.</p>
+                      <p className="text-sm text-soft">No providers match your search.</p>
                       <button onClick={() => setProvSearch('')} className="mt-2 text-xs text-[#0C6780] hover:underline">Clear</button>
                     </div>
                   ) : (
@@ -782,9 +782,9 @@ export default function DiscoverSection() {
                         <div key={group.code}>
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
-                              <span className="text-lg">{ROLE_EMOJI_FALLBACK[group.code] ?? '👨‍⚕️'}</span>
-                              <h4 className="text-sm font-bold text-gray-900">{group.label}</h4>
-                              <span className="text-xs text-gray-400">({group.providers.length})</span>
+                              <span className="text-lg">{ROLE_EMOJI_FALLBACK[group.code] ?? ''}</span>
+                              <h4 className="text-sm font-bold text-fg">{group.label}</h4>
+                              <span className="text-xs text-faint">({group.providers.length})</span>
                             </div>
                             <Link href={`/search/${group.slug}`} className="text-xs font-medium text-[#0C6780] hover:text-[#001E40] flex items-center gap-0.5">
                               See All <FaArrowRight className="text-[9px]" />
@@ -802,12 +802,12 @@ export default function DiscoverSection() {
                   )
                 ) : gridLoading ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-                    {Array.from({ length: 8 }).map((_, i) => <div key={i} className="animate-pulse bg-gray-100 rounded-2xl h-48" />)}
+                    {Array.from({ length: 8 }).map((_, i) => <div key={i} className="animate-pulse bg-subtle rounded-2xl h-48" />)}
                   </div>
                 ) : filteredGrid.length === 0 ? (
                   <div className="text-center py-12">
                     <FaUserMd className="text-4xl text-gray-200 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">{provSearch ? 'No match.' : 'No providers in this category.'}</p>
+                    <p className="text-sm text-soft">{provSearch ? 'No match.' : 'No providers in this category.'}</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -825,18 +825,18 @@ export default function DiscoverSection() {
             </div>
           )}
 
-          {/* ── Services tab ───────────────────────────────────────────────── */}
+          {/*  Services tab  */}
           {activeTab === 'services' && (
             <div className="py-6 sm:py-8 overflow-hidden">
               <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
 
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-fg flex items-center gap-2">
                       <FaConciergeBell className="text-[#0C6780] text-lg" />
                       Find Services
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5">Browse what every provider type offers</p>
+                    <p className="text-xs text-faint mt-0.5">Browse what every provider type offers</p>
                   </div>
                   <Link href="/search/services" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
@@ -845,21 +845,21 @@ export default function DiscoverSection() {
 
                 <div className="flex flex-col sm:flex-row gap-2 mb-5">
                   <div className="relative flex-shrink-0 sm:w-56">
-                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                    <input type="text" placeholder="Search services…" value={svcSearch}
+                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
+                    <input type="text" placeholder="Search services" value={svcSearch}
                       onChange={e => setSvcSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+                      className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
                   </div>
                   <div className="flex gap-1.5 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
                     <button onClick={() => setTabServiceRole('ALL')}
                       className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border
-                        ${tabServiceRole === 'ALL' ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                        ${tabServiceRole === 'ALL' ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'}`}
                     >All</button>
                     {roles.map(role => (
                       <button key={role.code} onClick={() => setTabServiceRole(role.code)}
                         style={tabServiceRole === role.code ? { backgroundColor: role.color, borderColor: role.color } : {}}
                         className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border
-                          ${tabServiceRole === role.code ? 'text-white' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400 hover:text-gray-800'}`}
+                          ${tabServiceRole === role.code ? 'text-white' : 'bg-surface text-soft border-line hover:border-gray-400 hover:text-fg'}`}
                       >
                         {role.label}
                       </button>
@@ -869,14 +869,14 @@ export default function DiscoverSection() {
 
                 {servicesLoading ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-                    {Array.from({ length: 12 }).map((_, i) => <div key={i} className="animate-pulse"><div className="h-32 bg-gray-100 rounded-2xl mb-2" /><div className="h-3 bg-gray-100 rounded w-3/4 mb-1.5" /><div className="h-3 bg-gray-100 rounded w-1/2" /></div>)}
+                    {Array.from({ length: 12 }).map((_, i) => <div key={i} className="animate-pulse"><div className="h-32 bg-subtle rounded-2xl mb-2" /><div className="h-3 bg-subtle rounded w-3/4 mb-1.5" /><div className="h-3 bg-subtle rounded w-1/2" /></div>)}
                   </div>
                 ) : servicesError || filteredServices.length === 0 ? (
                   <div className="text-center py-12">
                     <FaConciergeBell className="text-4xl text-gray-200 mx-auto mb-3" />
                     {servicesError
-                      ? <p className="text-sm text-gray-500">Could not load services - ensure the backend is running.</p>
-                      : <><p className="text-sm text-gray-500">No services match your search.</p>
+                      ? <p className="text-sm text-soft">Could not load services - ensure the backend is running.</p>
+                      : <><p className="text-sm text-soft">No services match your search.</p>
                         <button onClick={() => { setSvcSearch(''); setTabServiceRole('ALL') }} className="mt-2 text-xs text-[#0C6780] hover:underline">Clear filters</button></>
                     }
                   </div>
@@ -898,18 +898,18 @@ export default function DiscoverSection() {
             </div>
           )}
 
-          {/* ── Organisations tab ──────────────────────────────────────────────────── */}
+          {/*  Organisations tab  */}
           {activeTab === 'organisations' && (
             <div className="py-6 sm:py-8 overflow-hidden">
               <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
 
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-fg flex items-center gap-2">
                       <FaClinicMedical className="text-[#0C6780] text-lg" />
                       Organisations
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5">Find clinics, hospitals, laboratories & pharmacies near you</p>
+                    <p className="text-xs text-faint mt-0.5">Find clinics, hospitals, laboratories & pharmacies near you</p>
                   </div>
                   <Link href="/search/providers" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
@@ -919,22 +919,22 @@ export default function DiscoverSection() {
                 {/* Type filter + search */}
                 <div className="flex flex-col sm:flex-row gap-2 mb-5">
                   <div className="relative flex-shrink-0 sm:w-56">
-                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                    <input type="text" placeholder="Search by name or city…" value={orgSearch}
+                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
+                    <input type="text" placeholder="Search by name or city" value={orgSearch}
                       onChange={e => setOrgSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+                      className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
                   </div>
                   <div className="flex gap-1.5 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
                     {[
-                      { key: 'ALL',       label: 'All',         emoji: '🏥' },
-                      { key: 'clinic',    label: 'Clinics',     emoji: '🏥' },
-                      { key: 'hospital',  label: 'Hospitals',   emoji: '🏨' },
-                      { key: 'laboratory',label: 'Labs',        emoji: '🔬' },
-                      { key: 'pharmacy',  label: 'Pharmacies',  emoji: '💊' },
+                      { key: 'ALL',       label: 'All',         emoji: '' },
+                      { key: 'clinic',    label: 'Clinics',     emoji: '' },
+                      { key: 'hospital',  label: 'Hospitals',   emoji: '' },
+                      { key: 'laboratory',label: 'Labs',        emoji: '' },
+                      { key: 'pharmacy',  label: 'Pharmacies',  emoji: '' },
                     ].map(t => (
                       <button key={t.key} onClick={() => setOrgTypeFilter(t.key)}
                         className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border whitespace-nowrap
-                          ${orgTypeFilter === t.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                          ${orgTypeFilter === t.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'}`}
                       >
                         {t.emoji} {t.label}
                       </button>
@@ -945,7 +945,7 @@ export default function DiscoverSection() {
                 {filteredOrgs.length === 0 ? (
                   <div className="text-center py-12">
                     <FaClinicMedical className="text-4xl text-gray-200 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">No organisations match your search.</p>
+                    <p className="text-sm text-soft">No organisations match your search.</p>
                     <button onClick={() => { setOrgSearch(''); setOrgTypeFilter('ALL') }}
                       className="mt-2 text-xs text-[#0C6780] hover:underline">Clear filters</button>
                   </div>
@@ -961,43 +961,43 @@ export default function DiscoverSection() {
                           setMobileMapOpen(true)
                           trackEvent('discover_org_tap', { orgId: org.id, type: org.type })
                         }}
-                        className="group flex gap-3 items-start bg-white border border-gray-100 rounded-2xl p-4 text-left hover:shadow-lg hover:border-[#0C6780]/20 hover:-translate-y-0.5 transition-all duration-200"
+                        className="group flex gap-3 items-start bg-surface border border-line rounded-2xl p-4 text-left hover:shadow-lg hover:border-[#0C6780]/20 hover:-translate-y-0.5 transition-all duration-200"
                       >
                         <div className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-xl"
                           style={{ background: ENTITY_MODES.find(m => m.value === org.type)?.color ? hex2rgba(ENTITY_MODES.find(m => m.value === org.type)!.color, 0.12) : '#f3f4f6' }}>
-                          {ENTITY_MODES.find(m => m.value === org.type)?.emoji ?? '🏥'}
+                          {ENTITY_MODES.find(m => m.value === org.type)?.emoji ?? ''}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-gray-900 truncate group-hover:text-[#0C6780] transition-colors">{org.name}</p>
-                          <p className="text-[11px] text-gray-400 capitalize mt-0.5">{org.type}</p>
-                          {org.address && <p className="text-[11px] text-gray-500 mt-1 line-clamp-1 flex items-center gap-1"><FaMapMarkerAlt className="text-[#0C6780] text-[9px] flex-shrink-0" />{org.address}{org.city ? `, ${org.city}` : ''}</p>}
-                          {org.phone && <p className="text-[11px] text-gray-500 mt-0.5">{org.phone}</p>}
+                          <p className="text-sm font-bold text-fg truncate group-hover:text-[#0C6780] transition-colors">{org.name}</p>
+                          <p className="text-[11px] text-faint capitalize mt-0.5">{org.type}</p>
+                          {org.address && <p className="text-[11px] text-soft mt-1 line-clamp-1 flex items-center gap-1"><FaMapMarkerAlt className="text-[#0C6780] text-[9px] flex-shrink-0" />{org.address}{org.city ? `, ${org.city}` : ''}</p>}
+                          {org.phone && <p className="text-[11px] text-soft mt-0.5">{org.phone}</p>}
                         </div>
-                        <FaChevronRight className="text-gray-300 group-hover:text-[#0C6780] text-xs flex-shrink-0 mt-1 transition-colors" />
+                        <FaChevronRight className="text-faint group-hover:text-[#0C6780] text-xs flex-shrink-0 mt-1 transition-colors" />
                       </button>
                     ))}
                   </div>
                 )}
 
                 {filteredOrgs.length > 30 && (
-                  <p className="text-center text-xs text-gray-400 mt-4">Showing 30 of {filteredOrgs.length} organisations. Use the map to explore more.</p>
+                  <p className="text-center text-xs text-faint mt-4">Showing 30 of {filteredOrgs.length} organisations. Use the map to explore more.</p>
                 )}
               </div>
             </div>
           )}
 
-          {/* ── Health Shop tab ────────────────────────────────────────────── */}
+          {/*  Health Shop tab  */}
           {activeTab === 'shop' && (
             <div className="py-6 sm:py-8 overflow-hidden">
               <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
 
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-fg flex items-center gap-2">
                       <FaShoppingBag className="text-[#0C6780] text-lg" />
                       Health Shop
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5">Medicines, vitamins, devices &amp; more - from verified providers</p>
+                    <p className="text-xs text-faint mt-0.5">Medicines, vitamins, devices &amp; more - from verified providers</p>
                   </div>
                   <Link href="/search/health-shop" className="hidden sm:flex items-center gap-1 text-sm font-medium text-[#0C6780] hover:text-[#001E40] whitespace-nowrap">
                     See All <FaArrowRight className="text-xs" />
@@ -1009,7 +1009,7 @@ export default function DiscoverSection() {
                   {SHOP_CATEGORIES.map(cat => (
                     <button key={cat.key} onClick={() => setShopCat(cat.key)}
                       className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border whitespace-nowrap
-                        ${shopCat === cat.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#0C6780] hover:text-[#0C6780]'}`}
+                        ${shopCat === cat.key ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'bg-surface text-soft border-line hover:border-[#0C6780] hover:text-[#0C6780]'}`}
                     >
                       {cat.emoji} {cat.label}
                     </button>
@@ -1018,20 +1018,20 @@ export default function DiscoverSection() {
 
                 {/* Search */}
                 <div className="relative mb-5 sm:w-56">
-                  <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                  <input type="text" placeholder="Search products…" value={shopSearch}
+                  <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-xs" />
+                  <input type="text" placeholder="Search products" value={shopSearch}
                     onChange={e => setShopSearch(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
+                    className="w-full pl-8 pr-3 py-2 text-sm border border-line rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C6780]/30 focus:border-[#0C6780]" />
                 </div>
 
                 {shopLoading ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-                    {Array.from({ length: 8 }).map((_, i) => <div key={i} className="animate-pulse bg-gray-100 rounded-2xl h-44" />)}
+                    {Array.from({ length: 8 }).map((_, i) => <div key={i} className="animate-pulse bg-subtle rounded-2xl h-44" />)}
                   </div>
                 ) : filteredShop.length === 0 ? (
                   <div className="text-center py-12">
                     <FaShoppingBag className="text-4xl text-gray-200 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">No products in this category.</p>
+                    <p className="text-sm text-soft">No products in this category.</p>
                     <Link href="/search/health-shop" className="mt-2 inline-block text-xs text-[#0C6780] hover:underline">Browse full shop</Link>
                   </div>
                 ) : (
@@ -1057,7 +1057,7 @@ export default function DiscoverSection() {
   )
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+//  Sub-components 
 
 function mapProviders(raw: unknown[]): ProviderCard[] {
   return (raw as Record<string, unknown>[]).map(p => ({
@@ -1083,7 +1083,7 @@ function ProviderCardItem({ provider, color, onBook }: { provider: ProviderCard;
       trackEvent('discover_provider_book', { providerId: provider.id, userType: provider.userType })
       onBook()
     }}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
+      className="group flex flex-col bg-surface rounded-2xl border border-line text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
       <div className="relative w-full h-24 sm:h-28 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgLight} 100%)` }}>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
@@ -1094,19 +1094,19 @@ function ProviderCardItem({ provider, color, onBook }: { provider: ProviderCard;
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={avatarUrl} alt={`${provider.firstName} ${provider.lastName}`}
             className="w-14 h-14 sm:h-16 sm:w-16 rounded-full object-cover object-top border-2 border-white shadow-lg" />
-          {provider.verified && <FaCheckCircle className="absolute -bottom-0.5 -right-0.5 text-blue-500 text-xs bg-white rounded-full" />}
+          {provider.verified && <FaCheckCircle className="absolute -bottom-0.5 -right-0.5 text-blue-500 text-xs bg-surface rounded-full" />}
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: color }} />
       </div>
       <div className="p-2.5 flex-1 flex flex-col">
-        <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-1 mb-0.5">{provider.firstName} {provider.lastName}</h4>
-        {provider.specialty && <p className="text-[10px] text-gray-400 line-clamp-1">{Array.isArray(provider.specialty) ? provider.specialty[0] : provider.specialty}</p>}
+        <h4 className="text-xs sm:text-sm font-bold text-fg leading-snug line-clamp-1 mb-0.5">{provider.firstName} {provider.lastName}</h4>
+        {provider.specialty && <p className="text-[10px] text-faint line-clamp-1">{Array.isArray(provider.specialty) ? provider.specialty[0] : provider.specialty}</p>}
       </div>
-      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between gap-1">
+      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-line flex items-center justify-between gap-1">
         {provider.rating && provider.rating > 0 ? (
           <div className="flex items-center gap-0.5 text-[10px] text-amber-500 font-medium">
             <FaStar className="text-[9px]" />{Number(provider.rating).toFixed(1)}
-            {provider.reviewCount && <span className="text-gray-400 ml-0.5">({provider.reviewCount})</span>}
+            {provider.reviewCount && <span className="text-faint ml-0.5">({provider.reviewCount})</span>}
           </div>
         ) : <span />}
         <span className="text-[10px] font-semibold flex items-center gap-0.5" style={{ color }}>
@@ -1126,11 +1126,11 @@ function ServiceCardItem({ service, color, roleLabel, onBook }: { service: Servi
       trackEvent('discover_service_book', { serviceId: service.id, category: service.category, providerType: service.providerType })
       onBook()
     }}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
+      className="group flex flex-col bg-surface rounded-2xl border border-line text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
       <div className="relative w-full h-24 sm:h-28 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgLight} 100%)` }}>
         <span className="relative group-hover:scale-110 transition-transform duration-300 text-5xl leading-none select-none">
-          {service.emoji ?? service.imageUrl ? (service.emoji ?? '🩺') : '🩺'}
+          {service.emoji ?? service.imageUrl ? (service.emoji ?? '') : ''}
         </span>
         <div className="absolute bottom-1.5 left-2 z-10">
           <span className="text-[9px] px-1.5 py-0.5 rounded-full font-semibold" style={{ background: 'rgba(0,0,0,0.35)', color: '#fff', backdropFilter: 'blur(4px)' }}>
@@ -1141,12 +1141,12 @@ function ServiceCardItem({ service, color, roleLabel, onBook }: { service: Servi
       </div>
       <div className="p-2.5 flex-1 flex flex-col">
         <h4 className="text-xs sm:text-sm font-bold leading-snug line-clamp-2 mb-1" style={{ color }}>{service.serviceName}</h4>
-        {service.description && <p className="text-[10px] text-gray-400 line-clamp-2 flex-1">{service.description}</p>}
+        {service.description && <p className="text-[10px] text-faint line-clamp-2 flex-1">{service.description}</p>}
       </div>
-      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between gap-1">
-        <span className="text-xs font-bold text-gray-900">Rs {service.defaultPrice.toLocaleString()}</span>
+      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-line flex items-center justify-between gap-1">
+        <span className="text-xs font-bold text-fg">Rs {service.defaultPrice.toLocaleString()}</span>
         {service.duration && (
-          <span className="flex items-center gap-0.5 text-[10px] text-gray-400">
+          <span className="flex items-center gap-0.5 text-[10px] text-faint">
             <FaClock className="text-[9px]" />{service.duration}m
           </span>
         )}
@@ -1160,12 +1160,12 @@ function ShopItemCard({ item, authenticated }: { item: ShopItem; authenticated: 
     <Link
       href={authenticated ? `/search/health-shop/${item.id}` : '/login'}
       onClick={() => trackEvent('discover_shop_item_tap', { itemId: item.id, category: item.category, authenticated })}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+      className="group flex flex-col bg-surface rounded-2xl border border-line text-left w-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
       <div className="relative w-full h-24 sm:h-28 bg-gradient-to-br from-teal-50 to-sky-50 flex items-center justify-center overflow-hidden">
         {item.imageUrl
           // eslint-disable-next-line @next/next/no-img-element
           ? <img src={item.imageUrl} alt={item.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" />
-          : <span className="text-5xl leading-none group-hover:scale-110 transition-transform duration-300">💊</span>
+          : <span className="text-5xl leading-none group-hover:scale-110 transition-transform duration-300"></span>
         }
         {item.requiresPrescription && (
           <div className="absolute top-1.5 right-1.5 bg-amber-400/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
@@ -1174,16 +1174,16 @@ function ShopItemCard({ item, authenticated }: { item: ShopItem; authenticated: 
         )}
         {!item.inStock && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-            <span className="text-[10px] font-bold text-gray-400 bg-white px-2 py-1 rounded-full border border-gray-200">Out of Stock</span>
+            <span className="text-[10px] font-bold text-faint bg-surface px-2 py-1 rounded-full border border-line">Out of Stock</span>
           </div>
         )}
       </div>
       <div className="p-2.5 flex-1 flex flex-col">
-        <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug line-clamp-2 mb-0.5">{item.name}</h4>
-        {item.strength && <p className="text-[10px] text-gray-400">{item.strength}</p>}
+        <h4 className="text-xs sm:text-sm font-bold text-fg leading-snug line-clamp-2 mb-0.5">{item.name}</h4>
+        {item.strength && <p className="text-[10px] text-faint">{item.strength}</p>}
       </div>
-      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between gap-1">
-        <span className="text-xs font-bold text-gray-900">Rs {item.price.toLocaleString()}</span>
+      <div className="px-2.5 pb-2.5 pt-1.5 border-t border-line flex items-center justify-between gap-1">
+        <span className="text-xs font-bold text-fg">Rs {item.price.toLocaleString()}</span>
         <span className="text-[10px] font-semibold text-[#0C6780] flex items-center gap-0.5 group-hover:gap-1 transition-all">
           {authenticated ? 'Order' : 'Sign in'} <FaArrowRight className="text-[8px]" />
         </span>

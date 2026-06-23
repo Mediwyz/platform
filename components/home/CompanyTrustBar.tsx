@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FaShieldAlt, FaBuilding, FaArrowRight, FaHospital } from 'react-icons/fa'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+//  Types 
 
 interface TrustItem {
   id: string
@@ -29,7 +29,7 @@ interface OrgEntity {
   logoUrl: string | null
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+//  Helpers 
 
 function itemColor(name: string): string {
   const COLORS = [
@@ -64,7 +64,7 @@ function orgsToItems(orgs: OrgEntity[]): TrustItem[] {
   }))
 }
 
-// ─── Static fallback ──────────────────────────────────────────────────────────
+//  Static fallback 
 
 const FALLBACK: TrustItem[] = [
   { id: 'f1', name: 'Flamingo Health Co', badge: 'Insurance', href: '/search/company' },
@@ -75,7 +75,7 @@ const FALLBACK: TrustItem[] = [
   { id: 'f6', name: 'Sunset Bay Medical', badge: 'Hospital', href: '/search/organizations' },
 ]
 
-// ─── Badge icon ──────────────────────────────────────────────────────────────
+//  Badge icon 
 
 function BadgeIcon({ badge }: { badge: string }) {
   const lower = badge.toLowerCase()
@@ -84,7 +84,7 @@ function BadgeIcon({ badge }: { badge: string }) {
   return <FaBuilding className="text-[8px]" />
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+//  Component 
 
 export default function CompanyTrustBar() {
   const [items, setItems] = useState<TrustItem[]>(FALLBACK)
@@ -183,7 +183,7 @@ export default function CompanyTrustBar() {
                   <p className="text-white/50 text-[10px] whitespace-nowrap flex items-center gap-1">
                     <BadgeIcon badge={item.badge} />
                     {item.badge}
-                    {isClinic && <span className="ml-0.5">🏥</span>}
+                    {isClinic && <span className="ml-0.5"></span>}
                   </p>
                 </div>
               </Link>

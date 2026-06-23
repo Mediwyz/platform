@@ -5,7 +5,7 @@ import { FaArrowRight, FaUserMd } from 'react-icons/fa'
 
 export default function FinalCtaSection() {
   return (
-    <section className="bg-white py-14 sm:py-20">
+    <section className="bg-surface py-14 sm:py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className="relative overflow-hidden rounded-3xl px-6 py-12 sm:px-12 sm:py-16 text-center shadow-xl"
@@ -21,14 +21,14 @@ export default function FinalCtaSection() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
               Ready to take care of your health?
             </h2>
-            <p className="text-sm sm:text-base text-gray-300/90 max-w-xl mx-auto mb-8">
+            <p className="text-sm sm:text-base text-faint/90 max-w-xl mx-auto mb-8">
               Join thousands of patients across Africa, Mauritius & India booking trusted care on MediWyz - it is free to get started.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-[#001E40] px-7 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-sky"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-surface text-[#001E40] px-7 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-sky"
               >
                 Create your free account <FaArrowRight />
               </Link>

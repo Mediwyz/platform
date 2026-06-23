@@ -1,10 +1,10 @@
 'use client'
 
 /**
- * CategoryTile — a big square tile for a service category (Cardiology, Wound
- * Care, …). Renders the matching local Healthicon (resolved by keyword, see
+ * CategoryTile  a big square tile for a service category (Cardiology, Wound
+ * Care, ). Renders the matching local Healthicon (resolved by keyword, see
  * ServiceIcon) in white on a brand gradient, with the label below. Consistent
- * across all ~95 categories — no per-category image sourcing needed.
+ * across all ~95 categories  no per-category image sourcing needed.
  *
  * The healthicons are monochrome SVGs, so we recolor them to white with a
  * `brightness-0 invert` filter to sit on the gradient.

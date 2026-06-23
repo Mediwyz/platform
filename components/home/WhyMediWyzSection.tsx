@@ -44,7 +44,7 @@ const FEATURES = [
 
 export default function WhyMediWyzSection() {
   return (
-    <section className="bg-[#F4FBFF] border-b border-gray-100 py-14 sm:py-20">
+    <section className="bg-[#F4FBFF] border-b border-line py-14 sm:py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-14">
           <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
@@ -53,7 +53,7 @@ export default function WhyMediWyzSection() {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#001E40]">
             Healthcare that actually works for you
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-xl mx-auto">
+          <p className="mt-2 text-sm sm:text-base text-soft max-w-xl mx-auto">
             One trusted platform for every kind of care - built around your time, your privacy and your peace of mind.
           </p>
         </div>
