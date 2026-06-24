@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useAppConfig } from '@/hooks/useAppConfig'
+import { useTranslation } from '@/lib/i18n'
 import { FaRobot, FaVideo, FaHome, FaPills, FaGooglePlay, FaApple } from 'react-icons/fa'
 
 interface HeroStats {
@@ -75,6 +76,7 @@ const DEFAULT_BG = [
 
 const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
   const { config } = useAppConfig()
+  const { t } = useTranslation()
   const stats = useHeroStats()
 
   // Admin `slides` (title/subtitle/imageUrl) override the bundled backgrounds.
@@ -88,13 +90,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
     return () => clearInterval(id)
   }, [bg.length])
 
-  const titleParts = (content?.mainTitle || config.heroTitle || 'Healthcare, Reimagined').split(',')
+  const titleParts = (content?.mainTitle || config.heroTitle || t('landing.heroTitle')).split(',')
   const caption = bg[index]
 
   return (
     <section
       className="relative overflow-hidden isolate"
-      style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 560 }}
+      style={{ background: 'linear-gradient(135deg, #001E40 0%, #002B5C 55%, #0C6780 140%)', minHeight: 640 }}
     >
       {/*  Full-bleed background slider (Ken-Burns cross-fade)  */}
       <div aria-hidden className="absolute inset-0 -z-10">
@@ -129,7 +131,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="w-full max-w-4xl mx-auto px-6 sm:px-10 py-14 sm:py-20 text-center flex flex-col items-center"
+          className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-24 text-center flex flex-col items-center"
         >
           {/* animated caption synced to the background image */}
           <div className="h-7 mb-5">
@@ -149,7 +151,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             </AnimatePresence>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold mb-6 leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
+          <h1 className="text-6xl sm:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-7 leading-[1.0] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
             {titleParts.map((part, i) => (
               <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
                 {part.trim()}
@@ -158,9 +160,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl xl:text-2xl text-white/80 leading-relaxed max-w-3xl mx-auto mb-8">
-            {content?.subtitle ||
-              "Connect with verified doctors, nurses, dentists, and 10+ specialist types across Africa, Mauritius & India - all in one secure platform."}
+          <p className="text-xl sm:text-2xl xl:text-3xl text-white/85 leading-relaxed max-w-5xl mx-auto mb-9">
+            {content?.subtitle || t('landing.heroSubtitle')}
           </p>
 
           {/* App download badges */}
@@ -192,10 +193,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           {/* Feature pills */}
           <div className="flex flex-wrap justify-center gap-2 mb-8">
             {[
-              { icon: <FaRobot className="text-brand-sky" />, label: 'AI Health Assistant', href: '/ai-assistant' },
-              { icon: <FaVideo className="text-brand-sky" />, label: 'Video Consultations',  sectionId: 'discover-section' },
-              { icon: <FaHome  className="text-brand-sky" />, label: 'Home Visits',          sectionId: 'discover-section' },
-              { icon: <FaPills className="text-brand-sky" />, label: 'Online Pharmacy',      sectionId: 'discover-section' },
+              { icon: <FaRobot className="text-brand-sky" />, label: t('landing.heroPillAi'),       href: '/ai-assistant' },
+              { icon: <FaVideo className="text-brand-sky" />, label: t('landing.heroPillVideo'),    sectionId: 'discover-section' },
+              { icon: <FaHome  className="text-brand-sky" />, label: t('landing.heroPillHome'),     sectionId: 'discover-section' },
+              { icon: <FaPills className="text-brand-sky" />, label: t('landing.heroPillPharmacy'), sectionId: 'discover-section' },
             ].map(f => {
               const cls = "inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 border border-white/20 text-sm font-medium text-white hover:bg-white/20 hover:border-brand-sky/50 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               if ('href' in f) return (
@@ -212,17 +213,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
           </div>
 
           {/* Trust stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 w-full max-w-6xl mx-auto">
             {[
-              { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: 'Verified Providers',  sub: 'across all specialties' },
-              { value: `${stats.specialties}+`,                                  label: 'Medical Specialties', sub: 'doctors, nurses & more' },
-              { value: `${stats.countries}`,                                      label: 'Countries',           sub: 'Africa, Mauritius & India' },
-              { value: `${stats.providerTypes}+`,                                 label: 'Provider Types',      sub: 'from 1 platform' },
+              { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: t('landing.heroStatProviders'),   sub: t('landing.heroStatProvidersSub') },
+              { value: `${stats.specialties}+`,                                  label: t('landing.heroStatSpecialties'), sub: t('landing.heroStatSpecialtiesSub') },
+              { value: `${stats.countries}`,                                      label: t('landing.heroStatCountries'),   sub: t('landing.heroStatCountriesSub') },
+              { value: `${stats.providerTypes}+`,                                 label: t('landing.heroStatTypes'),       sub: t('landing.heroStatTypesSub') },
             ].map(stat => (
-              <div key={stat.label} className="flex flex-col rounded-xl bg-white/[0.08] border border-white/15 px-4 py-3.5 backdrop-blur-md">
-                <span className="text-2xl sm:text-3xl font-black text-white leading-none">{stat.value}</span>
-                <span className="text-xs font-semibold text-white/85 mt-1.5">{stat.label}</span>
-                <span className="text-[10px] text-white/50 mt-0.5 leading-tight">{stat.sub}</span>
+              <div key={stat.label} className="flex flex-col rounded-2xl bg-white/[0.08] border border-white/15 px-5 py-5 sm:py-6 backdrop-blur-md">
+                <span className="text-3xl sm:text-4xl xl:text-5xl font-black text-white leading-none">{stat.value}</span>
+                <span className="text-sm font-semibold text-white/85 mt-2">{stat.label}</span>
+                <span className="text-[11px] text-white/50 mt-0.5 leading-tight">{stat.sub}</span>
               </div>
             ))}
           </div>

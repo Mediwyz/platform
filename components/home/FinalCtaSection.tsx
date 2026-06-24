@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { FaArrowRight, FaUserMd } from 'react-icons/fa'
+import { useTranslation } from '@/lib/i18n'
 
 export default function FinalCtaSection() {
+  const { t } = useTranslation()
   return (
     <section className="bg-surface py-14 sm:py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,10 +21,10 @@ export default function FinalCtaSection() {
 
           <div className="relative">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
-              Ready to take care of your health?
+              {t('landing.ctaTitle')}
             </h2>
             <p className="text-sm sm:text-base text-faint/90 max-w-xl mx-auto mb-8">
-              Join thousands of patients across Africa, Mauritius & India booking trusted care on MediWyz - it is free to get started.
+              {t('landing.ctaSubtitle')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -30,13 +32,13 @@ export default function FinalCtaSection() {
                 href="/signup"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-surface text-fg px-7 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-sky"
               >
-                Create your free account <FaArrowRight />
+                {t('landing.ctaCreateAccount')} <FaArrowRight />
               </Link>
               <Link
                 href="/signup?type=provider"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white px-7 py-3.5 text-sm font-bold backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
               >
-                <FaUserMd /> Join as a provider
+                <FaUserMd /> {t('landing.ctaJoinProvider')}
               </Link>
             </div>
           </div>

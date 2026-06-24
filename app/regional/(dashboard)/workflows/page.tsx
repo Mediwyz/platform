@@ -352,12 +352,12 @@ export default function RegionalWorkflowsPage() {
 
                                 {/* Actions */}
                                 <div className="flex flex-wrap gap-1 mt-1.5">
-                                  {step.actionsForProvider.map(a => (
+                                  {(step.actionsForProvider ?? []).map(a => (
                                     <span key={a.action} className="px-1.5 py-0.5 bg-brand-navy/10 text-brand-navy text-xs rounded">
                                       Provider: {a.label}
                                     </span>
                                   ))}
-                                  {step.actionsForPatient.map(a => (
+                                  {(step.actionsForPatient ?? []).map(a => (
                                     <span key={a.action} className="px-1.5 py-0.5 bg-subtle text-soft text-xs rounded">
                                       Patient: {a.label}
                                     </span>
@@ -373,12 +373,15 @@ export default function RegionalWorkflowsPage() {
                           Transitions
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          {tpl.transitions.map((tr, i) => (
+                          {(tpl.transitions ?? []).map((tr, i) => (
                             <span key={i} className="text-xs bg-surface border border-line rounded px-2 py-1 text-soft">
                               {tr.from} <span className="text-brand-teal font-bold mx-1">→</span> {tr.to}
                               <span className="text-faint ml-1">({tr.action})</span>
                             </span>
                           ))}
+                          {(!tpl.transitions || tpl.transitions.length === 0) && (
+                            <span className="text-xs text-faint italic">No transitions defined.</span>
+                          )}
                         </div>
                       </div>
                     )}

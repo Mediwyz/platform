@@ -28,7 +28,7 @@ export const REGIONAL_ADMIN_SIDEBAR_ITEMS: SidebarItem[] = [
 
   // ── Service Flows (services + what happens after a booking) ───────────────
   { id: 'service-flows-header', label: 'Service Flows', icon: FaSitemap, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '#', divider: true },
-  { id: 'services', label: 'Services', labelKey: 'nav.services', icon: FaTag, color: 'text-brand-navy', bgColor: 'bg-sky-50', href: `${base}/services` },
+  { id: 'services', label: 'Service Catalog', icon: FaTag, color: 'text-brand-navy', bgColor: 'bg-sky-50', href: `${base}/services` },
   { id: 'workflows', label: 'After Booking', labelKey: 'nav.workflows', icon: FaSitemap, color: 'text-brand-teal', bgColor: 'bg-sky-50', href: `${base}/workflows` },
   { id: 'workflow-suggestions', label: 'Provider Requests', icon: FaInbox, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/workflows/suggestions` },
 
