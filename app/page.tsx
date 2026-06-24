@@ -19,7 +19,7 @@ const CategoryNavigator = dynamic(() => import('@/components/home/CategoryNaviga
 
 export default function HomePage() {
   return (
-    <>
+    <div className="landing-theme">
       {/* 1 - Hook: hero + image carousel + app badges */}
       <HeroSection />
 
@@ -61,6 +61,6 @@ export default function HomePage() {
 
       {/* 8 - Final conversion CTA */}
       <FinalCtaSection />
-    </>
+    </div>
   )
 }

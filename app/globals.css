@@ -67,6 +67,20 @@
   --accent-ink: #9AE1FF;
 }
 
+/* Landing page dark mode: use MediWyz brand blue/navy as the "dark" of white,
+   instead of the near-black used elsewhere. Scoped to the landing wrapper. */
+.dark .landing-theme {
+  --canvas: #00152e;      /* deep brand navy — page background */
+  --surface: #002146;     /* navy card surface (sits above canvas) */
+  --subtle: #002f5e;      /* muted / hover navy */
+  --line: #0d3f6d;        /* navy borders */
+  --fg: #eaf2fb;          /* near-white text */
+  --soft: #b3c6dd;        /* secondary text */
+  --faint: #8198b6;       /* tertiary text */
+  --accent: #38b6d9;
+  --accent-ink: #9AE1FF;
+}
+
 @keyframes blob {
   0%   { transform: translate(0px, 0px) scale(1); }
   33%  { transform: translate(30px, -50px) scale(1.1); }
