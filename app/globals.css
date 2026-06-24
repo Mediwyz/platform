@@ -70,16 +70,18 @@
 /* Landing page dark mode: use MediWyz brand blue/navy as the "dark" of white,
    instead of the near-black used elsewhere. Scoped to the landing wrapper. */
 .dark .landing-theme {
-  --canvas: #00152e;      /* deep brand navy — page background */
-  --surface: #002146;     /* navy card surface (sits above canvas) */
-  --subtle: #002f5e;      /* muted / hover navy */
-  --line: #0d3f6d;        /* navy borders */
-  --fg: #eaf2fb;          /* near-white text */
-  --soft: #b3c6dd;        /* secondary text */
-  --faint: #8198b6;       /* tertiary text */
+  --canvas: #001E40;      /* MediWyz brand navy — clearly blue page background */
+  --surface: #0a3360;     /* lighter navy card surface (sits above canvas) */
+  --subtle: #103e70;      /* muted / hover navy */
+  --line: #1c4f82;        /* navy borders (visible on navy) */
+  --fg: #eef4fc;          /* near-white text */
+  --soft: #bccfe6;        /* secondary text */
+  --faint: #97acca;       /* tertiary text */
   --accent: #38b6d9;
   --accent-ink: #9AE1FF;
 }
+/* Make sure the wrapper itself paints navy so no near-black body shows through. */
+.dark .landing-theme { background-color: var(--canvas); }
 
 @keyframes blob {
   0%   { transform: translate(0px, 0px) scale(1); }
