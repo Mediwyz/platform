@@ -52,8 +52,8 @@ const ContactForm: React.FC = () => {
  <div className="bg-surface rounded-2xl shadow-lg p-8">
  <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
  {status && (
- <div className={`mb-4 p-3 rounded-lg text-sm ${
- status.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'
+ <div role={status.type === 'error' ? 'alert' : 'status'} aria-live="polite" className={`mb-4 p-3 rounded-lg text-sm ${
+ status.type === 'success' ? 'bg-green-50 dark:bg-green-500/15 border border-green-200 dark:border-green-500/30 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-300'
  }`}>
  {status.message}
  </div>

@@ -109,7 +109,7 @@ const LoginForm: React.FC = () => {
 
  {/* Error Message */}
  {error && (
- <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">
+ <div role="alert" className="bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-300 text-sm rounded-lg p-3 mb-4">
  {error}
  </div>
  )}

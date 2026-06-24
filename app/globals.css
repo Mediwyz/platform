@@ -49,7 +49,7 @@
   --line: #e5e9f0;
   --fg: #0f172a;
   --soft: #475569;
-  --faint: #94a3b8;
+  --faint: #64748b;       /* slate-500 ≈ 4.6:1 on white (AA); was #94a3b8 (too low) */
   --accent: #0C6780;      /* interactive accent (teal) */
   --accent-ink: #001E40;  /* deep brand navy */
 }

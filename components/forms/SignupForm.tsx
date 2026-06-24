@@ -984,7 +984,7 @@ export default function EnhancedRegistrationForm() {
 
  {/* Success / Error Messages */}
  {submitError && (
- <div className="mt-6 bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 flex items-start gap-3">
+ <div role="alert" className="mt-6 bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-300 rounded-xl p-4 flex items-start gap-3">
  <FaTimes className="mt-0.5 flex-shrink-0" />
  <p>{submitError}</p>
  </div>
@@ -1132,7 +1132,7 @@ function RoleRequestModal({ onClose, onSubmitted }: { onClose: () => void; onSub
    />
    </div>
    {error && (
-   <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-2">{error}</p>
+   <p role="alert" className="text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 rounded-lg p-2">{error}</p>
    )}
   </div>
 
