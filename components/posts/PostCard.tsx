@@ -2,9 +2,26 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { FaCheckCircle, FaRegHeart, FaHeart, FaRegComment, FaShare, FaEllipsisH } from 'react-icons/fa'
+import {
+  FaCheckCircle, FaRegComment, FaShare, FaEllipsisH,
+  FaThumbsUp, FaHeart, FaSadTear, FaThumbsDown, FaExclamationTriangle, FaRegThumbsUp,
+} from 'react-icons/fa'
+import type { IconType } from 'react-icons'
 import { Card, Badge, Avatar } from '@/components/ui/ds'
 import { cn } from '@/lib/cn'
+
+export type ReactionKey = 'like' | 'love' | 'sad' | 'bad' | 'misinfo'
+
+const REACTIONS: { key: ReactionKey; label: string; Icon: IconType; color: string; dot: string }[] = [
+  { key: 'like',    label: 'Like',    Icon: FaThumbsUp,            color: 'text-[#0C6780] dark:text-accent', dot: 'bg-[#0C6780]' },
+  { key: 'love',    label: 'Love',    Icon: FaHeart,               color: 'text-red-500',                    dot: 'bg-red-500' },
+  { key: 'sad',     label: 'Sad',     Icon: FaSadTear,             color: 'text-amber-500',                  dot: 'bg-amber-500' },
+  { key: 'bad',     label: 'Bad',     Icon: FaThumbsDown,          color: 'text-slate-500',                  dot: 'bg-slate-500' },
+  { key: 'misinfo', label: 'Misinfo', Icon: FaExclamationTriangle, color: 'text-orange-600',                 dot: 'bg-orange-600' },
+]
+const REACTION_BY_KEY = Object.fromEntries(REACTIONS.map(r => [r.key, r])) as Record<ReactionKey, typeof REACTIONS[number]>
+
+type ReactionCounts = Partial<Record<ReactionKey, number>>
 
 interface PostCardProps {
   post: {
@@ -26,12 +43,17 @@ interface PostCardProps {
       doctorProfile?: { specialty: string[]; clinicAffiliation: string } | null
     }
     company?: { id: string; companyName: string } | null
+    reactions?: ReactionCounts
     _count: { comments: number }
   }
   currentUserId?: string
   onLike?: (postId: string) => void
+  /** Apply a reaction (love/sad/bad/misinfo/like). Falls back to onLike if absent. */
+  onReact?: (postId: string, type: ReactionKey) => void
   onComment?: (postId: string) => void
   liked?: boolean
+  /** The current user's reaction on this post, if any. */
+  userReaction?: ReactionKey | null
   children?: React.ReactNode
 }
 
@@ -73,12 +95,31 @@ export default function PostCard({
   post,
   currentUserId,
   onLike,
+  onReact,
   onComment,
   liked = false,
+  userReaction = null,
   children,
 }: PostCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
+
+  // The user's active reaction: explicit `userReaction` wins; otherwise fall
+  // back to the legacy `liked` flag (treated as a plain "like").
+  const activeReaction: ReactionKey | null = userReaction ?? (liked ? 'like' : null)
+  const activeMeta = activeReaction ? REACTION_BY_KEY[activeReaction] : null
+
+  const react = (type: ReactionKey) => {
+    setPickerOpen(false)
+    if (onReact) onReact(post.id, type)
+    else onLike?.(post.id) // back-compat: any reaction toggles the legacy like
+  }
+  // Tapping the main button toggles the current reaction off, or applies "like".
+  const quickToggle = () => react(activeReaction ?? 'like')
+
+  // Reaction types present on this post, ordered by the canonical REACTIONS list.
+  const presentReactions = REACTIONS.filter(r => (post.reactions?.[r.key] ?? 0) > 0)
 
   // Defensive fallback for a freshly-created post missing its author relation.
   const author = post.author ?? {
@@ -177,11 +218,19 @@ export default function PostCard({
       {/* Counts summary */}
       {(post.likeCount > 0 || post._count.comments > 0) && (
         <div className="flex items-center justify-between px-4 sm:px-5 pt-3 text-xs text-faint">
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1.5">
             {post.likeCount > 0 && (
               <>
-                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-red-500 text-white">
-                  <FaHeart className="text-[8px]" />
+                <span className="flex items-center -space-x-1">
+                  {(presentReactions.length ? presentReactions : [REACTION_BY_KEY.like]).slice(0, 3).map(r => (
+                    <span
+                      key={r.key}
+                      className={cn('inline-flex items-center justify-center w-4 h-4 rounded-full text-white ring-1 ring-canvas', r.dot)}
+                      title={r.label}
+                    >
+                      <r.Icon className="text-[8px]" />
+                    </span>
+                  ))}
                 </span>
                 {post.likeCount}
               </>
@@ -193,14 +242,50 @@ export default function PostCard({
 
       {/* Action row */}
       <div className="grid grid-cols-3 gap-1 px-2 sm:px-3 py-1.5 mt-2 border-t border-line">
-        <ActionButton
-          active={liked}
-          activeClass="text-red-500"
-          disabled={!currentUserId}
-          onClick={() => onLike?.(post.id)}
-          icon={liked ? <FaHeart className="scale-110" /> : <FaRegHeart />}
-          label="Like"
-        />
+        {/* Reaction button + hover/tap picker */}
+        <div
+          className="relative"
+          onMouseEnter={() => currentUserId && setPickerOpen(true)}
+          onMouseLeave={() => setPickerOpen(false)}
+        >
+          {pickerOpen && (
+            <div
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 flex items-center gap-1 rounded-full border border-line bg-surface px-2 py-1.5 shadow-lg"
+              role="menu"
+              aria-label="Choose a reaction"
+            >
+              {REACTIONS.map(r => (
+                <button
+                  key={r.key}
+                  role="menuitem"
+                  onClick={() => react(r.key)}
+                  title={r.label}
+                  aria-label={r.label}
+                  className={cn(
+                    'flex items-center justify-center w-9 h-9 rounded-full transition-transform duration-150',
+                    'hover:scale-125 hover:bg-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                    r.color,
+                    activeReaction === r.key && 'bg-subtle',
+                  )}
+                >
+                  <r.Icon className="text-lg" />
+                </button>
+              ))}
+            </div>
+          )}
+          <ActionButton
+            active={!!activeMeta}
+            activeClass={activeMeta?.color}
+            disabled={!currentUserId}
+            onClick={quickToggle}
+            icon={
+              activeMeta
+                ? <activeMeta.Icon className="scale-110" />
+                : <FaRegThumbsUp />
+            }
+            label={activeMeta?.label ?? 'Like'}
+          />
+        </div>
         <ActionButton
           onClick={() => onComment?.(post.id)}
           icon={<FaRegComment />}

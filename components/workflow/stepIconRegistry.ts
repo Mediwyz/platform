@@ -36,6 +36,43 @@ export type StepIcon =
   | 'cancelled'
   | 'waiting'
 
+import type { IconType } from 'react-icons'
+import {
+  FiClock, FiCheckCircle, FiCreditCard, FiDollarSign, FiRotateCcw, FiTruck,
+  FiHome, FiBriefcase, FiVideo, FiPhone, FiMessageSquare, FiFileText, FiStar,
+  FiXCircle, FiPauseCircle,
+} from 'react-icons/fi'
+import {
+  FaFlask, FaHospital, FaVial, FaMicroscope, FaStethoscope,
+  FaPrescriptionBottleAlt, FaFlagCheckered,
+} from 'react-icons/fa'
+
+/** Real SVG icon component per step type (ui-ux-pro-max: SVG icons, not emoji). */
+export const STEP_ICON_COMPONENT: Record<StepIcon, IconType> = {
+  pending: FiClock,
+  accepted: FiCheckCircle,
+  payment: FiCreditCard,
+  paid: FiDollarSign,
+  refund: FiRotateCcw,
+  transport: FiTruck,
+  at_home: FiHome,
+  at_office: FiBriefcase,
+  at_lab: FaFlask,
+  at_hospital: FaHospital,
+  video_call: FiVideo,
+  audio_call: FiPhone,
+  chat: FiMessageSquare,
+  sample_collection: FaVial,
+  analysis: FaMicroscope,
+  surgery: FaStethoscope,
+  prescription: FaPrescriptionBottleAlt,
+  document: FiFileText,
+  review: FiStar,
+  completed: FaFlagCheckered,
+  cancelled: FiXCircle,
+  waiting: FiPauseCircle,
+}
+
 export const STEP_ICON_EMOJI: Record<StepIcon, string> = {
   pending: '⏳',
   accepted: '✅',
@@ -135,11 +172,12 @@ export function inferStepIcon(step: IconInferenceInput): StepIcon {
   return 'accepted'
 }
 
-/** Shortcut for rendering: returns { emoji, label } for a step. */
+/** Shortcut for rendering: returns { icon, Icon (SVG component), emoji, label }. */
 export function resolveStepVisual(step: IconInferenceInput & { icon?: StepIcon }) {
   const icon = (step.icon && STEP_ICON_EMOJI[step.icon]) ? step.icon : inferStepIcon(step)
   return {
     icon,
+    Icon: STEP_ICON_COMPONENT[icon],
     emoji: STEP_ICON_EMOJI[icon],
     label: STEP_ICON_LABEL[icon],
   }

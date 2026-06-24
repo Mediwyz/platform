@@ -1,5 +1,6 @@
 'use client'
 
+import { FiChevronRight, FiXCircle } from 'react-icons/fi'
 import { CATEGORY_DOT, categoryFromLegacyStatus, type StepCategory } from './stepCategoryStyles'
 import { resolveStepVisual, type StepIcon } from './stepIconRegistry'
 
@@ -58,7 +59,7 @@ export default function WorkflowStepper({
     return (
       <div className="flex items-center gap-1.5 overflow-x-auto py-1 -mx-1 px-1">
         {happyPath.map((step, idx) => {
-          const { emoji, label } = resolveStepVisual({
+          const { Icon, label } = resolveStepVisual({
             statusCode: step.statusCode, label: step.label,
             flags: step.flags, category: step.category,
             icon: step.icon,
@@ -72,33 +73,34 @@ export default function WorkflowStepper({
             // Key combines order + status - some seeded/cloned templates
             // duplicate status codes (e.g. two "pending" steps during edit),
             // and a non-unique key triggers a React warning.
-            <div key={`${step.order}-${step.statusCode}-${idx}`} className="flex items-center gap-1 flex-shrink-0">
+            <div key={`${step.order}-${step.statusCode}-${idx}`} className="flex items-center gap-1.5 flex-shrink-0">
               <div
-                className={`flex items-center gap-1 px-2 py-1 rounded-full border ${
+                className={`flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full border ${
                   isCurrent
                     ? 'bg-surface border-brand-teal ring-2 ring-brand-teal/20'
                     : 'bg-subtle border-line'
                 }`}
                 title={`${idx + 1}. ${step.label} - ${label}`}
               >
-                <span className={`w-4 h-4 rounded-full ${dotColor} flex items-center justify-center text-[9px] text-white font-bold`}>
-                  {idx + 1}
+                <span className={`w-5 h-5 rounded-full ${dotColor} flex items-center justify-center text-white flex-shrink-0`}>
+                  <Icon className="w-3 h-3" aria-hidden="true" />
                 </span>
-                <span className="text-sm leading-none" aria-hidden="true">{emoji}</span>
-                <span className="text-[11px] text-soft truncate max-w-[120px]">{step.label}</span>
+                <span className="text-[11px] font-medium text-soft truncate max-w-[130px]">
+                  <span className="text-faint mr-0.5">{idx + 1}.</span>{step.label}
+                </span>
               </div>
               {idx < happyPath.length - 1 && (
-                <span className="text-faint text-xs flex-shrink-0">→</span>
+                <FiChevronRight className="text-faint w-4 h-4 flex-shrink-0" aria-hidden="true" />
               )}
             </div>
           )
         })}
         {dangerStep && (
           <span
-            className="flex items-center gap-1 ml-2 px-2 py-1 rounded-full bg-red-50 border border-red-200 text-[11px] text-red-700 flex-shrink-0"
+            className="flex items-center gap-1 ml-2 px-2 py-1 rounded-full bg-red-50 dark:bg-red-500/15 border border-red-200 dark:border-red-500/30 text-[11px] text-red-700 dark:text-red-300 flex-shrink-0"
             title={`Cancel path: ${dangerStep.label}`}
           >
-            <span aria-hidden="true">❌</span>
+            <FiXCircle className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{dangerStep.label}</span>
           </span>
         )}
@@ -110,7 +112,7 @@ export default function WorkflowStepper({
   return (
     <ol className="space-y-2">
       {ordered.map((step, idx) => {
-        const { emoji, label } = resolveStepVisual({
+        const { Icon, label } = resolveStepVisual({
           statusCode: step.statusCode, label: step.label,
           flags: step.flags, category: step.category,
           icon: step.icon,
@@ -122,10 +124,10 @@ export default function WorkflowStepper({
 
         return (
           <li key={`${step.order}-${step.statusCode}-${idx}`} className={`flex items-start gap-3 p-2 rounded-lg ${isCurrent ? 'bg-brand-teal/5 ring-1 ring-brand-teal/30' : ''}`}>
-            <span className={`w-7 h-7 rounded-full ${dotColor} flex items-center justify-center text-[11px] text-white font-bold flex-shrink-0`}>
-              {step.order}
+            <span className={`relative w-8 h-8 rounded-full ${dotColor} flex items-center justify-center text-white flex-shrink-0`}>
+              <Icon className="w-4 h-4" aria-hidden="true" />
+              <span className="absolute -top-1 -left-1 w-4 h-4 rounded-full bg-surface text-[9px] font-bold text-fg flex items-center justify-center border border-line">{step.order}</span>
             </span>
-            <span className="text-xl leading-none flex-shrink-0" aria-hidden="true">{emoji}</span>
             <div className="min-w-0 flex-1">
               <p className={`text-sm font-medium ${isCurrent ? 'text-brand-navy' : 'text-fg'}`}>
                 {step.label}

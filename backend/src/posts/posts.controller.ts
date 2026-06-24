@@ -51,9 +51,10 @@ export class PostsController {
 
   @Post(':id/like')
   @HttpCode(HttpStatus.OK)
-  async like(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
-    const liked = await this.postsService.toggleLike(id, user.sub);
-    return { success: true, liked, data: { liked } };
+  async like(@Param('id') id: string, @Body() body: { type?: string }, @CurrentUser() user: JwtPayload) {
+    const result = await this.postsService.setReaction(id, user.sub, body?.type ?? 'like');
+    // `liked`/`likeCount` kept for backward compatibility; `reactions`/`userReaction` are new.
+    return { success: true, liked: result.liked, data: result };
   }
 
   @Post(':id/comment')

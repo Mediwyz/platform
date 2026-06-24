@@ -3,6 +3,19 @@ import { PrismaService } from '../prisma/prisma.service';
 
 const SYSTEM_USER_TYPES = new Set(['MEMBER', 'PATIENT', 'ADMIN', 'REGIONAL_ADMIN']);
 
+export const REACTION_TYPES = ['like', 'love', 'sad', 'bad', 'misinfo'] as const;
+export type ReactionType = (typeof REACTION_TYPES)[number];
+
+/** Tally a list of {type} like rows into a per-reaction count map. */
+function tallyReactions(likes?: Array<{ type?: string | null }>): Record<ReactionType, number> {
+  const counts: Record<ReactionType, number> = { like: 0, love: 0, sad: 0, bad: 0, misinfo: 0 };
+  for (const l of likes ?? []) {
+    const t = (l.type ?? 'like') as ReactionType;
+    if (t in counts) counts[t] += 1;
+  }
+  return counts;
+}
+
 @Injectable()
 export class PostsService {
   constructor(private prisma: PrismaService) {}
@@ -22,12 +35,21 @@ export class PostsService {
         include: {
           author: { select: { id: true, firstName: true, lastName: true, profileImage: true, userType: true, verified: true } },
           company: { select: { id: true, companyName: true } },
+          likes: { select: { type: true } },
           _count: { select: { likes: true, comments: true } },
         },
       }),
       this.prisma.post.count({ where: safeWhere }),
     ]);
-    const mapped = posts.map((p: any) => ({ ...p, likeCount: p._count?.likes ?? 0, commentCount: p._count?.comments ?? 0 }));
+    const mapped = posts.map((p: any) => {
+      const { likes, ...rest } = p;
+      return {
+        ...rest,
+        likeCount: p._count?.likes ?? 0,
+        reactions: tallyReactions(likes),
+        commentCount: p._count?.comments ?? 0,
+      };
+    });
     return { posts: mapped, total };
   }
 
@@ -70,14 +92,31 @@ export class PostsService {
     };
   }
 
-  async toggleLike(postId: string, userId: string): Promise<boolean> {
+  /**
+   * Set the user's reaction on a post. Clicking the same reaction again removes
+   * it (toggle off); a different reaction replaces the previous one. Returns the
+   * fresh per-type counts, the user's resulting reaction, and the total.
+   */
+  async setReaction(postId: string, userId: string, type: string) {
+    const t: ReactionType = (REACTION_TYPES as readonly string[]).includes(type) ? (type as ReactionType) : 'like';
     const existing = await this.prisma.postLike.findUnique({ where: { postId_userId: { postId, userId } } });
+    let userReaction: ReactionType | null;
     if (existing) {
-      await this.prisma.postLike.delete({ where: { postId_userId: { postId, userId } } });
-      return false;
+      if (((existing as any).type ?? 'like') === t) {
+        await this.prisma.postLike.delete({ where: { postId_userId: { postId, userId } } });
+        userReaction = null;
+      } else {
+        await this.prisma.postLike.update({ where: { postId_userId: { postId, userId } }, data: { type: t } as any });
+        userReaction = t;
+      }
+    } else {
+      await this.prisma.postLike.create({ data: { postId, userId, type: t } as any });
+      userReaction = t;
     }
-    await this.prisma.postLike.create({ data: { postId, userId } });
-    return true;
+    const rows = await this.prisma.postLike.findMany({ where: { postId }, select: { type: true } });
+    const reactions = tallyReactions(rows as any);
+    const likeCount = (rows as any[]).length;
+    return { liked: userReaction !== null, userReaction, reactions, likeCount };
   }
 
   async addComment(postId: string, authorId: string, content: string) {

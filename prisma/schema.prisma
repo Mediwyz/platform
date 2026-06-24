@@ -1656,6 +1656,8 @@ model PostLike {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation("PostLiker", fields: [userId], references: [id], onDelete: Cascade)
+  /** Reaction type: like | love | sad | bad | misinfo (one per user per post). */
+  type      String   @default("like")
   createdAt DateTime @default(now())
 
   @@unique([postId, userId])

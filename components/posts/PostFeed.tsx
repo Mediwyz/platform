@@ -3,9 +3,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaPenFancy, FaGlobeAmericas, FaHeartbeat, FaBookOpen, FaNewspaper, FaSpa, FaMicroscope } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
-import PostCard from './PostCard'
+import PostCard, { type ReactionKey } from './PostCard'
 import CommentSection from './CommentSection'
 import CreatePostForm from './CreatePostForm'
+
+type ReactionCounts = Partial<Record<ReactionKey, number>>
 
 interface Post {
  id: string
@@ -14,6 +16,7 @@ interface Post {
  tags: string[]
  imageUrl: string | null
  likeCount: number
+ reactions?: ReactionCounts
  createdAt: string
  author: {
  id: string
@@ -53,7 +56,8 @@ export default function PostFeed({
  const [page, setPage] = useState(1)
  const [totalPages, setTotalPages] = useState(1)
  const [activeCategory, setActiveCategory] = useState('')
- const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set())
+ // The current user's reaction per post (postId → reaction key).
+ const [userReactions, setUserReactions] = useState<Record<string, ReactionKey | null>>({})
  const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set())
 
  const fetchPosts = useCallback(
@@ -101,70 +105,60 @@ export default function PostFeed({
  fetchPosts(nextPage, activeCategory, true)
  }
 
- const handleLike = async (postId: string) => {
+ // Adjust a post's reaction tallies/likeCount when moving from `from` → `to`.
+ const applyReactionDelta = (
+ list: Post[],
+ postId: string,
+ from: ReactionKey | null,
+ to: ReactionKey | null,
+ ) =>
+ list.map((p) => {
+ if (p.id !== postId) return p
+ const reactions: ReactionCounts = { ...(p.reactions ?? {}) }
+ if (from) reactions[from] = Math.max(0, (reactions[from] ?? 0) - 1)
+ if (to) reactions[to] = (reactions[to] ?? 0) + 1
+ const likeDelta = (to ? 1 : 0) - (from ? 1 : 0)
+ return { ...p, reactions, likeCount: Math.max(0, p.likeCount + likeDelta) }
+ })
+
+ const handleReact = async (postId: string, type: ReactionKey) => {
  if (!currentUserId) return
 
- // Optimistic update
- const wasLiked = likedPosts.has(postId)
- setLikedPosts((prev) => {
- const next = new Set(prev)
- if (wasLiked) {
- next.delete(postId)
- } else {
- next.add(postId)
- }
- return next
- })
+ const prev = userReactions[postId] ?? null
+ const next: ReactionKey | null = prev === type ? null : type // same reaction toggles off
 
- setPosts((prev) =>
- prev.map((p) =>
- p.id === postId
- ? { ...p, likeCount: p.likeCount + (wasLiked ? -1 : 1) }
- : p
- )
- )
+ // Optimistic update
+ setUserReactions((m) => ({ ...m, [postId]: next }))
+ setPosts((list) => applyReactionDelta(list, postId, prev, next))
 
  try {
- const res = await fetch(`/api/posts/${postId}/like`, { method: 'POST' })
+ const res = await fetch(`/api/posts/${postId}/like`, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ type }),
+ })
  const json = await res.json()
  if (json.success) {
- // Reconcile with server state
- setPosts((prev) =>
- prev.map((p) =>
- p.id === postId ? { ...p, likeCount: json.data.likeCount } : p
+ // Reconcile with authoritative server state
+ setUserReactions((m) => ({ ...m, [postId]: json.data.userReaction ?? null }))
+ setPosts((list) =>
+ list.map((p) =>
+ p.id === postId
+ ? { ...p, reactions: json.data.reactions ?? p.reactions, likeCount: json.data.likeCount ?? p.likeCount }
+ : p,
+ ),
  )
- )
- setLikedPosts((prev) => {
- const next = new Set(prev)
- if (json.data.liked) {
- next.add(postId)
- } else {
- next.delete(postId)
- }
- return next
- })
  }
  } catch (error) {
  // Revert optimistic update on failure
- console.error('Failed to toggle like:', error)
- setLikedPosts((prev) => {
- const next = new Set(prev)
- if (wasLiked) {
- next.add(postId)
- } else {
- next.delete(postId)
- }
- return next
- })
- setPosts((prev) =>
- prev.map((p) =>
- p.id === postId
- ? { ...p, likeCount: p.likeCount + (wasLiked ? 1 : -1) }
- : p
- )
- )
+ console.error('Failed to set reaction:', error)
+ setUserReactions((m) => ({ ...m, [postId]: prev }))
+ setPosts((list) => applyReactionDelta(list, postId, next, prev))
  }
  }
+
+ // Back-compat shim: a plain Like tap is just the "like" reaction.
+ const handleLike = (postId: string) => handleReact(postId, 'like')
 
  const handleComment = (postId: string) => {
  setExpandedComments((prev) => {
@@ -252,8 +246,10 @@ export default function PostFeed({
  key={post.id}
  post={post}
  currentUserId={currentUserId}
- liked={likedPosts.has(post.id)}
+ liked={!!userReactions[post.id]}
+ userReaction={userReactions[post.id] ?? null}
  onLike={handleLike}
+ onReact={handleReact}
  onComment={handleComment}
  >
  {expandedComments.has(post.id) && (
