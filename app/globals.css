@@ -70,18 +70,20 @@
 /* Landing page dark mode: use MediWyz brand blue/navy as the "dark" of white,
    instead of the near-black used elsewhere. Scoped to the landing wrapper. */
 .dark .landing-theme {
-  --canvas: #001E40;      /* MediWyz brand navy — clearly blue page background */
-  --surface: #0a3360;     /* lighter navy card surface (sits above canvas) */
-  --subtle: #103e70;      /* muted / hover navy */
-  --line: #1c4f82;        /* navy borders (visible on navy) */
-  --fg: #eef4fc;          /* near-white text */
-  --soft: #bccfe6;        /* secondary text */
-  --faint: #97acca;       /* tertiary text */
-  --accent: #38b6d9;
-  --accent-ink: #9AE1FF;
+  /* Override the --color-* vars that bg-*/text-* utilities actually read
+     (overriding only --canvas did not propagate through Tailwind's chain). */
+  --color-canvas: #001E40;   /* MediWyz brand navy — clearly blue page background */
+  --color-surface: #0a3360;  /* lighter navy card surface (sits above canvas) */
+  --color-subtle: #103e70;   /* muted / hover navy */
+  --color-line: #1c4f82;     /* navy borders (visible on navy) */
+  --color-fg: #eef4fc;       /* near-white text */
+  --color-soft: #bccfe6;     /* secondary text */
+  --color-faint: #97acca;    /* tertiary text */
+  /* keep upstream vars in sync for anything reading them directly */
+  --canvas: #001E40; --surface: #0a3360; --subtle: #103e70; --line: #1c4f82;
+  --fg: #eef4fc; --soft: #bccfe6; --faint: #97acca;
+  background-color: #001E40;
 }
-/* Make sure the wrapper itself paints navy so no near-black body shows through. */
-.dark .landing-theme { background-color: var(--canvas); }
 
 @keyframes blob {
   0%   { transform: translate(0px, 0px) scale(1); }
