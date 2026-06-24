@@ -70,7 +70,7 @@
 /* Landing page dark mode: use MediWyz brand blue/navy as the "dark" of white,
    instead of the near-black used elsewhere. Scoped to the landing wrapper. */
 .dark .landing-theme {
-  /* Override the --color-* vars that bg-*/text-* utilities actually read
+  /* Override the --color-x vars that the bg and text utilities actually read
      (overriding only --canvas did not propagate through Tailwind's chain). */
   --color-canvas: #001E40;   /* MediWyz brand navy — clearly blue page background */
   --color-surface: #0a3360;  /* lighter navy card surface (sits above canvas) */
