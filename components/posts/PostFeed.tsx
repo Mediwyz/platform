@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { FaPenFancy, FaGlobeAmericas, FaHeartbeat, FaBookOpen, FaNewspaper, FaSpa, FaMicroscope } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
 import PostCard, { type ReactionKey } from './PostCard'
@@ -34,6 +34,8 @@ interface PostFeedProps {
  currentUserId?: string
  currentUserType?: string
  showCreateButton?: boolean
+ /** When set, the feed shows ONLY this user's posts (e.g. on their profile). */
+ authorId?: string
 }
 
 const CATEGORY_TABS: { value: string; label: string; icon: IconType }[] = [
@@ -49,6 +51,7 @@ export default function PostFeed({
  currentUserId,
  currentUserType,
  showCreateButton = false,
+ authorId,
 }: PostFeedProps) {
  const [posts, setPosts] = useState<Post[]>([])
  const [loading, setLoading] = useState(true)
@@ -74,6 +77,7 @@ export default function PostFeed({
  limit: '10',
  })
  if (category) params.set('category', category)
+ if (authorId) params.set('authorId', authorId)
 
  const res = await fetch(`/api/posts?${params}`)
  const json = await res.json()
@@ -91,7 +95,7 @@ export default function PostFeed({
  setLoadingMore(false)
  }
  },
- []
+ [authorId]
  )
 
  useEffect(() => {
@@ -99,11 +103,31 @@ export default function PostFeed({
  fetchPosts(1, activeCategory)
  }, [activeCategory, fetchPosts])
 
- const handleLoadMore = () => {
+ const handleLoadMore = useCallback(() => {
  const nextPage = page + 1
  setPage(nextPage)
  fetchPosts(nextPage, activeCategory, true)
+ }, [page, activeCategory, fetchPosts])
+
+ // ── Infinite scroll ──────────────────────────────────────────────────────
+ // A sentinel at the end of the list; when it scrolls into view we load the
+ // next page automatically (Facebook-style). A ref holds the latest guard so
+ // the IntersectionObserver callback never sees stale state.
+ const sentinelRef = useRef<HTMLDivElement>(null)
+ const loadMoreRef = useRef<() => void>(() => {})
+ loadMoreRef.current = () => {
+ if (!loading && !loadingMore && page < totalPages) handleLoadMore()
  }
+ useEffect(() => {
+ const el = sentinelRef.current
+ if (!el) return
+ const obs = new IntersectionObserver(
+ (entries) => { if (entries[0]?.isIntersecting) loadMoreRef.current() },
+ { rootMargin: '300px' },
+ )
+ obs.observe(el)
+ return () => obs.disconnect()
+ }, [])
 
  // Adjust a post's reaction tallies/likeCount when moving from `from` → `to`.
  const applyReactionDelta = (
@@ -262,24 +286,14 @@ export default function PostFeed({
  </PostCard>
  ))}
 
- {/* Load more */}
+ {/* Infinite scroll: sentinel auto-loads the next page when reached */}
  {page < totalPages && (
- <div className="flex justify-center pt-4">
- <button
- onClick={handleLoadMore}
- disabled={loadingMore}
- className="px-6 py-2.5 bg-surface border border-line rounded-xl text-sm font-semibold text-soft hover:text-fg hover:bg-subtle disabled:opacity-50 transition-colors shadow-sm"
- >
- {loadingMore ? (
- <span className="flex items-center gap-2">
- <div className="w-4 h-4 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" />
- Loading…
- </span>
- ) : (
- 'Load More'
- )}
- </button>
+ <div ref={sentinelRef} className="flex justify-center py-6">
+ <div className="w-6 h-6 border-2 border-[#0C6780] dark:border-accent border-t-transparent rounded-full animate-spin" aria-label="Loading more posts" />
  </div>
+ )}
+ {page >= totalPages && posts.length > 0 && (
+ <p className="text-center text-xs text-faint py-6">You&apos;re all caught up.</p>
  )}
  </div>
  )}

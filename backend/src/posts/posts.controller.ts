@@ -17,6 +17,7 @@ export class PostsController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
     @Query('sort') sort?: string,
+    @Query('authorId') authorId?: string,
   ) {
     const take = Math.min(parseInt(limit || '20'), 50);
     const pageNum = Math.max(parseInt(page || '1'), 1);
@@ -24,6 +25,8 @@ export class PostsController {
     const sortMode: 'popular' | 'recent' = sort === 'popular' ? 'popular' : 'recent';
     const where: any = { isPublished: true };
     if (category) where.category = category;
+    // When viewing a user's profile, show only the posts THEY authored.
+    if (authorId) where.authorId = authorId;
     try {
       const { posts, total } = await this.postsService.list(where, take, skip, sortMode);
       return { success: true, data: { posts, total, page: pageNum, totalPages: Math.ceil(total / take) } };

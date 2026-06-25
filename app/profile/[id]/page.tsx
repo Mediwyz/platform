@@ -168,7 +168,8 @@ export default function UnifiedProfilePage() {
           {activeTab === 'posts' && (
             <div className="space-y-4">
               {isSelf && <CreatePostForm onPostCreated={() => { /* PostFeed refetches on mount */ }} />}
-              <PostFeed currentUserId={currentUser?.id ?? ''} currentUserType={currentUser?.userType ?? ''} />
+              {/* Profile Posts tab: only THIS user's posts, not the whole feed. */}
+              <PostFeed currentUserId={currentUser?.id ?? ''} currentUserType={currentUser?.userType ?? ''} authorId={profileId} />
             </div>
           )}
           {activeTab === 'services' && profile.isProvider && (
