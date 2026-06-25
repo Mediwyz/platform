@@ -294,7 +294,7 @@ export default function ContentManagementPage() {
 
  {/* Tab Navigation */}
  <div className="bg-surface rounded-xl p-1.5 shadow mb-6">
- <div className="flex gap-1 overflow-x-auto">
+ <div className="flex gap-1 overflow-x-auto scrollbar-hide">
  {TABS.map((tab) => {
  const Icon = tab.icon
  return (

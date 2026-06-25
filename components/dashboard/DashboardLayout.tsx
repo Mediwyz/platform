@@ -42,7 +42,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  sidebarFooter,
  mainClassName,
 }) => {
- const [sidebarOpen, setSidebarOpen] = useState(true)
+ // Desktop sidebar defaults to COLLAPSED (icon-only); the user's expand/collapse
+ // choice is remembered in localStorage. Mobile always starts closed.
+ const [sidebarOpen, setSidebarOpen] = useState(false)
  const [isMobile, setIsMobile] = useState(false)
  const { user: currentUser } = useUser()
  const userId = currentUser?.id
@@ -54,7 +56,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  const handleResize = () => {
  const mobile = window.innerWidth < 768
  setIsMobile(mobile)
- if (mobile) setSidebarOpen(false)
+ if (mobile) {
+ setSidebarOpen(false)
+ } else {
+ // Desktop: restore saved choice, defaulting to collapsed.
+ let stored: string | null = null
+ try { stored = localStorage.getItem('mediwyz_sidebar_open') } catch {}
+ setSidebarOpen(stored === 'true')
+ }
  }
 
  handleResize()
@@ -146,7 +155,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
  }, [userId])
 
  const handleToggleSidebar = () => {
- setSidebarOpen((prev) => !prev)
+ setSidebarOpen((prev) => {
+ const next = !prev
+ // Remember the choice on desktop so it sticks across navigation/refresh.
+ if (!isMobile) { try { localStorage.setItem('mediwyz_sidebar_open', String(next)) } catch {} }
+ return next
+ })
  }
 
  const handleCloseSidebar = () => {

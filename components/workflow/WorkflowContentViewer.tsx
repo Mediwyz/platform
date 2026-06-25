@@ -70,7 +70,7 @@ function renderLabResult(data: Record<string, unknown>) {
  <div>
  {data.findings ? <p className="text-sm text-soft mb-2">{String(data.findings)}</p> : null}
  {values.length > 0 && (
- <div className="overflow-x-auto"><table className="w-full text-sm">
+ <div className="overflow-x-auto scrollbar-hide"><table className="w-full text-sm">
  <thead>
  <tr className="border-b">
  <th className="text-left py-1 text-soft font-medium">Test</th>

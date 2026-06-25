@@ -243,7 +243,7 @@ function RecurrenceStep({ state, setState }: { state: WizardState; setState: (s:
 
 function SampleStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {SAMPLE_OPTIONS.map(opt => (
         <OptionCard key={opt.value} {...opt} selected={state.sample === opt.value} onClick={() => setState({ ...state, sample: opt.value })} />
       ))}
@@ -253,7 +253,7 @@ function SampleStep({ state, setState }: { state: WizardState; setState: (s: Wiz
 
 function CareModelStep({ state, setState }: { state: WizardState; setState: (s: WizardState) => void }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {CARE_MODEL_OPTIONS.map(opt => (
         <OptionCard key={opt.value} {...opt} selected={state.careModel === opt.value} onClick={() => setState({ ...state, careModel: opt.value })} />
       ))}
@@ -383,7 +383,7 @@ function ReviewStep({
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {summaryItems.map(item => (
           <div key={item.label} className="bg-subtle border border-line rounded-xl p-3 flex items-start gap-2">
             <span className="text-lg" aria-hidden="true">{item.emoji}</span>

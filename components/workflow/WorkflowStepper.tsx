@@ -57,7 +57,7 @@ export default function WorkflowStepper({
 
   if (variant === 'compact') {
     return (
-      <div className="flex items-center gap-1.5 overflow-x-auto py-1 -mx-1 px-1">
+      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-1 -mx-1 px-1">
         {happyPath.map((step, idx) => {
           const { Icon, label } = resolveStepVisual({
             statusCode: step.statusCode, label: step.label,

@@ -330,7 +330,7 @@ export default function SubscriptionsManagementPage() {
  {planList.length === 0 ? (
  <p className="text-soft text-sm">No plans yet.</p>
  ) : (
- <div className="overflow-x-auto">
+ <div className="overflow-x-auto scrollbar-hide">
  <table className="w-full text-sm">
  <thead className="bg-subtle">
  <tr>

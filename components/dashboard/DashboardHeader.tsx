@@ -119,8 +119,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
  <button
  onClick={onToggleSidebar}
- className="md:hidden p-2.5 sm:p-2 rounded-lg bg-subtle dark:bg-subtle hover:bg-line dark:hover:bg-line text-soft dark:text-soft transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
- aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+ className="p-2.5 sm:p-2 rounded-lg bg-subtle dark:bg-subtle hover:bg-line dark:hover:bg-line text-soft dark:text-soft transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+ aria-label={sidebarOpen ? 'Collapse menu' : 'Expand menu'}
  aria-expanded={sidebarOpen}
  >
  {sidebarOpen ? (
@@ -130,10 +130,10 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  )}
  </button>
 
- {/* Logo — smaller on mobile so the header never overflows */}
+ {/* Logo — compact so the header stays slim and never overflows */}
  <Link href="/" className="flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal rounded-md">
- <span className="sm:hidden"><HealthwyzLogo width={128} height={38} /></span>
- <span className="hidden sm:block"><HealthwyzLogo width={200} height={56} /></span>
+ <span className="sm:hidden"><HealthwyzLogo width={96} height={28} /></span>
+ <span className="hidden sm:block"><HealthwyzLogo width={140} height={40} /></span>
  </Link>
 
  <div className="hidden sm:flex items-center gap-2 sm:gap-3 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-line">

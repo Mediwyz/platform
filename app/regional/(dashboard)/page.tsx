@@ -192,7 +192,7 @@ export default function RegionalAdminDashboard() {
  {criticalAlerts.length > 0 && (
  <div className="bg-yellow-50 border-b border-yellow-200 rounded-lg mb-6">
  <div className="px-6 py-3">
- <div className="flex items-center gap-4 overflow-x-auto">
+ <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
  <FaExclamationTriangle className="text-yellow-600 flex-shrink-0" />
  {criticalAlerts.map((alert, idx) => (
  <div key={idx} className="flex items-center gap-2 px-3 py-1 bg-surface rounded-lg flex-shrink-0">
@@ -220,7 +220,7 @@ export default function RegionalAdminDashboard() {
  </div>
  ) : commission ? (
  <>
- <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+ <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
  <DashboardStatCard
  title="Your Commission (10%)"
  value={`Rs ${(commission.totalRegionalCommission ?? 0).toLocaleString()}`}
@@ -275,7 +275,7 @@ export default function RegionalAdminDashboard() {
  <div className="p-4 border-b border-line">
  <h3 className="text-lg font-semibold text-fg">Recent Commission Transactions</h3>
  </div>
- <div className="overflow-x-auto">
+ <div className="overflow-x-auto scrollbar-hide">
  <table className="w-full">
  <thead>
  <tr className="bg-subtle border-b border-line">
@@ -394,7 +394,7 @@ export default function RegionalAdminDashboard() {
  <div className="space-y-6">
  <div className="bg-surface rounded-xl p-6 shadow-lg">
  <h3 className="text-lg font-bold text-fg mb-4">Bookings Overview</h3>
- <div className="grid grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  {[
  { label: 'Pending', value: metrics.bookings.pending, color: 'text-yellow-600', bg: 'bg-yellow-50' },
  { label: 'Upcoming', value: metrics.bookings.upcoming, color: 'text-blue-600', bg: 'bg-blue-50' },

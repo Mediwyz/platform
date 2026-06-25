@@ -20,7 +20,7 @@ export class ServicesService {
       select: {
         id: true, providerType: true, serviceName: true, category: true,
         description: true, defaultPrice: true, currency: true, duration: true,
-        isDefault: true, countryCode: true, iconKey: true, emoji: true,
+        isDefault: true, isActive: true, countryCode: true, iconKey: true, emoji: true,
       },
     });
 
@@ -31,7 +31,7 @@ export class ServicesService {
       grouped[key].push({
         id: svc.id, serviceName: svc.serviceName, defaultPrice: svc.defaultPrice,
         description: svc.description, duration: svc.duration, isDefault: svc.isDefault,
-        iconKey: svc.iconKey, emoji: svc.emoji,
+        isActive: svc.isActive, iconKey: svc.iconKey, emoji: svc.emoji,
       });
     }
 

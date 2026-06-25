@@ -116,7 +116,7 @@ export default function RoleConfigPage() {
  </div>
  )}
 
- <div className="overflow-x-auto bg-surface rounded-xl shadow-lg">
+ <div className="overflow-x-auto scrollbar-hide bg-surface rounded-xl shadow-lg">
  <table className="min-w-full">
  <thead>
  <tr className="bg-subtle border-b">

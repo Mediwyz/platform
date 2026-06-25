@@ -323,7 +323,7 @@ function StepFlowIllustration({ steps }: { steps: WorkflowStep[] }) {
   if (steps.length === 0) return null
 
   return (
-    <div className="overflow-x-auto pb-2">
+    <div className="overflow-x-auto scrollbar-hide pb-2">
       <div className="flex items-start py-2 min-w-max">
         {steps.map((step, idx) => {
           const isCustom = step.kind === 'custom'
