@@ -134,7 +134,7 @@ const en = {
   'nav.workflows': 'Workflows',
   'nav.health': 'My Health',
   'nav.network': 'Network',
-  'nav.myCompany': 'My Company',
+  'nav.myCompany': 'My Organizations',
   'nav.searchBrowse': 'Search & Browse',
 
   // Provider Roles

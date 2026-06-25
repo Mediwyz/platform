@@ -134,7 +134,7 @@ const kr = {
   'nav.workflows': 'Workflow',
   'nav.health': 'Mo Lasante',
   'nav.network': 'Rezo',
-  'nav.myCompany': 'Mo Konpani',
+  'nav.myCompany': 'Mo Bann Organizasion',
   'nav.searchBrowse': 'Rod',
 
   'role.patient': 'Pasian',

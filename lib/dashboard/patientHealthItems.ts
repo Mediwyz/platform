@@ -99,7 +99,7 @@ export function getSearchItemsFromRoles(
 export function getMyCompanyItem(base: string): SidebarItem {
   return {
     id: 'my-company',
-    label: 'My Company',
+    label: 'My Organizations',
     labelKey: 'nav.myCompany',
     icon: FaBuilding,
     color: 'text-amber-600',

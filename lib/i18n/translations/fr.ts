@@ -134,7 +134,7 @@ const fr = {
   'nav.workflows': 'Workflows',
   'nav.health': 'Ma Sante',
   'nav.network': 'Reseau',
-  'nav.myCompany': 'Mon Entreprise',
+  'nav.myCompany': 'Mes Organisations',
   'nav.searchBrowse': 'Rechercher',
 
   'role.patient': 'Patient',

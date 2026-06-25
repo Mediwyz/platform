@@ -160,7 +160,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     if (hasCorporateCapability && !finalSidebarItems.some(i => i.id === 'my-company')) {
       finalSidebarItems = [
         ...finalSidebarItems,
-        { id: 'my-company', label: 'My Company', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/corporate' },
+        { id: 'my-company', label: 'My Organizations', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/corporate' },
       ]
     }
     // Same pattern for insurance-company owners. A MEMBER, DOCTOR, or any
