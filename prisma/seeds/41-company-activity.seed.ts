@@ -60,26 +60,31 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
       content: 'Exciting news! BlueLagoon Medical Clinic is now offering free health screenings every Saturday. Book your slot today through MediWyz. #HealthAwareness #FreeClinics',
       category: 'news',
       tags: ['health-screening', 'free-clinic', 'mauritius'],
+      imageUrl: '/images/feed/clinic.jpg',
     },
     {
       content: 'Our team of specialists performed over 500 consultations this month. Thank you for trusting MediCare Clinic with your health needs. We are committed to providing quality healthcare to every Mauritian family.',
       category: 'wellness',
       tags: ['milestone', 'healthcare', 'gratitude'],
+      imageUrl: '/images/feed/community.jpg',
     },
     {
       content: 'Did you know? Regular blood pressure monitoring can prevent 80% of cardiovascular emergencies. Visit our clinic or use MediWyz to book a quick checkup. Your heart will thank you!',
       category: 'health_tips',
       tags: ['blood-pressure', 'prevention', 'cardiology'],
+      imageUrl: '/images/feed/hypertension.jpg',
     },
     {
       content: 'We are proud to announce our partnership with 3 new pharmacies across Mauritius. Now your prescriptions can be delivered faster than ever through the MediWyz Health Shop.',
       category: 'news',
       tags: ['partnership', 'pharmacy', 'delivery'],
+      imageUrl: '/images/feed/pharmacy.jpg',
     },
     {
       content: 'Mental health matters. Our clinic now offers confidential counseling sessions every Wednesday. No referral needed - just book through MediWyz. Take the first step today.',
       category: 'wellness',
       tags: ['mental-health', 'counseling', 'wellness'],
+      imageUrl: '/images/feed/mental-health.jpg',
     },
   ]
 
@@ -96,6 +101,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
           content: post.content,
           category: post.category,
           tags: post.tags,
+          imageUrl: post.imageUrl,
           isPublished: true,
         },
       })
@@ -105,11 +111,11 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
 
   // Also create some personal posts from various providers
   const personalPosts = [
-    { authorId: 'DOC002', content: 'Just completed a 12-hour surgery marathon. 3 successful procedures. The team was incredible. Remember - your health is your wealth.', category: 'wellness', tags: ['surgery', 'teamwork'] },
-    { authorId: 'NUR001', content: 'Tip: Always keep your vaccination records up to date. As a nurse, I see too many patients who forgot their boosters. Stay protected!', category: 'health_tips', tags: ['vaccination', 'prevention'] },
-    { authorId: 'PHARM001', content: 'Important reminder: Never take antibiotics without a prescription. Antibiotic resistance is a growing global threat. Ask your pharmacist if you have questions.', category: 'health_tips', tags: ['antibiotics', 'pharmacy'] },
-    { authorId: 'DENT001', content: 'Brushing twice a day is great, but are you flossing? Most cavities form between teeth where your toothbrush cannot reach. Start flossing today!', category: 'health_tips', tags: ['dental', 'flossing'] },
-    { authorId: 'NUTR001', content: 'Meal prep Sunday! Here is a simple high-protein breakfast: Greek yogurt + mixed berries + chia seeds + honey. Takes 2 minutes, fuels your whole morning.', category: 'health_tips', tags: ['nutrition', 'meal-prep'] },
+    { authorId: 'DOC002', content: 'Just completed a 12-hour surgery marathon. 3 successful procedures. The team was incredible. Remember - your health is your wealth.', category: 'wellness', tags: ['surgery', 'teamwork'], imageUrl: '/images/feed/surgery.jpg' },
+    { authorId: 'NUR001', content: 'Tip: Always keep your vaccination records up to date. As a nurse, I see too many patients who forgot their boosters. Stay protected!', category: 'health_tips', tags: ['vaccination', 'prevention'], imageUrl: '/images/feed/nurse.jpg' },
+    { authorId: 'PHARM001', content: 'Important reminder: Never take antibiotics without a prescription. Antibiotic resistance is a growing global threat. Ask your pharmacist if you have questions.', category: 'health_tips', tags: ['antibiotics', 'pharmacy'], imageUrl: '/images/feed/pharmacy.jpg' },
+    { authorId: 'DENT001', content: 'Brushing twice a day is great, but are you flossing? Most cavities form between teeth where your toothbrush cannot reach. Start flossing today!', category: 'health_tips', tags: ['dental', 'flossing'], imageUrl: '/images/feed/dental.jpg' },
+    { authorId: 'NUTR001', content: 'Meal prep Sunday! Here is a simple high-protein breakfast: Greek yogurt + mixed berries + chia seeds + honey. Takes 2 minutes, fuels your whole morning.', category: 'health_tips', tags: ['nutrition', 'meal-prep'], imageUrl: '/images/feed/nutrition.jpg' },
   ]
 
   for (const post of personalPosts) {
@@ -125,6 +131,7 @@ export async function seedCompanyActivity(prisma: PrismaClient) {
           content: post.content,
           category: post.category,
           tags: post.tags,
+          imageUrl: post.imageUrl,
           isPublished: true,
         },
       })

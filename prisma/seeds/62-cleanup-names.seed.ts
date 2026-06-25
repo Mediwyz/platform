@@ -117,6 +117,58 @@ export async function seedCleanupNames(prisma: PrismaClient) {
     }
   }
 
+  // ── 4. Replace real public-figure names with mock names ──────────────────
+  // Avoid using real people (e.g. a sitting head of state) as seed data.
+  const USER_RENAMES = [
+    { match: { firstName: 'Andry', lastName: 'Rajoelina' }, to: { firstName: 'Mamy', lastName: 'Rakotonirina' } },
+  ]
+  let userRenamed = 0
+  for (const r of USER_RENAMES) {
+    const res = await prisma.user.updateMany({ where: r.match, data: r.to })
+    userRenamed += res.count
+  }
+  if (userRenamed) console.log(`  ✓ Renamed ${userRenamed} real-person user name(s)`)
+
+  // ── 5. Give every seeded user a realistic portrait avatar ────────────────
+  // Local portraits live in public/images/avatars/{f,m}/0..24.jpg. Runs last so
+  // users from every prior seed (incl. dentists/nutritionists in seed 32) exist.
+  const AVATARS_PER_GENDER = 25
+  const GENDER_OVERRIDE: Record<string, 'f' | 'm'> = {
+    DOC001: 'f', DOC002: 'm', DOC003: 'f', NUTR001: 'm', DENT001: 'f', PHARM001: 'm', PHARM002: 'f',
+    NUR001: 'f', NUR002: 'f', NAN001: 'f', NAN002: 'f', PAT001: 'f', PAT002: 'm', PAT003: 'f',
+    PAT004: 'm', PAT005: 'f', LAB001: 'm', LAB002: 'f', EMW001: 'm', EMW002: 'f', INS001: 'm',
+    INS002: 'f', CORP001: 'm', REF001: 'f', RADM000: 'm', RADM001: 'f', RADM002: 'f', RADM003: 'm',
+  }
+  // Only replace seed-generated/placeholder avatars — never a real uploaded photo.
+  const isSeedAvatar = (p: string | null) =>
+    !p || p.endsWith('.svg') || p.startsWith('/uploads/seed/') ||
+    p.startsWith('/images/doctors') || p.startsWith('/images/nurses') ||
+    p.startsWith('/images/patients') || p.includes('dicebear')
+
+  const users = await prisma.user.findMany({
+    select: { id: true, gender: true, profileImage: true },
+    orderBy: { id: 'asc' },
+  })
+  const counters: Record<'f' | 'm', number> = { f: 0, m: 0 }
+  let avatarsSet = 0
+  for (const u of users) {
+    if (!isSeedAvatar(u.profileImage)) continue
+    let g: 'f' | 'm'
+    if (GENDER_OVERRIDE[u.id]) {
+      g = GENDER_OVERRIDE[u.id]
+    } else {
+      const gg = (u.gender || '').trim().toLowerCase()
+      if (gg.startsWith('f')) g = 'f'
+      else if (gg.startsWith('m')) g = 'm'
+      else g = (counters.f + counters.m) % 2 === 0 ? 'f' : 'm'
+    }
+    const idx = counters[g] % AVATARS_PER_GENDER
+    counters[g]++
+    await prisma.user.update({ where: { id: u.id }, data: { profileImage: `/images/avatars/${g}/${idx}.jpg` } })
+    avatarsSet++
+  }
+  console.log(`  ✓ Assigned realistic portraits to ${avatarsSet} users`)
+
   console.log(
     `  Name-cleanup done - entities: ${entityDeleted}, companies renamed: ${companyUpdated}, duplicates removed: ${duplicateDeleted}`,
   )

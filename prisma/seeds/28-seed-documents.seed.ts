@@ -62,7 +62,7 @@ const countryConfigs = [
       { first: 'Faly', last: 'Randrianasolo' },
       { first: 'Nomena', last: 'Razafindrakoto' },
       { first: 'Miora', last: 'Ratsimbazafy' },
-      { first: 'Andry', last: 'Rajoelina' },
+      { first: 'Mamy', last: 'Rakotonirina' },
       { first: 'Hery', last: 'Rakotondrazaka' },
       { first: 'Lalaina', last: 'Andrianaivo' },
       { first: 'Voahangy', last: 'Ramanantsoa' },

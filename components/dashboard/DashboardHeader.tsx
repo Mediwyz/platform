@@ -112,7 +112,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  <div className="bg-surface h-14" />
  )}
  <div className="h-0.5 bg-brand-teal " />
- <div className="bg-white/95 dark:bg-surface/95 backdrop-blur-md shadow-sm border-b border-line dark:border-line">
+ <div className="bg-white/95 dark:bg-[#001E40]/95 backdrop-blur-md shadow-sm border-b border-line dark:border-line">
  <div className="px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-2.5">
  <div className="flex items-center justify-between gap-1">
  {/* Left: mobile toggle + logo + user info */}

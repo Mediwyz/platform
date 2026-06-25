@@ -24,7 +24,7 @@ const countries: CountryConfig[] = [
       { first: 'Faly', last: 'Randrianasolo', gender: 'Male' },
       { first: 'Nomena', last: 'Razafindrakoto', gender: 'Female' },
       { first: 'Miora', last: 'Ratsimbazafy', gender: 'Female' },
-      { first: 'Andry', last: 'Rajoelina', gender: 'Male' },
+      { first: 'Mamy', last: 'Rakotonirina', gender: 'Male' },
       { first: 'Hery', last: 'Rakotondrazaka', gender: 'Male' },
       { first: 'Lalaina', last: 'Andrianaivo', gender: 'Female' },
       { first: 'Voahangy', last: 'Ramanantsoa', gender: 'Female' },

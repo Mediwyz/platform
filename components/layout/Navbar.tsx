@@ -364,12 +364,12 @@ const Navbar: React.FC = () => {
 
  {/* Mobile: Icon grid - hidden when logged in */}
  {!isLoggedIn && (
- <div className="sm:hidden grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-line">
+ <div className="sm:hidden grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-white/10">
  {Object.values(serviceCategories).flat().map((service) => (
  <Link
  key={service.href}
  href={getServiceHref(service.href)}
- className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-subtle hover:bg-white/10 transition-colors"
+ className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
  onClick={() => setIsMenuOpen(false)}
  aria-label={service.label}
  >

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import {
   FaCheckCircle, FaRegComment, FaShare, FaEllipsisH,
@@ -104,6 +104,20 @@ export default function PostCard({
   const [expanded, setExpanded] = useState(false)
   const [copied, setCopied] = useState(false)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const reactionRef = useRef<HTMLDivElement>(null)
+
+  // Close the reaction picker when tapping/clicking anywhere outside it.
+  // This is the primary close mechanism on touch devices (no hover).
+  useEffect(() => {
+    if (!pickerOpen) return
+    const onOutside = (e: Event) => {
+      if (reactionRef.current && !reactionRef.current.contains(e.target as Node)) {
+        setPickerOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', onOutside)
+    return () => document.removeEventListener('pointerdown', onOutside)
+  }, [pickerOpen])
 
   // The user's active reaction: explicit `userReaction` wins; otherwise fall
   // back to the legacy `liked` flag (treated as a plain "like").
@@ -115,8 +129,6 @@ export default function PostCard({
     if (onReact) onReact(post.id, type)
     else onLike?.(post.id) // back-compat: any reaction toggles the legacy like
   }
-  // Tapping the main button toggles the current reaction off, or applies "like".
-  const quickToggle = () => react(activeReaction ?? 'like')
 
   // Reaction types present on this post, ordered by the canonical REACTIONS list.
   const presentReactions = REACTIONS.filter(r => (post.reactions?.[r.key] ?? 0) > 0)
@@ -242,42 +254,50 @@ export default function PostCard({
 
       {/* Action row */}
       <div className="grid grid-cols-3 gap-1 px-2 sm:px-3 py-1.5 mt-2 border-t border-line">
-        {/* Reaction button + hover/tap picker */}
+        {/* Reaction button + tap/hover picker. Tap opens the picker (works on
+            touch); hover opens it on desktop. Closes on outside tap or select. */}
         <div
+          ref={reactionRef}
           className="relative"
           onMouseEnter={() => currentUserId && setPickerOpen(true)}
           onMouseLeave={() => setPickerOpen(false)}
         >
           {pickerOpen && (
-            <div
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 flex items-center gap-1 rounded-full border border-line bg-surface px-2 py-1.5 shadow-lg"
-              role="menu"
-              aria-label="Choose a reaction"
-            >
-              {REACTIONS.map(r => (
-                <button
-                  key={r.key}
-                  role="menuitem"
-                  onClick={() => react(r.key)}
-                  title={r.label}
-                  aria-label={r.label}
-                  className={cn(
-                    'flex items-center justify-center w-9 h-9 rounded-full transition-transform duration-150',
-                    'hover:scale-125 hover:bg-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
-                    r.color,
-                    activeReaction === r.key && 'bg-subtle',
-                  )}
-                >
-                  <r.Icon className="text-lg" />
-                </button>
-              ))}
+            // Outer wrapper has pb-2 (not mb-2) so the hover area bridges the
+            // gap to the button — no flicker when moving the cursor up to it.
+            <div className="absolute bottom-full left-0 pb-2 z-30">
+              <div
+                className="flex items-center gap-1 rounded-full border border-line bg-surface px-2 py-1.5 shadow-lg"
+                role="menu"
+                aria-label="Choose a reaction"
+              >
+                {REACTIONS.map(r => (
+                  <button
+                    key={r.key}
+                    role="menuitem"
+                    onClick={() => react(r.key)}
+                    title={r.label}
+                    aria-label={r.label}
+                    className={cn(
+                      'flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-150',
+                      'hover:scale-125 hover:bg-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                      r.color,
+                      activeReaction === r.key && 'bg-subtle',
+                    )}
+                  >
+                    <r.Icon className="text-xl" />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
           <ActionButton
             active={!!activeMeta}
             activeClass={activeMeta?.color}
             disabled={!currentUserId}
-            onClick={quickToggle}
+            // Tap opens the reaction picker (so every reaction is reachable on
+            // mobile). Selecting a reaction in the picker applies it.
+            onClick={() => currentUserId && setPickerOpen(true)}
             icon={
               activeMeta
                 ? <activeMeta.Icon className="scale-110" />
