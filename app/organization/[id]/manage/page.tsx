@@ -6,6 +6,7 @@ import Image from 'next/image'
 import {
   FaBuilding, FaUsers, FaEnvelope, FaCog, FaCheck, FaTimes,
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
+  FaBoxOpen, FaPlus, FaEdit, FaExclamationTriangle, FaPrescriptionBottleAlt,
 } from 'react-icons/fa'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
@@ -26,7 +27,17 @@ interface Invitation {
   id: string; email: string; suggestedRole: string | null; token: string; createdAt: string
 }
 
-type TabId = 'overview' | 'members' | 'invite' | 'settings'
+type TabId = 'overview' | 'members' | 'invite' | 'inventory' | 'settings'
+
+// Pharmacies / health-shops get an Inventory tab; other org types don't.
+const isInventoryOrg = (type: string) => /pharmac|health[\s_-]?shop|drugstore/i.test(type || '')
+
+const SHOP_CATEGORIES = [
+  { key: 'medicines', label: 'Medicines' }, { key: 'supplements', label: 'Supplements' },
+  { key: 'equipment', label: 'Equipment' }, { key: 'personal_care', label: 'Personal Care' },
+  { key: 'eyewear', label: 'Eyewear' }, { key: 'dental', label: 'Dental Products' },
+  { key: 'nutrition', label: 'Nutrition Products' }, { key: 'other', label: 'Other' },
+]
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -578,9 +589,175 @@ function SettingsTab() {
   )
 }
 
+// ─── Tab: Inventory (pharmacy / health-shop only) ────────────────────────────
+
+interface InvItem {
+  id: string; name: string; category: string; price: number; quantity: number
+  minStockAlert: number; requiresPrescription: boolean; inStock: boolean
+}
+
+const emptyInvForm = { name: '', category: 'medicines', price: '', quantity: '', minStockAlert: '5', requiresPrescription: false }
+
+function InventoryTab({ id }: { id: string }) {
+  const [items, setItems] = useState<InvItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editId, setEditId] = useState<string | null>(null)
+  const [form, setForm] = useState({ ...emptyInvForm })
+  const [saving, setSaving] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/organizations/${id}/inventory`, { credentials: 'include' })
+      const json = await res.json()
+      if (json.success) setItems(json.data ?? [])
+    } catch { /* silent */ } finally { setLoading(false) }
+  }, [id])
+  useEffect(() => { load() }, [load])
+
+  const openCreate = () => { setEditId(null); setForm({ ...emptyInvForm }); setErr(null); setShowForm(true) }
+  const openEdit = (it: InvItem) => {
+    setEditId(it.id)
+    setForm({ name: it.name, category: it.category, price: String(it.price), quantity: String(it.quantity), minStockAlert: String(it.minStockAlert), requiresPrescription: it.requiresPrescription })
+    setErr(null); setShowForm(true)
+  }
+
+  async function save() {
+    if (!form.name.trim()) { setErr('Name is required'); return }
+    setSaving(true); setErr(null)
+    const body = {
+      name: form.name.trim(), category: form.category,
+      price: Number(form.price) || 0, quantity: Number(form.quantity) || 0,
+      minStockAlert: Number(form.minStockAlert) || 5, requiresPrescription: form.requiresPrescription,
+    }
+    try {
+      const url = editId ? `/api/organizations/${id}/inventory/${editId}` : `/api/organizations/${id}/inventory`
+      const res = await fetch(url, {
+        method: editId ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json()
+      if (!json.success) throw new Error(json.message || 'Save failed')
+      setShowForm(false); await load()
+    } catch (e) { setErr(e instanceof Error ? e.message : 'Save failed') } finally { setSaving(false) }
+  }
+
+  async function del(itemId: string) {
+    if (!confirm('Remove this item from the inventory?')) return
+    try {
+      const res = await fetch(`/api/organizations/${id}/inventory/${itemId}`, { method: 'DELETE', credentials: 'include' })
+      const json = await res.json()
+      if (json.success) await load()
+    } catch { /* silent */ }
+  }
+
+  const catLabel = (k: string) => SHOP_CATEGORIES.find(c => c.key === k)?.label ?? k
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h3 className="font-semibold text-fg">Inventory</h3>
+          <p className="text-xs text-soft">Products this organisation sells on the Health Shop.</p>
+        </div>
+        <button onClick={openCreate} className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-colors flex-shrink-0">
+          <FaPlus className="text-xs" /> Add item
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="space-y-2">{[1, 2, 3].map(i => <div key={i} className="h-14 bg-subtle rounded-xl animate-pulse" />)}</div>
+      ) : items.length === 0 ? (
+        <div className="text-center py-10 border border-dashed border-line rounded-xl">
+          <FaBoxOpen className="text-3xl text-faint mx-auto mb-2" />
+          <p className="text-sm text-soft">No items yet.</p>
+          <p className="text-xs text-faint mt-1">Add your first product to start selling.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {items.map(it => {
+            const low = it.quantity <= it.minStockAlert
+            return (
+              <div key={it.id} className="flex items-center gap-3 p-3 rounded-xl border border-line">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-sm font-semibold text-fg truncate">{it.name}</span>
+                    {it.requiresPrescription && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 dark:bg-amber-500/15 dark:text-amber-300 px-1.5 py-0.5 rounded-full">
+                        <FaPrescriptionBottleAlt className="text-[9px]" /> Rx
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5 text-xs text-faint flex-wrap">
+                    <span>{catLabel(it.category)}</span>
+                    <span>·</span>
+                    <span>Rs {it.price.toLocaleString()}</span>
+                    <span>·</span>
+                    <span className={low ? 'inline-flex items-center gap-1 text-red-600 font-medium' : ''}>
+                      {low && <FaExclamationTriangle className="text-[9px]" />} {it.quantity} in stock
+                    </span>
+                  </div>
+                </div>
+                <button onClick={() => openEdit(it)} aria-label="Edit" className="w-8 h-8 rounded-full bg-subtle hover:bg-line text-soft flex items-center justify-center"><FaEdit className="text-xs" /></button>
+                <button onClick={() => del(it.id)} aria-label="Remove" className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-500/15 hover:bg-red-100 text-red-600 flex items-center justify-center"><FaTrash className="text-xs" /></button>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowForm(false)}>
+          <div className="bg-surface rounded-2xl border border-line shadow-xl w-full max-w-md p-5 space-y-3" onClick={e => e.stopPropagation()}>
+            <h4 className="font-bold text-fg">{editId ? 'Edit item' : 'Add item'}</h4>
+            {err && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{err}</p>}
+            <div>
+              <label className="block text-xs font-medium text-soft mb-1">Name *</label>
+              <input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} className="w-full px-3 py-2 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-soft mb-1">Category</label>
+                <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} className="w-full px-3 py-2 border border-line rounded-xl text-sm bg-surface text-fg focus:ring-2 focus:ring-[#0C6780] outline-none">
+                  {SHOP_CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-soft mb-1">Price (Rs)</label>
+                <input type="number" min="0" value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))} className="w-full px-3 py-2 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-soft mb-1">Quantity</label>
+                <input type="number" min="0" value={form.quantity} onChange={e => setForm(p => ({ ...p, quantity: e.target.value }))} className="w-full px-3 py-2 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-soft mb-1">Low-stock alert</label>
+                <input type="number" min="0" value={form.minStockAlert} onChange={e => setForm(p => ({ ...p, minStockAlert: e.target.value }))} className="w-full px-3 py-2 border border-line rounded-xl text-sm focus:ring-2 focus:ring-[#0C6780] outline-none" />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 text-sm text-soft">
+              <input type="checkbox" checked={form.requiresPrescription} onChange={e => setForm(p => ({ ...p, requiresPrescription: e.target.checked }))} />
+              Requires prescription
+            </label>
+            <div className="flex justify-end gap-2 pt-2">
+              <button onClick={() => setShowForm(false)} className="px-4 py-2 rounded-xl text-sm font-semibold text-soft hover:bg-subtle">Cancel</button>
+              <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-5 py-2 rounded-xl font-semibold text-sm disabled:opacity-60">
+                {saving ? <FaSpinner className="animate-spin" /> : <FaCheck />} {saving ? 'Saving…' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
-const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
+const BASE_TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
   { id: 'members', label: 'Members', icon: <FaUsers /> },
   { id: 'invite', label: 'Invite', icon: <FaEnvelope /> },
@@ -646,6 +823,15 @@ export default function ManageOrganizationPage() {
     )
   }
 
+  // Pharmacies/health-shops get an Inventory tab (inserted before Settings).
+  const tabs = isInventoryOrg(entity.type)
+    ? [
+        ...BASE_TABS.slice(0, 3),
+        { id: 'inventory' as TabId, label: 'Inventory', icon: <FaBoxOpen /> },
+        ...BASE_TABS.slice(3),
+      ]
+    : BASE_TABS
+
   return (
     <div className="min-h-screen bg-subtle">
       {/* Header */}
@@ -678,7 +864,7 @@ export default function ManageOrganizationPage() {
       <div className="bg-surface border-b border-line sticky top-0 z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-8">
           <div className="flex overflow-x-auto scrollbar-hide">
-            {TABS.map(tab => (
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -702,6 +888,7 @@ export default function ManageOrganizationPage() {
           {activeTab === 'overview' && <OverviewTab entity={entity} id={id} />}
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}
+          {activeTab === 'inventory' && <InventoryTab id={id} />}
           {activeTab === 'settings' && <SettingsTab />}
         </div>
       </div>

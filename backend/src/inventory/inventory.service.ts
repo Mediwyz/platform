@@ -103,6 +103,69 @@ export class InventoryService {
     await this.prisma.providerInventoryItem.update({ where: { id }, data: { isActive: false } });
   }
 
+  // ─── Entity-scoped inventory (org founder manages a pharmacy's stock) ────
+
+  /** Throw unless `userId` founded the entity. Returns the entity row. */
+  private async assertEntityFounder(entityId: string, userId: string) {
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id: entityId },
+      select: { id: true, founderUserId: true, name: true, type: true },
+    });
+    if (!entity) throw new NotFoundException('Organisation not found');
+    if (entity.founderUserId !== userId) {
+      throw new ForbiddenException('Only the organisation owner can manage its inventory.');
+    }
+    return entity;
+  }
+
+  async getEntityItems(entityId: string, userId: string) {
+    await this.assertEntityFounder(entityId, userId);
+    return this.prisma.providerInventoryItem.findMany({
+      where: { healthcareEntityId: entityId, isActive: true },
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  async createEntityItem(entityId: string, userId: string, providerType: string, data: {
+    name: string; genericName?: string; description?: string; category: string;
+    price: number; unitOfMeasure?: string; quantity?: number; minStockAlert?: number;
+    requiresPrescription?: boolean; imageUrl?: string; isFeatured?: boolean;
+  }) {
+    await this.assertEntityFounder(entityId, userId);
+    return this.prisma.providerInventoryItem.create({
+      data: {
+        providerUserId: userId, providerType: providerType as any,
+        healthcareEntityId: entityId,
+        name: data.name, genericName: data.genericName, description: data.description,
+        category: data.category, price: data.price,
+        unitOfMeasure: data.unitOfMeasure || 'unit',
+        quantity: data.quantity ?? 0, minStockAlert: data.minStockAlert ?? 5,
+        requiresPrescription: data.requiresPrescription ?? false,
+        isFeatured: data.isFeatured ?? false,
+        imageUrl: data.imageUrl, inStock: (data.quantity ?? 0) > 0, isActive: true,
+      },
+    });
+  }
+
+  async updateEntityItem(entityId: string, itemId: string, userId: string, data: Record<string, any>) {
+    await this.assertEntityFounder(entityId, userId);
+    const item = await this.prisma.providerInventoryItem.findUnique({ where: { id: itemId } });
+    if (!item || item.healthcareEntityId !== entityId) throw new NotFoundException('Item not found');
+    const update: Record<string, any> = {};
+    for (const key of ['name', 'genericName', 'description', 'category', 'price', 'unitOfMeasure', 'quantity', 'minStockAlert', 'requiresPrescription', 'imageUrl', 'inStock', 'isFeatured']) {
+      if (data[key] !== undefined) update[key] = data[key];
+    }
+    if (data.quantity !== undefined && data.inStock === undefined) update.inStock = (Number(data.quantity) || 0) > 0;
+    return this.prisma.providerInventoryItem.update({ where: { id: itemId }, data: update });
+  }
+
+  async deleteEntityItem(entityId: string, itemId: string, userId: string) {
+    await this.assertEntityFounder(entityId, userId);
+    const item = await this.prisma.providerInventoryItem.findUnique({ where: { id: itemId } });
+    if (!item || item.healthcareEntityId !== entityId) throw new NotFoundException('Item not found');
+    await this.prisma.providerInventoryItem.update({ where: { id: itemId }, data: { isActive: false } });
+  }
+
   // ─── Orders ────────────────────────────────────────────────────────────
 
   async getOrders(userId: string, role: 'patient' | 'provider') {

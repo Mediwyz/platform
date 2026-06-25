@@ -37,6 +37,30 @@ export class InventoryController {
     return { success: true, message: 'Item deactivated' };
   }
 
+  // ─── Entity-scoped inventory (org founder manages a pharmacy's stock) ────
+
+  @Get('organizations/:entityId/inventory')
+  async getEntityItems(@Param('entityId') entityId: string, @CurrentUser() user: JwtPayload) {
+    return { success: true, data: await this.inventoryService.getEntityItems(entityId, user.sub) };
+  }
+
+  @Post('organizations/:entityId/inventory')
+  @HttpCode(HttpStatus.CREATED)
+  async createEntityItem(@Param('entityId') entityId: string, @Body() body: CreateInventoryItemDto, @CurrentUser() user: JwtPayload) {
+    return { success: true, data: await this.inventoryService.createEntityItem(entityId, user.sub, user.userType.toUpperCase(), body) };
+  }
+
+  @Patch('organizations/:entityId/inventory/:id')
+  async updateEntityItem(@Param('entityId') entityId: string, @Param('id') id: string, @Body() body: UpdateInventoryItemDto, @CurrentUser() user: JwtPayload) {
+    return { success: true, data: await this.inventoryService.updateEntityItem(entityId, id, user.sub, body) };
+  }
+
+  @Delete('organizations/:entityId/inventory/:id')
+  async deleteEntityItem(@Param('entityId') entityId: string, @Param('id') id: string, @CurrentUser() user: JwtPayload) {
+    await this.inventoryService.deleteEntityItem(entityId, id, user.sub);
+    return { success: true, message: 'Item removed' };
+  }
+
   // ─── Orders ────────────────────────────────────────────────────────────
 
   @Get('inventory/orders')
