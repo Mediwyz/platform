@@ -346,6 +346,35 @@ export class CorporateController {
     }
   }
 
+  // ── Per-company members (founder only) ────────────────────────────────────
+
+  @Get('companies/:companyId/members')
+  async companyMembers(@Param('companyId') companyId: string, @CurrentUser() user: JwtPayload) {
+    try {
+      return { success: true, data: await this.corporateService.getCompanyMembers(companyId, user.sub) };
+    } catch (error) {
+      return { success: false, message: error instanceof Error ? error.message : 'Internal server error' };
+    }
+  }
+
+  @Post('companies/:companyId/members')
+  async inviteCompanyMember(@Param('companyId') companyId: string, @Body() dto: InviteMemberDto, @CurrentUser() user: JwtPayload) {
+    try {
+      return { success: true, data: await this.corporateService.inviteCompanyMember(companyId, user.sub, dto.email) };
+    } catch (error) {
+      return { success: false, message: error instanceof Error ? error.message : 'Internal server error' };
+    }
+  }
+
+  @Patch('companies/:companyId/members')
+  async manageCompanyMember(@Param('companyId') companyId: string, @Body() dto: ManageMemberDto, @CurrentUser() user: JwtPayload) {
+    try {
+      return { success: true, data: await this.corporateService.manageCompanyMember(companyId, user.sub, dto.memberId, dto.action) };
+    } catch (error) {
+      return { success: false, message: error instanceof Error ? error.message : 'Internal server error' };
+    }
+  }
+
   /** GET /api/corporate/enroll — preview enrollment */
   @Get('enroll')
   async preview(@CurrentUser() user: JwtPayload, @Query('planId') planId: string) {

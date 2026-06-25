@@ -2532,6 +2532,10 @@ model CorporateEmployee {
   id               String                  @id @default(uuid())
   corporateAdminId String
   corporateAdmin   User                    @relation("CorporateAdminUser", fields: [corporateAdminId], references: [id], onDelete: Cascade)
+  // The specific company this membership belongs to. Older rows are backfilled
+  // to the owner's oldest company; new memberships set it explicitly so a user
+  // who owns several companies keeps a separate member list per company.
+  companyId        String?
   userId           String
   user             User                    @relation("EmployeeUser", fields: [userId], references: [id], onDelete: Cascade)
   status           CorporateEmployeeStatus @default(pending)
@@ -2547,6 +2551,7 @@ model CorporateEmployee {
 
   @@unique([corporateAdminId, userId])
   @@index([corporateAdminId])
+  @@index([companyId])
   @@index([userId])
   @@index([status])
   @@index([lastContributionMonth])

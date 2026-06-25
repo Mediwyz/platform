@@ -169,6 +169,13 @@ export async function seedCleanupNames(prisma: PrismaClient) {
   }
   console.log(`  ✓ Assigned realistic portraits to ${avatarsSet} users`)
 
+  // ── 5b. Backfill companyId on corporate members ──────────────────────────
+  // Members were historically keyed only by owner; assign each to a specific
+  // company so multi-company owners get separate member lists. Insurance
+  // members (those with contribution data) go to the owner's insurance company.
+  const cm = await backfillCompanyMembers(prisma)
+  if (cm) console.log(`  ✓ Backfilled companyId on ${cm} corporate members`)
+
   // ── 6. Enrich every user with realistic personal details ─────────────────
   // Only fills fields that are currently empty, so a real user's edits are
   // never overwritten. Values are deterministic (derived from id/gender/role).
@@ -202,6 +209,40 @@ const OCCUPATION_BY_TYPE: Record<string, string> = {
 const MARITAL_CYCLE = ['single', 'married', 'married', 'single', 'divorced', 'married']
 const REL_CYCLE = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Partner']
 const EMERGENCY_NAMES = ['Alex Carter', 'Sam Rivera', 'Jordan Blake', 'Casey Morgan', 'Taylor Reed', 'Robin Hayes']
+
+async function backfillCompanyMembers(prisma: PrismaClient): Promise<number> {
+  const rows = await prisma.corporateEmployee.findMany({
+    where: { companyId: null } as any,
+    select: { id: true, corporateAdminId: true, lastContributionMonth: true },
+  })
+  if (rows.length === 0) return 0
+  const ownerIds = [...new Set(rows.map(r => r.corporateAdminId))]
+  const companies = await prisma.corporateAdminProfile.findMany({
+    where: { userId: { in: ownerIds } },
+    select: { id: true, userId: true, isInsuranceCompany: true },
+  })
+  const byOwner = new Map<string, typeof companies>()
+  for (const c of companies) {
+    const arr = byOwner.get(c.userId) ?? []
+    arr.push(c)
+    byOwner.set(c.userId, arr)
+  }
+  let count = 0
+  for (const r of rows) {
+    const list = byOwner.get(r.corporateAdminId)
+    if (!list || list.length === 0) continue
+    // Insurance members (have contribution data) → the owner's insurance company;
+    // everyone else → the owner's first company.
+    let target = list[0]
+    if (r.lastContributionMonth) {
+      const ins = list.find(c => c.isInsuranceCompany)
+      if (ins) target = ins
+    }
+    await prisma.corporateEmployee.update({ where: { id: r.id }, data: { companyId: target.id } as any })
+    count++
+  }
+  return count
+}
 
 function hashId(s: string): number {
   let h = 0

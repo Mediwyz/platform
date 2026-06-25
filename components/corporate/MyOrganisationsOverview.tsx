@@ -25,12 +25,6 @@ import type { IconType } from 'react-icons'
 // non-healthcare company (IT, agro…).
 const COMPANY_CATEGORIES = new Set(['insurance', 'other'])
 
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null
-  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
-  return m ? decodeURIComponent(m[1]) : null
-}
-
 interface OwnedCompany { id: string; companyName: string; isInsuranceCompany: boolean; memberCount?: number }
 
 // A unified card item — either a HealthcareEntity or a corporate company.
@@ -155,6 +149,7 @@ export default function MyOrganisationsOverview() {
       return [
         ...companies.filter(c => !c.isInsuranceCompany).map<GridItem>(c => ({
           id: c.id, name: c.companyName, isOwner: true, memberCount: c.memberCount, kind: 'company',
+          manageHref: `/company/${c.id}/manage`,
         })),
         ...entities,
       ]
@@ -200,12 +195,11 @@ export default function MyOrganisationsOverview() {
     setBusy(true)
     setMessage(null)
     try {
-      // Companies invite via the corporate members API (keyed by the owner's
-      // user id); healthcare entities via the org invite API.
+      // Companies invite via the per-company members API; healthcare entities
+      // via the org invite API.
       const isCompany = companies.some(c => c.id === orgId)
-      const myId = getCookie('mediwyz_user_id')
       const res = isCompany
-        ? await fetch(`/api/corporate/${myId}/members`, {
+        ? await fetch(`/api/corporate/companies/${orgId}/members`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
             body: JSON.stringify({ email: inviteEmail.trim() }),
           })

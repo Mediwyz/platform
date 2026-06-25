@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { TreasuryService } from '../shared/services/treasury.service';
@@ -104,15 +104,88 @@ export class CorporateService {
    * owner's active-member total, shared across their companies.
    */
   async getOwnedCompanies(userId: string) {
-    const [companies, activeMembers] = await Promise.all([
-      this.prisma.corporateAdminProfile.findMany({
-        where: { userId },
-        select: { id: true, companyName: true, isInsuranceCompany: true, industry: true },
-        orderBy: { companyName: 'asc' },
-      }),
-      this.prisma.corporateEmployee.count({ where: { corporateAdminId: userId, status: 'active' } }),
-    ]);
-    return companies.map((c) => ({ ...c, memberCount: activeMembers }));
+    const companies = await this.prisma.corporateAdminProfile.findMany({
+      where: { userId },
+      select: { id: true, companyName: true, isInsuranceCompany: true, industry: true },
+      orderBy: { companyName: 'asc' },
+    });
+    if (companies.length === 0) return [];
+    // Active member count PER company.
+    const grouped = await this.prisma.corporateEmployee.groupBy({
+      by: ['companyId'],
+      where: { companyId: { in: companies.map((c) => c.id) }, status: 'active' },
+      _count: { _all: true },
+    });
+    const countBy = new Map(grouped.map((g) => [g.companyId, g._count._all]));
+    return companies.map((c) => ({ ...c, memberCount: countBy.get(c.id) ?? 0 }));
+  }
+
+  /** Throw unless `userId` owns `companyId`. Returns the company. */
+  private async assertCompanyOwner(companyId: string, userId: string) {
+    const company = await this.prisma.corporateAdminProfile.findFirst({
+      where: { id: companyId, userId },
+      select: { id: true, companyName: true, isInsuranceCompany: true },
+    });
+    if (!company) throw new ForbiddenException('Company not found or not yours');
+    return company;
+  }
+
+  /** Members of a specific company (founder only). */
+  async getCompanyMembers(companyId: string, userId: string) {
+    const company = await this.assertCompanyOwner(companyId, userId);
+    const members = await this.prisma.corporateEmployee.findMany({
+      where: { companyId },
+      include: { user: { select: { id: true, firstName: true, lastName: true, email: true, profileImage: true } } },
+      orderBy: { joinedAt: 'desc' },
+    });
+    return {
+      company,
+      members: members.map((m) => ({
+        id: m.id, userId: m.userId, status: m.status,
+        name: `${m.user.firstName} ${m.user.lastName}`.trim(), email: m.user.email,
+        profileImage: m.user.profileImage, joinedAt: m.joinedAt,
+      })),
+    };
+  }
+
+  /** Invite a user (by email) to a specific company (founder only). */
+  async inviteCompanyMember(companyId: string, ownerUserId: string, email: string) {
+    const company = await this.assertCompanyOwner(companyId, ownerUserId);
+    const targetUser = await this.prisma.user.findUnique({ where: { email }, select: { id: true } });
+    if (!targetUser) throw new NotFoundException('User not found — they need to register first');
+    if (targetUser.id === ownerUserId) throw new BadRequestException('You cannot invite yourself');
+    const existing = await this.prisma.corporateEmployee.findUnique({
+      where: { corporateAdminId_userId: { corporateAdminId: ownerUserId, userId: targetUser.id } },
+    });
+    if (existing && existing.status !== 'removed') {
+      throw new BadRequestException('User is already a member of one of your companies');
+    }
+    const member = existing
+      ? await this.prisma.corporateEmployee.update({
+          where: { id: existing.id },
+          data: { status: 'pending', companyId, approvedAt: null, removedAt: null, joinedAt: new Date() },
+        })
+      : await this.prisma.corporateEmployee.create({
+          data: { corporateAdminId: ownerUserId, companyId, userId: targetUser.id, status: 'pending' },
+        });
+    await this.notifications.createNotification({
+      userId: targetUser.id, type: 'corporate_invitation', title: 'Company Invitation',
+      message: `You have been invited to join ${company.companyName}. Accept or decline in your dashboard.`,
+      referenceId: member.id, referenceType: 'corporate_employee',
+    });
+    return member;
+  }
+
+  /** Approve / reject / remove a company member (founder only). */
+  async manageCompanyMember(companyId: string, ownerUserId: string, memberId: string, action: 'approve' | 'reject' | 'remove') {
+    await this.assertCompanyOwner(companyId, ownerUserId);
+    const member = await this.prisma.corporateEmployee.findFirst({ where: { id: memberId, companyId } });
+    if (!member) throw new NotFoundException('Member not found');
+    const now = new Date();
+    const data = action === 'approve'
+      ? { status: 'active' as const, approvedAt: now }
+      : { status: 'removed' as const, removedAt: now };
+    return this.prisma.corporateEmployee.update({ where: { id: memberId }, data });
   }
 
   /**
