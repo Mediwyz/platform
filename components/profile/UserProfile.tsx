@@ -100,6 +100,32 @@ interface DocumentData {
  uploadedAt: string
 }
 
+// Extended personal-profile fields rendered in the editor (and read view).
+const EXTENDED_FIELDS: { key: string; label: string; type?: 'text' | 'email' | 'url' | 'tel' | 'number' | 'select'; options?: string[]; full?: boolean }[] = [
+  { key: 'preferredName', label: 'Preferred name' },
+  { key: 'middleName', label: 'Middle name' },
+  { key: 'pronouns', label: 'Pronouns' },
+  { key: 'maritalStatus', label: 'Marital status', type: 'select', options: ['', 'single', 'married', 'divorced', 'widowed', 'prefer-not-to-say'] },
+  { key: 'nationality', label: 'Nationality' },
+  { key: 'occupation', label: 'Occupation' },
+  { key: 'employer', label: 'Employer' },
+  { key: 'secondaryPhone', label: 'Secondary phone', type: 'tel' },
+  { key: 'secondaryEmail', label: 'Secondary email', type: 'email' },
+  { key: 'website', label: 'Website', type: 'url' },
+  { key: 'addressLine2', label: 'Address line 2', full: true },
+  { key: 'city', label: 'City' },
+  { key: 'stateRegion', label: 'State / Region' },
+  { key: 'country', label: 'Country' },
+  { key: 'postalCode', label: 'Postal code' },
+  { key: 'languages', label: 'Languages (comma-separated)', full: true },
+  { key: 'heightCm', label: 'Height (cm)', type: 'number' },
+  { key: 'weightKg', label: 'Weight (kg)', type: 'number' },
+  { key: 'linkedinUrl', label: 'LinkedIn URL', type: 'url', full: true },
+  { key: 'twitterUrl', label: 'Twitter / X URL', type: 'url' },
+  { key: 'facebookUrl', label: 'Facebook URL', type: 'url' },
+  { key: 'instagramUrl', label: 'Instagram URL', type: 'url' },
+]
+
 interface UserData {
  firstName?: string
  lastName?: string
@@ -108,6 +134,29 @@ interface UserData {
  dateOfBirth?: string
  gender?: string
  address?: string
+ // Extended personal profile
+ middleName?: string
+ preferredName?: string
+ pronouns?: string
+ maritalStatus?: string
+ nationality?: string
+ secondaryPhone?: string
+ secondaryEmail?: string
+ website?: string
+ addressLine2?: string
+ city?: string
+ stateRegion?: string
+ country?: string
+ postalCode?: string
+ occupation?: string
+ employer?: string
+ languages?: string[]
+ linkedinUrl?: string
+ twitterUrl?: string
+ facebookUrl?: string
+ instagramUrl?: string
+ heightCm?: number
+ weightKg?: number
  profileImage?: string
  verified?: boolean
  accountStatus?: string
@@ -272,6 +321,8 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  const [editedGeneral, setEditedGeneral] = useState<{ firstName: string; lastName: string; email: string; phone: string; dateOfBirth: string; gender: string; address: string }>({
  firstName: '', lastName: '', email: '', phone: '', dateOfBirth: '', gender: '', address: '',
  })
+ // Extended personal-profile fields, kept as strings for the form inputs.
+ const [editedExtended, setEditedExtended] = useState<Record<string, string>>({})
  const [editedEmergency, setEditedEmergency] = useState<{ name: string; relationship: string; phone: string }>({
  name: '',
  relationship: '',
@@ -414,6 +465,16 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  address: userData.address || '',
  })
 
+ // Seed the extended-field form from the current profile.
+ const ext: Record<string, string> = {}
+ for (const f of EXTENDED_FIELDS) {
+ const v = (userData as Record<string, unknown>)[f.key]
+ ext[f.key] = f.key === 'languages'
+ ? (Array.isArray(v) ? (v as string[]).join(', ') : '')
+ : (v === null || v === undefined ? '' : String(v))
+ }
+ setEditedExtended(ext)
+
  if (userType === 'MEMBER' && profile?.emergencyContact) {
  setEditedEmergency({
  name: profile.emergencyContact.name || '',
@@ -442,6 +503,18 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  gender: editedGeneral.gender || undefined,
  address: editedGeneral.address || undefined,
  profileData: editedProfile,
+ }
+ // Merge extended personal fields: blanks → undefined; languages → array;
+ // height/weight → numbers.
+ for (const f of EXTENDED_FIELDS) {
+ const raw = (editedExtended[f.key] ?? '').trim()
+ if (f.key === 'languages') {
+ body.languages = raw ? raw.split(',').map((s) => s.trim()).filter(Boolean) : []
+ } else if (f.type === 'number') {
+ body[f.key] = raw === '' ? null : Number(raw)
+ } else {
+ body[f.key] = raw || undefined
+ }
  }
  if (userType === 'MEMBER' && editedEmergency.name) {
  body.emergencyContact = editedEmergency
@@ -1064,6 +1137,35 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
  />
  </div>
+
+ {/* Extended personal details — all optional */}
+ <div className="md:col-span-2 pt-3 mt-1 border-t border-line">
+ <h4 className="text-sm font-semibold text-fg">Personal details</h4>
+ <p className="text-xs text-faint">All optional — the more you add, the more complete your profile.</p>
+ </div>
+ {EXTENDED_FIELDS.map((f) => (
+ <div key={f.key} className={f.full ? 'md:col-span-2' : ''}>
+ <label className="block text-sm font-medium text-soft mb-1">{f.label}</label>
+ {f.type === 'select' ? (
+ <select
+ value={editedExtended[f.key] ?? ''}
+ onChange={(e) => setEditedExtended((prev) => ({ ...prev, [f.key]: e.target.value }))}
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-surface text-fg"
+ >
+ {f.options!.map((o) => (
+ <option key={o} value={o}>{o === '' ? 'Select…' : o.charAt(0).toUpperCase() + o.slice(1).replace(/-/g, ' ')}</option>
+ ))}
+ </select>
+ ) : (
+ <input
+ type={f.type ?? 'text'}
+ value={editedExtended[f.key] ?? ''}
+ onChange={(e) => setEditedExtended((prev) => ({ ...prev, [f.key]: e.target.value }))}
+ className="w-full px-3 py-2 border border-line rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+ />
+ )}
+ </div>
+ ))}
  </div>
  ) : (
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-line">
@@ -1074,7 +1176,24 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  { label: 'Phone', value: userData.phone, icon: FaPhone },
  { label: 'Date of Birth', value: userData.dateOfBirth ? new Date(userData.dateOfBirth).toLocaleDateString() : null, icon: FaBirthdayCake },
  { label: 'Gender', value: userData.gender, icon: FaVenusMars },
+ { label: 'Pronouns', value: userData.pronouns, icon: FaVenusMars },
  { label: 'Address', value: userData.address, icon: FaMapMarkerAlt },
+ { label: 'City', value: userData.city, icon: FaMapMarkerAlt },
+ { label: 'State / Region', value: userData.stateRegion, icon: FaMapMarkerAlt },
+ { label: 'Country', value: userData.country, icon: FaMapMarkerAlt },
+ { label: 'Postal Code', value: userData.postalCode, icon: FaMapMarkerAlt },
+ { label: 'Nationality', value: userData.nationality, icon: FaUser },
+ { label: 'Marital Status', value: userData.maritalStatus, icon: FaUser },
+ { label: 'Preferred Name', value: userData.preferredName, icon: FaUser },
+ { label: 'Occupation', value: userData.occupation, icon: FaUser },
+ { label: 'Employer', value: userData.employer, icon: FaUser },
+ { label: 'Languages', value: userData.languages && userData.languages.length ? userData.languages.join(', ') : null, icon: FaUser },
+ { label: 'Height', value: userData.heightCm ? `${userData.heightCm} cm` : null, icon: FaUser },
+ { label: 'Weight', value: userData.weightKg ? `${userData.weightKg} kg` : null, icon: FaUser },
+ { label: 'Secondary Phone', value: userData.secondaryPhone, icon: FaPhone },
+ { label: 'Secondary Email', value: userData.secondaryEmail, icon: FaEnvelope },
+ { label: 'Website', value: userData.website, icon: FaMapMarkerAlt },
+ { label: 'LinkedIn', value: userData.linkedinUrl, icon: FaUser },
  ].filter(f => f.value).map((f) => (
  <div key={f.label} className="flex items-center gap-3">
  <f.icon className="text-faint flex-shrink-0" />

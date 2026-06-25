@@ -45,12 +45,32 @@ export class UsersService {
 
   // ─── PATCH /users/:id ─────────────────────────────────────────────────
 
+  // Top-level User string columns that the profile editor may update.
+  private static readonly EDITABLE_STRING_FIELDS = [
+    'firstName', 'lastName', 'phone', 'address', 'gender', 'profileImage', 'coverImage', 'bio',
+    // Extended personal profile
+    'middleName', 'preferredName', 'pronouns', 'maritalStatus', 'nationality',
+    'secondaryPhone', 'secondaryEmail', 'website',
+    'addressLine2', 'city', 'stateRegion', 'country', 'postalCode',
+    'occupation', 'employer',
+    'emergencyContactName', 'emergencyContactPhone', 'emergencyContactRelationship',
+    'linkedinUrl', 'twitterUrl', 'facebookUrl', 'instagramUrl',
+  ];
+
   async update(id: string, data: Record<string, any>) {
     const userData: Record<string, any> = {};
-    for (const key of ['firstName', 'lastName', 'phone', 'address', 'gender', 'profileImage', 'coverImage', 'bio']) {
+    for (const key of UsersService.EDITABLE_STRING_FIELDS) {
       if (data[key] !== undefined) userData[key] = data[key];
     }
     if (data.dateOfBirth) userData.dateOfBirth = new Date(data.dateOfBirth);
+    if (Array.isArray(data.languages)) userData.languages = data.languages.filter((l: unknown) => typeof l === 'string');
+    // Numeric biometrics: coerce, drop blanks/invalid.
+    for (const numKey of ['heightCm', 'weightKg']) {
+      if (data[numKey] === undefined) continue;
+      if (data[numKey] === null || data[numKey] === '') { userData[numKey] = null; continue; }
+      const n = Number(data[numKey]);
+      if (!Number.isNaN(n)) userData[numKey] = numKey === 'heightCm' ? Math.round(n) : n;
+    }
 
     const updated = await this.prisma.user.update({
       where: { id }, data: userData,
@@ -58,6 +78,13 @@ export class UsersService {
         id: true, firstName: true, lastName: true, email: true,
         profileImage: true, coverImage: true, bio: true,
         phone: true, address: true, gender: true, dateOfBirth: true,
+        middleName: true, preferredName: true, pronouns: true, maritalStatus: true, nationality: true,
+        secondaryPhone: true, secondaryEmail: true, website: true,
+        addressLine2: true, city: true, stateRegion: true, country: true, postalCode: true,
+        occupation: true, employer: true, languages: true,
+        emergencyContactName: true, emergencyContactPhone: true, emergencyContactRelationship: true,
+        linkedinUrl: true, twitterUrl: true, facebookUrl: true, instagramUrl: true,
+        heightCm: true, weightKg: true,
       },
     });
     return updated;

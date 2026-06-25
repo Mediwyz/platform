@@ -169,7 +169,99 @@ export async function seedCleanupNames(prisma: PrismaClient) {
   }
   console.log(`  ✓ Assigned realistic portraits to ${avatarsSet} users`)
 
+  // ── 6. Enrich every user with realistic personal details ─────────────────
+  // Only fills fields that are currently empty, so a real user's edits are
+  // never overwritten. Values are deterministic (derived from id/gender/role).
+  const enriched = await enrichUserProfiles(prisma)
+  console.log(`  ✓ Enriched ${enriched} user profiles with personal details`)
+
   console.log(
     `  Name-cleanup done - entities: ${entityDeleted}, companies renamed: ${companyUpdated}, duplicates removed: ${duplicateDeleted}`,
   )
+}
+
+// Country profile presets keyed by the 2-letter id prefix (multi-country users
+// are `${CODE}-${ROLE}###`). Mauritius users have no prefix → default.
+const COUNTRY_PRESETS: Record<string, { country: string; nationality: string; city: string; postal: string; dial: string; languages: string[] }> = {
+  MG: { country: 'Madagascar', nationality: 'Malagasy', city: 'Antananarivo', postal: '101', dial: '+261', languages: ['Malagasy', 'French'] },
+  KE: { country: 'Kenya',      nationality: 'Kenyan',    city: 'Nairobi',      postal: '00100', dial: '+254', languages: ['English', 'Swahili'] },
+  TG: { country: 'Togo',       nationality: 'Togolese',  city: 'Lomé',         postal: '01BP', dial: '+228', languages: ['French', 'Ewe'] },
+  BJ: { country: 'Benin',      nationality: 'Beninese',  city: 'Cotonou',      postal: '229', dial: '+229', languages: ['French', 'Fon'] },
+  RW: { country: 'Rwanda',     nationality: 'Rwandan',   city: 'Kigali',       postal: '250', dial: '+250', languages: ['Kinyarwanda', 'French', 'English'] },
+  MU: { country: 'Mauritius',  nationality: 'Mauritian', city: 'Port Louis',   postal: '11328', dial: '+230', languages: ['English', 'French', 'Mauritian Creole'] },
+}
+
+const OCCUPATION_BY_TYPE: Record<string, string> = {
+  DOCTOR: 'Physician', NURSE: 'Registered Nurse', NANNY: 'Childcare Nurse', PHARMACIST: 'Pharmacist',
+  LAB_TECHNICIAN: 'Laboratory Technician', EMERGENCY_WORKER: 'Emergency Responder', INSURANCE_REP: 'Insurance Advisor',
+  CORPORATE_ADMIN: 'Corporate Administrator', REFERRAL_PARTNER: 'Referral Partner', REGIONAL_ADMIN: 'Regional Administrator',
+  CAREGIVER: 'Caregiver', PHYSIOTHERAPIST: 'Physiotherapist', DENTIST: 'Dentist', OPTOMETRIST: 'Optometrist',
+  NUTRITIONIST: 'Nutritionist', PATIENT: 'Member', MEMBER: 'Member',
+}
+
+const MARITAL_CYCLE = ['single', 'married', 'married', 'single', 'divorced', 'married']
+const REL_CYCLE = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Partner']
+const EMERGENCY_NAMES = ['Alex Carter', 'Sam Rivera', 'Jordan Blake', 'Casey Morgan', 'Taylor Reed', 'Robin Hayes']
+
+function hashId(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
+  return h
+}
+
+async function enrichUserProfiles(prisma: PrismaClient): Promise<number> {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true, firstName: true, lastName: true, gender: true, userType: true, phone: true,
+      preferredName: true, pronouns: true, nationality: true, country: true, city: true, postalCode: true,
+      maritalStatus: true, occupation: true, employer: true, languages: true,
+      emergencyContactName: true, emergencyContactPhone: true, emergencyContactRelationship: true,
+      heightCm: true, weightKg: true, website: true, linkedinUrl: true,
+    },
+    orderBy: { id: 'asc' },
+  })
+
+  let count = 0
+  for (const u of users) {
+    const code = /^[A-Z]{2}-/.test(u.id) ? u.id.slice(0, 2) : 'MU'
+    const preset = COUNTRY_PRESETS[code] ?? COUNTRY_PRESETS.MU
+    const h = hashId(u.id)
+    const gg = (u.gender || '').trim().toLowerCase()
+    const isFemale = gg.startsWith('f')
+    const isProvider = !['PATIENT', 'MEMBER', 'ADMIN', 'REGIONAL_ADMIN', 'CORPORATE_ADMIN'].includes(u.userType as string)
+    const slug = `${u.firstName}.${u.lastName}`.toLowerCase().replace(/[^a-z.]/g, '')
+
+    const data: Record<string, any> = {}
+    const setIfEmpty = (key: keyof typeof u, value: any) => {
+      const cur = (u as any)[key]
+      if (cur === null || cur === undefined || cur === '' || (Array.isArray(cur) && cur.length === 0)) data[key] = value
+    }
+
+    setIfEmpty('preferredName', u.firstName)
+    setIfEmpty('pronouns', isFemale ? 'she/her' : gg.startsWith('m') ? 'he/him' : 'they/them')
+    setIfEmpty('nationality', preset.nationality)
+    setIfEmpty('country', preset.country)
+    setIfEmpty('city', preset.city)
+    setIfEmpty('postalCode', preset.postal)
+    setIfEmpty('languages', preset.languages)
+    setIfEmpty('maritalStatus', MARITAL_CYCLE[h % MARITAL_CYCLE.length])
+    setIfEmpty('occupation', OCCUPATION_BY_TYPE[u.userType as string] ?? 'Member')
+    setIfEmpty('employer', isProvider ? 'MediWyz Partner Network' : null)
+    setIfEmpty('emergencyContactName', EMERGENCY_NAMES[h % EMERGENCY_NAMES.length])
+    setIfEmpty('emergencyContactPhone', `${preset.dial} ${5 + (h % 4)}${String(1000000 + (h % 8999999)).slice(0, 7)}`)
+    setIfEmpty('emergencyContactRelationship', REL_CYCLE[h % REL_CYCLE.length])
+    // Biometrics: plausible ranges by gender, stable per user.
+    setIfEmpty('heightCm', isFemale ? 156 + (h % 18) : 168 + (h % 20))
+    setIfEmpty('weightKg', (isFemale ? 52 + (h % 28) : 64 + (h % 34)) + 0.0)
+    if (isProvider) {
+      setIfEmpty('linkedinUrl', `https://www.linkedin.com/in/${slug}`)
+      setIfEmpty('website', `https://mediwyz.com/profile/${u.id}`)
+    }
+
+    if (Object.keys(data).length > 0) {
+      await prisma.user.update({ where: { id: u.id }, data })
+      count++
+    }
+  }
+  return count
 }

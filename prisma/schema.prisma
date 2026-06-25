@@ -206,6 +206,41 @@ model User {
   address        String?
   latitude       Float?    // GPS coordinates for nearest-provider search
   longitude      Float?
+
+  // ── Extended personal profile (all optional) ───────────────────────────
+  // Identity
+  middleName     String?
+  preferredName  String?   // nickname / what they like to be called
+  pronouns       String?   // e.g. she/her, he/him, they/them
+  maritalStatus  String?   // single, married, divorced, widowed, prefer-not-to-say
+  nationality    String?
+  // Extra contact
+  secondaryPhone String?
+  secondaryEmail String?
+  website        String?
+  // Granular location (address above is the free-form line 1)
+  addressLine2   String?
+  city           String?
+  stateRegion    String?
+  country        String?
+  postalCode     String?
+  // Work
+  occupation     String?
+  employer       String?
+  // Spoken languages
+  languages      String[]  @default([])
+  // Emergency contact (for every user, not just patients)
+  emergencyContactName         String?
+  emergencyContactPhone        String?
+  emergencyContactRelationship String?
+  // Social links
+  linkedinUrl    String?
+  twitterUrl     String?
+  facebookUrl    String?
+  instagramUrl   String?
+  // Basic biometrics
+  heightCm       Int?
+  weightKg       Float?
   verified       Boolean   @default(false)
   accountStatus  String    @default("active") // active, suspended, pending
   referredByCode String? // Referral code used at signup
