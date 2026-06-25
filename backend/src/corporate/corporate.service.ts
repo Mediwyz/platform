@@ -155,10 +155,10 @@ export class CorporateService {
     if (!targetUser) throw new NotFoundException('User not found — they need to register first');
     if (targetUser.id === ownerUserId) throw new BadRequestException('You cannot invite yourself');
     const existing = await this.prisma.corporateEmployee.findUnique({
-      where: { corporateAdminId_userId: { corporateAdminId: ownerUserId, userId: targetUser.id } },
+      where: { companyId_userId: { companyId, userId: targetUser.id } },
     });
     if (existing && existing.status !== 'removed') {
-      throw new BadRequestException('User is already a member of one of your companies');
+      throw new BadRequestException('User is already a member of this company');
     }
     const member = existing
       ? await this.prisma.corporateEmployee.update({
@@ -456,7 +456,7 @@ export class CorporateService {
       const now = new Date();
       const ym = now.toISOString().slice(0, 7);
       return tx.corporateEmployee.upsert({
-        where: { corporateAdminId_userId: { corporateAdminId: company.userId, userId } },
+        where: { companyId_userId: { companyId: company.id, userId } },
         update: {
           status: 'active',
           lastContributionMonth: ym,
@@ -465,6 +465,7 @@ export class CorporateService {
         },
         create: {
           corporateAdminId: company.userId,
+          companyId: company.id,
           userId,
           status: 'active',
           approvedAt: now,
@@ -479,13 +480,13 @@ export class CorporateService {
   async contributeToInsurance(userId: string, companyProfileId: string) {
     const company = await this.prisma.corporateAdminProfile.findFirst({
       where: { id: companyProfileId, isInsuranceCompany: true },
-      select: { userId: true, companyName: true, monthlyContribution: true },
+      select: { id: true, userId: true, companyName: true, monthlyContribution: true },
     });
     if (!company) throw new NotFoundException('Insurance company not found');
 
     const amount = company.monthlyContribution ?? 0;
     const membership = await this.prisma.corporateEmployee.findUnique({
-      where: { corporateAdminId_userId: { corporateAdminId: company.userId, userId } },
+      where: { companyId_userId: { companyId: company.id, userId } },
     });
     if (!membership) throw new BadRequestException('You are not a member of this company');
 
@@ -523,7 +524,7 @@ export class CorporateService {
 
       const now = new Date();
       return tx.corporateEmployee.update({
-        where: { corporateAdminId_userId: { corporateAdminId: company.userId, userId } },
+        where: { companyId_userId: { companyId: company.id, userId } },
         data: {
           lastContributionMonth: now.toISOString().slice(0, 7),
           lastContributionAt: now,
@@ -545,7 +546,7 @@ export class CorporateService {
 
     // Must be an active member of the company.
     const membership = await this.prisma.corporateEmployee.findUnique({
-      where: { corporateAdminId_userId: { corporateAdminId: company.userId, userId: memberId } },
+      where: { companyId_userId: { companyId: company.id, userId: memberId } },
       select: { status: true },
     });
     if (!membership || membership.status !== 'active') {
@@ -633,7 +634,7 @@ export class CorporateService {
     });
 
     const member = await this.prisma.corporateEmployee.findUnique({
-      where: { corporateAdminId_userId: { corporateAdminId: claim.company.userId, userId: claim.memberId } },
+      where: { companyId_userId: { companyId: claim.company.id, userId: claim.memberId } },
       select: { joinedAt: true },
     });
 
@@ -905,11 +906,12 @@ export class CorporateService {
       throw new BadRequestException('You cannot invite yourself');
     }
 
-    // Check if already invited/active
+    // Check if already invited/active (this legacy per-owner invite targets the
+    // owner's primary company = adminProfile.id).
     const existing = await this.prisma.corporateEmployee.findUnique({
       where: {
-        corporateAdminId_userId: {
-          corporateAdminId,
+        companyId_userId: {
+          companyId: adminProfile.id,
           userId: targetUser.id,
         },
       },
@@ -927,6 +929,7 @@ export class CorporateService {
       : await this.prisma.corporateEmployee.create({
           data: {
             corporateAdminId,
+            companyId: adminProfile.id,
             userId: targetUser.id,
             status: 'pending',
           },

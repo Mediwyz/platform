@@ -2549,7 +2549,9 @@ model CorporateEmployee {
   lastContributionMonth String?
   lastContributionAt    DateTime?
 
-  @@unique([corporateAdminId, userId])
+  // Per-company membership: a person may belong to several of an owner's
+  // companies simultaneously (one row per company).
+  @@unique([companyId, userId])
   @@index([corporateAdminId])
   @@index([companyId])
   @@index([userId])

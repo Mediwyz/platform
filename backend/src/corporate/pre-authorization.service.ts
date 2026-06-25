@@ -136,7 +136,7 @@ export class PreAuthorizationService {
       orderBy: { createdAt: 'desc' },
     });
     const membership = await this.prisma.corporateEmployee.findUnique({
-      where: { corporateAdminId_userId: { corporateAdminId: pa.company.userId, userId: pa.memberId } },
+      where: { companyId_userId: { companyId: pa.company.id, userId: pa.memberId } },
       select: { joinedAt: true, status: true },
     });
     if (!membership || membership.status !== 'active') {

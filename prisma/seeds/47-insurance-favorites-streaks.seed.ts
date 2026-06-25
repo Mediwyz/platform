@@ -61,7 +61,7 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
     const paidThisMonth = i % 2 === 0 // mix paid and unpaid
     await prisma.corporateEmployee.upsert({
       where: {
-        corporateAdminId_userId: { corporateAdminId: owner.id, userId: p.id },
+        companyId_userId: { companyId: company.id, userId: p.id },
       },
       update: {
         status: 'active',
@@ -69,7 +69,7 @@ export async function seedInsuranceFavoritesStreaks(prisma: PrismaClient) {
         lastContributionAt: paidThisMonth ? new Date() : new Date(Date.now() - 30 * 24 * 3600e3),
       },
       create: {
-        corporateAdminId: owner.id, userId: p.id,
+        corporateAdminId: owner.id, companyId: company.id, userId: p.id,
         status: 'active',
         approvedAt: new Date(),
         lastContributionMonth: paidThisMonth ? thisMonth : lastMonth,

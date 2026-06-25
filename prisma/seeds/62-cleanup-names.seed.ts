@@ -213,7 +213,7 @@ const EMERGENCY_NAMES = ['Alex Carter', 'Sam Rivera', 'Jordan Blake', 'Casey Mor
 async function backfillCompanyMembers(prisma: PrismaClient): Promise<number> {
   const rows = await prisma.corporateEmployee.findMany({
     where: { companyId: null } as any,
-    select: { id: true, corporateAdminId: true, lastContributionMonth: true },
+    select: { id: true, corporateAdminId: true, userId: true, lastContributionMonth: true },
   })
   if (rows.length === 0) return 0
   const ownerIds = [...new Set(rows.map(r => r.corporateAdminId))]
@@ -237,6 +237,16 @@ async function backfillCompanyMembers(prisma: PrismaClient): Promise<number> {
     if (r.lastContributionMonth) {
       const ins = list.find(c => c.isInsuranceCompany)
       if (ins) target = ins
+    }
+    // Avoid violating the (companyId, userId) unique: if the user is already a
+    // member of the target company, drop this redundant null-company row.
+    const dup = await prisma.corporateEmployee.findFirst({
+      where: { companyId: target.id, userId: r.userId } as any,
+      select: { id: true },
+    })
+    if (dup) {
+      await prisma.corporateEmployee.delete({ where: { id: r.id } }).catch(() => {})
+      continue
     }
     await prisma.corporateEmployee.update({ where: { id: r.id }, data: { companyId: target.id } as any })
     count++
