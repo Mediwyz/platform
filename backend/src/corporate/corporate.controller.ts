@@ -335,6 +335,17 @@ export class CorporateController {
     }
   }
 
+  /** GET /api/corporate/owned — companies the current user OWNS (insurance + generic). */
+  @Get('owned')
+  async owned(@CurrentUser() user: JwtPayload) {
+    try {
+      return { success: true, data: await this.corporateService.getOwnedCompanies(user.sub) };
+    } catch (error) {
+      console.error('GET /corporate/owned error:', error);
+      return { success: false, data: [] };
+    }
+  }
+
   /** GET /api/corporate/enroll — preview enrollment */
   @Get('enroll')
   async preview(@CurrentUser() user: JwtPayload, @Query('planId') planId: string) {

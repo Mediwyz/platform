@@ -12,12 +12,33 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import {
   FaHospital, FaBriefcaseMedical, FaFlask, FaPills, FaUserMd,
-  FaPlus, FaUserPlus, FaCrown, FaSpinner, FaTimes,
+  FaPlus, FaUserPlus, FaCrown, FaSpinner, FaTimes, FaCog,
   FaBuilding, FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa,
 } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
+
+// Org categories that map to a corporate COMPANY (CorporateAdminProfile) rather
+// than a HealthcareEntity. Insurance collects contributions; "other" is any
+// non-healthcare company (IT, agro…).
+const COMPANY_CATEGORIES = new Set(['insurance', 'other'])
+
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
+  return m ? decodeURIComponent(m[1]) : null
+}
+
+interface OwnedCompany { id: string; companyName: string; isInsuranceCompany: boolean; memberCount?: number }
+
+// A unified card item — either a HealthcareEntity or a corporate company.
+interface GridItem {
+  id: string; name: string; isOwner: boolean; memberCount?: number
+  city?: string | null; role?: string | null
+  kind: 'entity' | 'company'; manageHref?: string
+}
 
 // Map stored FA icon names -> components (for admin-managed categories).
 const ICON_MAP: Record<string, IconType> = {
@@ -89,11 +110,18 @@ export default function MyOrganisationsOverview() {
     return () => { cancelled = true }
   }, [])
 
+  const [companies, setCompanies] = useState<OwnedCompany[]>([])
+
   const fetchMine = useCallback(async () => {
     try {
-      const res = await fetch('/api/organizations/mine', { credentials: 'include' })
-      const json = await res.json()
+      const [mineRes, compRes] = await Promise.all([
+        fetch('/api/organizations/mine', { credentials: 'include' }),
+        fetch('/api/corporate/owned', { credentials: 'include' }),
+      ])
+      const json = await mineRes.json()
       if (json.success) setData({ owned: json.data.owned ?? [], member: json.data.member ?? [] })
+      const comp = await compRes.json().catch(() => null)
+      if (comp?.success && Array.isArray(comp.data)) setCompanies(comp.data)
     } catch {
       /* leave empty — each category still renders its create CTA */
     } finally {
@@ -104,19 +132,53 @@ export default function MyOrganisationsOverview() {
   useEffect(() => { fetchMine() }, [fetchMine])
 
   const allOrgs = [...data.owned, ...data.member]
-  const orgsByType = (type: string) => allOrgs.filter(o => o.type === type)
+
+  // Healthcare entities + corporate companies, unified per category. Insurance
+  // companies fall under "insurance"; all other companies under "other".
+  const itemsByType = (type: string): GridItem[] => {
+    const entities: GridItem[] = allOrgs
+      .filter(o => o.type === type)
+      .map(o => ({
+        id: o.id, name: o.name, isOwner: o.isOwner, memberCount: o.memberCount,
+        city: o.city, role: o.role, kind: 'entity', manageHref: `/organization/${o.id}/manage`,
+      }))
+    if (type === 'insurance') {
+      return [
+        ...companies.filter(c => c.isInsuranceCompany).map<GridItem>(c => ({
+          id: c.id, name: c.companyName, isOwner: true, memberCount: c.memberCount,
+          kind: 'company', manageHref: '/my-insurance-company',
+        })),
+        ...entities,
+      ]
+    }
+    if (type === 'other') {
+      return [
+        ...companies.filter(c => !c.isInsuranceCompany).map<GridItem>(c => ({
+          id: c.id, name: c.companyName, isOwner: true, memberCount: c.memberCount, kind: 'company',
+        })),
+        ...entities,
+      ]
+    }
+    return entities
+  }
 
   const handleCreate = async (type: string) => {
     if (!newName.trim()) { setMessage({ type: 'error', text: 'Please enter a name.' }); return }
     setBusy(true)
     setMessage(null)
     try {
-      const res = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ name: newName.trim(), type }),
-      })
+      // Insurance / "other" create a corporate company; everything else a
+      // healthcare entity.
+      const isCompany = COMPANY_CATEGORIES.has(type)
+      const res = isCompany
+        ? await fetch('/api/corporate/companies', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+            body: JSON.stringify({ companyName: newName.trim(), isInsuranceCompany: type === 'insurance' }),
+          })
+        : await fetch('/api/organizations', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+            body: JSON.stringify({ name: newName.trim(), type }),
+          })
       const json = await res.json()
       if (json.success) {
         setMessage({ type: 'success', text: `${newName.trim()} created.` })
@@ -138,12 +200,19 @@ export default function MyOrganisationsOverview() {
     setBusy(true)
     setMessage(null)
     try {
-      const res = await fetch(`/api/organizations/${orgId}/invite`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: inviteEmail.trim() }),
-      })
+      // Companies invite via the corporate members API (keyed by the owner's
+      // user id); healthcare entities via the org invite API.
+      const isCompany = companies.some(c => c.id === orgId)
+      const myId = getCookie('mediwyz_user_id')
+      const res = isCompany
+        ? await fetch(`/api/corporate/${myId}/members`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+            body: JSON.stringify({ email: inviteEmail.trim() }),
+          })
+        : await fetch(`/api/organizations/${orgId}/invite`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+            body: JSON.stringify({ email: inviteEmail.trim() }),
+          })
       const json = await res.json()
       if (json.success) {
         setMessage({ type: 'success', text: `Invitation sent to ${inviteEmail.trim()}.` })
@@ -177,7 +246,7 @@ export default function MyOrganisationsOverview() {
         <h2 className="text-lg font-bold text-fg">My Organisations</h2>
       </div>
       <p className="text-sm text-soft mb-5">
-        Clinics, hospitals, labs and practices you own or belong to. Create one and invite colleagues by email.
+        Every organisation you own or belong to — clinics, hospitals, labs, pharmacies, insurance and other companies. Create one and invite colleagues by email.
       </p>
 
       {message && (
@@ -191,7 +260,7 @@ export default function MyOrganisationsOverview() {
 
       <div className="space-y-3">
         {categories.map(cat => {
-          const orgs = orgsByType(cat.type)
+          const orgs = itemsByType(cat.type)
           const Icon = cat.Icon
           return (
             <div key={cat.type} className="border border-line rounded-xl p-4">
@@ -236,14 +305,24 @@ export default function MyOrganisationsOverview() {
                           {o.city ? `${o.city} · ` : ''}{o.isOwner ? `${o.memberCount ?? 0} member${(o.memberCount ?? 0) !== 1 ? 's' : ''}` : 'You are a member'}
                         </p>
                       </div>
-                      {o.isOwner && (
-                        <button
-                          onClick={() => { setInviteFor(inviteFor === o.id ? null : o.id); setInviteEmail(''); setMessage(null) }}
-                          className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
-                        >
-                          <FaUserPlus size={11} /> Invite
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {o.manageHref && (
+                          <Link
+                            href={o.manageHref}
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
+                          >
+                            <FaCog size={11} /> Manage
+                          </Link>
+                        )}
+                        {o.isOwner && (
+                          <button
+                            onClick={() => { setInviteFor(inviteFor === o.id ? null : o.id); setInviteEmail(''); setMessage(null) }}
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
+                          >
+                            <FaUserPlus size={11} /> Invite
+                          </button>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>

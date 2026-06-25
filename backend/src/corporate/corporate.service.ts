@@ -97,6 +97,25 @@ export class CorporateService {
   }
 
   /**
+   * Companies the user OWNS (insurance + generic). Used by the "My
+   * Organisations" grid to surface insurance under the Insurance category and
+   * everything else under Other. Note: members are tracked per-owner
+   * (CorporateEmployee.corporateAdminId = userId), so memberCount is the
+   * owner's active-member total, shared across their companies.
+   */
+  async getOwnedCompanies(userId: string) {
+    const [companies, activeMembers] = await Promise.all([
+      this.prisma.corporateAdminProfile.findMany({
+        where: { userId },
+        select: { id: true, companyName: true, isInsuranceCompany: true, industry: true },
+        orderBy: { companyName: 'asc' },
+      }),
+      this.prisma.corporateEmployee.count({ where: { corporateAdminId: userId, status: 'active' } }),
+    ]);
+    return companies.map((c) => ({ ...c, memberCount: activeMembers }));
+  }
+
+  /**
    * Create a new company OR update the user's only company.
    * Multi-company support: if the user already owns ≥2 companies, creating
    * a new one with the same `companyName` is a no-op (idempotent from the
