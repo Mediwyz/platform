@@ -159,6 +159,15 @@ export class OrganizationsService {
   // create + invite affordance per category. Insurance/employer companies live
   // in the corporate subsystem and are surfaced separately on the same page.
 
+  /** True if the user founded a pharmacy / health-shop entity. */
+  async ownsInventoryOrg(userId: string): Promise<boolean> {
+    const rows = await (this.prisma.healthcareEntity as any).findMany({
+      where: { founderUserId: userId, isActive: true },
+      select: { type: true },
+    });
+    return rows.some((r: { type: string }) => /pharmac|health[\s_-]?shop|drugstore/i.test(r.type || ''));
+  }
+
   async getMyOrganisations(userId: string) {
     const entitySelect = {
       id: true,

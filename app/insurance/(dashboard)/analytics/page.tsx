@@ -7,6 +7,7 @@ import {
   FaArrowDown, FaHourglassHalf, FaFileInvoiceDollar, FaShieldAlt,
 } from 'react-icons/fa'
 import { useCurrency } from '@/hooks/useCurrency'
+import InsuranceMembersTable from '@/components/corporate/InsuranceMembersTable'
 
 /**
  * Insurance Owner Analytics - rich operational view that consumes
@@ -215,6 +216,9 @@ function FunnelCard({ title, icon, total, breakdown, statusColors }: {
           ))}
         </ul>
       )}
+
+      {/* Members & monthly-contribution status (paid / unpaid / collected). */}
+      <InsuranceMembersTable />
     </div>
   )
 }

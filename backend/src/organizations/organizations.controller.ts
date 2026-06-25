@@ -56,6 +56,13 @@ export class OrganizationsController {
     return { success: true, data };
   }
 
+  // Whether the user owns a pharmacy / health-shop org (gates the inventory UI).
+  @Get('inventory-capability')
+  async inventoryCapability(@CurrentUser() user: JwtPayload) {
+    const hasPharmacy = await this.organizationsService.ownsInventoryOrg(user.sub);
+    return { success: true, data: { hasPharmacy } };
+  }
+
   // ─── Create a new healthcare entity ────────────────────────────────────
 
   @Post()

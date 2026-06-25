@@ -9,6 +9,7 @@ import { useDynamicSearchItems } from '@/hooks/useDynamicSearchItems'
 import { useRoleFeatureConfig, filterSidebarByFeatures } from '@/hooks/useRoleFeatureConfig'
 import { useCorporateCapability } from '@/hooks/useCorporateCapability'
 import { useInsuranceCapability } from '@/hooks/useInsuranceCapability'
+import { useHasPharmacy } from '@/hooks/useHasPharmacy'
 import { FaBuilding, FaShieldAlt, FaGift, FaBell } from 'react-icons/fa'
 
 interface UserData {
@@ -113,6 +114,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     const featureConfig = useRoleFeatureConfig(hookUser?.userType)
     const { has: hasCorporateCapability } = useCorporateCapability()
     const { has: hasInsuranceCapability } = useInsuranceCapability()
+    const { has: hasPharmacy, loading: pharmacyLoading } = useHasPharmacy()
 
     if (loading) return <DashboardLoadingState />
     if (error || !userData) return <DashboardErrorState message={error} />
@@ -172,6 +174,13 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
         ...finalSidebarItems,
         { id: 'my-insurance-company', label: 'My Insurance Company', icon: FaShieldAlt, color: 'text-blue-600', bgColor: 'bg-blue-50', href: '/my-insurance-company' },
       ]
+    }
+
+    // Inventory / Health-Shop management is only for pharmacy / health-shop
+    // owners. Once the capability check resolves with "no pharmacy", drop the
+    // provider "My Inventory" entry. (Only the provider sidebar emits it.)
+    if (!pharmacyLoading && !hasPharmacy) {
+      finalSidebarItems = finalSidebarItems.filter(i => i.id !== 'inventory')
     }
 
     // Notifications - every user should have this. Fallback inject if the
