@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaShieldAlt, FaBuilding, FaArrowRight, FaHospital } from 'react-icons/fa'
+import { useTranslation } from '@/lib/i18n'
 
 //  Types 
 
@@ -87,6 +88,7 @@ function BadgeIcon({ badge }: { badge: string }) {
 //  Component 
 
 export default function CompanyTrustBar() {
+  const { t } = useTranslation()
   const [items, setItems] = useState<TrustItem[]>(FALLBACK)
 
   useEffect(() => {
@@ -122,13 +124,13 @@ export default function CompanyTrustBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-3">
         <div className="flex items-center justify-between">
           <p className="text-white/70 text-xs sm:text-sm font-medium tracking-wide uppercase">
-            Trusted by companies &amp; organizations across the region
+            {t('landing.trustBarHeadline')}
           </p>
           <Link
             href="/search/company"
             className="flex items-center gap-1 text-xs text-[#9AE1FF] hover:text-white transition-colors font-medium"
           >
-            Explore <FaArrowRight className="text-[9px]" />
+            {t('landing.trustBarExplore')} <FaArrowRight className="text-[9px]" />
           </Link>
         </div>
       </div>

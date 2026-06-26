@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useTranslation } from '@/lib/i18n'
 
 interface Role { code: string; label: string; slug: string; color: string; cardImage?: string | null }
 
@@ -23,6 +24,7 @@ const imgFor = (r: Role) =>
   r.cardImage && r.cardImage.trim() ? r.cardImage : `/images/landing/roles/${ROLE_IMG[r.code] || 'generic'}.jpg`
 
 export default function ProviderMarquee() {
+  const { t } = useTranslation()
   const [roles, setRoles] = useState<Role[]>([])
 
   useEffect(() => {
@@ -39,13 +41,13 @@ export default function ProviderMarquee() {
     <section className="bg-surface border-b border-line py-14 sm:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-9 text-center">
         <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
-          Browse by provider
+          {t('landing.marqueeEyebrow')}
         </span>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-fg">
-          Care for every need
+          {t('landing.marqueeHeading')}
         </h2>
         <p className="mt-2 text-sm sm:text-base text-soft max-w-xl mx-auto">
-          From doctors and nurses to pharmacies, labs and emergency response - explore every type of provider on MediWyz.
+          {t('landing.marqueeSubheading')}
         </p>
       </div>
 
@@ -73,7 +75,7 @@ export default function ProviderMarquee() {
               <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#001E40] via-[#001E40]/45 to-transparent" />
               <span aria-hidden className="absolute left-0 top-0 h-full w-1" style={{ background: r.color || '#0C6780' }} />
               <span className="relative text-base sm:text-lg font-bold drop-shadow-sm">{r.label}</span>
-              <span className="relative text-xs text-brand-sky font-semibold mt-0.5">Explore &rarr;</span>
+              <span className="relative text-xs text-brand-sky font-semibold mt-0.5">{t('landing.marqueeExplore')} &rarr;</span>
             </Link>
           ))}
         </div>

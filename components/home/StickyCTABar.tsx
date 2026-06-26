@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { FaSearch } from 'react-icons/fa'
+import { useTranslation } from '@/lib/i18n'
 
 export default function StickyCTABar() {
+  const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
 
@@ -35,7 +37,7 @@ export default function StickyCTABar() {
           <div className="max-w-5xl mx-auto flex items-center gap-3">
             <FaSearch className="text-[#9AE1FF] text-sm flex-shrink-0 hidden sm:block" />
             <p className="text-xs sm:text-sm text-white/80 flex-1 leading-tight">
-              <span className="font-semibold text-white">500+ verified providers</span> ready to help
+              <span className="font-semibold text-white">{t('landing.stickyProvidersBadge')}</span> {t('landing.stickyProvidersSub')}
             </p>
             <div className="flex gap-2 flex-shrink-0">
               <button
@@ -46,13 +48,13 @@ export default function StickyCTABar() {
                 }}
                 className="px-3 py-1.5 rounded-lg bg-white/10 border border-white/20 text-xs font-semibold text-white hover:bg-white/20 transition-colors"
               >
-                Find Provider
+                {t('landing.stickyFindProvider')}
               </button>
               <Link
                 href="/search/services"
                 className="px-3 py-1.5 rounded-lg bg-[#0C6780] text-xs font-semibold text-white hover:bg-[#0a5c73] transition-colors"
               >
-                Book Now
+                {t('landing.stickyBookNow')}
               </Link>
             </div>
           </div>

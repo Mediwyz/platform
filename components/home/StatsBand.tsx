@@ -6,12 +6,13 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from '@/lib/i18n'
 
 const STATS = [
-  { value: 500, suffix: '+', label: 'Verified providers' },
-  { value: 15, suffix: '+', label: 'Medical specialties' },
-  { value: 11, suffix: '+', label: 'Provider types' },
-  { value: 6, suffix: '', label: 'Countries served' },
+  { value: 500, suffix: '+', labelKey: 'landing.statsVerifiedProviders' },
+  { value: 15, suffix: '+', labelKey: 'landing.statsMedicalSpecialties' },
+  { value: 11, suffix: '+', labelKey: 'landing.statsProviderTypes' },
+  { value: 6, suffix: '', labelKey: 'landing.statsCountriesServed' },
 ]
 
 const SKY = '#9AE1FF'
@@ -58,6 +59,7 @@ function Stat({ value, suffix, label }: { value: number; suffix: string; label: 
 }
 
 export default function StatsBand() {
+  const { t } = useTranslation()
   return (
     <section
       className="relative overflow-hidden py-14 sm:py-20 border-b border-white/10"
@@ -71,15 +73,15 @@ export default function StatsBand() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-12">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-brand-sky mb-2">
-            Trusted across the region
+            {t('landing.statsTrustedRegion')}
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-            Real care, real impact
+            {t('landing.statsRealCare')}
           </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6">
           {STATS.map(s => (
-            <Stat key={s.label} {...s} />
+            <Stat key={s.labelKey} value={s.value} suffix={s.suffix} label={t(s.labelKey)} />
           ))}
         </div>
       </div>

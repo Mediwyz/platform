@@ -17,25 +17,26 @@ import {
   FaMapMarkedAlt, FaProjectDiagram, FaBell, FaArrowRight, FaUserMd, FaShieldAlt,
   FaLock, FaBolt, FaMobileAlt, FaUniversalAccess, FaLayerGroup,
 } from 'react-icons/fa'
+import { useTranslation } from '@/lib/i18n'
 
 const NAVY = '#001E40'
 const TEAL = '#0C6780'
 const SKY = '#9AE1FF'
 
 /** Engineering & design highlights - shows the craft behind the platform. */
-const CRAFT: { Icon: IconType; title: string; desc: string }[] = [
-  { Icon: FaLock,             title: 'End-to-end encryption',   desc: 'WebRTC media & messaging secured in transit.' },
-  { Icon: FaBolt,             title: 'Real-time everything',     desc: 'Live calls, bookings & alerts over Socket.IO.' },
-  { Icon: FaMobileAlt,        title: 'Web + native mobile',      desc: 'One codebase ships to web, Android & iOS.' },
-  { Icon: FaMapMarkedAlt,     title: 'Live geolocation',         desc: 'Google Maps surfaces the nearest care to you.' },
-  { Icon: FaUniversalAccess,  title: 'Accessible by design',     desc: 'Keyboard-navigable, high-contrast, WCAG-minded.' },
-  { Icon: FaLayerGroup,       title: 'Multi-role architecture',  desc: '17+ provider types, each a tailored dashboard.' },
+const CRAFT: { Icon: IconType; titleKey: string; descKey: string }[] = [
+  { Icon: FaLock,             titleKey: 'landing.craftEncryptionTitle',  descKey: 'landing.craftEncryptionDesc' },
+  { Icon: FaBolt,             titleKey: 'landing.craftRealtimeTitle',    descKey: 'landing.craftRealtimeDesc' },
+  { Icon: FaMobileAlt,        titleKey: 'landing.craftMobileTitle',      descKey: 'landing.craftMobileDesc' },
+  { Icon: FaMapMarkedAlt,     titleKey: 'landing.craftGeoTitle',         descKey: 'landing.craftGeoDesc' },
+  { Icon: FaUniversalAccess,  titleKey: 'landing.craftAccessibleTitle',  descKey: 'landing.craftAccessibleDesc' },
+  { Icon: FaLayerGroup,       titleKey: 'landing.craftMultiroleTitle',   descKey: 'landing.craftMultiroleDesc' },
 ]
 
 interface Feature {
   Icon: IconType
-  title: string
-  desc: string
+  titleKey: string
+  descKey: string
   href: string
   /** Background photo (under /public/images/landing/). */
   img: string
@@ -44,89 +45,32 @@ interface Feature {
 }
 
 const FEATURES: Feature[] = [
-  {
-    Icon: FaVideo,
-    title: 'Video & audio consultations',
-    desc: 'Meet any provider over clinic-grade encrypted WebRTC video or audio - from home, at your scheduled time.',
-    href: '/search/doctors',
-    img: 'video_consult.jpg',
-    span: 'lg:col-span-2 lg:row-span-2',
-  },
-  {
-    Icon: FaMapMarkedAlt,
-    title: 'Find care near you',
-    desc: 'A live Google map locates the nearest doctors, clinics, labs, pharmacies, organisations and insurers around you.',
-    href: '/search/organizations',
-    img: 'find_care_map.jpg',
-    span: 'lg:col-span-2',
-  },
-  {
-    Icon: FaShoppingBag,
-    title: 'Health Shop',
-    desc: 'Order medicines, vitamins, devices & personal care from verified pharmacies.',
-    href: '/search/health-shop',
-    img: 'pharmacy.jpg',
-  },
-  {
-    Icon: FaComments,
-    title: 'Secure chat',
-    desc: 'Message your providers directly with end-to-end private conversations.',
-    href: '/search/doctors',
-    img: 'secure_chat.jpg',
-  },
-  {
-    Icon: FaAmbulance,
-    title: 'Emergency response',
-    desc: 'Dispatch an ambulance and reach emergency responders the moment it matters.',
-    href: '/search/emergency',
-    img: 'ambulance.jpg',
-    span: 'lg:col-span-2',
-  },
-  {
-    Icon: FaNewspaper,
-    title: 'Community feed',
-    desc: 'Health tips, case studies and advice from real verified professionals - no login needed.',
-    href: '/community',
-    img: 'community.jpg',
-  },
-  {
-    Icon: FaProjectDiagram,
-    title: 'Provider workflows & services',
-    desc: 'Providers build custom workflows, manage their service catalogue, bookings and stock from one dashboard.',
-    href: '/signup?type=provider',
-    img: 'provider_work.jpg',
-    span: 'lg:col-span-2',
-  },
-  {
-    Icon: FaBell,
-    title: 'Status & notifications',
-    desc: 'Real-time booking status and instant notifications keep everyone in sync.',
-    href: '/signup',
-    img: 'notifications.jpg',
-  },
-  {
-    Icon: FaShieldAlt,
-    title: 'Insurance & organisations',
-    desc: 'Browse insurers, clinics, hospitals and labs across the region in one directory.',
-    href: '/search/insurance',
-    img: 'hospital.jpg',
-  },
+  { Icon: FaVideo,          titleKey: 'landing.featureVideoTitle',         descKey: 'landing.featureVideoDesc',         href: '/search/doctors',          img: 'video_consult.jpg', span: 'lg:col-span-2 lg:row-span-2' },
+  { Icon: FaMapMarkedAlt,   titleKey: 'landing.featureMapTitle',           descKey: 'landing.featureMapDesc',           href: '/search/organizations',    img: 'find_care_map.jpg', span: 'lg:col-span-2' },
+  { Icon: FaShoppingBag,    titleKey: 'landing.featureShopTitle',          descKey: 'landing.featureShopDesc',          href: '/search/health-shop',      img: 'pharmacy.jpg' },
+  { Icon: FaComments,       titleKey: 'landing.featureChatTitle',          descKey: 'landing.featureChatDesc',          href: '/search/doctors',          img: 'secure_chat.jpg' },
+  { Icon: FaAmbulance,      titleKey: 'landing.featureEmergencyTitle',     descKey: 'landing.featureEmergencyDesc',     href: '/search/emergency',        img: 'ambulance.jpg', span: 'lg:col-span-2' },
+  { Icon: FaNewspaper,      titleKey: 'landing.featureCommunityTitle',     descKey: 'landing.featureCommunityDesc',     href: '/community',               img: 'community.jpg' },
+  { Icon: FaProjectDiagram, titleKey: 'landing.featureWorkflowTitle',      descKey: 'landing.featureWorkflowDesc',      href: '/signup?type=provider',    img: 'provider_work.jpg', span: 'lg:col-span-2' },
+  { Icon: FaBell,           titleKey: 'landing.featureStatusTitle',        descKey: 'landing.featureStatusDesc',        href: '/signup',                  img: 'notifications.jpg' },
+  { Icon: FaShieldAlt,      titleKey: 'landing.featureInsuranceTitle',     descKey: 'landing.featureInsuranceDesc',     href: '/search/insurance',        img: 'hospital.jpg' },
 ]
 
 export default function FeatureShowcase() {
+  const { t } = useTranslation()
   return (
     <section className="bg-canvas border-b border-line py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
-            One app, everything health
+            {t('landing.featureEyebrow')}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
-            Everything you can do on MediWyz
+            {t('landing.featureHeading')}
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
-            From a video consultation to ordering medicine, finding the nearest clinic, or running your practice - it all lives in one platform.
+            {t('landing.featureSubheading')}
           </p>
         </div>
 
@@ -136,7 +80,7 @@ export default function FeatureShowcase() {
             const Icon = f.Icon
             return (
               <Link
-                key={f.title}
+                key={f.titleKey}
                 href={f.href}
                 className={`group relative overflow-hidden rounded-3xl min-h-[200px] flex flex-col justify-end p-6 text-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780] ${f.span ?? ''}`}
               >
@@ -153,10 +97,10 @@ export default function FeatureShowcase() {
                   <Icon className="text-xl text-white" />
                 </span>
                 <div className="relative">
-                  <h3 className="text-lg font-bold mb-1.5 drop-shadow-sm">{f.title}</h3>
-                  <p className="text-sm text-white/85 leading-relaxed line-clamp-3">{f.desc}</p>
+                  <h3 className="text-lg font-bold mb-1.5 drop-shadow-sm">{t(f.titleKey)}</h3>
+                  <p className="text-sm text-white/85 leading-relaxed line-clamp-3">{t(f.descKey)}</p>
                   <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-sky group-hover:gap-2.5 transition-all">
-                    Explore <FaArrowRight className="text-[10px]" />
+                    {t('landing.featureExplore')} <FaArrowRight className="text-[10px]" />
                   </span>
                 </div>
               </Link>
@@ -177,13 +121,13 @@ export default function FeatureShowcase() {
 
           <div className="relative text-center max-w-2xl mx-auto mb-9">
             <span className="inline-block text-sm font-semibold tracking-wider uppercase text-brand-sky mb-2">
-              Engineered &amp; designed in-house
+              {t('landing.craftEyebrow')}
             </span>
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              Built with the craft your health deserves
+              {t('landing.craftHeading')}
             </h3>
             <p className="mt-3 text-base sm:text-lg text-white/75">
-              A full-stack platform - secure real-time infrastructure wrapped in an accessible, carefully designed interface across web and mobile.
+              {t('landing.craftSubheading')}
             </p>
           </div>
 
@@ -191,14 +135,14 @@ export default function FeatureShowcase() {
             {CRAFT.map(c => {
               const Icon = c.Icon
               return (
-                <div key={c.title}
+                <div key={c.titleKey}
                      className="flex items-start gap-4 rounded-2xl bg-white/[0.07] border border-white/10 backdrop-blur-sm px-5 py-5 hover:bg-white/[0.12] transition-colors">
                   <span className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center">
                     <Icon className="text-xl text-brand-sky" />
                   </span>
                   <div>
-                    <h4 className="text-base font-bold leading-tight">{c.title}</h4>
-                    <p className="text-sm text-white/65 mt-1 leading-relaxed">{c.desc}</p>
+                    <h4 className="text-base font-bold leading-tight">{t(c.titleKey)}</h4>
+                    <p className="text-sm text-white/65 mt-1 leading-relaxed">{t(c.descKey)}</p>
                   </div>
                 </div>
               )
@@ -209,10 +153,10 @@ export default function FeatureShowcase() {
         {/* Dual audience CTA */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link href="/signup" className="inline-flex items-center gap-2 rounded-xl bg-[#0C6780] text-white px-6 py-3 text-sm font-semibold hover:bg-[#001E40] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0C6780]">
-            Get started as a patient <FaArrowRight className="text-xs" />
+            {t('landing.featureCtaPatient')} <FaArrowRight className="text-xs" />
           </Link>
           <Link href="/signup?type=provider" className="inline-flex items-center gap-2 rounded-xl bg-surface border border-[#0C6780]/30 text-[#0C6780] px-6 py-3 text-sm font-semibold hover:border-[#0C6780] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]">
-            <FaUserMd className="text-xs" /> Join as a provider
+            <FaUserMd className="text-xs" /> {t('landing.featureCtaProvider')}
           </Link>
         </div>
       </div>

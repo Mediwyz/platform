@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import type { IconType } from 'react-icons'
 import CategoryTile from './CategoryTile'
+import { useTranslation } from '@/lib/i18n'
 import {
   MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
   MdArrowBack, MdArrowForward, MdChevronRight, MdHealthAndSafety,
@@ -36,17 +37,17 @@ type EntityKey = 'services' | 'providers' | 'organisations' | 'shop'
 
 interface Entity {
   key: EntityKey
-  label: string
-  blurb: string
+  labelKey: string
+  blurbKey: string
   Icon: IconType
   img: string
 }
 
 const ENTITIES: Entity[] = [
-  { key: 'services',      label: 'Services',      blurb: 'Consultations & treatments',     Icon: MdMedicalServices, img: 'video_consult.jpg' },
-  { key: 'providers',     label: 'Providers',     blurb: 'Qualified professionals',         Icon: MdPeople,          img: 'doctor_team.jpg' },
-  { key: 'organisations', label: 'Organisations', blurb: 'Clinics, hospitals, labs & insurers', Icon: MdLocalHospital, img: 'hospital.jpg' },
-  { key: 'shop',          label: 'Health Shop',   blurb: 'Medicines & health products',     Icon: MdShoppingCart,    img: 'pharmacy.jpg' },
+  { key: 'services',      labelKey: 'landing.entityServices',      blurbKey: 'landing.entityServicesBlurb',      Icon: MdMedicalServices, img: 'video_consult.jpg' },
+  { key: 'providers',     labelKey: 'landing.entityProviders',     blurbKey: 'landing.entityProvidersBlurb',     Icon: MdPeople,          img: 'doctor_team.jpg' },
+  { key: 'organisations', labelKey: 'landing.entityOrganisations', blurbKey: 'landing.entityOrganisationsBlurb', Icon: MdLocalHospital,   img: 'hospital.jpg' },
+  { key: 'shop',          labelKey: 'landing.entityHealthShop',    blurbKey: 'landing.entityHealthShopBlurb',    Icon: MdShoppingCart,    img: 'pharmacy.jpg' },
 ]
 
 //  Provider role icon mapping (by role code) 
@@ -108,6 +109,7 @@ const roleImg = (r: RoleData) =>
 
 export default function CategoryNavigator() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   const [entity, setEntity] = useState<EntityKey | null>(null)
   const [roles, setRoles] = useState<RoleData[]>([])
@@ -180,13 +182,13 @@ export default function CategoryNavigator() {
         {/* Header */}
         <div className="text-center mb-10 sm:mb-14">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
-            Discover
+            {t('landing.discoverEyebrow')}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
-            What are you looking for?
+            {t('landing.discoverHeading')}
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
-            Pick a category to jump straight to a focused search - find the nearest provider on a live map at the final step.
+            {t('landing.discoverSubheading')}
           </p>
         </div>
 
@@ -197,7 +199,7 @@ export default function CategoryNavigator() {
               onClick={reset}
               className="font-medium text-[#0C6780] hover:text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-1"
             >
-              All categories
+              {t('landing.navAllCategories')}
             </button>
             <MdChevronRight className="text-faint" aria-hidden />
             <button
@@ -206,7 +208,7 @@ export default function CategoryNavigator() {
               className={`font-medium rounded px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40
                 ${role ? 'text-[#0C6780] hover:text-fg' : 'text-soft cursor-default'}`}
             >
-              {activeEntity?.label}
+              {activeEntity ? t(activeEntity.labelKey) : ''}
             </button>
             {role && (
               <>
@@ -244,8 +246,8 @@ export default function CategoryNavigator() {
                   <span className="relative w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-5 transition-transform group-hover:scale-105">
                     <Icon size={34} aria-hidden className="text-white" />
                   </span>
-                  <span className="relative text-xl sm:text-2xl font-bold drop-shadow-sm">{e.label}</span>
-                  <span className="relative text-base text-white/80 mt-1.5">{e.blurb}</span>
+                  <span className="relative text-xl sm:text-2xl font-bold drop-shadow-sm">{t(e.labelKey)}</span>
+                  <span className="relative text-base text-white/80 mt-1.5">{t(e.blurbKey)}</span>
                   <span className="relative mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-brand-sky group-hover:gap-2.5 transition-all">
                     Browse <MdArrowForward size={16} aria-hidden />
                   </span>
@@ -261,7 +263,7 @@ export default function CategoryNavigator() {
             roles={roles}
             loaded={rolesLoaded}
             onPick={entity === 'services' ? pickServiceRole : goProviderRole}
-            cta={entity === 'services' ? 'See categories' : 'Find providers'}
+            cta={entity === 'services' ? t('landing.navSeeCategories') : t('landing.navFindProviders')}
           />
         )}
 
@@ -335,7 +337,7 @@ export default function CategoryNavigator() {
             className="inline-flex items-center gap-2 text-base font-semibold text-[#0C6780] hover:text-fg
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C6780]/40 rounded px-2 py-1 cursor-pointer"
           >
-            Or browse the full catalogue <MdArrowForward size={16} aria-hidden />
+            {t('landing.navBrowseCatalogue')} <MdArrowForward size={16} aria-hidden />
           </button>
         </div>
       </div>
@@ -352,6 +354,7 @@ function RoleGrid({
   onPick: (r: RoleData) => void
   cta: string
 }) {
+  const { t } = useTranslation()
   if (!loaded) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -362,7 +365,7 @@ function RoleGrid({
     )
   }
   if (roles.length === 0) {
-    return <p className="text-sm text-faint py-6 text-center">No provider types available right now.</p>
+    return <p className="text-sm text-faint py-6 text-center">{t('landing.navNoProviderTypes')}</p>
   }
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">

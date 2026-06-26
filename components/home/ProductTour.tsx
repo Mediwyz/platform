@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { MdArrowForward } from 'react-icons/md'
+import { useTranslation } from '@/lib/i18n'
 
 /**
  * Product Tour  real screenshots of the live app, grouped by audience, so the
@@ -12,43 +13,44 @@ import { MdArrowForward } from 'react-icons/md'
 
 interface Shot {
   key: string
-  title: string
-  desc: string
+  titleKey: string
+  descKey: string
 }
 
-const TABS: { id: 'members' | 'providers'; label: string; shots: Shot[] }[] = [
+const TABS: { id: 'members' | 'providers'; labelKey: string; shots: Shot[] }[] = [
   {
     id: 'members',
-    label: 'For Members',
+    labelKey: 'landing.tourTabMembers',
     shots: [
-      { key: 'home',                 title: 'Discover care',         desc: 'Find providers, services, organisations and the Health Shop from one place.' },
-      { key: 'find-providers',       title: 'Find a provider',       desc: 'Search doctors, nurses and specialists  see who offers video, home or office visits.' },
-      { key: 'member-dashboard',     title: 'Your dashboard',        desc: 'Appointments, health score and quick actions at a glance.' },
-      { key: 'member-consultations', title: 'Consultations',         desc: 'Track every booking through its live workflow steps.' },
-      { key: 'member-billing',       title: 'Wallet & plans',        desc: 'Top up or reset credit, manage payment methods and choose a plan.' },
-      { key: 'member-health',        title: 'AI health assistant',   desc: 'Chat, track meals and vitals, and get personalised guidance.' },
-      { key: 'member-video',         title: 'Video consultations',   desc: 'Secure in-app video calls with your provider.' },
-      { key: 'health-shop',          title: 'Health Shop',           desc: 'Order medicines and health products from any provider.' },
+      { key: 'home',                 titleKey: 'landing.tourDiscoverTitle',       descKey: 'landing.tourDiscoverDesc' },
+      { key: 'find-providers',       titleKey: 'landing.tourFindTitle',           descKey: 'landing.tourFindDesc' },
+      { key: 'member-dashboard',     titleKey: 'landing.tourDashboardTitle',      descKey: 'landing.tourDashboardDesc' },
+      { key: 'member-consultations', titleKey: 'landing.tourConsultationsTitle',  descKey: 'landing.tourConsultationsDesc' },
+      { key: 'member-billing',       titleKey: 'landing.tourWalletTitle',         descKey: 'landing.tourWalletDesc' },
+      { key: 'member-health',        titleKey: 'landing.tourAiTitle',             descKey: 'landing.tourAiDesc' },
+      { key: 'member-video',         titleKey: 'landing.tourVideoTitle',          descKey: 'landing.tourVideoDesc' },
+      { key: 'health-shop',          titleKey: 'landing.tourShopTitle',           descKey: 'landing.tourShopDesc' },
     ],
   },
   {
     id: 'providers',
-    label: 'For Providers',
+    labelKey: 'landing.tourTabProviders',
     shots: [
-      { key: 'provider-dashboard',    title: 'Provider dashboard',   desc: 'Bookings, revenue and patients in a single view.' },
-      { key: 'provider-services',     title: 'My Services',          desc: 'Create a service and configure its appointment types with the guided wizard.' },
-      { key: 'provider-workflows',    title: 'Workflows',            desc: 'Design how each booking progresses  steps, actions and auto-notifications.' },
-      { key: 'provider-inventory',    title: 'Inventory',            desc: 'Sell products on the Health Shop, as yourself or under your pharmacy.' },
-      { key: 'provider-availability', title: 'Availability',         desc: 'Define exactly when patients can book you.' },
+      { key: 'provider-dashboard',    titleKey: 'landing.tourProviderDashTitle', descKey: 'landing.tourProviderDashDesc' },
+      { key: 'provider-services',     titleKey: 'landing.tourServicesTitle',     descKey: 'landing.tourServicesDesc' },
+      { key: 'provider-workflows',    titleKey: 'landing.tourWorkflowsTitle',    descKey: 'landing.tourWorkflowsDesc' },
+      { key: 'provider-inventory',    titleKey: 'landing.tourInventoryTitle',    descKey: 'landing.tourInventoryDesc' },
+      { key: 'provider-availability', titleKey: 'landing.tourAvailabilityTitle', descKey: 'landing.tourAvailabilityDesc' },
     ],
   },
 ]
 
 export default function ProductTour() {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<'members' | 'providers'>('members')
   const [index, setIndex] = useState(0)
 
-  const active = TABS.find(t => t.id === tab)!
+  const active = TABS.find(x => x.id === tab)!
   const shot = active.shots[index]
 
   return (
@@ -56,28 +58,28 @@ export default function ProductTour() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-[#0C6780] mb-2">
-            See it in action
+            {t('landing.tourEyebrow')}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-fg">
-            Every feature, one platform
+            {t('landing.tourHeading')}
           </h2>
           <p className="mt-3 text-base sm:text-lg text-soft max-w-2xl mx-auto">
-            A real look at MediWyz  from booking and video care to provider tools and workflows.
+            {t('landing.tourSubheading')}
           </p>
         </div>
 
         {/* Audience tabs */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex p-1 bg-subtle rounded-full">
-            {TABS.map(t => (
+            {TABS.map(tabItem => (
               <button
-                key={t.id}
-                onClick={() => { setTab(t.id); setIndex(0) }}
+                key={tabItem.id}
+                onClick={() => { setTab(tabItem.id); setIndex(0) }}
                 className={`px-5 sm:px-6 py-2 rounded-full text-sm font-semibold transition-colors ${
-                  tab === t.id ? 'bg-surface text-[#0C6780] shadow-sm' : 'text-soft hover:text-soft'
+                  tab === tabItem.id ? 'bg-surface text-[#0C6780] shadow-sm' : 'text-soft hover:text-soft'
                 }`}
               >
-                {t.label}
+                {t(tabItem.labelKey)}
               </button>
             ))}
           </div>
@@ -90,13 +92,13 @@ export default function ProductTour() {
               <span className="w-3 h-3 rounded-full bg-red-400" />
               <span className="w-3 h-3 rounded-full bg-amber-400" />
               <span className="w-3 h-3 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-faint truncate">mediwyz.com  {shot.title}</span>
+              <span className="ml-3 text-xs text-faint truncate">mediwyz.com  {t(shot.titleKey)}</span>
             </div>
             <div className="relative aspect-[1280/820] bg-subtle">
               <Image
                 key={shot.key}
                 src={`/showcase/${shot.key}.png`}
-                alt={shot.title}
+                alt={t(shot.titleKey)}
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-cover object-top"
@@ -118,10 +120,10 @@ export default function ProductTour() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`text-sm font-bold ${i === index ? 'text-[#0C6780]' : 'text-fg'}`}>{s.title}</span>
+                  <span className={`text-sm font-bold ${i === index ? 'text-[#0C6780]' : 'text-fg'}`}>{t(s.titleKey)}</span>
                   {i === index && <MdArrowForward className="text-[#0C6780] flex-shrink-0" aria-hidden />}
                 </div>
-                <p className="text-xs text-soft mt-0.5">{s.desc}</p>
+                <p className="text-xs text-soft mt-0.5">{t(s.descKey)}</p>
               </button>
             ))}
           </div>

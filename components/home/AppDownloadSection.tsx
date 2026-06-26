@@ -1,15 +1,17 @@
 'use client'
 
 import { FaGooglePlay, FaApple, FaCheckCircle, FaBell, FaSearch } from 'react-icons/fa'
+import { useTranslation } from '@/lib/i18n'
 
-const PERKS = [
-  'Book & manage appointments on the go',
-  'Secure video consultations from your phone',
-  'Prescriptions, records & reminders in one place',
-  'Instant notifications from your providers',
-]
+const PERK_KEYS = [
+  'landing.appPerkAppointments',
+  'landing.appPerkVideo',
+  'landing.appPerkPrescriptions',
+  'landing.appPerkNotifications',
+] as const
 
 export default function AppDownloadSection() {
+  const { t } = useTranslation()
   return (
     <section className="relative overflow-hidden py-16 sm:py-24"
       style={{ background: 'linear-gradient(135deg, #001E40 0%, #0C6780 130%)' }}>
@@ -25,20 +27,20 @@ export default function AppDownloadSection() {
         {/* Copy + badges */}
         <div>
           <span className="inline-block text-xs font-semibold tracking-wider uppercase text-brand-sky mb-3">
-            MediWyz Mobile
+            {t('landing.appEyebrow')}
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
-            Your health, in your pocket
+            {t('landing.appHeading')}
           </h2>
           <p className="text-sm sm:text-base text-faint/90 leading-relaxed max-w-lg mb-7">
-            Download the MediWyz app and carry your entire care network with you - book, consult and manage your health from anywhere in Mauritius and beyond.
+            {t('landing.appDescription')}
           </p>
 
           <ul className="space-y-2.5 mb-8">
-            {PERKS.map(p => (
-              <li key={p} className="flex items-start gap-2.5 text-sm text-gray-200">
+            {PERK_KEYS.map(k => (
+              <li key={k} className="flex items-start gap-2.5 text-sm text-gray-200">
                 <FaCheckCircle className="text-brand-sky mt-0.5 flex-shrink-0" />
-                <span>{p}</span>
+                <span>{t(k)}</span>
               </li>
             ))}
           </ul>
@@ -51,7 +53,7 @@ export default function AppDownloadSection() {
             >
               <FaGooglePlay className="text-xl" />
               <span className="flex flex-col leading-none">
-                <span className="text-[9px] uppercase tracking-wide text-soft">Get it on</span>
+                <span className="text-[9px] uppercase tracking-wide text-soft">{t('landing.appGetItOn')}</span>
                 <span className="text-sm font-bold">Google Play</span>
               </span>
             </a>
@@ -62,7 +64,7 @@ export default function AppDownloadSection() {
             >
               <FaApple className="text-xl" />
               <span className="flex flex-col leading-none">
-                <span className="text-[9px] uppercase tracking-wide text-white/60">Coming soon</span>
+                <span className="text-[9px] uppercase tracking-wide text-white/60">{t('landing.appComingSoon')}</span>
                 <span className="text-sm font-bold">App Store</span>
               </span>
             </a>
