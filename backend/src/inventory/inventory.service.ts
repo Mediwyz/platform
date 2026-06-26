@@ -120,8 +120,17 @@ export class InventoryService {
 
   async getEntityItems(entityId: string, userId: string) {
     await this.assertEntityFounder(entityId, userId);
+    // Show items attributed to this entity PLUS the founder's own items that
+    // aren't attributed to any org yet (e.g. created from the personal "My
+    // Inventory" page) — so a pharmacy owner sees everything they sell here.
     return this.prisma.providerInventoryItem.findMany({
-      where: { healthcareEntityId: entityId, isActive: true },
+      where: {
+        isActive: true,
+        OR: [
+          { healthcareEntityId: entityId },
+          { providerUserId: userId, healthcareEntityId: null },
+        ],
+      },
       orderBy: { name: 'asc' },
     });
   }

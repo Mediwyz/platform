@@ -24,7 +24,7 @@ export function getDynamicProviderSidebarItems(slug: string): SidebarItem[] {
     { id: 'billing', label: 'Billing', icon: FaMoneyBillWave, color: 'text-green-600', bgColor: 'bg-green-50', href: `${base}/billing` },
     { id: 'pre-auth', label: 'Pre-authorizations', icon: FaShieldAlt, color: 'text-blue-600', bgColor: 'bg-blue-50', href: `${base}/pre-auth` },
     { id: 'services', label: 'My Services', icon: FaCogs, color: 'text-purple-600', bgColor: 'bg-purple-50', href: `${base}/services` },
-    { id: 'inventory', label: 'My Inventory', icon: FaCubes, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/inventory` },
+    { id: 'inventory', label: 'Health Shop', icon: FaCubes, color: 'text-amber-600', bgColor: 'bg-amber-50', href: `${base}/inventory` },
     { id: 'workflows', label: 'Workflows', icon: FaProjectDiagram, color: 'text-indigo-600', bgColor: 'bg-indigo-50', href: `${base}/workflows` },
     { id: 'workflow-suggestions', label: 'My Suggestions', icon: FaPaperPlane, color: 'text-purple-600', bgColor: 'bg-purple-50', href: `${base}/workflows/my-suggestions` },
     { id: 'availability', label: 'My Availability', icon: FaCalendarAlt, color: 'text-teal-600', bgColor: 'bg-teal-50', href: `${base}/availability` },

@@ -7,6 +7,7 @@ import {
   FaBuilding, FaUsers, FaEnvelope, FaCog, FaCheck, FaTimes,
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
   FaBoxOpen, FaPlus, FaEdit, FaExclamationTriangle, FaPrescriptionBottleAlt,
+  FaTachometerAlt,
 } from 'react-icons/fa'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
@@ -27,7 +28,7 @@ interface Invitation {
   id: string; email: string; suggestedRole: string | null; token: string; createdAt: string
 }
 
-type TabId = 'overview' | 'members' | 'invite' | 'inventory' | 'settings'
+type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'inventory' | 'settings'
 
 // Pharmacies / health-shops get an Inventory tab; other org types don't.
 const isInventoryOrg = (type: string) => /pharmac|health[\s_-]?shop|drugstore/i.test(type || '')
@@ -755,9 +756,52 @@ function InventoryTab({ id }: { id: string }) {
   )
 }
 
+// ─── Tab: Dashboard (at-a-glance stats for the entity) ───────────────────────
+
+function DashboardTab({ entity, id }: { entity: EntityDetail; id: string }) {
+  const [members, setMembers] = useState<number | null>(null)
+  const [items, setItems] = useState<number | null>(null)
+  const pharmacy = isInventoryOrg(entity.type)
+
+  useEffect(() => {
+    fetch(`/api/organizations/${id}/members`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(j => { if (j.success) setMembers((j.data ?? []).filter((m: { status: string }) => m.status === 'active').length) })
+      .catch(() => setMembers(0))
+    if (pharmacy) {
+      fetch(`/api/organizations/${id}/inventory`, { credentials: 'include' })
+        .then(r => r.json())
+        .then(j => { if (j.success) setItems((j.data ?? []).length) })
+        .catch(() => setItems(0))
+    }
+  }, [id, pharmacy])
+
+  const Stat = ({ label, value, icon }: { label: string; value: React.ReactNode; icon: React.ReactNode }) => (
+    <div className="rounded-2xl border border-line bg-canvas p-5">
+      <div className="flex items-center gap-2 text-soft text-xs font-semibold uppercase tracking-wide">{icon} {label}</div>
+      <p className="mt-2 text-3xl font-bold text-fg">{value}</p>
+    </div>
+  )
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h3 className="font-semibold text-fg">{entity.name}</h3>
+        <p className="text-sm text-soft capitalize">{entity.type}{entity.city ? ` · ${entity.city}` : ''}</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Stat label="Active members" value={members ?? '—'} icon={<FaUsers className="text-[#0C6780]" />} />
+        {pharmacy && <Stat label="Products" value={items ?? '—'} icon={<FaBoxOpen className="text-[#0C6780]" />} />}
+        <Stat label="Status" value={<span className="text-base">{entity.isVerified ? 'Verified' : 'Active'}</span>} icon={<FaBuilding className="text-[#0C6780]" />} />
+      </div>
+    </div>
+  )
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 const BASE_TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
   { id: 'members', label: 'Members', icon: <FaUsers /> },
   { id: 'invite', label: 'Invite', icon: <FaEnvelope /> },
@@ -771,7 +815,7 @@ export default function ManageOrganizationPage() {
   const [entity, setEntity] = useState<EntityDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [forbidden, setForbidden] = useState(false)
-  const [activeTab, setActiveTab] = useState<TabId>('overview')
+  const [activeTab, setActiveTab] = useState<TabId>('dashboard')
 
   useEffect(() => {
     async function load() {
@@ -826,9 +870,9 @@ export default function ManageOrganizationPage() {
   // Pharmacies/health-shops get an Inventory tab (inserted before Settings).
   const tabs = isInventoryOrg(entity.type)
     ? [
-        ...BASE_TABS.slice(0, 3),
-        { id: 'inventory' as TabId, label: 'Inventory', icon: <FaBoxOpen /> },
-        ...BASE_TABS.slice(3),
+        ...BASE_TABS.slice(0, 4),
+        { id: 'inventory' as TabId, label: 'Health Shop', icon: <FaBoxOpen /> },
+        ...BASE_TABS.slice(4),
       ]
     : BASE_TABS
 
@@ -885,6 +929,7 @@ export default function ManageOrganizationPage() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6">
         <div className="bg-surface rounded-2xl border border-line p-5 sm:p-7">
+          {activeTab === 'dashboard' && <DashboardTab entity={entity} id={id} />}
           {activeTab === 'overview' && <OverviewTab entity={entity} id={id} />}
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}
