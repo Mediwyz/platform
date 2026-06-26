@@ -25,7 +25,15 @@ async function shoot(page, key, urlPath) {
   try {
     await page.goto(BASE + urlPath, { waitUntil: 'domcontentloaded', timeout: 60_000 })
     // Let client data + hydration settle so cards/charts are populated.
-    await page.waitForTimeout(3000)
+    await page.waitForTimeout(3500)
+    // Don't capture an error/not-found page (better to keep the old shot).
+    const bad =
+      (await page.getByText(/Page Not Found|Something went wrong|Access Denied/i).count().catch(() => 0)) > 0 ||
+      page.url().includes('/login')
+    if (bad) {
+      console.warn('  ⚠ skipped', key, '— page was 404/login/error at', urlPath)
+      return
+    }
     await page.screenshot({ path: path.join(OUT, `${key}.png`) })
     console.log('  ✓ captured', key)
   } catch (e) {
@@ -34,16 +42,30 @@ async function shoot(page, key, urlPath) {
 }
 
 async function login(page, creds) {
-  await page.goto(BASE + '/login', { waitUntil: 'domcontentloaded', timeout: 60_000 })
-  await page.fill('input[type="email"]', creds.email)
-  await page.fill('input[type="password"]', creds.password)
-  await page.click('button[type="submit"]')
-  await page.waitForURL((u) => !u.pathname.endsWith('/login'), { timeout: 60_000 }).catch(() => {})
-  await page.waitForTimeout(2500)
+  // Authenticate via the API directly. The login form does a native GET submit
+  // when clicked before React hydrates (race), which silently fails. The API
+  // call sets the session cookies on the shared context, so subsequent page
+  // navigations are authenticated. Verify the token cookie landed before going on.
+  const resp = await page.context().request.post(BASE + '/api/auth/login', {
+    headers: { 'Content-Type': 'application/json' },
+    data: { email: creds.email, password: creds.password },
+  }).catch(() => null)
+  const cookies = await page.context().cookies()
+  const ok = !!resp && resp.ok() && cookies.some((c) => c.name === 'mediwyz_token')
+  await page.waitForTimeout(500)
+  console.log(ok ? `  → logged in as ${creds.email}` : `  ⚠ login failed for ${creds.email} (status ${resp ? resp.status() : 'none'})`)
 }
 
 const browser = await chromium.launch()
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 820 }, deviceScaleFactor: 2 })
+// Capture on a MOBILE viewport — the landing gallery shows the app in a phone
+// frame, which is more attractive than desktop screenshots.
+const ctx = await browser.newContext({
+  viewport: { width: 390, height: 844 },
+  deviceScaleFactor: 3,
+  isMobile: true,
+  hasTouch: true,
+  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+})
 const page = await ctx.newPage()
 
 console.log('Capturing public pages…')
@@ -52,12 +74,13 @@ await shoot(page, 'find-providers', '/search/doctors')
 await shoot(page, 'health-shop', '/search/health-shop')
 
 console.log('Capturing member journey…')
+// Members log in to /provider/patients/* (see auth.service redirectPath).
 await login(page, MEMBER)
-await shoot(page, 'member-dashboard', '/patient')
-await shoot(page, 'member-consultations', '/patient/consultations')
-await shoot(page, 'member-billing', '/patient/billing')
-await shoot(page, 'member-health', '/patient/ai-assistant')
-await shoot(page, 'member-video', '/patient/video')
+await shoot(page, 'member-dashboard', '/provider/patients/feed')
+await shoot(page, 'member-consultations', '/provider/patients/my-consultations')
+await shoot(page, 'member-billing', '/provider/patients/billing')
+await shoot(page, 'member-health', '/provider/patients/ai-assistant')
+await shoot(page, 'member-video', '/provider/patients/video')
 
 console.log('Capturing provider tools…')
 await ctx.clearCookies()

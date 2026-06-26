@@ -85,25 +85,23 @@ export default function ProductTour() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[1.6fr_1fr] gap-6 lg:gap-8 items-start">
-          {/* Framed screenshot */}
-          <div className="rounded-2xl border border-line shadow-xl overflow-hidden bg-surface">
-            <div className="flex items-center gap-1.5 px-4 py-2.5 bg-subtle border-b border-line">
-              <span className="w-3 h-3 rounded-full bg-red-400" />
-              <span className="w-3 h-3 rounded-full bg-amber-400" />
-              <span className="w-3 h-3 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-faint truncate">mediwyz.com  {t(shot.titleKey)}</span>
-            </div>
-            <div className="relative aspect-[1280/820] bg-subtle">
-              <Image
-                key={shot.key}
-                src={`/showcase/${shot.key}.png`}
-                alt={t(shot.titleKey)}
-                fill
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover object-top"
-                priority={index === 0}
-              />
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Phone-framed screenshot — mobile captures shown in a device mockup */}
+          <div className="flex justify-center">
+            <div className="relative w-full max-w-[290px] rounded-[2.6rem] border-[10px] border-[#001E40] bg-[#001E40] shadow-2xl">
+              {/* notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-[#001E40] rounded-b-2xl z-10" />
+              <div className="relative aspect-[390/844] overflow-hidden rounded-[1.9rem] bg-subtle">
+                <Image
+                  key={shot.key}
+                  src={`/showcase/${shot.key}.png`}
+                  alt={t(shot.titleKey)}
+                  fill
+                  sizes="(max-width: 1024px) 80vw, 290px"
+                  className="object-cover object-top"
+                  priority={index === 0}
+                />
+              </div>
             </div>
           </div>
 
