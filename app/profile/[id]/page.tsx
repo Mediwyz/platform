@@ -5,10 +5,12 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import {
-  FaInfoCircle, FaNewspaper, FaStar, FaHeartbeat, FaCog, FaLock,
-  FaConciergeBell, FaClock, FaArrowRight,
+  FaInfoCircle, FaNewspaper, FaStar, FaHeartbeat, FaPen, FaLock,
+  FaConciergeBell, FaClock, FaArrowRight, FaBuilding, FaShieldAlt,
+  FaPills, FaHospital, FaFlask, FaClinicMedical, FaCog,
 } from 'react-icons/fa'
 import { useUser } from '@/hooks/useUser'
+import { useMyWorkspaces, type Workspace } from '@/hooks/useMyWorkspaces'
 import ProfileHero from '@/components/profile/ProfileHero'
 
 /**
@@ -96,19 +98,21 @@ export default function UnifiedProfilePage() {
   }, [fetchProfile])
 
   const tabs = useMemo(() => {
+    // Self sees a clean View + Edit pair for profile info; visitors see the
+    // public read-only "Profile" plus any provider surfaces.
     const publicTabs: { id: TabId; label: string; icon: React.ElementType; private?: boolean }[] = [
-      { id: 'about', label: 'About', icon: FaInfoCircle },
-      { id: 'posts', label: 'Posts', icon: FaNewspaper },
+      { id: 'about', label: 'Profile', icon: FaInfoCircle },
     ]
+    if (isSelf) {
+      publicTabs.push({ id: 'settings', label: 'Edit', icon: FaPen, private: true })
+    }
+    publicTabs.push({ id: 'posts', label: 'Posts', icon: FaNewspaper })
     if (profile?.isProvider) {
       publicTabs.push({ id: 'services', label: 'Services', icon: FaConciergeBell })
       publicTabs.push({ id: 'reviews', label: 'Reviews', icon: FaStar })
     }
     if (isSelf) {
-      publicTabs.push(
-        { id: 'health', label: 'Health Goals', icon: FaHeartbeat, private: true },
-        { id: 'settings', label: 'Settings', icon: FaCog, private: true },
-      )
+      publicTabs.push({ id: 'health', label: 'Health Goals', icon: FaHeartbeat, private: true })
     }
     return publicTabs
   }, [isSelf, profile?.isProvider])
@@ -184,7 +188,7 @@ export default function UnifiedProfilePage() {
             </PrivateSection>
           )}
           {activeTab === 'settings' && isSelf && (
-            <PrivateSection title="Account settings">
+            <PrivateSection title="Edit your profile">
               <UserProfile userId={profile.id} userType={profile.userType} settingsPath={`/profile/${profile.id}`} />
             </PrivateSection>
           )}
@@ -268,6 +272,8 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
         )}
       </Section>
 
+      {isSelf && <WorkspacesSection />}
+
       {profile.isProvider && (
         <Section title="Availability">
           <AvailabilityPreview
@@ -296,6 +302,67 @@ function AboutTab({ profile, isSelf, onSaved }: { profile: ProfileData; isSelf: 
         )}
       </Section>
     </div>
+  )
+}
+
+/**
+ * Workspaces the logged-in user owns or works at, shown on their own profile.
+ * Founders get a clickable "Manage" link; members see a non-clickable "Member"
+ * badge — they can see the workspace but can't manage it.
+ */
+function WorkspacesSection() {
+  const { workspaces, loading } = useMyWorkspaces()
+
+  const iconFor = (ws: Workspace) =>
+    ws.kind === 'insurance' ? FaShieldAlt
+      : ws.kind === 'company' ? FaBuilding
+        : /pharmac|health[\s_-]?shop|drugstore/i.test(ws.type || '') ? FaPills
+          : /hospital/i.test(ws.type || '') ? FaHospital
+            : /lab/i.test(ws.type || '') ? FaFlask
+              : FaClinicMedical
+
+  if (loading) return null
+  if (workspaces.length === 0) return null
+
+  return (
+    <Section title="My organisations">
+      <ul className="space-y-2">
+        {workspaces.map((ws) => {
+          const Icon = iconFor(ws)
+          return (
+            <li
+              key={ws.id}
+              className="flex items-center gap-3 p-3 rounded-xl border border-line hover:bg-subtle transition-colors"
+            >
+              <span className="flex-shrink-0 w-9 h-9 rounded-lg bg-[#0C6780]/10 flex items-center justify-center text-[#0C6780] dark:text-accent">
+                <Icon className="text-sm" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-fg truncate">{ws.name}</div>
+                <div className="text-[11px] text-faint capitalize">
+                  {(ws.type || ws.kind).replace(/_/g, ' ')} · {ws.isFounder ? 'Founder' : 'Member'}
+                </div>
+              </div>
+              {ws.isFounder ? (
+                <Link
+                  href={ws.manageHref}
+                  className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C6780] dark:text-accent hover:underline"
+                >
+                  <FaCog className="text-[11px]" /> Manage
+                </Link>
+              ) : (
+                <span
+                  className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-faint cursor-not-allowed"
+                  title="Only the founder can manage this organisation"
+                >
+                  <FaCog className="text-[11px]" /> Manage
+                </span>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </Section>
   )
 }
 

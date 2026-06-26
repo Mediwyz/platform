@@ -301,12 +301,21 @@ export default function MyOrganisationsOverview() {
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {o.manageHref && (
-                          <Link
-                            href={o.manageHref}
-                            className="inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
-                          >
-                            <FaCog size={11} /> Manage
-                          </Link>
+                          o.isOwner ? (
+                            <Link
+                              href={o.manageHref}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium text-soft hover:text-[#0C6780] transition"
+                            >
+                              <FaCog size={11} /> Manage
+                            </Link>
+                          ) : (
+                            <span
+                              title="Only the founder can manage this organisation"
+                              className="inline-flex items-center gap-1.5 text-xs font-medium text-faint cursor-not-allowed"
+                            >
+                              <FaCog size={11} /> Manage
+                            </span>
+                          )
                         )}
                         {o.isOwner && (
                           <button

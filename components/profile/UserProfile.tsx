@@ -23,15 +23,9 @@ import {
  FaTrash,
  FaExclamationTriangle,
  FaSpinner,
- FaStar,
- FaPenFancy,
  FaCamera,
 } from 'react-icons/fa'
 import dynamic from 'next/dynamic'
-
-const ProviderReviews = dynamic(() => import('@/components/shared/ProviderReviews'), { ssr: false })
-const PostFeed = dynamic(() => import('@/components/posts/PostFeed'), { ssr: false })
-const CreatePostForm = dynamic(() => import('@/components/posts/CreatePostForm'), { ssr: false })
 
 const PdfViewer = dynamic(() => import('@/components/shared/PdfViewer'), {
  ssr: false,
@@ -166,17 +160,13 @@ interface UserData {
 
 /* ─── Tab config ─────────────────────────────────────────────────────────── */
 
-type TabId = 'overview' | 'documents' | 'info' | 'reviews' | 'posts'
+type TabId = 'overview' | 'documents' | 'info'
 
 interface TabConfig {
  id: TabId
  label: string
  icon: React.ComponentType<{ className?: string }>
 }
-
-// Role types that do NOT act as providers (no reviews, no posts feed authoring).
-// Everyone else is treated as a provider - aligned with dynamic-roles principle.
-const NON_PROVIDER_TYPES = new Set(['MEMBER', 'REGIONAL_ADMIN', 'CORPORATE_ADMIN', 'INSURANCE_REP', 'REFERRAL_PARTNER'])
 
 function getTabsForUserType(userType: string): TabConfig[] {
  const tabs: TabConfig[] = [
@@ -190,11 +180,10 @@ function getTabsForUserType(userType: string): TabConfig[] {
  tabs.push({ id: 'info', label: 'Professional Info', icon: FaBriefcaseMedical })
  }
 
- // All provider roles get reviews + posts - no role-specific gating.
- if (!NON_PROVIDER_TYPES.has(userType)) {
- tabs.push({ id: 'reviews', label: 'Reviews', icon: FaStar })
- tabs.push({ id: 'posts', label: 'Posts', icon: FaPenFancy })
- }
+ // NOTE: Reviews + Posts are intentionally NOT included here. This component
+ // renders inside the profile page's "Edit" tab, which already exposes Posts
+ // and Reviews as their own top-level tabs — duplicating them here produced a
+ // confusing second post feed and a second reviews list. Editing surface only.
 
  return tabs
 }
@@ -296,7 +285,7 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  const { updateUser } = useUser()
  const searchParams = useSearchParams()
  const initialTab = (searchParams?.get('tab') as TabId) || 'overview'
- const validTabs: TabId[] = ['overview', 'documents', 'info', 'reviews', 'posts']
+ const validTabs: TabId[] = ['overview', 'documents', 'info']
  const [userData, setUserData] = useState<UserData | null>(null)
  const [loading, setLoading] = useState(true)
  const [activeTab, setActiveTab] = useState<TabId>(
@@ -1488,19 +1477,6 @@ export default function UserProfile({ userId, userType }: UserProfileProps) {
  {activeTab === 'overview' && renderOverview()}
  {activeTab === 'documents' && renderDocuments()}
  {activeTab === 'info' && renderInfo()}
- {activeTab === 'reviews' && !NON_PROVIDER_TYPES.has(userType) && (
- <ProviderReviews
- providerUserId={userId}
- providerLabel={USER_TYPE_LABELS[userType] || userType}
- isOwner
- />
- )}
- {activeTab === 'posts' && !NON_PROVIDER_TYPES.has(userType) && (
- <div className="space-y-6">
- <CreatePostForm />
- <PostFeed currentUserId={userId} currentUserType={userType} />
- </div>
- )}
  </div>
  </div>
 
