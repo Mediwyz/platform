@@ -32,3 +32,9 @@ INSERT INTO "OrganisationCategory" ("id","key","label","blurb","icon","displayOr
   (gen_random_uuid(),'self_employed',   'Self-employed',   'Solo practice / freelancer',       'FaUserMd',                90),
   (gen_random_uuid(),'other',           'Other',           'Company not related to healthcare','FaBuilding',             100)
 ON CONFLICT ("key") DO NOTHING;
+
+-- Emergency / ambulance services. Key 'ambulance' matches the EMERGENCY_WORKER
+-- role and triggers the Dispatch tab on the org manage page. Idempotent.
+INSERT INTO "OrganisationCategory" ("id","key","label","blurb","icon","displayOrder") VALUES
+  (gen_random_uuid(),'ambulance',       'Emergency / Ambulance','Ambulance & emergency response services','FaAmbulance',  35)
+ON CONFLICT ("key") DO NOTHING;

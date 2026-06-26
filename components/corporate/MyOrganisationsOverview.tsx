@@ -16,7 +16,7 @@ import Link from 'next/link'
 import {
   FaHospital, FaBriefcaseMedical, FaFlask, FaPills, FaUserMd,
   FaPlus, FaUserPlus, FaCrown, FaSpinner, FaTimes, FaCog,
-  FaBuilding, FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa,
+  FaBuilding, FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa, FaAmbulance,
 } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
 
@@ -37,7 +37,7 @@ interface GridItem {
 // Map stored FA icon names -> components (for admin-managed categories).
 const ICON_MAP: Record<string, IconType> = {
   FaHospital, FaBriefcaseMedical, FaFlask, FaPills, FaUserMd, FaBuilding,
-  FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa,
+  FaClinicMedical, FaPrescriptionBottleAlt, FaShieldAlt, FaTooth, FaEye, FaSpa, FaAmbulance,
 }
 
 interface Org {
@@ -67,6 +67,7 @@ const FALLBACK_CATEGORIES: Category[] = [
   { type: 'hospital',      label: 'Hospitals',      blurb: 'Multi-department hospitals',           Icon: FaHospital },
   { type: 'laboratory',    label: 'Labs',           blurb: 'Diagnostic & pathology labs',          Icon: FaFlask },
   { type: 'pharmacy',      label: 'Pharmacies',     blurb: 'Dispensaries & pharmacy chains',       Icon: FaPills },
+  { type: 'ambulance',     label: 'Emergency / Ambulance', blurb: 'Ambulance & emergency response services', Icon: FaAmbulance },
   { type: 'self_employed', label: 'Self-employed',  blurb: 'Your solo practice / workplace',       Icon: FaUserMd },
 ]
 
