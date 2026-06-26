@@ -440,6 +440,101 @@ export class OrganizationsService {
     }));
   }
 
+  // ─── Emergency dispatch board (founder only) ──────────────────────────────
+  // Live picture of an ambulance/emergency org: which responders are free,
+  // dispatched or en route — derived from active EmergencyBookings (no new
+  // model needed). Responder status comes from their current booking, if any.
+
+  async getDispatch(id: string, founderUserId?: string) {
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id },
+      select: { id: true, name: true, type: true, founderUserId: true },
+    });
+    if (!entity) throw new NotFoundException('Healthcare entity not found');
+    if (!founderUserId || founderUserId !== entity.founderUserId) {
+      throw new ForbiddenException('Only the founder can view the dispatch board');
+    }
+
+    const workplaces = await (this.prisma.providerWorkplace as any).findMany({
+      where: { healthcareEntityId: id, isActive: true, status: 'active' },
+      include: {
+        provider: { select: { id: true, firstName: true, lastName: true, userType: true, profileImage: true, email: true } },
+      },
+      orderBy: [{ isPrimary: 'desc' }, { createdAt: 'asc' }],
+    });
+
+    const userIds: string[] = workplaces.map((w: any) => w.provider.id);
+    const profiles = userIds.length
+      ? await (this.prisma.emergencyWorkerProfile as any).findMany({
+          where: { userId: { in: userIds } },
+          select: { id: true, userId: true, vehicleType: true, emtLevel: true },
+        })
+      : [];
+    const profByUser = new Map<string, any>(profiles.map((p: any) => [p.userId, p]));
+    const profileIds: string[] = profiles.map((p: any) => p.id);
+
+    const ACTIVE = ['pending', 'dispatched', 'en_route'];
+    const bookings = profileIds.length
+      ? await (this.prisma.emergencyBooking as any).findMany({
+          where: { responderId: { in: profileIds }, status: { in: ACTIVE } },
+          select: { id: true, responderId: true, emergencyType: true, location: true, priority: true, status: true, createdAt: true },
+          orderBy: { createdAt: 'desc' },
+        })
+      : [];
+    // Each responder's current (most recent active) booking.
+    const bookingByResponder = new Map<string, any>();
+    for (const b of bookings) if (!bookingByResponder.has(b.responderId)) bookingByResponder.set(b.responderId, b);
+
+    const responders = workplaces.map((w: any) => {
+      const prof = profByUser.get(w.provider.id);
+      const active = prof ? bookingByResponder.get(prof.id) : undefined;
+      const status = active
+        ? (active.status === 'en_route' ? 'en_route' : 'dispatched')
+        : (prof ? 'available' : 'member');
+      return {
+        userId: w.provider.id,
+        name: `${w.provider.firstName} ${w.provider.lastName}`.trim(),
+        email: w.provider.email,
+        profileImage: w.provider.profileImage,
+        isResponder: !!prof,
+        vehicleType: prof?.vehicleType ?? null,
+        emtLevel: prof?.emtLevel ?? null,
+        status,
+        activeRequest: active
+          ? { id: active.id, emergencyType: active.emergencyType, location: active.location, priority: active.priority, status: active.status }
+          : null,
+      };
+    });
+
+    const nameByProfile = new Map<string, string>();
+    for (const w of workplaces) {
+      const prof = profByUser.get(w.provider.id);
+      if (prof) nameByProfile.set(prof.id, `${w.provider.firstName} ${w.provider.lastName}`.trim());
+    }
+    const requests = bookings.map((b: any) => ({
+      id: b.id,
+      emergencyType: b.emergencyType,
+      location: b.location,
+      priority: b.priority,
+      status: b.status,
+      responderName: nameByProfile.get(b.responderId) ?? null,
+      createdAt: b.createdAt,
+    }));
+
+    return {
+      entity: { id: entity.id, name: entity.name, type: entity.type },
+      summary: {
+        total: responders.filter((r: any) => r.isResponder).length,
+        available: responders.filter((r: any) => r.status === 'available').length,
+        dispatched: responders.filter((r: any) => r.status === 'dispatched').length,
+        enRoute: responders.filter((r: any) => r.status === 'en_route').length,
+        activeRequests: requests.length,
+      },
+      responders,
+      requests,
+    };
+  }
+
   // ─── Invite a member (founder only) ──────────────────────────────────────
 
   async inviteMember(

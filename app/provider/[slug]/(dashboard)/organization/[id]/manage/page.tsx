@@ -7,7 +7,7 @@ import {
   FaBuilding, FaUsers, FaEnvelope, FaCog, FaCheck, FaTimes,
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
   FaBoxOpen, FaPlus, FaEdit, FaExclamationTriangle, FaPrescriptionBottleAlt,
-  FaTachometerAlt,
+  FaTachometerAlt, FaAmbulance, FaRoute, FaMapMarkerAlt, FaCircle,
 } from 'react-icons/fa'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
@@ -28,10 +28,13 @@ interface Invitation {
   id: string; email: string; suggestedRole: string | null; token: string; createdAt: string
 }
 
-type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'inventory' | 'settings'
+type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'inventory' | 'dispatch' | 'settings'
 
 // Pharmacies / health-shops get an Inventory tab; other org types don't.
 const isInventoryOrg = (type: string) => /pharmac|health[\s_-]?shop|drugstore/i.test(type || '')
+
+// Ambulance / emergency orgs get a live Dispatch board instead.
+const isEmergencyOrg = (type: string) => /ambulance|emergency|paramedic|ems|dispatch|rescue/i.test(type || '')
 
 const SHOP_CATEGORIES = [
   { key: 'medicines', label: 'Medicines' }, { key: 'supplements', label: 'Supplements' },
@@ -804,6 +807,128 @@ function DashboardTab({ entity, id }: { entity: EntityDetail; id: string }) {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
+interface DispatchResponder {
+  userId: string; name: string; email: string; profileImage: string | null
+  isResponder: boolean; vehicleType: string | null; emtLevel: string | null
+  status: 'available' | 'dispatched' | 'en_route' | 'member'
+  activeRequest: { id: string; emergencyType: string; location: string; priority: string; status: string } | null
+}
+interface DispatchData {
+  summary: { total: number; available: number; dispatched: number; enRoute: number; activeRequests: number }
+  responders: DispatchResponder[]
+  requests: { id: string; emergencyType: string; location: string; priority: string; status: string; responderName: string | null; createdAt: string }[]
+}
+
+const DISPATCH_STATUS: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
+  available: { label: 'Available', cls: 'bg-green-100 text-green-700', icon: <FaCircle className="text-[8px]" /> },
+  dispatched: { label: 'Dispatched', cls: 'bg-amber-100 text-amber-700', icon: <FaMapMarkerAlt className="text-[10px]" /> },
+  en_route: { label: 'En route', cls: 'bg-blue-100 text-blue-700', icon: <FaRoute className="text-[10px]" /> },
+  member: { label: 'Staff', cls: 'bg-subtle text-soft', icon: <FaUsers className="text-[10px]" /> },
+}
+const DISPATCH_PRIORITY: Record<string, string> = {
+  low: 'bg-subtle text-soft', medium: 'bg-amber-100 text-amber-700',
+  high: 'bg-orange-100 text-orange-700', critical: 'bg-red-100 text-red-700',
+}
+
+function DispatchTab({ id }: { id: string }) {
+  const [data, setData] = useState<DispatchData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const refresh = useCallback(() => {
+    setLoading(true)
+    fetch(`/api/organizations/${id}/dispatch`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(j => { if (j.success) setData(j.data) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [id])
+  useEffect(() => { refresh() }, [refresh])
+
+  if (loading && !data) return <div className="py-10 flex justify-center"><FaSpinner className="text-[#0C6780] text-2xl animate-spin" /></div>
+  if (!data) return <p className="text-sm text-soft py-6">No dispatch data available yet.</p>
+
+  const Tile = ({ label, value, tone }: { label: string; value: number; tone: string }) => (
+    <div className="rounded-2xl border border-line bg-canvas p-4">
+      <div className="text-xs font-semibold uppercase tracking-wide text-soft">{label}</div>
+      <p className={`mt-1 text-2xl font-bold ${tone}`}>{value}</p>
+    </div>
+  )
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h3 className="font-semibold text-fg flex items-center gap-2"><FaAmbulance className="text-[#0C6780]" /> Dispatch board</h3>
+          <p className="text-sm text-soft">Who&apos;s available, dispatched or en route — live from active emergency requests.</p>
+        </div>
+        <button onClick={refresh} className="px-3 py-1.5 text-xs font-medium bg-subtle hover:bg-line rounded-lg">Refresh</button>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <Tile label="Responders" value={data.summary.total} tone="text-fg" />
+        <Tile label="Available" value={data.summary.available} tone="text-green-700" />
+        <Tile label="En route" value={data.summary.enRoute} tone="text-blue-700" />
+        <Tile label="Active calls" value={data.summary.activeRequests} tone="text-red-700" />
+      </div>
+
+      {/* Responders */}
+      <div className="rounded-2xl border border-line bg-canvas p-4">
+        <h4 className="font-semibold text-fg text-sm mb-3 flex items-center gap-2"><FaUsers className="text-[#0C6780]" /> Responders</h4>
+        {data.responders.length === 0 ? (
+          <p className="text-sm text-faint py-2">No active members yet.</p>
+        ) : (
+          <ul className="divide-y divide-line">
+            {data.responders.map(r => {
+              const meta = DISPATCH_STATUS[r.status] ?? DISPATCH_STATUS.member
+              return (
+                <li key={r.userId} className="flex items-center gap-3 py-2.5">
+                  <div className="w-9 h-9 rounded-full bg-[#0C6780] text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    {r.name.split(' ').map(n => n[0] ?? '').join('').toUpperCase().slice(0, 2)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-fg truncate">{r.name}</p>
+                    <p className="text-xs text-faint truncate">
+                      {[r.emtLevel, r.vehicleType].filter(Boolean).join(' · ') || r.email}
+                      {r.activeRequest ? ` — ${r.activeRequest.emergencyType} @ ${r.activeRequest.location}` : ''}
+                    </p>
+                  </div>
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ${meta.cls}`}>
+                    {meta.icon} {meta.label}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+
+      {/* Active requests */}
+      <div className="rounded-2xl border border-line bg-canvas p-4">
+        <h4 className="font-semibold text-fg text-sm mb-3 flex items-center gap-2"><FaMapMarkerAlt className="text-[#0C6780]" /> Active requests</h4>
+        {data.requests.length === 0 ? (
+          <p className="text-sm text-faint py-2">No active emergency requests right now.</p>
+        ) : (
+          <ul className="space-y-2">
+            {data.requests.map(req => (
+              <li key={req.id} className="flex items-center justify-between gap-3 bg-subtle rounded-lg px-3 py-2">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-fg truncate">{req.emergencyType} · {req.location}</p>
+                  <p className="text-xs text-faint truncate">
+                    {req.responderName ? `Assigned: ${req.responderName}` : 'Unassigned'} · {req.status.replace('_', ' ')}
+                  </p>
+                </div>
+                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full capitalize flex-shrink-0 ${DISPATCH_PRIORITY[req.priority] ?? 'bg-subtle text-soft'}`}>
+                  {req.priority}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  )
+}
+
 const BASE_TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
@@ -869,13 +994,15 @@ export default function ManageOrganizationPage() {
     )
   }
 
-  // Pharmacies/health-shops get an Inventory tab (inserted before Settings).
-  const founderTabs = isInventoryOrg(entity.type)
-    ? [
-        ...BASE_TABS.slice(0, 4),
-        { id: 'inventory' as TabId, label: 'Health Shop', icon: <FaBoxOpen /> },
-        ...BASE_TABS.slice(4),
-      ]
+  // Type-specific tab inserted before Settings: pharmacies get a Health Shop
+  // (inventory), ambulance/emergency orgs get a live Dispatch board.
+  const specialtyTab = isInventoryOrg(entity.type)
+    ? { id: 'inventory' as TabId, label: 'Health Shop', icon: <FaBoxOpen /> }
+    : isEmergencyOrg(entity.type)
+      ? { id: 'dispatch' as TabId, label: 'Dispatch', icon: <FaAmbulance /> }
+      : null
+  const founderTabs = specialtyTab
+    ? [...BASE_TABS.slice(0, 4), specialtyTab, ...BASE_TABS.slice(4)]
     : BASE_TABS
   // Members (non-founders) get a read-only view: Dashboard + Overview only.
   const tabs = canManage ? founderTabs : founderTabs.filter(t => t.id === 'dashboard' || t.id === 'overview')
@@ -938,6 +1065,7 @@ export default function ManageOrganizationPage() {
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}
           {activeTab === 'inventory' && <InventoryTab id={id} />}
+          {activeTab === 'dispatch' && <DispatchTab id={id} />}
           {activeTab === 'settings' && <SettingsTab />}
         </div>
       </div>

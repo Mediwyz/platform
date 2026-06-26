@@ -185,6 +185,18 @@ export class OrganizationsController {
     return { success: true, data };
   }
 
+  // ─── Emergency dispatch board (founder only) ──────────────────────────
+
+  @Get(':id/dispatch')
+  @ApiOperation({ summary: 'Emergency dispatch board: responder availability + active requests (founder only)' })
+  async getDispatch(
+    @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.getDispatch(id, user.sub);
+    return { success: true, data };
+  }
+
   // ─── List pending invitations (founder only) ──────────────────────────
 
   @Get(':id/invitations')
