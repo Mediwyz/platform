@@ -94,7 +94,13 @@ export async function middleware(request: NextRequest) {
     '/pharmacy', '/book', '/my-company', '/my-insurance-company']
   const isCleanDashboardRoute = dashboardPages.some(p => pathname === p || pathname.startsWith(p + '/'))
 
-  if (isCleanDashboardRoute) {
+  // Org/company management pages now live INSIDE the provider dashboard group so
+  // they render with the full app shell (sidebar + header), reached via the same
+  // clean URLs. The /organization/join/[token] accept screen is intentionally NOT
+  // matched (it needs no shell) — hence the explicit `/manage` in the pattern.
+  const isOrgManageRoute = /^\/(organization|company)\/[^/]+\/manage(?:\/.*)?$/.test(pathname)
+
+  if (isCleanDashboardRoute || isOrgManageRoute) {
     const token = request.cookies.get('mediwyz_token')
 
     if (!token) {
@@ -130,8 +136,11 @@ export async function middleware(request: NextRequest) {
       nutritionist: 'nutritionists',
     }
 
+    // Org/company manage pages exist ONLY under /provider/[slug]/(dashboard) — so
+    // even dedicated roles (insurance/corporate/admin) must rewrite there, not to
+    // their own prefix (which has no such page).
     const dedicatedPrefix = DEDICATED_ROUTES[cookieVal]
-    if (dedicatedPrefix) {
+    if (dedicatedPrefix && !isOrgManageRoute) {
       return NextResponse.rewrite(new URL(`${dedicatedPrefix}${pathname}`, request.url))
     }
 
@@ -250,5 +259,9 @@ export const config = {
     '/pharmacy/:path*',
     '/book/:path*',
     '/my-company/:path*',
+    '/organization/:id/manage',
+    '/organization/:id/manage/:path*',
+    '/company/:id/manage',
+    '/company/:id/manage/:path*',
   ]
 }

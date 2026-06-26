@@ -845,7 +845,7 @@ export default function ManageOrganizationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="py-20 flex items-center justify-center">
         <FaSpinner className="text-[#0C6780] text-3xl animate-spin" />
       </div>
     )
@@ -853,7 +853,7 @@ export default function ManageOrganizationPage() {
 
   if (forbidden || !entity) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="py-20 flex items-center justify-center p-6">
         <div className="text-center max-w-sm">
           <FaUserCircle className="text-5xl text-faint mx-auto mb-4" />
           <h2 className="text-xl font-bold text-fg mb-2">Access Denied</h2>
@@ -881,7 +881,7 @@ export default function ManageOrganizationPage() {
   const tabs = canManage ? founderTabs : founderTabs.filter(t => t.id === 'dashboard' || t.id === 'overview')
 
   return (
-    <div className="min-h-screen bg-subtle">
+    <div className="bg-subtle rounded-2xl border border-line overflow-hidden">
       {/* Header */}
       <div className="bg-[#001E40] text-white px-4 sm:px-8 py-6">
         <div className="max-w-4xl mx-auto">
