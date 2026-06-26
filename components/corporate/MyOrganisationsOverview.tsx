@@ -333,7 +333,7 @@ export default function MyOrganisationsOverview() {
 
               {/* Inline create form */}
               {creatingType === cat.type && (
-                <div className="mt-3 flex gap-2">
+                <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     value={newName}
@@ -346,7 +346,7 @@ export default function MyOrganisationsOverview() {
                   <button
                     onClick={() => handleCreate(cat.type)}
                     disabled={busy || !newName.trim()}
-                    className="px-4 py-2 bg-[#0C6780] text-white text-sm font-medium rounded-lg hover:bg-[#0a5568] disabled:opacity-50 transition inline-flex items-center gap-1.5"
+                    className="px-4 py-2 bg-[#0C6780] text-white text-sm font-medium rounded-lg hover:bg-[#0a5568] disabled:opacity-50 transition inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
                   >
                     {busy ? <FaSpinner className="animate-spin" size={12} /> : <FaPlus size={11} />} Create
                   </button>
@@ -355,7 +355,7 @@ export default function MyOrganisationsOverview() {
 
               {/* Inline invite form */}
               {orgs.some(o => o.id === inviteFor) && (
-                <div className="mt-3 flex gap-2">
+                <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <input
                     type="email"
                     value={inviteEmail}
@@ -368,7 +368,7 @@ export default function MyOrganisationsOverview() {
                   <button
                     onClick={() => inviteFor && handleInvite(inviteFor)}
                     disabled={busy || !inviteEmail.trim()}
-                    className="px-4 py-2 bg-[#0C6780] text-white text-sm font-medium rounded-lg hover:bg-[#0a5568] disabled:opacity-50 transition inline-flex items-center gap-1.5"
+                    className="px-4 py-2 bg-[#0C6780] text-white text-sm font-medium rounded-lg hover:bg-[#0a5568] disabled:opacity-50 transition inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
                   >
                     {busy ? <FaSpinner className="animate-spin" size={12} /> : <FaUserPlus size={11} />} Send invite
                   </button>

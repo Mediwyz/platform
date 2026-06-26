@@ -9,7 +9,7 @@ import { useDynamicSearchItems } from '@/hooks/useDynamicSearchItems'
 import { useRoleFeatureConfig, filterSidebarByFeatures } from '@/hooks/useRoleFeatureConfig'
 import { useCorporateCapability } from '@/hooks/useCorporateCapability'
 import { useMyWorkspaces, type Workspace } from '@/hooks/useMyWorkspaces'
-import { FaBuilding, FaShieldAlt, FaGift, FaBell, FaHospital, FaPills, FaClinicMedical, FaFlask } from 'react-icons/fa'
+import { FaBuilding, FaShieldAlt, FaHospital, FaPills, FaClinicMedical, FaFlask } from 'react-icons/fa'
 
 interface UserData {
   id: string
@@ -177,29 +177,16 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
           id: `ws-${ws.id}`, label: ws.name, icon: iconFor(ws),
           color: 'text-slate-600', bgColor: 'bg-slate-50', href: ws.manageHref,
         })),
-        { id: 'my-company', label: 'All organisations', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/corporate' },
+        { id: 'my-company', label: 'All organisations', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/my-company' },
       ]
     }
 
-    // Notifications - every user should have this. Fallback inject if the
-    // sidebar config missed it or the feature-config filter stripped it.
-    if (hookUser?.id && !finalSidebarItems.some(i => i.id === 'notifications')) {
-      finalSidebarItems = [
-        ...finalSidebarItems,
-        { id: 'notifications', label: 'Notifications', icon: FaBell, color: 'text-amber-600', bgColor: 'bg-amber-50', href: '/notifications' },
-      ]
-    }
-
-    // "Invite friends" - every authenticated user has a referral code and
-    // earns wallet credit per successful signup. Injected here so sidebar
-    // configs don't need to remember to add it (regional / admin were
-    // missing it; user flagged it).
-    if (hookUser?.id && !finalSidebarItems.some(i => i.id === 'invite')) {
-      finalSidebarItems = [
-        ...finalSidebarItems,
-        { id: 'invite', label: 'Invite friends', icon: FaGift, color: 'text-pink-600', bgColor: 'bg-pink-50', href: '/invite' },
-      ]
-    }
+    // Notifications + Invite friends live in the HEADER now (the notification
+    // bell and the gift button), NOT the sidebar — strip them wherever a
+    // sidebar config or earlier helper emitted them.
+    finalSidebarItems = finalSidebarItems.filter(
+      i => i.id !== 'notifications' && i.id !== 'invite',
+    )
 
     // Dedupe by id - a couple of sidebar helpers (`getSearchItems` +
     // `getSearchItemsFromRoles`) can both emit a 'search-insurance' entry

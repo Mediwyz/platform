@@ -175,7 +175,7 @@ export default function MyCompanyPage() {
 
   if (loading) {
     return (
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-4xl mx-auto">
         <div className="animate-pulse">
           <div className="h-8 bg-line rounded w-48 mb-4" />
           <div className="h-4 bg-subtle rounded w-96 mb-8" />
@@ -189,7 +189,7 @@ export default function MyCompanyPage() {
   // organisations (clinics/hospitals/clinics) overview, then the company creation form.
   if (!company) {
     return (
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-2xl mx-auto">
         {/* 1  Organisations you belong to (clinics, pharmacies, labs) */}
         <MyOrganisationsList />
         {/* 1b  Companies you're a member of (employer/insurer) */}
@@ -240,7 +240,7 @@ export default function MyCompanyPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-soft mb-1.5">
                 <FaIndustry className="inline mr-1.5 text-faint" /> Industry
@@ -357,7 +357,7 @@ export default function MyCompanyPage() {
   const pendingEmployees = employees.filter(e => e.status === 'pending')
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 rounded-xl bg-[#0C6780]/10 flex items-center justify-center">
           <FaBuilding className="text-xl text-[#0C6780]" />
@@ -410,7 +410,7 @@ export default function MyCompanyPage() {
           <FaUserPlus className="text-[#0C6780]" /> Invite Employee
         </h2>
         <p className="text-sm text-soft mb-4">Search by email to invite someone to your company. They will receive a notification to accept.</p>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-faint text-sm" />
             <input
@@ -425,7 +425,7 @@ export default function MyCompanyPage() {
           <button
             onClick={handleInvite}
             disabled={inviting || !inviteEmail.trim()}
-            className="px-5 py-2.5 bg-[#0C6780] text-white font-medium rounded-xl hover:bg-[#0a5568] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#0C6780] text-white font-medium rounded-xl hover:bg-[#0a5568] disabled:opacity-50 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             <FaEnvelope className="text-sm" />
             {inviting ? 'Sending...' : 'Invite'}

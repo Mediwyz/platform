@@ -11,6 +11,7 @@ import {
  FaUserFriends,
  FaHome,
  FaWallet,
+ FaGift,
 } from 'react-icons/fa'
 import { getCurrencySymbol } from '@/lib/currency'
 import HealthwyzLogo from '@/components/ui/HealthwyzLogo'
@@ -211,6 +212,16 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
  {userId && (
  <NotificationBell userId={userId} profileHref={profileHref} />
  )}
+
+ {/* Invite friends — referral link, earns wallet credit per signup */}
+ <Link
+   href="/invite"
+   className="hidden sm:flex p-2.5 md:p-3 text-soft hover:text-pink-600 bg-subtle rounded-lg hover:bg-pink-50 transition flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+   aria-label="Invite friends"
+   title="Invite friends"
+ >
+   <FaGift className="text-base sm:text-base md:text-lg" aria-hidden="true" />
+ </Link>
 
  {/* Theme toggle - light/dark */}
  <ThemeToggle />
