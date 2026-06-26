@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, ConflictException, BadRequestException, ForbiddenException, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException, ForbiddenException, NotFoundException, Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
@@ -610,6 +610,56 @@ export class AuthService {
   }
 
   // ─── Create type-specific profile ─────────────────────────────────────
+
+  // ─── Activate a provider category for an existing member ──────────────────
+  // Any MEMBER can turn on a service-provider category from their profile (the
+  // user keeps their patient data; a role profile is added and userType flips so
+  // they reach the provider dashboard). Mirrors the signup auto-login: returns a
+  // fresh token + cookie userType so routing updates without a re-login.
+  private static readonly SELF_ACTIVATABLE_PROVIDERS = new Set([
+    'doctor', 'nurse', 'child-care-nurse', 'pharmacy', 'lab', 'ambulance',
+    'caregiver', 'physiotherapist', 'dentist', 'optometrist', 'nutritionist',
+  ]);
+
+  async activateProvider(userId: string, providerCookieType: string) {
+    const cookieType = (providerCookieType || '').toLowerCase().trim();
+    if (!AuthService.SELF_ACTIVATABLE_PROVIDERS.has(cookieType)) {
+      throw new BadRequestException('Unknown or non-activatable provider category');
+    }
+    const prismaUserType = cookieToPrismaUserType[cookieType];
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, firstName: true, lastName: true, email: true, userType: true, address: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    if (user.userType !== UserType.MEMBER) {
+      throw new BadRequestException('Only members can activate a provider category');
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      await this.createProfile(tx, userId, prismaUserType, {
+        firstName: user.firstName, lastName: user.lastName, email: user.email, address: user.address,
+      });
+      await tx.user.update({ where: { id: userId }, data: { userType: prismaUserType } });
+    });
+
+    const cookieUserType =
+      (await this.rolesResolver.codeToCookieAsync(prismaUserType)) ??
+      prismaUserTypeToCookie[prismaUserType];
+    const token = this.signToken({ sub: user.id, userType: cookieUserType, email: user.email });
+    const redirectPath = await this.computeRedirectPath(cookieUserType, prismaUserType);
+
+    return {
+      token,
+      cookieUserType,
+      user: {
+        id: user.id, firstName: user.firstName, lastName: user.lastName,
+        email: user.email, userType: cookieUserType, redirectPath,
+      },
+      redirectPath,
+    };
+  }
 
   private async createProfile(tx: any, userId: string, userType: string, data: any) {
     switch (userType) {

@@ -33,6 +33,7 @@ const ProviderReviews = dynamic(() => import('@/components/shared/ProviderReview
 const ProfileGoalsTab = dynamic(() => import('@/components/health-tracker/tabs/ProfileGoalsTab'), { ssr: false })
 const UserProfile = dynamic(() => import('@/components/profile/UserProfile'), { ssr: false })
 const AvailabilityPreview = dynamic(() => import('@/components/providers/AvailabilityPreview'), { ssr: false })
+const BecomeProviderCard = dynamic(() => import('@/components/profile/BecomeProviderCard'), { ssr: false })
 
 type TabId = 'about' | 'posts' | 'reviews' | 'services' | 'health' | 'settings'
 
@@ -189,6 +190,7 @@ export default function UnifiedProfilePage() {
           )}
           {activeTab === 'settings' && isSelf && (
             <PrivateSection title="Edit your profile">
+              {profile.userType === 'MEMBER' && <BecomeProviderCard />}
               <UserProfile userId={profile.id} userType={profile.userType} settingsPath={`/profile/${profile.id}`} />
             </PrivateSection>
           )}

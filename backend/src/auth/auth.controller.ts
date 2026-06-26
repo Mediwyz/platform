@@ -165,6 +165,28 @@ export class AuthController {
     return { success: true, user: userData };
   }
 
+  // ─── Activate a service-provider category for the current member ──────────
+  // Any member can become a provider from their profile; we re-issue the auth
+  // cookies with the new userType so they land on the provider dashboard.
+  @Post('activate-provider')
+  @HttpCode(HttpStatus.OK)
+  async activateProvider(
+    @Body() body: { providerType?: string },
+    @CurrentUser() user: JwtPayload,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    try {
+      const result = await this.authService.activateProvider(user.sub, body?.providerType ?? '');
+      res.cookie('mediwyz_token', result.token, COOKIE_OPTIONS);
+      res.cookie('mediwyz_userType', result.cookieUserType, { ...COOKIE_OPTIONS, httpOnly: false });
+      res.cookie('mediwyz_user_id', result.user.id, { ...COOKIE_OPTIONS, httpOnly: false });
+      return { success: true, user: result.user, redirectPath: result.redirectPath };
+    } catch (error: any) {
+      res.status(error.status || 400);
+      return { success: false, message: error.message || 'Activation failed' };
+    }
+  }
+
   // ─── In-app password reset (no email provider required) ──────────────
 
   /** Step 1: look up the user's security question. Enumeration-safe. */
