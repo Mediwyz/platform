@@ -2,14 +2,15 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
 import {
   FaBuilding, FaUsers, FaEnvelope, FaCheck, FaTimes, FaTrash, FaSpinner, FaUserCircle,
-  FaCog, FaShieldAlt, FaFileAlt, FaCoins, FaArrowRight, FaTachometerAlt,
+  FaCog, FaShieldAlt, FaFileAlt, FaCoins, FaTachometerAlt,
 } from 'react-icons/fa'
 import InsuranceMembersTable from '@/components/corporate/InsuranceMembersTable'
 import CompanyAnalytics from '@/components/corporate/CompanyAnalytics'
 import CompanyDangerZone from '@/components/corporate/CompanyDangerZone'
+import InsuranceClaimsPage from '@/app/insurance/(dashboard)/claims/page'
+import InsurancePreAuthsPage from '@/app/insurance/(dashboard)/pre-auths/page'
 
 interface Member {
   id: string; userId: string; status: string
@@ -17,7 +18,7 @@ interface Member {
 }
 interface Company { id: string; companyName: string; isInsuranceCompany: boolean }
 
-type TabId = 'overview' | 'members' | 'invite' | 'contributions' | 'claims' | 'preauths' | 'settings'
+type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'contributions' | 'claims' | 'preauths' | 'settings'
 
 export default function ManageCompanyPage() {
   const params = useParams()
@@ -30,7 +31,7 @@ export default function ManageCompanyPage() {
   const [email, setEmail] = useState('')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
-  const [activeTab, setActiveTab] = useState<TabId>('overview')
+  const [activeTab, setActiveTab] = useState<TabId>('dashboard')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -93,7 +94,8 @@ export default function ManageCompanyPage() {
   // Same tab set as every other organisation; insurance companies get the
   // contribution + claims + pre-auth tabs injected before Settings.
   const baseTabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
-    { id: 'overview', label: 'Overview', icon: <FaTachometerAlt /> },
+    { id: 'dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
+    { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
     { id: 'members', label: 'Members', icon: <FaUsers /> },
     { id: 'invite', label: 'Invite', icon: <FaEnvelope /> },
   ]
@@ -149,6 +151,21 @@ export default function ManageCompanyPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 space-y-6">
+        {activeTab === 'dashboard' && (
+          <>
+            <div>
+              <h3 className="font-semibold text-fg">{company.companyName}</h3>
+              <p className="text-sm text-soft">{company.isInsuranceCompany ? 'Insurance company' : 'Company'}</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Stat label="Active members" value={active.length} icon={<FaUsers className="text-[#0C6780]" />} />
+              {pending.length > 0 && <Stat label="Pending" value={pending.length} icon={<FaUsers className="text-amber-500" />} />}
+              <Stat label="Status" value="Active" icon={<FaBuilding className="text-[#0C6780]" />} />
+            </div>
+            <CompanyAnalytics />
+          </>
+        )}
+
         {activeTab === 'overview' && (
           <>
             <div className="bg-surface rounded-2xl border border-line p-5">
@@ -196,26 +213,22 @@ export default function ManageCompanyPage() {
           </div>
         )}
 
+        {/* Insurance specificity: who paid the monthly contribution, who's unpaid,
+            and how much has been collected — the cotisation view. */}
         {activeTab === 'contributions' && <InsuranceMembersTable />}
 
+        {/* Real claims-review surface (who the insurer must pay) — same component
+            the dedicated insurance dashboard uses, embedded in the unified shell. */}
         {activeTab === 'claims' && (
-          <LinkPanel
-            icon={<FaFileAlt className="text-[#0C6780]" />}
-            title="Claims review"
-            text="Review, approve and pay member claims, run OCR on uploaded documents, and track every claim through its lifecycle."
-            href="/my-insurance-company/claims"
-            cta="Open claims review"
-          />
+          <div className="-mx-4 sm:-mx-8 -my-6">
+            <InsuranceClaimsPage />
+          </div>
         )}
 
         {activeTab === 'preauths' && (
-          <LinkPanel
-            icon={<FaShieldAlt className="text-[#0C6780]" />}
-            title="Pre-authorizations"
-            text="Approve or deny incoming pre-authorization requests against your coverage rules before treatment."
-            href="/my-insurance-company/pre-auths"
-            cta="Open pre-authorizations"
-          />
+          <div className="-mx-4 sm:-mx-8 -my-6">
+            <InsurancePreAuthsPage />
+          </div>
         )}
 
         {activeTab === 'settings' && (
@@ -226,14 +239,11 @@ export default function ManageCompanyPage() {
   )
 }
 
-function LinkPanel({ icon, title, text, href, cta }: { icon: React.ReactNode; title: string; text: string; href: string; cta: string }) {
+function Stat({ label, value, icon }: { label: string; value: React.ReactNode; icon: React.ReactNode }) {
   return (
-    <div className="bg-surface rounded-2xl border border-line p-5">
-      <h3 className="font-semibold text-fg mb-2 flex items-center gap-2">{icon} {title}</h3>
-      <p className="text-sm text-soft mb-4">{text}</p>
-      <Link href={href} className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0C6780] text-white rounded-xl font-semibold text-sm hover:bg-[#0a5568] transition-colors">
-        {cta} <FaArrowRight className="text-xs" />
-      </Link>
+    <div className="rounded-2xl border border-line bg-canvas p-5">
+      <div className="flex items-center gap-2 text-soft text-xs font-semibold uppercase tracking-wide">{icon} {label}</div>
+      <p className="mt-2 text-3xl font-bold text-fg">{value}</p>
     </div>
   )
 }

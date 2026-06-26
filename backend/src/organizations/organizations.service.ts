@@ -204,7 +204,10 @@ export class OrganizationsService {
     }
     for (const c of coOwned) {
       const insurance = c.isInsuranceCompany;
-      byId.set(c.id, { id: c.id, name: c.companyName, kind: insurance ? 'insurance' : 'company', type: null, isFounder: true, manageHref: insurance ? '/my-insurance-company' : `/company/${c.id}/manage` });
+      // Insurance companies are managed on the SAME unified /company/[id]/manage
+      // page as every other org — the insurance-specific tabs (Contributions /
+      // Claims / Pre-auths) are what differ, not the whole page.
+      byId.set(c.id, { id: c.id, name: c.companyName, kind: insurance ? 'insurance' : 'company', type: null, isFounder: true, manageHref: `/company/${c.id}/manage` });
     }
     const memberCompanyIds = [...new Set((coEmp as any[]).map((e) => e.companyId).filter(Boolean))].filter((id) => !byId.has(id as string)) as string[];
     if (memberCompanyIds.length) {

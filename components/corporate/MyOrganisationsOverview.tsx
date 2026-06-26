@@ -140,7 +140,7 @@ export default function MyOrganisationsOverview() {
       return [
         ...companies.filter(c => c.isInsuranceCompany).map<GridItem>(c => ({
           id: c.id, name: c.companyName, isOwner: true, memberCount: c.memberCount,
-          kind: 'company', manageHref: '/my-insurance-company',
+          kind: 'company', manageHref: `/company/${c.id}/manage`,
         })),
         ...entities,
       ]
