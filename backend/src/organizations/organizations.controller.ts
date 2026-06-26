@@ -63,6 +63,13 @@ export class OrganizationsController {
     return { success: true, data: { hasPharmacy } };
   }
 
+  // Per-entity sidebar entries: every org/company the user owns or works at.
+  @Get('my-workspaces')
+  async myWorkspaces(@CurrentUser() user: JwtPayload) {
+    const data = await this.organizationsService.getMyWorkspaces(user.sub);
+    return { success: true, data };
+  }
+
   // ─── Create a new healthcare entity ────────────────────────────────────
 
   @Post()

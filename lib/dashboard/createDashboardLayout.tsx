@@ -8,9 +8,8 @@ import { useUser } from '@/hooks/useUser'
 import { useDynamicSearchItems } from '@/hooks/useDynamicSearchItems'
 import { useRoleFeatureConfig, filterSidebarByFeatures } from '@/hooks/useRoleFeatureConfig'
 import { useCorporateCapability } from '@/hooks/useCorporateCapability'
-import { useInsuranceCapability } from '@/hooks/useInsuranceCapability'
-import { useHasPharmacy } from '@/hooks/useHasPharmacy'
-import { FaBuilding, FaShieldAlt, FaGift, FaBell } from 'react-icons/fa'
+import { useMyWorkspaces, type Workspace } from '@/hooks/useMyWorkspaces'
+import { FaBuilding, FaShieldAlt, FaGift, FaBell, FaHospital, FaPills, FaClinicMedical, FaFlask } from 'react-icons/fa'
 
 interface UserData {
   id: string
@@ -113,8 +112,7 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
     const dynamicSearch = useDynamicSearchItems(dynamicSearchBasePath || '')
     const featureConfig = useRoleFeatureConfig(hookUser?.userType)
     const { has: hasCorporateCapability } = useCorporateCapability()
-    const { has: hasInsuranceCapability } = useInsuranceCapability()
-    const { has: hasPharmacy, loading: pharmacyLoading } = useHasPharmacy()
+    const { workspaces } = useMyWorkspaces()
 
     if (loading) return <DashboardLoadingState />
     if (error || !userData) return <DashboardErrorState message={error} />
@@ -157,30 +155,30 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       }
     }
 
-    // Inject "My Company" entry for any user with corporate-admin capability - 
-    // capability, not role: granted by buying a corporate/enterprise plan or owning a company.
-    if (hasCorporateCapability && !finalSidebarItems.some(i => i.id === 'my-company')) {
+    // ── My Organizations: one named entry per org/company the user owns or
+    // works at, each pointing straight at its management page. Replaces the
+    // old generic "My Insurance Company" + provider "Health Shop" entries (and
+    // the personal inventory entry) — management now lives on the entity page.
+    finalSidebarItems = finalSidebarItems.filter(
+      i => i.id !== 'inventory' && i.id !== 'my-insurance-company' && i.id !== 'my-company',
+    )
+    if (workspaces.length > 0 || hasCorporateCapability) {
+      const iconFor = (ws: Workspace) =>
+        ws.kind === 'insurance' ? FaShieldAlt
+          : ws.kind === 'company' ? FaBuilding
+            : /pharmac|health[\s_-]?shop|drugstore/i.test(ws.type || '') ? FaPills
+              : /hospital/i.test(ws.type || '') ? FaHospital
+                : /lab/i.test(ws.type || '') ? FaFlask
+                  : FaClinicMedical
       finalSidebarItems = [
         ...finalSidebarItems,
-        { id: 'my-company', label: 'My Organizations', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/corporate' },
+        { id: 'workspaces-header', label: 'My Organizations', icon: FaBuilding, color: 'text-gray-400', bgColor: 'bg-gray-50', href: '#', divider: true },
+        ...workspaces.map<SidebarItem>(ws => ({
+          id: `ws-${ws.id}`, label: ws.name, icon: iconFor(ws),
+          color: 'text-slate-600', bgColor: 'bg-slate-50', href: ws.manageHref,
+        })),
+        { id: 'my-company', label: 'All organisations', icon: FaBuilding, color: 'text-slate-600', bgColor: 'bg-slate-50', href: '/corporate' },
       ]
-    }
-    // Same pattern for insurance-company owners. A MEMBER, DOCTOR, or any
-    // role who owns a `CorporateAdminProfile` with `isInsuranceCompany: true`
-    // gets a "My Insurance Company" shortcut in their sidebar regardless of
-    // their userType. NOT tied to the legacy INSURANCE_REP role.
-    if (hasInsuranceCapability && !finalSidebarItems.some(i => i.id === 'my-insurance-company')) {
-      finalSidebarItems = [
-        ...finalSidebarItems,
-        { id: 'my-insurance-company', label: 'My Insurance Company', icon: FaShieldAlt, color: 'text-blue-600', bgColor: 'bg-blue-50', href: '/my-insurance-company' },
-      ]
-    }
-
-    // Inventory / Health-Shop management is only for pharmacy / health-shop
-    // owners. Once the capability check resolves with "no pharmacy", drop the
-    // provider "My Inventory" entry. (Only the provider sidebar emits it.)
-    if (!pharmacyLoading && !hasPharmacy) {
-      finalSidebarItems = finalSidebarItems.filter(i => i.id !== 'inventory')
     }
 
     // Notifications - every user should have this. Fallback inject if the

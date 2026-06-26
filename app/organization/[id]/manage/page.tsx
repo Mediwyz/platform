@@ -138,7 +138,7 @@ function MemberRow({
 
 // ─── Tab: Overview ───────────────────────────────────────────────────────────
 
-function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
+function OverviewTab({ entity, id, canManage = true }: { entity: EntityDetail; id: string; canManage?: boolean }) {
   const [form, setForm] = useState({
     name: entity.name,
     type: entity.type,
@@ -225,7 +225,7 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
       {/* Logo */}
       <div className="flex items-center gap-5">
         <button
-          onClick={() => fileRef.current?.click()}
+          onClick={() => canManage && fileRef.current?.click()}
           aria-label="Change logo"
           className="relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-dashed border-line hover:border-[#0C6780] transition-colors group"
         >
@@ -280,16 +280,20 @@ function OverviewTab({ entity, id }: { entity: EntityDetail; id: string }) {
         <Field label="Website" name="website" type="url" value={form.website} onChange={handleChange} placeholder="https://" />
       </div>
 
-      <div className="flex justify-end pt-2">
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-6 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
-        >
-          {saving ? <FaSpinner className="animate-spin" /> : <FaCheck />}
-          {saving ? 'Saving…' : 'Save Changes'}
-        </button>
-      </div>
+      {canManage ? (
+        <div className="flex justify-end pt-2">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-2 bg-[#0C6780] hover:bg-[#0a5568] text-white px-6 py-2.5 rounded-xl font-semibold text-sm disabled:opacity-60 transition-colors"
+          >
+            {saving ? <FaSpinner className="animate-spin" /> : <FaCheck />}
+            {saving ? 'Saving…' : 'Save Changes'}
+          </button>
+        </div>
+      ) : (
+        <p className="text-xs text-faint pt-2">You work here but aren&apos;t the owner — this view is read-only.</p>
+      )}
     </div>
   )
 }
@@ -815,6 +819,8 @@ export default function ManageOrganizationPage() {
   const [entity, setEntity] = useState<EntityDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [forbidden, setForbidden] = useState(false)
+  // Founders manage; people who only WORK at the org get a read-only view.
+  const [canManage, setCanManage] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
 
   useEffect(() => {
@@ -826,11 +832,7 @@ export default function ManageOrganizationPage() {
 
         const data: EntityDetail = json.data
         const currentUserId = getCookie('mediwyz_user_id')
-
-        if (data.founderUserId && currentUserId && data.founderUserId !== currentUserId) {
-          setForbidden(true)
-          return
-        }
+        setCanManage(!!(data.founderUserId && currentUserId && data.founderUserId === currentUserId))
         setEntity(data)
       } catch {
         setForbidden(true)
@@ -868,13 +870,15 @@ export default function ManageOrganizationPage() {
   }
 
   // Pharmacies/health-shops get an Inventory tab (inserted before Settings).
-  const tabs = isInventoryOrg(entity.type)
+  const founderTabs = isInventoryOrg(entity.type)
     ? [
         ...BASE_TABS.slice(0, 4),
         { id: 'inventory' as TabId, label: 'Health Shop', icon: <FaBoxOpen /> },
         ...BASE_TABS.slice(4),
       ]
     : BASE_TABS
+  // Members (non-founders) get a read-only view: Dashboard + Overview only.
+  const tabs = canManage ? founderTabs : founderTabs.filter(t => t.id === 'dashboard' || t.id === 'overview')
 
   return (
     <div className="min-h-screen bg-subtle">
@@ -893,7 +897,7 @@ export default function ManageOrganizationPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold">{entity.name}</h1>
-              <p className="text-white/60 text-sm">{entity.type} · Manage</p>
+              <p className="text-white/60 text-sm">{entity.type} · {canManage ? 'Manage' : 'Workspace (read-only)'}</p>
             </div>
             {entity.isVerified && (
               <span className="ml-auto text-xs font-bold bg-[#0C6780] text-white px-3 py-1 rounded-full">
@@ -930,7 +934,7 @@ export default function ManageOrganizationPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6">
         <div className="bg-surface rounded-2xl border border-line p-5 sm:p-7">
           {activeTab === 'dashboard' && <DashboardTab entity={entity} id={id} />}
-          {activeTab === 'overview' && <OverviewTab entity={entity} id={id} />}
+          {activeTab === 'overview' && <OverviewTab entity={entity} id={id} canManage={canManage} />}
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}
           {activeTab === 'inventory' && <InventoryTab id={id} />}

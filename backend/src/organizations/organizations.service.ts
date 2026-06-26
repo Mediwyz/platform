@@ -168,6 +168,58 @@ export class OrganizationsService {
     return rows.some((r: { type: string }) => /pharmac|health[\s_-]?shop|drugstore/i.test(r.type || ''));
   }
 
+  /**
+   * Every organisation/company the user owns OR works at, normalised for the
+   * sidebar: one named entry per entity, with where its management page lives
+   * and whether the user is the founder (members get a read-only view).
+   */
+  async getMyWorkspaces(userId: string) {
+    const [heOwned, heMemberships, coOwned, coEmp] = await Promise.all([
+      (this.prisma.healthcareEntity as any).findMany({
+        where: { founderUserId: userId, isActive: true },
+        select: { id: true, name: true, type: true }, orderBy: { name: 'asc' },
+      }),
+      (this.prisma.providerWorkplace as any).findMany({
+        where: { providerUserId: userId, isActive: true, status: 'active' },
+        select: { entity: { select: { id: true, name: true, type: true, founderUserId: true, isActive: true } } },
+      }),
+      this.prisma.corporateAdminProfile.findMany({
+        where: { userId }, select: { id: true, companyName: true, isInsuranceCompany: true },
+      }),
+      this.prisma.corporateEmployee.findMany({
+        where: { userId, status: 'active' }, select: { companyId: true },
+      }),
+    ]);
+
+    type WS = { id: string; name: string; kind: 'healthcare' | 'insurance' | 'company'; type: string | null; isFounder: boolean; manageHref: string };
+    const byId = new Map<string, WS>();
+
+    for (const e of heOwned) {
+      byId.set(e.id, { id: e.id, name: e.name, kind: 'healthcare', type: e.type, isFounder: true, manageHref: `/organization/${e.id}/manage` });
+    }
+    for (const m of heMemberships) {
+      const e = m.entity;
+      if (!e || !e.isActive || byId.has(e.id)) continue;
+      byId.set(e.id, { id: e.id, name: e.name, kind: 'healthcare', type: e.type, isFounder: e.founderUserId === userId, manageHref: `/organization/${e.id}/manage` });
+    }
+    for (const c of coOwned) {
+      const insurance = c.isInsuranceCompany;
+      byId.set(c.id, { id: c.id, name: c.companyName, kind: insurance ? 'insurance' : 'company', type: null, isFounder: true, manageHref: insurance ? '/my-insurance-company' : `/company/${c.id}/manage` });
+    }
+    const memberCompanyIds = [...new Set((coEmp as any[]).map((e) => e.companyId).filter(Boolean))].filter((id) => !byId.has(id as string)) as string[];
+    if (memberCompanyIds.length) {
+      const comps = await this.prisma.corporateAdminProfile.findMany({
+        where: { id: { in: memberCompanyIds } },
+        select: { id: true, companyName: true, isInsuranceCompany: true },
+      });
+      for (const c of comps) {
+        byId.set(c.id, { id: c.id, name: c.companyName, kind: c.isInsuranceCompany ? 'insurance' : 'company', type: null, isFounder: false, manageHref: `/company/${c.id}/manage` });
+      }
+    }
+
+    return Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   async getMyOrganisations(userId: string) {
     const entitySelect = {
       id: true,
