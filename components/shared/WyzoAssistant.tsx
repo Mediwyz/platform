@@ -269,7 +269,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'gap-2'}`}>
             {m.role === 'bot' && <span className="w-7 h-7 rounded-full bg-[#0C6780] text-white flex items-center justify-center text-[11px] flex-shrink-0 mt-0.5"><FaRobot /></span>}
             <div className={`max-w-[88%] ${m.role === 'user' ? 'order-2' : ''}`}>
-              <div className={`rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${m.role === 'user' ? 'bg-[#0C6780] text-white rounded-br-sm' : 'bg-surface border border-line text-fg rounded-tl-sm'}`}>
+              <div className={`rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${m.role === 'user' ? 'bg-[#0C6780] text-white rounded-br-sm' : hero ? 'bg-white/10 border border-white/20 text-white backdrop-blur-md rounded-tl-sm' : 'bg-surface border border-line text-fg rounded-tl-sm'}`}>
                 {m.typing ? (
                   <span className="inline-flex gap-1 py-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-soft animate-bounce" style={{ animationDelay: '0ms' }} />
