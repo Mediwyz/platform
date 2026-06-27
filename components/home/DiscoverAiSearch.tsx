@@ -1,38 +1,77 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight } from 'react-icons/fa'
+import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt } from 'react-icons/fa'
 
 interface Result {
   id: string; name: string; userType: string; profileImage: string | null
   address: string | null; verified: boolean; score?: number
 }
 interface Intent { type?: string; specialty?: string; location?: string; serviceMode?: string; serviceName?: string }
-interface Msg { role: 'bot' | 'user'; text?: string; providers?: Result[]; typing?: boolean }
+interface Day { date: string; label: string; slots: string[] }
+interface Service { id: string; serviceName: string; price: number; duration: number; workflows?: { id: string; serviceMode: string }[] }
+interface Draft { provider?: Result; date?: string; time?: string; service?: Service }
+interface Msg {
+  role: 'bot' | 'user'
+  text?: string
+  typing?: boolean
+  providers?: Result[]
+  days?: Day[]
+  services?: Service[]
+  confirm?: Draft
+  signIn?: boolean
+  bookedHref?: string
+}
 
 const SUGGESTIONS = [
   'A cardiologist who does video calls',
   'Un laboratoire à Moka',
   'Someone to care for my elderly mother at home',
   'A dentist for my kids',
-  'A nurse for home visits',
   'Un nutritionniste pour perdre du poids',
 ]
+const GREETING = "Hi! 👋 Tell me what you need — in any language — and I'll find the right provider, then book it for you."
+const PENDING_KEY = 'wyzo_pending_booking'
 
-const GREETING = "Hi! 👋 Tell me what you need — in any language — and I'll find the right provider for you."
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
+  return m ? decodeURIComponent(m[1]) : null
+}
+function isoDate(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
 
-/** Conversational RAG search for the home "Discover" section: a chat dialog with
- *  suggestion chips. Parses the request (Groq), embeds it (local e5) and returns
- *  semantically-ranked provider cards. */
+/** Conversational RAG search + agentic booking for the home "Discover" section.
+ *  Parse request → semantic provider match → book (availability → services → confirm),
+ *  with a secure sign-in handoff for logged-out users (no passwords typed in chat). */
 export default function DiscoverAiSearch() {
   const [messages, setMessages] = useState<Msg[]>([{ role: 'bot', text: GREETING }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [draft, setDraft] = useState<Draft>({})
   const endRef = useRef<HTMLDivElement>(null)
+  const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
+  const push = useCallback((m: Msg) => setMessages(prev => [...prev, m]), [])
+  const replaceTyping = useCallback((m: Msg) => setMessages(prev => [...prev.slice(0, -1), m]), [])
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
+  // Resume a pending booking after the user signs in.
+  useEffect(() => {
+    if (!loggedIn) return
+    try {
+      const raw = localStorage.getItem(PENDING_KEY)
+      if (!raw) return
+      const d: Draft = JSON.parse(raw)
+      if (d.provider && d.date && d.time) {
+        setDraft(d)
+        setMessages(prev => [...prev, { role: 'bot', text: `Welcome back! Want to finish booking ${d.provider!.name} on ${d.date} at ${d.time}?`, confirm: d }])
+      }
+      localStorage.removeItem(PENDING_KEY)
+    } catch { /* ignore */ }
+  }, [loggedIn])
+
+  // ── 1. Natural-language search ──────────────────────────────────────────
   async function send(text?: string) {
     const q = (text ?? input).trim()
     if (!q || loading) return
@@ -53,14 +92,101 @@ export default function DiscoverAiSearch() {
         intent.serviceMode ? `(${intent.serviceMode.replace(/_/g, ' ')})` : '',
         intent.location ? `in ${intent.location}` : '',
       ].filter(Boolean).join(' · ')
-      const summary = providers.length
-        ? `Here ${providers.length === 1 ? 'is a match' : `are ${providers.length} matches`} for ${bits}:`
-        : `I couldn't find a close match for that. Try rephrasing, or pick a category on the left.`
-      setMessages(m => [...m.slice(0, -1), { role: 'bot', text: summary, providers }])
+      replaceTyping({
+        role: 'bot',
+        text: providers.length
+          ? `Here ${providers.length === 1 ? 'is a match' : `are ${providers.length} matches`} for ${bits}. Tap “Book” on anyone to schedule:`
+          : `I couldn't find a close match for that. Try rephrasing, or pick a category on the left.`,
+        providers,
+      })
     } catch {
-      setMessages(m => [...m.slice(0, -1), { role: 'bot', text: 'Something went wrong — please try again.' }])
+      replaceTyping({ role: 'bot', text: 'Something went wrong — please try again.' })
     } finally {
       setLoading(false)
+    }
+  }
+
+  // ── 2. Start booking → fetch this week's availability ───────────────────
+  async function startBooking(provider: Result) {
+    setDraft({ provider })
+    push({ role: 'user', text: `Book ${provider.name}` })
+    push({ role: 'bot', typing: true })
+    try {
+      const today = new Date()
+      const days: Day[] = []
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(today); d.setDate(today.getDate() + i)
+        const date = isoDate(d)
+        const res = await fetch(`/api/bookings/available-slots?providerUserId=${provider.id}&date=${date}&duration=30`, { credentials: 'include' })
+        const j = await res.json().catch(() => ({}))
+        const slots: string[] = j?.slots || []
+        if (slots.length) days.push({ date, label: d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }), slots: slots.slice(0, 8) })
+      }
+      replaceTyping(days.length
+        ? { role: 'bot', text: `Here's ${provider.name}'s availability this week — pick a time:`, days }
+        : { role: 'bot', text: `${provider.name} has no open slots this week. Try another provider, or check back soon.` })
+    } catch {
+      replaceTyping({ role: 'bot', text: 'Could not load availability — please try again.' })
+    }
+  }
+
+  // ── 3. Slot picked → fetch services + pricing ───────────────────────────
+  async function pickSlot(date: string, time: string, label: string) {
+    setDraft(d => ({ ...d, date, time }))
+    push({ role: 'user', text: `${label} at ${time}` })
+    push({ role: 'bot', typing: true })
+    try {
+      const res = await fetch(`/api/providers/${draft.provider!.id}/services`, { credentials: 'include' })
+      const j = await res.json().catch(() => ({}))
+      const services: Service[] = (j?.data || []).slice(0, 6)
+      replaceTyping(services.length
+        ? { role: 'bot', text: 'Which service would you like to book?', services }
+        : { role: 'bot', text: 'No specific services listed — I\'ll book a standard consultation.', confirm: { provider: draft.provider, date, time } })
+    } catch {
+      replaceTyping({ role: 'bot', text: 'Could not load services — please try again.' })
+    }
+  }
+
+  // ── 4. Service picked → confirm ─────────────────────────────────────────
+  function pickService(svc: Service) {
+    const next = { ...draft, service: svc }
+    setDraft(next)
+    push({ role: 'user', text: svc.serviceName })
+    push({ role: 'bot', text: `Confirm: ${svc.serviceName}${svc.price ? ` · Rs ${svc.price}` : ''} with ${next.provider!.name} on ${next.date} at ${next.time}?`, confirm: next })
+  }
+
+  // ── 5. Confirm → book (or sign-in handoff) ──────────────────────────────
+  async function confirmBooking(d: Draft) {
+    if (!loggedIn) {
+      try { localStorage.setItem(PENDING_KEY, JSON.stringify(d)) } catch { /* ignore */ }
+      push({ role: 'bot', text: 'You just need to sign in to confirm — your booking is saved and will resume right after.', signIn: true })
+      return
+    }
+    push({ role: 'bot', typing: true })
+    try {
+      const wf = d.service?.workflows?.[0]
+      const res = await fetch('/api/bookings', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({
+          providerUserId: d.provider!.id,
+          providerType: d.provider!.userType,
+          scheduledDate: d.date,
+          scheduledTime: d.time,
+          platformServiceId: d.service?.id,
+          serviceName: d.service?.serviceName,
+          duration: d.service?.duration ?? 30,
+          type: wf?.serviceMode || 'in_person',
+          workflowTemplateId: wf?.id,
+          reason: d.service?.serviceName,
+        }),
+      })
+      const j = await res.json()
+      if (!j.success && !j.booking) throw new Error(j.message || 'Booking failed')
+      const ticket = j.booking?.ticketId ? ` (ref ${j.booking.ticketId})` : ''
+      replaceTyping({ role: 'bot', text: `✅ Booked! Your appointment with ${d.provider!.name} is on ${d.date} at ${d.time}${ticket}.`, bookedHref: '/bookings' })
+      setDraft({})
+    } catch (e) {
+      replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' })
     }
   }
 
@@ -72,7 +198,7 @@ export default function DiscoverAiSearch() {
           <span className="w-9 h-9 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0"><FaRobot /></span>
           <div className="min-w-0">
             <div className="font-bold text-sm leading-tight">AI Health Assistant</div>
-            <div className="text-[11px] text-white/75">Describe your need in your own words</div>
+            <div className="text-[11px] text-white/75">Find a provider & book — in your own words</div>
           </div>
           <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 px-1.5 py-0.5 rounded-full flex-shrink-0"><FaMagic className="text-[8px]" /> RAG</span>
         </div>
@@ -84,7 +210,7 @@ export default function DiscoverAiSearch() {
               {m.role === 'bot' && (
                 <span className="w-7 h-7 rounded-full bg-[#0C6780] text-white flex items-center justify-center text-[11px] flex-shrink-0 mt-0.5"><FaRobot /></span>
               )}
-              <div className={`max-w-[85%] ${m.role === 'user' ? 'order-2' : ''}`}>
+              <div className={`max-w-[88%] ${m.role === 'user' ? 'order-2' : ''}`}>
                 <div className={`rounded-2xl px-3 py-2 text-sm ${m.role === 'user' ? 'bg-[#0C6780] text-white rounded-br-sm' : 'bg-surface border border-line text-fg rounded-tl-sm'}`}>
                   {m.typing ? (
                     <span className="inline-flex gap-1 py-1">
@@ -94,36 +220,93 @@ export default function DiscoverAiSearch() {
                     </span>
                   ) : m.text}
                 </div>
-                {/* Provider result cards */}
+
+                {/* Provider results — each with a Book button */}
                 {m.providers && m.providers.length > 0 && (
                   <div className="mt-2 space-y-1.5">
                     {m.providers.map(r => (
-                      <Link key={r.id} href={`/profile/${r.id}`} className="group flex items-center gap-2.5 rounded-xl border border-line hover:border-[#0C6780]/50 bg-surface px-2.5 py-2 transition">
+                      <div key={r.id} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2">
                         <span className="w-8 h-8 rounded-full bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center text-[11px] font-bold flex-shrink-0">
                           {r.name.split(' ').map(w => w[0] ?? '').join('').toUpperCase().slice(0, 2)}
                         </span>
-                        <span className="min-w-0 flex-1">
+                        <Link href={`/profile/${r.id}`} className="min-w-0 flex-1">
                           <span className="flex items-center gap-1">
                             <span className="text-[13px] font-semibold text-fg truncate">{r.name}</span>
                             {r.verified && <FaCheckCircle className="text-[#0C6780] text-[10px] flex-shrink-0" />}
                           </span>
                           <span className="block text-[10px] text-faint capitalize truncate">
-                            {r.userType.toLowerCase().replace(/_/g, ' ')}{r.address ? ` · ${r.address}` : ''}
+                            {r.userType.toLowerCase().replace(/_/g, ' ')}{r.address ? ` · ${r.address}` : ''}{typeof r.score === 'number' && r.score > 0 ? ` · ${r.score}%` : ''}
                           </span>
-                        </span>
-                        {typeof r.score === 'number' && r.score > 0 && (
-                          <span className="text-[10px] font-semibold text-[#0C6780] flex-shrink-0">{r.score}%</span>
-                        )}
-                        <FaArrowRight className="text-[9px] text-faint group-hover:text-[#0C6780] flex-shrink-0" />
-                      </Link>
+                        </Link>
+                        <button onClick={() => startBooking(r)} className="text-[11px] font-semibold text-white bg-[#0C6780] hover:bg-[#001E40] px-2.5 py-1 rounded-lg flex-shrink-0 inline-flex items-center gap-1 transition">
+                          <FaCalendarCheck className="text-[9px]" /> Book
+                        </button>
+                      </div>
                     ))}
                   </div>
+                )}
+
+                {/* Availability — day → slots */}
+                {m.days && (
+                  <div className="mt-2 space-y-2">
+                    {m.days.map(day => (
+                      <div key={day.date}>
+                        <p className="text-[11px] font-semibold text-soft mb-1">{day.label}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {day.slots.map(t => (
+                            <button key={t} onClick={() => pickSlot(day.date, t, day.label)}
+                              className="text-[11px] border border-[#0C6780]/30 text-[#0C6780] hover:bg-[#0C6780] hover:text-white rounded-lg px-2 py-1 transition">
+                              {t}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Services + pricing */}
+                {m.services && (
+                  <div className="mt-2 space-y-1.5">
+                    {m.services.map(svc => (
+                      <button key={svc.id} onClick={() => pickService(svc)}
+                        className="w-full flex items-center justify-between gap-2 rounded-xl border border-line hover:border-[#0C6780]/50 bg-surface px-3 py-2 text-left transition">
+                        <span className="min-w-0">
+                          <span className="block text-[13px] font-semibold text-fg truncate">{svc.serviceName}</span>
+                          <span className="block text-[10px] text-faint">{svc.duration} min{svc.workflows?.[0]?.serviceMode ? ` · ${svc.workflows[0].serviceMode}` : ''}</span>
+                        </span>
+                        <span className="text-[12px] font-bold text-[#0C6780] flex-shrink-0">{svc.price ? `Rs ${svc.price}` : 'Free'}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Confirm */}
+                {m.confirm && (
+                  <button onClick={() => confirmBooking(m.confirm!)} disabled={loading}
+                    className="mt-2 inline-flex items-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+                    <FaCalendarCheck className="text-xs" /> Confirm booking
+                  </button>
+                )}
+
+                {/* Sign-in handoff */}
+                {m.signIn && (
+                  <Link href="/login" className="mt-2 inline-flex items-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+                    <FaSignInAlt className="text-xs" /> Sign in to continue
+                  </Link>
+                )}
+
+                {/* Booked → view bookings */}
+                {m.bookedHref && (
+                  <Link href={m.bookedHref} className="mt-2 inline-flex items-center gap-2 border border-[#0C6780]/30 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
+                    View my bookings <FaArrowRight className="text-[10px]" />
+                  </Link>
                 )}
               </div>
             </div>
           ))}
 
-          {/* Suggestion chips — shown before the first question */}
+          {/* Suggestion chips — before the first question */}
           {messages.length === 1 && (
             <div className="flex flex-wrap gap-1.5 pt-1">
               {SUGGESTIONS.map(s => (
