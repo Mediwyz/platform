@@ -30,6 +30,7 @@ const MODE_META: Record<string, { label: string; Icon: IconType; cls: string }> 
 
 const CreateBookingModal = dynamic(() => import('@/components/shared/CreateBookingModal'), { ssr: false })
 const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: false })
+const SearchOrgPanel = dynamic(() => import('@/components/search/SearchOrgPanel'), { ssr: false })
 
 interface Provider {
  id: string
@@ -355,8 +356,9 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  <NearbyMap mode="providers" type={config.providerType} noun={`${config.singularLabel.toLowerCase()}s`} accentColor="#0C6780" />
  </div>
 
- {/* Results */}
- <div className="flex-1 min-w-0 mt-2">
+ {/* Results + right rail (organisations offering the searched service) */}
+ <div className="mt-2 flex flex-col lg:flex-row gap-6">
+ <div className="flex-1 min-w-0">
  {isLoading ? (
  <SearchResultsSkeleton />
  ) : searchResults.length > 0 ? (
@@ -386,6 +388,12 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
  ) : (hasSearched || serviceId) ? (
  <NoResults query={searchQuery || serviceName} onClear={serviceId ? clearServiceFilter : handleClearFilters} />
  ) : null}
+ </div>
+
+ {/* Right rail */}
+ <aside className="lg:w-80 flex-shrink-0 space-y-4">
+ <SearchOrgPanel type={config.providerType} query={searchQuery} serviceId={serviceId} />
+ </aside>
  </div>
  </div>
 

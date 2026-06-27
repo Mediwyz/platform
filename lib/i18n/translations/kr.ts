@@ -334,6 +334,8 @@ const kr = {
   'landing.featureStatusDesc': 'Stati rezervasion an tan reel ek notifikasion instantane gard tou dimoun sinkronize.',
   'landing.featureInsuranceTitle': 'Lasirans ek organizasion',
   'landing.featureInsuranceDesc': 'Get bann aser, klinik, lopital ek laboratwar dan rezion dan enn sel anyer.',
+  'landing.featureOrgMgmtTitle': 'Zer ou organizasion',
+  'landing.featureOrgMgmtDesc': 'Kree ek zer enn klinik, lopital, laboratwar, farmasi ou servis lambilans — manb, disponibilite, rezervasion, dispatch ek kotizasion, dan enn sel plas.',
   'landing.featureExplore': 'Explore',
   'landing.craftEyebrow': 'Konsi ek devlope andan',
   'landing.craftHeading': 'Konstri ar swin ki ou sante merite',

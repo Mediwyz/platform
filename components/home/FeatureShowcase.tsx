@@ -15,7 +15,7 @@ import type { IconType } from 'react-icons'
 import {
   FaVideo, FaComments, FaShoppingBag, FaNewspaper, FaAmbulance,
   FaMapMarkedAlt, FaProjectDiagram, FaBell, FaArrowRight, FaUserMd, FaShieldAlt,
-  FaLock, FaBolt, FaMobileAlt, FaUniversalAccess, FaLayerGroup,
+  FaLock, FaBolt, FaMobileAlt, FaUniversalAccess, FaLayerGroup, FaHospital,
 } from 'react-icons/fa'
 import { useTranslation } from '@/lib/i18n'
 
@@ -54,6 +54,7 @@ const FEATURES: Feature[] = [
   { Icon: FaProjectDiagram, titleKey: 'landing.featureWorkflowTitle',      descKey: 'landing.featureWorkflowDesc',      href: '/signup?type=provider',    img: 'provider_work.jpg', span: 'lg:col-span-2' },
   { Icon: FaBell,           titleKey: 'landing.featureStatusTitle',        descKey: 'landing.featureStatusDesc',        href: '/signup',                  img: 'notifications.jpg' },
   { Icon: FaShieldAlt,      titleKey: 'landing.featureInsuranceTitle',     descKey: 'landing.featureInsuranceDesc',     href: '/search/insurance',        img: 'hospital.jpg' },
+  { Icon: FaHospital,       titleKey: 'landing.featureOrgMgmtTitle',       descKey: 'landing.featureOrgMgmtDesc',       href: '/my-company',              img: 'provider_work.jpg', span: 'lg:col-span-2' },
 ]
 
 export default function FeatureShowcase() {

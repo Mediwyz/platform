@@ -996,6 +996,65 @@ export class OrganizationsService {
 
   // ─── Providers + services for booking flow (public) ───────────────────────
 
+  /** Aggregate view of what an org offers, derived from its members: the distinct
+   *  services its providers are configured for + the specialties they hold. */
+  async getOrgServices(id: string) {
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id }, select: { id: true, name: true, type: true, isActive: true },
+    });
+    if (!entity || !entity.isActive) throw new NotFoundException('Healthcare entity not found');
+
+    const members = await (this.prisma.providerWorkplace as any).findMany({
+      where: { healthcareEntityId: id, status: 'active', isActive: true },
+      select: { providerUserId: true, provider: { select: { userType: true } } },
+    });
+    const ids: string[] = members.map((m: any) => m.providerUserId);
+    if (ids.length === 0) return { entity, providerTypes: [], specialties: [], services: [] };
+    const providerTypes = [...new Set(members.map((m: any) => m.provider.userType))];
+
+    // Services any member is configured for.
+    const configs = await (this.prisma.providerServiceConfig as any).findMany({
+      where: { providerUserId: { in: ids }, isActive: true },
+      select: { providerUserId: true, platformServiceId: true },
+    });
+    const svcIds = [...new Set(configs.map((c: any) => c.platformServiceId))];
+    const platformServices = svcIds.length
+      ? await this.prisma.platformService.findMany({
+          where: { id: { in: svcIds }, isActive: true },
+          select: { id: true, serviceName: true, category: true, defaultPrice: true, duration: true, emoji: true },
+        })
+      : [];
+    const providersBySvc = new Map<string, Set<string>>();
+    for (const c of configs) {
+      if (!providersBySvc.has(c.platformServiceId)) providersBySvc.set(c.platformServiceId, new Set());
+      providersBySvc.get(c.platformServiceId)!.add(c.providerUserId);
+    }
+    const services = platformServices.map((s: any) => ({
+      id: s.id, serviceName: s.serviceName, category: s.category, defaultPrice: s.defaultPrice,
+      duration: s.duration, emoji: s.emoji, providerCount: providersBySvc.get(s.id)?.size ?? 0,
+    }));
+
+    // Specialties across the heterogeneous member profiles.
+    const p = this.prisma as any;
+    const [docs, nurses, dentists, physios, nutris, caregivers, optos, pharmas, labs] = await Promise.all([
+      p.doctorProfile.findMany({ where: { userId: { in: ids } }, select: { specialty: true } }),
+      p.nurseProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.dentistProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.physiotherapistProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.nutritionistProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.caregiverProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.optometristProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.pharmacistProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+      p.labTechProfile.findMany({ where: { userId: { in: ids } }, select: { specializations: true } }),
+    ]);
+    const specSet = new Set<string>();
+    for (const d of docs) for (const s of (d.specialty ?? [])) specSet.add(s);
+    for (const arr of [nurses, dentists, physios, nutris, caregivers, optos, pharmas, labs])
+      for (const row of arr) for (const s of (row.specializations ?? [])) specSet.add(s);
+
+    return { entity, providerTypes, specialties: [...specSet].sort(), services };
+  }
+
   async getProvidersServices(id: string) {
     const entity = await (this.prisma.healthcareEntity as any).findUnique({
       where: { id },

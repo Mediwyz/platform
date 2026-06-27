@@ -33,6 +33,15 @@ export class SearchController {
     return { success: true, ...result };
   }
 
+  @Public() @Get('organisations')
+  async searchOrganisations(
+    @Query('type') type?: string, @Query('q') q?: string,
+    @Query('specialty') specialty?: string, @Query('serviceId') serviceId?: string,
+  ) {
+    const result = await this.searchService.searchOrganisations(type, q, specialty, serviceId);
+    return { success: true, ...result };
+  }
+
   // ── Backward-compat aliases — delegate to generic searchProviders ──────────
 
   @Public() @Get('doctors')

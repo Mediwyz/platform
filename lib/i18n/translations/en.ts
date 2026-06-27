@@ -338,6 +338,8 @@ const en = {
   'landing.featureStatusDesc': 'Real-time booking status and instant notifications keep everyone in sync.',
   'landing.featureInsuranceTitle': 'Insurance & organisations',
   'landing.featureInsuranceDesc': 'Browse insurers, clinics, hospitals and labs across the region in one directory.',
+  'landing.featureOrgMgmtTitle': 'Run your organisation',
+  'landing.featureOrgMgmtDesc': 'Found and manage a clinic, hospital, lab, pharmacy or ambulance service — members, availability, bookings, dispatch and contributions, all in one place.',
   'landing.featureExplore': 'Explore',
   'landing.craftEyebrow': 'Engineered & designed in-house',
   'landing.craftHeading': 'Built with the craft your health deserves',

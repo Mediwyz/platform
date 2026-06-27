@@ -334,6 +334,8 @@ const fr = {
   'landing.featureStatusDesc': 'Le statut des réservations en temps réel et les notifications instantanées gardent tout le monde synchronisé.',
   'landing.featureInsuranceTitle': 'Assurances et organisations',
   'landing.featureInsuranceDesc': 'Parcourez assureurs, cliniques, hôpitaux et laboratoires de la région dans un seul annuaire.',
+  'landing.featureOrgMgmtTitle': 'Gérez votre organisation',
+  'landing.featureOrgMgmtDesc': "Créez et gérez une clinique, un hôpital, un laboratoire, une pharmacie ou un service d'ambulance — membres, disponibilités, réservations, régulation et cotisations, au même endroit.",
   'landing.featureExplore': 'Explorer',
   'landing.craftEyebrow': 'Conçu et développé en interne',
   'landing.craftHeading': 'Construit avec le soin que votre santé mérite',

@@ -363,4 +363,12 @@ export class OrganizationsController {
     const data = await this.organizationsService.getProvidersServices(id);
     return { success: true, data };
   }
+
+  @Public()
+  @Get(':id/services')
+  @ApiOperation({ summary: 'Aggregate services + specialties this org offers, derived from its members (public)' })
+  async getOrgServices(@Param('id') id: string) {
+    const data = await this.organizationsService.getOrgServices(id);
+    return { success: true, data };
+  }
 }

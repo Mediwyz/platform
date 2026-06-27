@@ -253,6 +253,61 @@ export class SearchService {
     return { data, total, page: pageNum, limit: take, totalPages: Math.ceil(total / take) };
   }
 
+  /** Organisations that have at least one active provider matching the same
+   *  filters as searchProviders — shown alongside provider search results. */
+  async searchOrganisations(type?: string, query?: string, specialty?: string, serviceId?: string) {
+    const uType = type ? type.toUpperCase() : undefined;
+    const where: any = { accountStatus: 'active' };
+    if (uType) where.userType = uType;
+
+    if (serviceId) {
+      const configs = await this.prisma.providerServiceConfig.findMany({
+        where: { platformServiceId: serviceId, isActive: true },
+        select: { providerUserId: true },
+      });
+      if (configs.length === 0) return { data: [] };
+      where.id = { in: configs.map(c => c.providerUserId) };
+    }
+    if (query) {
+      where.OR = [
+        { firstName: { contains: query, mode: 'insensitive' } },
+        { lastName: { contains: query, mode: 'insensitive' } },
+        { address: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    if (specialty && uType) {
+      const legacyEntry = LEGACY_PROFILE_INCLUDE[uType];
+      const profileRelation = userTypeToProfileRelation[uType];
+      if (legacyEntry && profileRelation) where[profileRelation] = { [legacyEntry.specialtyField]: { has: specialty } };
+    }
+
+    const matching = await this.prisma.user.findMany({ where, select: { id: true } });
+    const ids = matching.map(u => u.id);
+    if (ids.length === 0) return { data: [] };
+
+    const workplaces = await (this.prisma.providerWorkplace as any).findMany({
+      where: { providerUserId: { in: ids }, isActive: true, status: 'active' },
+      select: { healthcareEntityId: true, providerUserId: true },
+    });
+    const byEntity = new Map<string, Set<string>>();
+    for (const w of workplaces) {
+      if (!w.healthcareEntityId) continue;
+      if (!byEntity.has(w.healthcareEntityId)) byEntity.set(w.healthcareEntityId, new Set());
+      byEntity.get(w.healthcareEntityId)!.add(w.providerUserId);
+    }
+    const entityIds = [...byEntity.keys()];
+    if (entityIds.length === 0) return { data: [] };
+
+    const entities = await (this.prisma.healthcareEntity as any).findMany({
+      where: { id: { in: entityIds }, isActive: true },
+      select: { id: true, name: true, type: true, city: true, logoUrl: true, isVerified: true },
+    });
+    const data = entities
+      .map((e: any) => ({ ...e, providerCount: byEntity.get(e.id)?.size ?? 0 }))
+      .sort((a: any, b: any) => b.providerCount - a.providerCount);
+    return { data };
+  }
+
   async searchLabTests(q?: string, page?: number, limit?: number) {
     const pageNum = Math.max(page || 1, 1);
     const limitNum = Math.min(limit || 20, 50);
