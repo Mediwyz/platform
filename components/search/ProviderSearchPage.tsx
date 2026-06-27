@@ -31,6 +31,7 @@ const MODE_META: Record<string, { label: string; Icon: IconType; cls: string }> 
 const CreateBookingModal = dynamic(() => import('@/components/shared/CreateBookingModal'), { ssr: false })
 const NearbyMap = dynamic(() => import('@/components/search/NearbyMap'), { ssr: false })
 const SearchOrgPanel = dynamic(() => import('@/components/search/SearchOrgPanel'), { ssr: false })
+const SearchAiPanel = dynamic(() => import('@/components/search/SearchAiPanel'), { ssr: false })
 
 interface Provider {
  id: string
@@ -392,6 +393,7 @@ function ProviderSearchContent({ config }: { config: ProviderSearchPageConfig })
 
  {/* Right rail */}
  <aside className="lg:w-80 flex-shrink-0 space-y-4">
+ <SearchAiPanel />
  <SearchOrgPanel type={config.providerType} query={searchQuery} serviceId={serviceId} />
  </aside>
  </div>

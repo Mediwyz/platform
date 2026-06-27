@@ -1783,6 +1783,21 @@ model ServiceBooking {
   @@index([organizationId])
 }
 
+// Semantic-search vector for a provider, embedded with Gemini text-embedding-004.
+// Stored as a Float[] (no pgvector dependency) — similarity is computed in the
+// query path, which is fine at the platform's provider count. Drop-in upgrade to
+// pgvector later if the corpus grows large.
+model ProviderEmbedding {
+  id             String   @id @default(uuid())
+  providerUserId String   @unique
+  textCorpus     String
+  embedding      Float[]
+  dim            Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  @@index([providerUserId])
+}
+
 // Per-organisation weekly availability for a provider who works at that org.
 // Distinct from the global ProviderAvailability so a provider can keep different
 // hours at each org. Slot generation prefers org rows and falls back to global.

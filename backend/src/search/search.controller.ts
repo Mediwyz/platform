@@ -1,7 +1,9 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query, Body, ForbiddenException } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SearchService } from './search.service';
 import { Public } from '../auth/decorators/public.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtPayload } from '../auth/jwt.strategy';
 
 @ApiTags('Search')
 @Controller('search')
@@ -40,6 +42,23 @@ export class SearchController {
   ) {
     const result = await this.searchService.searchOrganisations(type, q, specialty, serviceId);
     return { success: true, ...result };
+  }
+
+  // ── Natural-language (RAG) provider search ──────────────────────────────
+  @Public() @Post('semantic')
+  async semantic(@Body() body: { query?: string }) {
+    const data = await this.searchService.semanticSearch((body?.query || '').trim());
+    return { success: true, ...data };
+  }
+
+  // Admin-only: (re)embed every provider with Gemini. Run after providers change.
+  @Post('embeddings/rebuild')
+  async rebuildEmbeddings(@CurrentUser() user: JwtPayload) {
+    if (!['admin', 'regional-admin'].includes(user.userType)) {
+      throw new ForbiddenException('Admins only');
+    }
+    const data = await this.searchService.rebuildEmbeddings();
+    return { success: true, ...data };
   }
 
   // ── Backward-compat aliases — delegate to generic searchProviders ──────────
