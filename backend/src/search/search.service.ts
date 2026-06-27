@@ -280,7 +280,7 @@ export class SearchService {
     return this.providerIndex.rebuildAll();
   }
 
-  private async extractIntent(query: string): Promise<{ type?: string; specialty?: string }> {
+  private async extractIntent(query: string): Promise<{ type?: string; specialty?: string; location?: string; serviceMode?: string; serviceName?: string }> {
     const key = process.env.GROQ_API_KEY;
     if (!key) return {};
     try {
@@ -289,7 +289,14 @@ export class SearchService {
         body: JSON.stringify({
           model: 'llama-3.1-8b-instant', temperature: 0, response_format: { type: 'json_object' },
           messages: [
-            { role: 'system', content: `Extract what kind of health provider the user wants. Reply ONLY JSON: {"type": one of ${this.PROVIDER_USERTYPES.join('|')} or null, "specialty": short phrase or null}.` },
+            { role: 'system', content:
+`Extract structured search filters from a patient's health request (any language). Reply ONLY JSON:
+{"type": one of ${this.PROVIDER_USERTYPES.join('|')} or null,
+ "specialty": short specialty/sub-field phrase or null,
+ "location": a city / area / town name mentioned, or null,
+ "serviceMode": one of in_person|video|audio|home (how they want to be seen) or null,
+ "serviceName": a specific service/treatment/test name or null}
+Map synonyms: "office/in clinic"→in_person, "call/phone"→audio, "video/online/téléconsultation"→video, "at home/à domicile/home visit"→home.` },
             { role: 'user', content: query },
           ],
         }),
@@ -299,7 +306,14 @@ export class SearchService {
       const content = json?.choices?.[0]?.message?.content;
       const parsed = content ? JSON.parse(content) : {};
       const type = this.PROVIDER_USERTYPES.includes(parsed?.type) ? parsed.type : undefined;
-      return { type, specialty: parsed?.specialty || undefined };
+      const modeOk = ['in_person', 'video', 'audio', 'home'].includes(parsed?.serviceMode) ? parsed.serviceMode : undefined;
+      return {
+        type,
+        specialty: parsed?.specialty || undefined,
+        location: parsed?.location || undefined,
+        serviceMode: modeOk,
+        serviceName: parsed?.serviceName || undefined,
+      };
     } catch { return {}; }
   }
 
@@ -363,6 +377,15 @@ export class SearchService {
         profileImage: u.profileImage, address: u.address, verified: u.verified,
         score: Math.round((scoreById.get(u.id) ?? 0) * 100),
       }));
+
+    // Boost providers whose address matches an extracted location (V8 sort is
+    // stable, so within each group the semantic order is preserved).
+    if (intent.location) {
+      const loc = intent.location.toLowerCase();
+      providers.sort((a, b) =>
+        Number((b.address || '').toLowerCase().includes(loc)) - Number((a.address || '').toLowerCase().includes(loc)));
+    }
+
     return { intent, usedVector: true, providers };
   }
 

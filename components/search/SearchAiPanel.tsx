@@ -15,7 +15,7 @@ export default function SearchAiPanel() {
   const [q, setQ] = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<Result[] | null>(null)
-  const [intent, setIntent] = useState<{ type?: string; specialty?: string }>({})
+  const [intent, setIntent] = useState<{ type?: string; specialty?: string; location?: string; serviceMode?: string; serviceName?: string }>({})
   const [asked, setAsked] = useState('')
 
   async function ask() {
@@ -55,10 +55,13 @@ export default function SearchAiPanel() {
         </button>
       </div>
 
-      {(intent.type || intent.specialty) && results && (
+      {results && (intent.type || intent.specialty || intent.location || intent.serviceMode || intent.serviceName) && (
         <p className="text-[11px] text-soft mt-3">
-          Understood: {intent.type ? <span className="font-medium capitalize">{intent.type.toLowerCase().replace(/_/g, ' ')}</span> : 'provider'}
+          Understood: <span className="font-medium capitalize">{intent.type ? intent.type.toLowerCase().replace(/_/g, ' ') : 'provider'}</span>
           {intent.specialty ? <> · <span className="font-medium">{intent.specialty}</span></> : ''}
+          {intent.serviceName ? <> · <span className="font-medium">{intent.serviceName}</span></> : ''}
+          {intent.serviceMode ? <> · <span className="font-medium">{intent.serviceMode.replace(/_/g, ' ')}</span></> : ''}
+          {intent.location ? <> · <span className="font-medium">in {intent.location}</span></> : ''}
         </p>
       )}
 

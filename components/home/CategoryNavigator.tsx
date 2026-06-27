@@ -223,10 +223,10 @@ export default function CategoryNavigator() {
         {/*  Level 1  Entities  */}
         {/* First thing a new user sees: 22 grid of large cards (was a single
             cramped row of 4). Bigger tap targets + more breathing room. */}
-        {!entity && <DiscoverAiSearch />}
-
         {!entity && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+          <div className="grid lg:grid-cols-[1fr_24rem] gap-6 lg:gap-8 max-w-6xl mx-auto items-start">
+            {/* Left: the 4 category cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             {ENTITIES.map(e => {
               const Icon = e.Icon
               return (
@@ -257,6 +257,11 @@ export default function CategoryNavigator() {
                 </button>
               )
             })}
+            </div>
+            {/* Right: AI chatbot column */}
+            <aside className="lg:sticky lg:top-24">
+              <DiscoverAiSearch />
+            </aside>
           </div>
         )}
 
