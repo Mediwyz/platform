@@ -7,8 +7,9 @@ import {
   FaBuilding, FaUsers, FaEnvelope, FaCog, FaCheck, FaTimes,
   FaUserCircle, FaUpload, FaTrash, FaCopy, FaSpinner,
   FaBoxOpen, FaPlus, FaEdit, FaExclamationTriangle, FaPrescriptionBottleAlt,
-  FaTachometerAlt, FaAmbulance, FaRoute, FaMapMarkerAlt, FaCircle,
+  FaTachometerAlt, FaAmbulance, FaRoute, FaMapMarkerAlt, FaCircle, FaCalendarAlt,
 } from 'react-icons/fa'
+import OrgBookingAdmin from '@/components/organizations/OrgBookingAdmin'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ interface Invitation {
   id: string; email: string; suggestedRole: string | null; token: string; createdAt: string
 }
 
-type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'inventory' | 'dispatch' | 'settings'
+type TabId = 'dashboard' | 'overview' | 'members' | 'invite' | 'booking' | 'inventory' | 'dispatch' | 'settings'
 
 // Pharmacies / health-shops get an Inventory tab; other org types don't.
 const isInventoryOrg = (type: string) => /pharmac|health[\s_-]?shop|drugstore/i.test(type || '')
@@ -934,6 +935,7 @@ const BASE_TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview', icon: <FaBuilding /> },
   { id: 'members', label: 'Members', icon: <FaUsers /> },
   { id: 'invite', label: 'Invite', icon: <FaEnvelope /> },
+  { id: 'booking', label: 'Booking', icon: <FaCalendarAlt /> },
   { id: 'settings', label: 'Settings', icon: <FaCog /> },
 ]
 
@@ -1064,6 +1066,7 @@ export default function ManageOrganizationPage() {
           {activeTab === 'overview' && <OverviewTab entity={entity} id={id} canManage={canManage} />}
           {activeTab === 'members' && <MembersTab id={id} />}
           {activeTab === 'invite' && <InviteTab id={id} />}
+          {activeTab === 'booking' && <OrgBookingAdmin orgId={id} />}
           {activeTab === 'inventory' && <InventoryTab id={id} />}
           {activeTab === 'dispatch' && <DispatchTab id={id} />}
           {activeTab === 'settings' && <SettingsTab />}
