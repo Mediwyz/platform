@@ -400,9 +400,14 @@ export class SearchService {
     }
 
     // Fallback when no embeddings yet (or no Gemini key): keyword search by intent.
+    // Try the specialty filter first, then all providers of that type so the user
+    // still sees relevant people instead of an empty panel.
     if (ranked.length === 0) {
       if (intent.type) {
-        const fb = await this.searchProviders(intent.type, intent.specialty, 1, 8);
+        let fb = intent.specialty
+          ? await this.searchProviders(intent.type, undefined, 1, 8, intent.specialty)
+          : { data: [] as any[] };
+        if (!fb.data.length) fb = await this.searchProviders(intent.type, undefined, 1, 8);
         return { intent, usedVector: false, providers: fb.data };
       }
       return { intent, usedVector: false, providers: [] };
