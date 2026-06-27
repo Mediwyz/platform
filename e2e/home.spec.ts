@@ -57,14 +57,16 @@ test.describe('Home Page', () => {
     await expect(page.locator('button', { hasText: /Browse the full catalogue/i }).first()).toBeVisible({ timeout: 10_000 })
   })
 
-  test('hero feature pills are visible', async ({ page }) => {
+  test('hero agentic assistant is visible', async ({ page }) => {
     // Generous timeout: the very first request right after a deploy hits a cold
     // VPS that is still warming up, so the hero can take >10s to paint.
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    // Assert on an actual hero pill — specific and always visible. A loose
-    // /Healthcare/ regex used to match a hidden "Healthcare Services" heading.
-    await expect(page.getByText('AI Health Assistant', { exact: true }).first())
+    // The hero is now a discussable agent (WyzoAssistant variant="hero"):
+    // assert its input and a default suggestion chip are present.
+    await expect(page.getByPlaceholder(/Posez votre question/i).first())
       .toBeVisible({ timeout: 30_000 })
+    await expect(page.getByText('Assistant Santé IA', { exact: true }).first())
+      .toBeVisible({ timeout: 10_000 })
   })
 
   test('sticky CTA bar appears after scrolling past hero', async ({ page }) => {
