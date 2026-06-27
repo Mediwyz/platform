@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { FaRobot, FaTint, FaDumbbell, FaUtensils, FaBed, FaArrowRight } from 'react-icons/fa'
-import BotHealthAssistant from '@/app/patient/(dashboard)/components/BotHealthAssistant'
+import WyzoAssistant from '@/components/shared/WyzoAssistant'
 
 interface AiCoachTabProps {
  userName?: string
@@ -28,7 +28,7 @@ const QUICK_PROMPTS = [
  { label: "Sleep improvement", prompt: "How can I improve my sleep quality based on my recent sleep patterns?", icon: FaBed },
 ]
 
-export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
+export default function AiCoachTab(_props: AiCoachTabProps) {
  const [snapshot, setSnapshot] = useState<TodaySnapshot | null>(null)
  const [showChat, setShowChat] = useState(false)
 
@@ -54,22 +54,14 @@ export default function AiCoachTab({ userName, healthScore }: AiCoachTabProps) {
  if (showChat) {
   return (
    <div className="h-full flex flex-col">
-    <div className="flex items-center gap-3 px-4 py-3 bg-surface border-b border-line">
-     <button
-      onClick={() => setShowChat(false)}
-      className="text-xs text-[#0C6780] dark:text-accent hover:underline font-medium"
-     >
-      ← Back
-     </button>
-     <div className="flex items-center gap-2">
-      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#001E40] to-[#0C6780] flex items-center justify-center">
-       <FaRobot className="text-white text-xs" />
-      </div>
-      <span className="text-sm font-bold text-fg">Wyzo - Health AI</span>
-     </div>
-    </div>
-    <div className="flex-1 min-h-0">
-     <BotHealthAssistant userName={userName} healthScore={healthScore} />
+    <button
+     onClick={() => setShowChat(false)}
+     className="self-start text-xs text-[#0C6780] dark:text-accent hover:underline font-medium px-4 py-2"
+    >
+     ← Back
+    </button>
+    <div className="flex-1 min-h-0 px-2 pb-2">
+     <WyzoAssistant variant="tab" />
     </div>
    </div>
   )
