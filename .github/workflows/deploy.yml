@@ -185,6 +185,7 @@ jobs:
           cat > .env <<ENVEOF
           DATABASE_URL=$DB_URL
           GROQ_API_KEY=$GROQ_API_KEY
+          GEMINI_API_KEY=$GEMINI_API_KEY
           JWT_SECRET=$JWT_SECRET
           PORT=3000
           API_PORT=3001
@@ -479,6 +480,7 @@ jobs:
           DB_URL:              ${{ secrets.DATABASE_URL || format('postgresql://mediwyz:{0}@db:5432/mediwyz', secrets.POSTGRES_PASSWORD) }}
           JWT_SECRET:          ${{ secrets.JWT_SECRET }}
           GROQ_API_KEY:        ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY:      ${{ secrets.GEMINI_API_KEY }}
           POSTGRES_PASSWORD:   ${{ secrets.POSTGRES_PASSWORD }}
           SUPER_ADMIN_EMAIL:   ${{ secrets.SUPER_ADMIN_EMAIL }}
           SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}

@@ -353,6 +353,13 @@ export class SearchService {
           create: { providerUserId: id, textCorpus: text, embedding: vec, dim: vec.length },
           update: { textCorpus: text, embedding: vec, dim: vec.length },
         });
+        // Mirror into the native pgvector column for fast similarity search.
+        try {
+          await this.prisma.$executeRawUnsafe(
+            `UPDATE "ProviderEmbedding" SET "embeddingVec" = $1::vector WHERE "providerUserId" = $2`,
+            `[${vec.join(',')}]`, id,
+          );
+        } catch { /* pgvector not ready — the Float[] copy still powers search */ }
         embedded++;
       }));
     }
@@ -391,12 +398,26 @@ export class SearchService {
 
     let ranked: { id: string; score: number }[] = [];
     if (qVec) {
-      const rows = await (this.prisma as any).providerEmbedding.findMany({ select: { providerUserId: true, embedding: true } });
-      ranked = rows
-        .map((r: any) => ({ id: r.providerUserId, score: this.cosine(qVec, r.embedding) }))
-        .filter((r: any) => r.score > 0.55)
-        .sort((a: any, b: any) => b.score - a.score)
-        .slice(0, 12);
+      const qLit = `[${qVec.join(',')}]`;
+      try {
+        // Native pgvector cosine similarity (1 - cosine distance).
+        const rows: any[] = await this.prisma.$queryRawUnsafe(
+          `SELECT "providerUserId", 1 - ("embeddingVec" <=> $1::vector) AS score
+           FROM "ProviderEmbedding"
+           WHERE "embeddingVec" IS NOT NULL
+           ORDER BY "embeddingVec" <=> $1::vector
+           LIMIT 12`, qLit,
+        );
+        ranked = rows.map(r => ({ id: r.providerUserId, score: Number(r.score) })).filter(r => r.score > 0.55);
+      } catch {
+        // pgvector not available yet → in-app cosine over the Float[] copy.
+        const rows = await (this.prisma as any).providerEmbedding.findMany({ select: { providerUserId: true, embedding: true } });
+        ranked = rows
+          .map((r: any) => ({ id: r.providerUserId, score: this.cosine(qVec, r.embedding) }))
+          .filter((r: any) => r.score > 0.55)
+          .sort((a: any, b: any) => b.score - a.score)
+          .slice(0, 12);
+      }
     }
 
     // Fallback when no embeddings yet (or no Gemini key): keyword search by intent.

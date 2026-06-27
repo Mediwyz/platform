@@ -10,3 +10,8 @@ CREATE TABLE IF NOT EXISTS "ProviderEmbedding" (
   "updatedAt"      TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "ProviderEmbedding_providerUserId_key" ON "ProviderEmbedding"("providerUserId");
+
+-- pgvector: native vector column for similarity search (Gemini text-embedding-004
+-- is 768-dim). The Float[] column above is kept as a portable backup / fallback.
+CREATE EXTENSION IF NOT EXISTS vector;
+ALTER TABLE "ProviderEmbedding" ADD COLUMN IF NOT EXISTS "embeddingVec" vector(768);

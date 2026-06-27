@@ -1791,7 +1791,9 @@ model ProviderEmbedding {
   id             String   @id @default(uuid())
   providerUserId String   @unique
   textCorpus     String
-  embedding      Float[]
+  embedding      Float[] // portable fallback copy
+  /// Native pgvector column (768-dim); read/written via raw SQL.
+  embeddingVec   Unsupported("vector(768)")?
   dim            Int      @default(0)
   updatedAt      DateTime @updatedAt
 

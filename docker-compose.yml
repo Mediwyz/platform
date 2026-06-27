@@ -1,6 +1,9 @@
 services:
   db:
-    image: postgres:16-alpine
+    # pgvector/pgvector:pg16 = official postgres:16 + the pgvector extension
+    # preinstalled. Drop-in for the prior postgres:16-alpine image (same PG16,
+    # same data volume) so semantic search can use native vector similarity.
+    image: pgvector/pgvector:pg16
     container_name: mediwyz-db
     restart: unless-stopped
     environment:
