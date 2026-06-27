@@ -16,43 +16,7 @@ const HERO_SUGGESTIONS: Suggestion[] = [
   { label: 'Commander des médicaments en ligne', kind: 'ask' },
 ]
 
-interface HeroStats {
-  providers: number
-  specialties: number
-  countries: number
-  providerTypes: number
-}
-
-function useHeroStats(): HeroStats {
-  const [stats, setStats] = useState<HeroStats>({ providers: 500, specialties: 15, countries: 6, providerTypes: 11 })
-
-  useEffect(() => {
-    Promise.all([
-      fetch('/api/roles?searchEnabled=true').then(r => r.json()),
-      fetch('/api/specialties').then(r => r.json()),
-      fetch('/api/regions').then(r => r.json()),
-    ]).then(([rolesJson, specJson, regionsJson]) => {
-      const totalProviders = rolesJson.success
-        ? (rolesJson.data as Array<{ providerCount: number }>).reduce((s, r) => s + (r.providerCount ?? 0), 0)
-        : 500
-      const specialtyCount = specJson.success ? (specJson.data as unknown[]).length : 15
-      const countryCount   = regionsJson.success ? (regionsJson.data as unknown[]).length : 6
-      const typeCount      = rolesJson.success
-        ? (rolesJson.data as unknown[]).filter((r: any) => r.isProvider).length
-        : 11
-      setStats({
-        providers:     Math.max(totalProviders, 1),
-        specialties:   Math.max(specialtyCount, 1),
-        countries:     Math.max(countryCount, 1),
-        providerTypes: Math.max(typeCount, 1),
-      })
-    }).catch(() => {})
-  }, [])
-
-  return stats
-}
-
-//  Props 
+//  Props
 
 interface HeroSectionProps {
   content?: {
@@ -86,7 +50,6 @@ const DEFAULT_BG = [
 const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
   const { config } = useAppConfig()
   const { t } = useTranslation()
-  const stats = useHeroStats()
 
   // Admin `slides` (title/subtitle/imageUrl) override the bundled backgrounds.
   const bg = slides && slides.length
@@ -134,95 +97,84 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
              style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
-      {/*  Content (single column over the photo)  */}
-      <div className="relative flex items-center" style={{ minHeight: 'inherit' }}>
+      {/*  The entire hero IS the chat UI: one big translucent agent panel.
+           The background photo + Ken-Burns animation show through it; all the
+           slogan/subtitle/suggestions live INSIDE the chat.  */}
+      <div className="relative flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16" style={{ minHeight: 'inherit' }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-24 text-center flex flex-col items-center"
+          className="w-full max-w-3xl mx-auto rounded-[28px] border border-white/15 bg-[#02132a]/45 backdrop-blur-xl shadow-[0_24px_70px_-20px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col"
         >
-          {/* animated caption synced to the background image */}
-          <div className="h-7 mb-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ duration: 0.4 }}
-                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-4 py-1.5 border border-white/15"
+          {/* ── Agent identity zone: the slogan now lives inside the chat ── */}
+          <div className="px-6 sm:px-10 pt-7 sm:pt-9 text-center">
+            {/* animated caption synced to the background image */}
+            <div className="h-7 mb-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.4 }}
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-4 py-1.5 border border-white/15"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
+                  <span className="text-xs font-semibold text-white">{caption.title}</span>
+                  {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55"> {caption.sub}</span>}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold mb-4 leading-[1.03] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
+              {titleParts.map((part, i) => (
+                <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
+                  {part.trim()}
+                  {i === 0 && titleParts.length > 1 && ','}{i === 0 && titleParts.length > 1 && <br />}
+                </span>
+              ))}
+            </h1>
+
+            <p className="text-base sm:text-lg text-white/85 leading-relaxed max-w-2xl mx-auto mb-5">
+              {content?.subtitle || t('landing.heroSubtitle')}
+            </p>
+
+            {/* App download badges */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
+              <a
+                href="/MediWyz-v3.0.0-debug.apk"
+                className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+                aria-label="Get it on Google Play"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
-                <span className="text-xs font-semibold text-white">{caption.title}</span>
-                {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55"> {caption.sub}</span>}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                <FaGooglePlay className="text-lg" />
+                <span className="flex flex-col leading-none">
+                  <span className="text-[8px] uppercase tracking-wide text-soft">Get it on</span>
+                  <span className="text-xs font-bold">Google Play</span>
+                </span>
+              </a>
+              <a
+                href="#"
+                className="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white pl-3 pr-4 py-2 backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+                aria-label="Download on the App Store (coming soon)"
+              >
+                <FaApple className="text-lg" />
+                <span className="flex flex-col leading-none">
+                  <span className="text-[8px] uppercase tracking-wide text-white/60">Coming soon</span>
+                  <span className="text-xs font-bold">App Store</span>
+                </span>
+              </a>
+            </div>
 
-          <h1 className="text-6xl sm:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-7 leading-[1.0] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
-            {titleParts.map((part, i) => (
-              <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
-                {part.trim()}
-                {i === 0 && titleParts.length > 1 && ','}{i === 0 && titleParts.length > 1 && <br />}
-              </span>
-            ))}
-          </h1>
-
-          <p className="text-xl sm:text-2xl xl:text-3xl text-white/85 leading-relaxed max-w-5xl mx-auto mb-9">
-            {content?.subtitle || t('landing.heroSubtitle')}
-          </p>
-
-          {/* App download badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-7">
-            <a
-              href="/MediWyz-v3.0.0-debug.apk"
-              className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
-              aria-label="Get it on Google Play"
-            >
-              <FaGooglePlay className="text-lg" />
-              <span className="flex flex-col leading-none">
-                <span className="text-[8px] uppercase tracking-wide text-soft">Get it on</span>
-                <span className="text-xs font-bold">Google Play</span>
-              </span>
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white pl-3 pr-4 py-2 backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
-              aria-label="Download on the App Store (coming soon)"
-            >
-              <FaApple className="text-lg" />
-              <span className="flex flex-col leading-none">
-                <span className="text-[8px] uppercase tracking-wide text-white/60">Coming soon</span>
-                <span className="text-xs font-bold">App Store</span>
-              </span>
-            </a>
-          </div>
-
-          {/* Agentic hero: the whole hero is a discussable agent. No card/header —
-              it blends into the hero; a frosted dialog box appears on reply. */}
-          <div className="w-full max-w-2xl mx-auto mb-9">
-            <div className="inline-flex items-center gap-2 mb-3 text-xs sm:text-sm font-semibold text-brand-sky">
+            <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-brand-sky">
               <FaRobot className="animate-pulse" />
               <span>Bienvenue dans l&apos;ère Agentique — discutez avec notre IA santé</span>
             </div>
-            <WyzoAssistant variant="hero" suggestions={HERO_SUGGESTIONS} />
           </div>
 
-          {/* Trust stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 w-full max-w-6xl mx-auto">
-            {[
-              { value: stats.providers >= 500 ? '500+' : `${stats.providers}+`, label: t('landing.heroStatProviders'),   sub: t('landing.heroStatProvidersSub') },
-              { value: `${stats.specialties}+`,                                  label: t('landing.heroStatSpecialties'), sub: t('landing.heroStatSpecialtiesSub') },
-              { value: `${stats.countries}`,                                      label: t('landing.heroStatCountries'),   sub: t('landing.heroStatCountriesSub') },
-              { value: `${stats.providerTypes}+`,                                 label: t('landing.heroStatTypes'),       sub: t('landing.heroStatTypesSub') },
-            ].map(stat => (
-              <div key={stat.label} className="flex flex-col rounded-2xl bg-white/[0.08] border border-white/15 px-5 py-5 sm:py-6 backdrop-blur-md">
-                <span className="text-3xl sm:text-4xl xl:text-5xl font-black text-white leading-none">{stat.value}</span>
-                <span className="text-sm font-semibold text-white/85 mt-2">{stat.label}</span>
-                <span className="text-[11px] text-white/50 mt-0.5 leading-tight">{stat.sub}</span>
-              </div>
-            ))}
+          {/* ── The agent: suggestions + conversation + input, full width ── */}
+          <div className="px-4 sm:px-7 pb-6 pt-4">
+            <WyzoAssistant variant="hero" suggestions={HERO_SUGGESTIONS} />
           </div>
         </motion.div>
       </div>

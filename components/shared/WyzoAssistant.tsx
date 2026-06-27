@@ -230,7 +230,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   ) : null
 
   const inputBar = (
-    <div className={hero ? 'flex gap-2 max-w-2xl mx-auto' : 'p-3 border-t border-line flex gap-2 bg-surface flex-shrink-0'}>
+    <div className={hero ? 'flex gap-2' : 'p-3 border-t border-line flex gap-2 bg-surface flex-shrink-0'}>
       <input
         value={input}
         onChange={e => setInput(e.target.value)}
@@ -340,9 +340,9 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   //    box appears once the conversation starts. ──
   if (hero) {
     return (
-      <div className="w-full max-w-2xl mx-auto">
+      <div className="w-full">
         {messages.length > 0 && (
-          <div className="rounded-2xl border border-white/20 bg-canvas/95 backdrop-blur-md shadow-2xl overflow-y-auto max-h-[42vh] p-3 mb-3 text-left space-y-3">
+          <div className="rounded-2xl border border-white/20 bg-canvas/95 backdrop-blur-md shadow-2xl overflow-y-auto max-h-[40vh] p-3 mb-3 text-left space-y-3">
             {messageNodes}
             <div ref={endRef} />
           </div>
