@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import {
- FaChartPie, FaUtensils, FaDumbbell, FaBed, FaRobot,
+ FaUtensils, FaDumbbell, FaBed, FaRobot,
  FaChartLine, FaCalendarAlt, FaHeartbeat,
 } from 'react-icons/fa'
 import { useCapacitor } from '@/hooks/useCapacitor'
 
-import DashboardTab from './tabs/DashboardTab'
 import FoodDiaryTab from './tabs/FoodDiaryTab'
 import ExerciseTab from './tabs/ExerciseTab'
 import SleepTab from './tabs/SleepTab'
@@ -19,39 +18,66 @@ import BloodPressureScanner from './BloodPressureScanner'
 interface HealthTrackerTabsProps {
  userName?: string
  healthScore?: number
+ /** When embedded in the unified dashboard page, flow normally instead of
+  *  taking the full viewport + a fixed mobile bottom bar. */
+ embedded?: boolean
 }
 
+// AI Assistant is the first tab now; the old standalone "Dashboard" tab is gone
+// (the unified dashboard page hosts it). FaChartPie kept off the tab list.
 const TABS = [
- { id: 'dashboard', label: 'Dashboard', icon: FaChartPie },
+ { id: 'ai-coach', label: 'AI Assistant', icon: FaRobot },
  { id: 'food', label: 'Food Diary', icon: FaUtensils },
  { id: 'exercise', label: 'Exercise', icon: FaDumbbell },
  { id: 'sleep', label: 'Sleep', icon: FaBed },
- { id: 'ai-coach', label: 'AI Coach', icon: FaRobot },
  { id: 'progress', label: 'Progress', icon: FaChartLine },
  { id: 'meal-plan', label: 'Meal Plan', icon: FaCalendarAlt },
- // Profile & goals moved to the centralised profile page (`/profile/[id]` →
- // 🔒 Health Goals tab). One canonical destination - per
- // `.claude/rules/…/feedback_centralised_profile.md`. The health tracker
- // now focuses on daily-logging surfaces (food, exercise, sleep, BP).
  { id: 'bp-check', label: 'BP Check', icon: FaHeartbeat },
 ]
 
-export default function HealthTrackerTabs({ userName, healthScore }: HealthTrackerTabsProps) {
+export default function HealthTrackerTabs({ userName, healthScore, embedded }: HealthTrackerTabsProps) {
  const [activeTab, setActiveTab] = useState(0)
  const isCapacitor = useCapacitor()
 
  const renderTab = () => {
   switch (activeTab) {
-  case 0: return <DashboardTab onNavigateToTab={setActiveTab} />
+  case 0: return <AiCoachTab userName={userName} healthScore={healthScore} />
   case 1: return <FoodDiaryTab />
   case 2: return <ExerciseTab />
   case 3: return <SleepTab />
-  case 4: return <AiCoachTab userName={userName} healthScore={healthScore} />
-  case 5: return <ProgressTab />
-  case 6: return <MealPlannerTab />
-  case 7: return <BloodPressureScanner />
-  default: return <DashboardTab onNavigateToTab={setActiveTab} />
+  case 4: return <ProgressTab />
+  case 5: return <MealPlannerTab />
+  case 6: return <BloodPressureScanner />
+  default: return <AiCoachTab userName={userName} healthScore={healthScore} />
   }
+ }
+
+ // Embedded: normal flow with a single horizontal tab bar (no full-viewport
+ // height, no fixed mobile bottom nav).
+ if (embedded) {
+  return (
+   <div className="flex flex-col rounded-2xl border border-line bg-surface overflow-hidden">
+    <div className="flex items-center gap-1 bg-surface border-b border-line px-3 py-2 overflow-x-auto">
+     {TABS.map((tab, index) => {
+      const Icon = tab.icon
+      const isActive = activeTab === index
+      return (
+       <button
+        key={tab.id}
+        onClick={() => setActiveTab(index)}
+        className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+         isActive ? 'bg-[#0C6780] text-white dark:bg-accent dark:text-[#04121f]' : 'text-soft hover:bg-subtle hover:text-fg'
+        }`}
+       >
+        <Icon className="w-4 h-4" />
+        <span>{tab.label}</span>
+       </button>
+      )
+     })}
+    </div>
+    <div className="bg-canvas h-[600px] overflow-y-auto">{renderTab()}</div>
+   </div>
+  )
  }
 
  return (

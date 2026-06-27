@@ -7,6 +7,7 @@ import { FaCalendarCheck, FaClock, FaCheckCircle, FaChartLine, FaComments, FaMon
 import { MdVerified } from 'react-icons/md'
 import Link from 'next/link'
 import DashboardStatCard from '@/components/shared/DashboardStatCard'
+import HealthTrackerTabs from '@/components/health-tracker/HealthTrackerTabs'
 
 interface Workplace {
   id: string
@@ -238,6 +239,15 @@ export default function DynamicProviderDashboard() {
             )}
           </div>
         )}
+      </div>
+
+      {/* Health & AI Assistant — merged from the former standalone AI dashboard.
+          AI Assistant is the first tab; daily-logging surfaces follow. */}
+      <div>
+        <h2 className="text-lg font-bold text-fg mb-3 flex items-center gap-2">
+          <FaRobot className="text-[#0C6780]" /> Health &amp; AI Assistant
+        </h2>
+        <HealthTrackerTabs embedded userName={user?.firstName} />
       </div>
     </div>
   )
