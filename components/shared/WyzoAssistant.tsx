@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import Link from 'next/link'
 import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes } from 'react-icons/fa'
 
@@ -35,6 +35,9 @@ interface Props {
   onClose?: () => void
   greeting?: string
   suggestions?: Suggestion[]
+  /** hero only: the slogan/identity block rendered INSIDE the scroll area, so
+   *  it scrolls up and out of view as the conversation grows. */
+  heroIntro?: ReactNode
 }
 
 const DEFAULT_GREETING = "Hi! 👋 Tell me what you need — in any language. I can find a provider and book it, or answer your questions about MediWyz."
@@ -54,20 +57,32 @@ function getCookie(name: string): string | null {
 }
 function isoDate(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
 
-export default function WyzoAssistant({ variant = 'panel', onClose, greeting, suggestions }: Props) {
+export default function WyzoAssistant({ variant = 'panel', onClose, greeting, suggestions, heroIntro }: Props) {
   const hero = variant === 'hero'
   const [messages, setMessages] = useState<Msg[]>(hero ? [] : [{ role: 'bot', text: greeting ?? DEFAULT_GREETING }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [draft, setDraft] = useState<Draft>({})
   const endRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const sessionRef = useRef<string | undefined>(undefined)
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
   const push = useCallback((m: Msg) => setMessages(prev => [...prev, m]), [])
   const replaceTyping = useCallback((m: Msg) => setMessages(prev => [...prev.slice(0, -1), m]), [])
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
+  // Non-hero placements: scroll the message into view as before. Hero: keep the
+  // identity block pinned at first paint (no messages yet); once the user
+  // engages, scroll the bounded container so the intro slides up and away.
+  useEffect(() => {
+    if (hero) {
+      if (messages.length === 0) return
+      const el = scrollRef.current
+      if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+      return
+    }
+    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, hero])
 
   // Resume a pending booking after sign-in.
   useEffect(() => {
@@ -340,15 +355,17 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   //    box appears once the conversation starts. ──
   if (hero) {
     return (
-      <div className="w-full">
-        {messages.length > 0 && (
-          <div className="rounded-2xl border border-white/20 bg-canvas/95 backdrop-blur-md shadow-2xl overflow-y-auto max-h-[40vh] p-3 mb-3 text-left space-y-3">
-            {messageNodes}
-            <div ref={endRef} />
-          </div>
-        )}
-        {chipsNode && <div className="mb-3">{chipsNode}</div>}
-        {inputBar}
+      <div className="w-full h-full flex flex-col">
+        {/* One bounded, vertically-scrollable area: the identity block + the
+            conversation share it, so older content slides up and out of view
+            as new replies arrive. */}
+        <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-1 pb-2 space-y-4">
+          {heroIntro}
+          {messages.length > 0 && <div className="space-y-3 text-left">{messageNodes}</div>}
+          {chipsNode}
+          <div ref={endRef} />
+        </div>
+        <div className="pt-3 flex-shrink-0">{inputBar}</div>
       </div>
     )
   }

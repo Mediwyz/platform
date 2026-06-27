@@ -65,6 +65,74 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
   const titleParts = (content?.mainTitle || config.heroTitle || t('landing.heroTitle')).split(',')
   const caption = bg[index]
 
+  // The slogan / identity block. Rendered INSIDE the agent's scroll area so it
+  // scrolls up and out of view once the conversation starts.
+  const heroIntro = (
+    <div className="pt-5 sm:pt-8 text-center">
+      {/* animated caption synced to the background image */}
+      <div className="h-7 mb-4">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-4 py-1.5 border border-white/15"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
+            <span className="text-xs font-semibold text-white">{caption.title}</span>
+            {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55"> {caption.sub}</span>}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold mb-4 leading-[1.03] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+        {titleParts.map((part, i) => (
+          <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
+            {part.trim()}
+            {i === 0 && titleParts.length > 1 && ','}{i === 0 && titleParts.length > 1 && <br />}
+          </span>
+        ))}
+      </h1>
+
+      <p className="text-base sm:text-lg text-white/90 leading-relaxed max-w-2xl mx-auto mb-5 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
+        {content?.subtitle || t('landing.heroSubtitle')}
+      </p>
+
+      {/* App download badges */}
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
+        <a
+          href="/MediWyz-v3.0.0-debug.apk"
+          className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+          aria-label="Get it on Google Play"
+        >
+          <FaGooglePlay className="text-lg" />
+          <span className="flex flex-col leading-none">
+            <span className="text-[8px] uppercase tracking-wide text-soft">Get it on</span>
+            <span className="text-xs font-bold">Google Play</span>
+          </span>
+        </a>
+        <a
+          href="#"
+          className="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white pl-3 pr-4 py-2 backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
+          aria-label="Download on the App Store (coming soon)"
+        >
+          <FaApple className="text-lg" />
+          <span className="flex flex-col leading-none">
+            <span className="text-[8px] uppercase tracking-wide text-white/60">Coming soon</span>
+            <span className="text-xs font-bold">App Store</span>
+          </span>
+        </a>
+      </div>
+
+      <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-brand-sky drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
+        <FaRobot className="animate-pulse" />
+        <span>Bienvenue dans l&apos;ère Agentique — discutez avec notre IA santé</span>
+      </div>
+    </div>
+  )
+
   return (
     <section
       className="relative overflow-hidden isolate"
@@ -97,85 +165,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
              style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
-      {/*  The entire hero IS the chat UI: one big translucent agent panel.
-           The background photo + Ken-Burns animation show through it; all the
-           slogan/subtitle/suggestions live INSIDE the chat.  */}
-      <div className="relative flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16" style={{ minHeight: 'inherit' }}>
+      {/*  The entire hero IS the chat UI. The panel is transparent so the full
+           background photo + Ken-Burns animation stay visible; the slogan lives
+           inside the agent's bounded scroll area and slides up as you chat.  */}
+      <div className="relative flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10" style={{ minHeight: 'inherit' }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="w-full max-w-3xl mx-auto rounded-[28px] border border-white/15 bg-[#02132a]/45 backdrop-blur-xl shadow-[0_24px_70px_-20px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col"
+          className="w-full max-w-3xl mx-auto h-[80vh] flex flex-col"
         >
-          {/* ── Agent identity zone: the slogan now lives inside the chat ── */}
-          <div className="px-6 sm:px-10 pt-7 sm:pt-9 text-center">
-            {/* animated caption synced to the background image */}
-            <div className="h-7 mb-4">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.4 }}
-                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full pl-2 pr-4 py-1.5 border border-white/15"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-sky" />
-                  <span className="text-xs font-semibold text-white">{caption.title}</span>
-                  {caption.sub && <span className="hidden sm:inline text-[11px] text-white/55"> {caption.sub}</span>}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold mb-4 leading-[1.03] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
-              {titleParts.map((part, i) => (
-                <span key={i} className={i === 1 ? 'text-brand-sky' : ''}>
-                  {part.trim()}
-                  {i === 0 && titleParts.length > 1 && ','}{i === 0 && titleParts.length > 1 && <br />}
-                </span>
-              ))}
-            </h1>
-
-            <p className="text-base sm:text-lg text-white/85 leading-relaxed max-w-2xl mx-auto mb-5">
-              {content?.subtitle || t('landing.heroSubtitle')}
-            </p>
-
-            {/* App download badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
-              <a
-                href="/MediWyz-v3.0.0-debug.apk"
-                className="inline-flex items-center gap-2 rounded-xl bg-surface text-fg pl-3 pr-4 py-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
-                aria-label="Get it on Google Play"
-              >
-                <FaGooglePlay className="text-lg" />
-                <span className="flex flex-col leading-none">
-                  <span className="text-[8px] uppercase tracking-wide text-soft">Get it on</span>
-                  <span className="text-xs font-bold">Google Play</span>
-                </span>
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/25 text-white pl-3 pr-4 py-2 backdrop-blur-sm hover:bg-white/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
-                aria-label="Download on the App Store (coming soon)"
-              >
-                <FaApple className="text-lg" />
-                <span className="flex flex-col leading-none">
-                  <span className="text-[8px] uppercase tracking-wide text-white/60">Coming soon</span>
-                  <span className="text-xs font-bold">App Store</span>
-                </span>
-              </a>
-            </div>
-
-            <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-brand-sky">
-              <FaRobot className="animate-pulse" />
-              <span>Bienvenue dans l&apos;ère Agentique — discutez avec notre IA santé</span>
-            </div>
-          </div>
-
-          {/* ── The agent: suggestions + conversation + input, full width ── */}
-          <div className="px-4 sm:px-7 pb-6 pt-4">
-            <WyzoAssistant variant="hero" suggestions={HERO_SUGGESTIONS} />
-          </div>
+          <WyzoAssistant variant="hero" suggestions={HERO_SUGGESTIONS} heroIntro={heroIntro} />
         </motion.div>
       </div>
 
