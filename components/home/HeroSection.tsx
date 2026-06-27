@@ -5,7 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useAppConfig } from '@/hooks/useAppConfig'
 import { useTranslation } from '@/lib/i18n'
-import { FaRobot, FaVideo, FaHome, FaPills, FaGooglePlay, FaApple } from 'react-icons/fa'
+import { FaRobot, FaGooglePlay, FaApple } from 'react-icons/fa'
+import WyzoAssistant, { Suggestion } from '@/components/shared/WyzoAssistant'
+
+// Default chat starters mapped to the four hero capabilities.
+const HERO_SUGGESTIONS: Suggestion[] = [
+  { label: 'Assistant Santé IA', kind: 'ask' },
+  { label: 'Un médecin en consultation vidéo', kind: 'search' },
+  { label: 'Une infirmière à domicile', kind: 'search' },
+  { label: 'Commander des médicaments en ligne', kind: 'ask' },
+]
 
 interface HeroStats {
   providers: number
@@ -190,26 +199,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ content, slides }) => {
             </a>
           </div>
 
-          {/* Feature pills */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {[
-              { icon: <FaRobot className="text-brand-sky" />, label: t('landing.heroPillAi'),       href: '/ai-assistant' },
-              { icon: <FaVideo className="text-brand-sky" />, label: t('landing.heroPillVideo'),    sectionId: 'discover-section' },
-              { icon: <FaHome  className="text-brand-sky" />, label: t('landing.heroPillHome'),     sectionId: 'discover-section' },
-              { icon: <FaPills className="text-brand-sky" />, label: t('landing.heroPillPharmacy'), sectionId: 'discover-section' },
-            ].map(f => {
-              const cls = "inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 border border-white/20 text-sm font-medium text-white hover:bg-white/20 hover:border-brand-sky/50 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sky"
-              if ('href' in f) return (
-                <a key={f.label} href={f.href} className={cls}>{f.icon} {f.label}</a>
-              )
-              return (
-                <button key={f.label} type="button" className={cls} onClick={() => {
-                  document.getElementById(f.sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }}>
-                  {f.icon} {f.label}
-                </button>
-              )
-            })}
+          {/* Agentic hero: the whole hero is a discussable agent. No card/header —
+              it blends into the hero; a frosted dialog box appears on reply. */}
+          <div className="w-full max-w-2xl mx-auto mb-9">
+            <div className="inline-flex items-center gap-2 mb-3 text-xs sm:text-sm font-semibold text-brand-sky">
+              <FaRobot className="animate-pulse" />
+              <span>Bienvenue dans l&apos;ère Agentique — discutez avec notre IA santé</span>
+            </div>
+            <WyzoAssistant variant="hero" suggestions={HERO_SUGGESTIONS} />
           </div>
 
           {/* Trust stats */}

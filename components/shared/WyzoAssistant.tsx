@@ -28,7 +28,7 @@ interface Msg {
   bookedHref?: string
 }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
-type Variant = 'panel' | 'floating' | 'tab'
+type Variant = 'panel' | 'floating' | 'tab' | 'hero'
 
 interface Props {
   variant?: Variant
@@ -55,7 +55,8 @@ function getCookie(name: string): string | null {
 function isoDate(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
 
 export default function WyzoAssistant({ variant = 'panel', onClose, greeting, suggestions }: Props) {
-  const [messages, setMessages] = useState<Msg[]>([{ role: 'bot', text: greeting ?? DEFAULT_GREETING }])
+  const hero = variant === 'hero'
+  const [messages, setMessages] = useState<Msg[]>(hero ? [] : [{ role: 'bot', text: greeting ?? DEFAULT_GREETING }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [draft, setDraft] = useState<Draft>({})
@@ -213,35 +214,43 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     } catch (e) { replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' }) }
   }
 
-  // ── Layout config per variant ──────────────────────────────────────────
-  const outer = variant === 'panel'
-    ? 'rounded-3xl border border-[#0C6780]/25 shadow-lg'
-    : variant === 'tab'
-      ? 'rounded-2xl border border-line'
-      : ''
-  const msgArea = variant === 'panel'
-    ? 'min-h-[420px] lg:min-h-[480px] max-h-[640px]'
-    : 'flex-1 min-h-0'
+  // ── Shared bits ─────────────────────────────────────────────────────────
+  const showChips = hero ? messages.length === 0 : messages.length === 1
+  const chipsNode = showChips ? (
+    <div className={`flex flex-wrap gap-1.5 ${hero ? 'justify-center' : 'pt-1'}`}>
+      {chips.map(s => (
+        <button key={s.label} onClick={() => send(s.label, s.kind)}
+          className={hero
+            ? 'text-xs text-white border border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 transition'
+            : 'text-[11px] text-[#0C6780] border border-[#0C6780]/30 bg-[#0C6780]/5 hover:bg-[#0C6780]/10 rounded-full px-2.5 py-1 transition'}>
+          {s.label}
+        </button>
+      ))}
+    </div>
+  ) : null
 
-  return (
-    <div className={`w-full h-full bg-surface overflow-hidden flex flex-col ${outer}`}>
-      {/* Header */}
-      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-[#0C6780] to-[#001E40] text-white flex-shrink-0">
-        <span className="w-9 h-9 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0"><FaRobot /></span>
-        <div className="min-w-0">
-          <div className="font-bold text-sm leading-tight">Wyzo — Health AI Assistant</div>
-          <div className="text-[11px] text-white/75 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Find a provider, book, or ask anything</div>
-        </div>
-        {onClose ? (
-          <button onClick={onClose} aria-label="Close" className="ml-auto w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center flex-shrink-0 transition"><FaTimes className="text-xs" /></button>
-        ) : (
-          <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 px-1.5 py-0.5 rounded-full flex-shrink-0"><FaMagic className="text-[8px]" /> RAG</span>
-        )}
-      </div>
+  const inputBar = (
+    <div className={hero ? 'flex gap-2 max-w-2xl mx-auto' : 'p-3 border-t border-line flex gap-2 bg-surface flex-shrink-0'}>
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && send()}
+        placeholder={hero ? 'Posez votre question ou décrivez votre besoin…' : 'Type your request or question…'}
+        className={hero
+          ? 'flex-1 min-w-0 px-4 py-3.5 rounded-2xl text-base bg-white/10 border border-white/25 text-white placeholder-white/55 focus:ring-2 focus:ring-brand-sky focus:bg-white/15 outline-none backdrop-blur-sm'
+          : 'flex-1 min-w-0 px-3 py-2.5 border border-line rounded-2xl text-sm bg-canvas focus:ring-2 focus:ring-[#0C6780] outline-none'}
+        aria-label="Ask Wyzo"
+      />
+      <button onClick={() => send()} disabled={loading || !input.trim()} aria-label="Send"
+        className={hero
+          ? 'px-5 py-3.5 bg-brand-sky text-[#001225] font-bold rounded-2xl hover:bg-white disabled:opacity-50 transition-colors flex-shrink-0'
+          : 'px-3.5 py-2.5 bg-[#0C6780] text-white rounded-2xl hover:bg-[#001E40] disabled:opacity-50 transition-colors flex-shrink-0'}>
+        {loading ? <FaSpinner className="animate-spin" /> : <FaPaperPlane />}
+      </button>
+    </div>
+  )
 
-      {/* Conversation */}
-      <div className={`flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-canvas ${msgArea}`}>
-        {messages.map((m, i) => (
+  const messageNodes = messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'gap-2'}`}>
             {m.role === 'bot' && <span className="w-7 h-7 rounded-full bg-[#0C6780] text-white flex items-center justify-center text-[11px] flex-shrink-0 mt-0.5"><FaRobot /></span>}
             <div className={`max-w-[88%] ${m.role === 'user' ? 'order-2' : ''}`}>
@@ -325,32 +334,58 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
               )}
             </div>
           </div>
-        ))}
+        ))
 
-        {messages.length === 1 && (
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            {chips.map(s => (
-              <button key={s.label} onClick={() => send(s.label, s.kind)} className="text-[11px] text-[#0C6780] border border-[#0C6780]/30 bg-[#0C6780]/5 hover:bg-[#0C6780]/10 rounded-full px-2.5 py-1 transition">{s.label}</button>
-            ))}
+  // ── HERO variant: blends into the hero (no card/header); a frosted dialog
+  //    box appears once the conversation starts. ──
+  if (hero) {
+    return (
+      <div className="w-full max-w-2xl mx-auto">
+        {messages.length > 0 && (
+          <div className="rounded-2xl border border-white/20 bg-canvas/95 backdrop-blur-md shadow-2xl overflow-y-auto max-h-[42vh] p-3 mb-3 text-left space-y-3">
+            {messageNodes}
+            <div ref={endRef} />
           </div>
         )}
+        {chipsNode && <div className="mb-3">{chipsNode}</div>}
+        {inputBar}
+      </div>
+    )
+  }
+
+  const outer = variant === 'panel'
+    ? 'rounded-3xl border border-[#0C6780]/25 shadow-lg'
+    : variant === 'tab'
+      ? 'rounded-2xl border border-line'
+      : ''
+  const msgArea = variant === 'panel'
+    ? 'min-h-[420px] lg:min-h-[480px] max-h-[640px]'
+    : 'flex-1 min-h-0'
+
+  return (
+    <div className={`w-full h-full bg-surface overflow-hidden flex flex-col ${outer}`}>
+      {/* Header */}
+      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-[#0C6780] to-[#001E40] text-white flex-shrink-0">
+        <span className="w-9 h-9 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0"><FaRobot /></span>
+        <div className="min-w-0">
+          <div className="font-bold text-sm leading-tight">Wyzo — Health AI Assistant</div>
+          <div className="text-[11px] text-white/75 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Find a provider, book, or ask anything</div>
+        </div>
+        {onClose ? (
+          <button onClick={onClose} aria-label="Close" className="ml-auto w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center flex-shrink-0 transition"><FaTimes className="text-xs" /></button>
+        ) : (
+          <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 px-1.5 py-0.5 rounded-full flex-shrink-0"><FaMagic className="text-[8px]" /> RAG</span>
+        )}
+      </div>
+
+      {/* Conversation */}
+      <div className={`flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-canvas ${msgArea}`}>
+        {messageNodes}
+        {chipsNode}
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
-      <div className="p-3 border-t border-line flex gap-2 bg-surface flex-shrink-0">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && send()}
-          placeholder="Type your request or question…"
-          className="flex-1 min-w-0 px-3 py-2.5 border border-line rounded-2xl text-sm bg-canvas focus:ring-2 focus:ring-[#0C6780] outline-none"
-          aria-label="Ask Wyzo"
-        />
-        <button onClick={() => send()} disabled={loading || !input.trim()} aria-label="Send" className="px-3.5 py-2.5 bg-[#0C6780] text-white rounded-2xl hover:bg-[#001E40] disabled:opacity-50 transition-colors flex-shrink-0">
-          {loading ? <FaSpinner className="animate-spin" /> : <FaPaperPlane />}
-        </button>
-      </div>
+      {inputBar}
     </div>
   )
 }
