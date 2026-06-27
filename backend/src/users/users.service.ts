@@ -4,12 +4,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { userTypeToProfileRelation, cookieToPrismaUserType } from '../auth/auth.service';
 import { PAYMENT_GATEWAY, PaymentGateway } from '../payments/payment-gateway.interface';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
     private treasury: TreasuryService,
+    private providerIndex: ProviderIndexService,
     @Optional() @Inject(PAYMENT_GATEWAY) private gateway?: PaymentGateway,
   ) {}
 
@@ -87,6 +89,8 @@ export class UsersService {
         heightCm: true, weightKg: true,
       },
     });
+    // Embed-on-write: refresh this provider's semantic index after a profile edit.
+    this.providerIndex.reembedProvider(id).catch(() => {});
     return updated;
   }
 

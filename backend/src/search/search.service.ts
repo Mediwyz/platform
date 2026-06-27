@@ -1,6 +1,8 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { userTypeToProfileRelation } from '../auth/auth.service';
+import { EmbeddingService } from '../embeddings/embedding.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 
 /**
  * LEGACY profile include map — for backward compatibility with roles that have
@@ -28,7 +30,11 @@ const LEGACY_PROFILE_INCLUDE: Record<string, { include: Record<string, any>; spe
 
 @Injectable()
 export class SearchService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private embeddings: EmbeddingService,
+    private providerIndex: ProviderIndexService,
+  ) {}
 
   /**
    * Search providers by type — works for ANY ProviderRole (legacy or dynamic).
@@ -262,22 +268,6 @@ export class SearchService {
     'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST',
   ];
 
-  private async embedGemini(text: string): Promise<number[] | null> {
-    const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-    if (!key) return null;
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${key}`,
-        { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: 'models/text-embedding-004', content: { parts: [{ text: text.slice(0, 8000) }] } }) },
-      );
-      if (!res.ok) return null;
-      const json: any = await res.json();
-      const vals = json?.embedding?.values;
-      return Array.isArray(vals) ? vals : null;
-    } catch { return null; }
-  }
-
   private cosine(a: number[], b: number[]): number {
     let dot = 0, na = 0, nb = 0;
     const n = Math.min(a.length, b.length);
@@ -285,85 +275,9 @@ export class SearchService {
     return na && nb ? dot / (Math.sqrt(na) * Math.sqrt(nb)) : 0;
   }
 
-  /** Build a searchable text blob per provider: name, type, specialties, services, bio, location. */
-  private async buildCorpora(ids: string[]): Promise<Map<string, string>> {
-    const out = new Map<string, string>();
-    if (ids.length === 0) return out;
-    const p = this.prisma as any;
-    const users = await this.prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, firstName: true, lastName: true, userType: true, address: true } });
-    const [docs, nurses, dentists, physios, nutris, caregivers, optos, pharmas, labs] = await Promise.all([
-      p.doctorProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specialty: true, bio: true } }),
-      p.nurseProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.dentistProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.physiotherapistProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.nutritionistProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.caregiverProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.optometristProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.pharmacistProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-      p.labTechProfile.findMany({ where: { userId: { in: ids } }, select: { userId: true, specializations: true } }),
-    ]);
-    const specBy = new Map<string, string[]>(); const bioBy = new Map<string, string>();
-    for (const d of docs) { specBy.set(d.userId, d.specialty ?? []); if (d.bio) bioBy.set(d.userId, d.bio); }
-    for (const arr of [nurses, dentists, physios, nutris, caregivers, optos, pharmas, labs]) for (const r of arr) specBy.set(r.userId, r.specializations ?? []);
-
-    const cfgs = await this.prisma.providerServiceConfig.findMany({ where: { providerUserId: { in: ids }, isActive: true }, select: { providerUserId: true, platformServiceId: true } });
-    const svcIds = [...new Set(cfgs.map(c => c.platformServiceId))];
-    const svcs = svcIds.length ? await this.prisma.platformService.findMany({ where: { id: { in: svcIds } }, select: { id: true, serviceName: true } }) : [];
-    const svcName = new Map<string, string>(svcs.map(s => [s.id, s.serviceName] as [string, string]));
-    const svcBy = new Map<string, string[]>();
-    for (const c of cfgs) { const nm = svcName.get(c.platformServiceId); if (!nm) continue; const a = svcBy.get(c.providerUserId) ?? []; a.push(nm); svcBy.set(c.providerUserId, a); }
-
-    for (const u of users) {
-      const specs = specBy.get(u.id) ?? []; const services = svcBy.get(u.id) ?? []; const bio = bioBy.get(u.id) ?? '';
-      out.set(u.id, [
-        `${u.firstName} ${u.lastName}`,
-        (u.userType || '').replace(/_/g, ' ').toLowerCase(),
-        specs.length ? `Specialties: ${specs.join(', ')}` : '',
-        services.length ? `Services: ${services.join(', ')}` : '',
-        bio,
-        u.address ? `Location: ${u.address}` : '',
-      ].filter(Boolean).join('. '));
-    }
-    return out;
-  }
-
-  /** (Re)embed every active provider. Admin-triggered; idempotent (upsert). */
-  async rebuildEmbeddings(): Promise<{ embedded: number; total: number; keyConfigured: boolean }> {
-    const keyConfigured = !!(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY);
-    const providers = await this.prisma.user.findMany({
-      where: { accountStatus: 'active', userType: { in: this.PROVIDER_USERTYPES as any } },
-      select: { id: true },
-    });
-    const ids = providers.map(u => u.id);
-    if (!keyConfigured) return { embedded: 0, total: ids.length, keyConfigured };
-    const corpora = await this.buildCorpora(ids);
-
-    let embedded = 0;
-    // Embed in small parallel batches to stay well under request timeouts.
-    const batch = 8;
-    for (let i = 0; i < ids.length; i += batch) {
-      const slice = ids.slice(i, i + batch);
-      await Promise.all(slice.map(async id => {
-        const text = corpora.get(id);
-        if (!text) return;
-        const vec = await this.embedGemini(text);
-        if (!vec) return;
-        await (this.prisma as any).providerEmbedding.upsert({
-          where: { providerUserId: id },
-          create: { providerUserId: id, textCorpus: text, embedding: vec, dim: vec.length },
-          update: { textCorpus: text, embedding: vec, dim: vec.length },
-        });
-        // Mirror into the native pgvector column for fast similarity search.
-        try {
-          await this.prisma.$executeRawUnsafe(
-            `UPDATE "ProviderEmbedding" SET "embeddingVec" = $1::vector WHERE "providerUserId" = $2`,
-            `[${vec.join(',')}]`, id,
-          );
-        } catch { /* pgvector not ready — the Float[] copy still powers search */ }
-        embedded++;
-      }));
-    }
-    return { embedded, total: ids.length, keyConfigured };
+  /** Admin-triggered backfill of all provider embeddings. */
+  async rebuildEmbeddings() {
+    return this.providerIndex.rebuildAll();
   }
 
   private async extractIntent(query: string): Promise<{ type?: string; specialty?: string }> {
@@ -394,7 +308,7 @@ export class SearchService {
   async semanticSearch(query: string) {
     if (!query || query.trim().length < 2) return { intent: {}, usedVector: false, providers: [] };
     const intent = await this.extractIntent(query);
-    const qVec = await this.embedGemini(query);
+    const qVec = await this.embeddings.embed(query, 'query');
 
     let ranked: { id: string; score: number }[] = [];
     if (qVec) {

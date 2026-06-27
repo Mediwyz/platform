@@ -5,6 +5,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { validate } from './config/env.validation';
 import { PrismaModule } from './prisma/prisma.module';
+import { EmbeddingModule } from './embeddings/embedding.module';
 import { AuthModule } from './auth/auth.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ChatModule } from './chat/chat.module';
@@ -52,6 +53,7 @@ import { OrganizationsModule } from './organizations/organizations.module';
     NestConfigModule.forRoot({ isGlobal: true, validate }),
     ScheduleModule.forRoot(),
     PrismaModule,
+    EmbeddingModule,
     SharedModule,
     ThrottlerModule.forRoot([
       { name: 'short', ttl: 1000, limit: 20 },

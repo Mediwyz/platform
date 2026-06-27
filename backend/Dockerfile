@@ -1,11 +1,14 @@
 # ─── Stage 1: Install dependencies ─────────────────────────────────────────
-FROM node:20-alpine AS deps
+# node:20-slim (Debian/glibc) — required by onnxruntime-node (used by
+# @huggingface/transformers for local CPU embeddings); the prior alpine/musl
+# base has no prebuilt onnxruntime binary.
+FROM node:20-slim AS deps
 WORKDIR /app
 COPY backend/package.json backend/package-lock.json ./
 RUN npm ci --install-strategy=nested --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000
 
 # ─── Stage 2: Build ───────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 
 # Copy backend deps
@@ -27,14 +30,20 @@ RUN npx prisma generate --schema=./prisma/schema.prisma
 ENV NODE_ENV=production
 RUN npx nest build
 
+# Pre-bake the embedding model into the image cache (no prod cold-start).
+# Non-fatal: if the download fails, the model lazy-loads at runtime instead.
+ENV TRANSFORMERS_CACHE=/app/.models
+RUN node scripts/bake-embeddings.mjs || echo "[bake] skipped — model will download at runtime"
+
 # ─── Stage 3: Production runner ───────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV TRANSFORMERS_CACHE=/app/.models
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
+RUN groupadd --system --gid 1001 nodejs \
+  && useradd --system --uid 1001 --gid nodejs nestjs
 
 # Copy compiled output + production deps
 COPY --from=builder /app/dist ./dist
@@ -48,6 +57,9 @@ COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/clie
 
 # Copy root lib files needed by seed scripts at runtime (ts-node resolves ../../lib/*)
 COPY --from=builder /app/lib ./lib
+
+# Baked embedding model cache
+COPY --from=builder /app/.models ./.models
 
 RUN chown -R nestjs:nodejs /app
 USER nestjs

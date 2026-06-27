@@ -7,6 +7,7 @@ import { JwtPayload } from './jwt.strategy';
 import { UserType } from '../shared/user-types';
 import { RolesResolverService } from '../shared/services/roles-resolver.service';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 
 // ─── Cookie/Prisma user type maps (from lib/auth/user-type-map.ts) ──────────
 
@@ -98,6 +99,7 @@ export class AuthService {
     private prisma: PrismaService,
     private rolesResolver: RolesResolverService,
     private treasury: TreasuryService,
+    private providerIndex: ProviderIndexService,
   ) {
     this.jwtSecret = process.env.JWT_SECRET || 'mediwyz-dev-secret-change-in-production';
   }
@@ -606,6 +608,9 @@ export class AuthService {
       message = 'Registration successful! You can now log in.';
     }
 
+    // Embed-on-write: index new providers for semantic search (self-skips members).
+    this.providerIndex.reembedProvider(user.id).catch(() => {});
+
     return { userId: user.id, accountStatus, hasSkippedDocuments, message };
   }
 
@@ -643,6 +648,9 @@ export class AuthService {
       });
       await tx.user.update({ where: { id: userId }, data: { userType: prismaUserType } });
     });
+
+    // Embed-on-write: index the brand-new provider so they're semantically searchable.
+    this.providerIndex.reembedProvider(userId).catch(() => {});
 
     const cookieUserType =
       (await this.rolesResolver.codeToCookieAsync(prismaUserType)) ??
