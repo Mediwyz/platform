@@ -3,6 +3,7 @@ import { AuthService, cookieToPrismaUserType, prismaUserTypeToCookie } from './a
 import { PrismaService } from '../prisma/prisma.service';
 import { RolesResolverService } from '../shared/services/roles-resolver.service';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 import { UnauthorizedException, ConflictException } from '@nestjs/common';
 
 // Mock PrismaService
@@ -56,6 +57,7 @@ describe('AuthService', () => {
         { provide: PrismaService, useValue: mockPrisma },
         { provide: RolesResolverService, useValue: mockRolesResolver },
         { provide: TreasuryService, useValue: { creditPlatformFee: jest.fn() } },
+        { provide: ProviderIndexService, useValue: { reembedProvider: jest.fn().mockResolvedValue(false) } },
       ],
     }).compile();
 

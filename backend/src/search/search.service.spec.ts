@@ -1,7 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchService } from './search.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { EmbeddingService } from '../embeddings/embedding.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 import { BadRequestException } from '@nestjs/common';
+
+const mockEmbeddings = { embed: jest.fn().mockResolvedValue(null), available: false };
+const mockProviderIndex = { rebuildAll: jest.fn(), reembedProvider: jest.fn() };
 
 const mockPrisma = {
   user: {
@@ -24,6 +29,8 @@ describe('SearchService', () => {
       providers: [
         SearchService,
         { provide: PrismaService, useValue: mockPrisma },
+        { provide: EmbeddingService, useValue: mockEmbeddings },
+        { provide: ProviderIndexService, useValue: mockProviderIndex },
       ],
     }).compile();
 

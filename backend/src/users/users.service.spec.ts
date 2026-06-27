@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { ProviderIndexService } from '../embeddings/provider-index.service';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 const mockPrisma = {
@@ -46,6 +47,7 @@ describe('UsersService', () => {
             creditPlatformFee: jest.fn(), creditContribution: jest.fn(),
             payoutClaim: jest.fn(), payoutProviderDirect: jest.fn(),
           } },
+        { provide: ProviderIndexService, useValue: { reembedProvider: jest.fn().mockResolvedValue(false) } },
       ],
     }).compile();
 
