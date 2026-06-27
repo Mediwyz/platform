@@ -32,9 +32,9 @@ vi.mock('../BloodPressureScanner', () => ({
 }))
 
 describe('HealthTrackerTabs', () => {
- it('renders with dashboard tab by default', () => {
+ it('renders the AI Assistant tab by default', () => {
  render(<HealthTrackerTabs />)
- expect(screen.getByTestId('dashboard-tab')).toBeInTheDocument()
+ expect(screen.getByTestId('ai-coach-tab')).toBeInTheDocument()
  })
 
  it('switches to food diary tab on click', () => {
@@ -43,13 +43,12 @@ describe('HealthTrackerTabs', () => {
  expect(screen.getByTestId('food-tab')).toBeInTheDocument()
  })
 
- it('renders all 8 tab buttons on desktop', () => {
+ it('renders all 7 tab buttons on desktop', () => {
  render(<HealthTrackerTabs />)
- expect(screen.getAllByText('Dashboard').length).toBeGreaterThan(0)
+ expect(screen.getAllByText('AI Assistant').length).toBeGreaterThan(0)
  expect(screen.getAllByText('Food Diary').length).toBeGreaterThan(0)
  expect(screen.getAllByText('Exercise').length).toBeGreaterThan(0)
  expect(screen.getAllByText('Sleep').length).toBeGreaterThan(0)
- expect(screen.getAllByText('AI Coach').length).toBeGreaterThan(0)
  expect(screen.getAllByText('Progress').length).toBeGreaterThan(0)
  expect(screen.getAllByText('Meal Plan').length).toBeGreaterThan(0)
  expect(screen.getAllByText('BP Check').length).toBeGreaterThan(0)
@@ -61,9 +60,10 @@ describe('HealthTrackerTabs', () => {
  expect(screen.getByTestId('exercise-tab')).toBeInTheDocument()
  })
 
- it('switches to AI Coach tab', () => {
+ it('returns to the AI Assistant tab', () => {
  render(<HealthTrackerTabs />)
- fireEvent.click(screen.getAllByText('AI Coach')[0])
+ fireEvent.click(screen.getAllByText('Food Diary')[0])
+ fireEvent.click(screen.getAllByText('AI Assistant')[0])
  expect(screen.getByTestId('ai-coach-tab')).toBeInTheDocument()
  })
 
