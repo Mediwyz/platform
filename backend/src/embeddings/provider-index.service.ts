@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmbeddingService } from './embedding.service';
 
@@ -13,13 +13,43 @@ const PROVIDER_USERTYPES = [
  * the native pgvector column. Used for the one-time backfill and for embed-on-write.
  */
 @Injectable()
-export class ProviderIndexService {
+export class ProviderIndexService implements OnApplicationBootstrap {
   private readonly logger = new Logger(ProviderIndexService.name);
 
   constructor(
     private prisma: PrismaService,
     private embeddings: EmbeddingService,
   ) {}
+
+  /** After boot, embed any provider that's missing a vector — covers the first
+   *  deploy and acts as a safety net (embed-on-write handles ongoing changes).
+   *  Backgrounded + delayed so it never blocks startup/health. No-op once indexed. */
+  onApplicationBootstrap() {
+    setTimeout(() => { void this.backfillMissing(); }, 10000);
+  }
+
+  private async backfillMissing() {
+    try {
+      const providers = await this.prisma.user.findMany({
+        where: { accountStatus: 'active', userType: { in: PROVIDER_USERTYPES as any } },
+        select: { id: true },
+      });
+      const ids = providers.map(u => u.id);
+      if (!ids.length) return;
+      const existing = await (this.prisma as any).providerEmbedding.findMany({
+        where: { providerUserId: { in: ids }, dim: { gt: 0 } },
+        select: { providerUserId: true },
+      });
+      const have = new Set(existing.map((e: any) => e.providerUserId));
+      const missing = ids.filter(id => !have.has(id));
+      if (!missing.length) return;
+      this.logger.log(`Auto-backfill: ${missing.length} provider(s) missing an embedding…`);
+      const embedded = await this.embedIds(missing);
+      this.logger.log(`Auto-backfill embedded ${embedded} provider(s)`);
+    } catch (e: any) {
+      this.logger.warn(`Auto-backfill failed: ${e?.message}`);
+    }
+  }
 
   /** Build a searchable text blob per provider: name, type, specialties, services, bio, location. */
   private async buildCorpora(ids: string[]): Promise<Map<string, string>> {
@@ -96,18 +126,12 @@ export class ProviderIndexService {
     }
   }
 
-  /** (Re)embed every active provider. Admin-triggered; idempotent. */
-  async rebuildAll(): Promise<{ embedded: number; total: number; modelAvailable: boolean }> {
-    const providers = await this.prisma.user.findMany({
-      where: { accountStatus: 'active', userType: { in: PROVIDER_USERTYPES as any } },
-      select: { id: true },
-    });
-    const ids = providers.map(u => u.id);
-    if (!this.embeddings.available) return { embedded: 0, total: ids.length, modelAvailable: false };
+  /** Embed a specific set of providers in small batches. Returns how many succeeded. */
+  private async embedIds(ids: string[]): Promise<number> {
+    if (!ids.length) return 0;
     const corpora = await this.buildCorpora(ids);
-
     let embedded = 0;
-    const batch = 8;
+    const batch = 6;
     for (let i = 0; i < ids.length; i += batch) {
       await Promise.all(ids.slice(i, i + batch).map(async id => {
         const text = corpora.get(id);
@@ -118,6 +142,18 @@ export class ProviderIndexService {
         embedded++;
       }));
     }
+    return embedded;
+  }
+
+  /** (Re)embed every active provider. Admin-triggered; idempotent. */
+  async rebuildAll(): Promise<{ embedded: number; total: number; modelAvailable: boolean }> {
+    const providers = await this.prisma.user.findMany({
+      where: { accountStatus: 'active', userType: { in: PROVIDER_USERTYPES as any } },
+      select: { id: true },
+    });
+    const ids = providers.map(u => u.id);
+    if (!this.embeddings.available) return { embedded: 0, total: ids.length, modelAvailable: false };
+    const embedded = await this.embedIds(ids);
     return { embedded, total: ids.length, modelAvailable: true };
   }
 }

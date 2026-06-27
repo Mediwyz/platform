@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import type { IconType } from 'react-icons'
 import CategoryTile from './CategoryTile'
+import DiscoverAiSearch from './DiscoverAiSearch'
 import { useTranslation } from '@/lib/i18n'
 import {
   MdMedicalServices, MdPeople, MdLocalHospital, MdShoppingCart,
@@ -222,6 +223,8 @@ export default function CategoryNavigator() {
         {/*  Level 1  Entities  */}
         {/* First thing a new user sees: 22 grid of large cards (was a single
             cramped row of 4). Bigger tap targets + more breathing room. */}
+        {!entity && <DiscoverAiSearch />}
+
         {!entity && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
             {ENTITIES.map(e => {
