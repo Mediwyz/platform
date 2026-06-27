@@ -32,7 +32,22 @@ export default function DoctorDetailsPage() {
  .then(res => res.json())
  .then(json => {
  if (json.success) {
- const found = json.data.find((d: Doctor) => d.id === doctorId)
+ const found: any = json.data.find((d: any) => d.id === doctorId)
+ if (found) {
+ // Dynamic-role providers may lack legacy profile fields — default every
+ // array the UI maps/joins over so the detail page never crashes.
+ found.specialty = found.specialty ?? found.specializations ?? []
+ found.subSpecialties = found.subSpecialties ?? []
+ found.languages = found.languages ?? []
+ found.education = found.education ?? []
+ found.workHistory = found.workHistory ?? []
+ found.certifications = found.certifications ?? []
+ found.consultationTypes = found.consultationTypes ?? []
+ found.patientComments = found.patientComments ?? []
+ found.profileImage = found.profileImage || '/images/avatars/m/1.jpg'
+ found.rating = found.rating ?? 0
+ found.reviews = found.reviews ?? 0
+ }
  setDoctor(found || null)
  }
  setIsLoading(false)

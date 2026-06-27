@@ -30,7 +30,21 @@ export default function NannyDetailsPage() {
  .then(res => res.json())
  .then(json => {
  if (json.success) {
- const found = json.data.find((n: Nanny) => n.id === nannyId)
+ const found: any = json.data.find((n: any) => n.id === nannyId)
+ if (found) {
+ found.specialization = found.specialization ?? found.specializations ?? []
+ found.subSpecialties = found.subSpecialties ?? []
+ found.languages = found.languages ?? []
+ found.ageGroups = found.ageGroups ?? []
+ found.services = found.services ?? []
+ found.education = found.education ?? []
+ found.workHistory = found.workHistory ?? []
+ found.certifications = found.certifications ?? []
+ found.patientComments = found.patientComments ?? []
+ found.profileImage = found.profileImage || '/images/avatars/f/1.jpg'
+ found.rating = found.rating ?? 0
+ found.reviews = found.reviews ?? 0
+ }
  setNanny(found || null)
  }
  setIsLoading(false)
