@@ -78,7 +78,7 @@ export default function DiscoverAiSearch() {
         </div>
 
         {/* Conversation */}
-        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 min-h-[300px] max-h-[460px] bg-canvas">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-[420px] lg:min-h-[480px] max-h-[640px] bg-canvas">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'gap-2'}`}>
               {m.role === 'bot' && (

@@ -155,6 +155,16 @@ export function createDashboardLayout(config: DashboardLayoutConfig) {
       }
     }
 
+    // Promote the AI Health Assistant (Wyzo) to the #2 slot — it's the flagship
+    // member surface, so it sits right after the first item (Feed/Dashboard).
+    {
+      const aiIdx = finalSidebarItems.findIndex((i) => i.id === 'ai-assistant')
+      if (aiIdx > 1) {
+        const [ai] = finalSidebarItems.splice(aiIdx, 1)
+        finalSidebarItems.splice(1, 0, ai)
+      }
+    }
+
     // ── My Organizations: one named entry per org/company the user owns or
     // works at, each pointing straight at its management page. Replaces the
     // old generic "My Insurance Company" + provider "Health Shop" entries (and

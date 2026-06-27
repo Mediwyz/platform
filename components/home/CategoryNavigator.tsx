@@ -224,9 +224,9 @@ export default function CategoryNavigator() {
         {/* First thing a new user sees: 22 grid of large cards (was a single
             cramped row of 4). Bigger tap targets + more breathing room. */}
         {!entity && (
-          <div className="grid lg:grid-cols-[1fr_24rem] gap-6 lg:gap-8 max-w-6xl mx-auto items-start">
+          <div className="grid lg:grid-cols-[1fr_1fr] xl:grid-cols-[1.05fr_1fr] gap-6 lg:gap-8 max-w-7xl mx-auto items-stretch">
             {/* Left: the 4 category cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
             {ENTITIES.map(e => {
               const Icon = e.Icon
               return (
