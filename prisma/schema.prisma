@@ -1763,6 +1763,7 @@ model ServiceBooking {
   servicePrice       Float?
   specialty          String?
   location           String?
+  organizationId     String?   // HealthcareEntity the booking was made through (org-level booking)
   roomId             String?
   priority           String?   @default("normal")
   cancellationReason String?
@@ -1779,6 +1780,26 @@ model ServiceBooking {
   @@index([scheduledAt])
   @@index([status])
   @@index([deletedAt])
+  @@index([organizationId])
+}
+
+// Per-organisation weekly availability for a provider who works at that org.
+// Distinct from the global ProviderAvailability so a provider can keep different
+// hours at each org. Slot generation prefers org rows and falls back to global.
+model OrgProviderAvailability {
+  id                 String   @id @default(uuid())
+  userId             String
+  healthcareEntityId String
+  dayOfWeek          Int // 0=Sunday … 6=Saturday
+  startTime          String // "09:00" (24h)
+  endTime            String // "17:00"
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId, healthcareEntityId, dayOfWeek, startTime])
+  @@index([userId])
+  @@index([healthcareEntityId])
 }
 
 // ─── Provider Availability ──────────────────────────────────────────────────

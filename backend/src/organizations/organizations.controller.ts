@@ -197,6 +197,78 @@ export class OrganizationsController {
     return { success: true, data };
   }
 
+  // ─── Org-level booking ─────────────────────────────────────────────────
+
+  @Get(':id/members/:userId/availability')
+  @ApiOperation({ summary: "A member's per-org weekly availability (founder only)" })
+  async getMemberAvailability(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.getMemberAvailability(id, userId, user.sub);
+    return { success: true, data };
+  }
+
+  @Patch(':id/members/:userId/availability')
+  @ApiOperation({ summary: "Replace a member's per-org availability grid (founder only)" })
+  async setMemberAvailability(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Body() body: { slots: { dayOfWeek: number; startTime: string; endTime: string }[] },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.setMemberAvailability(id, userId, user.sub, body?.slots ?? []);
+    return { success: true, data };
+  }
+
+  @Public()
+  @Get(':id/booking-options')
+  @ApiOperation({ summary: 'Providers in the org offering a service, each with free slots for a date' })
+  async getBookingOptions(
+    @Param('id') id: string,
+    @Query('serviceId') serviceId: string,
+    @Query('date') date: string,
+  ) {
+    const data = await this.organizationsService.getBookingOptions(id, serviceId, date);
+    return { success: true, data };
+  }
+
+  @Post(':id/bookings')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Book a service at the org (auto-assigns an available provider unless one is chosen)' })
+  async createOrgBooking(
+    @Param('id') id: string,
+    @Body() body: { serviceId?: string; providerUserId?: string; scheduledDate: string; scheduledTime: string; type?: string; reason?: string; notes?: string; contactNumber?: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.createOrgBooking(id, user.sub, body);
+    return { success: true, data };
+  }
+
+  @Get(':id/bookings')
+  @ApiOperation({ summary: 'All bookings made through this org (founder only)' })
+  async getOrgBookings(
+    @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.getOrgBookings(id, user.sub);
+    return { success: true, data };
+  }
+
+  @Post(':id/bookings/:bookingId/reassign')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reassign a booking to another org member (founder only)' })
+  async reassignBooking(
+    @Param('id') id: string,
+    @Param('bookingId') bookingId: string,
+    @Body() body: { providerUserId: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const data = await this.organizationsService.reassignBooking(id, bookingId, body?.providerUserId, user.sub);
+    return { success: true, data };
+  }
+
   // ─── List pending invitations (founder only) ──────────────────────────
 
   @Get(':id/invitations')

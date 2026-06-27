@@ -229,6 +229,8 @@ export class BookingsService {
     children?: any[]; sampleType?: string; priority?: string;
     testName?: string; location?: string; contactNumber?: string; specialty?: string;
     platformServiceId?: string;
+    /** Optional: the org this booking was made through (org-level booking). */
+    organizationId?: string;
     /** Optional: pin to a specific workflow template, bypassing the registry cascade. */
     workflowTemplateId?: string;
   }) {
@@ -303,6 +305,7 @@ export class BookingsService {
         servicePrice: fee,
         specialty: data.specialty,
         location: data.location,
+        organizationId: data.organizationId,
         priority: data.priority || 'normal',
         metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
       },
@@ -544,11 +547,22 @@ export class BookingsService {
 
   // ─── Available Slots ───────────────────────────────────────────────────
 
-  async getAvailableSlots(providerUserId: string, date: string, serviceDurationMin = 30) {
+  async getAvailableSlots(providerUserId: string, date: string, serviceDurationMin = 30, organizationId?: string) {
     // Use noon on the target date to avoid DST shifts when computing dayOfWeek
     const dayOfWeek = new Date(date + 'T12:00:00').getDay();
 
-    const [availabilities, bookedSlots] = await Promise.all([
+    // When booking through an org, prefer the provider's per-org hours; fall back
+    // to their global availability if they haven't set org-specific hours.
+    let orgAvail: { startTime: string; endTime: string }[] = [];
+    if (organizationId) {
+      orgAvail = await (this.prisma as any).orgProviderAvailability.findMany({
+        where: { userId: providerUserId, healthcareEntityId: organizationId, dayOfWeek, isActive: true },
+        select: { startTime: true, endTime: true },
+        orderBy: { startTime: 'asc' },
+      });
+    }
+
+    const [globalAvail, bookedSlots] = await Promise.all([
       this.prisma.providerAvailability.findMany({
         where: { userId: providerUserId, dayOfWeek, isActive: true },
         select: { startTime: true, endTime: true },
@@ -559,6 +573,7 @@ export class BookingsService {
         select: { startTime: true },
       }),
     ]);
+    const availabilities = orgAvail.length > 0 ? orgAvail : globalAvail;
 
     // All 30-min blocks that are occupied (start times only)
     const bookedBlocks = new Set(bookedSlots.map(b => b.startTime));

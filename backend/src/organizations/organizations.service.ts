@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { BookingsService } from '../bookings/bookings.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +14,10 @@ import * as path from 'path';
 export class OrganizationsService {
   private readonly logger = new Logger(OrganizationsService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private bookings: BookingsService,
+  ) {}
 
   // ─── Create a healthcare entity ──────────────────────────────────────────
 
@@ -533,6 +537,171 @@ export class OrganizationsService {
       responders,
       requests,
     };
+  }
+
+  // ─── Org-level booking ─────────────────────────────────────────────────────
+
+  /** A member's per-org weekly availability grid (founder view). */
+  async getMemberAvailability(id: string, memberUserId: string, founderUserId: string) {
+    await this.assertFounder(id, founderUserId);
+    const rows = await (this.prisma as any).orgProviderAvailability.findMany({
+      where: { healthcareEntityId: id, userId: memberUserId },
+      select: { id: true, dayOfWeek: true, startTime: true, endTime: true, isActive: true },
+      orderBy: [{ dayOfWeek: 'asc' }, { startTime: 'asc' }],
+    });
+    return rows;
+  }
+
+  /** Replace a member's per-org availability with the supplied weekly grid. */
+  async setMemberAvailability(
+    id: string, memberUserId: string, founderUserId: string,
+    slots: { dayOfWeek: number; startTime: string; endTime: string }[],
+  ) {
+    await this.assertFounder(id, founderUserId);
+    const member = await (this.prisma.providerWorkplace as any).findFirst({
+      where: { healthcareEntityId: id, providerUserId: memberUserId, isActive: true },
+      select: { id: true },
+    });
+    if (!member) throw new BadRequestException('That user is not a member of this organisation');
+
+    const clean = (slots || [])
+      .filter(s => Number.isInteger(s.dayOfWeek) && s.dayOfWeek >= 0 && s.dayOfWeek <= 6 && /^\d{2}:\d{2}$/.test(s.startTime) && /^\d{2}:\d{2}$/.test(s.endTime) && s.startTime < s.endTime)
+      // de-dupe on (day,start) — the unique constraint key
+      .filter((s, i, arr) => arr.findIndex(o => o.dayOfWeek === s.dayOfWeek && o.startTime === s.startTime) === i);
+
+    await this.prisma.$transaction([
+      (this.prisma as any).orgProviderAvailability.deleteMany({ where: { healthcareEntityId: id, userId: memberUserId } }),
+      ...clean.map(s => (this.prisma as any).orgProviderAvailability.create({
+        data: { userId: memberUserId, healthcareEntityId: id, dayOfWeek: s.dayOfWeek, startTime: s.startTime, endTime: s.endTime, isActive: true },
+      })),
+    ]);
+    return { count: clean.length };
+  }
+
+  /** Providers in this org offering the service, each with their free slots for a date. */
+  async getBookingOptions(id: string, serviceId: string | undefined, date: string) {
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id }, select: { id: true, name: true, type: true, isActive: true },
+    });
+    if (!entity || !entity.isActive) throw new NotFoundException('Healthcare entity not found');
+
+    const workplaces: any[] = await (this.prisma.providerWorkplace as any).findMany({
+      where: { healthcareEntityId: id, status: 'active', isActive: true },
+      include: { provider: { select: { id: true, firstName: true, lastName: true, userType: true, profileImage: true, verified: true } } },
+    });
+    let providers = workplaces.map(w => w.provider).filter((p: any) => p.verified);
+
+    // Filter to providers who actually offer the requested service.
+    if (serviceId) {
+      const configs = await (this.prisma.providerServiceConfig as any).findMany({
+        where: { platformServiceId: serviceId, isActive: true, providerUserId: { in: providers.map((p: any) => p.id) } },
+        select: { providerUserId: true },
+      });
+      const offering = new Set(configs.map((c: any) => c.providerUserId));
+      providers = providers.filter((p: any) => offering.has(p.id));
+    }
+
+    const duration = serviceId
+      ? (await this.prisma.platformService.findUnique({ where: { id: serviceId }, select: { duration: true } }))?.duration ?? 30
+      : 30;
+
+    const withSlots = await Promise.all(providers.map(async (p: any) => ({
+      id: p.id,
+      name: `${p.firstName} ${p.lastName}`.trim(),
+      userType: p.userType,
+      profileImage: p.profileImage,
+      slots: await this.bookings.getAvailableSlots(p.id, date, duration, id),
+    })));
+
+    return { entity, duration, providers: withSlots.filter(p => p.slots.length > 0) };
+  }
+
+  /** Patient books a service at the org. Provider is chosen, or auto-assigned to
+   *  the first member free at that time. Reuses the core booking pipeline. */
+  async createOrgBooking(id: string, patientUserId: string, data: {
+    serviceId?: string; providerUserId?: string; scheduledDate: string; scheduledTime: string;
+    type?: string; reason?: string; notes?: string; contactNumber?: string;
+  }) {
+    const entity = await (this.prisma.healthcareEntity as any).findUnique({
+      where: { id }, select: { id: true, name: true, isActive: true },
+    });
+    if (!entity || !entity.isActive) throw new NotFoundException('Healthcare entity not found');
+
+    const options = await this.getBookingOptions(id, data.serviceId, data.scheduledDate);
+    const free = options.providers.filter(p => p.slots.includes(data.scheduledTime));
+    if (free.length === 0) throw new BadRequestException('No provider is available for that time slot');
+
+    const chosen = data.providerUserId
+      ? free.find(p => p.id === data.providerUserId)
+      : free[0];
+    if (!chosen) throw new BadRequestException('The selected provider is not available for that slot');
+
+    const result = await this.bookings.createBooking(patientUserId, {
+      providerUserId: chosen.id,
+      providerType: chosen.userType,
+      platformServiceId: data.serviceId,
+      scheduledDate: data.scheduledDate,
+      scheduledTime: data.scheduledTime,
+      type: data.type,
+      reason: data.reason,
+      notes: data.notes,
+      contactNumber: data.contactNumber,
+      duration: options.duration,
+      organizationId: id,
+    });
+    return { ...result, assignedProvider: { id: chosen.id, name: chosen.name } };
+  }
+
+  /** All bookings made through this org (founder view, for the Booking tab). */
+  async getOrgBookings(id: string, founderUserId: string) {
+    await this.assertFounder(id, founderUserId);
+    const bookings = await (this.prisma.serviceBooking as any).findMany({
+      where: { organizationId: id, deletedAt: null },
+      select: {
+        id: true, providerUserId: true, providerName: true, serviceName: true,
+        scheduledAt: true, duration: true, type: true, status: true, priority: true, patientId: true,
+      },
+      orderBy: { scheduledAt: 'desc' },
+      take: 200,
+    });
+    // Resolve patient display names.
+    const patientIds = [...new Set(bookings.map((b: any) => b.patientId))];
+    const patients = patientIds.length
+      ? await (this.prisma.patientProfile as any).findMany({
+          where: { id: { in: patientIds } },
+          select: { id: true, user: { select: { firstName: true, lastName: true } } },
+        })
+      : [];
+    const nameById = new Map<string, string>(patients.map((p: any) => [p.id, `${p.user.firstName} ${p.user.lastName}`.trim()]));
+    return bookings.map((b: any) => ({ ...b, patientName: nameById.get(b.patientId) ?? null }));
+  }
+
+  /** Reassign a booking to a different member of the org (founder only). */
+  async reassignBooking(id: string, bookingId: string, newProviderUserId: string, founderUserId: string) {
+    await this.assertFounder(id, founderUserId);
+    const booking = await (this.prisma.serviceBooking as any).findFirst({
+      where: { id: bookingId, organizationId: id }, select: { id: true },
+    });
+    if (!booking) throw new NotFoundException('Booking not found for this organisation');
+    const member = await (this.prisma.providerWorkplace as any).findFirst({
+      where: { healthcareEntityId: id, providerUserId: newProviderUserId, isActive: true, status: 'active' },
+      select: { id: true },
+    });
+    if (!member) throw new BadRequestException('Target provider is not an active member of this organisation');
+    const provider = await this.prisma.user.findUnique({
+      where: { id: newProviderUserId }, select: { firstName: true, lastName: true, userType: true },
+    });
+    if (!provider) throw new NotFoundException('Provider not found');
+
+    await this.prisma.$transaction([
+      (this.prisma.serviceBooking as any).update({
+        where: { id: bookingId },
+        data: { providerUserId: newProviderUserId, providerName: `${provider.firstName} ${provider.lastName}`.trim(), providerType: provider.userType },
+      }),
+      // Move any held slots to the new provider so availability stays consistent.
+      (this.prisma.bookedSlot as any).updateMany({ where: { bookingId }, data: { providerUserId: newProviderUserId } }),
+    ]);
+    return { success: true };
   }
 
   // ─── Invite a member (founder only) ──────────────────────────────────────
