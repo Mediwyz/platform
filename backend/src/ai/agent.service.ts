@@ -16,12 +16,12 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS' | 'MY_INVOICES' | 'MY_HEALTH'
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS' | 'MY_INVOICES' | 'MY_HEALTH' | 'LOG_HEALTH'
   | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS', 'MY_INVOICES', 'MY_HEALTH',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS', 'MY_INVOICES', 'MY_HEALTH', 'LOG_HEALTH',
   'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
@@ -108,6 +108,7 @@ export class AgentService {
         case 'MY_LAB_RESULTS': return await this.handleMyLabResults(entities, language, input);
         case 'MY_INVOICES': return await this.handleMyInvoices(entities, language, input);
         case 'MY_HEALTH': return await this.handleMyHealth(entities, language, input);
+        case 'LOG_HEALTH': return await this.handleLogHealth(message, entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -154,6 +155,7 @@ Intent guide:
 - MY_LAB_RESULTS: asks about THEIR OWN lab tests/results ("my lab results", "mes analyses", "mes résultats d'analyse", "le résultat de mon test").
 - MY_INVOICES: asks about THEIR OWN invoices/receipts ("my invoices", "mes factures", "mon reçu").
 - MY_HEALTH: asks for THEIR OWN health snapshot/tracker dashboard ("my health dashboard", "mon bilan du jour", "combien de calories aujourd'hui", "ma journée santé").
+- LOG_HEALTH: the user REPORTS an activity to track — water, exercise or sleep ("j'ai bu 500ml", "I drank a glass of water", "j'ai couru 30 min", "I slept 7 hours").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -209,6 +211,7 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/\b(mes|my)\b[^.?!]*\b(analyses?|laboratoire|lab\s*results?)\b/.test(m) || /\b(mes|my)\b[^.?!]*r[ée]sultats?[^.?!]*(analyse|labo|test)/.test(m)) return 'MY_LAB_RESULTS';
     if (/\b(mes|my|ma|mon)\b[^.?!]*(facture|invoice|recu|receipt)/.test(m)) return 'MY_INVOICES';
     if (/\b(my|mon|ma)\b[^.?!]*(tableau de bord|dashboard|bilan|health (dashboard|summary|snapshot|stats)|journee sante)/.test(m) || /(combien[^.?!]*calories|how many calories|mes calories|today'?s? (health|calories|stats))/.test(m)) return 'MY_HEALTH';
+    if (/(j'?ai (bu|couru|marche|dormi)|i (drank|ran|walked|slept)|\d+\s*ml\b|dormi\s*\d|log (water|sleep|exercise))/.test(m)) return 'LOG_HEALTH';
     // Purchase vs booking (checked before the generic BOOK pattern)
     if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
     if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)/.test(m)) return 'BOOK';
@@ -449,6 +452,47 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     return {
       intent: 'MY_HEALTH', entities, reply,
       followUps: fr ? ['Suggère un plan de repas', 'Conseils pour mieux dormir'] : ['Suggest a meal plan', 'How to sleep better'],
+    };
+  }
+
+  private async handleLogHealth(message: string, entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('LOG_HEALTH', language);
+    const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const snap = fr ? ['Mon bilan du jour'] : ['My health snapshot'];
+    try {
+      // Water
+      if (/(bu|drank|boire|water|eau|verre|glass)/.test(m)) {
+        let ml = 0;
+        const mlM = m.match(/(\d+)\s*ml/);
+        const lM = m.match(/(\d+([.,]\d+)?)\s*(l|litre|liter)\b/);
+        const gM = m.match(/(\d+)\s*(verre|glass)/);
+        if (mlM) ml = parseInt(mlM[1], 10);
+        else if (lM) ml = Math.round(parseFloat(lM[1].replace(',', '.')) * 1000);
+        else if (gM) ml = parseInt(gM[1], 10) * 250;
+        else ml = 250;
+        await this.healthTracker.createWaterEntry(input.userId, { amountMl: ml });
+        return { intent: 'LOG_HEALTH', entities, reply: fr ? `💧 Noté : ${ml} ml d'eau ajoutés.` : `💧 Logged ${ml} ml of water.`, followUps: snap };
+      }
+      // Exercise
+      if (/(couru|marche|sport|gym|exercice|workout|ran|walk|jog|exercise|nage|swim)/.test(m)) {
+        const min = parseInt((m.match(/(\d+)\s*(min|minute|h|heure|hour)/) || [])[1] || '30', 10);
+        const type = /couru|ran|jog|run/.test(m) ? (fr ? 'Course' : 'Running') : /marche|walk/.test(m) ? (fr ? 'Marche' : 'Walking') : /nage|swim/.test(m) ? (fr ? 'Natation' : 'Swimming') : (fr ? 'Exercice' : 'Exercise');
+        await this.healthTracker.createExerciseEntry(input.userId, { exerciseType: type, durationMin: min, caloriesBurned: Math.round(min * 6) });
+        return { intent: 'LOG_HEALTH', entities, reply: fr ? `🏃 Noté : ${min} min de ${type.toLowerCase()}.` : `🏃 Logged ${min} min of ${type.toLowerCase()}.`, followUps: snap };
+      }
+      // Sleep
+      if (/(dormi|sommeil|slept|sleep)/.test(m)) {
+        const hM = m.match(/(\d+([.,]\d+)?)\s*(h|heure|hour)/);
+        const hours = hM ? parseFloat(hM[1].replace(',', '.')) : 8;
+        await this.healthTracker.upsertSleepEntry(input.userId, { durationMin: Math.round(hours * 60) });
+        return { intent: 'LOG_HEALTH', entities, reply: fr ? `😴 Noté : ${hours} h de sommeil.` : `😴 Logged ${hours} h of sleep.`, followUps: fr ? ['Mon bilan du jour', 'Conseils pour mieux dormir'] : ['My health snapshot', 'How to sleep better'] };
+      }
+    } catch { /* */ }
+    return {
+      intent: 'LOG_HEALTH', entities,
+      reply: fr ? "Dites-moi quoi enregistrer, par ex. « j'ai bu 500 ml » ou « j'ai dormi 7h »." : 'Tell me what to log, e.g. "I drank 500 ml" or "I slept 7h".',
+      followUps: fr ? ['J\'ai bu 500 ml', 'J\'ai dormi 7h'] : ['I drank 500 ml', 'I slept 7h'],
     };
   }
 
