@@ -15,12 +15,12 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS'
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET'
   | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET',
   'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
@@ -100,6 +100,8 @@ export class AgentService {
         case 'BUY_PRODUCT': return await this.handleBuyProduct(message, entities, language, input);
         case 'MY_BOOKINGS': return await this.handleMyBookings(entities, language, input);
         case 'MY_ORDERS': return await this.handleMyOrders(entities, language, input);
+        case 'MY_PRESCRIPTIONS': return await this.handleMyPrescriptions(entities, language, input);
+        case 'MY_WALLET': return await this.handleMyWallet(entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -141,6 +143,8 @@ Intent guide:
 - BOOK: wants to book/appoint/reserve with someone (often refersToPrevious).
 - MY_BOOKINGS: asks about THEIR OWN existing appointments/bookings ("my appointments", "mes rendez-vous", "do I have anything booked", "ma prochaine consultation").
 - MY_ORDERS: asks about THEIR OWN Health Shop orders ("my orders", "where is my order", "mes commandes", "le statut de ma commande").
+- MY_PRESCRIPTIONS: asks about THEIR OWN prescriptions ("my prescriptions", "mes ordonnances", "ma dernière ordonnance").
+- MY_WALLET: asks about THEIR OWN wallet/balance ("my balance", "mon solde", "combien j'ai sur mon compte", "mon portefeuille").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -189,6 +193,8 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/\b(do i have|ai[- ]?je)\b[^.?!]*\b(rendez|appointment|book)/.test(m)) return 'MY_BOOKINGS';
     if (/\b(mes|my|ma)\b[^.?!]*\b(commandes?|orders?)\b/.test(m)) return 'MY_ORDERS';
     if (/(o[uù][^.?!]*(commande|order)|track[^.?!]*(order|commande)|order status|statut[^.?!]*commande)/.test(m)) return 'MY_ORDERS';
+    if (/\b(mes|my|ma)\b[^.?!]*\b(ordonnances?|prescriptions?)\b/.test(m)) return 'MY_PRESCRIPTIONS';
+    if (/\b(mon|my|ma)\b[^.?!]*\b(solde|balance|portefeuille|wallet|cr[ée]dit)\b/.test(m) || /(combien[^.?!]*(solde|cr[ée]dit|compte)|how much[^.?!]*balance)/.test(m)) return 'MY_WALLET';
     // Purchase vs booking (checked before the generic BOOK pattern)
     if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
     if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)\b/.test(m)) return 'BOOK';
@@ -321,6 +327,45 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       intent: 'MY_ORDERS', entities, reply,
       list: items.length ? { kind: 'orders', title: fr ? 'Mes commandes' : 'My orders', items } : undefined,
       followUps: items.length ? (fr ? ['Commander un médicament', 'Voir le Health Shop'] : ['Order a medicine', 'Browse the Health Shop']) : this.capabilityFollowUps(language),
+    };
+  }
+
+  private async handleMyPrescriptions(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_PRESCRIPTIONS', language);
+    const profile = await this.prisma.patientProfile.findUnique({ where: { userId: input.userId }, select: { id: true } });
+    const rx = profile ? await this.prisma.prescription.findMany({
+      where: { patientId: profile.id },
+      orderBy: { date: 'desc' }, take: 8,
+      select: { date: true, diagnosis: true, isActive: true, medicines: { select: { medicine: { select: { name: true } } } } },
+    }) : [];
+    const items = rx.map(r => ({
+      title: r.medicines.map(m => m.medicine?.name).filter(Boolean).join(', ') || r.diagnosis || (fr ? 'Ordonnance' : 'Prescription'),
+      subtitle: [r.diagnosis, r.date ? new Date(r.date).toLocaleDateString(fr ? 'fr-FR' : 'en-GB') : null].filter(Boolean).join(' · '),
+      badge: r.isActive ? 'active' : (fr ? 'expirée' : 'past'),
+      href: '/prescriptions',
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos ordonnances (${items.length}).` : `Here are your prescriptions (${items.length}).`)
+      : (fr ? "Vous n'avez aucune ordonnance pour le moment." : 'You have no prescriptions yet.');
+    return {
+      intent: 'MY_PRESCRIPTIONS', entities, reply,
+      list: items.length ? { kind: 'prescriptions', title: fr ? 'Mes ordonnances' : 'My prescriptions', items } : undefined,
+      followUps: fr ? ['Commander un médicament', 'Trouver un médecin'] : ['Order a medicine', 'Find a doctor'],
+    };
+  }
+
+  private async handleMyWallet(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_WALLET', language);
+    const wallet = await this.prisma.userWallet.findUnique({ where: { userId: input.userId }, select: { balance: true, currency: true } });
+    const bal = `${wallet?.currency || 'Rs'} ${wallet?.balance ?? 0}`;
+    const reply = wallet
+      ? (fr ? `Votre solde est de ${bal}.` : `Your wallet balance is ${bal}.`)
+      : (fr ? "Je ne trouve pas votre portefeuille — êtes-vous connecté ?" : "I couldn't find your wallet — are you signed in?");
+    return {
+      intent: 'MY_WALLET', entities, reply,
+      followUps: fr ? ['Mes commandes', 'Mes rendez-vous'] : ['My orders', 'My appointments'],
     };
   }
 
