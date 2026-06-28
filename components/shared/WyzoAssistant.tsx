@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import Link from 'next/link'
-import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes } from 'react-icons/fa'
+import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes, FaPills, FaBuilding } from 'react-icons/fa'
 
 /* ── Shared agentic assistant: natural-language provider search + in-chat
  *    booking, plus general Q&A (health-aware when logged in). One component,
@@ -12,15 +12,19 @@ interface Result {
   id: string; name: string; userType: string; profileImage: string | null
   address: string | null; verified: boolean; score?: number
 }
-interface Intent { type?: string; specialty?: string; location?: string; serviceMode?: string; serviceName?: string }
 interface Day { date: string; label: string; slots: string[] }
 interface Service { id: string; serviceName: string; price: number; duration: number; workflows?: { id: string; serviceMode: string }[] }
 interface Draft { provider?: Result; date?: string; time?: string; service?: Service }
+interface Org { id: string; name: string; type?: string; city?: string | null; logoUrl?: string | null; isVerified?: boolean; providerCount?: number }
+interface Product { id: string; name: string; category?: string | null; price?: number | null; currency?: string; inStock?: boolean; providerUserId?: string | null; requiresPrescription?: boolean }
 interface Msg {
   role: 'bot' | 'user'
   text?: string
   typing?: boolean
   providers?: Result[]
+  organisations?: Org[]
+  products?: Product[]
+  followUps?: string[]
   days?: Day[]
   services?: Service[]
   confirm?: Draft
@@ -66,6 +70,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const endRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const sessionRef = useRef<string | undefined>(undefined)
+  const lastProviderIdsRef = useRef<string[]>([])
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
@@ -110,49 +115,44 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
-  async function askQA(text: string): Promise<string> {
-    try {
-      const endpoint = loggedIn ? '/api/ai/chat' : '/api/ai/widget-chat'
-      const body = loggedIn ? { message: text, sessionId: sessionRef.current } : { message: text }
-      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) })
-      const j = await res.json()
-      if (loggedIn && j?.data?.sessionId) sessionRef.current = j.data.sessionId
-      return j?.data?.response || "I couldn't process that — please try rephrasing."
-    } catch {
-      return 'Connection problem — please try again in a moment.'
-    }
-  }
-
-  // Route a message: a "search" finds providers; an "ask" answers a question;
-  // free text tries search first and falls back to Q&A when nothing matches.
-  async function send(text?: string, kind?: 'search' | 'ask') {
+  // Every message flows through the Wyzo agent: it classifies intent, extracts
+  // and resolves entities (names→IDs, fuzzy), runs the right tool (provider /
+  // org / product search, booking, or Q&A), and returns a reply + result cards
+  // + follow-up suggestions. The deterministic booking sub-flow stays client-side.
+  async function send(text?: string, _kind?: 'search' | 'ask') {
     const q = (text ?? input).trim()
     if (!q || loading) return
     setInput('')
     setMessages(m => [...m, { role: 'user', text: q }, { role: 'bot', typing: true }])
     setLoading(true)
     try {
-      if (kind === 'ask') { replaceTyping({ role: 'bot', text: await askQA(q) }); return }
-      const res = await fetch('/api/search/semantic', {
+      const endpoint = loggedIn ? '/api/ai/agent' : '/api/ai/agent-public'
+      const history = messages
+        .filter(m => m.text && !m.typing)
+        .slice(-6)
+        .map(m => ({ role: m.role, text: m.text as string }))
+      const res = await fetch(endpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ message: q, history, sessionId: sessionRef.current, lastProviderIds: lastProviderIdsRef.current }),
       })
       const j = await res.json()
-      const providers: Result[] = j.success ? (j.providers || []) : []
-      if (kind === 'search' || providers.length > 0) {
-        const intent: Intent = j.intent || {}
-        const bits = [
-          intent.type ? intent.type.toLowerCase().replace(/_/g, ' ') : 'provider',
-          intent.specialty, intent.serviceName,
-          intent.serviceMode ? `(${intent.serviceMode.replace(/_/g, ' ')})` : '',
-          intent.location ? `in ${intent.location}` : '',
-        ].filter(Boolean).join(' · ')
-        replaceTyping(providers.length
-          ? { role: 'bot', text: `Here ${providers.length === 1 ? 'is a match' : `are ${providers.length} matches`} for ${bits}. Tap “Book” to schedule:`, providers }
-          : { role: 'bot', text: 'No provider matched that — try rephrasing.' })
-      } else {
-        // No provider match → treat it as a general question.
-        replaceTyping({ role: 'bot', text: await askQA(q) })
+      const d = j?.data || {}
+      if (d.sessionId) sessionRef.current = d.sessionId
+      const providers: Result[] = Array.isArray(d.providers) ? d.providers : []
+      if (providers.length) lastProviderIdsRef.current = providers.map((p: Result) => p.id)
+      replaceTyping({
+        role: 'bot',
+        text: d.reply || "I couldn't process that — please try rephrasing.",
+        providers: providers.length ? providers : undefined,
+        organisations: Array.isArray(d.organisations) && d.organisations.length ? d.organisations : undefined,
+        products: Array.isArray(d.products) && d.products.length ? d.products : undefined,
+        followUps: Array.isArray(d.followUps) && d.followUps.length ? d.followUps : undefined,
+      })
+      // Agentic booking: when the agent pinned a single provider to book, jump
+      // straight into the slot picker.
+      if (d.action === 'book' && d.bookProviderId) {
+        const p = providers.find((x: Result) => x.id === d.bookProviderId)
+        if (p) startBooking(p)
       }
     } catch {
       replaceTyping({ role: 'bot', text: 'Something went wrong — please try again.' })
@@ -303,6 +303,43 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                 </div>
               )}
 
+              {m.organisations && m.organisations.length > 0 && (
+                <div className="mt-2 space-y-1.5">
+                  {m.organisations.map(o => (
+                    <Link key={o.id} href={`/organization/${o.id}/book`} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2 hover:border-[#0C6780]/50 transition">
+                      <span className="w-8 h-8 rounded-lg bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center text-[11px] flex-shrink-0"><FaBuilding /></span>
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-1">
+                          <span className="text-[13px] font-semibold text-fg truncate">{o.name}</span>
+                          {o.isVerified && <FaCheckCircle className="text-[#0C6780] text-[10px] flex-shrink-0" />}
+                        </span>
+                        <span className="block text-[10px] text-faint capitalize truncate">
+                          {o.type || 'organisation'}{o.city ? ` · ${o.city}` : ''}{typeof o.providerCount === 'number' ? ` · ${o.providerCount} provider${o.providerCount === 1 ? '' : 's'}` : ''}
+                        </span>
+                      </span>
+                      <FaArrowRight className="text-faint text-[10px] flex-shrink-0" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {m.products && m.products.length > 0 && (
+                <div className="mt-2 space-y-1.5">
+                  {m.products.map(p => (
+                    <div key={p.id} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2">
+                      <span className="w-8 h-8 rounded-lg bg-[#0C6780]/10 text-[#0C6780] flex items-center justify-center text-[11px] flex-shrink-0"><FaPills /></span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[13px] font-semibold text-fg truncate">{p.name}</span>
+                        <span className="block text-[10px] text-faint capitalize truncate">
+                          {p.category || 'product'}{p.requiresPrescription ? ' · prescription required' : ''}{p.inStock === false ? ' · out of stock' : ''}
+                        </span>
+                      </span>
+                      {p.price != null && <span className="text-[12px] font-bold text-[#0C6780] flex-shrink-0">{p.currency || 'Rs'} {p.price}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {m.days && (
                 <div className="mt-2 space-y-2">
                   {m.days.map(day => (
@@ -346,6 +383,20 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                 <Link href={m.bookedHref} className="mt-2 inline-flex items-center gap-2 border border-[#0C6780]/30 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
                   View my bookings <FaArrowRight className="text-[10px]" />
                 </Link>
+              )}
+
+              {/* Conversation continuation: tappable next-step suggestions. */}
+              {m.followUps && m.followUps.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {m.followUps.map((f, k) => (
+                    <button key={k} onClick={() => send(f)} disabled={loading}
+                      className={hero
+                        ? 'text-[11px] text-white border border-white/30 bg-white/10 hover:bg-white/20 rounded-full px-2.5 py-1 transition disabled:opacity-50'
+                        : 'text-[11px] text-[#0C6780] border border-[#0C6780]/30 bg-[#0C6780]/5 hover:bg-[#0C6780]/10 rounded-full px-2.5 py-1 transition disabled:opacity-50'}>
+                      {f}
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
           </div>
