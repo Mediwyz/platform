@@ -29,4 +29,10 @@ export class CreateOrderDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  // 'wallet' (default) or 'pay_on_delivery' (settle on delivery/pickup, no
+  // wallet pre-funding) — used by the in-chat buy flow.
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
 }

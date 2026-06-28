@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import Link from 'next/link'
-import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes, FaPills, FaBuilding, FaUserPlus } from 'react-icons/fa'
+import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes, FaPills, FaBuilding, FaUserPlus, FaShoppingCart } from 'react-icons/fa'
 
 /* ── Shared agentic assistant: natural-language provider search + in-chat
  *    booking, plus general Q&A (health-aware when logged in). One component,
@@ -30,9 +30,11 @@ interface Msg {
   confirm?: Draft
   signIn?: boolean
   authChoice?: Draft
-  signup?: Draft
+  signup?: boolean
+  buy?: Product
   bookedHref?: string
 }
+interface Order { qty: number; fulfil: 'delivery' | 'pickup'; address?: string }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
 type Variant = 'panel' | 'floating' | 'tab' | 'hero'
 
@@ -81,6 +83,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const availDaysRef = useRef<Day[]>([])
   const availServicesRef = useRef<Service[]>([])
   const confirmDraftRef = useRef<Draft | null>(null)
+  const afterSignupRef = useRef<(() => void) | null>(null)
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
@@ -321,9 +324,44 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     } catch (e) { replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' }) }
   }
 
-  // Kick off in-chat account creation, keeping the pending booking to resume.
-  function startSignup(d: Draft) {
-    push({ role: 'bot', text: "Great — let's set up your free account (about 30 seconds):", signup: d })
+  // Kick off in-chat account creation; `resume` runs after the account is made
+  // (finishes the pending booking or order).
+  function startSignup(resume: () => void) {
+    afterSignupRef.current = resume
+    push({ role: 'bot', text: "Great — let's set up your free account (about 30 seconds):", signup: true })
+  }
+
+  // ── Health Shop purchase sub-flow ──────────────────────────────────────────
+  function startPurchase(product: Product) {
+    push({ role: 'user', text: `Buy ${product.name}` })
+    push({ role: 'bot', text: `How would you like to receive ${product.name}? Choose quantity and delivery below — you pay on delivery/pickup.`, buy: product })
+  }
+
+  function placeOrder(product: Product, order: Order) {
+    if (!loggedIn) { startSignup(() => finalizeOrder(product, order)); return }
+    finalizeOrder(product, order)
+  }
+
+  async function finalizeOrder(product: Product, order: Order) {
+    push({ role: 'bot', typing: true })
+    try {
+      const res = await fetch('/api/inventory/orders', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({
+          providerUserId: product.providerUserId,
+          items: [{ itemId: product.id, quantity: order.qty }],
+          deliveryMethod: order.fulfil,
+          deliveryAddress: order.fulfil === 'delivery' ? order.address : undefined,
+          paymentMethod: 'pay_on_delivery',
+        }),
+      })
+      const j = await res.json()
+      if (!j.success && !j.data) throw new Error(j.message || 'Order failed')
+      const how = order.fulfil === 'delivery' ? `delivered to ${order.address}` : 'ready for pickup'
+      replaceTyping({ role: 'bot', text: `✅ Order placed! ${order.qty} × ${product.name} — ${how}. You'll pay on ${order.fulfil}.`, bookedHref: '/orders' })
+    } catch (e) {
+      replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Order failed — please try again.' })
+    }
   }
 
   // ── Shared bits ─────────────────────────────────────────────────────────
@@ -432,10 +470,15 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                         </span>
                       </span>
                       {p.price != null && <span className="text-[12px] font-bold text-[#0C6780] flex-shrink-0">{p.currency || 'Rs'} {p.price}</span>}
+                      <button onClick={() => startPurchase(p)} disabled={p.inStock === false} className="text-[11px] font-semibold text-white bg-[#0C6780] hover:bg-[#001E40] px-2.5 py-1 rounded-lg flex-shrink-0 inline-flex items-center gap-1 transition disabled:opacity-50">
+                        <FaShoppingCart className="text-[9px]" /> Buy
+                      </button>
                     </div>
                   ))}
                 </div>
               )}
+
+              {m.buy && <BuyPanel product={m.buy} onConfirm={o => placeOrder(m.buy!, o)} />}
 
               {m.days && (
                 <div className="mt-2 space-y-2">
@@ -481,12 +524,12 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                   <Link href="/login" className="inline-flex items-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
                     <FaSignInAlt className="text-xs" /> Sign in
                   </Link>
-                  <button onClick={() => startSignup(m.authChoice!)} className="inline-flex items-center gap-2 border border-[#0C6780]/40 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
+                  <button onClick={() => startSignup(() => submitBooking(m.authChoice!))} className="inline-flex items-center gap-2 border border-[#0C6780]/40 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
                     <FaUserPlus className="text-xs" /> Create account
                   </button>
                 </div>
               )}
-              {m.signup && <InlineSignup onCreated={() => submitBooking(m.signup!)} />}
+              {m.signup && <InlineSignup onCreated={() => { const r = afterSignupRef.current; afterSignupRef.current = null; r?.() }} />}
               {m.bookedHref && (
                 <Link href={m.bookedHref} className="mt-2 inline-flex items-center gap-2 border border-[#0C6780]/30 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
                   View my bookings <FaArrowRight className="text-[10px]" />
@@ -623,6 +666,49 @@ function InlineSignup({ onCreated }: { onCreated: () => void }) {
         {busy ? <FaSpinner className="animate-spin" /> : <FaUserPlus className="text-xs" />} Create account &amp; continue
       </button>
       <p className="text-[10px] text-faint text-center">Already have an account? <Link href="/login" className="text-[#0C6780] font-medium">Sign in</Link></p>
+    </div>
+  )
+}
+
+/** Inline Health Shop purchase: quantity + delivery/pickup. The parent handles
+ *  the login gate and the order POST (pay-on-delivery). */
+function BuyPanel({ product, onConfirm }: { product: Product; onConfirm: (o: Order) => void }) {
+  const [qty, setQty] = useState(1)
+  const [fulfil, setFulfil] = useState<'delivery' | 'pickup'>('pickup')
+  const [address, setAddress] = useState('')
+  const [done, setDone] = useState(false)
+  const total = (product.price ?? 0) * qty
+  if (done) return <p className="mt-2 text-xs text-emerald-600 font-medium">Placing your order…</p>
+  const needsAddress = fulfil === 'delivery' && !address.trim()
+  return (
+    <div className="mt-2 rounded-xl border border-line bg-surface p-3 space-y-2 max-w-sm text-left">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold text-fg">{product.name}</span>
+        <span className="text-[12px] font-bold text-[#0C6780]">{product.currency || 'Rs'} {product.price}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-soft">Qty</span>
+        <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-7 h-7 rounded-lg border border-line text-fg">−</button>
+        <span className="text-sm font-semibold w-6 text-center">{qty}</span>
+        <button onClick={() => setQty(q => q + 1)} className="w-7 h-7 rounded-lg border border-line text-fg">+</button>
+        <span className="ml-auto text-[12px] font-bold text-fg">Total {product.currency || 'Rs'} {total}</span>
+      </div>
+      <div className="flex gap-2">
+        {(['pickup', 'delivery'] as const).map(f => (
+          <button key={f} onClick={() => setFulfil(f)} className={`flex-1 text-xs font-semibold rounded-lg px-2 py-1.5 border transition ${fulfil === f ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'border-line text-soft hover:border-[#0C6780]/40'}`}>
+            {f === 'pickup' ? 'Pickup' : 'Delivery'}
+          </button>
+        ))}
+      </div>
+      {fulfil === 'delivery'
+        ? <input value={address} onChange={e => setAddress(e.target.value)} placeholder="Delivery address" className="w-full px-3 py-2 border border-line rounded-lg text-sm bg-canvas text-fg outline-none focus:ring-2 focus:ring-[#0C6780]" />
+        : <p className="text-[11px] text-faint">Pick up at the seller&apos;s location.</p>}
+      <button
+        onClick={() => { if (needsAddress) return; setDone(true); onConfirm({ qty, fulfil, address: address.trim() }) }}
+        disabled={needsAddress}
+        className="w-full inline-flex items-center justify-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-lg transition disabled:opacity-50">
+        <FaShoppingCart className="text-xs" /> Order — pay on {fulfil}
+      </button>
     </div>
   )
 }

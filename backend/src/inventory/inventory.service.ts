@@ -285,7 +285,11 @@ export class InventoryService implements OnApplicationBootstrap {
   async createOrder(patientUserId: string, data: {
     providerUserId: string; items: Array<{ itemId: string; quantity: number }>;
     deliveryMethod?: string; deliveryAddress?: string; notes?: string;
+    /** 'wallet' (default, debits now) or 'pay_on_delivery' (settle on delivery/
+     *  pickup — no wallet pre-funding required, used by the in-chat buy flow). */
+    paymentMethod?: string;
   }) {
+    const payNow = data.paymentMethod !== 'pay_on_delivery';
     return this.prisma.$transaction(async (tx) => {
       // ─── 1. STOCK CHECK (automatic) ─────────────────────────────────
       let totalAmount = 0;
@@ -336,8 +340,8 @@ export class InventoryService implements OnApplicationBootstrap {
         totalAmount += inv.price * item.quantity;
       }
 
-      // ─── 2. WALLET CHECK (automatic) ────────────────────────────────
-      if (totalAmount > 0) {
+      // ─── 2. WALLET CHECK (automatic) — skipped for pay-on-delivery ──
+      if (totalAmount > 0 && payNow) {
         const wallet = await tx.userWallet.findUnique({ where: { userId: patientUserId }, select: { id: true, balance: true } });
         if (!wallet || wallet.balance < totalAmount) {
           throw new BadRequestException(`Insufficient wallet balance. Required: ${totalAmount}, Available: ${wallet?.balance ?? 0}`);
@@ -389,7 +393,8 @@ export class InventoryService implements OnApplicationBootstrap {
       }
 
       // ─── 5. PAYMENT (automatic — debit patient, credit provider) ────
-      if (totalAmount > 0) {
+      //      Skipped for pay-on-delivery: settled when the order is fulfilled.
+      if (totalAmount > 0 && payNow) {
         const patientWallet = await tx.userWallet.findUnique({ where: { userId: patientUserId }, select: { id: true, balance: true } });
         if (patientWallet) {
           // Debit patient

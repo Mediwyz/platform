@@ -239,7 +239,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         // Guest (not signed in) → collect details and create the account in-chat,
         // then resume the booking automatically.
         _replaceTyping(_Msg('bot', text: 'Encore une étape : créez un compte gratuit (30 s) pour confirmer. Vous paierez sur place.'));
-        _openSignup();
+        _openSignup(_submitBooking);
       }
     } catch (_) {
       _replaceTyping(_Msg('bot', text: 'Échec de la réservation — réessayez.'));
@@ -248,16 +248,53 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     }
   }
 
-  void _openSignup() {
+  void _openSignup(VoidCallback onDone) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _SignupSheet(onSuccess: () {
         Navigator.of(context).pop();
-        _submitBooking();
+        onDone();
       }),
     );
+  }
+
+  // ── Health Shop purchase ──────────────────────────────────────────────────
+  void _startPurchase(Map<String, dynamic> product) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _PurchaseSheet(product: product, onConfirm: (order) {
+        Navigator.of(context).pop();
+        _placeOrder(product, order);
+      }),
+    );
+  }
+
+  Future<void> _placeOrder(Map<String, dynamic> product, Map<String, dynamic> order) async {
+    setState(() { _messages.add(_Msg('bot', typing: true)); _loading = true; });
+    _scrollToEnd();
+    try {
+      final j = await AgentApi.createOrder({
+        'providerUserId': product['providerUserId'],
+        'items': [{'itemId': product['id'], 'quantity': order['qty']}],
+        'deliveryMethod': order['fulfil'],
+        if (order['fulfil'] == 'delivery') 'deliveryAddress': order['address'],
+      });
+      if (j['success'] == true || j['data'] != null) {
+        final how = order['fulfil'] == 'delivery' ? 'livré à ${order['address']}' : 'à récupérer chez le vendeur';
+        _replaceTyping(_Msg('bot', text: '✅ Commande passée ! ${order['qty']} × ${product['name']} — $how. Paiement à la ${order['fulfil'] == 'delivery' ? 'livraison' : 'récupération'}.', booked: true));
+      } else {
+        _replaceTyping(_Msg('bot', text: 'Encore une étape : créez un compte gratuit (30 s) pour commander.'));
+        _openSignup(() => _placeOrder(product, order));
+      }
+    } catch (_) {
+      _replaceTyping(_Msg('bot', text: 'Échec de la commande — réessayez.'));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -383,7 +420,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ),
           ...m.providers.map((p) => _providerCard(Map<String, dynamic>.from(p as Map))),
           ...m.organisations.map((o) => _simpleCard(Icons.business, (o as Map)['name']?.toString() ?? '', '${o['type'] ?? 'organisation'}${o['city'] != null ? ' · ${o['city']}' : ''}')),
-          ...m.products.map((p) => _simpleCard(Icons.medication, (p as Map)['name']?.toString() ?? '', p['price'] != null ? '${p['currency'] ?? 'Rs'} ${p['price']}' : '')),
+          ...m.products.map((p) => _buyableProduct(Map<String, dynamic>.from(p as Map))),
           if (m.days.isNotEmpty) _slots(m.days),
           if (m.services.isNotEmpty) ...m.services.map((s) => _serviceTile(s)),
           if (m.confirm != null) Padding(padding: const EdgeInsets.only(top: 6), child: ElevatedButton.icon(onPressed: _confirmBooking, icon: const Icon(Icons.event_available, size: 16), label: const Text('Confirmer'))),
@@ -425,6 +462,25 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ])),
         ]),
       );
+
+  Widget _buyableProduct(Map<String, dynamic> p) {
+    final outOfStock = p['inStock'] == false;
+    return Container(
+      margin: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: Row(children: [
+        const Icon(Icons.medication, color: MediWyzColors.teal, size: 18),
+        const SizedBox(width: 10),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(p['name']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          Text('${p['category'] ?? 'product'}${p['requiresPrescription'] == true ? ' · ordonnance' : ''}${outOfStock ? ' · rupture' : ''}', style: const TextStyle(fontSize: 10, color: Colors.black54)),
+        ])),
+        if (p['price'] != null) Padding(padding: const EdgeInsets.only(right: 4), child: Text('${p['currency'] ?? 'Rs'} ${p['price']}', style: const TextStyle(color: MediWyzColors.teal, fontWeight: FontWeight.bold, fontSize: 12))),
+        TextButton(onPressed: outOfStock ? null : () => _startPurchase(p), child: const Text('Acheter')),
+      ]),
+    );
+  }
 
   Widget _slots(List<_Day> days) => Container(
         margin: const EdgeInsets.only(top: 6),
@@ -594,4 +650,77 @@ class _SignupSheetState extends State<_SignupSheet> {
         padding: const EdgeInsets.only(bottom: 8),
         child: TextField(controller: c, obscureText: obscure, keyboardType: keyboard, decoration: InputDecoration(hintText: hint, isDense: true)),
       );
+}
+
+/// Health Shop purchase sheet: quantity + delivery/pickup (+ address). The
+/// parent handles the login gate and the order POST (pay-on-delivery).
+class _PurchaseSheet extends StatefulWidget {
+  final Map<String, dynamic> product;
+  final void Function(Map<String, dynamic> order) onConfirm;
+  const _PurchaseSheet({required this.product, required this.onConfirm});
+  @override
+  State<_PurchaseSheet> createState() => _PurchaseSheetState();
+}
+
+class _PurchaseSheetState extends State<_PurchaseSheet> {
+  int _qty = 1;
+  String _fulfil = 'pickup';
+  final _address = TextEditingController();
+
+  @override
+  void dispose() { _address.dispose(); super.dispose(); }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.product;
+    final price = (p['price'] is num) ? (p['price'] as num).toDouble() : 0.0;
+    final cur = p['currency'] ?? 'Rs';
+    final needsAddress = _fulfil == 'delivery' && _address.text.trim().isEmpty;
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        padding: const EdgeInsets.all(16),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [
+            Expanded(child: Text(p['name']?.toString() ?? '', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: MediWyzColors.navy))),
+            Text('$cur ${price.toStringAsFixed(0)}', style: const TextStyle(color: MediWyzColors.teal, fontWeight: FontWeight.bold)),
+          ]),
+          const SizedBox(height: 10),
+          Row(children: [
+            const Text('Quantité', style: TextStyle(fontSize: 13)),
+            const Spacer(),
+            IconButton(onPressed: () => setState(() => _qty = _qty > 1 ? _qty - 1 : 1), icon: const Icon(Icons.remove_circle_outline)),
+            Text('$_qty', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            IconButton(onPressed: () => setState(() => _qty++), icon: const Icon(Icons.add_circle_outline)),
+          ]),
+          Text('Total : $cur ${(price * _qty).toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          Row(children: [
+            for (final f in const ['pickup', 'delivery'])
+              Expanded(child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: OutlinedButton(
+                  onPressed: () => setState(() => _fulfil = f),
+                  style: OutlinedButton.styleFrom(backgroundColor: _fulfil == f ? MediWyzColors.teal : null, foregroundColor: _fulfil == f ? Colors.white : MediWyzColors.teal),
+                  child: Text(f == 'pickup' ? 'Retrait' : 'Livraison'),
+                ),
+              )),
+          ]),
+          const SizedBox(height: 8),
+          if (_fulfil == 'delivery')
+            TextField(controller: _address, onChanged: (_) => setState(() {}), decoration: const InputDecoration(hintText: 'Adresse de livraison', isDense: true))
+          else
+            const Text('À récupérer chez le vendeur.', style: TextStyle(fontSize: 12, color: Colors.black54)),
+          const SizedBox(height: 12),
+          SizedBox(width: double.infinity, child: ElevatedButton.icon(
+            onPressed: needsAddress ? null : () => widget.onConfirm({'qty': _qty, 'fulfil': _fulfil, 'address': _address.text.trim()}),
+            icon: const Icon(Icons.shopping_cart, size: 16),
+            label: Text('Commander — paiement à la ${_fulfil == 'delivery' ? 'livraison' : 'récupération'}'),
+          )),
+          const SizedBox(height: 6),
+        ]),
+      ),
+    );
+  }
 }

@@ -48,6 +48,16 @@ class AgentApi {
     return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
+  /// POST /inventory/orders — places a Health Shop order. Pay-on-delivery so no
+  /// wallet pre-funding is needed. Requires auth.
+  static Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
+    final res = await ApiClient.instance.post('/inventory/orders', data: {
+      ...payload,
+      'paymentMethod': 'pay_on_delivery',
+    });
+    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+  }
+
   /// POST /auth/register — creates a patient account. Active patient accounts
   /// are auto-logged-in by the backend (auth cookies are set on the response),
   /// so the booking can be confirmed straight after.
