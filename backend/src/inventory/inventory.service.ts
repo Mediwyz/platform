@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { InvoiceService } from '../shared/services/invoice.service';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { EmbeddingService } from '../embeddings/embedding.service';
 
 @Injectable()
-export class InventoryService {
+export class InventoryService implements OnApplicationBootstrap {
   private readonly logger = new Logger(InventoryService.name);
 
   constructor(
@@ -13,7 +14,83 @@ export class InventoryService {
     private notifications: NotificationsService,
     private invoiceService: InvoiceService,
     private treasury: TreasuryService,
+    private embeddings: EmbeddingService,
   ) {}
+
+  // ─── Semantic Health Shop search (pgvector + local e5) ───────────────────
+
+  /** After boot, embed any active item missing a vector. Backgrounded + delayed
+   *  so it never blocks startup. No-op once indexed. */
+  onApplicationBootstrap() {
+    setTimeout(() => { void this.backfillProductEmbeddings(); }, 12000);
+  }
+
+  private productCorpus(i: { name: string; genericName?: string | null; category?: string | null; description?: string | null; strength?: string | null; dosageForm?: string | null }): string {
+    return [i.name, i.genericName, i.category, i.strength, i.dosageForm, i.description].filter(Boolean).join('. ');
+  }
+
+  /** Embed a single item (embed-on-write). Fire-and-forget safe. */
+  async reembedProduct(itemId: string): Promise<void> {
+    try {
+      const i = await this.prisma.providerInventoryItem.findUnique({
+        where: { id: itemId },
+        select: { id: true, name: true, genericName: true, category: true, description: true, strength: true, dosageForm: true },
+      });
+      if (!i) return;
+      const vec = await this.embeddings.embed(this.productCorpus(i), 'passage');
+      if (!vec) return;
+      await this.prisma.$executeRawUnsafe(
+        `UPDATE "ProviderInventoryItem" SET "embeddingVec" = $1::vector WHERE id = $2`,
+        `[${vec.join(',')}]`, itemId,
+      );
+    } catch (e: any) {
+      this.logger.warn(`reembedProduct(${itemId}) failed: ${e?.message}`);
+    }
+  }
+
+  private async backfillProductEmbeddings() {
+    try {
+      const rows: any[] = await this.prisma.$queryRawUnsafe(
+        `SELECT id FROM "ProviderInventoryItem" WHERE "isActive" = true AND "embeddingVec" IS NULL LIMIT 2000`,
+      );
+      if (!rows.length) return;
+      this.logger.log(`Product embedding backfill: ${rows.length} item(s)…`);
+      let n = 0;
+      for (const r of rows) { await this.reembedProduct(r.id); n++; }
+      this.logger.log(`Product embedding backfill embedded ${n} item(s)`);
+    } catch (e: any) {
+      this.logger.warn(`Product embedding backfill failed: ${e?.message}`);
+    }
+  }
+
+  /** Natural-language Health Shop search: embed query → pgvector cosine rank.
+   *  Falls back to keyword search when embeddings/pgvector are unavailable. */
+  async semanticProductSearch(query: string, opts: { category?: string; limit?: number } = {}) {
+    const limit = opts.limit ?? 6;
+    if (!query || query.trim().length < 2) return { items: [], usedVector: false };
+    const qVec = await this.embeddings.embed(query, 'query');
+    if (qVec) {
+      try {
+        const rows: any[] = await this.prisma.$queryRawUnsafe(
+          `SELECT id, 1 - ("embeddingVec" <=> $1::vector) AS score
+           FROM "ProviderInventoryItem"
+           WHERE "embeddingVec" IS NOT NULL AND "isActive" = true AND "inStock" = true
+           ORDER BY "embeddingVec" <=> $1::vector LIMIT $2`,
+          `[${qVec.join(',')}]`, limit,
+        );
+        const ranked = rows.map(r => ({ id: r.id, score: Number(r.score) })).filter(r => r.score > 0.55);
+        if (ranked.length) {
+          const ids = ranked.map(r => r.id);
+          const items = await this.prisma.providerInventoryItem.findMany({ where: { id: { in: ids } } });
+          const byId = new Map(items.map(it => [it.id, it]));
+          const ordered = ids.map(id => byId.get(id)).filter(Boolean);
+          return { items: ordered, usedVector: true };
+        }
+      } catch { /* pgvector unavailable → keyword fallback */ }
+    }
+    const fb = await this.searchShop({ query, category: opts.category, limit });
+    return { items: fb.items, usedVector: false };
+  }
 
   // ─── Provider's items ──────────────────────────────────────────────────
 

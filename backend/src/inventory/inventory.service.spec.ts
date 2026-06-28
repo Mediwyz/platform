@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { InvoiceService } from '../shared/services/invoice.service';
 import { TreasuryService } from '../shared/services/treasury.service';
+import { EmbeddingService } from '../embeddings/embedding.service';
 
 // Transaction mock — calls the callback with a tx proxy that delegates to mockPrisma
 const mockPrisma: any = {
@@ -50,6 +51,7 @@ describe('InventoryService', () => {
         { provide: NotificationsService, useValue: mockNotifications },
         { provide: InvoiceService, useValue: { generateInvoice: jest.fn().mockResolvedValue({}) } },
         { provide: TreasuryService, useValue: { creditPlatformFee: jest.fn() } },
+        { provide: EmbeddingService, useValue: { embed: jest.fn().mockResolvedValue(null) } },
       ],
     }).compile();
 

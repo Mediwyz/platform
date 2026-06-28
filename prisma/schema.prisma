@@ -2998,6 +2998,11 @@ model ProviderInventoryItem {
   isActive             Boolean @default(true)
   isFeatured           Boolean @default(false) // show in Health Shop highlights
 
+  // Semantic search: native pgvector embedding (768-dim, local e5). Managed via
+  // raw SQL (see prisma/sql/add-product-embedding.sql); declared here so Prisma
+  // doesn't drop the column on `db push`.
+  embeddingVec Unsupported("vector(768)")?
+
   // Medicine-specific (nullable for non-medicines)
   sideEffects String[]  @default([])
   expiryDate  DateTime?

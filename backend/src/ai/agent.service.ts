@@ -14,12 +14,12 @@ const PROVIDER_TYPES = [
 
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
-  | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT'
+  | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
   | 'BOOK' | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BOOK', 'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
 export interface AgentEntities {
@@ -55,8 +55,9 @@ export interface AgentResult {
   products?: any[];
   resolved?: { kind: string; id: string; name: string }[];
   followUps?: string[];
-  action?: 'book' | null;
+  action?: 'book' | 'buy' | null;
   bookProviderId?: string;
+  requiresLogin?: boolean;
   sessionId?: string;
 }
 
@@ -92,6 +93,7 @@ export class AgentService {
         case 'FIND_PROVIDER': return await this.handleFindProvider(message, entities, language, input);
         case 'FIND_ORGANISATION': return await this.handleFindOrg(message, entities, language, input);
         case 'FIND_PRODUCT': return await this.handleFindProduct(message, entities, language, input);
+        case 'BUY_PRODUCT': return await this.handleBuyProduct(message, entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -127,7 +129,8 @@ Intent guide:
 - MEDIWYZ_INFO: questions about MediWyz itself (how it works, pricing, plans, the Health Shop, coverage, app).
 - FIND_PROVIDER: looking for a doctor/nurse/dentist/specialist etc.
 - FIND_ORGANISATION: looking for a clinic/hospital/pharmacy/laboratory/insurer.
-- FIND_PRODUCT: looking for a medicine / health-shop product.
+- FIND_PRODUCT: browsing/looking for a medicine / health-shop product (not yet buying).
+- BUY_PRODUCT: wants to BUY / order / purchase a product ("I want to buy paracetamol", "commander du paracétamol", "acheter des vitamines").
 - BOOK: wants to book/appoint/reserve with someone (often refersToPrevious).
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
@@ -210,10 +213,25 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
   }
 
   private async handleFindProduct(message: string, entities: AgentEntities, language: string, _input: AgentInput): Promise<AgentResult> {
-    const r = await this.inventory.searchShop({ query: entities.productName || message, limit: 6 });
+    const r = await this.inventory.semanticProductSearch(entities.productName || message, { limit: 6 });
     const products = (r.items || []).map((i: any) => this.productCard(i)).slice(0, 6);
     const { reply, followUps } = await this.compose('FIND_PRODUCT', this.summarizeProducts(products), message, language);
     return { intent: 'FIND_PRODUCT', entities, reply, products, followUps };
+  }
+
+  private async handleBuyProduct(message: string, entities: AgentEntities, language: string, _input: AgentInput): Promise<AgentResult> {
+    const r = await this.inventory.semanticProductSearch(entities.productName || message, { limit: 6 });
+    const products = (r.items || []).map((i: any) => this.productCard(i)).slice(0, 6);
+    const fr = language === 'fr';
+    const reply = products.length
+      ? (fr ? 'Voici ce que j’ai trouvé. Touchez « Acheter » pour choisir la quantité et la livraison.' : 'Here’s what I found. Tap “Buy” to choose quantity and delivery.')
+      : (fr ? "Je n'ai pas trouvé ce produit. Essayez un autre nom." : "I couldn't find that product. Try another name.");
+    const followUps = products.length
+      ? (fr ? ['Acheter le premier', 'Voir les alternatives', 'Faut-il une ordonnance ?'] : ['Buy the first one', 'Show alternatives', 'Do I need a prescription?'])
+      : this.capabilityFollowUps(language);
+    // Buying requires an account (delivery/pickup + order history). The client
+    // opens the purchase sub-flow and gates on login before placing the order.
+    return { intent: 'BUY_PRODUCT', entities, reply, products, action: 'buy', requiresLogin: true, followUps };
   }
 
   private async handleBook(message: string, entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
