@@ -129,8 +129,9 @@ Intent guide:
 - MEDIWYZ_INFO: questions about MediWyz itself (how it works, pricing, plans, the Health Shop, coverage, app).
 - FIND_PROVIDER: looking for a doctor/nurse/dentist/specialist etc.
 - FIND_ORGANISATION: looking for a clinic/hospital/pharmacy/laboratory/insurer.
-- FIND_PRODUCT: browsing/looking for a medicine / health-shop product (not yet buying).
+- FIND_PRODUCT: browsing/looking for a medicine / health-shop product (not yet buying). ALSO use this when the user describes a minor symptom or need that an over-the-counter product addresses (pain, fever, headache, cough, cold, sore throat, allergy, nausea, vitamins, first aid) and isn't explicitly asking only for advice — they likely want a product.
 - BUY_PRODUCT: wants to BUY / order / purchase a product ("I want to buy paracetamol", "commander du paracétamol", "acheter des vitamines").
+- (Reserve HEALTH_QA for genuine advice/explanation questions with no product or provider need — "why am I tired", "how much water should I drink".)
 - BOOK: wants to book/appoint/reserve with someone (often refersToPrevious).
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
@@ -391,13 +392,18 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
 
   // ── 4. Compose reply + follow-ups for result-bearing intents ─────────────
   private async compose(intent: AgentIntent, summary: string, message: string, language: string): Promise<{ reply: string; followUps: string[] }> {
+    // For symptom-driven product/provider queries, lead with a short, safe piece
+    // of general health guidance so the agent feels genuinely intelligent.
+    const symptomAware = (intent === 'FIND_PRODUCT' || intent === 'BUY_PRODUCT' || intent === 'FIND_PROVIDER')
+      ? `\nINTELLIGENT CONTEXT: If the user's message describes a symptom or health need, OPEN with ONE short, safe sentence of general guidance that links the need to the result type — e.g. for products "Pour la fièvre et la douleur, le paracétamol est couramment utilisé", for providers "Pour des douleurs articulaires, un rhumatologue est indiqué". This is general guidance only — never diagnose or prescribe a dose, and add a brief "consultez un professionnel si cela persiste ou s'aggrave" when symptoms could be serious. Then point to the results below. You may give this general health context, but you must STILL NOT invent specific prices, stock, availability or ratings.`
+      : '';
     const sys =
-`You are Wyzo, MediWyz's warm, concise health agent. Reply in language "${language}". Write a SHORT reply (1-2 sentences) about what was found, then 3 follow-up actions phrased AS IF THE USER is saying them (short, tappable, e.g. "Réserver avec lui", "A-t-il des créneaux cette semaine ?", "Montre-moi ses tarifs").
+`You are Wyzo, MediWyz's warm, concise health agent. Reply in language "${language}". Write a SHORT reply (1-3 sentences) about what was found, then 3 follow-up actions phrased AS IF THE USER is saying them (short, tappable, e.g. "Réserver avec lui", "A-t-il des créneaux cette semaine ?", "Montre-moi ses tarifs").
 GROUNDING RULES (critical):
 - State ONLY facts present in "Found" (names, type, city). NEVER claim or imply availability, free slots, prices, ratings, or specialties — that data is NOT provided here and asserting it is a hallucination.
 - If "Found" is non-empty, be confident and positive; do NOT contradict yourself (never "I found some… however there are none").
 - If "Found" is "(nothing)", clearly say nothing matched and suggest broadening the search.
-- For availability/pricing the user must tap "Book"/a follow-up; do not state times or amounts yourself.
+- For availability/pricing the user must tap "Book"/a follow-up; do not state times or amounts yourself.${symptomAware}
 Reply ONLY JSON: {"reply": string, "followUps": [string, string, string]}.`;
     const raw = await this.groq(
       [{ role: 'system', content: sys }, { role: 'user', content: `Intent: ${intent}\nUser message: ${message}\nFound: ${summary || '(nothing)'}` }],
