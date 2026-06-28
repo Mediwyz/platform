@@ -15,11 +15,13 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS'
+  | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS',
+  'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
 export interface AgentEntities {
@@ -58,6 +60,8 @@ export interface AgentResult {
   action?: 'book' | 'buy' | null;
   bookProviderId?: string;
   requiresLogin?: boolean;
+  /** Generic list render (my bookings, my orders, …). */
+  list?: { kind: string; title: string; items: Array<{ title: string; subtitle?: string; badge?: string; href?: string }> };
   sessionId?: string;
 }
 
@@ -94,6 +98,8 @@ export class AgentService {
         case 'FIND_ORGANISATION': return await this.handleFindOrg(message, entities, language, input);
         case 'FIND_PRODUCT': return await this.handleFindProduct(message, entities, language, input);
         case 'BUY_PRODUCT': return await this.handleBuyProduct(message, entities, language, input);
+        case 'MY_BOOKINGS': return await this.handleMyBookings(entities, language, input);
+        case 'MY_ORDERS': return await this.handleMyOrders(entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -133,6 +139,8 @@ Intent guide:
 - BUY_PRODUCT: wants to BUY / order / purchase a product ("I want to buy paracetamol", "commander du paracétamol", "acheter des vitamines").
 - (Reserve HEALTH_QA for genuine advice/explanation questions with no product or provider need — "why am I tired", "how much water should I drink".)
 - BOOK: wants to book/appoint/reserve with someone (often refersToPrevious).
+- MY_BOOKINGS: asks about THEIR OWN existing appointments/bookings ("my appointments", "mes rendez-vous", "do I have anything booked", "ma prochaine consultation").
+- MY_ORDERS: asks about THEIR OWN Health Shop orders ("my orders", "where is my order", "mes commandes", "le statut de ma commande").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -233,6 +241,65 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
     // Buying requires an account (delivery/pickup + order history). The client
     // opens the purchase sub-flow and gates on login before placing the order.
     return { intent: 'BUY_PRODUCT', entities, reply, products, action: 'buy', requiresLogin: true, followUps };
+  }
+
+  private loginRequired(intent: AgentIntent, language: string): AgentResult {
+    const fr = language === 'fr';
+    return {
+      intent, entities: {},
+      reply: fr ? 'Connectez-vous pour voir vos informations personnelles (rendez-vous, commandes…).' : 'Sign in to see your personal info (appointments, orders…).',
+      requiresLogin: true,
+      followUps: this.capabilityFollowUps(language),
+    };
+  }
+
+  private async handleMyBookings(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_BOOKINGS', language);
+    const profile = await this.prisma.patientProfile.findUnique({ where: { userId: input.userId }, select: { id: true } });
+    const bookings = profile ? await this.prisma.serviceBooking.findMany({
+      where: { patientId: profile.id },
+      orderBy: { scheduledAt: 'desc' }, take: 8,
+      select: { providerName: true, scheduledAt: true, status: true, serviceName: true },
+    }) : [];
+    const items = bookings.map(b => ({
+      title: b.serviceName || (fr ? 'Consultation' : 'Appointment'),
+      subtitle: [b.providerName, b.scheduledAt ? new Date(b.scheduledAt).toLocaleString(fr ? 'fr-FR' : 'en-GB') : null].filter(Boolean).join(' · '),
+      badge: (b.status || '').replace(/_/g, ' '),
+      href: '/bookings',
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos rendez-vous (${items.length}).` : `Here are your appointments (${items.length}).`)
+      : (fr ? "Vous n'avez aucun rendez-vous pour le moment. Voulez-vous en réserver un ?" : 'You have no appointments yet. Want to book one?');
+    return {
+      intent: 'MY_BOOKINGS', entities, reply,
+      list: items.length ? { kind: 'bookings', title: fr ? 'Mes rendez-vous' : 'My appointments', items } : undefined,
+      followUps: items.length ? (fr ? ['Réserver un rendez-vous', 'Trouver un médecin'] : ['Book an appointment', 'Find a doctor']) : this.capabilityFollowUps(language),
+    };
+  }
+
+  private async handleMyOrders(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_ORDERS', language);
+    const orders = await this.prisma.inventoryOrder.findMany({
+      where: { patientUserId: input.userId },
+      orderBy: { createdAt: 'desc' }, take: 8,
+      select: { status: true, totalAmount: true, currency: true, deliveryType: true, createdAt: true, items: { select: { quantity: true, inventoryItem: { select: { name: true } } } } },
+    });
+    const items = orders.map(o => ({
+      title: o.items.map(i => `${i.quantity}× ${i.inventoryItem?.name ?? 'article'}`).join(', ') || (fr ? 'Commande' : 'Order'),
+      subtitle: `${o.currency || 'Rs'} ${o.totalAmount} · ${o.deliveryType === 'delivery' ? (fr ? 'Livraison' : 'Delivery') : (fr ? 'Retrait' : 'Pickup')} · ${new Date(o.createdAt).toLocaleDateString(fr ? 'fr-FR' : 'en-GB')}`,
+      badge: (o.status || '').replace(/_/g, ' '),
+      href: '/orders',
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos commandes (${items.length}).` : `Here are your orders (${items.length}).`)
+      : (fr ? "Vous n'avez aucune commande. Voulez-vous commander quelque chose ?" : 'You have no orders yet. Want to order something?');
+    return {
+      intent: 'MY_ORDERS', entities, reply,
+      list: items.length ? { kind: 'orders', title: fr ? 'Mes commandes' : 'My orders', items } : undefined,
+      followUps: items.length ? (fr ? ['Commander un médicament', 'Voir le Health Shop'] : ['Order a medicine', 'Browse the Health Shop']) : this.capabilityFollowUps(language),
+    };
   }
 
   private async handleBook(message: string, entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {

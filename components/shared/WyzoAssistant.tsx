@@ -32,9 +32,12 @@ interface Msg {
   authChoice?: Draft
   signup?: boolean
   buy?: Product
+  list?: ListBlock
   bookedHref?: string
 }
 interface Order { qty: number; fulfil: 'delivery' | 'pickup'; address?: string }
+interface ListItem { title: string; subtitle?: string; badge?: string; href?: string }
+interface ListBlock { kind: string; title: string; items: ListItem[] }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
 type Variant = 'panel' | 'floating' | 'tab' | 'hero'
 
@@ -221,6 +224,8 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         providers: providers.length ? providers : undefined,
         organisations: Array.isArray(d.organisations) && d.organisations.length ? d.organisations : undefined,
         products: Array.isArray(d.products) && d.products.length ? d.products : undefined,
+        list: d.list && Array.isArray(d.list.items) && d.list.items.length ? d.list : undefined,
+        signIn: d.requiresLogin === true && !d.action,
         followUps: Array.isArray(d.followUps) && d.followUps.length ? d.followUps : undefined,
       })
       // Agentic booking: when the agent pinned a single provider to book, jump
@@ -479,6 +484,25 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
               )}
 
               {m.buy && <BuyPanel product={m.buy} onConfirm={o => placeOrder(m.buy!, o)} />}
+
+              {m.list && m.list.items.length > 0 && (
+                <div className="mt-2 space-y-1.5">
+                  {m.list.items.map((it, k) => {
+                    const inner = (
+                      <>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-[13px] font-semibold text-fg truncate">{it.title}</span>
+                          {it.subtitle && <span className="block text-[10px] text-faint truncate">{it.subtitle}</span>}
+                        </span>
+                        {it.badge && <span className="text-[10px] font-semibold capitalize text-[#0C6780] bg-[#0C6780]/10 px-2 py-0.5 rounded-full flex-shrink-0">{it.badge}</span>}
+                      </>
+                    )
+                    return it.href
+                      ? <Link key={k} href={it.href} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2 hover:border-[#0C6780]/50 transition">{inner}</Link>
+                      : <div key={k} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2">{inner}</div>
+                  })}
+                </div>
+              )}
 
               {m.days && (
                 <div className="mt-2 space-y-2">

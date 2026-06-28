@@ -45,8 +45,9 @@ class _Msg {
   List<_Day> days;
   List<Map<String, dynamic>> services;
   Map<String, dynamic>? confirm;
+  List<dynamic> list;
   bool booked;
-  _Msg(this.role, {this.text, this.typing = false, this.providers = const [], this.organisations = const [], this.products = const [], this.followUps = const [], this.days = const [], this.services = const [], this.confirm, this.booked = false});
+  _Msg(this.role, {this.text, this.typing = false, this.providers = const [], this.organisations = const [], this.products = const [], this.followUps = const [], this.days = const [], this.services = const [], this.confirm, this.list = const [], this.booked = false});
 }
 
 class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProviderStateMixin {
@@ -125,6 +126,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         providers: providers,
         organisations: (d['organisations'] as List?) ?? const [],
         products: (d['products'] as List?) ?? const [],
+        list: ((d['list'] as Map?)?['items'] as List?) ?? const [],
         followUps: ((d['followUps'] as List?) ?? const []).map((e) => e.toString()).toList(),
       ));
       if (d['action'] == 'book' && d['bookProviderId'] != null) {
@@ -421,6 +423,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ...m.providers.map((p) => _providerCard(Map<String, dynamic>.from(p as Map))),
           ...m.organisations.map((o) => _simpleCard(Icons.business, (o as Map)['name']?.toString() ?? '', '${o['type'] ?? 'organisation'}${o['city'] != null ? ' · ${o['city']}' : ''}')),
           ...m.products.map((p) => _buyableProduct(Map<String, dynamic>.from(p as Map))),
+          ...m.list.map((it) => _listTile(Map<String, dynamic>.from(it as Map))),
           if (m.days.isNotEmpty) _slots(m.days),
           if (m.services.isNotEmpty) ...m.services.map((s) => _serviceTile(s)),
           if (m.confirm != null) Padding(padding: const EdgeInsets.only(top: 6), child: ElevatedButton.icon(onPressed: _confirmBooking, icon: const Icon(Icons.event_available, size: 16), label: const Text('Confirmer'))),
@@ -481,6 +484,24 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       ]),
     );
   }
+
+  Widget _listTile(Map<String, dynamic> it) => Container(
+        margin: const EdgeInsets.only(top: 6),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        child: Row(children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(it['title']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+            if (it['subtitle'] != null) Text(it['subtitle'].toString(), style: const TextStyle(fontSize: 10, color: Colors.black54)),
+          ])),
+          if (it['badge'] != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+              child: Text(it['badge'].toString(), style: const TextStyle(fontSize: 10, color: MediWyzColors.teal, fontWeight: FontWeight.w600)),
+            ),
+        ]),
+      );
 
   Widget _slots(List<_Day> days) => Container(
         margin: const EdgeInsets.only(top: 6),
