@@ -72,6 +72,13 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const sessionRef = useRef<string | undefined>(undefined)
   const lastProviderIdsRef = useRef<string[]>([])
   const firstRenderRef = useRef(true)
+  // Active booking sub-flow: while a step is awaiting input, free-text typed in
+  // the box is interpreted IN CONTEXT (pick a slot / service / confirm) instead
+  // of being re-classified by the agent (which would restart the booking).
+  const stageRef = useRef<null | 'slot' | 'service' | 'confirm'>(null)
+  const availDaysRef = useRef<Day[]>([])
+  const availServicesRef = useRef<Service[]>([])
+  const confirmDraftRef = useRef<Draft | null>(null)
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
@@ -119,6 +126,40 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
+  const WEEKDAYS: Record<string, number> = {
+    sun: 0, sunday: 0, dim: 0, dimanche: 0,
+    mon: 1, monday: 1, lun: 1, lundi: 1,
+    tue: 2, tuesday: 2, mar: 2, mardi: 2,
+    wed: 3, wednesday: 3, mer: 3, mercredi: 3,
+    thu: 4, thursday: 4, jeu: 4, jeudi: 4,
+    fri: 5, friday: 5, ven: 5, vendredi: 5,
+    sat: 6, saturday: 6, sam: 6, samedi: 6,
+  }
+  function hasTimeToken(s: string) { return /\b\d{1,2}\s*[:hH.]\s*\d{2}\b/.test(s) }
+  // Match a typed time (and optional weekday) to one of the shown slots.
+  function matchSlot(s: string): { date: string; time: string; label: string } | null {
+    const m = s.match(/\b(\d{1,2})\s*[:hH.]\s*(\d{2})\b/)
+    if (!m) return null
+    const time = `${String(parseInt(m[1], 10)).padStart(2, '0')}:${m[2]}`
+    const days = availDaysRef.current
+    const wdKey = Object.keys(WEEKDAYS).find(k => new RegExp(`\\b${k}`, 'i').test(s))
+    let day = wdKey
+      ? days.find(d => new Date(d.date).getDay() === WEEKDAYS[wdKey] && d.slots.includes(time))
+      : undefined
+    if (!day) day = days.find(d => d.slots.includes(time))
+    return day ? { date: day.date, time, label: day.label } : null
+  }
+  function matchService(s: string): Service | null {
+    const ql = s.toLowerCase().trim()
+    const list = availServicesRef.current
+    if (/\b(first|1st|premier|première)\b/.test(ql)) return list[0] ?? null
+    if (/\b(second|2nd|deuxi)\b/.test(ql)) return list[1] ?? null
+    if (/\b(third|3rd|troisi)\b/.test(ql)) return list[2] ?? null
+    return list.find(svc => ql.includes(svc.serviceName.toLowerCase()) || svc.serviceName.toLowerCase().includes(ql)) ?? null
+  }
+  const isYes = (s: string) => /\b(yes|yeah|yep|ok|okay|sure|confirm|book it|go ahead|oui|valide[rz]?|d'accord|c'est bon)\b/i.test(s)
+  const isNo = (s: string) => /\b(no|nope|cancel|stop|non|annule[rz]?)\b/i.test(s)
+
   // Every message flows through the Wyzo agent: it classifies intent, extracts
   // and resolves entities (names→IDs, fuzzy), runs the right tool (provider /
   // org / product search, booking, or Q&A), and returns a reply + result cards
@@ -126,6 +167,31 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   async function send(text?: string, _kind?: 'search' | 'ask') {
     const q = (text ?? input).trim()
     if (!q || loading) return
+
+    // ── In-flow interception: interpret free-text within the active booking step
+    if (stageRef.current === 'slot') {
+      const hit = matchSlot(q)
+      if (hit) { setInput(''); pickSlot(hit.date, hit.time, hit.label); return }
+      if (hasTimeToken(q)) {
+        setInput('')
+        setMessages(m => [...m, { role: 'user', text: q }, { role: 'bot', text: "That time isn't open — please pick one of the slots shown above." }])
+        return
+      }
+    } else if (stageRef.current === 'service') {
+      const svc = matchService(q)
+      if (svc) { setInput(''); pickService(svc); return }
+    } else if (stageRef.current === 'confirm') {
+      if (isNo(q)) {
+        setInput(''); stageRef.current = null; confirmDraftRef.current = null
+        setMessages(m => [...m, { role: 'user', text: q }, { role: 'bot', text: 'No problem — booking cancelled. Anything else I can help with?' }])
+        return
+      }
+      if (isYes(q) && confirmDraftRef.current) {
+        setInput(''); setMessages(m => [...m, { role: 'user', text: q }]); confirmBooking(confirmDraftRef.current); return
+      }
+    }
+    // Leaving any booking step → hand the message to the agent.
+    stageRef.current = null
     setInput('')
     setMessages(m => [...m, { role: 'user', text: q }, { role: 'bot', typing: true }])
     setLoading(true)
@@ -179,8 +245,9 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         const slots: string[] = j?.slots || []
         if (slots.length) days.push({ date, label: d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }), slots: slots.slice(0, 8) })
       }
+      if (days.length) { availDaysRef.current = days; stageRef.current = 'slot' } else { stageRef.current = null }
       replaceTyping(days.length
-        ? { role: 'bot', text: `Here's ${provider.name}'s availability this week — pick a time:`, days }
+        ? { role: 'bot', text: `Here's ${provider.name}'s availability this week — pick a time, or just type one (e.g. "Tue 11:00"):`, days }
         : { role: 'bot', text: `${provider.name} has no open slots this week. Try another provider, or check back soon.` })
     } catch { replaceTyping({ role: 'bot', text: 'Could not load availability — please try again.' }) }
   }
@@ -193,8 +260,15 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
       const res = await fetch(`/api/providers/${draft.provider!.id}/services`, { credentials: 'include' })
       const j = await res.json().catch(() => ({}))
       const services: Service[] = (j?.data || []).slice(0, 6)
+      if (services.length) {
+        availServicesRef.current = services
+        stageRef.current = 'service'
+      } else {
+        confirmDraftRef.current = { provider: draft.provider, date, time }
+        stageRef.current = 'confirm'
+      }
       replaceTyping(services.length
-        ? { role: 'bot', text: 'Which service would you like to book?', services }
+        ? { role: 'bot', text: 'Which service would you like to book? Tap one, or type its name:', services }
         : { role: 'bot', text: "No specific services listed — I'll book a standard consultation.", confirm: { provider: draft.provider, date, time } })
     } catch { replaceTyping({ role: 'bot', text: 'Could not load services — please try again.' }) }
   }
@@ -202,11 +276,14 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   function pickService(svc: Service) {
     const next = { ...draft, service: svc }
     setDraft(next)
+    confirmDraftRef.current = next
+    stageRef.current = 'confirm'
     push({ role: 'user', text: svc.serviceName })
-    push({ role: 'bot', text: `Confirm: ${svc.serviceName}${svc.price ? ` · Rs ${svc.price}` : ''} with ${next.provider!.name} on ${next.date} at ${next.time}?`, confirm: next })
+    push({ role: 'bot', text: `Confirm: ${svc.serviceName}${svc.price ? ` · Rs ${svc.price}` : ''} with ${next.provider!.name} on ${next.date} at ${next.time}? (yes/no)`, confirm: next })
   }
 
   async function confirmBooking(d: Draft) {
+    stageRef.current = null
     if (!loggedIn) {
       try { localStorage.setItem(PENDING_KEY, JSON.stringify(d)) } catch { /* ignore */ }
       push({ role: 'bot', text: 'You just need to sign in to confirm — your booking is saved and resumes right after.', signIn: true })
@@ -229,7 +306,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
       if (!j.success && !j.booking) throw new Error(j.message || 'Booking failed')
       const ticket = j.booking?.ticketId ? ` (ref ${j.booking.ticketId})` : ''
       replaceTyping({ role: 'bot', text: `✅ Booked! Your appointment with ${d.provider!.name} is on ${d.date} at ${d.time}${ticket}.`, bookedHref: '/bookings' })
-      setDraft({})
+      setDraft({}); confirmDraftRef.current = null
     } catch (e) { replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' }) }
   }
 
