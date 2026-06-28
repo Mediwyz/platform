@@ -1,7 +1,7 @@
 'use client'
 
-import ProviderInventoryManager from '@/components/shared/ProviderInventoryManager'
+import ProviderShopManager from '@/components/shared/ProviderShopManager'
 
 export default function DynamicInventoryPage() {
-  return <ProviderInventoryManager />
+  return <ProviderShopManager />
 }
