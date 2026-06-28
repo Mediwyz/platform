@@ -10,6 +10,7 @@ Curated, source-backed best-practice skills for evolving the MediWyz "Wyzo" agen
 | [entity-resolution](./entity-resolution/SKILL.md) | name→ID logic, "wrong entity picked" bugs |
 | [rag-grounding](./rag-grounding/SKILL.md) | compose step, semantic search, any generated text |
 | [conversation-state](./conversation-state/SKILL.md) | booking flow, multi-turn state, "flow restarts" bugs |
+| [flutter-agentic-ui](./flutter-agentic-ui/SKILL.md) | the Flutter Wyzo app (mobile/) — rendering, animations, store build |
 
 See [`AGENTIC-AUDIT.md`](./AGENTIC-AUDIT.md) for the current-state review and prioritised improvements.
 
