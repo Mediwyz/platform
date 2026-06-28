@@ -215,7 +215,7 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/\b(mes|my)\b[^.?!]*\b(analyses?|laboratoire|lab\s*results?)\b/.test(m) || /\b(mes|my)\b[^.?!]*r[ée]sultats?[^.?!]*(analyse|labo|test)/.test(m)) return 'MY_LAB_RESULTS';
     if (/\b(mes|my|ma|mon)\b[^.?!]*(facture|invoice|recu|receipt)/.test(m)) return 'MY_INVOICES';
     if (/\b(my|mon|ma)\b[^.?!]*(tableau de bord|dashboard|bilan|health (dashboard|summary|snapshot|stats)|journee sante)/.test(m) || /(combien[^.?!]*calories|how many calories|mes calories|today'?s? (health|calories|stats))/.test(m)) return 'MY_HEALTH';
-    if (/(j'?ai (bu|couru|marche|dormi)|i (drank|ran|walked|slept)|\d+\s*ml\b|dormi\s*\d|log (water|sleep|exercise))/.test(m)) return 'LOG_HEALTH';
+    if (/(j'?ai (bu|mange|couru|marche|dormi)|i (drank|ate|ran|walked|slept)|\d+\s*ml\b|dormi\s*\d|log (water|sleep|exercise|food))/.test(m)) return 'LOG_HEALTH';
     if (/\b(mes|my)\b[^.?!]*(favoris|favourite|favorite|preferes?|prefered)/.test(m)) return 'MY_FAVORITES';
     if (/(avis|reviews?|ratings?|note)[^.?!]*(sur|de|of|for|on|about|du|de la)\b/.test(m) || /\b(reviews?|avis) (of|for|on|sur|de)\b/.test(m)) return 'PROVIDER_REVIEWS';
     // Purchase vs booking (checked before the generic BOOK pattern)
@@ -497,12 +497,31 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
         await this.healthTracker.upsertSleepEntry(input.userId, { durationMin: Math.round(hours * 60) });
         return { intent: 'LOG_HEALTH', entities, reply: fr ? `😴 Noté : ${hours} h de sommeil.` : `😴 Logged ${hours} h of sleep.`, followUps: fr ? ['Mon bilan du jour', 'Conseils pour mieux dormir'] : ['My health snapshot', 'How to sleep better'] };
       }
+      // Food (LLM-estimated calories/macros for the described meal)
+      if (/(mange|ate|eaten|eat|repas|petit.?dejeuner|dejeuner|diner|breakfast|lunch|dinner|snack)/.test(m)) {
+        const food = message.replace(/.*\b(j'?ai mange|mange[ée]?s?|i ate|eaten|i eat|i had)\b/i, '').trim() || message;
+        const est = await this.estimateFood(food);
+        const cal = Math.max(0, Math.round(est.calories || 0));
+        await this.healthTracker.createFoodEntry(input.userId, {
+          name: est.name || food.slice(0, 60), mealType: ['breakfast', 'lunch', 'dinner', 'snack'].includes(est.mealType) ? est.mealType : 'snack',
+          calories: cal, protein: est.protein, carbs: est.carbs, fat: est.fat,
+        });
+        return { intent: 'LOG_HEALTH', entities, reply: fr ? `🍽️ Noté : ${est.name || food} (~${cal} kcal).` : `🍽️ Logged ${est.name || food} (~${cal} kcal).`, followUps: snap };
+      }
     } catch { /* */ }
     return {
       intent: 'LOG_HEALTH', entities,
       reply: fr ? "Dites-moi quoi enregistrer, par ex. « j'ai bu 500 ml » ou « j'ai dormi 7h »." : 'Tell me what to log, e.g. "I drank 500 ml" or "I slept 7h".',
       followUps: fr ? ['J\'ai bu 500 ml', 'J\'ai dormi 7h'] : ['I drank 500 ml', 'I slept 7h'],
     };
+  }
+
+  private async estimateFood(food: string): Promise<any> {
+    const raw = await this.groq([
+      { role: 'system', content: 'Estimate nutrition for a described food/meal for a typical single serving. Reply ONLY JSON: {"name": short label, "mealType": one of breakfast|lunch|dinner|snack, "calories": number, "protein": number, "carbs": number, "fat": number}.' },
+      { role: 'user', content: food },
+    ], { json: true, max: 150, temp: 0 });
+    try { return raw ? JSON.parse(raw) : {}; } catch { return {}; }
   }
 
   private async handleMyFavorites(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
