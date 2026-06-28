@@ -74,6 +74,21 @@ class AgentApi {
     return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
+  /// GET /auth/me — returns the signed-in user (or null for a guest).
+  static Future<Map<String, dynamic>?> me() async {
+    try {
+      final res = await ApiClient.instance.get('/auth/me');
+      final b = res.data as Map?;
+      if (b?['success'] == true && b!['user'] != null) return Map<String, dynamic>.from(b['user'] as Map);
+    } catch (_) { /* guest */ }
+    return null;
+  }
+
+  /// POST /auth/logout — clears the auth cookies (start fresh / test guest flow).
+  static Future<void> logout() async {
+    try { await ApiClient.instance.post('/auth/logout'); } catch (_) { /* */ }
+  }
+
   /// POST /auth/register — creates a patient account. Active patient accounts
   /// are auto-logged-in by the backend (auth cookies are set on the response),
   /// so the booking can be confirmed straight after.

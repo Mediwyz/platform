@@ -17,12 +17,6 @@ const _heroImages = [
   'assets/images/hospital.jpg',
   'assets/images/paramedics.jpg',
 ];
-const _captions = [
-  'Specialist & surgical care',
-  'Video consultations',
-  'Hospital & ward care',
-  'Vaccination & home nursing',
-];
 const _suggestions = [
   'Une infirmière à domicile',
   'Un médecin en consultation vidéo',
@@ -61,6 +55,9 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   Timer? _bgTimer;
   late final AnimationController _kenBurns;
 
+  // auth state (for the indicator)
+  Map<String, dynamic>? _user;
+
   // booking state
   Map<String, dynamic>? _provider, _service;
   String? _date, _time, _stage; // stage: slot | service | confirm
@@ -71,6 +68,31 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     super.initState();
     _kenBurns = AnimationController(vsync: this, duration: const Duration(seconds: 7))..repeat(reverse: true);
     _bgTimer = Timer.periodic(const Duration(seconds: 6), (_) => setState(() => _bg = (_bg + 1) % _heroImages.length));
+    AgentApi.me().then((u) { if (mounted) setState(() => _user = u); });
+  }
+
+  void _authTap() {
+    if (_user == null) { _send('Comment créer un compte ?'); return; }
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(
+            leading: const Icon(Icons.person, color: MediWyzColors.teal),
+            title: Text('Connecté : ${_user!['firstName'] ?? ''}'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text('Se déconnecter (tester en invité)'),
+            onTap: () async {
+              Navigator.of(context).pop();
+              await AgentApi.logout();
+              if (mounted) setState(() => _user = null);
+            },
+          ),
+        ]),
+      ),
+    );
   }
 
   @override
@@ -378,7 +400,18 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           const SizedBox(width: 10),
           const Text('MediWyz', style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w800)),
           const Spacer(),
-          Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(20)), child: Text(_captions[_bg], style: const TextStyle(color: Colors.white70, fontSize: 10))),
+          GestureDetector(
+            onTap: _authTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(20)),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Icon(_user != null ? Icons.person : Icons.person_outline, color: Colors.white70, size: 12),
+                const SizedBox(width: 4),
+                Text(_user != null ? (_user!['firstName']?.toString() ?? 'Compte') : 'Invité', style: const TextStyle(color: Colors.white70, fontSize: 10)),
+              ]),
+            ),
+          ),
         ]),
         const SizedBox(height: 8),
         const Text('La santé, réinventée', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800, shadows: [Shadow(color: Colors.black54, blurRadius: 8)])),
