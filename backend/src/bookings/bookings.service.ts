@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { WorkflowEngineService } from '../workflow/workflow-engine.service';
@@ -27,7 +27,7 @@ const LEGACY_MODEL_MAP: Record<string, string> = {
 };
 
 @Injectable()
-export class BookingsService {
+export class BookingsService implements OnApplicationBootstrap {
   private readonly logger = new Logger(BookingsService.name);
 
   constructor(
@@ -35,6 +35,40 @@ export class BookingsService {
     private notifications: NotificationsService,
     private workflowEngine: WorkflowEngineService,
   ) {}
+
+  /** Boot-time safety net: ensure EVERY provider has bookable availability.
+   *  The deploy seed wipes + reseeds availability and can leave some provider
+   *  types (e.g. doctors with a null accountStatus) with none, which dead-ends
+   *  the in-chat booking. This runs after the post-deploy restart, is idempotent
+   *  (only providers with zero windows are seeded), and is immune to seed crashes. */
+  onApplicationBootstrap() {
+    setTimeout(() => { void this.backfillAvailability(); }, 8000);
+  }
+
+  private async backfillAvailability() {
+    try {
+      const PROVIDER_TYPES = ['DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER', 'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST'];
+      const providers = await this.prisma.user.findMany({
+        where: { userType: { in: PROVIDER_TYPES as any } },
+        select: { id: true },
+      });
+      const ids = providers.map(p => p.id);
+      if (!ids.length) return;
+      const have = await this.prisma.providerAvailability.findMany({
+        where: { userId: { in: ids } }, select: { userId: true }, distinct: ['userId'],
+      });
+      const haveSet = new Set(have.map(h => h.userId));
+      const missing = ids.filter(id => !haveSet.has(id));
+      if (!missing.length) return;
+      const rows = missing.flatMap(userId =>
+        [1, 2, 3, 4, 5].map(day => ({ userId, dayOfWeek: day, startTime: '09:00', endTime: '17:00', slotDuration: 30, isActive: true })),
+      );
+      const res = await this.prisma.providerAvailability.createMany({ data: rows, skipDuplicates: true });
+      this.logger.log(`Availability backfill: created ${res.count} windows for ${missing.length} provider(s) with none`);
+    } catch (e: any) {
+      this.logger.warn(`Availability backfill failed: ${e?.message}`);
+    }
+  }
 
   /** Ensure user has a PatientProfile */
   private async ensurePatientProfile(userId: string) {
