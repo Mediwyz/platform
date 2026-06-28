@@ -71,6 +71,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const scrollRef = useRef<HTMLDivElement>(null)
   const sessionRef = useRef<string | undefined>(undefined)
   const lastProviderIdsRef = useRef<string[]>([])
+  const firstRenderRef = useRef(true)
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
@@ -80,13 +81,16 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   // identity block pinned at first paint (no messages yet); once the user
   // engages, scroll the bounded container so the intro slides up and away.
   useEffect(() => {
+    // Never auto-scroll on first paint — otherwise a panel placement (e.g. the
+    // Discover section) would scroll the whole window down to itself on page
+    // load, hiding the hero. Only scroll once the user has actually engaged.
+    if (firstRenderRef.current) { firstRenderRef.current = false; return }
     if (hero) {
-      if (messages.length === 0) return
       const el = scrollRef.current
       if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
       return
     }
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [messages, hero])
 
   // Resume a pending booking after sign-in.
@@ -410,7 +414,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         {/* One bounded, vertically-scrollable area: the identity block + the
             conversation share it, so older content slides up and out of view
             as new replies arrive. */}
-        <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-1 pb-2 space-y-4">
+        <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-1 pb-2 space-y-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {heroIntro}
           {messages.length > 0 && <div className="space-y-3 text-left">{messageNodes}</div>}
           {chipsNode}

@@ -86,8 +86,10 @@ const LoginForm: React.FC = () => {
   localStorage.setItem('mediwyz_redirectPath', data.redirectPath)
  }
 
- // Redirect to the user's private dashboard feed
- router.push(data.redirectPath || '/patient/feed')
+ // Land on the AI Health Assistant (the agent) instead of the feed. The server
+ // returns the role-specific feed path; swap its trailing /feed for /ai-assistant.
+ const dest = (data.redirectPath || '/patient/feed').replace(/\/feed\/?$/, '/ai-assistant')
+ router.push(dest)
  } catch {
  setError('Network error. Please try again.')
  setIsSubmitting(false)

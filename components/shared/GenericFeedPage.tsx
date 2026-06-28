@@ -4,6 +4,7 @@ import { useDashboardUser } from '@/hooks/useDashboardUser'
 import PostFeed from '@/components/posts/PostFeed'
 import ChatContactsSidebar from '@/components/chat/ChatContactsSidebar'
 import UserSuggestions from '@/components/social/UserSuggestions'
+import OrgSuggestions from '@/components/social/OrgSuggestions'
 import { usePathname } from 'next/navigation'
 
 function LoadingSpinner() {
@@ -31,6 +32,7 @@ export default function GenericFeedPage() {
  </div>
  <div className="hidden lg:block w-72 flex-shrink-0 space-y-4">
  <UserSuggestions currentUserId={user.id} maxResults={7} />
+ <OrgSuggestions maxResults={6} />
  <ChatContactsSidebar currentUserId={user.id} messagesPath={messagesPath} />
  </div>
  </div>
