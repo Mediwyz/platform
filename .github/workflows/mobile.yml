@@ -46,6 +46,18 @@ jobs:
       - name: Generate Android platform files
         run: flutter create --platforms=android --org=com.mediwyz --project-name=mediwyz_mobile .
 
+      - name: Tune Gradle/Kotlin for CI memory
+        # `flutter create` regenerates android/ (the dir is gitignored). Its default
+        # heap (-Xmx8G) exceeds the ~7 GB runner, so the forked Kotlin compiler
+        # worker gets OOM-killed → flaky ':*:compileReleaseKotlin'. Right-size the
+        # heap (last org.gradle.jvmargs wins) and run Kotlin in-process.
+        run: |
+          {
+            echo "org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=1G -XX:ReservedCodeCacheSize=512m"
+            echo "kotlin.compiler.execution.strategy=in-process"
+            echo "org.gradle.workers.max=2"
+          } >> android/gradle.properties
+
       - name: Analyze
         run: flutter analyze --no-fatal-infos
 
