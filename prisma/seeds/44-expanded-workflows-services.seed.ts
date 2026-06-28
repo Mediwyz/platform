@@ -52,10 +52,14 @@ export async function seedExpandedWorkflowsServices(prisma: PrismaClient) {
 
   // ─── 3. Provider availability for slot checking ──────────────────────────
 
+  // Cover EVERY provider type and don't filter by accountStatus — some seeded
+  // providers (e.g. doctors) have a null accountStatus, which previously left
+  // them with no availability and made the in-chat booking dead-end. The
+  // `existing > 0` guard below keeps this idempotent and respects custom hours.
   const allProviders = await prisma.user.findMany({
-    where: { userType: { in: ['DOCTOR', 'NURSE', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST', 'PHYSIOTHERAPIST'] }, accountStatus: 'active' },
+    where: { userType: { in: ['DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER', 'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST'] } },
     select: { id: true },
-    take: 20,
+    take: 1000,
   })
 
   for (const provider of allProviders) {
