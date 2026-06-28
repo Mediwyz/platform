@@ -144,7 +144,12 @@ Intent guide:
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
-Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, "video/online/téléconsultation"→video, "at home/à domicile/home visit"→home.`;
+Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, "video/online/téléconsultation"→video, "at home/à domicile/home visit"→home.
+KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "track", "statut de") about something the user ALREADY has → MY_BOOKINGS / MY_ORDERS, NOT a new request:
+- "mes rendez-vous" / "show my appointments" / "do I have anything booked" → MY_BOOKINGS
+- "réserver un médecin" / "book a doctor" / "je veux un rendez-vous" → BOOK
+- "mes commandes" / "où sont mes commandes" / "track my order" / "my orders" → MY_ORDERS
+- "acheter du paracétamol" / "commander des vitamines" / "I want to buy X" → BUY_PRODUCT`;
     const user = (hist ? `Conversation so far:\n${hist}\n\n` : '') + `New message: ${message}`;
     const raw = await this.groq([{ role: 'system', content: sys }, { role: 'user', content: user }], { json: true, max: 400, temp: 0 });
 
