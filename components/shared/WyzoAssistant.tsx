@@ -36,7 +36,8 @@ interface Msg {
   bookedHref?: string
 }
 interface Order { qty: number; fulfil: 'delivery' | 'pickup'; address?: string }
-interface ListItem { title: string; subtitle?: string; badge?: string; href?: string }
+interface ListAction { kind: string; id: string; label: string; payload?: Record<string, unknown> }
+interface ListItem { title: string; subtitle?: string; badge?: string; href?: string; action?: ListAction }
 interface ListBlock { kind: string; title: string; items: ListItem[] }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
 type Variant = 'panel' | 'floating' | 'tab' | 'hero'
@@ -329,6 +330,25 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     } catch (e) { replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' }) }
   }
 
+  // Dispatch an inline list-item action (e.g. cancel a booking).
+  async function runListAction(a: ListAction) {
+    if (loading) return
+    if (a.kind === 'cancel_booking') {
+      setMessages(m => [...m, { role: 'bot', typing: true }])
+      setLoading(true)
+      try {
+        const res = await fetch('/api/bookings/cancel', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          body: JSON.stringify({ bookingId: a.id, bookingType: (a.payload?.bookingType as string) || 'service' }),
+        })
+        const j = await res.json()
+        replaceTyping({ role: 'bot', text: j.success || j.message ? '✅ Rendez-vous annulé.' : "Annulation impossible — réessayez." })
+      } catch {
+        replaceTyping({ role: 'bot', text: 'Annulation impossible — réessayez.' })
+      } finally { setLoading(false) }
+    }
+  }
+
   // Kick off in-chat account creation; `resume` runs after the account is made
   // (finishes the pending booking or order).
   function startSignup(resume: () => void) {
@@ -487,20 +507,21 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
 
               {m.list && m.list.items.length > 0 && (
                 <div className="mt-2 space-y-1.5">
-                  {m.list.items.map((it, k) => {
-                    const inner = (
-                      <>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-[13px] font-semibold text-fg truncate">{it.title}</span>
-                          {it.subtitle && <span className="block text-[10px] text-faint truncate">{it.subtitle}</span>}
-                        </span>
-                        {it.badge && <span className="text-[10px] font-semibold capitalize text-[#0C6780] bg-[#0C6780]/10 px-2 py-0.5 rounded-full flex-shrink-0">{it.badge}</span>}
-                      </>
-                    )
-                    return it.href
-                      ? <Link key={k} href={it.href} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2 hover:border-[#0C6780]/50 transition">{inner}</Link>
-                      : <div key={k} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2">{inner}</div>
-                  })}
+                  {m.list.items.map((it, k) => (
+                    <div key={k} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-2.5 py-2">
+                      {it.href
+                        ? <Link href={it.href} className="min-w-0 flex-1">
+                            <span className="block text-[13px] font-semibold text-fg truncate">{it.title}</span>
+                            {it.subtitle && <span className="block text-[10px] text-faint truncate">{it.subtitle}</span>}
+                          </Link>
+                        : <span className="min-w-0 flex-1">
+                            <span className="block text-[13px] font-semibold text-fg truncate">{it.title}</span>
+                            {it.subtitle && <span className="block text-[10px] text-faint truncate">{it.subtitle}</span>}
+                          </span>}
+                      {it.badge && <span className="text-[10px] font-semibold capitalize text-[#0C6780] bg-[#0C6780]/10 px-2 py-0.5 rounded-full flex-shrink-0">{it.badge}</span>}
+                      {it.action && <button onClick={() => runListAction(it.action!)} disabled={loading} className="text-[10px] font-semibold text-red-600 border border-red-200 px-2 py-1 rounded-lg hover:bg-red-50 flex-shrink-0 disabled:opacity-50 transition">{it.action.label}</button>}
+                    </div>
+                  ))}
                 </div>
               )}
 

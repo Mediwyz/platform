@@ -15,12 +15,12 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET'
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS'
   | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS',
   'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
@@ -60,8 +60,9 @@ export interface AgentResult {
   action?: 'book' | 'buy' | null;
   bookProviderId?: string;
   requiresLogin?: boolean;
-  /** Generic list render (my bookings, my orders, …). */
-  list?: { kind: string; title: string; items: Array<{ title: string; subtitle?: string; badge?: string; href?: string }> };
+  /** Generic list render (my bookings, my orders, …). Items may carry an
+   *  inline action (e.g. cancel a booking) the client dispatches. */
+  list?: { kind: string; title: string; items: Array<{ title: string; subtitle?: string; badge?: string; href?: string; action?: { kind: string; id: string; label: string; payload?: any } }> };
   sessionId?: string;
 }
 
@@ -102,6 +103,7 @@ export class AgentService {
         case 'MY_ORDERS': return await this.handleMyOrders(entities, language, input);
         case 'MY_PRESCRIPTIONS': return await this.handleMyPrescriptions(entities, language, input);
         case 'MY_WALLET': return await this.handleMyWallet(entities, language, input);
+        case 'MY_LAB_RESULTS': return await this.handleMyLabResults(entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -145,6 +147,7 @@ Intent guide:
 - MY_ORDERS: asks about THEIR OWN Health Shop orders ("my orders", "where is my order", "mes commandes", "le statut de ma commande").
 - MY_PRESCRIPTIONS: asks about THEIR OWN prescriptions ("my prescriptions", "mes ordonnances", "ma dernière ordonnance").
 - MY_WALLET: asks about THEIR OWN wallet/balance ("my balance", "mon solde", "combien j'ai sur mon compte", "mon portefeuille").
+- MY_LAB_RESULTS: asks about THEIR OWN lab tests/results ("my lab results", "mes analyses", "mes résultats d'analyse", "le résultat de mon test").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -187,7 +190,9 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
   /** High-confidence deterministic routing for unambiguous phrasings. Returns
    *  null when the request is ambiguous (then we trust the LLM classifier). */
   private strongHeuristic(message: string): AgentIntent | null {
-    const m = message.toLowerCase();
+    // Strip accents (NFD → drop combining marks) so the [ée]-style patterns
+    // match regardless of how é is encoded in the source vs the incoming text.
+    const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
     // Possessive / existing → "my …"
     if (/\b(mes|my|ma)\b[^.?!]*\b(rendez|appointment|consultation|booking|r[ée]servation)/.test(m)) return 'MY_BOOKINGS';
     if (/\b(do i have|ai[- ]?je)\b[^.?!]*\b(rendez|appointment|book)/.test(m)) return 'MY_BOOKINGS';
@@ -195,9 +200,10 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/(o[uù][^.?!]*(commande|order)|track[^.?!]*(order|commande)|order status|statut[^.?!]*commande)/.test(m)) return 'MY_ORDERS';
     if (/\b(mes|my|ma)\b[^.?!]*\b(ordonnances?|prescriptions?)\b/.test(m)) return 'MY_PRESCRIPTIONS';
     if (/\b(mon|my|ma)\b[^.?!]*\b(solde|balance|portefeuille|wallet|cr[ée]dit)\b/.test(m) || /(combien[^.?!]*(solde|cr[ée]dit|compte)|how much[^.?!]*balance)/.test(m)) return 'MY_WALLET';
+    if (/\b(mes|my)\b[^.?!]*\b(analyses?|laboratoire|lab\s*results?)\b/.test(m) || /\b(mes|my)\b[^.?!]*r[ée]sultats?[^.?!]*(analyse|labo|test)/.test(m)) return 'MY_LAB_RESULTS';
     // Purchase vs booking (checked before the generic BOOK pattern)
     if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
-    if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)\b/.test(m)) return 'BOOK';
+    if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)/.test(m)) return 'BOOK';
     return null;
   }
 
@@ -288,13 +294,15 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     const bookings = profile ? await this.prisma.serviceBooking.findMany({
       where: { patientId: profile.id },
       orderBy: { scheduledAt: 'desc' }, take: 8,
-      select: { providerName: true, scheduledAt: true, status: true, serviceName: true },
+      select: { id: true, type: true, providerName: true, scheduledAt: true, status: true, serviceName: true },
     }) : [];
+    const cancellable = (s: string) => !['cancelled', 'completed', 'delivered'].includes((s || '').toLowerCase());
     const items = bookings.map(b => ({
       title: b.serviceName || (fr ? 'Consultation' : 'Appointment'),
       subtitle: [b.providerName, b.scheduledAt ? new Date(b.scheduledAt).toLocaleString(fr ? 'fr-FR' : 'en-GB') : null].filter(Boolean).join(' · '),
       badge: (b.status || '').replace(/_/g, ' '),
       href: '/bookings',
+      action: cancellable(b.status) ? { kind: 'cancel_booking', id: b.id, label: fr ? 'Annuler' : 'Cancel', payload: { bookingType: b.type || 'service' } } : undefined,
     }));
     const reply = items.length
       ? (fr ? `Voici vos rendez-vous (${items.length}).` : `Here are your appointments (${items.length}).`)
@@ -366,6 +374,31 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     return {
       intent: 'MY_WALLET', entities, reply,
       followUps: fr ? ['Mes commandes', 'Mes rendez-vous'] : ['My orders', 'My appointments'],
+    };
+  }
+
+  private async handleMyLabResults(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_LAB_RESULTS', language);
+    const profile = await this.prisma.patientProfile.findUnique({ where: { userId: input.userId }, select: { id: true } });
+    const tests = profile ? await this.prisma.labTest.findMany({
+      where: { patientId: profile.id },
+      orderBy: { orderedAt: 'desc' }, take: 8,
+      select: { testName: true, category: true, status: true, facility: true, orderedAt: true },
+    }) : [];
+    const items = tests.map(t => ({
+      title: t.testName || (fr ? 'Analyse' : 'Lab test'),
+      subtitle: [t.category, t.facility, t.orderedAt ? new Date(t.orderedAt).toLocaleDateString(fr ? 'fr-FR' : 'en-GB') : null].filter(Boolean).join(' · '),
+      badge: (t.status || '').replace(/_/g, ' '),
+      href: '/lab-results',
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos analyses (${items.length}).` : `Here are your lab tests (${items.length}).`)
+      : (fr ? "Vous n'avez aucune analyse pour le moment." : 'You have no lab tests yet.');
+    return {
+      intent: 'MY_LAB_RESULTS', entities, reply,
+      list: items.length ? { kind: 'lab_results', title: fr ? 'Mes analyses' : 'My lab tests', items } : undefined,
+      followUps: fr ? ['Trouver un laboratoire', 'Réserver une analyse'] : ['Find a lab', 'Book a test'],
     };
   }
 

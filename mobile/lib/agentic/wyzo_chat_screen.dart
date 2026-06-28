@@ -500,8 +500,30 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
               decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
               child: Text(it['badge'].toString(), style: const TextStyle(fontSize: 10, color: MediWyzColors.teal, fontWeight: FontWeight.w600)),
             ),
+          if (it['action'] != null)
+            TextButton(
+              onPressed: _loading ? null : () => _runListAction(Map<String, dynamic>.from(it['action'] as Map)),
+              style: TextButton.styleFrom(foregroundColor: Colors.red, minimumSize: const Size(0, 32), padding: const EdgeInsets.symmetric(horizontal: 8)),
+              child: Text(it['action']['label']?.toString() ?? 'Action', style: const TextStyle(fontSize: 11)),
+            ),
         ]),
       );
+
+  Future<void> _runListAction(Map<String, dynamic> a) async {
+    if (a['kind'] == 'cancel_booking') {
+      setState(() { _messages.add(_Msg('bot', typing: true)); _loading = true; });
+      _scrollToEnd();
+      try {
+        final payload = a['payload'] as Map?;
+        final j = await AgentApi.cancelBooking(a['id'].toString(), (payload?['bookingType'] ?? 'service').toString());
+        _replaceTyping(_Msg('bot', text: (j['success'] == true || j['message'] != null) ? '✅ Rendez-vous annulé.' : 'Annulation impossible — réessayez.'));
+      } catch (_) {
+        _replaceTyping(_Msg('bot', text: 'Annulation impossible — réessayez.'));
+      } finally {
+        setState(() => _loading = false);
+      }
+    }
+  }
 
   Widget _slots(List<_Day> days) => Container(
         margin: const EdgeInsets.only(top: 6),

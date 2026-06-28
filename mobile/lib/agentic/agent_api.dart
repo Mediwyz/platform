@@ -58,6 +58,14 @@ class AgentApi {
     return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
+  /// POST /bookings/cancel — cancel a booking (auth).
+  static Future<Map<String, dynamic>> cancelBooking(String bookingId, String bookingType) async {
+    final res = await ApiClient.instance.post('/bookings/cancel', data: {
+      'bookingId': bookingId, 'bookingType': bookingType,
+    });
+    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+  }
+
   /// POST /auth/register — creates a patient account. Active patient accounts
   /// are auto-logged-in by the backend (auth cookies are set on the response),
   /// so the booking can be confirmed straight after.
