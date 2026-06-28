@@ -231,7 +231,21 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
         followUps: [],
       };
     }
-    // No provider pinned yet → help them pick first.
+    // Several providers were just shown and the user didn't name one → ask which,
+    // re-using those exact results. Never blind-search the raw "book Tuesday at 2pm"
+    // string (it has no provider keyword → unrelated matches).
+    if (input.lastProviderIds && input.lastProviderIds.length > 1) {
+      const cards = await this.providersByIds(input.lastProviderIds);
+      if (cards.length > 1) {
+        return {
+          intent: 'BOOK', entities,
+          reply: this.t(language, 'bookWhich'),
+          providers: cards,
+          followUps: cards.slice(0, 3).map(c => `${language === 'fr' ? 'Réserver avec' : 'Book'} ${c.name.split(' ')[0]}`),
+        };
+      }
+    }
+    // Nothing to disambiguate → run a proper provider search to help them pick.
     const found = await this.handleFindProvider(message, entities, language, input);
     return { ...found, intent: 'BOOK', reply: this.t(language, 'bookPick') };
   }
@@ -332,6 +346,16 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
     return us.map(u => `${u.firstName} ${u.lastName}`.trim());
   }
 
+  /** Build provider cards for a set of ids, preserving the given order. */
+  private async providersByIds(ids: string[]): Promise<any[]> {
+    const us = await this.prisma.user.findMany({
+      where: { id: { in: ids.slice(0, 6) } },
+      select: { id: true, firstName: true, lastName: true, userType: true, profileImage: true, address: true, verified: true },
+    });
+    const byId = new Map(us.map(u => [u.id, u]));
+    return ids.map(id => byId.get(id)).filter(Boolean).map((u: any) => this.providerCard(this.rowToProvider(u, 1)));
+  }
+
   /** Sørensen–Dice bigram coefficient — cheap fuzzy score in [0,1]. */
   private fuzzy(a: string, b: string): number {
     if (a === b) return 1;
@@ -350,7 +374,13 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
   // ── 4. Compose reply + follow-ups for result-bearing intents ─────────────
   private async compose(intent: AgentIntent, summary: string, message: string, language: string): Promise<{ reply: string; followUps: string[] }> {
     const sys =
-`You are Wyzo, MediWyz's warm, concise health agent. Reply in language "${language}". Given the user's message and a summary of what was found, write a SHORT reply (1-2 sentences) that acknowledges the result and gently moves the conversation forward. Then propose exactly 3 follow-up actions phrased AS IF THE USER is saying them (short, tappable, e.g. "Réserver avec lui", "A-t-il des créneaux cette semaine ?", "Montre-moi ses tarifs"). If the summary is empty, say nothing was found and suggest a broader search. Reply ONLY JSON: {"reply": string, "followUps": [string, string, string]}.`;
+`You are Wyzo, MediWyz's warm, concise health agent. Reply in language "${language}". Write a SHORT reply (1-2 sentences) about what was found, then 3 follow-up actions phrased AS IF THE USER is saying them (short, tappable, e.g. "Réserver avec lui", "A-t-il des créneaux cette semaine ?", "Montre-moi ses tarifs").
+GROUNDING RULES (critical):
+- State ONLY facts present in "Found" (names, type, city). NEVER claim or imply availability, free slots, prices, ratings, or specialties — that data is NOT provided here and asserting it is a hallucination.
+- If "Found" is non-empty, be confident and positive; do NOT contradict yourself (never "I found some… however there are none").
+- If "Found" is "(nothing)", clearly say nothing matched and suggest broadening the search.
+- For availability/pricing the user must tap "Book"/a follow-up; do not state times or amounts yourself.
+Reply ONLY JSON: {"reply": string, "followUps": [string, string, string]}.`;
     const raw = await this.groq(
       [{ role: 'system', content: sys }, { role: 'user', content: `Intent: ${intent}\nUser message: ${message}\nFound: ${summary || '(nothing)'}` }],
       { json: true, max: 300, temp: 0.5 },
@@ -425,12 +455,13 @@ Map serviceMode synonyms: "office/in clinic"→in_person, "call/phone"→audio, 
     if (intent === 'FIND_PRODUCT') return lang === 'fr' ? 'Voici des produits correspondants.' : 'Here are some matching products.';
     return lang === 'fr' ? 'Voici ce que j’ai trouvé.' : 'Here is what I found.';
   }
-  private t(lang: string, key: 'error' | 'bookStart' | 'bookPick', arg?: string): string {
+  private t(lang: string, key: 'error' | 'bookStart' | 'bookPick' | 'bookWhich', arg?: string): string {
     const fr = lang === 'fr';
     switch (key) {
       case 'error': return fr ? "Désolé, une erreur s'est produite. Réessayez." : 'Sorry, something went wrong. Please try again.';
       case 'bookStart': return fr ? `Parfait, réservons avec ${arg}. Choisissez un créneau ci-dessous.` : `Great, let's book with ${arg}. Pick a slot below.`;
       case 'bookPick': return fr ? "Avec qui souhaitez-vous réserver ? Voici quelques options." : 'Who would you like to book with? Here are some options.';
+      case 'bookWhich': return fr ? 'Avec lequel de ces prestataires souhaitez-vous réserver ?' : 'Which of these providers would you like to book with?';
       default: return '';
     }
   }
