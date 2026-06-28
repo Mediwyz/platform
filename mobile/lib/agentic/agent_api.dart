@@ -66,6 +66,14 @@ class AgentApi {
     return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
+  /// POST /bookings/reschedule — move a booking to a new date/time (auth).
+  static Future<Map<String, dynamic>> rescheduleBooking(String bookingId, String bookingType, String newDate, String newTime) async {
+    final res = await ApiClient.instance.post('/bookings/reschedule', data: {
+      'bookingId': bookingId, 'bookingType': bookingType, 'newDate': newDate, 'newTime': newTime,
+    });
+    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+  }
+
   /// POST /auth/register — creates a patient account. Active patient accounts
   /// are auto-logged-in by the backend (auth cookies are set on the response),
   /// so the booking can be confirmed straight after.

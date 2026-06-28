@@ -61,9 +61,9 @@ export interface AgentResult {
   action?: 'book' | 'buy' | null;
   bookProviderId?: string;
   requiresLogin?: boolean;
-  /** Generic list render (my bookings, my orders, …). Items may carry an
-   *  inline action (e.g. cancel a booking) the client dispatches. */
-  list?: { kind: string; title: string; items: Array<{ title: string; subtitle?: string; badge?: string; href?: string; action?: { kind: string; id: string; label: string; payload?: any } }> };
+  /** Generic list render (my bookings, my orders, …). Items may carry inline
+   *  actions (e.g. cancel / reschedule a booking) the client dispatches. */
+  list?: { kind: string; title: string; items: Array<{ title: string; subtitle?: string; badge?: string; href?: string; actions?: Array<{ kind: string; id: string; label: string; payload?: any }> }> };
   sessionId?: string;
 }
 
@@ -311,7 +311,7 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     const bookings = profile ? await this.prisma.serviceBooking.findMany({
       where: { patientId: profile.id },
       orderBy: { scheduledAt: 'desc' }, take: 8,
-      select: { id: true, type: true, providerName: true, scheduledAt: true, status: true, serviceName: true },
+      select: { id: true, type: true, providerUserId: true, providerName: true, scheduledAt: true, status: true, serviceName: true },
     }) : [];
     const cancellable = (s: string) => !['cancelled', 'completed', 'delivered'].includes((s || '').toLowerCase());
     const items = bookings.map(b => ({
@@ -319,7 +319,10 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       subtitle: [b.providerName, b.scheduledAt ? new Date(b.scheduledAt).toLocaleString(fr ? 'fr-FR' : 'en-GB') : null].filter(Boolean).join(' · '),
       badge: (b.status || '').replace(/_/g, ' '),
       href: '/bookings',
-      action: cancellable(b.status) ? { kind: 'cancel_booking', id: b.id, label: fr ? 'Annuler' : 'Cancel', payload: { bookingType: b.type || 'service' } } : undefined,
+      actions: cancellable(b.status) ? [
+        { kind: 'reschedule_booking', id: b.id, label: fr ? 'Reporter' : 'Reschedule', payload: { bookingType: b.type || 'service', providerUserId: b.providerUserId, providerName: b.providerName } },
+        { kind: 'cancel_booking', id: b.id, label: fr ? 'Annuler' : 'Cancel', payload: { bookingType: b.type || 'service' } },
+      ] : undefined,
     }));
     const reply = items.length
       ? (fr ? `Voici vos rendez-vous (${items.length}).` : `Here are your appointments (${items.length}).`)

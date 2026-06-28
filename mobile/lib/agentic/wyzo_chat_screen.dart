@@ -182,6 +182,19 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   }
 
   Future<void> _pickSlot(String date, String time, String label) async {
+    if (_reschedule != null) {
+      final r = _reschedule!;
+      _reschedule = null; _stage = null;
+      setState(() { _messages.add(_Msg('user', text: '$label · $time')); _messages.add(_Msg('bot', typing: true)); });
+      _scrollToEnd();
+      try {
+        final j = await AgentApi.rescheduleBooking(r['bookingId']!, r['bookingType']!, date, time);
+        _replaceTyping(_Msg('bot', text: (j['success'] == true || j['booking'] != null || j['message'] != null) ? '✅ Rendez-vous reporté au $date à $time.' : 'Impossible de reporter — réessayez.'));
+      } catch (_) {
+        _replaceTyping(_Msg('bot', text: 'Impossible de reporter — réessayez.'));
+      }
+      return;
+    }
     setState(() {
       _date = date; _time = time;
       _messages.add(_Msg('user', text: '$label à $time'));
@@ -500,16 +513,27 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
               decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
               child: Text(it['badge'].toString(), style: const TextStyle(fontSize: 10, color: MediWyzColors.teal, fontWeight: FontWeight.w600)),
             ),
-          if (it['action'] != null)
-            TextButton(
-              onPressed: _loading ? null : () => _runListAction(Map<String, dynamic>.from(it['action'] as Map)),
-              style: TextButton.styleFrom(foregroundColor: Colors.red, minimumSize: const Size(0, 32), padding: const EdgeInsets.symmetric(horizontal: 8)),
-              child: Text(it['action']['label']?.toString() ?? 'Action', style: const TextStyle(fontSize: 11)),
-            ),
+          ...(((it['actions'] as List?) ?? const []).map((a) {
+            final am = Map<String, dynamic>.from(a as Map);
+            final isCancel = am['kind'] == 'cancel_booking';
+            return TextButton(
+              onPressed: _loading ? null : () => _runListAction(am),
+              style: TextButton.styleFrom(foregroundColor: isCancel ? Colors.red : MediWyzColors.teal, minimumSize: const Size(0, 32), padding: const EdgeInsets.symmetric(horizontal: 8)),
+              child: Text(am['label']?.toString() ?? 'Action', style: const TextStyle(fontSize: 11)),
+            );
+          })),
         ]),
       );
 
+  Map<String, String>? _reschedule;
+
   Future<void> _runListAction(Map<String, dynamic> a) async {
+    if (a['kind'] == 'reschedule_booking') {
+      final p = a['payload'] as Map?;
+      _reschedule = { 'bookingId': a['id'].toString(), 'bookingType': (p?['bookingType'] ?? 'service').toString() };
+      _startBooking({'id': (p?['providerUserId'] ?? '').toString(), 'name': (p?['providerName'] ?? '').toString(), 'userType': ''});
+      return;
+    }
     if (a['kind'] == 'cancel_booking') {
       setState(() { _messages.add(_Msg('bot', typing: true)); _loading = true; });
       _scrollToEnd();

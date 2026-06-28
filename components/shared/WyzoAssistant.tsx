@@ -37,7 +37,7 @@ interface Msg {
 }
 interface Order { qty: number; fulfil: 'delivery' | 'pickup'; address?: string }
 interface ListAction { kind: string; id: string; label: string; payload?: Record<string, unknown> }
-interface ListItem { title: string; subtitle?: string; badge?: string; href?: string; action?: ListAction }
+interface ListItem { title: string; subtitle?: string; badge?: string; href?: string; actions?: ListAction[] }
 interface ListBlock { kind: string; title: string; items: ListItem[] }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
 type Variant = 'panel' | 'floating' | 'tab' | 'hero'
@@ -88,6 +88,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const availServicesRef = useRef<Service[]>([])
   const confirmDraftRef = useRef<Draft | null>(null)
   const afterSignupRef = useRef<(() => void) | null>(null)
+  const rescheduleRef = useRef<{ bookingId: string; bookingType: string } | null>(null)
   const chips = suggestions ?? DEFAULT_SUGGESTIONS
   const loggedIn = typeof document !== 'undefined' && !!getCookie('mediwyz_user_id')
 
@@ -264,6 +265,20 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   }
 
   async function pickSlot(date: string, time: string, label: string) {
+    // Reschedule mode: the slot picker was opened to MOVE an existing booking.
+    if (rescheduleRef.current) {
+      const r = rescheduleRef.current; rescheduleRef.current = null; stageRef.current = null
+      setMessages(m => [...m, { role: 'user', text: `${label} · ${time}` }, { role: 'bot', typing: true }])
+      try {
+        const res = await fetch('/api/bookings/reschedule', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          body: JSON.stringify({ bookingId: r.bookingId, bookingType: r.bookingType, newDate: date, newTime: time }),
+        })
+        const j = await res.json()
+        replaceTyping({ role: 'bot', text: j.success || j.booking || j.message ? `✅ Rendez-vous reporté au ${date} à ${time}.` : 'Impossible de reporter — réessayez.' })
+      } catch { replaceTyping({ role: 'bot', text: 'Impossible de reporter — réessayez.' }) }
+      return
+    }
     setDraft(d => ({ ...d, date, time }))
     push({ role: 'user', text: `${label} at ${time}` })
     push({ role: 'bot', typing: true })
@@ -333,6 +348,11 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   // Dispatch an inline list-item action (e.g. cancel a booking).
   async function runListAction(a: ListAction) {
     if (loading) return
+    if (a.kind === 'reschedule_booking') {
+      rescheduleRef.current = { bookingId: a.id, bookingType: (a.payload?.bookingType as string) || 'service' }
+      startBooking({ id: (a.payload?.providerUserId as string) || '', name: (a.payload?.providerName as string) || '', userType: '', profileImage: null, address: null, verified: false })
+      return
+    }
     if (a.kind === 'cancel_booking') {
       setMessages(m => [...m, { role: 'bot', typing: true }])
       setLoading(true)
@@ -519,7 +539,9 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                             {it.subtitle && <span className="block text-[10px] text-faint truncate">{it.subtitle}</span>}
                           </span>}
                       {it.badge && <span className="text-[10px] font-semibold capitalize text-[#0C6780] bg-[#0C6780]/10 px-2 py-0.5 rounded-full flex-shrink-0">{it.badge}</span>}
-                      {it.action && <button onClick={() => runListAction(it.action!)} disabled={loading} className="text-[10px] font-semibold text-red-600 border border-red-200 px-2 py-1 rounded-lg hover:bg-red-50 flex-shrink-0 disabled:opacity-50 transition">{it.action.label}</button>}
+                      {it.actions?.map((a, ai) => (
+                        <button key={ai} onClick={() => runListAction(a)} disabled={loading} className={`text-[10px] font-semibold px-2 py-1 rounded-lg flex-shrink-0 disabled:opacity-50 transition border ${a.kind === 'cancel_booking' ? 'text-red-600 border-red-200 hover:bg-red-50' : 'text-[#0C6780] border-[#0C6780]/30 hover:bg-[#0C6780]/5'}`}>{a.label}</button>
+                      ))}
                     </div>
                   ))}
                 </div>
