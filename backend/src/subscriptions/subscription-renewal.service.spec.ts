@@ -103,17 +103,22 @@ describe('SubscriptionRenewalService', () => {
   });
 
   it('skips when today is before the startDate anniversary day', async () => {
-    // startDate day 31, today's day is likely ≤ 30 — unless run on the 31st.
-    const today = new Date();
-    const sub = {
-      id: 'S1', userId: 'U1',
-      startDate: new Date(Date.UTC(2026, 0, Math.min(today.getUTCDate() + 5, 28))),
-      plan: { id: 'PL1', name: 'Basic', price: 500 },
-    };
-    prisma.userSubscription.findMany.mockResolvedValueOnce([sub]);
+    // Pin "now" to the 15th so the anniversary day (20th) is reliably in the
+    // future, regardless of the real calendar date the suite runs on.
+    jest.useFakeTimers().setSystemTime(new Date('2026-06-15T12:00:00Z'));
+    try {
+      const sub = {
+        id: 'S1', userId: 'U1',
+        startDate: new Date(Date.UTC(2026, 0, 20)), // day-of-month 20 > 15
+        plan: { id: 'PL1', name: 'Basic', price: 500 },
+      };
+      prisma.userSubscription.findMany.mockResolvedValueOnce([sub]);
 
-    const out = await service.processDueRenewals();
-    expect(out.processed).toBe(0);
-    expect(prisma.userWallet.update).not.toHaveBeenCalled();
+      const out = await service.processDueRenewals();
+      expect(out.processed).toBe(0);
+      expect(prisma.userWallet.update).not.toHaveBeenCalled();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
