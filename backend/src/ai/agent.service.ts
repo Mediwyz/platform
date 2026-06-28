@@ -16,12 +16,12 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS' | 'MY_INVOICES' | 'MY_HEALTH' | 'LOG_HEALTH'
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS' | 'MY_INVOICES' | 'MY_HEALTH' | 'LOG_HEALTH' | 'MY_FAVORITES' | 'PROVIDER_REVIEWS'
   | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS', 'MY_INVOICES', 'MY_HEALTH', 'LOG_HEALTH',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS', 'MY_INVOICES', 'MY_HEALTH', 'LOG_HEALTH', 'MY_FAVORITES', 'PROVIDER_REVIEWS',
   'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
@@ -109,6 +109,8 @@ export class AgentService {
         case 'MY_INVOICES': return await this.handleMyInvoices(entities, language, input);
         case 'MY_HEALTH': return await this.handleMyHealth(entities, language, input);
         case 'LOG_HEALTH': return await this.handleLogHealth(message, entities, language, input);
+        case 'MY_FAVORITES': return await this.handleMyFavorites(entities, language, input);
+        case 'PROVIDER_REVIEWS': return await this.handleProviderReviews(entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -156,6 +158,8 @@ Intent guide:
 - MY_INVOICES: asks about THEIR OWN invoices/receipts ("my invoices", "mes factures", "mon reçu").
 - MY_HEALTH: asks for THEIR OWN health snapshot/tracker dashboard ("my health dashboard", "mon bilan du jour", "combien de calories aujourd'hui", "ma journée santé").
 - LOG_HEALTH: the user REPORTS an activity to track — water, exercise or sleep ("j'ai bu 500ml", "I drank a glass of water", "j'ai couru 30 min", "I slept 7 hours").
+- MY_FAVORITES: asks for THEIR OWN saved/favourite providers ("my favourites", "mes favoris", "mes prestataires préférés").
+- PROVIDER_REVIEWS: asks for reviews/ratings of a named provider ("reviews of Dr Rakoto", "avis sur le Dr X", "is she well rated").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -212,6 +216,8 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/\b(mes|my|ma|mon)\b[^.?!]*(facture|invoice|recu|receipt)/.test(m)) return 'MY_INVOICES';
     if (/\b(my|mon|ma)\b[^.?!]*(tableau de bord|dashboard|bilan|health (dashboard|summary|snapshot|stats)|journee sante)/.test(m) || /(combien[^.?!]*calories|how many calories|mes calories|today'?s? (health|calories|stats))/.test(m)) return 'MY_HEALTH';
     if (/(j'?ai (bu|couru|marche|dormi)|i (drank|ran|walked|slept)|\d+\s*ml\b|dormi\s*\d|log (water|sleep|exercise))/.test(m)) return 'LOG_HEALTH';
+    if (/\b(mes|my)\b[^.?!]*(favoris|favourite|favorite|preferes?|prefered)/.test(m)) return 'MY_FAVORITES';
+    if (/(avis|reviews?|ratings?|note)[^.?!]*(sur|de|of|for|on|about|du|de la)\b/.test(m) || /\b(reviews?|avis) (of|for|on|sur|de)\b/.test(m)) return 'PROVIDER_REVIEWS';
     // Purchase vs booking (checked before the generic BOOK pattern)
     if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
     if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)/.test(m)) return 'BOOK';
@@ -493,6 +499,62 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       intent: 'LOG_HEALTH', entities,
       reply: fr ? "Dites-moi quoi enregistrer, par ex. « j'ai bu 500 ml » ou « j'ai dormi 7h »." : 'Tell me what to log, e.g. "I drank 500 ml" or "I slept 7h".',
       followUps: fr ? ['J\'ai bu 500 ml', 'J\'ai dormi 7h'] : ['I drank 500 ml', 'I slept 7h'],
+    };
+  }
+
+  private async handleMyFavorites(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_FAVORITES', language);
+    const favs = await this.prisma.providerFavorite.findMany({
+      where: { userId: input.userId },
+      include: { provider: { select: { id: true, firstName: true, lastName: true, userType: true } } },
+      orderBy: { createdAt: 'desc' }, take: 10,
+    });
+    const items = favs.filter(f => f.provider).map(f => ({
+      title: `${f.provider!.firstName} ${f.provider!.lastName}`.trim(),
+      subtitle: (f.provider!.userType || '').toLowerCase().replace(/_/g, ' '),
+      href: `/profile/${f.providerId}`,
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos prestataires favoris (${items.length}).` : `Here are your favourite providers (${items.length}).`)
+      : (fr ? "Vous n'avez aucun favori. Touchez ❤ sur un prestataire pour l'ajouter." : 'You have no favourites yet. Tap ❤ on a provider to add one.');
+    return {
+      intent: 'MY_FAVORITES', entities, reply,
+      list: items.length ? { kind: 'favorites', title: fr ? 'Mes favoris' : 'My favourites', items } : undefined,
+      followUps: fr ? ['Trouver un médecin', 'Mes rendez-vous'] : ['Find a doctor', 'My appointments'],
+    };
+  }
+
+  private async handleProviderReviews(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    let prov: ResolvedProvider | null = null;
+    if (entities.providerName) prov = await this.resolveProvider(entities.providerName, entities.providerType);
+    if (!prov && input.lastProviderIds?.length === 1) prov = await this.providerById(input.lastProviderIds[0]);
+    if (!prov) {
+      return { intent: 'PROVIDER_REVIEWS', entities, reply: fr ? 'De quel prestataire souhaitez-vous voir les avis ?' : 'Whose reviews would you like to see?', followUps: this.capabilityFollowUps(language) };
+    }
+    const reviews = await this.prisma.providerReview.findMany({
+      where: { providerUserId: prov.id },
+      orderBy: { createdAt: 'desc' }, take: 8,
+      select: { rating: true, comment: true, createdAt: true, reviewerUser: { select: { firstName: true } } },
+    });
+    const items = reviews.map(r => {
+      const n = Math.max(1, Math.min(5, r.rating));
+      return {
+        title: `${'★'.repeat(n)}${'☆'.repeat(5 - n)} ${r.comment}`.slice(0, 120),
+        subtitle: `${r.reviewerUser?.firstName ?? (fr ? 'Anonyme' : 'Anonymous')} · ${new Date(r.createdAt).toLocaleDateString(fr ? 'fr-FR' : 'en-GB')}`,
+      };
+    });
+    const avg = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : null;
+    const reply = items.length
+      ? (fr ? `${prov.name} — note moyenne ${avg}/5 (${items.length} avis).` : `${prov.name} — average ${avg}/5 (${items.length} reviews).`)
+      : (fr ? `${prov.name} n'a pas encore d'avis.` : `${prov.name} has no reviews yet.`);
+    return {
+      intent: 'PROVIDER_REVIEWS', entities, reply,
+      providers: [this.providerCard(prov)],
+      list: items.length ? { kind: 'reviews', title: fr ? `Avis — ${prov.name}` : `Reviews — ${prov.name}`, items } : undefined,
+      resolved: [{ kind: 'provider', id: prov.id, name: prov.name }],
+      followUps: fr ? [`Réserver avec ${prov.name.split(' ')[0]}`, 'Voir ses tarifs'] : [`Book ${prov.name.split(' ')[0]}`, 'See prices'],
     };
   }
 
