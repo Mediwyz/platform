@@ -662,7 +662,7 @@ class _SignupSheetState extends State<_SignupSheet> {
               Expanded(child: OutlinedButton(onPressed: _pickDob, child: Text(_dob.isEmpty ? 'Naissance' : _dob, overflow: TextOverflow.ellipsis))),
               const SizedBox(width: 8),
               Expanded(child: DropdownButtonFormField<String>(
-                value: _gender.isEmpty ? null : _gender,
+                initialValue: _gender.isEmpty ? null : _gender,
                 isDense: true,
                 hint: const Text('Genre'),
                 items: const [

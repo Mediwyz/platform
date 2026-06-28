@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SearchService } from '../search/search.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { AiService } from './ai.service';
+import { HealthTrackerService } from './health-tracker.service';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
@@ -15,12 +16,12 @@ const PROVIDER_TYPES = [
 export type AgentIntent =
   | 'GREETING' | 'SMALL_TALK' | 'MEDIWYZ_INFO'
   | 'FIND_PROVIDER' | 'FIND_ORGANISATION' | 'FIND_PRODUCT' | 'BUY_PRODUCT'
-  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS'
+  | 'BOOK' | 'MY_BOOKINGS' | 'MY_ORDERS' | 'MY_PRESCRIPTIONS' | 'MY_WALLET' | 'MY_LAB_RESULTS' | 'MY_INVOICES' | 'MY_HEALTH'
   | 'WHY' | 'HEALTH_QA' | 'OUT_OF_SCOPE';
 
 const INTENTS: AgentIntent[] = [
   'GREETING', 'SMALL_TALK', 'MEDIWYZ_INFO', 'FIND_PROVIDER', 'FIND_ORGANISATION',
-  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS',
+  'FIND_PRODUCT', 'BUY_PRODUCT', 'BOOK', 'MY_BOOKINGS', 'MY_ORDERS', 'MY_PRESCRIPTIONS', 'MY_WALLET', 'MY_LAB_RESULTS', 'MY_INVOICES', 'MY_HEALTH',
   'WHY', 'HEALTH_QA', 'OUT_OF_SCOPE',
 ];
 
@@ -83,6 +84,7 @@ export class AgentService {
     private search: SearchService,
     private inventory: InventoryService,
     private ai: AiService,
+    private healthTracker: HealthTrackerService,
   ) {}
 
   async run(input: AgentInput): Promise<AgentResult> {
@@ -104,6 +106,8 @@ export class AgentService {
         case 'MY_PRESCRIPTIONS': return await this.handleMyPrescriptions(entities, language, input);
         case 'MY_WALLET': return await this.handleMyWallet(entities, language, input);
         case 'MY_LAB_RESULTS': return await this.handleMyLabResults(entities, language, input);
+        case 'MY_INVOICES': return await this.handleMyInvoices(entities, language, input);
+        case 'MY_HEALTH': return await this.handleMyHealth(entities, language, input);
         case 'BOOK': return await this.handleBook(message, entities, language, input);
         default: return await this.handleTalk(intent, message, entities, language, input);
       }
@@ -148,6 +152,8 @@ Intent guide:
 - MY_PRESCRIPTIONS: asks about THEIR OWN prescriptions ("my prescriptions", "mes ordonnances", "ma dernière ordonnance").
 - MY_WALLET: asks about THEIR OWN wallet/balance ("my balance", "mon solde", "combien j'ai sur mon compte", "mon portefeuille").
 - MY_LAB_RESULTS: asks about THEIR OWN lab tests/results ("my lab results", "mes analyses", "mes résultats d'analyse", "le résultat de mon test").
+- MY_INVOICES: asks about THEIR OWN invoices/receipts ("my invoices", "mes factures", "mon reçu").
+- MY_HEALTH: asks for THEIR OWN health snapshot/tracker dashboard ("my health dashboard", "mon bilan du jour", "combien de calories aujourd'hui", "ma journée santé").
 - WHY: any question starting with or meaning "why / pourquoi / explain / how come".
 - HEALTH_QA: a general health/medical/wellness question (symptoms, advice, nutrition).
 - OUT_OF_SCOPE: clearly unrelated to health or MediWyz.
@@ -201,6 +207,8 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/\b(mes|my|ma)\b[^.?!]*\b(ordonnances?|prescriptions?)\b/.test(m)) return 'MY_PRESCRIPTIONS';
     if (/\b(mon|my|ma)\b[^.?!]*\b(solde|balance|portefeuille|wallet|cr[ée]dit)\b/.test(m) || /(combien[^.?!]*(solde|cr[ée]dit|compte)|how much[^.?!]*balance)/.test(m)) return 'MY_WALLET';
     if (/\b(mes|my)\b[^.?!]*\b(analyses?|laboratoire|lab\s*results?)\b/.test(m) || /\b(mes|my)\b[^.?!]*r[ée]sultats?[^.?!]*(analyse|labo|test)/.test(m)) return 'MY_LAB_RESULTS';
+    if (/\b(mes|my|ma|mon)\b[^.?!]*(facture|invoice|recu|receipt)/.test(m)) return 'MY_INVOICES';
+    if (/\b(my|mon|ma)\b[^.?!]*(tableau de bord|dashboard|bilan|health (dashboard|summary|snapshot|stats)|journee sante)/.test(m) || /(combien[^.?!]*calories|how many calories|mes calories|today'?s? (health|calories|stats))/.test(m)) return 'MY_HEALTH';
     // Purchase vs booking (checked before the generic BOOK pattern)
     if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
     if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)/.test(m)) return 'BOOK';
@@ -399,6 +407,48 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       intent: 'MY_LAB_RESULTS', entities, reply,
       list: items.length ? { kind: 'lab_results', title: fr ? 'Mes analyses' : 'My lab tests', items } : undefined,
       followUps: fr ? ['Trouver un laboratoire', 'Réserver une analyse'] : ['Find a lab', 'Book a test'],
+    };
+  }
+
+  private async handleMyInvoices(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_INVOICES', language);
+    const invoices = await this.prisma.invoice.findMany({
+      where: { patientUserId: input.userId },
+      orderBy: { createdAt: 'desc' }, take: 8,
+      select: { invoiceNumber: true, description: true, amount: true, currency: true, status: true, createdAt: true },
+    });
+    const items = invoices.map(i => ({
+      title: i.description || (fr ? 'Facture' : 'Invoice'),
+      subtitle: `${i.currency || 'Rs'} ${i.amount} · #${i.invoiceNumber} · ${new Date(i.createdAt).toLocaleDateString(fr ? 'fr-FR' : 'en-GB')}`,
+      badge: (i.status || '').replace(/_/g, ' '),
+      href: '/billing',
+    }));
+    const reply = items.length
+      ? (fr ? `Voici vos factures (${items.length}).` : `Here are your invoices (${items.length}).`)
+      : (fr ? "Vous n'avez aucune facture pour le moment." : 'You have no invoices yet.');
+    return {
+      intent: 'MY_INVOICES', entities, reply,
+      list: items.length ? { kind: 'invoices', title: fr ? 'Mes factures' : 'My invoices', items } : undefined,
+      followUps: fr ? ['Mon solde', 'Mes rendez-vous'] : ['My balance', 'My appointments'],
+    };
+  }
+
+  private async handleMyHealth(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+    const fr = language === 'fr';
+    if (!input.userId) return this.loginRequired('MY_HEALTH', language);
+    let d: any = null;
+    try { d = await this.healthTracker.getDashboard(input.userId); } catch { /* */ }
+    if (!d) {
+      return { intent: 'MY_HEALTH', entities, reply: fr ? "Je n'ai pas encore de données santé pour aujourd'hui." : 'No health data for today yet.', followUps: this.talkFollowUps('HEALTH_QA', language) };
+    }
+    const sleepH = d.sleepDurationMin ? (d.sleepDurationMin / 60).toFixed(1) : '0';
+    const reply = fr
+      ? `Aujourd'hui : ${d.caloriesConsumed ?? 0} kcal consommées (${d.caloriesRemaining ?? 0} restantes), ${d.waterConsumedMl ?? 0} ml d'eau, ${d.exerciseMinutes ?? 0} min d'exercice, ${sleepH} h de sommeil.`
+      : `Today: ${d.caloriesConsumed ?? 0} kcal eaten (${d.caloriesRemaining ?? 0} left), ${d.waterConsumedMl ?? 0} ml water, ${d.exerciseMinutes ?? 0} min exercise, ${sleepH} h sleep.`;
+    return {
+      intent: 'MY_HEALTH', entities, reply,
+      followUps: fr ? ['Suggère un plan de repas', 'Conseils pour mieux dormir'] : ['Suggest a meal plan', 'How to sleep better'],
     };
   }
 
