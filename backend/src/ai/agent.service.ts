@@ -153,10 +153,12 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     const user = (hist ? `Conversation so far:\n${hist}\n\n` : '') + `New message: ${message}`;
     const raw = await this.groq([{ role: 'system', content: sys }, { role: 'user', content: user }], { json: true, max: 400, temp: 0 });
 
-    if (!raw) return { ...this.heuristic(message), language: this.guessLang(message) };
+    if (!raw) return { ...this.heuristic(message), intent: this.strongHeuristic(message) ?? this.heuristic(message).intent, language: this.guessLang(message) };
     try {
       const p = JSON.parse(raw);
-      const intent: AgentIntent = INTENTS.includes(p?.intent) ? p.intent : this.heuristic(message).intent;
+      // The small classifier model is unreliable on the 13-intent set; a
+      // deterministic override guarantees the unambiguous cases route correctly.
+      const intent: AgentIntent = this.strongHeuristic(message) ?? (INTENTS.includes(p?.intent) ? p.intent : this.heuristic(message).intent);
       const e = p?.entities || {};
       const entities: AgentEntities = {
         providerName: e.providerName || undefined,
@@ -174,8 +176,23 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       const language = ['fr', 'en', 'mfe'].includes(p?.language) ? p.language : this.guessLang(message);
       return { intent, entities, language };
     } catch {
-      return { ...this.heuristic(message), language: this.guessLang(message) };
+      return { ...this.heuristic(message), intent: this.strongHeuristic(message) ?? this.heuristic(message).intent, language: this.guessLang(message) };
     }
+  }
+
+  /** High-confidence deterministic routing for unambiguous phrasings. Returns
+   *  null when the request is ambiguous (then we trust the LLM classifier). */
+  private strongHeuristic(message: string): AgentIntent | null {
+    const m = message.toLowerCase();
+    // Possessive / existing → "my …"
+    if (/\b(mes|my|ma)\b[^.?!]*\b(rendez|appointment|consultation|booking|r[ée]servation)/.test(m)) return 'MY_BOOKINGS';
+    if (/\b(do i have|ai[- ]?je)\b[^.?!]*\b(rendez|appointment|book)/.test(m)) return 'MY_BOOKINGS';
+    if (/\b(mes|my|ma)\b[^.?!]*\b(commandes?|orders?)\b/.test(m)) return 'MY_ORDERS';
+    if (/(o[uù][^.?!]*(commande|order)|track[^.?!]*(order|commande)|order status|statut[^.?!]*commande)/.test(m)) return 'MY_ORDERS';
+    // Purchase vs booking (checked before the generic BOOK pattern)
+    if (/\b(buy|acheter|commander|order)\b[^.?!]*\b(m[ée]dicament|parac[ée]tamol|paracetamol|doliprane|vitamine?s?|comprim|medicine|drug|tablet|produit)/.test(m)) return 'BUY_PRODUCT';
+    if (/\b(book|r[ée]serv|prendre[^.?!]{0,8}rendez|appointment)\b/.test(m)) return 'BOOK';
+    return null;
   }
 
   private heuristic(message: string): { intent: AgentIntent; entities: AgentEntities } {
