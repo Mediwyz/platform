@@ -233,8 +233,12 @@ export class BookingsService {
     organizationId?: string;
     /** Optional: pin to a specific workflow template, bypassing the registry cascade. */
     workflowTemplateId?: string;
+    /** 'wallet' (default, pre-funded) or 'pay_at_appointment' (cash/card on the day,
+     *  no wallet pre-funding required — used by the in-chat agent booking flow). */
+    paymentMethod?: string;
   }) {
     const providerType = data.providerType.toUpperCase();
+    const payAtAppointment = data.paymentMethod === 'pay_at_appointment';
 
     // Verify provider exists and is verified
     const provider = await this.prisma.user.findUnique({
@@ -264,7 +268,8 @@ export class BookingsService {
     );
 
     // Check balance — skip if role has skipWalletCheck (e.g., emergency services)
-    if (fee > 0) {
+    // or the patient chose to pay at the appointment (no wallet pre-funding).
+    if (fee > 0 && !payAtAppointment) {
       const role = await this.prisma.providerRole.findUnique({ where: { code: providerType }, select: { skipWalletCheck: true } });
       if (!role?.skipWalletCheck) {
         await this.checkBalance(patientUserId, fee);
@@ -273,6 +278,7 @@ export class BookingsService {
 
     // Build role-specific metadata (any extra fields go here)
     const metadata: Record<string, any> = {};
+    metadata.paymentMethod = payAtAppointment ? 'pay_at_appointment' : 'wallet';
     if (data.children?.length) metadata.children = data.children;
     if (data.sampleType) metadata.sampleType = data.sampleType;
     if (data.testName) metadata.testName = data.testName;

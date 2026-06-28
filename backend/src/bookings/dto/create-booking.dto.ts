@@ -125,4 +125,10 @@ export class CreateBookingDto {
   @IsOptional()
   @IsString()
   workflowTemplateId?: string;
+
+  // 'wallet' (default) or 'pay_at_appointment'. The latter creates the booking
+  // without requiring a pre-funded wallet — payment is settled on the day.
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
 }

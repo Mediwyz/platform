@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import Link from 'next/link'
-import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes, FaPills, FaBuilding } from 'react-icons/fa'
+import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight, FaCalendarCheck, FaSignInAlt, FaTimes, FaPills, FaBuilding, FaUserPlus } from 'react-icons/fa'
 
 /* ── Shared agentic assistant: natural-language provider search + in-chat
  *    booking, plus general Q&A (health-aware when logged in). One component,
@@ -29,6 +29,8 @@ interface Msg {
   services?: Service[]
   confirm?: Draft
   signIn?: boolean
+  authChoice?: Draft
+  signup?: Draft
   bookedHref?: string
 }
 export interface Suggestion { label: string; kind: 'search' | 'ask' }
@@ -285,10 +287,18 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   async function confirmBooking(d: Draft) {
     stageRef.current = null
     if (!loggedIn) {
+      // Guest: keep the booking and offer to sign in OR create an account in-chat.
       try { localStorage.setItem(PENDING_KEY, JSON.stringify(d)) } catch { /* ignore */ }
-      push({ role: 'bot', text: 'You just need to sign in to confirm — your booking is saved and resumes right after.', signIn: true })
+      push({ role: 'bot', text: 'Almost there! Sign in or create a free account to confirm — your booking resumes right after. No payment now; you pay at the appointment.', authChoice: d })
       return
     }
+    return submitBooking(d)
+  }
+
+  // Create the booking. Uses pay-at-appointment so no wallet pre-funding is
+  // needed — the appointment is settled on the day.
+  async function submitBooking(d: Draft) {
+    stageRef.current = null
     push({ role: 'bot', typing: true })
     try {
       const wf = d.service?.workflows?.[0]
@@ -300,14 +310,20 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
           platformServiceId: d.service?.id, serviceName: d.service?.serviceName,
           duration: d.service?.duration ?? 30, type: wf?.serviceMode || 'in_person',
           workflowTemplateId: wf?.id, reason: d.service?.serviceName,
+          paymentMethod: 'pay_at_appointment',
         }),
       })
       const j = await res.json()
       if (!j.success && !j.booking) throw new Error(j.message || 'Booking failed')
       const ticket = j.booking?.ticketId ? ` (ref ${j.booking.ticketId})` : ''
-      replaceTyping({ role: 'bot', text: `✅ Booked! Your appointment with ${d.provider!.name} is on ${d.date} at ${d.time}${ticket}.`, bookedHref: '/bookings' })
+      replaceTyping({ role: 'bot', text: `✅ Booked! Your appointment with ${d.provider!.name} is on ${d.date} at ${d.time}${ticket}. You'll pay at the appointment.`, bookedHref: '/bookings' })
       setDraft({}); confirmDraftRef.current = null
     } catch (e) { replaceTyping({ role: 'bot', text: e instanceof Error ? e.message : 'Booking failed — please try again.' }) }
+  }
+
+  // Kick off in-chat account creation, keeping the pending booking to resume.
+  function startSignup(d: Draft) {
+    push({ role: 'bot', text: "Great — let's set up your free account (about 30 seconds):", signup: d })
   }
 
   // ── Shared bits ─────────────────────────────────────────────────────────
@@ -460,6 +476,17 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                   <FaSignInAlt className="text-xs" /> Sign in to continue
                 </Link>
               )}
+              {m.authChoice && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Link href="/login" className="inline-flex items-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-xl transition">
+                    <FaSignInAlt className="text-xs" /> Sign in
+                  </Link>
+                  <button onClick={() => startSignup(m.authChoice!)} className="inline-flex items-center gap-2 border border-[#0C6780]/40 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
+                    <FaUserPlus className="text-xs" /> Create account
+                  </button>
+                </div>
+              )}
+              {m.signup && <InlineSignup onCreated={() => submitBooking(m.signup!)} />}
               {m.bookedHref && (
                 <Link href={m.bookedHref} className="mt-2 inline-flex items-center gap-2 border border-[#0C6780]/30 text-[#0C6780] text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#0C6780]/5 transition">
                   View my bookings <FaArrowRight className="text-[10px]" />
@@ -535,6 +562,67 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
       </div>
 
       {inputBar}
+    </div>
+  )
+}
+
+/** In-chat patient account creation. Collects the fields `POST /api/auth/register`
+ *  requires; that endpoint auto-logs-in active patient accounts (sets cookies),
+ *  so on success we call `onCreated` to resume the pending booking. */
+function InlineSignup({ onCreated }: { onCreated: () => void }) {
+  const [f, setF] = useState({ fullName: '', email: '', phone: '', dateOfBirth: '', gender: '', address: '', password: '' })
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
+  const set = (k: keyof typeof f, v: string) => setF(p => ({ ...p, [k]: v }))
+
+  async function submit() {
+    setErr(null)
+    if (!f.fullName.trim() || !f.email.trim() || !f.phone.trim() || !f.dateOfBirth || !f.gender || !f.address.trim()) {
+      setErr('Please fill in all fields.'); return
+    }
+    if (f.password.length < 6) { setErr('Password must be at least 6 characters.'); return }
+    setBusy(true)
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({ ...f, userType: 'patient' }),
+      })
+      const j = await res.json()
+      if (!res.ok || !j.success) { setErr(j.message || 'Could not create your account. Please try again.'); return }
+      setDone(true)
+      onCreated()
+    } catch { setErr('Network error — please try again.') } finally { setBusy(false) }
+  }
+
+  const field = 'w-full px-3 py-2 border border-line rounded-lg text-sm bg-canvas text-fg focus:ring-2 focus:ring-[#0C6780] outline-none'
+
+  if (done) return <p className="mt-2 text-sm text-emerald-600 font-medium">✅ Account created — finishing your booking…</p>
+
+  return (
+    <div className="mt-2 rounded-xl border border-line bg-surface p-3 space-y-2 text-left max-w-sm">
+      <div className="grid grid-cols-2 gap-2">
+        <input className={field} placeholder="Full name" value={f.fullName} onChange={e => set('fullName', e.target.value)} />
+        <input className={field} placeholder="Phone" value={f.phone} onChange={e => set('phone', e.target.value)} />
+      </div>
+      <input className={field} type="email" placeholder="Email" value={f.email} onChange={e => set('email', e.target.value)} />
+      <div className="grid grid-cols-2 gap-2">
+        <input className={field} type="date" aria-label="Date of birth" value={f.dateOfBirth} onChange={e => set('dateOfBirth', e.target.value)} />
+        <select className={field} aria-label="Gender" value={f.gender} onChange={e => set('gender', e.target.value)}>
+          <option value="">Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+      </div>
+      <input className={field} placeholder="Address" value={f.address} onChange={e => set('address', e.target.value)} />
+      <input className={field} type="password" placeholder="Password (min 6 characters)" value={f.password} onChange={e => set('password', e.target.value)} />
+      {err && <p className="text-xs text-red-600">{err}</p>}
+      <button onClick={submit} disabled={busy} className="w-full inline-flex items-center justify-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-lg transition disabled:opacity-50">
+        {busy ? <FaSpinner className="animate-spin" /> : <FaUserPlus className="text-xs" />} Create account &amp; continue
+      </button>
+      <p className="text-[10px] text-faint text-center">Already have an account? <Link href="/login" className="text-[#0C6780] font-medium">Sign in</Link></p>
     </div>
   )
 }
