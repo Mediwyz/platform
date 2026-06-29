@@ -51,8 +51,10 @@ dependencies:
   # Open external URLs (e.g. prescription PDF view in the system browser)
   url_launcher: ^6.3.0
 
-  # Error monitoring
-  sentry_flutter: ^8.0.0
+  # Error monitoring — 9.x is required: sentry_flutter 8.x pins Kotlin
+  # languageVersion 1.6, which Flutter 3.41's Kotlin 2.x compiler rejects
+  # ("Language version 1.6 is no longer supported").
+  sentry_flutter: ^9.0.0
 
 dev_dependencies:
   flutter_test:
