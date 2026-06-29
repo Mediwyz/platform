@@ -47,14 +47,18 @@ jobs:
         run: flutter create --platforms=android --org=com.mediwyz --project-name=mediwyz_mobile .
 
       - name: Tune Gradle/Kotlin for CI memory
-        # `flutter create` regenerates android/ (the dir is gitignored). Its default
-        # heap (-Xmx8G) exceeds the ~7 GB runner, so the forked Kotlin compiler
-        # worker gets OOM-killed → flaky ':*:compileReleaseKotlin'. Right-size the
-        # heap (last org.gradle.jvmargs wins) and run Kotlin in-process.
+        # `flutter create` regenerates android/ (the dir is gitignored), so this
+        # tuning can't live in a committed gradle.properties. History:
+        #   - default forked worker @ -Xmx8G → worker OOM-killed.
+        #   - in-process @ -Xmx4G/1G-metaspace → "Compilation error" (no e: lines),
+        #     i.e. the single JVM running Gradle + Kotlin + R8 starved.
+        # ubuntu-latest runners have ~16 GB, so give the in-process JVM real
+        # headroom: 6G heap + 2G metaspace (~8G total, fits comfortably).
         run: |
           {
-            echo "org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=1G -XX:ReservedCodeCacheSize=512m"
+            echo "org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=2g -XX:ReservedCodeCacheSize=512m"
             echo "kotlin.compiler.execution.strategy=in-process"
+            echo "kotlin.daemon.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g"
             echo "org.gradle.workers.max=2"
           } >> android/gradle.properties
 
