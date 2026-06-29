@@ -10,6 +10,8 @@ type AgentBody = {
   history?: { role: 'user' | 'bot'; text: string }[];
   sessionId?: string;
   lastProviderIds?: string[];
+  lat?: number;
+  lng?: number;
 };
 
 /**

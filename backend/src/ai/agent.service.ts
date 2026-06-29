@@ -47,6 +47,9 @@ export interface AgentInput {
   userId?: string;
   sessionId?: string;
   lastProviderIds?: string[];
+  /** Caller-supplied device/browser geolocation for "near me" searches. */
+  lat?: number;
+  lng?: number;
 }
 
 export interface AgentResult {
@@ -58,7 +61,9 @@ export interface AgentResult {
   products?: any[];
   resolved?: { kind: string; id: string; name: string }[];
   followUps?: string[];
-  action?: 'book' | 'buy' | null;
+  action?: 'book' | 'buy' | 'topup' | null;
+  /** For action:'topup' — amount the user asked to add, if they stated one. */
+  topupAmount?: number | null;
   bookProviderId?: string;
   requiresLogin?: boolean;
   /** Generic list render (my bookings, my orders, …). Items may carry inline
@@ -104,7 +109,7 @@ export class AgentService {
         case 'MY_BOOKINGS': return await this.handleMyBookings(entities, language, input);
         case 'MY_ORDERS': return await this.handleMyOrders(entities, language, input);
         case 'MY_PRESCRIPTIONS': return await this.handleMyPrescriptions(entities, language, input);
-        case 'MY_WALLET': return await this.handleMyWallet(entities, language, input);
+        case 'MY_WALLET': return await this.handleMyWallet(message, entities, language, input);
         case 'MY_LAB_RESULTS': return await this.handleMyLabResults(entities, language, input);
         case 'MY_INVOICES': return await this.handleMyInvoices(entities, language, input);
         case 'MY_HEALTH': return await this.handleMyHealth(entities, language, input);
@@ -212,10 +217,11 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (/(o[uù][^.?!]*(commande|order)|track[^.?!]*(order|commande)|order status|statut[^.?!]*commande)/.test(m)) return 'MY_ORDERS';
     if (/\b(mes|my|ma)\b[^.?!]*\b(ordonnances?|prescriptions?)\b/.test(m)) return 'MY_PRESCRIPTIONS';
     if (/\b(mon|my|ma)\b[^.?!]*\b(solde|balance|portefeuille|wallet|cr[ée]dit)\b/.test(m) || /(combien[^.?!]*(solde|cr[ée]dit|compte)|how much[^.?!]*balance)/.test(m)) return 'MY_WALLET';
+    if (/(recharg|top.?up|alimenter|approvisionner)[^.?!]*(wallet|portefeuille|solde|compte|account)?|add (money|funds|credit|cash)[^.?!]*(wallet|account|balance)?/.test(m)) return 'MY_WALLET';
     if (/\b(mes|my)\b[^.?!]*\b(analyses?|laboratoire|lab\s*results?)\b/.test(m) || /\b(mes|my)\b[^.?!]*r[ée]sultats?[^.?!]*(analyse|labo|test)/.test(m)) return 'MY_LAB_RESULTS';
     if (/\b(mes|my|ma|mon)\b[^.?!]*(facture|invoice|recu|receipt)/.test(m)) return 'MY_INVOICES';
     if (/\b(my|mon|ma)\b[^.?!]*(tableau de bord|dashboard|bilan|health (dashboard|summary|snapshot|stats)|journee sante)/.test(m) || /(combien[^.?!]*calories|how many calories|mes calories|today'?s? (health|calories|stats))/.test(m)) return 'MY_HEALTH';
-    if (/(j'?ai (bu|mange|couru|marche|dormi)|i (drank|ate|ran|walked|slept)|\d+\s*ml\b|dormi\s*\d|log (water|sleep|exercise|food))/.test(m)) return 'LOG_HEALTH';
+    if (/(j'?ai (bu|mang|cour|march|dorm)|i (drank|ate|ran|walked|slept|had)|\d+\s*ml\b|dorm\s*\d|log (water|sleep|exercise|food))/.test(m)) return 'LOG_HEALTH';
     if (/\b(mes|my)\b[^.?!]*(favoris|favourite|favorite|preferes?|prefered)/.test(m)) return 'MY_FAVORITES';
     if (/(avis|reviews?|ratings?|note)[^.?!]*(sur|de|of|for|on|about|du|de la)\b/.test(m) || /\b(reviews?|avis) (of|for|on|sur|de)\b/.test(m)) return 'PROVIDER_REVIEWS';
     // Purchase vs booking (checked before the generic BOOK pattern)
@@ -247,6 +253,10 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (entities.providerName) {
       const p = await this.resolveProvider(entities.providerName, entities.providerType);
       if (p) { providers = [this.providerCard(p)]; resolved.push({ kind: 'provider', id: p.id, name: p.name }); }
+    }
+    // "near me" → distance-sorted, when the client supplied geolocation.
+    if (!providers.length && this.wantsNearby(message) && _input.lat != null && _input.lng != null) {
+      providers = await this.nearbyProviders(_input.lat, _input.lng, entities.providerType);
     }
     if (!providers.length) {
       const r = await this.search.semanticSearch(message);
@@ -383,17 +393,31 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     };
   }
 
-  private async handleMyWallet(entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
+  private async handleMyWallet(message: string, entities: AgentEntities, language: string, input: AgentInput): Promise<AgentResult> {
     const fr = language === 'fr';
+    const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const wantsTopUp = /(recharg|top.?up|add (money|funds|credit|cash)|ajouter[^.?!]*(argent|credit|fonds|sous)|alimenter|approvisionner)/.test(m);
     if (!input.userId) return this.loginRequired('MY_WALLET', language);
     const wallet = await this.prisma.userWallet.findUnique({ where: { userId: input.userId }, select: { balance: true, currency: true } });
-    const bal = `${wallet?.currency || 'Rs'} ${wallet?.balance ?? 0}`;
+    const cur = wallet?.currency || 'Rs';
+    const bal = `${cur} ${wallet?.balance ?? 0}`;
+    if (wantsTopUp) {
+      const amt = m.match(/(\d[\d\s.,]*)\s*(rs|mur|rupees?|roupies?)?/);
+      const topupAmount = amt ? Math.round(parseFloat(amt[1].replace(/[\s,]/g, ''))) : null;
+      return {
+        intent: 'MY_WALLET', entities, action: 'topup', topupAmount: topupAmount || null,
+        reply: fr
+          ? `Votre solde est de ${bal}. Combien souhaitez-vous ajouter ?`
+          : `Your balance is ${bal}. How much would you like to add?`,
+        followUps: fr ? ['Rs 500', 'Rs 1000', 'Rs 2000'] : ['Rs 500', 'Rs 1000', 'Rs 2000'],
+      };
+    }
     const reply = wallet
       ? (fr ? `Votre solde est de ${bal}.` : `Your wallet balance is ${bal}.`)
       : (fr ? "Je ne trouve pas votre portefeuille — êtes-vous connecté ?" : "I couldn't find your wallet — are you signed in?");
     return {
       intent: 'MY_WALLET', entities, reply,
-      followUps: fr ? ['Mes commandes', 'Mes rendez-vous'] : ['My orders', 'My appointments'],
+      followUps: fr ? ['Recharger mon portefeuille', 'Mes commandes'] : ['Top up my wallet', 'My orders'],
     };
   }
 
@@ -484,22 +508,22 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
         return { intent: 'LOG_HEALTH', entities, reply: fr ? `💧 Noté : ${ml} ml d'eau ajoutés.` : `💧 Logged ${ml} ml of water.`, followUps: snap };
       }
       // Exercise
-      if (/(couru|marche|sport|gym|exercice|workout|ran|walk|jog|exercise|nage|swim)/.test(m)) {
+      if (/(cour|march|sport|gym|exercice|workout|ran|walk|jog|exercise|nage|swim)/.test(m)) {
         const min = parseInt((m.match(/(\d+)\s*(min|minute|h|heure|hour)/) || [])[1] || '30', 10);
-        const type = /couru|ran|jog|run/.test(m) ? (fr ? 'Course' : 'Running') : /marche|walk/.test(m) ? (fr ? 'Marche' : 'Walking') : /nage|swim/.test(m) ? (fr ? 'Natation' : 'Swimming') : (fr ? 'Exercice' : 'Exercise');
+        const type = /cour|ran|jog|run/.test(m) ? (fr ? 'Course' : 'Running') : /march|walk/.test(m) ? (fr ? 'Marche' : 'Walking') : /nage|swim/.test(m) ? (fr ? 'Natation' : 'Swimming') : (fr ? 'Exercice' : 'Exercise');
         await this.healthTracker.createExerciseEntry(input.userId, { exerciseType: type, durationMin: min, caloriesBurned: Math.round(min * 6) });
         return { intent: 'LOG_HEALTH', entities, reply: fr ? `🏃 Noté : ${min} min de ${type.toLowerCase()}.` : `🏃 Logged ${min} min of ${type.toLowerCase()}.`, followUps: snap };
       }
       // Sleep
-      if (/(dormi|sommeil|slept|sleep)/.test(m)) {
+      if (/(dorm|sommeil|slept|sleep)/.test(m)) {
         const hM = m.match(/(\d+([.,]\d+)?)\s*(h|heure|hour)/);
         const hours = hM ? parseFloat(hM[1].replace(',', '.')) : 8;
         await this.healthTracker.upsertSleepEntry(input.userId, { durationMin: Math.round(hours * 60) });
         return { intent: 'LOG_HEALTH', entities, reply: fr ? `😴 Noté : ${hours} h de sommeil.` : `😴 Logged ${hours} h of sleep.`, followUps: fr ? ['Mon bilan du jour', 'Conseils pour mieux dormir'] : ['My health snapshot', 'How to sleep better'] };
       }
       // Food (LLM-estimated calories/macros for the described meal)
-      if (/(mange|ate|eaten|eat|repas|petit.?dejeuner|dejeuner|diner|breakfast|lunch|dinner|snack)/.test(m)) {
-        const food = message.replace(/.*\b(j'?ai mange|mange[ée]?s?|i ate|eaten|i eat|i had)\b/i, '').trim() || message;
+      if (/(mang|ate|eaten|eat|repas|petit.?dejeuner|dejeuner|diner|breakfast|lunch|dinner|snack)/.test(m)) {
+        const food = message.replace(/.*\b(j'?ai mang[ée]?s?|mang[ée]+s?|i ate|eaten|i eat|i had)\b/i, '').trim() || message;
         const est = await this.estimateFood(food);
         const cal = Math.max(0, Math.round(est.calories || 0));
         await this.healthTracker.createFoodEntry(input.userId, {
@@ -673,6 +697,27 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       if (s > bestScore) { bestScore = s; best = c; }
     }
     return best && bestScore >= 0.45 ? this.rowToProvider(best, bestScore) : null;
+  }
+
+  private wantsNearby(message: string): boolean {
+    const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    return /(near ?(me|by)|nearest|closest|around me|pres de (moi|chez)|le plus proche|a proximite|autour de moi)/.test(m);
+  }
+
+  /** Distance-sorted providers via the Haversine formula (km). Returns provider
+   *  cards with an extra `distanceKm` field the client can show. */
+  private async nearbyProviders(lat: number, lng: number, type?: string): Promise<any[]> {
+    const rows: any[] = await this.prisma.$queryRawUnsafe(
+      `SELECT id, "firstName", "lastName", "userType", "profileImage", "address", "verified",
+              (6371 * acos(LEAST(1, cos(radians($1)) * cos(radians("latitude")) *
+                cos(radians("longitude") - radians($2)) + sin(radians($1)) * sin(radians("latitude"))))) AS dist
+       FROM "User"
+       WHERE "accountStatus" = 'active' AND "userType" = ANY($3::text[])
+         AND "latitude" IS NOT NULL AND "longitude" IS NOT NULL
+       ORDER BY dist ASC LIMIT 5`,
+      lat, lng, type ? [type] : PROVIDER_TYPES,
+    );
+    return rows.map(r => ({ ...this.providerCard(this.rowToProvider(r, 0)), distanceKm: r.dist != null ? Math.round(Number(r.dist) * 10) / 10 : null }));
   }
 
   private async resolveOrg(name: string): Promise<any | null> {

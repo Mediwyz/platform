@@ -10,14 +10,27 @@ class AgentApi {
     String message, {
     List<Map<String, String>> history = const [],
     List<String> lastProviderIds = const [],
+    double? lat,
+    double? lng,
   }) async {
     final res = await ApiClient.instance.post('/ai/agent-public', data: {
       'message': message,
       'history': history,
       'lastProviderIds': lastProviderIds,
+      if (lat != null) 'lat': lat,
+      if (lng != null) 'lng': lng,
     });
     final body = res.data as Map?;
     return Map<String, dynamic>.from((body?['data'] as Map?) ?? const {});
+  }
+
+  /// POST /users/:id/wallet/topup — mock-channel top-up (auto-completes).
+  static Future<Map<String, dynamic>> topUpWallet(String userId, int amount) async {
+    final res = await ApiClient.instance.post('/users/$userId/wallet/topup', data: {
+      'amount': amount,
+      'channel': 'mock',
+    });
+    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
   /// GET /bookings/available-slots?providerUserId&date&duration

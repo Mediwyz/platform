@@ -32,6 +32,7 @@ interface Msg {
   authChoice?: Draft
   signup?: boolean
   buy?: Product
+  topup?: { amount: number | null }
   list?: ListBlock
   bookedHref?: string
 }
@@ -79,6 +80,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
   const scrollRef = useRef<HTMLDivElement>(null)
   const sessionRef = useRef<string | undefined>(undefined)
   const lastProviderIdsRef = useRef<string[]>([])
+  const geoRef = useRef<{ lat: number; lng: number } | null>(null)
   const firstRenderRef = useRef(true)
   // Active booking sub-flow: while a step is awaiting input, free-text typed in
   // the box is interpreted IN CONTEXT (pick a slot / service / confirm) instead
@@ -211,9 +213,12 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         .filter(m => m.text && !m.typing)
         .slice(-6)
         .map(m => ({ role: m.role, text: m.text as string }))
+      // Only ask the browser for location when the message implies proximity.
+      const geo = /near ?(me|by)|nearest|closest|around me|près de (moi|chez)|le plus proche|à proximité|autour de moi/i.test(q)
+        ? await ensureGeo() : geoRef.current
       const res = await fetch(endpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-        body: JSON.stringify({ message: q, history, sessionId: sessionRef.current, lastProviderIds: lastProviderIdsRef.current }),
+        body: JSON.stringify({ message: q, history, sessionId: sessionRef.current, lastProviderIds: lastProviderIdsRef.current, lat: geo?.lat, lng: geo?.lng }),
       })
       const j = await res.json()
       const d = j?.data || {}
@@ -236,11 +241,44 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         const p = providers.find((x: Result) => x.id === d.bookProviderId)
         if (p) startBooking(p)
       }
+      // Wallet top-up: show the amount picker (login-gated like a purchase).
+      if (d.action === 'topup') {
+        if (!loggedIn) { setMessages(m => [...m, { role: 'bot', text: 'Sign in to top up your wallet.', signIn: true }]) }
+        else setMessages(m => [...m, { role: 'bot', text: 'Choose an amount to add:', topup: { amount: typeof d.topupAmount === 'number' ? d.topupAmount : null } }])
+      }
     } catch {
       replaceTyping({ role: 'bot', text: 'Something went wrong — please try again.' })
     } finally {
       setLoading(false)
     }
+  }
+
+  function ensureGeo(): Promise<{ lat: number; lng: number } | null> {
+    if (geoRef.current) return Promise.resolve(geoRef.current)
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return Promise.resolve(null)
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        pos => { geoRef.current = { lat: pos.coords.latitude, lng: pos.coords.longitude }; resolve(geoRef.current) },
+        () => resolve(null),
+        { timeout: 8000, maximumAge: 300000 },
+      )
+    })
+  }
+
+  async function topUp(amount: number) {
+    const uid = getCookie('mediwyz_user_id')
+    if (!uid || !amount) return
+    push({ role: 'user', text: `Top up Rs ${amount}` })
+    push({ role: 'bot', typing: true })
+    try {
+      const res = await fetch(`/api/users/${uid}/wallet/topup`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({ amount, channel: 'mock' }),
+      })
+      const j = await res.json()
+      const bal = j?.data?.balance ?? j?.data?.wallet?.balance
+      replaceTyping({ role: 'bot', text: j.success ? `✅ Added Rs ${amount}.${bal != null ? ` New balance: Rs ${bal}.` : ''}` : 'Top-up failed — please try again.' })
+    } catch { replaceTyping({ role: 'bot', text: 'Top-up failed — please try again.' }) }
   }
 
   async function startBooking(provider: Result) {
@@ -524,6 +562,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
               )}
 
               {m.buy && <BuyPanel product={m.buy} onConfirm={o => placeOrder(m.buy!, o)} />}
+              {m.topup && <TopUpPanel preset={m.topup.amount} onConfirm={a => topUp(a)} />}
 
               {m.list && m.list.items.length > 0 && (
                 <div className="mt-2 space-y-1.5">
@@ -775,6 +814,34 @@ function BuyPanel({ product, onConfirm }: { product: Product; onConfirm: (o: Ord
         disabled={needsAddress}
         className="w-full inline-flex items-center justify-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-lg transition disabled:opacity-50">
         <FaShoppingCart className="text-xs" /> Order — pay on {fulfil}
+      </button>
+    </div>
+  )
+}
+
+function TopUpPanel({ preset, onConfirm }: { preset: number | null; onConfirm: (amount: number) => void }) {
+  const [amount, setAmount] = useState<number>(preset && preset > 0 ? preset : 500)
+  const [done, setDone] = useState(false)
+  if (done) return <p className="mt-2 text-xs text-emerald-600 font-medium">Processing top-up…</p>
+  return (
+    <div className="mt-2 rounded-xl border border-line bg-surface p-3 space-y-2 max-w-sm text-left">
+      <span className="text-sm font-semibold text-fg">Add money to your wallet</span>
+      <div className="flex flex-wrap gap-2">
+        {[500, 1000, 2000, 5000].map(a => (
+          <button key={a} onClick={() => setAmount(a)} className={`text-xs font-semibold rounded-lg px-3 py-1.5 border transition ${amount === a ? 'bg-[#0C6780] text-white border-[#0C6780]' : 'border-line text-soft hover:border-[#0C6780]/40'}`}>
+            Rs {a}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-soft">Rs</span>
+        <input type="number" min={1} value={amount} onChange={e => setAmount(Math.max(0, parseInt(e.target.value, 10) || 0))} className="w-full px-3 py-2 border border-line rounded-lg text-sm bg-canvas text-fg outline-none focus:ring-2 focus:ring-[#0C6780]" />
+      </div>
+      <button
+        onClick={() => { if (!amount) return; setDone(true); onConfirm(amount) }}
+        disabled={!amount}
+        className="w-full inline-flex items-center justify-center gap-2 bg-[#0C6780] hover:bg-[#001E40] text-white text-sm font-semibold px-4 py-2 rounded-lg transition disabled:opacity-50">
+        Add Rs {amount}
       </button>
     </div>
   )

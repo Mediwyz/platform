@@ -155,6 +155,14 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         final p = providers.cast<Map>().firstWhere((x) => x['id'] == d['bookProviderId'], orElse: () => {});
         if (p.isNotEmpty) _startBooking(Map<String, dynamic>.from(p));
       }
+      if (d['action'] == 'topup') {
+        final preset = (d['topupAmount'] is num) ? (d['topupAmount'] as num).toInt() : null;
+        if (_user == null) {
+          _openSignup(() => _startTopUp(preset));
+        } else {
+          _startTopUp(preset);
+        }
+      }
     } catch (_) {
       _replaceTyping(_Msg('bot', text: 'Problème de connexion — réessayez dans un instant.'));
     } finally {
@@ -329,6 +337,44 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       }
     } catch (_) {
       _replaceTyping(_Msg('bot', text: 'Échec de la commande — réessayez.'));
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  // ── Wallet top-up ─────────────────────────────────────────────────────────
+  void _startTopUp(int? preset) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _TopUpSheet(preset: preset, onConfirm: (amount) {
+        Navigator.of(context).pop();
+        _topUp(amount);
+      }),
+    );
+  }
+
+  Future<void> _topUp(int amount) async {
+    final uid = _user?['id']?.toString();
+    if (uid == null || amount <= 0) return;
+    setState(() {
+      _messages.add(_Msg('user', text: 'Recharger Rs $amount'));
+      _messages.add(_Msg('bot', typing: true));
+      _loading = true;
+    });
+    _scrollToEnd();
+    try {
+      final j = await AgentApi.topUpWallet(uid, amount);
+      final data = j['data'] as Map?;
+      final bal = data?['balance'] ?? (data?['wallet'] as Map?)?['balance'];
+      if (j['success'] == true || data != null) {
+        _replaceTyping(_Msg('bot', text: '✅ Rs $amount ajoutés.${bal != null ? ' Nouveau solde : Rs $bal.' : ''}', booked: true));
+      } else {
+        _replaceTyping(_Msg('bot', text: 'Recharge impossible — réessayez.'));
+      }
+    } catch (_) {
+      _replaceTyping(_Msg('bot', text: 'Recharge impossible — réessayez.'));
     } finally {
       setState(() => _loading = false);
     }
@@ -817,6 +863,49 @@ class _PurchaseSheetState extends State<_PurchaseSheet> {
             onPressed: needsAddress ? null : () => widget.onConfirm({'qty': _qty, 'fulfil': _fulfil, 'address': _address.text.trim()}),
             icon: const Icon(Icons.shopping_cart, size: 16),
             label: Text('Commander — paiement à la ${_fulfil == 'delivery' ? 'livraison' : 'récupération'}'),
+          )),
+          const SizedBox(height: 6),
+        ]),
+      ),
+    );
+  }
+}
+
+class _TopUpSheet extends StatefulWidget {
+  final int? preset;
+  final void Function(int amount) onConfirm;
+  const _TopUpSheet({required this.preset, required this.onConfirm});
+  @override
+  State<_TopUpSheet> createState() => _TopUpSheetState();
+}
+
+class _TopUpSheetState extends State<_TopUpSheet> {
+  late int _amount = (widget.preset != null && widget.preset! > 0) ? widget.preset! : 500;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        padding: const EdgeInsets.all(16),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Recharger le portefeuille', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: MediWyzColors.navy)),
+          const SizedBox(height: 12),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            for (final a in const [500, 1000, 2000, 5000])
+              OutlinedButton(
+                onPressed: () => setState(() => _amount = a),
+                style: OutlinedButton.styleFrom(backgroundColor: _amount == a ? MediWyzColors.teal : null, foregroundColor: _amount == a ? Colors.white : MediWyzColors.teal),
+                child: Text('Rs $a'),
+              ),
+          ]),
+          const SizedBox(height: 12),
+          Text('Montant : Rs $_amount', style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          SizedBox(width: double.infinity, child: ElevatedButton(
+            onPressed: _amount > 0 ? () => widget.onConfirm(_amount) : null,
+            child: Text('Ajouter Rs $_amount'),
           )),
           const SizedBox(height: 6),
         ]),
