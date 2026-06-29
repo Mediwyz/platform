@@ -673,7 +673,7 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
         `SELECT id, "firstName", "lastName", "userType", "profileImage", "address", "verified",
                 similarity(lower("firstName" || ' ' || "lastName"), lower($1)) AS sim
          FROM "User"
-         WHERE "accountStatus" = 'active' AND "userType" = ANY($2::text[])
+         WHERE "accountStatus" = 'active' AND "userType"::text = ANY($2::text[])
          ORDER BY sim DESC LIMIT 1`,
         n, type ? [type] : PROVIDER_TYPES,
       );
@@ -720,7 +720,7 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
                 cos(radians("longitude") - radians($2)) + sin(radians($1)) * sin(radians("latitude"))))) AS dist
        FROM "User"
        WHERE ("accountStatus" = 'active' OR "accountStatus" IS NULL)
-         AND "userType" = ANY($3::text[])
+         AND "userType"::text = ANY($3::text[])
          AND "latitude" IS NOT NULL AND "longitude" IS NOT NULL
        ORDER BY dist ASC LIMIT 5`,
       lat, lng, type ? [type] : PROVIDER_TYPES,

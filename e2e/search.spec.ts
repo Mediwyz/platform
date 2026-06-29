@@ -36,6 +36,11 @@ test.describe('Search Page', () => {
     // deploy the page can still be hydrating when the test starts.
     await expect(searchInput).toBeVisible({ timeout: 30_000 })
     await searchInput.fill('cardiologist')
+    // Wait for the controlled input to reflect the value before submitting —
+    // otherwise Enter can fire before React flushes onChange, so handleSearch
+    // reads an empty searchQuery and the URL gets no ?q= (the cause of the
+    // intermittent "/search/doctors" failure on a cold VPS).
+    await expect(searchInput).toHaveValue('cardiologist', { timeout: 10_000 })
     // Press Enter to submit — more reliable than clicking the submit button
     await searchInput.press('Enter')
     // URL updates after the async fetchProviders resolves (generous for warmup)
