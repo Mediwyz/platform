@@ -397,21 +397,28 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     const fr = language === 'fr';
     const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
     const wantsTopUp = /(recharg|top.?up|add (money|funds|credit|cash)|ajouter[^.?!]*(argent|credit|fonds|sous)|alimenter|approvisionner)/.test(m);
+    // Top-up mirrors the buy flow: offer the amount picker even to guests and
+    // gate at submission (client opens signup, then tops up). So action:'topup'
+    // is returned regardless of auth — only the balance line is auth-dependent.
+    if (wantsTopUp) {
+      const w = input.userId
+        ? await this.prisma.userWallet.findUnique({ where: { userId: input.userId }, select: { balance: true, currency: true } })
+        : null;
+      const balLine = w ? `${w.currency || 'Rs'} ${w.balance ?? 0}` : null;
+      const amt = m.match(/(\d[\d\s.,]*)\s*(rs|mur|rupees?|roupies?)?/);
+      const topupAmount = amt ? Math.round(parseFloat(amt[1].replace(/[\s,]/g, ''))) : null;
+      return {
+        intent: 'MY_WALLET', entities, action: 'topup', topupAmount: topupAmount || null, requiresLogin: !input.userId,
+        reply: fr
+          ? `${balLine ? `Votre solde est de ${balLine}. ` : ''}Combien souhaitez-vous ajouter ?`
+          : `${balLine ? `Your balance is ${balLine}. ` : ''}How much would you like to add?`,
+        followUps: fr ? ['Rs 500', 'Rs 1000', 'Rs 2000'] : ['Rs 500', 'Rs 1000', 'Rs 2000'],
+      };
+    }
     if (!input.userId) return this.loginRequired('MY_WALLET', language);
     const wallet = await this.prisma.userWallet.findUnique({ where: { userId: input.userId }, select: { balance: true, currency: true } });
     const cur = wallet?.currency || 'Rs';
     const bal = `${cur} ${wallet?.balance ?? 0}`;
-    if (wantsTopUp) {
-      const amt = m.match(/(\d[\d\s.,]*)\s*(rs|mur|rupees?|roupies?)?/);
-      const topupAmount = amt ? Math.round(parseFloat(amt[1].replace(/[\s,]/g, ''))) : null;
-      return {
-        intent: 'MY_WALLET', entities, action: 'topup', topupAmount: topupAmount || null,
-        reply: fr
-          ? `Votre solde est de ${bal}. Combien souhaitez-vous ajouter ?`
-          : `Your balance is ${bal}. How much would you like to add?`,
-        followUps: fr ? ['Rs 500', 'Rs 1000', 'Rs 2000'] : ['Rs 500', 'Rs 1000', 'Rs 2000'],
-      };
-    }
     const reply = wallet
       ? (fr ? `Votre solde est de ${bal}.` : `Your wallet balance is ${bal}.`)
       : (fr ? "Je ne trouve pas votre portefeuille — êtes-vous connecté ?" : "I couldn't find your wallet — are you signed in?");

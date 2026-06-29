@@ -43,6 +43,56 @@ export class BookingsService implements OnApplicationBootstrap {
    *  (only providers with zero windows are seeded), and is immune to seed crashes. */
   onApplicationBootstrap() {
     setTimeout(() => { void this.backfillAvailability(); }, 8000);
+    setTimeout(() => { void this.backfillCoordinates(); }, 9000);
+  }
+
+  /**
+   * Geo-tag providers that have no GPS coordinates so the agent's "near me"
+   * search returns results. Seed 61 maps specific seeded IDs to real practice
+   * locations, but it doesn't run on prod — so here we deterministically spread
+   * any coord-less provider across real Mauritius city centres (stable per user
+   * id). Approximate by design; good enough for distance-ranked discovery.
+   */
+  private async backfillCoordinates() {
+    try {
+      const PROVIDER_TYPES = ['DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER', 'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST'];
+      // Real Mauritius town centres (lat, lng).
+      const CITIES: Array<[number, number]> = [
+        [-20.1609, 57.4977], // Port Louis
+        [-20.2342, 57.4617], // Rose Hill
+        [-20.2648, 57.4759], // Quatre Bornes
+        [-20.3173, 57.5259], // Curepipe
+        [-20.2985, 57.4786], // Vacoas
+        [-20.2455, 57.4836], // Ebène / Cybercity
+        [-20.0140, 57.5815], // Grand Baie
+        [-20.4072, 57.7020], // Mahébourg
+        [-20.2366, 57.5056], // Moka
+        [-20.3095, 57.5016], // Floréal
+      ];
+      const missing = await this.prisma.user.findMany({
+        where: { userType: { in: PROVIDER_TYPES as any }, OR: [{ latitude: null }, { longitude: null }] },
+        select: { id: true },
+      });
+      if (!missing.length) return;
+      let updated = 0;
+      for (const { id } of missing) {
+        // Stable hash of the id → a city + a small deterministic jitter so
+        // co-located providers don't all collapse onto the exact same point.
+        let h = 0;
+        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+        const [lat, lng] = CITIES[h % CITIES.length];
+        const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04; // ±0.02° ≈ ±2.2 km
+        const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
+        await this.prisma.user.update({
+          where: { id },
+          data: { latitude: lat + jLat, longitude: lng + jLng },
+        });
+        updated++;
+      }
+      this.logger.log(`Coordinate backfill: geo-tagged ${updated} provider(s) lacking GPS`);
+    } catch (e: any) {
+      this.logger.warn(`Coordinate backfill failed: ${e?.message}`);
+    }
   }
 
   private async backfillAvailability() {
