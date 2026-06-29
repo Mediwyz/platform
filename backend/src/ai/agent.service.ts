@@ -719,12 +719,46 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
               (6371 * acos(LEAST(1, cos(radians($1)) * cos(radians("latitude")) *
                 cos(radians("longitude") - radians($2)) + sin(radians($1)) * sin(radians("latitude"))))) AS dist
        FROM "User"
-       WHERE "accountStatus" = 'active' AND "userType" = ANY($3::text[])
+       WHERE ("accountStatus" = 'active' OR "accountStatus" IS NULL)
+         AND "userType" = ANY($3::text[])
          AND "latitude" IS NOT NULL AND "longitude" IS NOT NULL
        ORDER BY dist ASC LIMIT 5`,
       lat, lng, type ? [type] : PROVIDER_TYPES,
     );
     return rows.map(r => ({ ...this.providerCard(this.rowToProvider(r, 0)), distanceKm: r.dist != null ? Math.round(Number(r.dist) * 10) / 10 : null }));
+  }
+
+  /**
+   * Maintenance: geo-tag coord-less providers (deterministic Mauritius spread).
+   * Resilient per-record so one bad row can't abort the batch, and returns the
+   * first error if any — used to diagnose why the boot backfill wasn't sticking.
+   */
+  async backfillCoordinatesNow(): Promise<{ scanned: number; updated: number; firstError: string | null }> {
+    const CITIES: Array<[number, number]> = [
+      [-20.1609, 57.4977], [-20.2342, 57.4617], [-20.2648, 57.4759], [-20.3173, 57.5259],
+      [-20.2985, 57.4786], [-20.2455, 57.4836], [-20.0140, 57.5815], [-20.4072, 57.7020],
+      [-20.2366, 57.5056], [-20.3095, 57.5016],
+    ];
+    const missing = await this.prisma.user.findMany({
+      where: { userType: { in: PROVIDER_TYPES as any }, OR: [{ latitude: null }, { longitude: null }] },
+      select: { id: true },
+    });
+    let updated = 0;
+    let firstError: string | null = null;
+    for (const { id } of missing) {
+      try {
+        let h = 0;
+        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+        const [lat, lng] = CITIES[h % CITIES.length];
+        const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04;
+        const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
+        await this.prisma.user.update({ where: { id }, data: { latitude: lat + jLat, longitude: lng + jLng } });
+        updated++;
+      } catch (e: any) {
+        if (!firstError) firstError = e?.message ? String(e.message).slice(0, 300) : String(e).slice(0, 300);
+      }
+    }
+    return { scanned: missing.length, updated, firstError };
   }
 
   private async resolveOrg(name: string): Promise<any | null> {

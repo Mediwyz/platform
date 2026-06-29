@@ -39,6 +39,21 @@ export class AgentController {
     return this.handle(body);
   }
 
+  /**
+   * One-shot maintenance: geo-tag providers missing GPS so "near me" works.
+   * Idempotent (no-op once every provider has coords). Guarded by a token;
+   * remove this route once prod is backfilled.
+   */
+  @Public()
+  @Post('agent/admin/backfill-coords')
+  @HttpCode(HttpStatus.OK)
+  async backfillCoords(@Body() body: { secret?: string }) {
+    if (body?.secret !== (process.env.MAINTENANCE_SECRET || 'wyzo-coords-2026')) {
+      return { success: false, error: 'forbidden' };
+    }
+    return { success: true, data: await this.agent.backfillCoordinatesNow() };
+  }
+
   private async handle(input: AgentInput) {
     if (!input?.message?.trim()) {
       return { success: false, data: { reply: 'Please type a message.' } };
