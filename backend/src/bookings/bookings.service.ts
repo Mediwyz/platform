@@ -71,30 +71,39 @@ export class BookingsService implements OnApplicationBootstrap {
         [-20.2366, 57.5056], // Moka
         [-20.3095, 57.5016], // Floréal
       ];
-      const missing = await this.prisma.user.findMany({
+      // Stable hash of an id → a city + small deterministic jitter, so
+      // co-located records don't all collapse onto the exact same point.
+      const pointFor = (id: string): { latitude: number; longitude: number } => {
+        let h = 0;
+        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+        const [lat, lng] = CITIES[h % CITIES.length];
+        return {
+          latitude: lat + (((h >> 4) % 100) / 100 - 0.5) * 0.04, // ±0.02° ≈ ±2.2 km
+          longitude: lng + (((h >> 8) % 100) / 100 - 0.5) * 0.04,
+        };
+      };
+
+      // Providers (User).
+      const missingUsers = await this.prisma.user.findMany({
         where: { userType: { in: PROVIDER_TYPES as any }, OR: [{ latitude: null }, { longitude: null }] },
         select: { id: true },
       });
-      if (!missing.length) return;
-      let updated = 0;
-      for (const { id } of missing) {
-        // Per-record guard: one bad row must not abort the whole batch.
-        try {
-          // Stable hash of the id → a city + a small deterministic jitter so
-          // co-located providers don't all collapse onto the exact same point.
-          let h = 0;
-          for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-          const [lat, lng] = CITIES[h % CITIES.length];
-          const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04; // ±0.02° ≈ ±2.2 km
-          const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
-          await this.prisma.user.update({
-            where: { id },
-            data: { latitude: lat + jLat, longitude: lng + jLng },
-          });
-          updated++;
-        } catch { /* skip this row, keep going */ }
+      let users = 0;
+      for (const { id } of missingUsers) {
+        try { await this.prisma.user.update({ where: { id }, data: pointFor(id) }); users++; } catch { /* skip */ }
       }
-      this.logger.log(`Coordinate backfill: geo-tagged ${updated} provider(s) lacking GPS`);
+
+      // Organisations (HealthcareEntity) — pharmacies/clinics/labs/… for "near me".
+      const missingOrgs = await this.prisma.healthcareEntity.findMany({
+        where: { OR: [{ latitude: null }, { longitude: null }] },
+        select: { id: true },
+      });
+      let orgs = 0;
+      for (const { id } of missingOrgs) {
+        try { await this.prisma.healthcareEntity.update({ where: { id }, data: pointFor(id) }); orgs++; } catch { /* skip */ }
+      }
+
+      if (users || orgs) this.logger.log(`Coordinate backfill: geo-tagged ${users} provider(s) and ${orgs} organisation(s) lacking GPS`);
     } catch (e: any) {
       this.logger.warn(`Coordinate backfill failed: ${e?.message}`);
     }

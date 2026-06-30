@@ -25,6 +25,8 @@ const _suggestions = [
   'Commander un médicament',
 ];
 
+String _fmtKm(num km) => km < 1 ? '${(km * 1000).round()} m' : '${km.toStringAsFixed(1)} km';
+
 class _Day {
   final String date, label;
   final List<String> slots;
@@ -550,7 +552,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
                 : Text(m.text ?? '', style: const TextStyle(color: Colors.white, fontSize: 14)),
           ),
           ...m.providers.map((p) => _providerCard(Map<String, dynamic>.from(p as Map))),
-          ...m.organisations.map((o) => _simpleCard(Icons.business, (o as Map)['name']?.toString() ?? '', '${o['type'] ?? 'organisation'}${o['city'] != null ? ' · ${o['city']}' : ''}')),
+          ...m.organisations.map((o) => _simpleCard(Icons.business, (o as Map)['name']?.toString() ?? '', '${o['type'] ?? 'organisation'}${o['city'] != null ? ' · ${o['city']}' : ''}${o['distanceKm'] is num ? ' · ${_fmtKm(o['distanceKm'] as num)}' : ''}')),
           ...m.products.map((p) => _buyableProduct(Map<String, dynamic>.from(p as Map))),
           ...m.list.map((it) => _listTile(Map<String, dynamic>.from(it as Map))),
           if (m.days.isNotEmpty) _slots(m.days),
@@ -574,7 +576,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         const SizedBox(width: 10),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-          Text('${(r['userType'] ?? '').toString().toLowerCase().replaceAll('_', ' ')}${r['address'] != null ? ' · ${r['address']}' : ''}', style: const TextStyle(fontSize: 10, color: Colors.black54), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text('${(r['userType'] ?? '').toString().toLowerCase().replaceAll('_', ' ')}${r['address'] != null ? ' · ${r['address']}' : ''}${r['distanceKm'] is num ? ' · ${_fmtKm(r['distanceKm'] as num)}' : ''}', style: const TextStyle(fontSize: 10, color: Colors.black54), maxLines: 1, overflow: TextOverflow.ellipsis),
         ])),
         TextButton(onPressed: () => _startBooking(r), child: const Text('Réserver')),
       ]),

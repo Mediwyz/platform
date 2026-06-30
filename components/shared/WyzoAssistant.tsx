@@ -10,12 +10,12 @@ import { FaRobot, FaSpinner, FaPaperPlane, FaCheckCircle, FaMagic, FaArrowRight,
 
 interface Result {
   id: string; name: string; userType: string; profileImage: string | null
-  address: string | null; verified: boolean; score?: number
+  address: string | null; verified: boolean; score?: number; distanceKm?: number
 }
 interface Day { date: string; label: string; slots: string[] }
 interface Service { id: string; serviceName: string; price: number; duration: number; workflows?: { id: string; serviceMode: string }[] }
 interface Draft { provider?: Result; date?: string; time?: string; service?: Service }
-interface Org { id: string; name: string; type?: string; city?: string | null; logoUrl?: string | null; isVerified?: boolean; providerCount?: number }
+interface Org { id: string; name: string; type?: string; city?: string | null; logoUrl?: string | null; isVerified?: boolean; providerCount?: number; distanceKm?: number }
 interface Product { id: string; name: string; category?: string | null; price?: number | null; currency?: string; inStock?: boolean; providerUserId?: string | null; requiresPrescription?: boolean }
 interface Msg {
   role: 'bot' | 'user'
@@ -69,6 +69,7 @@ function getCookie(name: string): string | null {
   return m ? decodeURIComponent(m[1]) : null
 }
 function isoDate(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
+function fmtKm(km: number) { return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km` }
 
 export default function WyzoAssistant({ variant = 'panel', onClose, greeting, suggestions, heroIntro }: Props) {
   const hero = variant === 'hero'
@@ -510,7 +511,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                           {r.verified && <FaCheckCircle className="text-[#0C6780] text-[10px] flex-shrink-0" />}
                         </span>
                         <span className="block text-[10px] text-faint capitalize truncate">
-                          {r.userType.toLowerCase().replace(/_/g, ' ')}{r.address ? ` · ${r.address}` : ''}{typeof r.score === 'number' && r.score > 0 ? ` · ${r.score}%` : ''}
+                          {r.userType.toLowerCase().replace(/_/g, ' ')}{r.address ? ` · ${r.address}` : ''}{typeof r.score === 'number' && r.score > 0 ? ` · ${r.score}%` : ''}{typeof r.distanceKm === 'number' ? ` · ${fmtKm(r.distanceKm)}` : ''}
                         </span>
                       </Link>
                       <button onClick={() => startBooking(r)} className="text-[11px] font-semibold text-white bg-[#0C6780] hover:bg-[#001E40] px-2.5 py-1 rounded-lg flex-shrink-0 inline-flex items-center gap-1 transition">
@@ -532,7 +533,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
                           {o.isVerified && <FaCheckCircle className="text-[#0C6780] text-[10px] flex-shrink-0" />}
                         </span>
                         <span className="block text-[10px] text-faint capitalize truncate">
-                          {o.type || 'organisation'}{o.city ? ` · ${o.city}` : ''}{typeof o.providerCount === 'number' ? ` · ${o.providerCount} provider${o.providerCount === 1 ? '' : 's'}` : ''}
+                          {o.type || 'organisation'}{o.city ? ` · ${o.city}` : ''}{typeof o.providerCount === 'number' ? ` · ${o.providerCount} provider${o.providerCount === 1 ? '' : 's'}` : ''}{typeof o.distanceKm === 'number' ? ` · ${fmtKm(o.distanceKm)}` : ''}
                         </span>
                       </span>
                       <FaArrowRight className="text-faint text-[10px] flex-shrink-0" />

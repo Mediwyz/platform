@@ -273,6 +273,10 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       const o = await this.resolveOrg(entities.orgName);
       if (o) { organisations = [this.orgCard(o)]; resolved.push({ kind: 'organisation', id: o.id, name: o.name }); }
     }
+    // "near me" → distance-sorted, when the client supplied geolocation.
+    if (!organisations.length && this.wantsNearby(message) && _input.lat != null && _input.lng != null) {
+      organisations = await this.nearbyOrgs(_input.lat, _input.lng, entities.orgType);
+    }
     if (!organisations.length) {
       const q = entities.orgName || entities.location || message;
       const r = await this.search.searchOrganizations(q, entities.orgType, entities.location, undefined, 1, 6);
@@ -726,6 +730,23 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
       lat, lng, type ? [type] : PROVIDER_TYPES,
     );
     return rows.map(r => ({ ...this.providerCard(this.rowToProvider(r, 0)), distanceKm: r.dist != null ? Math.round(Number(r.dist) * 10) / 10 : null }));
+  }
+
+  /** Distance-sorted organisations (clinics/pharmacies/labs/…) via Haversine.
+   *  `type` is the HealthcareEntity.type key (a plain string, no enum cast). */
+  private async nearbyOrgs(lat: number, lng: number, type?: string): Promise<any[]> {
+    const rows: any[] = await this.prisma.$queryRawUnsafe(
+      `SELECT id, name, type, city, "logoUrl", "isVerified",
+              (6371 * acos(LEAST(1, cos(radians($1)) * cos(radians("latitude")) *
+                cos(radians("longitude") - radians($2)) + sin(radians($1)) * sin(radians("latitude"))))) AS dist
+       FROM "HealthcareEntity"
+       WHERE "isActive" = true
+         AND ($3::text IS NULL OR "type" = $3)
+         AND "latitude" IS NOT NULL AND "longitude" IS NOT NULL
+       ORDER BY dist ASC LIMIT 6`,
+      lat, lng, type ?? null,
+    );
+    return rows.map(e => ({ ...this.orgCard(e), distanceKm: e.dist != null ? Math.round(Number(e.dist) * 10) / 10 : null }));
   }
 
   private async resolveOrg(name: string): Promise<any | null> {
