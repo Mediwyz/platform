@@ -64,6 +64,10 @@ export interface AgentResult {
   action?: 'book' | 'buy' | 'topup' | null;
   /** For action:'topup' — amount the user asked to add, if they stated one. */
   topupAmount?: number | null;
+  /** For action:'book' — the day/time the user requested, so the client can
+   *  jump straight to it instead of showing the whole week. */
+  bookDate?: string | null; // YYYY-MM-DD
+  bookTime?: string | null; // HH:MM
   bookProviderId?: string;
   requiresLogin?: boolean;
   /** Generic list render (my bookings, my orders, …). Items may carry inline
@@ -269,17 +273,20 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
   private async handleFindOrg(message: string, entities: AgentEntities, language: string, _input: AgentInput): Promise<AgentResult> {
     const resolved: AgentResult['resolved'] = [];
     let organisations: any[] = [];
+    // The small classifier often omits orgType — derive it deterministically
+    // from the message so "a laboratory near me" actually filters to labs.
+    const orgType = entities.orgType || this.deriveOrgType(message);
     if (entities.orgName) {
       const o = await this.resolveOrg(entities.orgName);
       if (o) { organisations = [this.orgCard(o)]; resolved.push({ kind: 'organisation', id: o.id, name: o.name }); }
     }
     // "near me" → distance-sorted, when the client supplied geolocation.
     if (!organisations.length && this.wantsNearby(message) && _input.lat != null && _input.lng != null) {
-      organisations = await this.nearbyOrgs(_input.lat, _input.lng, entities.orgType);
+      organisations = await this.nearbyOrgs(_input.lat, _input.lng, orgType);
     }
     if (!organisations.length) {
       const q = entities.orgName || entities.location || message;
-      const r = await this.search.searchOrganizations(q, entities.orgType, entities.location, undefined, 1, 6);
+      const r = await this.search.searchOrganizations(q, orgType, entities.location, undefined, 1, 6);
       organisations = (r.data || []).map((e: any) => this.orgCard(e)).slice(0, 6);
     }
     const { reply, followUps } = await this.compose('FIND_ORGANISATION', this.summarizeOrgs(organisations), message, language);
@@ -621,12 +628,13 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     if (!prov && input.lastProviderIds?.length === 1) prov = await this.providerById(input.lastProviderIds[0]);
 
     if (prov) {
+      const { date, time } = this.parseRequestedDateTime(message, entities.date);
       return {
         intent: 'BOOK', entities,
         reply: this.t(language, 'bookStart', prov.name),
         providers: [this.providerCard(prov)],
         resolved: [{ kind: 'provider', id: prov.id, name: prov.name }],
-        action: 'book', bookProviderId: prov.id,
+        action: 'book', bookProviderId: prov.id, bookDate: date ?? null, bookTime: time ?? null,
         followUps: [],
       };
     }
@@ -713,6 +721,66 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
   private wantsNearby(message: string): boolean {
     const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
     return /(near ?(me|by)|nearest|closest|around me|pres de (moi|chez)|le plus proche|a proximite|autour de moi)/.test(m);
+  }
+
+  /** Map free text to a HealthcareEntity.type key (pharmacy/clinic/hospital/
+   *  laboratory/insurance). The classifier frequently omits this. */
+  private deriveOrgType(message: string): string | undefined {
+    const m = message.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    if (/\b(pharmac|chemist|drugstore)/.test(m)) return 'pharmacy';
+    if (/\b(laborator|laboratoire|\blabo\b|\blab\b|analyses?)/.test(m)) return 'laboratory';
+    if (/\b(hospital|hopital|hopita|chu\b)/.test(m)) return 'hospital';
+    if (/\b(clinic|clinique)/.test(m)) return 'clinic';
+    if (/\b(insuranc|assuranc|mutuelle)/.test(m)) return 'insurance';
+    return undefined;
+  }
+
+  /** Parse a requested day + time from the message (and the classifier's date
+   *  phrase) into {date: YYYY-MM-DD, time: HH:MM} so booking can jump to it.
+   *  Handles today/tomorrow, weekday names (next occurrence), dd/mm, ISO, and
+   *  times like "3pm", "15h", "15h30", "14:00" — EN + FR. */
+  private parseRequestedDateTime(message: string, datePhrase?: string): { date?: string; time?: string } {
+    const src = `${datePhrase || ''} ${message}`.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const today = new Date();
+    const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    let date: string | undefined;
+    const isoM = src.match(/(\d{4}-\d{2}-\d{2})/);
+    if (isoM) date = isoM[1];
+    if (!date) {
+      const dm = src.match(/\b(\d{1,2})[\/.](\d{1,2})(?:[\/.](\d{2,4}))?\b/);
+      if (dm) {
+        const dd = +dm[1], mm = +dm[2] - 1;
+        const yy = dm[3] ? (dm[3].length === 2 ? 2000 + +dm[3] : +dm[3]) : today.getFullYear();
+        const d = new Date(yy, mm, dd);
+        if (!isNaN(d.getTime())) date = iso(d);
+      }
+    }
+    if (!date && /\b(after ?tomorrow|apres ?demain|surlendemain)/.test(src)) { const d = new Date(today); d.setDate(d.getDate() + 2); date = iso(d); }
+    if (!date && /\b(tomorrow|demain)/.test(src)) { const d = new Date(today); d.setDate(d.getDate() + 1); date = iso(d); }
+    if (!date && /\b(today|aujourd|ce soir|tonight)/.test(src)) date = iso(today);
+    if (!date) {
+      const days = [['sunday', 'dimanche'], ['monday', 'lundi'], ['tuesday', 'mardi'], ['wednesday', 'mercredi'], ['thursday', 'jeudi'], ['friday', 'vendredi'], ['saturday', 'samedi']];
+      for (let i = 0; i < 7; i++) {
+        if (days[i].some(w => new RegExp(`\\b${w}`).test(src))) {
+          const d = new Date(today);
+          const delta = ((i - d.getDay() + 7) % 7) || 7; // next occurrence (not today)
+          d.setDate(d.getDate() + delta);
+          date = iso(d);
+          break;
+        }
+      }
+    }
+    let time: string | undefined;
+    const t = src.match(/\b(\d{1,2})\s*(?::|h)\s*(\d{2})\b/) || src.match(/\b(\d{1,2})\s*(h)\b/) || src.match(/\b(\d{1,2})\s*(am|pm)\b/);
+    if (t) {
+      let hh = +t[1];
+      const tok = t[2];
+      if (tok === 'pm' && hh < 12) hh += 12;
+      if (tok === 'am' && hh === 12) hh = 0;
+      const mm = /^\d{2}$/.test(tok) ? tok : '00';
+      if (hh >= 0 && hh <= 23) time = `${String(hh).padStart(2, '0')}:${mm}`;
+    }
+    return { date, time };
   }
 
   /** Distance-sorted providers via the Haversine formula (km). Returns provider

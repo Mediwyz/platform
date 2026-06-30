@@ -240,7 +240,7 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
       // straight into the slot picker.
       if (d.action === 'book' && d.bookProviderId) {
         const p = providers.find((x: Result) => x.id === d.bookProviderId)
-        if (p) startBooking(p)
+        if (p) startBooking(p, d.bookDate, d.bookTime)
       }
       // Wallet top-up: show the amount picker (login-gated like a purchase).
       if (d.action === 'topup') {
@@ -282,10 +282,12 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
     } catch { replaceTyping({ role: 'bot', text: 'Top-up failed — please try again.' }) }
   }
 
-  async function startBooking(provider: Result) {
+  async function startBooking(provider: Result, prefDate?: string | null, prefTime?: string | null) {
     setDraft({ provider })
-    push({ role: 'user', text: `Book ${provider.name}` })
+    const reqLabel = prefDate ? ` on ${prefDate}${prefTime ? ` at ${prefTime}` : ''}` : ''
+    push({ role: 'user', text: `Book ${provider.name}${reqLabel}` })
     push({ role: 'bot', typing: true })
+    const labelFor = (d: Date) => d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })
     try {
       const today = new Date(); const days: Day[] = []
       for (let i = 0; i < 7; i++) {
@@ -294,7 +296,29 @@ export default function WyzoAssistant({ variant = 'panel', onClose, greeting, su
         const res = await fetch(`/api/bookings/available-slots?providerUserId=${provider.id}&date=${date}&duration=30`, { credentials: 'include' })
         const j = await res.json().catch(() => ({}))
         const slots: string[] = j?.slots || []
-        if (slots.length) days.push({ date, label: d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }), slots: slots.slice(0, 8) })
+        if (slots.length) days.push({ date, label: labelFor(d), slots: slots.slice(0, 8) })
+      }
+      // Honour a requested day/time.
+      if (prefDate) {
+        let day = days.find(x => x.date === prefDate)
+        if (!day) {
+          // Requested date is outside the 7-day scan — fetch it directly.
+          const res = await fetch(`/api/bookings/available-slots?providerUserId=${provider.id}&date=${prefDate}&duration=30`, { credentials: 'include' })
+          const j = await res.json().catch(() => ({}))
+          const slots: string[] = j?.slots || []
+          if (slots.length) { day = { date: prefDate, label: labelFor(new Date(`${prefDate}T00:00`)), slots: slots.slice(0, 8) }; days.unshift(day) }
+        }
+        if (day) {
+          if (prefTime) {
+            const hit = day.slots.find(s => s === prefTime || s.startsWith(prefTime))
+            if (hit) { availDaysRef.current = days; pickSlot(day.date, hit, day.label); return }
+          }
+          const reordered = [day, ...days.filter(x => x.date !== day!.date)]
+          availDaysRef.current = reordered; stageRef.current = 'slot'
+          replaceTyping({ role: 'bot', text: `${provider.name} — ${day.label}${prefTime ? `: ${prefTime} isn't open, here are the available times` : ', pick a time'}:`, days: reordered })
+          return
+        }
+        // Requested day has no slots → fall back to the week view below.
       }
       if (days.length) { availDaysRef.current = days; stageRef.current = 'slot' } else { stageRef.current = null }
       replaceTyping(days.length
