@@ -39,6 +39,27 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /connections — the user's connections (optionally filtered by status).
+  static Future<List<Map<String, dynamic>>> connections({String? status}) async {
+    try {
+      final res = await ApiClient.instance.get('/connections', queryParameters: status != null ? {'status': status} : null);
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// PATCH /connections/:id — accept / reject / block a connection request.
+  static Future<bool> connectionAction(String id, String action) async {
+    try {
+      final res = await ApiClient.instance.patch('/connections/$id', data: {'action': action});
+      return (res.data as Map?)?['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// GET /notifications — recent notifications + unread count (auth).
   static Future<Map<String, dynamic>> notifications() async {
     try {

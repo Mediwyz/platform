@@ -9,6 +9,7 @@ import 'agent_api.dart';
 import 'auth_screens.dart';
 import 'feed_screen.dart';
 import 'nav_config.dart';
+import 'network_screen.dart';
 import 'notifications_screen.dart';
 import 'profile_screen.dart';
 
@@ -487,6 +488,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationsScreen(loggedIn: _user != null)));
   }
 
+  void _openNetwork() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => NetworkScreen(loggedIn: _user != null, myId: _user?['id']?.toString())));
+  }
+
   Widget _buildDrawer() {
     final userType = _user?['userType']?.toString();
     final items = navForRole(userType);
@@ -648,7 +653,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ),
         ),
         const SizedBox(width: 8),
-        _hdrBtn(FontAwesomeIcons.userGroup, 'Fil', () { _scaffoldKey.currentState?.closeDrawer(); _openFeed(); }),
+        _hdrBtn(FontAwesomeIcons.userGroup, 'Mon réseau', _openNetwork),
         _hdrBtn(FontAwesomeIcons.bell, 'Notifications', _openNotifications),
         _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _openWeb('/invite')),
         _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => _openWeb('/')),
