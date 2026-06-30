@@ -728,54 +728,6 @@ KEY DISTINCTION — possessive/existing ("my", "mes", "ma", "où est/sont", "tra
     return rows.map(r => ({ ...this.providerCard(this.rowToProvider(r, 0)), distanceKm: r.dist != null ? Math.round(Number(r.dist) * 10) / 10 : null }));
   }
 
-  /**
-   * Maintenance: geo-tag coord-less providers (deterministic Mauritius spread).
-   * Resilient per-record so one bad row can't abort the batch, and returns the
-   * first error if any — used to diagnose why the boot backfill wasn't sticking.
-   */
-  async backfillCoordinatesNow(): Promise<any> {
-    const CITIES: Array<[number, number]> = [
-      [-20.1609, 57.4977], [-20.2342, 57.4617], [-20.2648, 57.4759], [-20.3173, 57.5259],
-      [-20.2985, 57.4786], [-20.2455, 57.4836], [-20.0140, 57.5815], [-20.4072, 57.7020],
-      [-20.2366, 57.5056], [-20.3095, 57.5016],
-    ];
-    const missing = await this.prisma.user.findMany({
-      where: { userType: { in: PROVIDER_TYPES as any }, OR: [{ latitude: null }, { longitude: null }] },
-      select: { id: true },
-    });
-    let updated = 0;
-    let firstError: string | null = null;
-    for (const { id } of missing) {
-      try {
-        let h = 0;
-        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-        const [lat, lng] = CITIES[h % CITIES.length];
-        const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04;
-        const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
-        await this.prisma.user.update({ where: { id }, data: { latitude: lat + jLat, longitude: lng + jLng } });
-        updated++;
-      } catch (e: any) {
-        if (!firstError) firstError = e?.message ? String(e.message).slice(0, 300) : String(e).slice(0, 300);
-      }
-    }
-    // ── Diagnostics: prove whether providers/coords/SQL are the issue ─────────
-    const total = await this.prisma.user.count({ where: { userType: { in: PROVIDER_TYPES as any } } });
-    const withCoords = await this.prisma.user.count({ where: { userType: { in: PROVIDER_TYPES as any }, AND: [{ latitude: { not: null } }, { longitude: { not: null } }] } });
-    const sample = await this.prisma.user.findMany({
-      where: { userType: { in: PROVIDER_TYPES as any } },
-      select: { id: true, userType: true, latitude: true, longitude: true, accountStatus: true },
-      take: 4,
-    });
-    let nearTest: any;
-    try {
-      const near = await this.nearbyProviders(-20.1609, 57.5012, undefined);
-      nearTest = { count: near.length, first: near[0] ?? null };
-    } catch (e: any) {
-      nearTest = { error: String(e?.message || e).slice(0, 300) };
-    }
-    return { scanned: missing.length, updated, firstError, total, withCoords, sample, nearTest };
-  }
-
   private async resolveOrg(name: string): Promise<any | null> {
     const n = name.trim();
     if (n.length < 2) return null;

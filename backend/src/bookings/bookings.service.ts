@@ -43,7 +43,9 @@ export class BookingsService implements OnApplicationBootstrap {
    *  (only providers with zero windows are seeded), and is immune to seed crashes. */
   onApplicationBootstrap() {
     setTimeout(() => { void this.backfillAvailability(); }, 8000);
-    setTimeout(() => { void this.backfillCoordinates(); }, 9000);
+    // Run well after deploy seeds settle — seeds add coord-less providers, and a
+    // too-early pass would miss them (provider count grows deploy over deploy).
+    setTimeout(() => { void this.backfillCoordinates(); }, 30000);
   }
 
   /**
@@ -76,18 +78,21 @@ export class BookingsService implements OnApplicationBootstrap {
       if (!missing.length) return;
       let updated = 0;
       for (const { id } of missing) {
-        // Stable hash of the id → a city + a small deterministic jitter so
-        // co-located providers don't all collapse onto the exact same point.
-        let h = 0;
-        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-        const [lat, lng] = CITIES[h % CITIES.length];
-        const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04; // ±0.02° ≈ ±2.2 km
-        const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
-        await this.prisma.user.update({
-          where: { id },
-          data: { latitude: lat + jLat, longitude: lng + jLng },
-        });
-        updated++;
+        // Per-record guard: one bad row must not abort the whole batch.
+        try {
+          // Stable hash of the id → a city + a small deterministic jitter so
+          // co-located providers don't all collapse onto the exact same point.
+          let h = 0;
+          for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+          const [lat, lng] = CITIES[h % CITIES.length];
+          const jLat = (((h >> 4) % 100) / 100 - 0.5) * 0.04; // ±0.02° ≈ ±2.2 km
+          const jLng = (((h >> 8) % 100) / 100 - 0.5) * 0.04;
+          await this.prisma.user.update({
+            where: { id },
+            data: { latitude: lat + jLat, longitude: lng + jLng },
+          });
+          updated++;
+        } catch { /* skip this row, keep going */ }
       }
       this.logger.log(`Coordinate backfill: geo-tagged ${updated} provider(s) lacking GPS`);
     } catch (e: any) {
