@@ -21,6 +21,7 @@ class NavItem {
 const _aiPath = '__ai__';
 const _feedPath = '__feed__';
 const _notifPath = '__notif__';
+const _messagesPath = '__messages__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -52,7 +53,7 @@ const patientNav = <NavItem>[
   NavItem('My Wallet', '/patient/billing', FontAwesomeIcons.wallet, agentMsg: 'Mon solde'),
   NavItem('Video Call', '/patient/video', FontAwesomeIcons.video),
   NavItem('Audio Call', '/patient/audio', FontAwesomeIcons.phone),
-  NavItem('Messages', '/patient/chat', FontAwesomeIcons.comments),
+  NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('My Organizations', '/patient/my-company', FontAwesomeIcons.building),
   NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
@@ -76,7 +77,7 @@ const providerNav = <NavItem>[
   NavItem('Reviews', '/provider/{slug}/reviews', FontAwesomeIcons.star),
   NavItem('Video Call', '/provider/{slug}/video', FontAwesomeIcons.video),
   NavItem('Audio Call', '/provider/{slug}/audio', FontAwesomeIcons.phone),
-  NavItem('Messages', '/provider/{slug}/messages', FontAwesomeIcons.comments),
+  NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('My Health', '/provider/{slug}/my-health', FontAwesomeIcons.heart, agentMsg: 'Mon bilan santé du jour'),
@@ -104,7 +105,7 @@ const adminNav = <NavItem>[
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('Communication', '#', FontAwesomeIcons.comments, divider: true),
   NavItem('Video Call', '/admin/video', FontAwesomeIcons.video),
-  NavItem('Messages', '/admin/messages', FontAwesomeIcons.comments),
+  NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
 ];
 
@@ -134,7 +135,7 @@ const regionalNav = <NavItem>[
   NavItem('Communication', '#', FontAwesomeIcons.comments, divider: true),
   NavItem('Video Call', '/regional/video', FontAwesomeIcons.video),
   NavItem('Audio Call', '/regional/audio', FontAwesomeIcons.phone),
-  NavItem('Messages', '/regional/messages', FontAwesomeIcons.comments),
+  NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('My Health', '/regional/my-health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
@@ -169,3 +170,4 @@ String roleLabel(String? userType) {
 const aiSentinelPath = _aiPath;
 const feedSentinelPath = _feedPath;
 const notifSentinelPath = _notifPath;
+const messagesSentinelPath = _messagesPath;

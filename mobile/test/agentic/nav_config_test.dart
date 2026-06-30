@@ -47,12 +47,17 @@ void main() {
       }
     });
 
-    test('Notifications entries use the native sentinel (never a web path)', () {
+    test('Notifications & Messages entries use native sentinels (never web paths)', () {
       for (final menu in [patientNav, providerNav, adminNav, regionalNav]) {
         final notif = menu.where((i) => i.label == 'Notifications');
         expect(notif, isNotEmpty);
         for (final n in notif) {
           expect(n.path, notifSentinelPath);
+        }
+        final msgs = menu.where((i) => i.label == 'Messages');
+        expect(msgs, isNotEmpty);
+        for (final m in msgs) {
+          expect(m.path, messagesSentinelPath);
         }
       }
     });

@@ -39,6 +39,39 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /conversations — the user's conversations (with last message).
+  static Future<List<Map<String, dynamic>>> conversations() async {
+    try {
+      final res = await ApiClient.instance.get('/conversations');
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /conversations/:id/messages — messages in a thread (recent first).
+  static Future<List<Map<String, dynamic>>> conversationMessages(String id) async {
+    try {
+      final res = await ApiClient.instance.get('/conversations/$id/messages', queryParameters: {'limit': 50});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// POST /conversations/:id/messages — send a message; returns the created row.
+  static Future<Map<String, dynamic>?> sendMessage(String id, String content) async {
+    try {
+      final res = await ApiClient.instance.post('/conversations/$id/messages', data: {'content': content});
+      final d = (res.data as Map?)?['data'];
+      return d is Map ? Map<String, dynamic>.from(d) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// GET /connections — the user's connections (optionally filtered by status).
   static Future<List<Map<String, dynamic>>> connections({String? status}) async {
     try {
