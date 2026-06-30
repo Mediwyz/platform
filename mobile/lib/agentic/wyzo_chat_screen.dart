@@ -8,6 +8,7 @@ import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
 import 'feed_screen.dart';
+import 'health_records_screen.dart';
 import 'messages_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
@@ -476,6 +477,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == feedSentinelPath) { _openFeed(); return; }
         if (it.path == notifSentinelPath) { _openNotifications(); return; }
         if (it.path == messagesSentinelPath) { _openMessages(); return; }
+        if (it.path == recordsSentinelPath) { _openHealthRecords(); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -496,6 +498,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _openMessages() {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagesScreen(loggedIn: _user != null, myId: _user?['id']?.toString())));
+  }
+
+  void _openHealthRecords() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => HealthRecordsScreen(loggedIn: _user != null, myId: _user?['id']?.toString())));
   }
 
   Widget _buildDrawer() {

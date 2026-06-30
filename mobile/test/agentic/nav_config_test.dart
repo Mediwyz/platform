@@ -62,6 +62,13 @@ void main() {
       }
     });
 
+    test('patient Health Records uses the native records sentinel', () {
+      final rec = patientNav.where((i) => i.label == 'Health Records');
+      expect(rec, isNotEmpty);
+      expect(rec.first.path, recordsSentinelPath);
+      expect(rec.first.agentMsg, isNull);
+    });
+
     test('agent-capable patient entries carry an agentMsg', () {
       final byLabel = {for (final i in patientNav) i.label: i};
       expect(byLabel['My Bookings']?.agentMsg, 'Mes rendez-vous');

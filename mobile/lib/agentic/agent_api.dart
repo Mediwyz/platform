@@ -39,6 +39,17 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /users/:id/medical-records — the patient's medical records (recent first).
+  static Future<List<Map<String, dynamic>>> medicalRecords(String userId) async {
+    try {
+      final res = await ApiClient.instance.get('/users/$userId/medical-records', queryParameters: {'limit': 30});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// GET /conversations — the user's conversations (with last message).
   static Future<List<Map<String, dynamic>>> conversations() async {
     try {
