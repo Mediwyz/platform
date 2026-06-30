@@ -51,9 +51,10 @@ jobs:
         # geolocator_android deliberately doesn't declare location permissions —
         # the app must opt in — so inject them before <application> for "near me".
         run: |
-          sed -i 's#<application#<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <application#' \
+          sed -i 's#<application#<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <uses-permission android:name="android.permission.CAMERA"/>\n    <uses-permission android:name="android.permission.RECORD_AUDIO"/>\n    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>\n    <application#' \
             android/app/src/main/AndroidManifest.xml
           grep -q ACCESS_FINE_LOCATION android/app/src/main/AndroidManifest.xml
+          grep -q "permission.CAMERA" android/app/src/main/AndroidManifest.xml
 
       - name: Tune Gradle/Kotlin for CI memory
         # `flutter create` regenerates android/ (the dir is gitignored), so this

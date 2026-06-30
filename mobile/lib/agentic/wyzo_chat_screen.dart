@@ -8,6 +8,7 @@ import '../theme/mediwyz_theme.dart';
 import 'admin_users_screen.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
+import 'call_screen.dart';
 import 'dashboard_screen.dart';
 import 'feed_screen.dart';
 import 'health_records_screen.dart';
@@ -488,6 +489,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == provReviewsSentinelPath) { _openProviderReviews(); return; }
         if (it.path == adminUsersSentinelPath) { _openAdminUsers(''); return; }
         if (it.path == adminValidationSentinelPath) { _openAdminUsers('pending'); return; }
+        if (it.path == videoSentinelPath) { _openCall(true); return; }
+        if (it.path == audioSentinelPath) { _openCall(false); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -524,6 +527,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _openAdminUsers(String status) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => AdminUsersScreen(loggedIn: _user != null, initialStatus: status)));
+  }
+
+  void _openCall(bool video) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => CallEntryScreen(video: video, user: _user)));
   }
 
   void _openDashboard() {

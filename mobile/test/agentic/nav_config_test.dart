@@ -82,6 +82,14 @@ void main() {
       expect(byLabel['Reviews']?.path, provReviewsSentinelPath);
     });
 
+    test('Video/Audio Call entries use native call sentinels', () {
+      for (final menu in [patientNav, providerNav]) {
+        final byLabel = {for (final i in menu) i.label: i};
+        expect(byLabel['Video Call']?.path, videoSentinelPath);
+        expect(byLabel['Audio Call']?.path, audioSentinelPath);
+      }
+    });
+
     test('admin & regional Users/Validation use native sentinels', () {
       for (final menu in [adminNav, regionalNav]) {
         final byLabel = {for (final i in menu) i.label: i};

@@ -29,6 +29,8 @@ const _provRequestsPath = '__provrequests__';
 const _provReviewsPath = '__provreviews__';
 const _adminUsersPath = '__adminusers__';
 const _adminValidationPath = '__adminvalidation__';
+const _videoPath = '__video__';
+const _audioPath = '__audio__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -59,8 +61,8 @@ const patientNav = <NavItem>[
   NavItem('My Orders', '/patient/orders', FontAwesomeIcons.receipt, agentMsg: 'Mes commandes'),
   NavItem('My Prescriptions', '/patient/prescriptions', FontAwesomeIcons.filePrescription, agentMsg: 'Mes ordonnances'),
   NavItem('My Wallet', '/patient/billing', FontAwesomeIcons.wallet, agentMsg: 'Mon solde'),
-  NavItem('Video Call', '/patient/video', FontAwesomeIcons.video),
-  NavItem('Audio Call', '/patient/audio', FontAwesomeIcons.phone),
+  NavItem('Video Call', _videoPath, FontAwesomeIcons.video),
+  NavItem('Audio Call', _audioPath, FontAwesomeIcons.phone),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('My Organizations', '/patient/my-company', FontAwesomeIcons.building),
@@ -83,8 +85,8 @@ const providerNav = <NavItem>[
   NavItem('Booking Requests', _provRequestsPath, FontAwesomeIcons.inbox),
   NavItem('Bookings', _provBookingsPath, FontAwesomeIcons.calendarCheck),
   NavItem('Reviews', _provReviewsPath, FontAwesomeIcons.star),
-  NavItem('Video Call', '/provider/{slug}/video', FontAwesomeIcons.video),
-  NavItem('Audio Call', '/provider/{slug}/audio', FontAwesomeIcons.phone),
+  NavItem('Video Call', _videoPath, FontAwesomeIcons.video),
+  NavItem('Audio Call', _audioPath, FontAwesomeIcons.phone),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
@@ -112,7 +114,7 @@ const adminNav = <NavItem>[
   NavItem('Workflow Audit', '/admin/workflows/audit', FontAwesomeIcons.clockRotateLeft),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('Communication', '#', FontAwesomeIcons.comments, divider: true),
-  NavItem('Video Call', '/admin/video', FontAwesomeIcons.video),
+  NavItem('Video Call', _videoPath, FontAwesomeIcons.video),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
 ];
@@ -141,8 +143,8 @@ const regionalNav = <NavItem>[
   NavItem('AI Knowledge', '/regional/clinical-knowledge', FontAwesomeIcons.book),
   NavItem('Billing', '/regional/billing', FontAwesomeIcons.moneyBillWave),
   NavItem('Communication', '#', FontAwesomeIcons.comments, divider: true),
-  NavItem('Video Call', '/regional/video', FontAwesomeIcons.video),
-  NavItem('Audio Call', '/regional/audio', FontAwesomeIcons.phone),
+  NavItem('Video Call', _videoPath, FontAwesomeIcons.video),
+  NavItem('Audio Call', _audioPath, FontAwesomeIcons.phone),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('My Health', '/regional/my-health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
@@ -186,3 +188,5 @@ const provRequestsSentinelPath = _provRequestsPath;
 const provReviewsSentinelPath = _provReviewsPath;
 const adminUsersSentinelPath = _adminUsersPath;
 const adminValidationSentinelPath = _adminValidationPath;
+const videoSentinelPath = _videoPath;
+const audioSentinelPath = _audioPath;
