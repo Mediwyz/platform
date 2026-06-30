@@ -12,6 +12,7 @@ import 'call_screen.dart';
 import 'dashboard_screen.dart';
 import 'feed_screen.dart';
 import 'health_records_screen.dart';
+import 'insurance_claims_screen.dart';
 import 'messages_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
@@ -491,6 +492,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == adminValidationSentinelPath) { _openAdminUsers('pending'); return; }
         if (it.path == videoSentinelPath) { _openCall(true); return; }
         if (it.path == audioSentinelPath) { _openCall(false); return; }
+        if (it.path == insClaimsSentinelPath) { Navigator.of(context).push(MaterialPageRoute(builder: (_) => InsuranceClaimsScreen(loggedIn: _user != null))); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },

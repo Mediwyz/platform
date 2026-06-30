@@ -21,6 +21,15 @@ void main() {
       expect(navForRole('regional_admin'), same(regionalNav));
     });
 
+    test('insurance roles get the insurance menu', () {
+      expect(navForRole('INSURANCE_REP'), same(insuranceNav));
+      expect(navForRole('CORPORATE_ADMIN'), same(insuranceNav));
+      expect(roleLabel('INSURANCE_REP'), 'Assureur');
+      final claims = insuranceNav.where((i) => i.label == 'Claims');
+      expect(claims, isNotEmpty);
+      expect(claims.first.path, insClaimsSentinelPath);
+    });
+
     test('guests / unknown roles default to the patient menu', () {
       expect(navForRole(null), same(patientNav));
       expect(navForRole(''), same(patientNav));

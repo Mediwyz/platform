@@ -39,6 +39,27 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /corporate/insurance/claims?as=owner — claims for the insurance company.
+  static Future<List<Map<String, dynamic>>> insuranceClaims() async {
+    try {
+      final res = await ApiClient.instance.get('/corporate/insurance/claims', queryParameters: {'as': 'owner'});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// POST /corporate/insurance/claims/:id/approve — approve + pay out a claim.
+  static Future<bool> approveClaim(String id) async {
+    try {
+      final res = await ApiClient.instance.post('/corporate/insurance/claims/$id/approve', data: {});
+      return (res.data as Map?)?['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
     try {

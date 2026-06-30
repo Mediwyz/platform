@@ -31,6 +31,7 @@ const _adminUsersPath = '__adminusers__';
 const _adminValidationPath = '__adminvalidation__';
 const _videoPath = '__video__';
 const _audioPath = '__audio__';
+const _insClaimsPath = '__insclaims__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -153,6 +154,25 @@ const regionalNav = <NavItem>[
   ..._searchSection,
 ];
 
+// ── Insurance (INSURANCE_REP / CORPORATE_ADMIN) ──────────────────────────────
+const insuranceNav = <NavItem>[
+  NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
+  NavItem('Dashboard', '/insurance', FontAwesomeIcons.house),
+  NavItem('Members', '/insurance/members', FontAwesomeIcons.users),
+  NavItem('Clients', '/insurance/clients', FontAwesomeIcons.userGroup),
+  NavItem('Claims', _insClaimsPath, FontAwesomeIcons.fileInvoiceDollar),
+  NavItem('Pre-authorizations', '/insurance/pre-auths', FontAwesomeIcons.shieldHalved),
+  NavItem('Plans', '/insurance/plans', FontAwesomeIcons.crown),
+  NavItem('Portfolio', '/insurance/portfolio', FontAwesomeIcons.briefcase),
+  NavItem('Analytics', '/insurance/analytics', FontAwesomeIcons.chartLine),
+  NavItem('Member Payments', '/insurance/member-payments', FontAwesomeIcons.moneyBillWave),
+  NavItem('Billing', '/insurance/billing', FontAwesomeIcons.fileInvoice),
+  NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
+  NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
+  NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
+  NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
+];
+
 const _providerTypes = {
   'DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER',
   'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST',
@@ -163,6 +183,7 @@ List<NavItem> navForRole(String? userType) {
   final t = (userType ?? '').toUpperCase();
   if (t == 'REGIONAL_ADMIN') return regionalNav;
   if (t == 'ADMIN' || t == 'SUPER_ADMIN') return adminNav;
+  if (t == 'INSURANCE_REP' || t == 'CORPORATE_ADMIN' || t == 'INSURANCE') return insuranceNav;
   if (_providerTypes.contains(t)) return providerNav;
   return patientNav;
 }
@@ -172,6 +193,7 @@ String roleLabel(String? userType) {
   final t = (userType ?? '').toUpperCase();
   if (t == 'REGIONAL_ADMIN') return 'Admin régional';
   if (t == 'ADMIN' || t == 'SUPER_ADMIN') return 'Administrateur';
+  if (t == 'INSURANCE_REP' || t == 'CORPORATE_ADMIN' || t == 'INSURANCE') return 'Assureur';
   if (_providerTypes.contains(t)) return 'Prestataire';
   if (t.isEmpty) return 'Invité';
   return 'Membre';
@@ -190,3 +212,4 @@ const adminUsersSentinelPath = _adminUsersPath;
 const adminValidationSentinelPath = _adminValidationPath;
 const videoSentinelPath = _videoPath;
 const audioSentinelPath = _audioPath;
+const insClaimsSentinelPath = _insClaimsPath;
