@@ -7,6 +7,7 @@ import '../config.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
+import 'feed_screen.dart';
 import 'nav_config.dart';
 
 /// The whole app: a single agentic chat over the deployed NestJS backend.
@@ -473,14 +474,23 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         ]),
       );
     }
-    final isAi = it.path == aiSentinelPath;
     return ListTile(
       leading: SizedBox(width: 22, child: Center(child: FaIcon(it.icon, size: 17, color: MediWyzColors.teal))),
       title: Text(it.label, style: const TextStyle(fontSize: 13.5, color: MediWyzColors.navy)),
       dense: true,
       visualDensity: const VisualDensity(vertical: -2),
-      onTap: () { Navigator.of(context).pop(); if (!isAi) _openWeb(it.path); },
+      onTap: () {
+        Navigator.of(context).pop();
+        if (it.path == aiSentinelPath) return;           // already here (the chat)
+        if (it.path == feedSentinelPath) { _openFeed(); return; }
+        if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
+        _openWeb(it.path);                                // web-only page → deep-link
+      },
     );
+  }
+
+  void _openFeed() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => FeedScreen(loggedIn: _user != null)));
   }
 
   Widget _buildDrawer() {

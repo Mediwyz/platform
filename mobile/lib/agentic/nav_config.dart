@@ -11,36 +11,44 @@ class NavItem {
   final String path;
   final IconData icon;
   final bool divider;
-  const NavItem(this.label, this.path, this.icon, {this.divider = false});
+
+  /// If set, tapping sends this message to the agent IN-APP instead of opening
+  /// the web page — used for everything the Wyzo agent can already do natively.
+  final String? agentMsg;
+  const NavItem(this.label, this.path, this.icon, {this.divider = false, this.agentMsg});
 }
 
 const _aiPath = '__ai__';
+const _feedPath = '__feed__';
 
-// ── Shared "Search & Browse" section (patient, provider, regional) ───────────
+// ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
   NavItem('Recherche', '#', FontAwesomeIcons.magnifyingGlass, divider: true),
-  NavItem('Find Doctors', '/search/doctors', FontAwesomeIcons.userDoctor),
-  NavItem('Find Nurses', '/search/nurses', FontAwesomeIcons.userNurse),
-  NavItem('Find Childcare', '/search/childcare', FontAwesomeIcons.baby),
-  NavItem('Find Caregivers', '/search/caregivers', FontAwesomeIcons.handHoldingHeart),
-  NavItem('Find Physio', '/search/physiotherapists', FontAwesomeIcons.personWalking),
-  NavItem('Find Dentists', '/search/dentists', FontAwesomeIcons.tooth),
-  NavItem('Find Eye Care', '/search/optometrists', FontAwesomeIcons.eye),
-  NavItem('Find Nutrition', '/search/nutritionists', FontAwesomeIcons.appleWhole),
-  NavItem('Find Lab Tests', '/search/lab', FontAwesomeIcons.flask),
-  NavItem('Emergency Services', '/search/emergency', FontAwesomeIcons.truckMedical),
-  NavItem('Buy Medicines', '/search/medicines', FontAwesomeIcons.capsules),
-  NavItem('Find Insurance', '/search/insurance', FontAwesomeIcons.shieldHalved),
+  NavItem('Find Doctors', '/search/doctors', FontAwesomeIcons.userDoctor, agentMsg: 'Trouver un médecin'),
+  NavItem('Find Nurses', '/search/nurses', FontAwesomeIcons.userNurse, agentMsg: 'Trouver une infirmière'),
+  NavItem('Find Childcare', '/search/childcare', FontAwesomeIcons.baby, agentMsg: "Trouver une garde d'enfant"),
+  NavItem('Find Caregivers', '/search/caregivers', FontAwesomeIcons.handHoldingHeart, agentMsg: 'Trouver un aide-soignant'),
+  NavItem('Find Physio', '/search/physiotherapists', FontAwesomeIcons.personWalking, agentMsg: 'Trouver un physiothérapeute'),
+  NavItem('Find Dentists', '/search/dentists', FontAwesomeIcons.tooth, agentMsg: 'Trouver un dentiste'),
+  NavItem('Find Eye Care', '/search/optometrists', FontAwesomeIcons.eye, agentMsg: 'Trouver un optométriste'),
+  NavItem('Find Nutrition', '/search/nutritionists', FontAwesomeIcons.appleWhole, agentMsg: 'Trouver un nutritionniste'),
+  NavItem('Find Lab Tests', '/search/lab', FontAwesomeIcons.flask, agentMsg: 'Trouver un laboratoire'),
+  NavItem('Emergency Services', '/search/emergency', FontAwesomeIcons.truckMedical, agentMsg: "J'ai besoin d'une ambulance"),
+  NavItem('Buy Medicines', '/search/medicines', FontAwesomeIcons.capsules, agentMsg: 'Acheter un médicament'),
+  NavItem('Find Insurance', '/search/insurance', FontAwesomeIcons.shieldHalved, agentMsg: 'Trouver une assurance'),
 ];
 
 // ── Patient / Member ─────────────────────────────────────────────────────────
 const patientNav = <NavItem>[
-  NavItem('Feed', '/patient/feed', FontAwesomeIcons.newspaper),
+  NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', '/patient', FontAwesomeIcons.house),
-  NavItem('My Bookings', '/patient/bookings', FontAwesomeIcons.calendarCheck),
+  NavItem('My Bookings', '/patient/bookings', FontAwesomeIcons.calendarCheck, agentMsg: 'Mes rendez-vous'),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
-  NavItem('My Health', '/patient/health', FontAwesomeIcons.heartPulse),
-  NavItem('Billing', '/patient/billing', FontAwesomeIcons.moneyBillWave),
+  NavItem('My Health', '/patient/health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
+  NavItem('Billing', '/patient/billing', FontAwesomeIcons.moneyBillWave, agentMsg: 'Mes factures'),
+  NavItem('My Orders', '/patient/orders', FontAwesomeIcons.receipt, agentMsg: 'Mes commandes'),
+  NavItem('My Prescriptions', '/patient/prescriptions', FontAwesomeIcons.filePrescription, agentMsg: 'Mes ordonnances'),
+  NavItem('My Wallet', '/patient/billing', FontAwesomeIcons.wallet, agentMsg: 'Mon solde'),
   NavItem('Video Call', '/patient/video', FontAwesomeIcons.video),
   NavItem('Audio Call', '/patient/audio', FontAwesomeIcons.phone),
   NavItem('Messages', '/patient/chat', FontAwesomeIcons.comments),
@@ -52,7 +60,7 @@ const patientNav = <NavItem>[
 
 // ── Provider (DOCTOR/NURSE/…); {slug} substituted at render ──────────────────
 const providerNav = <NavItem>[
-  NavItem('Feed', '/provider/{slug}/feed', FontAwesomeIcons.rss),
+  NavItem('Feed', _feedPath, FontAwesomeIcons.rss),
   NavItem('Dashboard', '/provider/{slug}', FontAwesomeIcons.house),
   NavItem('My Practice', '/provider/{slug}/practice', FontAwesomeIcons.briefcaseMedical),
   NavItem('Billing', '/provider/{slug}/billing', FontAwesomeIcons.moneyBillWave),
@@ -70,13 +78,13 @@ const providerNav = <NavItem>[
   NavItem('Messages', '/provider/{slug}/messages', FontAwesomeIcons.comments),
   NavItem('Notifications', '/provider/{slug}/notifications', FontAwesomeIcons.bell),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
-  NavItem('My Health', '/provider/{slug}/my-health', FontAwesomeIcons.heart),
+  NavItem('My Health', '/provider/{slug}/my-health', FontAwesomeIcons.heart, agentMsg: 'Mon bilan santé du jour'),
   NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
 ];
 
 // ── Admin / Super-admin ──────────────────────────────────────────────────────
 const adminNav = <NavItem>[
-  NavItem('Feed', '/admin/feed', FontAwesomeIcons.newspaper),
+  NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', '/admin', FontAwesomeIcons.house),
   NavItem('Administration', '#', FontAwesomeIcons.gear, divider: true),
   NavItem('Users', '/admin/users', FontAwesomeIcons.users),
@@ -101,7 +109,7 @@ const adminNav = <NavItem>[
 
 // ── Regional admin ───────────────────────────────────────────────────────────
 const regionalNav = <NavItem>[
-  NavItem('Feed', '/regional/feed', FontAwesomeIcons.newspaper),
+  NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', '/regional', FontAwesomeIcons.house),
   NavItem('Administration', '#', FontAwesomeIcons.gear, divider: true),
   NavItem('Users', '/regional/users', FontAwesomeIcons.users),
@@ -127,7 +135,7 @@ const regionalNav = <NavItem>[
   NavItem('Audio Call', '/regional/audio', FontAwesomeIcons.phone),
   NavItem('Messages', '/regional/messages', FontAwesomeIcons.comments),
   NavItem('Notifications', '/regional/notifications', FontAwesomeIcons.bell),
-  NavItem('My Health', '/regional/my-health', FontAwesomeIcons.heartPulse),
+  NavItem('My Health', '/regional/my-health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
   ..._searchSection,
@@ -158,3 +166,4 @@ String roleLabel(String? userType) {
 }
 
 const aiSentinelPath = _aiPath;
+const feedSentinelPath = _feedPath;

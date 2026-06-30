@@ -24,6 +24,21 @@ class AgentApi {
     return Map<String, dynamic>.from((body?['data'] as Map?) ?? const {});
   }
 
+  /// GET /posts — the social feed (public; recent first).
+  static Future<List<Map<String, dynamic>>> feed({int page = 1}) async {
+    final res = await ApiClient.instance.get('/posts', queryParameters: {'page': page, 'limit': 20, 'sort': 'recent'});
+    final data = (res.data as Map?)?['data'] as Map?;
+    final posts = data?['posts'] as List?;
+    return posts?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+  }
+
+  /// POST /posts/:id/like — toggle a reaction (auth). Returns {liked, likeCount}.
+  static Future<Map<String, dynamic>> likePost(String id) async {
+    final res = await ApiClient.instance.post('/posts/$id/like', data: {'type': 'like'});
+    final m = Map<String, dynamic>.from((res.data as Map?) ?? const {});
+    return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
+  }
+
   /// GET /users/:id/wallet — current balance (for the header chip).
   static Future<Map<String, dynamic>?> getWallet(String userId) async {
     try {
