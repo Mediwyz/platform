@@ -274,6 +274,36 @@ class AgentApi {
     return Map<String, dynamic>.from((res.data as Map?) ?? const {});
   }
 
+  /// POST /auth/forgot-password/question — returns the account's security question.
+  static Future<String?> forgotPasswordQuestion(String email) async {
+    try {
+      final res = await ApiClient.instance.post('/auth/forgot-password/question', data: {'email': email});
+      return (res.data as Map?)?['question']?.toString();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// POST /auth/forgot-password/verify — verify the answer, get a reset token.
+  static Future<String?> forgotPasswordVerify(String email, String answer) async {
+    try {
+      final res = await ApiClient.instance.post('/auth/forgot-password/verify', data: {'email': email, 'answer': answer});
+      final m = res.data as Map?;
+      if (m?['success'] == true) return m?['resetToken']?.toString();
+    } catch (_) {/* */}
+    return null;
+  }
+
+  /// POST /auth/reset-password — set a new password with the verified token.
+  static Future<bool> resetPassword(String token, String password) async {
+    try {
+      final res = await ApiClient.instance.post('/auth/reset-password', data: {'token': token, 'password': password});
+      return (res.data as Map?)?['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// POST /auth/logout — clears the auth cookies (start fresh / test guest flow).
   static Future<void> logout() async {
     try { await ApiClient.instance.post('/auth/logout'); } catch (_) { /* */ }
