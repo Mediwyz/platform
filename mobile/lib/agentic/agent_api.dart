@@ -39,6 +39,28 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
+  static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
+    try {
+      final qp = {'limit': 40, if (status != null) 'status': status};
+      final res = await ApiClient.instance.get('/admin/accounts', queryParameters: qp);
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// PATCH /admin/accounts — approve / suspend / activate a user account.
+  static Future<bool> adminAccountAction(String userId, String action) async {
+    try {
+      final res = await ApiClient.instance.patch('/admin/accounts', data: {'userId': userId, 'action': action});
+      return (res.data as Map?)?['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// GET /providers/:id/reviews — a provider's reviews + average rating.
   static Future<Map<String, dynamic>> providerReviews(String providerId) async {
     try {

@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../theme/mediwyz_theme.dart';
+import 'admin_users_screen.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
 import 'dashboard_screen.dart';
@@ -485,6 +486,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == provBookingsSentinelPath) { _openProviderBookings(''); return; }
         if (it.path == provRequestsSentinelPath) { _openProviderBookings('pending'); return; }
         if (it.path == provReviewsSentinelPath) { _openProviderReviews(); return; }
+        if (it.path == adminUsersSentinelPath) { _openAdminUsers(''); return; }
+        if (it.path == adminValidationSentinelPath) { _openAdminUsers('pending'); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -517,6 +520,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _openProviderReviews() {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderReviewsScreen(loggedIn: _user != null, myId: _user?['id']?.toString())));
+  }
+
+  void _openAdminUsers(String status) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AdminUsersScreen(loggedIn: _user != null, initialStatus: status)));
   }
 
   void _openDashboard() {

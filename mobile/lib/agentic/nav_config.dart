@@ -27,6 +27,8 @@ const _dashboardPath = '__dashboard__';
 const _provBookingsPath = '__provbookings__';
 const _provRequestsPath = '__provrequests__';
 const _provReviewsPath = '__provreviews__';
+const _adminUsersPath = '__adminusers__';
+const _adminValidationPath = '__adminvalidation__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -95,8 +97,8 @@ const adminNav = <NavItem>[
   NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', '/admin', FontAwesomeIcons.house),
   NavItem('Administration', '#', FontAwesomeIcons.gear, divider: true),
-  NavItem('Users', '/admin/users', FontAwesomeIcons.users),
-  NavItem('Validation', '/admin/validation', FontAwesomeIcons.clipboardCheck),
+  NavItem('Users', _adminUsersPath, FontAwesomeIcons.users),
+  NavItem('Validation', _adminValidationPath, FontAwesomeIcons.clipboardCheck),
   NavItem('Security', '/admin/security', FontAwesomeIcons.shieldHalved),
   NavItem('Content', '/admin/content', FontAwesomeIcons.fileLines),
   NavItem('Role Config', '/admin/role-config', FontAwesomeIcons.toggleOn),
@@ -120,14 +122,14 @@ const regionalNav = <NavItem>[
   NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', '/regional', FontAwesomeIcons.house),
   NavItem('Administration', '#', FontAwesomeIcons.gear, divider: true),
-  NavItem('Users', '/regional/users', FontAwesomeIcons.users),
+  NavItem('Users', _adminUsersPath, FontAwesomeIcons.users),
   NavItem('Content', '/regional/content', FontAwesomeIcons.fileLines),
   NavItem('Security', '/regional/security', FontAwesomeIcons.shieldHalved),
   NavItem('Role Config', '/regional/role-config', FontAwesomeIcons.toggleOn),
   NavItem('Documents', '/regional/required-documents', FontAwesomeIcons.clipboardList),
   NavItem('Plans', '/regional/subscriptions', FontAwesomeIcons.crown),
   NavItem('Providers', '#', FontAwesomeIcons.usersGear, divider: true),
-  NavItem('Validation', '/regional/validation', FontAwesomeIcons.clipboardCheck),
+  NavItem('Validation', _adminValidationPath, FontAwesomeIcons.clipboardCheck),
   NavItem('Provider Roles', '/regional/roles', FontAwesomeIcons.usersGear),
   NavItem('Organisation Categories', '/regional/org-categories', FontAwesomeIcons.building),
   NavItem('Role Requests', '/regional/role-requests', FontAwesomeIcons.inbox),
@@ -182,3 +184,5 @@ const dashboardSentinelPath = _dashboardPath;
 const provBookingsSentinelPath = _provBookingsPath;
 const provRequestsSentinelPath = _provRequestsPath;
 const provReviewsSentinelPath = _provReviewsPath;
+const adminUsersSentinelPath = _adminUsersPath;
+const adminValidationSentinelPath = _adminValidationPath;

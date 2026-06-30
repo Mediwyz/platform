@@ -82,6 +82,14 @@ void main() {
       expect(byLabel['Reviews']?.path, provReviewsSentinelPath);
     });
 
+    test('admin & regional Users/Validation use native sentinels', () {
+      for (final menu in [adminNav, regionalNav]) {
+        final byLabel = {for (final i in menu) i.label: i};
+        expect(byLabel['Users']?.path, adminUsersSentinelPath);
+        expect(byLabel['Validation']?.path, adminValidationSentinelPath);
+      }
+    });
+
     test('agent-capable patient entries carry an agentMsg', () {
       final byLabel = {for (final i in patientNav) i.label: i};
       expect(byLabel['My Bookings']?.agentMsg, 'Mes rendez-vous');
