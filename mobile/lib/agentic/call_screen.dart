@@ -117,11 +117,21 @@ class _CallScreenState extends State<CallScreen> {
   void _connectSignaling() {
     final s = io.io(
       AppConfig.socketUrl,
-      io.OptionBuilder().setTransports(['websocket']).disableAutoConnect().enableForceNew().build(),
+      io.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .enableForceNew()
+          .enableReconnection()
+          .setReconnectionAttempts(20)
+          .setReconnectionDelay(1000)
+          .setReconnectionDelayMax(5000)
+          .build(),
     );
     _socket = s;
+    // Fires on the initial connect AND on every reconnect → always (re)join the
+    // room so a dropped socket recovers and peers find each other again.
     s.onConnect((_) {
-      if (mounted) setState(() => _status = 'En attente du correspondant…');
+      if (mounted) setState(() => _status = _remoteOn ? 'Connecté' : 'En attente du correspondant…');
       s.emit('join-room', {
         'roomId': widget.roomId,
         'userId': widget.user?['id']?.toString() ?? 'guest-${DateTime.now().millisecondsSinceEpoch}',
@@ -161,6 +171,13 @@ class _CallScreenState extends State<CallScreen> {
       }
     });
     s.on('user-left', (_) { if (mounted) setState(() { _remoteOn = false; _status = 'Le correspondant a quitté.'; }); });
+    // On a dropped socket, tear down the stale peer connection so the next
+    // (re)connect renegotiates a fresh one instead of reusing a failed pc.
+    s.onDisconnect((_) async {
+      if (mounted) setState(() { _status = 'Reconnexion…'; _remoteOn = false; });
+      try { await _pc?.close(); } catch (_) {}
+      _pc = null; _peerId = null;
+    });
     s.connect();
   }
 
