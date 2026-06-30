@@ -52,6 +52,9 @@ dependencies:
   cached_network_image: ^3.3.1
   intl: ^0.19.0
 
+  # Exact Font Awesome icons to match the web's react-icons/fa sidebar + header.
+  font_awesome_flutter: ^10.7.0
+
   # Open external URLs (e.g. prescription PDF view in the system browser)
   url_launcher: ^6.3.0
 

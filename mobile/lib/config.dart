@@ -36,6 +36,10 @@ class AppConfig {
     return _host();
   }
 
+  /// Web app base URL (no /api) — used to deep-link role menu entries into the
+  /// web pages the lean agentic app doesn't render natively.
+  static String get webBase => socketUrl;
+
   /// App display name.
   static const String appName = 'MediWyz';
 

@@ -24,6 +24,16 @@ class AgentApi {
     return Map<String, dynamic>.from((body?['data'] as Map?) ?? const {});
   }
 
+  /// GET /users/:id/wallet — current balance (for the header chip).
+  static Future<Map<String, dynamic>?> getWallet(String userId) async {
+    try {
+      final res = await ApiClient.instance.get('/users/$userId/wallet');
+      final b = res.data as Map?;
+      if (b?['data'] != null) return Map<String, dynamic>.from(b!['data'] as Map);
+    } catch (_) {/* ignore */}
+    return null;
+  }
+
   /// POST /users/:id/wallet/topup — mock-channel top-up (auto-completes).
   static Future<Map<String, dynamic>> topUpWallet(String userId, int amount) async {
     final res = await ApiClient.instance.post('/users/$userId/wallet/topup', data: {

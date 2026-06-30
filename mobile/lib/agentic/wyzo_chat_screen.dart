@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../config.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
+import 'nav_config.dart';
 
 /// The whole app: a single agentic chat over the deployed NestJS backend.
 /// Animated hero (logo + cross-fading background) on top, conversation below.
@@ -60,8 +64,9 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   Timer? _bgTimer;
   late final AnimationController _kenBurns;
 
-  // auth state (for the indicator)
+  // auth state (for the indicator) + wallet balance (header chip)
   Map<String, dynamic>? _user;
+  String? _walletText;
 
   // booking state
   Map<String, dynamic>? _provider, _service;
@@ -76,7 +81,14 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     super.initState();
     _kenBurns = AnimationController(vsync: this, duration: const Duration(seconds: 7))..repeat(reverse: true);
     _bgTimer = Timer.periodic(const Duration(seconds: 6), (_) => setState(() => _bg = (_bg + 1) % _heroImages.length));
-    AgentApi.me().then((u) { if (mounted) setState(() => _user = u); });
+    AgentApi.me().then((u) { if (mounted) { setState(() => _user = u); _refreshWallet(); } });
+  }
+
+  Future<void> _refreshWallet() async {
+    final uid = _user?['id']?.toString();
+    if (uid == null) { if (mounted) setState(() => _walletText = null); return; }
+    final w = await AgentApi.getWallet(uid);
+    if (mounted && w != null) setState(() => _walletText = '${w['currency'] ?? 'Rs'} ${w['balance'] ?? 0}');
   }
 
   void _authTap() {
@@ -422,39 +434,64 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   }
 
   // ── Sidebar (drawer) ───────────────────────────────────────────────────────
-  void _menuSend(String msg) { Navigator.of(context).pop(); _send(msg); }
-
   Future<void> _gotoLogin() async {
     Navigator.of(context).pop();
     final ok = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const LoginScreen()));
-    if (ok == true) { final u = await AgentApi.me(); if (mounted) setState(() => _user = u); }
+    if (ok == true) { final u = await AgentApi.me(); if (mounted) { setState(() => _user = u); _refreshWallet(); } }
   }
 
   Future<void> _gotoSignup() async {
     Navigator.of(context).pop();
     final ok = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const SignupScreen()));
-    if (ok == true) { final u = await AgentApi.me(); if (mounted) setState(() => _user = u); }
+    if (ok == true) { final u = await AgentApi.me(); if (mounted) { setState(() => _user = u); _refreshWallet(); } }
   }
 
   Future<void> _logoutFromMenu() async {
     Navigator.of(context).pop();
     await AgentApi.logout();
-    if (mounted) setState(() => _user = null);
+    if (mounted) setState(() { _user = null; _walletText = null; });
   }
 
-  Widget _drawerItem(IconData icon, String label, VoidCallback onTap) => ListTile(
-        leading: Icon(icon, color: MediWyzColors.teal, size: 22),
-        title: Text(label, style: const TextStyle(fontSize: 14, color: MediWyzColors.navy)),
-        dense: true,
-        onTap: onTap,
+  /// Open a web route (deep-link) the lean app doesn't render natively.
+  Future<void> _openWeb(String path) async {
+    final slug = (_user?['slug'] ?? _user?['id'] ?? '').toString();
+    final p = path.replaceAll('{slug}', slug);
+    final url = '${AppConfig.webBase}$p';
+    try {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } catch (_) {/* ignore launch failure */}
+  }
+
+  Widget _navTile(NavItem it) {
+    if (it.divider) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+        child: Row(children: [
+          FaIcon(it.icon, size: 11, color: Colors.black38),
+          const SizedBox(width: 6),
+          Text(it.label.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.black38, letterSpacing: 0.4)),
+        ]),
       );
+    }
+    final isAi = it.path == aiSentinelPath;
+    return ListTile(
+      leading: SizedBox(width: 22, child: Center(child: FaIcon(it.icon, size: 17, color: MediWyzColors.teal))),
+      title: Text(it.label, style: const TextStyle(fontSize: 13.5, color: MediWyzColors.navy)),
+      dense: true,
+      visualDensity: const VisualDensity(vertical: -2),
+      onTap: () { Navigator.of(context).pop(); if (!isAi) _openWeb(it.path); },
+    );
+  }
 
   Widget _buildDrawer() {
+    final userType = _user?['userType']?.toString();
+    final items = navForRole(userType);
     return Drawer(
       child: SafeArea(
-        child: ListView(padding: EdgeInsets.zero, children: [
-          // Header
+        child: Column(children: [
+          // Header — logo + signed-in user + role
           Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(gradient: LinearGradient(colors: [MediWyzColors.navy, MediWyzColors.teal])),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -468,28 +505,20 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
                 Icon(_user != null ? Icons.person : Icons.person_outline, color: Colors.white70, size: 16),
                 const SizedBox(width: 6),
                 Expanded(child: Text(
-                  _user != null ? 'Connecté : ${_user!['firstName'] ?? ''}' : 'Invité — non connecté',
+                  _user != null ? '${_user!['firstName'] ?? ''} · ${roleLabel(userType)}' : 'Invité — non connecté',
                   style: const TextStyle(color: Colors.white70, fontSize: 12), overflow: TextOverflow.ellipsis)),
               ]),
             ]),
           ),
-          _drawerItem(Icons.auto_awesome, 'Assistant Wyzo', () => Navigator.of(context).pop()),
-          const Divider(height: 1),
-          _drawerItem(Icons.search, 'Trouver un médecin', () => _menuSend('Trouver un médecin')),
-          _drawerItem(Icons.near_me, 'Près de moi', () => _menuSend('un médecin près de moi')),
-          _drawerItem(Icons.local_pharmacy, 'Health Shop', () => _menuSend('Acheter un médicament')),
-          _drawerItem(Icons.monitor_heart, 'Suivi santé', () => _menuSend('Mon bilan santé du jour')),
-          const Divider(height: 1),
-          _drawerItem(Icons.calendar_month, 'Mes rendez-vous', () => _menuSend('Mes rendez-vous')),
-          _drawerItem(Icons.receipt_long, 'Mes commandes', () => _menuSend('Mes commandes')),
-          _drawerItem(Icons.description, 'Mes ordonnances', () => _menuSend('Mes ordonnances')),
-          _drawerItem(Icons.account_balance_wallet, 'Mon portefeuille', () => _menuSend('Mon solde')),
-          const Divider(height: 1),
-          if (_user == null) ...[
-            _drawerItem(Icons.login, 'Se connecter', _gotoLogin),
-            _drawerItem(Icons.person_add, 'Créer un compte', _gotoSignup),
-          ] else
-            _drawerItem(Icons.logout, 'Se déconnecter', _logoutFromMenu),
+          Expanded(child: ListView(padding: const EdgeInsets.only(top: 4, bottom: 12), children: [
+            for (final it in items) _navTile(it),
+            const Divider(height: 16),
+            if (_user == null) ...[
+              ListTile(leading: const SizedBox(width: 22, child: Center(child: FaIcon(FontAwesomeIcons.rightToBracket, size: 17, color: MediWyzColors.teal))), title: const Text('Se connecter', style: TextStyle(fontSize: 13.5, color: MediWyzColors.navy)), dense: true, onTap: _gotoLogin),
+              ListTile(leading: const SizedBox(width: 22, child: Center(child: FaIcon(FontAwesomeIcons.userPlus, size: 17, color: MediWyzColors.teal))), title: const Text('Créer un compte', style: TextStyle(fontSize: 13.5, color: MediWyzColors.navy)), dense: true, onTap: _gotoSignup),
+            ] else
+              ListTile(leading: const SizedBox(width: 22, child: Center(child: FaIcon(FontAwesomeIcons.rightFromBracket, size: 17, color: Colors.red))), title: const Text('Se déconnecter', style: TextStyle(fontSize: 13.5, color: Colors.red)), dense: true, onTap: _logoutFromMenu),
+          ])),
         ]),
       ),
     );
@@ -581,6 +610,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ),
         ]),
         const SizedBox(height: 8),
+        _headerActions(),
+        const SizedBox(height: 8),
         const Text('La santé, réinventée', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800, shadows: [Shadow(color: Colors.black54, blurRadius: 8)])),
         const SizedBox(height: 3),
         const Row(children: [
@@ -591,6 +622,62 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       ]),
     );
   }
+
+  // The dashboard header's action cluster, reproduced for mobile: wallet,
+  // connections, notifications, invite, home, theme, language (+ logout).
+  Widget _headerActions() {
+    return SizedBox(
+      height: 30,
+      child: ListView(scrollDirection: Axis.horizontal, children: [
+        // Wallet (shows balance when known) → ask the agent for the balance.
+        InkWell(
+          onTap: () => _send('Mon solde'),
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const FaIcon(FontAwesomeIcons.wallet, size: 13, color: Colors.white70),
+              const SizedBox(width: 5),
+              Text(_walletText ?? 'Portefeuille', style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600)),
+            ]),
+          ),
+        ),
+        const SizedBox(width: 8),
+        _hdrBtn(FontAwesomeIcons.userGroup, 'Connexions', () => _openWeb(_rolePath('Feed'))),
+        _hdrBtn(FontAwesomeIcons.bell, 'Notifications', () => _openWeb(_rolePath('Notifications'))),
+        _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _openWeb('/invite')),
+        _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => _openWeb('/')),
+        _hdrBtn(FontAwesomeIcons.solidMoon, 'Thème', () => _snack('Mode clair')),
+        _hdrBtn(FontAwesomeIcons.language, 'Langue : Français', () => _snack('Français')),
+        if (_user != null) _hdrBtn(FontAwesomeIcons.rightFromBracket, 'Se déconnecter', _logoutFromHeader),
+      ]),
+    );
+  }
+
+  Widget _hdrBtn(IconData icon, String tooltip, VoidCallback onTap) => Tooltip(
+        message: tooltip,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6), child: FaIcon(icon, size: 15, color: Colors.white70)),
+        ),
+      );
+
+  /// Raw web path (with {slug}) for a labelled entry in the current role's nav.
+  String _rolePath(String label) {
+    for (final it in navForRole(_user?['userType']?.toString())) {
+      if (it.label == label && !it.divider) return it.path;
+    }
+    return '/';
+  }
+
+  Future<void> _logoutFromHeader() async {
+    await AgentApi.logout();
+    if (mounted) setState(() { _user = null; _walletText = null; });
+  }
+
+  void _snack(String m) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(m), duration: const Duration(seconds: 1)));
 
   Widget _chips() {
     return SingleChildScrollView(
