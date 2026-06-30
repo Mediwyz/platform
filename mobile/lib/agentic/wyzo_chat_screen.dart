@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 
@@ -63,6 +64,9 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   String? _date, _time, _stage; // stage: slot | service | confirm
   List<String> _lastProviderIds = [];
 
+  // cached device location for "near me" searches (asked for lazily, once)
+  ({double lat, double lng})? _geo;
+
   @override
   void initState() {
     super.initState();
@@ -110,6 +114,31 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     });
   }
 
+  static final _nearbyRe = RegExp(
+    r'near ?(me|by)|nearest|closest|around me|près de (moi|chez)|le plus proche|à proximité|autour de moi',
+    caseSensitive: false,
+  );
+
+  /// Lazily obtain the device location — only when a message implies proximity.
+  /// Cached after the first grant; returns null if disabled/denied (the agent
+  /// then falls back to a normal search, exactly like the web client).
+  Future<({double lat, double lng})?> _ensureGeo() async {
+    if (_geo != null) return _geo;
+    try {
+      if (!await Geolocator.isLocationServiceEnabled()) return null;
+      var perm = await Geolocator.checkPermission();
+      if (perm == LocationPermission.denied) perm = await Geolocator.requestPermission();
+      if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) return null;
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium, timeLimit: Duration(seconds: 8)),
+      );
+      _geo = (lat: pos.latitude, lng: pos.longitude);
+      return _geo;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _send(String raw) async {
     final q = raw.trim();
     if (q.isEmpty || _loading) return;
@@ -140,7 +169,15 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
     try {
       final history = _messages.where((m) => m.text != null && !m.typing).map((m) => {'role': m.role, 'text': m.text!}).toList();
-      final d = await AgentApi.chat(q, history: history.length > 6 ? history.sublist(history.length - 6) : history, lastProviderIds: _lastProviderIds);
+      // Only ask the device for location when the message implies proximity.
+      final geo = _nearbyRe.hasMatch(q) ? await _ensureGeo() : _geo;
+      final d = await AgentApi.chat(
+        q,
+        history: history.length > 6 ? history.sublist(history.length - 6) : history,
+        lastProviderIds: _lastProviderIds,
+        lat: geo?.lat,
+        lng: geo?.lng,
+      );
       final providers = (d['providers'] as List?) ?? const [];
       if (providers.isNotEmpty) _lastProviderIds = providers.map((p) => (p as Map)['id'].toString()).toList();
       _replaceTyping(_Msg('bot',

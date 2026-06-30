@@ -46,6 +46,15 @@ jobs:
       - name: Generate Android platform files
         run: flutter create --platforms=android --org=com.mediwyz --project-name=mediwyz_mobile .
 
+      - name: Add location permissions to AndroidManifest
+        # `flutter create` regenerates a minimal manifest (android/ is gitignored).
+        # geolocator_android deliberately doesn't declare location permissions —
+        # the app must opt in — so inject them before <application> for "near me".
+        run: |
+          sed -i 's#<application#<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <application#' \
+            android/app/src/main/AndroidManifest.xml
+          grep -q ACCESS_FINE_LOCATION android/app/src/main/AndroidManifest.xml
+
       - name: Tune Gradle/Kotlin for CI memory
         # `flutter create` regenerates android/ (the dir is gitignored), so this
         # tuning can't live in a committed gradle.properties. History:
@@ -144,6 +153,7 @@ jobs:
             <key>NSMicrophoneUsageDescription</key><string>MediWyz needs microphone access for video and audio consultations.</string>
             <key>NSPhotoLibraryUsageDescription</key><string>MediWyz needs photo library access to upload profile photos and documents.</string>
             <key>NSPhotoLibraryAddUsageDescription</key><string>MediWyz needs permission to save images to your photo library.</string>
+            <key>NSLocationWhenInUseUsageDescription</key><string>MediWyz uses your location to find healthcare providers near you.</string>
             <key>NSAppTransportSecurity</key>
             <dict>
               <key>NSAllowsLocalNetworking</key><true/>

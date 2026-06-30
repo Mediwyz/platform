@@ -33,6 +33,10 @@ dependencies:
   # Permissions (camera/mic for video on native)
   permission_handler: ^11.3.1
 
+  # Device GPS for the agent's "near me" provider search (web uses the browser
+  # geolocation API automatically; native needs location permissions — see CI).
+  geolocator: ^13.0.1
+
   # Storage
   shared_preferences: ^2.2.3
 
