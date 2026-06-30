@@ -9,6 +9,7 @@ import 'agent_api.dart';
 import 'auth_screens.dart';
 import 'feed_screen.dart';
 import 'nav_config.dart';
+import 'notifications_screen.dart';
 
 /// The whole app: a single agentic chat over the deployed NestJS backend.
 /// Animated hero (logo + cross-fading background) on top, conversation below.
@@ -483,6 +484,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         Navigator.of(context).pop();
         if (it.path == aiSentinelPath) return;           // already here (the chat)
         if (it.path == feedSentinelPath) { _openFeed(); return; }
+        if (it.path == notifSentinelPath) { _openNotifications(); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -491,6 +493,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _openFeed() {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => FeedScreen(loggedIn: _user != null)));
+  }
+
+  void _openNotifications() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationsScreen(loggedIn: _user != null)));
   }
 
   Widget _buildDrawer() {
@@ -654,8 +660,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ),
         ),
         const SizedBox(width: 8),
-        _hdrBtn(FontAwesomeIcons.userGroup, 'Connexions', () => _openWeb(_rolePath('Feed'))),
-        _hdrBtn(FontAwesomeIcons.bell, 'Notifications', () => _openWeb(_rolePath('Notifications'))),
+        _hdrBtn(FontAwesomeIcons.userGroup, 'Fil', () { _scaffoldKey.currentState?.closeDrawer(); _openFeed(); }),
+        _hdrBtn(FontAwesomeIcons.bell, 'Notifications', _openNotifications),
         _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _openWeb('/invite')),
         _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => _openWeb('/')),
         _hdrBtn(FontAwesomeIcons.solidMoon, 'Thème', () => _snack('Mode clair')),
@@ -673,14 +679,6 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           child: Padding(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6), child: FaIcon(icon, size: 15, color: Colors.white70)),
         ),
       );
-
-  /// Raw web path (with {slug}) for a labelled entry in the current role's nav.
-  String _rolePath(String label) {
-    for (final it in navForRole(_user?['userType']?.toString())) {
-      if (it.label == label && !it.divider) return it.path;
-    }
-    return '/';
-  }
 
   Future<void> _logoutFromHeader() async {
     await AgentApi.logout();

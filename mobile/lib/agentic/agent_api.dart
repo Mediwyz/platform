@@ -39,6 +39,25 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /notifications — recent notifications + unread count (auth).
+  static Future<Map<String, dynamic>> notifications() async {
+    try {
+      final res = await ApiClient.instance.get('/notifications');
+      final d = (res.data as Map?)?['data'] as Map?;
+      return Map<String, dynamic>.from(d ?? const {});
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  static Future<void> markNotificationRead(String id) async {
+    try { await ApiClient.instance.post('/notifications/$id/read'); } catch (_) {/* */}
+  }
+
+  static Future<void> markAllNotificationsRead() async {
+    try { await ApiClient.instance.post('/notifications/read-all'); } catch (_) {/* */}
+  }
+
   /// GET /users/:id/wallet — current balance (for the header chip).
   static Future<Map<String, dynamic>?> getWallet(String userId) async {
     try {

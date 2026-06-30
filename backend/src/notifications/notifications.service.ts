@@ -134,4 +134,16 @@ export class NotificationsService {
     }
     return { count: updated.count };
   }
+
+  /** Recent notifications for a user + unread count (drives the mobile list). */
+  async list(userId: string, limit = 30) {
+    const items = await this.prisma.notification.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: Math.min(limit, 50),
+      select: { id: true, type: true, title: true, message: true, createdAt: true, readAt: true, referenceType: true, referenceId: true },
+    });
+    const unread = await this.prisma.notification.count({ where: { userId, readAt: null } });
+    return { items, unread };
+  }
 }
