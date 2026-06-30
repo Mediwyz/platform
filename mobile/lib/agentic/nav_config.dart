@@ -24,6 +24,8 @@ const _notifPath = '__notif__';
 const _messagesPath = '__messages__';
 const _recordsPath = '__records__';
 const _dashboardPath = '__dashboard__';
+const _provBookingsPath = '__provbookings__';
+const _provRequestsPath = '__provrequests__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -75,8 +77,8 @@ const providerNav = <NavItem>[
   NavItem('Workflows', '/provider/{slug}/workflows', FontAwesomeIcons.diagramProject),
   NavItem('My Suggestions', '/provider/{slug}/workflows/my-suggestions', FontAwesomeIcons.paperPlane),
   NavItem('My Availability', '/provider/{slug}/availability', FontAwesomeIcons.calendarDays),
-  NavItem('Booking Requests', '/provider/{slug}/booking-requests', FontAwesomeIcons.inbox),
-  NavItem('Bookings', '/provider/{slug}/bookings', FontAwesomeIcons.calendarCheck),
+  NavItem('Booking Requests', _provRequestsPath, FontAwesomeIcons.inbox),
+  NavItem('Bookings', _provBookingsPath, FontAwesomeIcons.calendarCheck),
   NavItem('Reviews', '/provider/{slug}/reviews', FontAwesomeIcons.star),
   NavItem('Video Call', '/provider/{slug}/video', FontAwesomeIcons.video),
   NavItem('Audio Call', '/provider/{slug}/audio', FontAwesomeIcons.phone),
@@ -176,3 +178,5 @@ const notifSentinelPath = _notifPath;
 const messagesSentinelPath = _messagesPath;
 const recordsSentinelPath = _recordsPath;
 const dashboardSentinelPath = _dashboardPath;
+const provBookingsSentinelPath = _provBookingsPath;
+const provRequestsSentinelPath = _provRequestsPath;

@@ -75,6 +75,12 @@ void main() {
       expect(dash.first.path, dashboardSentinelPath);
     });
 
+    test('provider Bookings & Booking Requests use native sentinels', () {
+      final byLabel = {for (final i in providerNav) i.label: i};
+      expect(byLabel['Bookings']?.path, provBookingsSentinelPath);
+      expect(byLabel['Booking Requests']?.path, provRequestsSentinelPath);
+    });
+
     test('agent-capable patient entries carry an agentMsg', () {
       final byLabel = {for (final i in patientNav) i.label: i};
       expect(byLabel['My Bookings']?.agentMsg, 'Mes rendez-vous');

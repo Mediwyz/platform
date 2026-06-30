@@ -39,6 +39,18 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /bookings/unified?role=provider — bookings the provider has received.
+  static Future<List<Map<String, dynamic>>> providerBookings({String? status}) async {
+    try {
+      final qp = {'role': 'provider', 'limit': 50, if (status != null) 'status': status};
+      final res = await ApiClient.instance.get('/bookings/unified', queryParameters: qp);
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// GET /ai/health-tracker/dashboard — today's health aggregation.
   static Future<Map<String, dynamic>> healthDashboard() async {
     try {
