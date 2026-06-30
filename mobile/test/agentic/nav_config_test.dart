@@ -79,6 +79,7 @@ void main() {
       final byLabel = {for (final i in providerNav) i.label: i};
       expect(byLabel['Bookings']?.path, provBookingsSentinelPath);
       expect(byLabel['Booking Requests']?.path, provRequestsSentinelPath);
+      expect(byLabel['Reviews']?.path, provReviewsSentinelPath);
     });
 
     test('agent-capable patient entries carry an agentMsg', () {

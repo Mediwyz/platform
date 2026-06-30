@@ -14,6 +14,7 @@ import 'messages_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
 import 'provider_bookings_screen.dart';
+import 'provider_reviews_screen.dart';
 import 'notifications_screen.dart';
 import 'profile_screen.dart';
 
@@ -483,6 +484,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == dashboardSentinelPath) { _openDashboard(); return; }
         if (it.path == provBookingsSentinelPath) { _openProviderBookings(''); return; }
         if (it.path == provRequestsSentinelPath) { _openProviderBookings('pending'); return; }
+        if (it.path == provReviewsSentinelPath) { _openProviderReviews(); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -511,6 +513,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _openProviderBookings(String status) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderBookingsScreen(loggedIn: _user != null, initialStatus: status)));
+  }
+
+  void _openProviderReviews() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderReviewsScreen(loggedIn: _user != null, myId: _user?['id']?.toString())));
   }
 
   void _openDashboard() {

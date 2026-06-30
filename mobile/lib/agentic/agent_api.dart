@@ -39,6 +39,21 @@ class AgentApi {
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }
 
+  /// GET /providers/:id/reviews — a provider's reviews + average rating.
+  static Future<Map<String, dynamic>> providerReviews(String providerId) async {
+    try {
+      final res = await ApiClient.instance.get('/providers/$providerId/reviews', queryParameters: {'limit': 30});
+      final body = res.data as Map?;
+      return {
+        'reviews': ((body?['data'] as List?) ?? const []).map((e) => Map<String, dynamic>.from(e as Map)).toList(),
+        'averageRating': body?['averageRating'],
+        'total': body?['total'],
+      };
+    } catch (_) {
+      return const {'reviews': [], 'averageRating': null, 'total': 0};
+    }
+  }
+
   /// GET /bookings/unified?role=provider — bookings the provider has received.
   static Future<List<Map<String, dynamic>>> providerBookings({String? status}) async {
     try {
