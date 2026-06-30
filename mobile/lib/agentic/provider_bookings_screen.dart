@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'call_screen.dart';
 
 /// Native provider bookings — the web "Bookings" / "Booking Requests" pages.
 /// Lists bookings the provider has received, filterable by status. Auth-gated.
 class ProviderBookingsScreen extends StatefulWidget {
   final bool loggedIn;
   final String initialStatus; // '' = all
-  const ProviderBookingsScreen({super.key, required this.loggedIn, this.initialStatus = ''});
+  final Map<String, dynamic>? user;
+  const ProviderBookingsScreen({super.key, required this.loggedIn, this.initialStatus = '', this.user});
   @override
   State<ProviderBookingsScreen> createState() => _ProviderBookingsScreenState();
 }
@@ -117,13 +119,22 @@ class _ProviderBookingsScreenState extends State<ProviderBookingsScreen> {
                                     if (type.isNotEmpty) type.replaceAll('-', ' '),
                                     _when(b['scheduledAt'] ?? b['createdAt']),
                                   ].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
-                                  trailing: status.isEmpty
-                                      ? null
-                                      : Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                          decoration: BoxDecoration(color: _statusColor(status).withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
-                                          child: Text(status, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: _statusColor(status))),
-                                        ),
+                                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                                    if (b['id'] != null)
+                                      IconButton(
+                                        tooltip: 'Appel vidéo',
+                                        visualDensity: VisualDensity.compact,
+                                        icon: const FaIcon(FontAwesomeIcons.video, size: 15, color: MediWyzColors.teal),
+                                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (_) => CallScreen(roomId: 'booking-${b['id']}', video: true, user: widget.user))),
+                                      ),
+                                    if (status.isNotEmpty)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        decoration: BoxDecoration(color: _statusColor(status).withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+                                        child: Text(status, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: _statusColor(status))),
+                                      ),
+                                  ]),
                                 );
                               },
                             ),

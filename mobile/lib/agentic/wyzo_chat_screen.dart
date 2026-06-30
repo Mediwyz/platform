@@ -518,7 +518,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   }
 
   void _openProviderBookings(String status) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderBookingsScreen(loggedIn: _user != null, initialStatus: status)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderBookingsScreen(loggedIn: _user != null, initialStatus: status, user: _user)));
   }
 
   void _openProviderReviews() {
@@ -836,32 +836,51 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     );
   }
 
-  Widget _listTile(Map<String, dynamic> it) => Container(
-        margin: const EdgeInsets.only(top: 6),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-        child: Row(children: [
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(it['title']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-            if (it['subtitle'] != null) Text(it['subtitle'].toString(), style: const TextStyle(fontSize: 10, color: Colors.black54)),
-          ])),
-          if (it['badge'] != null)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
-              child: Text(it['badge'].toString(), style: const TextStyle(fontSize: 10, color: MediWyzColors.teal, fontWeight: FontWeight.w600)),
-            ),
-          ...(((it['actions'] as List?) ?? const []).map((a) {
-            final am = Map<String, dynamic>.from(a as Map);
-            final isCancel = am['kind'] == 'cancel_booking';
-            return TextButton(
-              onPressed: _loading ? null : () => _runListAction(am),
-              style: TextButton.styleFrom(foregroundColor: isCancel ? Colors.red : MediWyzColors.teal, minimumSize: const Size(0, 32), padding: const EdgeInsets.symmetric(horizontal: 8)),
-              child: Text(am['label']?.toString() ?? 'Action', style: const TextStyle(fontSize: 11)),
-            );
-          })),
-        ]),
-      );
+  Widget _listTile(Map<String, dynamic> it) {
+    final acts = (it['actions'] as List?) ?? const [];
+    // A booking row carries cancel/reschedule actions → its id is the booking id,
+    // which both patient and provider share → a `booking-<id>` call room.
+    Map<String, dynamic>? bookingAction;
+    for (final a in acts) {
+      final am = Map<String, dynamic>.from(a as Map);
+      if (am['kind'] == 'cancel_booking' || am['kind'] == 'reschedule_booking') { bookingAction = am; break; }
+    }
+    final bookingId = bookingAction?['id']?.toString();
+    return Container(
+      margin: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: Row(children: [
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(it['title']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          if (it['subtitle'] != null) Text(it['subtitle'].toString(), style: const TextStyle(fontSize: 10, color: Colors.black54)),
+        ])),
+        if (it['badge'] != null)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+            child: Text(it['badge'].toString(), style: const TextStyle(fontSize: 10, color: MediWyzColors.teal, fontWeight: FontWeight.w600)),
+          ),
+        if (bookingId != null)
+          IconButton(
+            tooltip: 'Appel vidéo',
+            visualDensity: VisualDensity.compact,
+            icon: const FaIcon(FontAwesomeIcons.video, size: 14, color: MediWyzColors.teal),
+            onPressed: _loading ? null : () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => CallScreen(roomId: 'booking-$bookingId', video: true, user: _user))),
+          ),
+        ...acts.map((a) {
+          final am = Map<String, dynamic>.from(a as Map);
+          final isCancel = am['kind'] == 'cancel_booking';
+          return TextButton(
+            onPressed: _loading ? null : () => _runListAction(am),
+            style: TextButton.styleFrom(foregroundColor: isCancel ? Colors.red : MediWyzColors.teal, minimumSize: const Size(0, 32), padding: const EdgeInsets.symmetric(horizontal: 8)),
+            child: Text(am['label']?.toString() ?? 'Action', style: const TextStyle(fontSize: 11)),
+          );
+        }),
+      ]),
+    );
+  }
 
   Map<String, String>? _reschedule;
 
