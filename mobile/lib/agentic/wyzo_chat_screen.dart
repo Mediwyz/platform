@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../theme/mediwyz_theme.dart';
+import 'about_screen.dart';
 import 'admin_users_screen.dart';
 import 'agent_api.dart';
 import 'auth_screens.dart';
@@ -573,6 +574,13 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           ),
           Expanded(child: ListView(padding: const EdgeInsets.only(top: 4, bottom: 12), children: [
             for (final it in items) _navTile(it),
+            const Divider(height: 16),
+            ListTile(
+              leading: const SizedBox(width: 22, child: Center(child: FaIcon(FontAwesomeIcons.circleQuestion, size: 17, color: MediWyzColors.teal))),
+              title: const Text('Aide & À propos', style: TextStyle(fontSize: 13.5, color: MediWyzColors.navy)),
+              dense: true,
+              onTap: () { Navigator.of(context).pop(); Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AboutScreen())); },
+            ),
             const Divider(height: 16),
             if (_user == null) ...[
               ListTile(leading: const SizedBox(width: 22, child: Center(child: FaIcon(FontAwesomeIcons.rightToBracket, size: 17, color: MediWyzColors.teal))), title: const Text('Se connecter', style: TextStyle(fontSize: 13.5, color: MediWyzColors.navy)), dense: true, onTap: _gotoLogin),
