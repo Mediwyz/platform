@@ -82,6 +82,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           flutter build apk --release \
+            -t lib/main_agentic.dart \
             --dart-define=API_BASE=https://mediwyz.com/api \
             --dart-define=SOCKET_URL=https://mediwyz.com \
             --dart-define=SENTRY_DSN=${SENTRY_DSN:-}
@@ -179,6 +180,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           flutter build ios --release --no-codesign \
+            -t lib/main_agentic.dart \
             --dart-define=API_BASE=https://mediwyz.com/api \
             --dart-define=SOCKET_URL=https://mediwyz.com \
             --dart-define=SENTRY_DSN=${SENTRY_DSN:-}

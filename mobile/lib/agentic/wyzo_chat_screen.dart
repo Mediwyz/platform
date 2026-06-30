@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'auth_screens.dart';
 
 /// The whole app: a single agentic chat over the deployed NestJS backend.
 /// Animated hero (logo + cross-fading background) on top, conversation below.
@@ -51,6 +52,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   final _messages = <_Msg>[];
   final _input = TextEditingController();
   final _scroll = ScrollController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _loading = false;
 
   // hero animation
@@ -419,9 +421,85 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     }
   }
 
+  // ── Sidebar (drawer) ───────────────────────────────────────────────────────
+  void _menuSend(String msg) { Navigator.of(context).pop(); _send(msg); }
+
+  Future<void> _gotoLogin() async {
+    Navigator.of(context).pop();
+    final ok = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const LoginScreen()));
+    if (ok == true) { final u = await AgentApi.me(); if (mounted) setState(() => _user = u); }
+  }
+
+  Future<void> _gotoSignup() async {
+    Navigator.of(context).pop();
+    final ok = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const SignupScreen()));
+    if (ok == true) { final u = await AgentApi.me(); if (mounted) setState(() => _user = u); }
+  }
+
+  Future<void> _logoutFromMenu() async {
+    Navigator.of(context).pop();
+    await AgentApi.logout();
+    if (mounted) setState(() => _user = null);
+  }
+
+  Widget _drawerItem(IconData icon, String label, VoidCallback onTap) => ListTile(
+        leading: Icon(icon, color: MediWyzColors.teal, size: 22),
+        title: Text(label, style: const TextStyle(fontSize: 14, color: MediWyzColors.navy)),
+        dense: true,
+        onTap: onTap,
+      );
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: SafeArea(
+        child: ListView(padding: EdgeInsets.zero, children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(gradient: LinearGradient(colors: [MediWyzColors.navy, MediWyzColors.teal])),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                ClipRRect(borderRadius: BorderRadius.circular(9), child: Image.asset('assets/images/logo-icon.png', width: 36, height: 36)),
+                const SizedBox(width: 10),
+                const Text('MediWyz', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800)),
+              ]),
+              const SizedBox(height: 12),
+              Row(children: [
+                Icon(_user != null ? Icons.person : Icons.person_outline, color: Colors.white70, size: 16),
+                const SizedBox(width: 6),
+                Expanded(child: Text(
+                  _user != null ? 'Connecté : ${_user!['firstName'] ?? ''}' : 'Invité — non connecté',
+                  style: const TextStyle(color: Colors.white70, fontSize: 12), overflow: TextOverflow.ellipsis)),
+              ]),
+            ]),
+          ),
+          _drawerItem(Icons.auto_awesome, 'Assistant Wyzo', () => Navigator.of(context).pop()),
+          const Divider(height: 1),
+          _drawerItem(Icons.search, 'Trouver un médecin', () => _menuSend('Trouver un médecin')),
+          _drawerItem(Icons.near_me, 'Près de moi', () => _menuSend('un médecin près de moi')),
+          _drawerItem(Icons.local_pharmacy, 'Health Shop', () => _menuSend('Acheter un médicament')),
+          _drawerItem(Icons.monitor_heart, 'Suivi santé', () => _menuSend('Mon bilan santé du jour')),
+          const Divider(height: 1),
+          _drawerItem(Icons.calendar_month, 'Mes rendez-vous', () => _menuSend('Mes rendez-vous')),
+          _drawerItem(Icons.receipt_long, 'Mes commandes', () => _menuSend('Mes commandes')),
+          _drawerItem(Icons.description, 'Mes ordonnances', () => _menuSend('Mes ordonnances')),
+          _drawerItem(Icons.account_balance_wallet, 'Mon portefeuille', () => _menuSend('Mon solde')),
+          const Divider(height: 1),
+          if (_user == null) ...[
+            _drawerItem(Icons.login, 'Se connecter', _gotoLogin),
+            _drawerItem(Icons.person_add, 'Créer un compte', _gotoSignup),
+          ] else
+            _drawerItem(Icons.logout, 'Se déconnecter', _logoutFromMenu),
+        ]),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: _buildDrawer(),
       backgroundColor: const Color(0xFF02132a),
       body: Stack(
         fit: StackFit.expand,
@@ -481,6 +559,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
+          GestureDetector(
+            onTap: () => _scaffoldKey.currentState?.openDrawer(),
+            child: const Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.menu, color: Colors.white, size: 24)),
+          ),
           ClipRRect(borderRadius: BorderRadius.circular(9), child: Image.asset('assets/images/logo-icon.png', width: 34, height: 34)),
           const SizedBox(width: 10),
           const Text('MediWyz', style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w800)),

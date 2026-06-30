@@ -97,6 +97,13 @@ class AgentApi {
     return null;
   }
 
+  /// POST /auth/login — signs in with email + password. The backend sets the
+  /// auth cookies on success (so subsequent calls are authenticated).
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    final res = await ApiClient.instance.post('/auth/login', data: {'email': email, 'password': password});
+    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+  }
+
   /// POST /auth/logout — clears the auth cookies (start fresh / test guest flow).
   static Future<void> logout() async {
     try { await ApiClient.instance.post('/auth/logout'); } catch (_) { /* */ }
