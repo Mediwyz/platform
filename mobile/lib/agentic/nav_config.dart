@@ -23,6 +23,7 @@ const _feedPath = '__feed__';
 const _notifPath = '__notif__';
 const _messagesPath = '__messages__';
 const _recordsPath = '__records__';
+const _dashboardPath = '__dashboard__';
 
 // ── Shared "Search & Browse" section — all handled in-app by the agent ───────
 const _searchSection = <NavItem>[
@@ -44,7 +45,7 @@ const _searchSection = <NavItem>[
 // ── Patient / Member ─────────────────────────────────────────────────────────
 const patientNav = <NavItem>[
   NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
-  NavItem('Dashboard', '/patient', FontAwesomeIcons.house),
+  NavItem('Dashboard', _dashboardPath, FontAwesomeIcons.house),
   NavItem('My Bookings', '/patient/bookings', FontAwesomeIcons.calendarCheck, agentMsg: 'Mes rendez-vous'),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('My Health', '/patient/health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
@@ -174,3 +175,4 @@ const feedSentinelPath = _feedPath;
 const notifSentinelPath = _notifPath;
 const messagesSentinelPath = _messagesPath;
 const recordsSentinelPath = _recordsPath;
+const dashboardSentinelPath = _dashboardPath;

@@ -69,6 +69,12 @@ void main() {
       expect(rec.first.agentMsg, isNull);
     });
 
+    test('patient Dashboard uses the native dashboard sentinel', () {
+      final dash = patientNav.where((i) => i.label == 'Dashboard');
+      expect(dash, isNotEmpty);
+      expect(dash.first.path, dashboardSentinelPath);
+    });
+
     test('agent-capable patient entries carry an agentMsg', () {
       final byLabel = {for (final i in patientNav) i.label: i};
       expect(byLabel['My Bookings']?.agentMsg, 'Mes rendez-vous');
