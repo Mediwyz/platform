@@ -10,6 +10,7 @@ import 'auth_screens.dart';
 import 'feed_screen.dart';
 import 'nav_config.dart';
 import 'notifications_screen.dart';
+import 'profile_screen.dart';
 
 /// The whole app: a single agentic chat over the deployed NestJS backend.
 /// Animated hero (logo + cross-fading background) on top, conversation below.
@@ -93,28 +94,15 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     if (mounted && w != null) setState(() => _walletText = '${w['currency'] ?? 'Rs'} ${w['balance'] ?? 0}');
   }
 
-  void _authTap() {
-    if (_user == null) { _send('Comment créer un compte ?'); return; }
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => SafeArea(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          ListTile(
-            leading: const Icon(Icons.person, color: MediWyzColors.teal),
-            title: Text('Connecté : ${_user!['firstName'] ?? ''}'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Se déconnecter (tester en invité)'),
-            onTap: () async {
-              Navigator.of(context).pop();
-              await AgentApi.logout();
-              if (mounted) setState(() => _user = null);
-            },
-          ),
-        ]),
-      ),
-    );
+  Future<void> _authTap() async {
+    if (_user == null) {
+      final ok = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      if (ok == true) { final u = await AgentApi.me(); if (mounted) { setState(() => _user = u); _refreshWallet(); } }
+      return;
+    }
+    // Logged in → open the native profile; it pops `true` after logout.
+    final loggedOut = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => ProfileScreen(user: _user!)));
+    if (loggedOut == true && mounted) setState(() { _user = null; _walletText = null; });
   }
 
   @override
