@@ -109,6 +109,77 @@ class AgentApi {
     }
   }
 
+  /// GET /bookings/unified?role=patient — the patient's own bookings.
+  static Future<List<Map<String, dynamic>>> patientBookings({String? status}) async {
+    try {
+      final qp = {'role': 'patient', 'limit': 50, if (status != null) 'status': status};
+      final res = await ApiClient.instance.get('/bookings/unified', queryParameters: qp);
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /users/:id/prescriptions — the patient's prescriptions (recent first).
+  static Future<List<Map<String, dynamic>>> prescriptions(String userId) async {
+    try {
+      final res = await ApiClient.instance.get('/users/$userId/prescriptions', queryParameters: {'limit': 40});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /users/:id/lab-tests — the patient's lab test results.
+  static Future<List<Map<String, dynamic>>> labTests(String userId) async {
+    try {
+      final res = await ApiClient.instance.get('/users/$userId/lab-tests', queryParameters: {'limit': 40});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /inventory/orders?role=customer — the patient's Health Shop orders.
+  static Future<List<Map<String, dynamic>>> orders() async {
+    try {
+      final res = await ApiClient.instance.get('/inventory/orders', queryParameters: {'role': 'customer'});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /users/:id/invoices — the patient's invoices / billing history.
+  static Future<List<Map<String, dynamic>>> invoices(String userId) async {
+    try {
+      final res = await ApiClient.instance.get('/users/$userId/invoices', queryParameters: {'limit': 40});
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /search/providers?type=X — provider search (public). `type` is the
+  /// backend UserType code (DOCTOR, NURSE, …). Returns the provider list.
+  static Future<List<Map<String, dynamic>>> searchProviders(String type, {String? q}) async {
+    try {
+      final res = await ApiClient.instance.get('/search/providers', queryParameters: {
+        'type': type, 'limit': 40, if (q != null && q.isNotEmpty) 'q': q,
+      });
+      final b = res.data as Map?;
+      final list = (b?['providers'] ?? b?['data'] ?? (b?['data'] is Map ? (b!['data'] as Map)['providers'] : null)) as List?;
+      return list?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// GET /ai/health-tracker/dashboard — today's health aggregation.
   static Future<Map<String, dynamic>> healthDashboard() async {
     try {

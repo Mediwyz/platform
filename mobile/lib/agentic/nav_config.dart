@@ -32,36 +32,42 @@ const _adminValidationPath = '__adminvalidation__';
 const _videoPath = '__video__';
 const _audioPath = '__audio__';
 const _insClaimsPath = '__insclaims__';
+const _bookingsPath = '__bookings__';
+const _prescriptionsPath = '__prescriptions__';
+const _ordersPath = '__orders__';
+const _billingPath = '__billing__';
+const _healthPath = '__health__';
 
-// ── Shared "Search & Browse" section — all handled in-app by the agent ───────
+// ── Shared "Search & Browse" section — each opens the native search page ──────
+// (a `/search/<slug>` path is resolved to a generic ProviderSearchScreen).
 const _searchSection = <NavItem>[
   NavItem('Recherche', '#', FontAwesomeIcons.magnifyingGlass, divider: true),
-  NavItem('Find Doctors', '/search/doctors', FontAwesomeIcons.userDoctor, agentMsg: 'Trouver un médecin'),
-  NavItem('Find Nurses', '/search/nurses', FontAwesomeIcons.userNurse, agentMsg: 'Trouver une infirmière'),
-  NavItem('Find Childcare', '/search/childcare', FontAwesomeIcons.baby, agentMsg: "Trouver une garde d'enfant"),
-  NavItem('Find Caregivers', '/search/caregivers', FontAwesomeIcons.handHoldingHeart, agentMsg: 'Trouver un aide-soignant'),
-  NavItem('Find Physio', '/search/physiotherapists', FontAwesomeIcons.personWalking, agentMsg: 'Trouver un physiothérapeute'),
-  NavItem('Find Dentists', '/search/dentists', FontAwesomeIcons.tooth, agentMsg: 'Trouver un dentiste'),
-  NavItem('Find Eye Care', '/search/optometrists', FontAwesomeIcons.eye, agentMsg: 'Trouver un optométriste'),
-  NavItem('Find Nutrition', '/search/nutritionists', FontAwesomeIcons.appleWhole, agentMsg: 'Trouver un nutritionniste'),
-  NavItem('Find Lab Tests', '/search/lab', FontAwesomeIcons.flask, agentMsg: 'Trouver un laboratoire'),
-  NavItem('Emergency Services', '/search/emergency', FontAwesomeIcons.truckMedical, agentMsg: "J'ai besoin d'une ambulance"),
-  NavItem('Buy Medicines', '/search/medicines', FontAwesomeIcons.capsules, agentMsg: 'Acheter un médicament'),
-  NavItem('Find Insurance', '/search/insurance', FontAwesomeIcons.shieldHalved, agentMsg: 'Trouver une assurance'),
+  NavItem('Find Doctors', '/search/doctors', FontAwesomeIcons.userDoctor),
+  NavItem('Find Nurses', '/search/nurses', FontAwesomeIcons.userNurse),
+  NavItem('Find Childcare', '/search/childcare', FontAwesomeIcons.baby),
+  NavItem('Find Caregivers', '/search/caregivers', FontAwesomeIcons.handHoldingHeart),
+  NavItem('Find Physio', '/search/physiotherapists', FontAwesomeIcons.personWalking),
+  NavItem('Find Dentists', '/search/dentists', FontAwesomeIcons.tooth),
+  NavItem('Find Eye Care', '/search/optometrists', FontAwesomeIcons.eye),
+  NavItem('Find Nutrition', '/search/nutritionists', FontAwesomeIcons.appleWhole),
+  NavItem('Find Lab Tests', '/search/lab', FontAwesomeIcons.flask),
+  NavItem('Emergency Services', '/search/emergency', FontAwesomeIcons.truckMedical),
+  NavItem('Buy Medicines', '/search/medicines', FontAwesomeIcons.capsules),
+  NavItem('Find Insurance', '/search/insurance', FontAwesomeIcons.shieldHalved),
 ];
 
 // ── Patient / Member ─────────────────────────────────────────────────────────
 const patientNav = <NavItem>[
   NavItem('Feed', _feedPath, FontAwesomeIcons.newspaper),
   NavItem('Dashboard', _dashboardPath, FontAwesomeIcons.house),
-  NavItem('My Bookings', '/patient/bookings', FontAwesomeIcons.calendarCheck, agentMsg: 'Mes rendez-vous'),
+  NavItem('My Bookings', _bookingsPath, FontAwesomeIcons.calendarCheck),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
-  NavItem('My Health', '/patient/health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
+  NavItem('My Health', _healthPath, FontAwesomeIcons.heartPulse),
   NavItem('Health Records', _recordsPath, FontAwesomeIcons.fileMedical),
-  NavItem('Billing', '/patient/billing', FontAwesomeIcons.moneyBillWave, agentMsg: 'Mes factures'),
-  NavItem('My Orders', '/patient/orders', FontAwesomeIcons.receipt, agentMsg: 'Mes commandes'),
-  NavItem('My Prescriptions', '/patient/prescriptions', FontAwesomeIcons.filePrescription, agentMsg: 'Mes ordonnances'),
-  NavItem('My Wallet', '/patient/billing', FontAwesomeIcons.wallet, agentMsg: 'Mon solde'),
+  NavItem('Billing', _billingPath, FontAwesomeIcons.moneyBillWave),
+  NavItem('My Orders', _ordersPath, FontAwesomeIcons.receipt),
+  NavItem('My Prescriptions', _prescriptionsPath, FontAwesomeIcons.filePrescription),
+  NavItem('My Wallet', _billingPath, FontAwesomeIcons.wallet),
   NavItem('Video Call', _videoPath, FontAwesomeIcons.video),
   NavItem('Audio Call', _audioPath, FontAwesomeIcons.phone),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
@@ -91,7 +97,7 @@ const providerNav = <NavItem>[
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
-  NavItem('My Health', '/provider/{slug}/my-health', FontAwesomeIcons.heart, agentMsg: 'Mon bilan santé du jour'),
+  NavItem('My Health', _healthPath, FontAwesomeIcons.heart),
   NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
 ];
 
@@ -148,7 +154,7 @@ const regionalNav = <NavItem>[
   NavItem('Audio Call', _audioPath, FontAwesomeIcons.phone),
   NavItem('Messages', _messagesPath, FontAwesomeIcons.comments),
   NavItem('Notifications', _notifPath, FontAwesomeIcons.bell),
-  NavItem('My Health', '/regional/my-health', FontAwesomeIcons.heartPulse, agentMsg: 'Mon bilan santé du jour'),
+  NavItem('My Health', _healthPath, FontAwesomeIcons.heartPulse),
   NavItem('AI Health Assistant', _aiPath, FontAwesomeIcons.robot),
   NavItem('Invite friends', '/invite', FontAwesomeIcons.gift),
   ..._searchSection,
@@ -213,3 +219,16 @@ const adminValidationSentinelPath = _adminValidationPath;
 const videoSentinelPath = _videoPath;
 const audioSentinelPath = _audioPath;
 const insClaimsSentinelPath = _insClaimsPath;
+const bookingsSentinelPath = _bookingsPath;
+const prescriptionsSentinelPath = _prescriptionsPath;
+const ordersSentinelPath = _ordersPath;
+const billingSentinelPath = _billingPath;
+const healthSentinelPath = _healthPath;
+
+/// A menu path that opens the native provider-search page — `/search/<slug>`
+/// where the slug is a known provider category. Returns the slug, or null.
+String? searchSlugForPath(String path) {
+  if (!path.startsWith('/search/')) return null;
+  final slug = path.substring('/search/'.length);
+  return slug.isEmpty || slug.contains('/') ? null : slug;
+}

@@ -107,28 +107,34 @@ void main() {
       }
     });
 
-    test('agent-capable patient entries carry an agentMsg', () {
+    test('patient data entries open native pages (sentinels, not chat)', () {
       final byLabel = {for (final i in patientNav) i.label: i};
-      expect(byLabel['My Bookings']?.agentMsg, 'Mes rendez-vous');
-      expect(byLabel['My Prescriptions']?.agentMsg, 'Mes ordonnances');
-      expect(byLabel['My Orders']?.agentMsg, 'Mes commandes');
-      expect(byLabel['My Wallet']?.agentMsg, 'Mon solde');
-      expect(byLabel['Billing']?.agentMsg, isNotNull);
-    });
-
-    test('every Search & Browse entry is handled in-app by the agent', () {
-      // The shared search section appears in the patient menu after Invite.
-      final search = patientNav.where((i) => i.label.startsWith('Find ') || i.label.contains('Medicines') || i.label.contains('Emergency'));
-      expect(search, isNotEmpty);
-      for (final s in search) {
-        expect(s.agentMsg, isNotNull, reason: '${s.label} should route to the agent');
+      expect(byLabel['My Bookings']?.path, bookingsSentinelPath);
+      expect(byLabel['My Prescriptions']?.path, prescriptionsSentinelPath);
+      expect(byLabel['My Orders']?.path, ordersSentinelPath);
+      expect(byLabel['My Wallet']?.path, billingSentinelPath);
+      expect(byLabel['Billing']?.path, billingSentinelPath);
+      expect(byLabel['My Health']?.path, healthSentinelPath);
+      // None of them fall back to the agent chat anymore.
+      for (final l in ['My Bookings', 'My Prescriptions', 'My Orders', 'My Wallet', 'Billing', 'My Health']) {
+        expect(byLabel[l]?.agentMsg, isNull, reason: '$l must open a native page, not the chat');
       }
     });
 
-    test('AI entries never carry an agentMsg (they stay on the chat)', () {
-      for (final menu in [patientNav, providerNav, adminNav, regionalNav]) {
-        for (final ai in menu.where((i) => i.path == aiSentinelPath)) {
-          expect(ai.agentMsg, isNull);
+    test('every Search & Browse entry resolves to a native search page', () {
+      final search = patientNav.where((i) => i.path.startsWith('/search/'));
+      expect(search, isNotEmpty);
+      for (final s in search) {
+        expect(s.agentMsg, isNull, reason: '${s.label} must open a native page, not the chat');
+        final slug = searchSlugForPath(s.path);
+        expect(slug, isNotNull, reason: '${s.path} should yield a slug');
+      }
+    });
+
+    test('no menu entry routes to the chat via agentMsg (only AI Assistant is the chat)', () {
+      for (final menu in [patientNav, providerNav, adminNav, regionalNav, insuranceNav]) {
+        for (final i in menu) {
+          expect(i.agentMsg, isNull, reason: '${i.label} should not send a chat message');
         }
       }
     });

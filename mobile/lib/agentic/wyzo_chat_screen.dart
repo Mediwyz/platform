@@ -15,6 +15,8 @@ import 'feed_screen.dart';
 import 'health_records_screen.dart';
 import 'insurance_claims_screen.dart';
 import 'messages_screen.dart';
+import 'patient_pages.dart';
+import 'provider_search_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
 import 'provider_bookings_screen.dart';
@@ -493,11 +495,22 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == adminValidationSentinelPath) { _openAdminUsers('pending'); return; }
         if (it.path == videoSentinelPath) { _openCall(true); return; }
         if (it.path == audioSentinelPath) { _openCall(false); return; }
-        if (it.path == insClaimsSentinelPath) { Navigator.of(context).push(MaterialPageRoute(builder: (_) => InsuranceClaimsScreen(loggedIn: _user != null))); return; }
-        if (it.agentMsg != null) { _send(it.agentMsg!); return; } // handled in-app by the agent
+        if (it.path == insClaimsSentinelPath) { _push(InsuranceClaimsScreen(loggedIn: _user != null)); return; }
+        if (it.path == bookingsSentinelPath) { _push(MyBookingsScreen(loggedIn: _user != null, user: _user)); return; }
+        if (it.path == prescriptionsSentinelPath) { _push(PrescriptionsScreen(loggedIn: _user != null, userId: _user?['id']?.toString())); return; }
+        if (it.path == ordersSentinelPath) { _push(OrdersScreen(loggedIn: _user != null)); return; }
+        if (it.path == billingSentinelPath) { _push(BillingScreen(loggedIn: _user != null, userId: _user?['id']?.toString())); return; }
+        if (it.path == healthSentinelPath) { _push(MyHealthScreen(loggedIn: _user != null)); return; }
+        final slug = searchSlugForPath(it.path);
+        if (slug != null) { _push(ProviderSearchScreen(slug: slug, loggedIn: _user != null)); return; }
+        if (it.agentMsg != null) { _send(it.agentMsg!); return; } // legacy fallback (none remain)
         _openWeb(it.path);                                // web-only page → deep-link
       },
     );
+  }
+
+  void _push(Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
   }
 
   void _openFeed() {
@@ -698,9 +711,9 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     return SizedBox(
       height: 30,
       child: ListView(scrollDirection: Axis.horizontal, children: [
-        // Wallet (shows balance when known) → ask the agent for the balance.
+        // Wallet (shows balance when known) → open the native Billing page.
         InkWell(
-          onTap: () => _send('Mon solde'),
+          onTap: () => _push(BillingScreen(loggedIn: _user != null, userId: _user?['id']?.toString())),
           borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
