@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../theme/mediwyz_theme.dart';
+import '../theme/theme_controller.dart';
 import 'network_screen.dart';
 import 'notifications_screen.dart';
 
@@ -60,6 +61,10 @@ class MediwyzHeader extends StatelessWidget implements PreferredSizeWidget {
               _btn(context, FontAwesomeIcons.bell, 'Notifications', () => _push(context, NotificationsScreen(loggedIn: loggedIn))),
               _btn(context, FontAwesomeIcons.gift, 'Inviter des amis', () => _web('/invite')),
               _btn(context, FontAwesomeIcons.house, 'Accueil', () => Navigator.of(context).popUntil((r) => r.isFirst)),
+              ValueListenableBuilder<ThemeMode>(
+                valueListenable: themeMode,
+                builder: (_, __, ___) => _btn(context, isDarkMode ? FontAwesomeIcons.sun : FontAwesomeIcons.moon, isDarkMode ? 'Mode clair' : 'Mode sombre', toggleThemeMode),
+              ),
             ]),
           ),
         ]),

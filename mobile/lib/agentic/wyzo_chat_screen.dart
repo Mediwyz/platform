@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../theme/mediwyz_theme.dart';
+import '../theme/theme_controller.dart';
 import 'about_screen.dart';
 import 'admin_users_screen.dart';
 import 'agent_api.dart';
@@ -657,13 +658,16 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
           child: Image.asset(_heroImages[_bg], fit: BoxFit.cover),
         ),
       ),
+      // Lighter, more even scrim so the animated hero image fills the FULL
+      // height of the chat (it reads as a stretched backdrop, not a centered
+      // band) while the header + bubbles stay readable at the edges.
       Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xF0001024), Color(0xC0021A30), Color(0xE6010F22)],
-            stops: [0.0, 0.45, 1.0],
+            colors: [Color(0xCC001024), Color(0x66021A30), Color(0x59021A30), Color(0xCC010F22)],
+            stops: [0.0, 0.35, 0.6, 1.0],
           ),
         ),
       ),
@@ -735,7 +739,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         _hdrBtn(FontAwesomeIcons.bell, 'Notifications', _openNotifications),
         _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _openWeb('/invite')),
         _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => _openWeb('/')),
-        _hdrBtn(FontAwesomeIcons.solidMoon, 'Thème', () => _snack('Mode clair')),
+        ValueListenableBuilder<ThemeMode>(
+          valueListenable: themeMode,
+          builder: (_, __, ___) => _hdrBtn(isDarkMode ? FontAwesomeIcons.solidSun : FontAwesomeIcons.solidMoon, isDarkMode ? 'Mode clair' : 'Mode sombre', toggleThemeMode),
+        ),
         _hdrBtn(FontAwesomeIcons.language, 'Langue : Français', () => _snack('Français')),
         if (_user != null) _hdrBtn(FontAwesomeIcons.rightFromBracket, 'Se déconnecter', _logoutFromHeader),
       ]),

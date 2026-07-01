@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../config.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 
-/// Native social feed — the web "Feed" page, read + like. Posts come from
-/// GET /posts (public). Liking requires auth; guests are nudged to sign in.
+/// One reaction type — mirrors the web `REACTIONS` list in PostCard.tsx.
+class _Reaction {
+  final String key;
+  final String label;
+  final IconData icon;
+  final Color color;
+  const _Reaction(this.key, this.label, this.icon, this.color);
+}
+
+const _reactions = <_Reaction>[
+  _Reaction('like', "J'aime", FontAwesomeIcons.thumbsUp, Color(0xFF0C6780)),
+  _Reaction('love', 'Adore', FontAwesomeIcons.solidHeart, Color(0xFFEF4444)),
+  _Reaction('sad', 'Triste', FontAwesomeIcons.faceSadTear, Color(0xFFF59E0B)),
+  _Reaction('bad', 'Mauvais', FontAwesomeIcons.thumbsDown, Color(0xFF64748B)),
+  _Reaction('misinfo', 'Fausse info', FontAwesomeIcons.triangleExclamation, Color(0xFFEA580C)),
+];
+_Reaction? _reactionByKey(String? k) {
+  for (final r in _reactions) { if (r.key == k) return r; }
+  return null;
+}
+
+/// Native social feed — mirrors the web "Feed" (PostCard): 5 reactions via a
+/// tap picker, reaction counts, comment + share. Posts from GET /posts (public).
 class FeedScreen extends StatefulWidget {
   final bool loggedIn;
   const FeedScreen({super.key, required this.loggedIn});
@@ -35,31 +58,68 @@ class _FeedScreenState extends State<FeedScreen> {
     }
   }
 
-  Future<void> _like(int i) async {
+  String? _userReaction(Map<String, dynamic> p) => (p['userReaction'] ?? (p['_liked'] == true ? 'like' : null))?.toString();
+
+  Future<void> _react(int i, String type) async {
     final post = _posts[i];
     if (!widget.loggedIn) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Connectez-vous pour aimer une publication.'), duration: Duration(seconds: 2)));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Connectez-vous pour réagir à une publication.'), duration: Duration(seconds: 2)));
       return;
     }
     final id = post['id']?.toString();
     if (id == null) return;
-    // Optimistic toggle.
-    final wasLiked = post['_liked'] == true;
+    final prev = _userReaction(post);
+    final prevCount = (post['likeCount'] ?? 0) as int;
+    // Optimistic: same type toggles off, otherwise switches/adds.
+    final removing = prev == type;
     setState(() {
-      post['_liked'] = !wasLiked;
-      post['likeCount'] = (post['likeCount'] ?? 0) + (wasLiked ? -1 : 1);
+      post['userReaction'] = removing ? null : type;
+      post['_liked'] = !removing;
+      post['likeCount'] = prevCount + (removing ? -1 : (prev == null ? 1 : 0));
     });
     try {
-      final r = await AgentApi.likePost(id);
+      final r = await AgentApi.reactPost(id, type);
       if (mounted && r.isNotEmpty) {
         setState(() {
           if (r['likeCount'] != null) post['likeCount'] = r['likeCount'];
-          if (r['liked'] != null) post['_liked'] = r['liked'];
+          if (r.containsKey('userReaction')) post['userReaction'] = r['userReaction'];
+          if (r['reactions'] != null) post['reactions'] = r['reactions'];
         });
       }
     } catch (_) {
-      if (mounted) setState(() { post['_liked'] = wasLiked; post['likeCount'] = (post['likeCount'] ?? 0) + (wasLiked ? 1 : -1); });
+      if (mounted) setState(() { post['userReaction'] = prev; post['likeCount'] = prevCount; });
     }
+  }
+
+  void _showReactionPicker(int i) {
+    if (!widget.loggedIn) { _react(i, 'like'); return; }
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(40), boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 16)]),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: _reactions.map((r) => InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: () { Navigator.of(context).pop(); _react(i, r.key); },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              FaIcon(r.icon, size: 26, color: r.color),
+              const SizedBox(height: 4),
+              Text(r.label, style: const TextStyle(fontSize: 10, color: Colors.black54)),
+            ]),
+          ),
+        )).toList()),
+      ),
+    );
+  }
+
+  void _share(Map<String, dynamic> p) {
+    final id = p['id']?.toString() ?? '';
+    Clipboard.setData(ClipboardData(text: '${AppConfig.webBase}/community?post=$id'));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lien copié !'), duration: Duration(seconds: 1)));
   }
 
   String _abs(String? url) {
@@ -83,7 +143,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Fil d'actualité")),
+      appBar: MediwyzHeader(title: "Fil d'actualité", loggedIn: widget.loggedIn),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -112,12 +172,18 @@ class _FeedScreenState extends State<FeedScreen> {
     final avatar = _abs(author['profileImage']?.toString());
     final image = _abs(p['imageUrl']?.toString());
     final initials = name.split(' ').where((w) => w.isNotEmpty).map((w) => w[0]).take(2).join().toUpperCase();
-    final liked = p['_liked'] == true;
+    final active = _reactionByKey(_userReaction(p));
+    final likeCount = (p['likeCount'] ?? 0) as int;
+    final int commentCount = ((p['commentCount'] ?? (p['_count'] is Map ? (p['_count'] as Map)['comments'] : 0)) as num?)?.toInt() ?? 0;
+    final reactions = (p['reactions'] as Map?) ?? const {};
+    final present = _reactions.where((r) => ((reactions[r.key] ?? 0) as num) > 0).toList();
+
     return Card(
       margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14), side: const BorderSide(color: Color(0xFFE6EDF2))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        // Author row + options
         Padding(
           padding: const EdgeInsets.all(12),
           child: Row(children: [
@@ -135,36 +201,68 @@ class _FeedScreenState extends State<FeedScreen> {
               ]),
               Text('${(author['userType'] ?? '').toString().toLowerCase().replaceAll('_', ' ')} · ${_ago(p['createdAt'])}', style: const TextStyle(fontSize: 11, color: Colors.black45)),
             ])),
+            const Icon(Icons.more_horiz, size: 20, color: Colors.black26),
           ]),
         ),
         if ((p['content'] ?? '').toString().isNotEmpty)
           Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10), child: Text(p['content'].toString(), style: const TextStyle(fontSize: 14, height: 1.35, color: Color(0xFF1A2733)))),
         if (image.isNotEmpty)
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(0)),
-            child: CachedNetworkImage(imageUrl: image, width: double.infinity, fit: BoxFit.cover, errorWidget: (_, __, ___) => const SizedBox.shrink()),
+          CachedNetworkImage(imageUrl: image, width: double.infinity, fit: BoxFit.cover, errorWidget: (_, __, ___) => const SizedBox.shrink()),
+        // Counts summary (reaction dots + total, comments)
+        if (likeCount > 0 || commentCount > 0)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 8, 14, 0),
+            child: Row(children: [
+              if (likeCount > 0) ...[
+                ...(present.isEmpty ? [_reactions.first] : present).take(3).map((r) => Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CircleAvatar(radius: 8, backgroundColor: r.color, child: FaIcon(r.icon, size: 8, color: Colors.white)),
+                    )),
+                const SizedBox(width: 4),
+                Text('$likeCount', style: const TextStyle(fontSize: 12, color: Colors.black45)),
+              ],
+              const Spacer(),
+              if (commentCount > 0) Text('$commentCount commentaire${commentCount > 1 ? 's' : ''}', style: const TextStyle(fontSize: 12, color: Colors.black45)),
+            ]),
           ),
+        const Divider(height: 16, indent: 8, endIndent: 8),
+        // Action row — Reaction | Comment | Share
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
           child: Row(children: [
-            TextButton.icon(
-              onPressed: () => _like(i),
-              icon: FaIcon(liked ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart, size: 15, color: liked ? Colors.red : Colors.black45),
-              label: Text('${p['likeCount'] ?? 0}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
-            ),
-            TextButton.icon(
-              onPressed: () => _openWebPost(p['id']?.toString()),
-              icon: const FaIcon(FontAwesomeIcons.comment, size: 15, color: Colors.black45),
-              label: Text('${p['commentCount'] ?? 0}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
-            ),
+            Expanded(child: _action(
+              icon: active?.icon ?? FontAwesomeIcons.thumbsUp,
+              label: active?.label ?? "J'aime",
+              color: active?.color,
+              onTap: () => _showReactionPicker(i),
+              onLongPress: () => _showReactionPicker(i),
+            )),
+            Expanded(child: _action(icon: FontAwesomeIcons.comment, label: 'Commenter', onTap: () => _comment(p))),
+            Expanded(child: _action(icon: FontAwesomeIcons.share, label: 'Partager', onTap: () => _share(p))),
           ]),
         ),
       ]),
     );
   }
 
-  void _openWebPost(String? id) {
-    // Comments thread isn't native yet — nudge, keep it simple.
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Les commentaires arrivent bientôt dans l\'app.'), duration: Duration(seconds: 2)));
+  Widget _action({required IconData icon, required String label, Color? color, VoidCallback? onTap, VoidCallback? onLongPress}) {
+    final c = color ?? Colors.black54;
+    return InkWell(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          FaIcon(icon, size: 15, color: c),
+          const SizedBox(width: 6),
+          Flexible(child: Text(label, overflow: TextOverflow.ellipsis, style: TextStyle(color: c, fontSize: 12.5, fontWeight: FontWeight.w500))),
+        ]),
+      ),
+    );
+  }
+
+  void _comment(Map<String, dynamic> p) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Les commentaires arrivent bientôt dans l'app."), duration: Duration(seconds: 2)));
   }
 }

@@ -32,9 +32,11 @@ class AgentApi {
     return posts?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
   }
 
-  /// POST /posts/:id/like — toggle a reaction (auth). Returns {liked, likeCount}.
-  static Future<Map<String, dynamic>> likePost(String id) async {
-    final res = await ApiClient.instance.post('/posts/$id/like', data: {'type': 'like'});
+  /// POST /posts/:id/like — set/toggle a reaction (auth). `type` is one of
+  /// like|love|sad|bad|misinfo. Clicking the same type again removes it.
+  /// Returns {liked, likeCount, reactions, userReaction}.
+  static Future<Map<String, dynamic>> reactPost(String id, String type) async {
+    final res = await ApiClient.instance.post('/posts/$id/like', data: {'type': type});
     final m = Map<String, dynamic>.from((res.data as Map?) ?? const {});
     return Map<String, dynamic>.from((m['data'] as Map?) ?? m);
   }

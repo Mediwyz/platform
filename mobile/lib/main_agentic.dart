@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
 import 'theme/mediwyz_theme.dart';
+import 'theme/theme_controller.dart';
 import 'agentic/wyzo_chat_screen.dart';
 import 'agentic/onboarding_screen.dart';
 
@@ -10,17 +11,26 @@ import 'agentic/onboarding_screen.dart';
 ///   flutter run -d chrome -t lib/main_agentic.dart \
 ///     --dart-define=API_BASE=https://mediwyz.com/api \
 ///     --web-browser-flag "--disable-web-security"
-void main() => runApp(const WyzoApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  loadThemeMode(); // restore the persisted light/dark choice (best-effort)
+  runApp(const WyzoApp());
+}
 
 class WyzoApp extends StatelessWidget {
   const WyzoApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConfig.appName,
-      theme: buildMediWyzTheme(),
-      debugShowCheckedModeBanner: false,
-      home: const _RootGate(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeMode,
+      builder: (_, mode, __) => MaterialApp(
+        title: AppConfig.appName,
+        theme: buildMediWyzTheme(),
+        darkTheme: buildMediWyzDarkTheme(),
+        themeMode: mode,
+        debugShowCheckedModeBanner: false,
+        home: const _RootGate(),
+      ),
     );
   }
 }
