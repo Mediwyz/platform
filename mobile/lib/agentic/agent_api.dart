@@ -118,6 +118,7 @@ class AgentApi {
   static Future<List<Map<String, dynamic>>> allRoles() => _getList('/roles', qp: {'all': 'true'}, key: 'roles');
   static Future<List<Map<String, dynamic>>> cmsSections() => _getList('/cms/sections', key: 'sections');
   static Future<List<Map<String, dynamic>>> cmsTestimonials() => _getList('/cms/testimonials', key: 'testimonials');
+  static Future<List<Map<String, dynamic>>> roleConfig() => _getList('/admin/role-config', key: 'config');
 
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {

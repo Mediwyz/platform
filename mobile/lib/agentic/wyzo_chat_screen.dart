@@ -549,7 +549,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       case '/provider/{slug}': return ProviderDashboardScreen(loggedIn: li, providerId: uid);
       case '/provider/{slug}/pre-auth': return ProviderPreAuthScreen(loggedIn: li);
       case '/patient/my-company': return MyOrganizationsScreen(loggedIn: li);
-      case '/admin/content': return AdminContentScreen(loggedIn: li);
+      case '/admin/content': case '/regional/content': return AdminContentScreen(loggedIn: li);
+      case '/admin/role-config': case '/regional/role-config': return RoleConfigScreen(loggedIn: li);
       case '/regional/services': return ServiceCatalogScreen(loggedIn: li);
       case '/regional/role-requests': return RoleRequestsScreen(loggedIn: li);
       case '/invite': return InviteScreen(loggedIn: li);

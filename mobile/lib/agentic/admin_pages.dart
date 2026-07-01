@@ -35,6 +35,30 @@ class RegionalAdminsScreen extends StatelessWidget {
       );
 }
 
+// ── Role config (/admin/role-config, /regional/role-config) — feature toggles ─
+class RoleConfigScreen extends StatelessWidget {
+  final bool loggedIn;
+  const RoleConfigScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Configuration des rôles',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.toggleOn,
+        emptyText: 'Aucune configuration.',
+        fetch: () => AgentApi.roleConfig(),
+        tile: (c, _) {
+          final on = c['enabled'] == true;
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.toggleOn),
+            title: Text((c['featureKey'] ?? c['feature'] ?? 'Fonctionnalité').toString().replaceAll('_', ' '), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text((c['userType'] ?? c['role'] ?? '').toString().toLowerCase().replaceAll('_', ' '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: Icon(on ? Icons.toggle_on : Icons.toggle_off, color: on ? const Color(0xFF27AE60) : Colors.grey, size: 30),
+          );
+        },
+      );
+}
+
 // ── Content / CMS (/admin/content) — testimonials + sections ─────────────────
 class AdminContentScreen extends StatelessWidget {
   final bool loggedIn;
