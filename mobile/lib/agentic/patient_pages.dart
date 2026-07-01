@@ -5,6 +5,7 @@ import 'agent_api.dart';
 import 'app_header.dart';
 import 'call_screen.dart';
 import 'page_kit.dart';
+import 'provider_search_screen.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // My Bookings (patient) — mirrors /patient/bookings. Call button on each row.
@@ -20,6 +21,8 @@ class MyBookingsScreen extends StatelessWidget {
       title: 'Mes rendez-vous',
       loggedIn: loggedIn,
       myId: user?['id']?.toString(),
+      countNoun: 'rendez-vous',
+      searchText: (b) => '${b['providerName'] ?? b['provider']?['name'] ?? ''} ${b['serviceType'] ?? ''}',
       emptyIcon: FontAwesomeIcons.calendarCheck,
       emptyText: 'Aucun rendez-vous.',
       fetch: () => AgentApi.patientBookings(),
@@ -110,8 +113,23 @@ class OrdersScreen extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// My Health — mirrors /patient/health (today's health tracker summary).
+// My Health — mirrors /patient/health: your care across every provider category
+// (pick one to see visits/results/prescriptions or book). Each card → search.
 // ─────────────────────────────────────────────────────────────────────────────
+const _careCategories = <(String, IconData, String)>[
+  ('Médecins', FontAwesomeIcons.userDoctor, 'doctors'),
+  ('Infirmiers', FontAwesomeIcons.userNurse, 'nurses'),
+  ("Garde d'enfants", FontAwesomeIcons.baby, 'childcare'),
+  ('Pharmacies', FontAwesomeIcons.capsules, 'medicines'),
+  ('Laboratoires', FontAwesomeIcons.flask, 'lab'),
+  ('Urgences', FontAwesomeIcons.truckMedical, 'emergency'),
+  ('Physiothérapeutes', FontAwesomeIcons.personWalking, 'physiotherapists'),
+  ('Dentistes', FontAwesomeIcons.tooth, 'dentists'),
+  ('Optométristes', FontAwesomeIcons.eye, 'optometrists'),
+  ('Nutritionnistes', FontAwesomeIcons.appleWhole, 'nutritionists'),
+  ('Aides-soignants', FontAwesomeIcons.handHoldingHeart, 'caregivers'),
+];
+
 class MyHealthScreen extends StatefulWidget {
   final bool loggedIn;
   const MyHealthScreen({super.key, required this.loggedIn});
@@ -120,75 +138,72 @@ class MyHealthScreen extends StatefulWidget {
 }
 
 class _MyHealthScreenState extends State<MyHealthScreen> {
-  Map<String, dynamic> _d = {};
+  final Map<String, int> _counts = {};
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    if (widget.loggedIn) { _load(); } else { _loading = false; }
+    _load();
   }
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final d = await AgentApi.healthDashboard();
-    if (mounted) setState(() { _d = d; _loading = false; });
+    // Count available providers per category (parallel).
+    await Future.wait(_careCategories.map((cat) async {
+      final type = kSearchSlugType[cat.$3]?.$1 ?? 'DOCTOR';
+      final list = await AgentApi.searchProviders(type);
+      if (mounted) _counts[cat.$3] = list.length;
+    }));
+    if (mounted) setState(() => _loading = false);
   }
 
-  Widget _metric(IconData icon, String label, String value) => Container(
+  void _open(String slug) => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProviderSearchScreen(slug: slug, loggedIn: widget.loggedIn)));
+
+  Widget _card(String label, IconData icon, String slug) {
+    final n = _counts[slug];
+    return InkWell(
+      onTap: () => _open(slug),
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(color: kSurface(context), borderRadius: BorderRadius.circular(14), border: Border.all(color: kLine(context))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          FaIcon(icon, size: 16, color: MediWyzColors.teal),
-          const SizedBox(height: 8),
-          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: kFg(context))),
-          Text(label, style: TextStyle(fontSize: 11.5, color: kSub(context))),
+          Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)), child: FaIcon(icon, size: 16, color: MediWyzColors.teal)),
+          const SizedBox(height: 10),
+          Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kFg(context))),
+          const SizedBox(height: 2),
+          Text(n == null ? '…' : '$n disponible${n > 1 ? 's' : ''}', style: TextStyle(fontSize: 11.5, color: kSub(context))),
+          const SizedBox(height: 4),
+          Row(children: [Icon(Icons.event_available, size: 12, color: kFaint(context)), const SizedBox(width: 4), Text('Aucune visite', style: TextStyle(fontSize: 10.5, color: kFaint(context)))]),
         ]),
-      );
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final water = _d['water'] ?? _d['waterIntake'] ?? _d['hydration'];
-    final steps = _d['steps'] ?? _d['stepCount'];
-    final sleep = _d['sleep'] ?? _d['sleepHours'];
-    final calories = _d['calories'] ?? _d['caloriesConsumed'];
     return Scaffold(
-      appBar: MediwyzHeader(title: 'Mon bilan santé', loggedIn: widget.loggedIn),
-      body: !widget.loggedIn
-          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text('Connectez-vous pour suivre votre santé.', textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
-          : _loading
-              ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  child: ListView(padding: const EdgeInsets.all(16), children: [
-                    Text("Aujourd'hui", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kFg(context))),
-                    const SizedBox(height: 12),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
-                      children: [
-                        _metric(FontAwesomeIcons.droplet, 'Hydratation', water != null ? '$water' : '—'),
-                        _metric(FontAwesomeIcons.personWalking, 'Pas', steps != null ? '$steps' : '—'),
-                        _metric(FontAwesomeIcons.bed, 'Sommeil', sleep != null ? '$sleep h' : '—'),
-                        _metric(FontAwesomeIcons.fire, 'Calories', calories != null ? '$calories' : '—'),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(14)),
-                      child: Row(children: [
-                        const FaIcon(FontAwesomeIcons.robot, size: 18, color: MediWyzColors.teal),
-                        const SizedBox(width: 12),
-                        Expanded(child: Text((_d['summary'] ?? _d['insight'] ?? "Suivez votre hydratation, votre sommeil et votre activité chaque jour. Demandez à Wyzo un conseil personnalisé.").toString(), style: TextStyle(fontSize: 13, height: 1.4, color: kFg(context)))),
-                      ]),
-                    ),
-                  ]),
-                ),
+      appBar: MediwyzHeader(title: 'Ma santé', loggedIn: widget.loggedIn),
+      body: RefreshIndicator(
+        onRefresh: _load,
+        child: ListView(padding: const EdgeInsets.all(16), children: [
+          Text('Votre santé auprès de chaque prestataire', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: kFg(context))),
+          const SizedBox(height: 4),
+          Text('Choisissez une catégorie pour voir vos visites, résultats et ordonnances, ou prendre un nouveau rendez-vous.', style: TextStyle(fontSize: 12.5, height: 1.35, color: kSub(context))),
+          const SizedBox(height: 16),
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1.35,
+            children: [for (final c in _careCategories) _card(c.$1, c.$2, c.$3)],
+          ),
+          if (_loading) const Padding(padding: EdgeInsets.only(top: 16), child: Center(child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)))),
+        ]),
+      ),
     );
   }
 }

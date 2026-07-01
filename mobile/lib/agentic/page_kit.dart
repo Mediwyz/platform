@@ -48,6 +48,11 @@ class ListPage extends StatefulWidget {
   final Future<List<Map<String, dynamic>>> Function() fetch;
   final Widget Function(Map<String, dynamic> item, VoidCallback reload) tile;
   final String? myId;
+  /// Optional: text to match each item against for the search box. When set, a
+  /// search field + a "N résultats" count header appear (mirrors the web lists).
+  final String Function(Map<String, dynamic> item)? searchText;
+  /// Word for the count header ("N rendez-vous"). Defaults to "éléments".
+  final String countNoun;
   const ListPage({
     super.key,
     required this.title,
@@ -58,6 +63,8 @@ class ListPage extends StatefulWidget {
     required this.tile,
     this.gateText = 'Connectez-vous pour voir cette page.',
     this.myId,
+    this.searchText,
+    this.countNoun = 'éléments',
   });
   @override
   State<ListPage> createState() => _ListPageState();
@@ -66,6 +73,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _items = [];
   bool _loading = true;
+  String _query = '';
 
   @override
   void initState() {
@@ -79,29 +87,62 @@ class _ListPageState extends State<ListPage> {
     if (mounted) setState(() { _items = r; _loading = false; });
   }
 
+  List<Map<String, dynamic>> get _filtered {
+    if (widget.searchText == null || _query.trim().isEmpty) return _items;
+    final q = _query.trim().toLowerCase();
+    return _items.where((it) => widget.searchText!(it).toLowerCase().contains(q)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final items = _filtered;
     return Scaffold(
       appBar: MediwyzHeader(title: widget.title, loggedIn: widget.loggedIn, myId: widget.myId),
       body: !widget.loggedIn
           ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(widget.gateText, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
               ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  child: _items.isEmpty
-                      ? ListView(children: [
-                          const SizedBox(height: 120),
-                          Center(child: FaIcon(widget.emptyIcon, size: 40, color: kFaint(context).withValues(alpha: 0.4))),
-                          const SizedBox(height: 12),
-                          Center(child: Text(widget.emptyText, style: TextStyle(color: kFaint(context)))),
-                        ])
-                      : ListView.separated(
-                          itemCount: _items.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (_, i) => widget.tile(_items[i], _load),
+              : Column(children: [
+                  if (widget.searchText != null && _items.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+                      child: TextField(
+                        onChanged: (v) => setState(() => _query = v),
+                        decoration: InputDecoration(
+                          hintText: 'Rechercher…',
+                          prefixIcon: const Icon(Icons.search, size: 20),
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 6),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         ),
-                ),
+                      ),
+                    ),
+                  if (_items.isNotEmpty)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 2, 16, 4),
+                        child: Text('${items.length} ${widget.countNoun}', style: TextStyle(fontSize: 12, color: kSub(context))),
+                      ),
+                    ),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: _load,
+                      child: items.isEmpty
+                          ? ListView(children: [
+                              const SizedBox(height: 100),
+                              Center(child: FaIcon(widget.emptyIcon, size: 40, color: kFaint(context).withValues(alpha: 0.4))),
+                              const SizedBox(height: 12),
+                              Center(child: Text(_items.isEmpty ? widget.emptyText : 'Aucun résultat.', style: TextStyle(color: kFaint(context)))),
+                            ])
+                          : ListView.separated(
+                              itemCount: items.length,
+                              separatorBuilder: (_, __) => const Divider(height: 1),
+                              itemBuilder: (_, i) => widget.tile(items[i], _load),
+                            ),
+                    ),
+                  ),
+                ]),
     );
   }
 }
