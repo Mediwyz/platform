@@ -21,6 +21,9 @@ import 'provider_pages.dart';
 import 'provider_search_screen.dart';
 import 'role_dashboards.dart';
 import 'insurance_pages.dart';
+import 'regional_pages.dart';
+import 'admin_pages.dart';
+import 'org_pages.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
 import 'provider_bookings_screen.dart';
@@ -536,8 +539,14 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       case '/insurance/pre-auths': return InsurancePreAuthsScreen(loggedIn: li);
       case '/insurance/member-payments': return InsuranceMemberPaymentsScreen(loggedIn: li);
       case '/admin': return AdminDashboardScreen(loggedIn: li);
+      case '/admin/regional-admins': return RegionalAdminsScreen(loggedIn: li);
+      case '/admin/commission-config': return CommissionConfigScreen(loggedIn: li);
       case '/regional': return RegionalDashboardScreen(loggedIn: li);
+      case '/regional/subscriptions': return RegionalSubscriptionsScreen(loggedIn: li);
+      case '/regional/roles': return ProviderRolesScreen(loggedIn: li);
+      case '/regional/org-categories': return OrgCategoriesScreen(loggedIn: li);
       case '/provider/{slug}': return ProviderDashboardScreen(loggedIn: li, providerId: uid);
+      case '/patient/my-company': return MyOrganizationsScreen(loggedIn: li);
     }
     return null;
   }
