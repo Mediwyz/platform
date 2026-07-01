@@ -152,6 +152,14 @@ class AgentApi {
     try { final r = await ApiClient.instance.delete(path); return (r.data as Map?)?['success'] == true || (r.statusCode ?? 500) < 300; } catch (_) { return false; }
   }
 
+  static Future<bool> _put(String path, Map<String, dynamic> body) async {
+    try { final r = await ApiClient.instance.put(path, data: body); return (r.data as Map?)?['success'] == true || (r.statusCode ?? 500) < 300; } catch (_) { return false; }
+  }
+
+  // Config saves
+  static Future<bool> updateCommissionConfig(Map<String, dynamic> b) => _put('/admin/commission-config', b);
+  static Future<bool> patchRoleConfig(String userType, String featureKey, bool enabled) => _patch('/admin/role-config', {'userType': userType, 'featureKey': featureKey, 'enabled': enabled});
+
   // Insurance plans CRUD
   static Future<bool> createInsurancePlan(Map<String, dynamic> b) => _post('/insurance/plans', b);
   static Future<bool> updateInsurancePlan(String id, Map<String, dynamic> b) => _patch('/insurance/plans/$id', b);

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
+import 'form_kit.dart';
 import 'page_kit.dart';
 
 const _gate = "Connectez-vous en tant qu'administrateur.";
@@ -85,13 +86,24 @@ class RoleConfigScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.toggleOn,
         emptyText: 'Aucune configuration.',
         fetch: () => AgentApi.roleConfig(),
-        tile: (c, _) {
+        searchText: (c) => '${c['featureKey'] ?? c['feature'] ?? ''} ${c['userType'] ?? c['role'] ?? ''}',
+        countNoun: 'réglages',
+        tile: (c, reload) {
           final on = c['enabled'] == true;
+          final userType = (c['userType'] ?? c['role'] ?? '').toString();
+          final featureKey = (c['featureKey'] ?? c['feature'] ?? '').toString();
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.toggleOn),
-            title: Text((c['featureKey'] ?? c['feature'] ?? 'Fonctionnalité').toString().replaceAll('_', ' '), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-            subtitle: Text((c['userType'] ?? c['role'] ?? '').toString().toLowerCase().replaceAll('_', ' '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: Icon(on ? Icons.toggle_on : Icons.toggle_off, color: on ? const Color(0xFF27AE60) : Colors.grey, size: 30),
+            title: Text(featureKey.replaceAll('_', ' '), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text(userType.toLowerCase().replaceAll('_', ' '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: Switch(
+              value: on,
+              activeThumbColor: const Color(0xFF27AE60),
+              onChanged: (userType.isEmpty || featureKey.isEmpty) ? null : (v) async {
+                final ok = await AgentApi.patchRoleConfig(userType, featureKey, v);
+                if (context.mounted) { ok ? reload() : toast(context, 'Modification impossible'); }
+              },
+            ),
           );
         },
       );
@@ -160,10 +172,24 @@ class _CommissionConfigScreenState extends State<CommissionConfigScreen> {
 
   String _v(dynamic v, {String suffix = ''}) => v == null ? '—' : '$v$suffix';
 
+  Future<void> _edit() async {
+    const fields = <FormFieldSpec>[
+      FormFieldSpec('platformCommissionRate', 'Commission plateforme (%)', type: FieldType.number),
+      FormFieldSpec('providerRate', 'Taux prestataire (%)', type: FieldType.number),
+      FormFieldSpec('trialWalletAmount', "Portefeuille d'essai", type: FieldType.number),
+      FormFieldSpec('currency', 'Devise'),
+    ];
+    final v = await showEntityForm(context, title: 'Modifier la configuration', fields: fields, initial: _c);
+    if (v == null || !mounted) return;
+    final ok = await AgentApi.updateCommissionConfig(v);
+    if (mounted) { ok ? _load() : toast(context, 'Enregistrement impossible'); }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MediwyzHeader(title: 'Configuration des commissions', loggedIn: widget.loggedIn),
+      floatingActionButton: widget.loggedIn ? FloatingActionButton.extended(onPressed: _edit, backgroundColor: MediWyzColors.navy, icon: const Icon(Icons.edit, color: Colors.white), label: const Text('Modifier', style: TextStyle(color: Colors.white))) : null,
       body: !widget.loggedIn
           ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_gate, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
