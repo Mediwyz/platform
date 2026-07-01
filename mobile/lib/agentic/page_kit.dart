@@ -57,6 +57,8 @@ class ListPage extends StatefulWidget {
   final List<(String, String)>? filters;
   /// Given an item, return its filter value (compared to the selected chip).
   final String Function(Map<String, dynamic> item)? filterValue;
+  /// Optional create action — shows a "+" FAB; the callback gets a reload fn.
+  final void Function(VoidCallback reload)? onCreate;
   const ListPage({
     super.key,
     required this.title,
@@ -71,6 +73,7 @@ class ListPage extends StatefulWidget {
     this.countNoun = 'éléments',
     this.filters,
     this.filterValue,
+    this.onCreate,
   });
   @override
   State<ListPage> createState() => _ListPageState();
@@ -111,6 +114,9 @@ class _ListPageState extends State<ListPage> {
     final items = _filtered;
     return Scaffold(
       appBar: MediwyzHeader(title: widget.title, loggedIn: widget.loggedIn, myId: widget.myId),
+      floatingActionButton: (widget.onCreate != null && widget.loggedIn)
+          ? FloatingActionButton(onPressed: () => widget.onCreate!(_load), backgroundColor: MediWyzColors.navy, child: const Icon(Icons.add, color: Colors.white))
+          : null,
       body: !widget.loggedIn
           ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(widget.gateText, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading

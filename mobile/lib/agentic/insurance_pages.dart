@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'form_kit.dart';
 import 'page_kit.dart';
+
+const _planFields = <FormFieldSpec>[
+  FormFieldSpec('planName', 'Nom de la formule', required: true),
+  FormFieldSpec('planType', 'Type'),
+  FormFieldSpec('monthlyPremium', 'Prime mensuelle (Rs)', type: FieldType.number),
+  FormFieldSpec('coverageAmount', 'Montant de couverture (Rs)', type: FieldType.number),
+  FormFieldSpec('deductible', 'Franchise (Rs)', type: FieldType.number),
+  FormFieldSpec('coverageDetails', 'Détails de couverture', type: FieldType.multiline),
+  FormFieldSpec('eligibility', 'Éligibilité', type: FieldType.multiline),
+];
 
 const _gate = "Connectez-vous en tant qu'assureur.";
 
@@ -103,9 +114,16 @@ class InsurancePlansScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.crown,
         emptyText: 'Aucune formule.',
         fetch: () => AgentApi.insurancePlans(),
-        tile: (p, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouvelle formule', fields: _planFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createInsurancePlan(v);
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (p, reload) {
           final premium = p['monthlyPremium'] ?? p['premium'];
           final coverage = p['coverageAmount'] ?? p['coverage'];
+          final id = p['id']?.toString();
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.shieldHalved),
             title: Text((p['planName'] ?? p['name'] ?? 'Formule').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -113,7 +131,25 @@ class InsurancePlansScreen extends StatelessWidget {
               if (p['planType'] ?? p['type'] != null) (p['planType'] ?? p['type']).toString(),
               if (coverage != null) 'Couverture Rs $coverage',
             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: premium == null ? null : Text('Rs $premium/mois', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              if (premium != null) Text('Rs $premium/mois', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+              if (id != null) PopupMenuButton<String>(
+                icon: Icon(Icons.more_vert, size: 18, color: kFaint(context)),
+                onSelected: (a) async {
+                  if (a == 'edit') {
+                    final v = await showEntityForm(context, title: 'Modifier la formule', fields: _planFields, initial: p);
+                    if (v == null || !context.mounted) return;
+                    final ok = await AgentApi.updateInsurancePlan(id, v);
+                    if (context.mounted) { ok ? reload() : toast(context, 'Modification impossible'); }
+                  } else if (a == 'delete') {
+                    if (!await confirmAction(context, 'Supprimer', 'Supprimer cette formule ?', confirmLabel: 'Supprimer') || !context.mounted) return;
+                    final ok = await AgentApi.deleteInsurancePlan(id);
+                    if (context.mounted) { ok ? reload() : toast(context, 'Suppression impossible'); }
+                  }
+                },
+                itemBuilder: (_) => const [PopupMenuItem(value: 'edit', child: Text('Modifier')), PopupMenuItem(value: 'delete', child: Text('Supprimer'))],
+              ),
+            ]),
           );
         },
       );

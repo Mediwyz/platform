@@ -145,6 +145,28 @@ class AgentApi {
     }
   }
 
+  static Future<bool> _patch(String path, Map<String, dynamic> body) async {
+    try { final r = await ApiClient.instance.patch(path, data: body); return (r.data as Map?)?['success'] == true || (r.statusCode ?? 500) < 300; } catch (_) { return false; }
+  }
+  static Future<bool> _delete(String path) async {
+    try { final r = await ApiClient.instance.delete(path); return (r.data as Map?)?['success'] == true || (r.statusCode ?? 500) < 300; } catch (_) { return false; }
+  }
+
+  // Insurance plans CRUD
+  static Future<bool> createInsurancePlan(Map<String, dynamic> b) => _post('/insurance/plans', b);
+  static Future<bool> updateInsurancePlan(String id, Map<String, dynamic> b) => _patch('/insurance/plans/$id', b);
+  static Future<bool> deleteInsurancePlan(String id) => _delete('/insurance/plans/$id');
+
+  // Regional org-categories CRUD
+  static Future<bool> createOrgCategory(Map<String, dynamic> b) => _post('/regional/org-categories', b);
+  static Future<bool> updateOrgCategory(String id, Map<String, dynamic> b) => _patch('/regional/org-categories/$id', b);
+  static Future<bool> deleteOrgCategory(String id) => _delete('/regional/org-categories/$id');
+
+  // Clinical knowledge CRUD
+  static Future<bool> createClinicalKnowledge(Map<String, dynamic> b) => _post('/admin/clinical-knowledge', b);
+  static Future<bool> updateClinicalKnowledge(String id, Map<String, dynamic> b) => _patch('/admin/clinical-knowledge/$id', b);
+  static Future<bool> deleteClinicalKnowledge(String id) => _delete('/admin/clinical-knowledge/$id');
+
   static Future<bool> denyClaim(String id, String reason) => _post('/corporate/insurance/claims/$id/deny', {'reason': reason});
   static Future<bool> approvePreAuth(String id) => _post('/corporate/insurance/pre-auth/$id/approve');
   static Future<bool> denyPreAuth(String id, String reason) => _post('/corporate/insurance/pre-auth/$id/deny', {'reason': reason});

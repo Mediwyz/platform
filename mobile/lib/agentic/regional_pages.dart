@@ -2,9 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'form_kit.dart';
 import 'page_kit.dart';
 
 const _gate = "Connectez-vous en tant qu'administrateur régional.";
+
+const _orgCatFields = <FormFieldSpec>[
+  FormFieldSpec('label', 'Libellé', required: true),
+  FormFieldSpec('key', 'Clé', required: true),
+  FormFieldSpec('blurb', 'Description', type: FieldType.multiline),
+  FormFieldSpec('icon', 'Icône'),
+  FormFieldSpec('displayOrder', "Ordre d'affichage", type: FieldType.number),
+  FormFieldSpec('isActive', 'Actif', type: FieldType.toggle),
+];
+
+const _knowledgeFields = <FormFieldSpec>[
+  FormFieldSpec('conditionKey', 'Condition', required: true),
+  FormFieldSpec('category', 'Catégorie'),
+  FormFieldSpec('aliases', 'Alias (séparés par des virgules)'),
+  FormFieldSpec('dietaryGuidance', 'Conseils diététiques', type: FieldType.multiline),
+  FormFieldSpec('sources', 'Sources (séparées par des virgules)'),
+  FormFieldSpec('active', 'Actif', type: FieldType.toggle),
+];
+
+/// Split a comma-separated field into a list for the API (aliases/sources).
+Map<String, dynamic> _splitLists(Map<String, dynamic> v, List<String> keys) {
+  final out = Map<String, dynamic>.from(v);
+  for (final k in keys) {
+    if (out[k] is String) out[k] = (out[k] as String).split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+  }
+  return out;
+}
 
 // ── Subscription plans (/regional/subscriptions) ─────────────────────────────
 class RegionalSubscriptionsScreen extends StatelessWidget {
@@ -96,12 +124,39 @@ class OrgCategoriesScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.building,
         emptyText: 'Aucune catégorie.',
         fetch: () => AgentApi.regionalOrgCategories(),
-        tile: (c, _) => ListTile(
-          leading: tileIcon(FontAwesomeIcons.building),
-          title: Text((c['label'] ?? c['key'] ?? 'Catégorie').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-          subtitle: (c['blurb'] ?? '').toString().isEmpty ? null : Text(c['blurb'].toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: statusBadge(c['isActive'] == false ? 'inactive' : 'active'),
-        ),
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouvelle catégorie', fields: _orgCatFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createOrgCategory(v);
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (c, reload) {
+          final id = c['id']?.toString();
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.building),
+            title: Text((c['label'] ?? c['key'] ?? 'Catégorie').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: (c['blurb'] ?? '').toString().isEmpty ? null : Text(c['blurb'].toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              statusBadge(c['isActive'] == false ? 'inactive' : 'active'),
+              if (id != null) PopupMenuButton<String>(
+                icon: Icon(Icons.more_vert, size: 18, color: kFaint(context)),
+                onSelected: (a) async {
+                  if (a == 'edit') {
+                    final v = await showEntityForm(context, title: 'Modifier la catégorie', fields: _orgCatFields, initial: c);
+                    if (v == null || !context.mounted) return;
+                    final ok = await AgentApi.updateOrgCategory(id, v);
+                    if (context.mounted) { ok ? reload() : toast(context, 'Modification impossible'); }
+                  } else if (a == 'delete') {
+                    if (!await confirmAction(context, 'Désactiver', 'Désactiver cette catégorie ?', confirmLabel: 'Désactiver') || !context.mounted) return;
+                    final ok = await AgentApi.deleteOrgCategory(id);
+                    if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); }
+                  }
+                },
+                itemBuilder: (_) => const [PopupMenuItem(value: 'edit', child: Text('Modifier')), PopupMenuItem(value: 'delete', child: Text('Désactiver'))],
+              ),
+            ]),
+          );
+        },
       );
 }
 
@@ -186,9 +241,16 @@ class ClinicalKnowledgeScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.book,
         emptyText: 'Aucune connaissance.',
         fetch: () => AgentApi.clinicalKnowledge(),
-        tile: (k, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouvelle entrée', fields: _knowledgeFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createClinicalKnowledge(_splitLists(v, ['aliases', 'sources']));
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (k, reload) {
           final aliases = (k['aliases'] as List?)?.length;
           final sources = (k['sources'] as List?)?.length;
+          final id = k['id']?.toString();
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.book),
             title: Text((k['conditionKey'] ?? k['condition'] ?? k['name'] ?? 'Condition').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -197,7 +259,26 @@ class ClinicalKnowledgeScreen extends StatelessWidget {
               if (aliases != null) '$aliases alias',
               if (sources != null) '$sources sources',
             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: statusBadge(k['active'] == false ? 'inactive' : 'active'),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              statusBadge(k['active'] == false ? 'inactive' : 'active'),
+              if (id != null) PopupMenuButton<String>(
+                icon: Icon(Icons.more_vert, size: 18, color: kFaint(context)),
+                onSelected: (a) async {
+                  if (a == 'edit') {
+                    final init = {...k, 'aliases': (k['aliases'] as List?)?.join(', '), 'sources': (k['sources'] as List?)?.join(', ')};
+                    final v = await showEntityForm(context, title: "Modifier l'entrée", fields: _knowledgeFields, initial: init);
+                    if (v == null || !context.mounted) return;
+                    final ok = await AgentApi.updateClinicalKnowledge(id, _splitLists(v, ['aliases', 'sources']));
+                    if (context.mounted) { ok ? reload() : toast(context, 'Modification impossible'); }
+                  } else if (a == 'delete') {
+                    if (!await confirmAction(context, 'Supprimer', 'Supprimer cette entrée ?', confirmLabel: 'Supprimer') || !context.mounted) return;
+                    final ok = await AgentApi.deleteClinicalKnowledge(id);
+                    if (context.mounted) { ok ? reload() : toast(context, 'Suppression impossible'); }
+                  }
+                },
+                itemBuilder: (_) => const [PopupMenuItem(value: 'edit', child: Text('Modifier')), PopupMenuItem(value: 'delete', child: Text('Supprimer'))],
+              ),
+            ]),
           );
         },
       );
