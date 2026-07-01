@@ -222,6 +222,49 @@ class DashboardGrid extends StatelessWidget {
       );
 }
 
+void toast(BuildContext c, String msg) => ScaffoldMessenger.of(c).showSnackBar(SnackBar(content: Text(msg), duration: const Duration(seconds: 2)));
+
+/// Prompt for a free-text reason (e.g. a denial reason). Returns the text, or
+/// null if cancelled. `optional` allows an empty confirm.
+Future<String?> promptReason(BuildContext c, String title, {String confirmLabel = 'Confirmer', bool optional = true}) async {
+  final ctl = TextEditingController();
+  final r = await showDialog<String>(
+    context: c,
+    builder: (ctx) => AlertDialog(
+      title: Text(title),
+      content: TextField(controller: ctl, autofocus: true, maxLines: 3, decoration: const InputDecoration(hintText: 'Motif…', border: OutlineInputBorder())),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Annuler')),
+        ElevatedButton(onPressed: () { if (!optional && ctl.text.trim().isEmpty) return; Navigator.of(ctx).pop(ctl.text.trim()); }, child: Text(confirmLabel)),
+      ],
+    ),
+  );
+  ctl.dispose();
+  return r;
+}
+
+/// Confirm dialog. Returns true if confirmed.
+Future<bool> confirmAction(BuildContext c, String title, String message, {String confirmLabel = 'Confirmer'}) async {
+  final r = await showDialog<bool>(
+    context: c,
+    builder: (ctx) => AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Annuler')),
+        ElevatedButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(confirmLabel)),
+      ],
+    ),
+  );
+  return r == true;
+}
+
+/// A small green "approve" + red "deny" action pair for a list-tile trailing.
+Widget approveDenyButtons({required VoidCallback onApprove, required VoidCallback onDeny}) => Row(mainAxisSize: MainAxisSize.min, children: [
+      IconButton(icon: const FaIcon(FontAwesomeIcons.circleCheck, size: 18, color: Color(0xFF27AE60)), tooltip: 'Approuver', onPressed: onApprove),
+      IconButton(icon: const FaIcon(FontAwesomeIcons.circleXmark, size: 18, color: Colors.red), tooltip: 'Refuser', onPressed: onDeny),
+    ]);
+
 /// A round teal leading avatar with an icon — the standard list-tile leading.
 Widget tileIcon(IconData icon) => CircleAvatar(
       radius: 18,

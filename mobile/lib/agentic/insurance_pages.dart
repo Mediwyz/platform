@@ -134,19 +134,27 @@ class InsurancePreAuthsScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.fileShield,
         emptyText: 'Aucune pré-autorisation.',
         fetch: () => AgentApi.insurancePreAuths(),
-        tile: (a, _) {
+        tile: (a, reload) {
           final member = a['member'] is Map ? '${a['member']['firstName'] ?? ''} ${a['member']['lastName'] ?? ''}'.trim() : (a['memberId'] ?? 'Membre').toString();
           final req = a['requestedAmount'] ?? a['amount'];
           final appr = a['approvedAmount'];
+          final id = a['id']?.toString();
+          final pending = (a['status'] ?? '').toString().toLowerCase() == 'pending';
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.fileShield),
             title: Text(member.isEmpty ? 'Membre' : member, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
             subtitle: Text([
+              if (a['category'] != null) a['category'].toString(),
               if (req != null) 'Demandé Rs $req',
               if (appr != null) 'Approuvé Rs $appr',
               if (a['expiresAt'] != null) 'Exp. ${fmtDate(a['expiresAt'])}',
             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: (a['status'] ?? '').toString().isEmpty ? null : statusBadge(a['status'].toString()),
+            trailing: (pending && id != null)
+                ? approveDenyButtons(
+                    onApprove: () async { final ok = await AgentApi.approvePreAuth(id); if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); } },
+                    onDeny: () async { final r = await promptReason(context, 'Refuser la pré-autorisation'); if (r == null || !context.mounted) return; final ok = await AgentApi.denyPreAuth(id, r); if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); } },
+                  )
+                : (a['status'] ?? '').toString().isEmpty ? null : statusBadge(a['status'].toString()),
           );
         },
       );

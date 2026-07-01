@@ -74,15 +74,27 @@ class WorkflowSuggestionsScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.paperPlane,
         emptyText: 'Aucune suggestion.',
         fetch: () => AgentApi.workflowSuggestions(),
-        tile: (s, _) => ListTile(
-          leading: tileIcon(FontAwesomeIcons.paperPlane),
-          title: Text((s['title'] ?? s['name'] ?? 'Suggestion').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-          subtitle: Text([
-            if (s['description'] != null) s['description'].toString(),
-            if (s['createdAt'] != null) fmtDate(s['createdAt']),
-          ].where((t) => t.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: (s['status'] ?? '').toString().isEmpty ? null : statusBadge(s['status'].toString()),
-        ),
+        filters: const [('all', 'Toutes'), ('pending', 'En attente'), ('approved', 'Approuvées'), ('rejected', 'Rejetées')],
+        filterValue: (s) => (s['status'] ?? '').toString(),
+        tile: (s, reload) {
+          final id = s['id']?.toString();
+          final pending = (s['status'] ?? '').toString().toLowerCase() == 'pending';
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.paperPlane),
+            title: Text((s['title'] ?? s['name'] ?? 'Suggestion').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text([
+              if (s['providerType'] != null) s['providerType'].toString().toLowerCase().replaceAll('_', ' '),
+              if (s['description'] != null) s['description'].toString(),
+              if (s['createdAt'] != null) fmtDate(s['createdAt']),
+            ].where((t) => t.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: (pending && id != null)
+                ? approveDenyButtons(
+                    onApprove: () async { final r = await promptReason(context, 'Approuver et activer', confirmLabel: 'Approuver'); if (r == null || !context.mounted) return; final ok = await AgentApi.reviewSuggestion(id, 'approve', r); if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); } },
+                    onDeny: () async { final r = await promptReason(context, 'Rejeter la suggestion'); if (r == null || !context.mounted) return; final ok = await AgentApi.reviewSuggestion(id, 'reject', r); if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); } },
+                  )
+                : (s['status'] ?? '').toString().isEmpty ? null : statusBadge(s['status'].toString()),
+          );
+        },
       );
 }
 

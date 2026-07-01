@@ -39,6 +39,17 @@ class _InsuranceClaimsScreenState extends State<InsuranceClaimsScreen> {
     }
   }
 
+  Future<void> _deny(Map<String, dynamic> c) async {
+    final id = c['id']?.toString();
+    if (id == null) return;
+    final reason = await promptReason(context, 'Refuser la réclamation');
+    if (reason == null || !mounted) return;
+    final ok = await AgentApi.denyClaim(id, reason);
+    if (ok) { _load(); } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Action impossible — réessayez.'), duration: Duration(seconds: 2)));
+    }
+  }
+
   String _member(Map<String, dynamic> c) {
     final m = (c['member'] as Map?);
     final name = '${m?['firstName'] ?? ''} ${m?['lastName'] ?? ''}'.trim();
@@ -89,7 +100,10 @@ class _InsuranceClaimsScreenState extends State<InsuranceClaimsScreen> {
                               _date(c['createdAt']),
                             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
                             trailing: pending
-                                ? TextButton(onPressed: () => _approve(c), child: const Text('Approuver'))
+                                ? Row(mainAxisSize: MainAxisSize.min, children: [
+                                    IconButton(icon: const FaIcon(FontAwesomeIcons.circleCheck, size: 18, color: Color(0xFF27AE60)), tooltip: 'Approuver', onPressed: () => _approve(c)),
+                                    IconButton(icon: const FaIcon(FontAwesomeIcons.circleXmark, size: 18, color: Colors.red), tooltip: 'Refuser', onPressed: () => _deny(c)),
+                                  ])
                                 : Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                     decoration: BoxDecoration(color: _statusColor(status).withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),

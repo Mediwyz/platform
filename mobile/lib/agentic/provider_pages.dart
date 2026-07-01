@@ -20,11 +20,15 @@ class ProviderPreAuthScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.fileShield,
         emptyText: 'Aucune pré-autorisation.',
         fetch: () => AgentApi.providerPreAuths(),
-        tile: (a, _) {
+        filters: const [('all', 'Toutes'), ('approved', 'Approuvées'), ('pending', 'En attente'), ('denied', 'Refusées')],
+        filterValue: (a) => (a['status'] ?? '').toString(),
+        tile: (a, reload) {
           final member = a['member'] is Map ? '${a['member']['firstName'] ?? ''} ${a['member']['lastName'] ?? ''}'.trim() : (a['memberId'] ?? 'Membre').toString();
           final company = a['company'] is Map ? a['company']['companyName'] : a['companyName'];
           final req = a['requestedAmount'] ?? a['amount'];
           final appr = a['approvedAmount'];
+          final id = a['id']?.toString();
+          final approved = (a['status'] ?? '').toString().toLowerCase() == 'approved';
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.fileShield),
             title: Text(member.isEmpty ? 'Membre' : member, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -32,8 +36,20 @@ class ProviderPreAuthScreen extends StatelessWidget {
               if (company != null) company.toString(),
               if (req != null) 'Demandé Rs $req',
               if (appr != null) 'Approuvé Rs $appr',
+              if (a['expiresAt'] != null) 'Exp. ${fmtDate(a['expiresAt'])}',
+              if ((a['denialReason'] ?? a['reason']) != null) 'Motif: ${a['denialReason'] ?? a['reason']}',
             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: (a['status'] ?? '').toString().isEmpty ? null : statusBadge(a['status'].toString()),
+            trailing: (approved && id != null)
+                ? TextButton(
+                    onPressed: () async {
+                      if (!await confirmAction(context, 'Marquer comme utilisé', 'Confirmer la prestation pour cette pré-autorisation ?', confirmLabel: 'Confirmer')) return;
+                      if (!context.mounted) return;
+                      final ok = await AgentApi.usePreAuth(id);
+                      if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); }
+                    },
+                    child: const Text('Utilisé'),
+                  )
+                : (a['status'] ?? '').toString().isEmpty ? null : statusBadge(a['status'].toString()),
           );
         },
       );

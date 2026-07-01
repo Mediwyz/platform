@@ -149,17 +149,28 @@ class RoleRequestsScreen extends StatelessWidget {
           final all = await AgentApi.allRoles();
           return all.where((r) => r['isActive'] == false).toList();
         },
-        tile: (r, _) => ListTile(
-          leading: tileIcon(FontAwesomeIcons.userTag),
-          title: Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-          subtitle: Text([
-            if (r['slug'] != null) '/${r['slug']}',
-            if (r['regionCode'] != null) r['regionCode'].toString(),
-            if (r['description'] != null) r['description'].toString(),
-            if (r['createdAt'] != null) 'Soumis ${fmtDate(r['createdAt'])}',
-          ].where((s) => s.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: statusBadge('pending'),
-        ),
+        tile: (r, reload) {
+          final id = r['id']?.toString();
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.userTag),
+            title: Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text([
+              if (r['slug'] != null) '/${r['slug']}',
+              if (r['regionCode'] != null) r['regionCode'].toString(),
+              if (r['description'] != null) r['description'].toString(),
+              if (r['createdAt'] != null) 'Soumis ${fmtDate(r['createdAt'])}',
+            ].where((s) => s.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: id == null ? statusBadge('pending') : TextButton(
+              onPressed: () async {
+                if (!await confirmAction(context, 'Activer le rôle', 'Activer ce rôle pour la région ?', confirmLabel: 'Activer')) return;
+                if (!context.mounted) return;
+                final ok = await AgentApi.activateRole(id);
+                if (context.mounted) { ok ? reload() : toast(context, 'Action impossible'); }
+              },
+              child: const Text('Activer'),
+            ),
+          );
+        },
       );
 }
 

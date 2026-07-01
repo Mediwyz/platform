@@ -134,6 +134,24 @@ class AgentApi {
   static Future<List<Map<String, dynamic>>> clinicalKnowledge() => _getList('/admin/clinical-knowledge', key: 'items');
   static Future<List<Map<String, dynamic>>> requiredDocuments() => _getList('/required-documents', key: 'documents');
 
+  // ── Approve / deny / activate write-actions ────────────────────────────────
+  static Future<bool> _post(String path, [Map<String, dynamic>? body]) async {
+    try {
+      final res = await ApiClient.instance.post(path, data: body ?? {});
+      final m = res.data as Map?;
+      return m?['success'] == true || (res.statusCode != null && res.statusCode! < 300);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<bool> denyClaim(String id, String reason) => _post('/corporate/insurance/claims/$id/deny', {'reason': reason});
+  static Future<bool> approvePreAuth(String id) => _post('/corporate/insurance/pre-auth/$id/approve');
+  static Future<bool> denyPreAuth(String id, String reason) => _post('/corporate/insurance/pre-auth/$id/deny', {'reason': reason});
+  static Future<bool> usePreAuth(String id) => _post('/corporate/insurance/pre-auth/$id/use');
+  static Future<bool> reviewSuggestion(String id, String action, String note) => _post('/workflow/suggestions/$id/review', {'action': action, 'note': note});
+  static Future<bool> activateRole(String id) => _post('/roles/$id/activate');
+
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
     try {
