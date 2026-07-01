@@ -52,13 +52,32 @@ class ProviderRolesScreen extends StatelessWidget {
         tile: (r, _) {
           final search = r['searchEnabled'] == true;
           final booking = r['bookingEnabled'] == true;
-          return ListTile(
-            leading: tileIcon(FontAwesomeIcons.userTag),
-            title: Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-            subtitle: Text((r['slug'] ?? r['code'] ?? '').toString(), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (search) _chip('Recherche', const Color(0xFF0C6780)),
-              if (booking) _chip('Réservation', const Color(0xFF27AE60)),
+          final inventory = r['inventoryEnabled'] == true;
+          final desc = (r['description'] ?? r['blurb'] ?? '').toString();
+          final docs = r['requiredDocumentCount'] ?? (r['requiredDocuments'] is List ? (r['requiredDocuments'] as List).length : null);
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                tileIcon(FontAwesomeIcons.userTag),
+                const SizedBox(width: 12),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kFg(context))),
+                  Text((r['code'] ?? '').toString().toUpperCase(), style: TextStyle(fontSize: 10.5, color: kFaint(context), letterSpacing: 0.4)),
+                ])),
+              ]),
+              if (desc.isNotEmpty && desc != 'null') Padding(padding: const EdgeInsets.only(top: 6), child: Text(desc, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, height: 1.3, color: kSub(context)))),
+              const SizedBox(height: 6),
+              Wrap(spacing: 6, runSpacing: 4, children: [
+                if (search) _chip('Recherche', const Color(0xFF0C6780)),
+                if (booking) _chip('Réservation', const Color(0xFF27AE60)),
+                if (inventory) _chip('Boutique', const Color(0xFFE0A800)),
+              ]),
+              Padding(padding: const EdgeInsets.only(top: 4), child: Row(children: [
+                Text('/${r['slug'] ?? ''}', style: TextStyle(fontSize: 11, color: kFaint(context))),
+                const Spacer(),
+                if (docs != null) Text('$docs doc${docs == 1 ? '' : 's'} requis', style: TextStyle(fontSize: 11, color: kFaint(context))),
+              ])),
             ]),
           );
         },
