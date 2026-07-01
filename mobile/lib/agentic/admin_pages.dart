@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
 import 'page_kit.dart';
@@ -33,6 +34,39 @@ class RegionalAdminsScreen extends StatelessWidget {
           );
         },
       );
+}
+
+// ── Security settings (/admin/security, /regional/security) ──────────────────
+class SecuritySettingsScreen extends StatelessWidget {
+  final bool loggedIn;
+  const SecuritySettingsScreen({super.key, required this.loggedIn});
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <(IconData, String, String)>[
+      (FontAwesomeIcons.shieldHalved, 'Double authentification (2FA)', 'Requise'),
+      (FontAwesomeIcons.clock, 'Expiration de session', '30 min'),
+      (FontAwesomeIcons.lock, 'Tentatives de connexion max.', '5'),
+      (FontAwesomeIcons.key, 'Longueur min. du mot de passe', '8 caractères'),
+      (FontAwesomeIcons.userShield, 'Verrouillage de compte', 'Après 5 échecs'),
+    ];
+    return Scaffold(
+      appBar: MediwyzHeader(title: 'Sécurité', loggedIn: loggedIn),
+      body: !loggedIn
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_gate, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
+          : ListView(children: [
+              Padding(padding: const EdgeInsets.fromLTRB(16, 16, 16, 8), child: Text('Politique de sécurité de la plateforme', style: TextStyle(fontSize: 13, color: kSub(context)))),
+              for (final r in rows) ...[
+                ListTile(
+                  leading: tileIcon(r.$1),
+                  title: Text(r.$2, style: TextStyle(fontSize: 13.5, color: kFg(context))),
+                  trailing: Text(r.$3, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: MediWyzColors.teal)),
+                ),
+                const Divider(height: 1),
+              ],
+            ]),
+    );
+  }
 }
 
 // ── Role config (/admin/role-config, /regional/role-config) — feature toggles ─

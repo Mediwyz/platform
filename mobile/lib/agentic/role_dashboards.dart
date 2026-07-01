@@ -87,6 +87,26 @@ class InsuranceDashboardScreen extends StatelessWidget {
       );
 }
 
+// ── Insurance analytics (/insurance/analytics) ───────────────────────────────
+class InsuranceAnalyticsScreen extends StatelessWidget {
+  final bool loggedIn;
+  const InsuranceAnalyticsScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => _DashboardScaffold(
+        title: 'Analytique',
+        loggedIn: loggedIn,
+        fetch: () => AgentApi.insuranceAnalytics(),
+        cards: (c, d) => [
+          statCard(c, icon: FontAwesomeIcons.chartPie, label: 'Ratio de sinistralité', value: _pct(_pick(d, ['lossRatio', 'loss_ratio']))),
+          statCard(c, icon: FontAwesomeIcons.vault, label: 'Trésorerie', value: _money(_pick(d, ['treasury.balance', 'treasury', 'balance'])), accent: const Color(0xFF27AE60)),
+          statCard(c, icon: FontAwesomeIcons.fileInvoiceDollar, label: 'Réclamations (12 mois)', value: _num(_pick(d, ['claims.last12Months', 'claims.total', 'claimsCount']))),
+          statCard(c, icon: FontAwesomeIcons.moneyBillTrendUp, label: 'Payé (12 mois)', value: _money(_pick(d, ['claims.paidAmount12m', 'claims.paidAmount', 'paidAmount']))),
+          statCard(c, icon: FontAwesomeIcons.fileShield, label: 'Pré-autorisations', value: _num(_pick(d, ['preAuth.total', 'preAuth.count', 'preAuthorizations'])), accent: const Color(0xFFE0A800)),
+          statCard(c, icon: FontAwesomeIcons.users, label: 'Membres', value: _num(_pick(d, ['members', 'totalMembers', 'policyHolders']))),
+        ],
+      );
+}
+
 // ── Provider ─────────────────────────────────────────────────────────────────
 class ProviderDashboardScreen extends StatelessWidget {
   final bool loggedIn;

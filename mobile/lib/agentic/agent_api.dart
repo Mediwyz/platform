@@ -120,6 +120,16 @@ class AgentApi {
   static Future<List<Map<String, dynamic>>> cmsTestimonials() => _getList('/cms/testimonials', key: 'testimonials');
   static Future<List<Map<String, dynamic>>> roleConfig() => _getList('/admin/role-config', key: 'config');
 
+  // Workflows
+  static Future<List<Map<String, dynamic>>> workflowInstances({bool admin = false}) => _getList(admin ? '/workflow/admin/instances' : '/workflow/instances', key: 'instances');
+  static Future<List<Map<String, dynamic>>> workflowTemplates() => _getList('/workflow/templates', key: 'templates');
+  static Future<List<Map<String, dynamic>>> workflowSuggestions() => _getList('/workflow/suggestions', key: 'suggestions');
+  static Future<List<Map<String, dynamic>>> workflowAudit() => _getList('/workflow/admin/audit', key: 'audit');
+
+  // Regional / admin config data
+  static Future<List<Map<String, dynamic>>> clinicalKnowledge() => _getList('/admin/clinical-knowledge', key: 'items');
+  static Future<List<Map<String, dynamic>>> requiredDocuments() => _getList('/required-documents', key: 'documents');
+
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
     try {

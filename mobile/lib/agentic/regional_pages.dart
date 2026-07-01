@@ -140,6 +140,59 @@ class RoleRequestsScreen extends StatelessWidget {
       );
 }
 
+// ── Clinical knowledge (/regional/clinical-knowledge — AI Knowledge) ─────────
+class ClinicalKnowledgeScreen extends StatelessWidget {
+  final bool loggedIn;
+  const ClinicalKnowledgeScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Connaissances IA',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.book,
+        emptyText: 'Aucune connaissance.',
+        fetch: () => AgentApi.clinicalKnowledge(),
+        tile: (k, _) {
+          final aliases = (k['aliases'] as List?)?.length;
+          final sources = (k['sources'] as List?)?.length;
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.book),
+            title: Text((k['conditionKey'] ?? k['condition'] ?? k['name'] ?? 'Condition').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text([
+              if (k['category'] != null) k['category'].toString(),
+              if (aliases != null) '$aliases alias',
+              if (sources != null) '$sources sources',
+            ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: statusBadge(k['active'] == false ? 'inactive' : 'active'),
+          );
+        },
+      );
+}
+
+// ── Required documents (/regional/required-documents) ────────────────────────
+class RequiredDocumentsScreen extends StatelessWidget {
+  final bool loggedIn;
+  const RequiredDocumentsScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Documents requis',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.clipboardList,
+        emptyText: 'Aucun document configuré.',
+        fetch: () => AgentApi.requiredDocuments(),
+        tile: (d, _) {
+          final required = d['required'] == true || d['isRequired'] == true;
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.fileLines),
+            title: Text((d['documentName'] ?? d['name'] ?? d['label'] ?? 'Document').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text((d['code'] ?? d['userType'] ?? d['role'] ?? '').toString().toLowerCase().replaceAll('_', ' '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: statusBadge(required ? 'requis' : 'optionnel'),
+          );
+        },
+      );
+}
+
 Widget _chip(String label, Color color) => Container(
       margin: const EdgeInsets.only(left: 4),
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
