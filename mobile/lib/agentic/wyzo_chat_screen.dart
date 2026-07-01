@@ -606,7 +606,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
   }
 
   void _openCall(bool video) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => CallEntryScreen(video: video, user: _user)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => CallListScreen(video: video, user: _user)));
   }
 
   void _openDashboard() {

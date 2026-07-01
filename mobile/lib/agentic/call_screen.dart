@@ -2,61 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../config.dart';
-import '../theme/mediwyz_theme.dart';
+import 'agent_api.dart';
+import 'page_kit.dart';
 
-/// Room entry for a video/audio call — pick/confirm a room id and join.
-/// (In the agentic flow a room id would come from a booking; for now the user
-/// enters or accepts a shared id so two peers can meet — tested via two Chrome
-/// tabs or the web app's call page on the same room.)
-class CallEntryScreen extends StatefulWidget {
+const _callProviderTypes = {
+  'DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER',
+  'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST',
+};
+
+/// The list of the user's bookings to call from — each row joins the shared
+/// `booking-<id>` room so the patient and their booked provider meet. Replaces
+/// the old manual "room id" entry; every call now comes from a real booking.
+class CallListScreen extends StatelessWidget {
   final bool video;
   final Map<String, dynamic>? user;
-  const CallEntryScreen({super.key, required this.video, required this.user});
-  @override
-  State<CallEntryScreen> createState() => _CallEntryScreenState();
-}
+  const CallListScreen({super.key, required this.video, required this.user});
 
-class _CallEntryScreenState extends State<CallEntryScreen> {
-  final _room = TextEditingController(text: 'mediwyz-demo');
-
-  @override
-  void dispose() { _room.dispose(); super.dispose(); }
+  bool get _isProvider => user != null && _callProviderTypes.contains((user!['userType'] ?? '').toString().toUpperCase());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.video ? 'Appel vidéo' : 'Appel audio')),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(children: [
-            const SizedBox(height: 12),
-            Icon(widget.video ? Icons.videocam : Icons.call, size: 56, color: MediWyzColors.teal),
-            const SizedBox(height: 12),
-            const Text('Rejoindre une salle', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: MediWyzColors.navy)),
-            const SizedBox(height: 4),
-            const Text("Partagez le même identifiant de salle avec l'autre participant.", textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Colors.black54)),
-            const SizedBox(height: 20),
-            TextField(controller: _room, decoration: const InputDecoration(labelText: 'Identifiant de la salle', isDense: true)),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  final room = _room.text.trim();
-                  if (room.isEmpty) return;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (_) => CallScreen(roomId: room, video: widget.video, user: widget.user),
-                  ));
-                },
-                icon: Icon(widget.video ? Icons.videocam : Icons.call, size: 18),
-                label: const Text('Rejoindre'),
-              ),
-            ),
-          ]),
-        ),
-      ),
+    return ListPage(
+      title: video ? 'Appel vidéo' : 'Appel audio',
+      loggedIn: user != null,
+      gateText: 'Connectez-vous pour appeler depuis vos rendez-vous.',
+      emptyIcon: video ? FontAwesomeIcons.video : FontAwesomeIcons.phone,
+      emptyText: 'Aucun rendez-vous à appeler.\nRéservez une consultation pour démarrer un appel.',
+      fetch: () => _isProvider ? AgentApi.providerBookings() : AgentApi.patientBookings(),
+      tile: (b, _) {
+        final other = (_isProvider
+                ? (b['patientName'] ?? b['patient']?['name'])
+                : (b['providerName'] ?? b['provider']?['name'])) ??
+            'Correspondant';
+        final when = [
+          fmtDate(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']),
+          (b['time'] ?? b['startTime'] ?? '').toString(),
+        ].where((s) => s.isNotEmpty).join(' · ');
+        final id = b['id']?.toString();
+        return ListTile(
+          leading: tileIcon(_isProvider ? FontAwesomeIcons.user : FontAwesomeIcons.userDoctor),
+          title: Text(other.toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text([if (b['serviceType'] != null) b['serviceType'].toString(), when].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+          trailing: ElevatedButton.icon(
+            onPressed: id == null ? null : () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => CallScreen(roomId: 'booking-$id', video: video, user: user),
+                )),
+            icon: FaIcon(video ? FontAwesomeIcons.video : FontAwesomeIcons.phone, size: 13),
+            label: const Text('Appeler'),
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), textStyle: const TextStyle(fontSize: 12.5)),
+          ),
+        );
+      },
     );
   }
 }
