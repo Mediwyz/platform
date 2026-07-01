@@ -3,10 +3,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
+import 'form_kit.dart';
 import 'page_kit.dart';
 
 const _gate = 'Connectez-vous en tant que prestataire.';
 const _days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+
+const _serviceFields = <FormFieldSpec>[
+  FormFieldSpec('name', 'Nom du service', required: true),
+  FormFieldSpec('description', 'Description', type: FieldType.multiline),
+  FormFieldSpec('category', 'Catégorie'),
+  FormFieldSpec('price', 'Prix (Rs)', type: FieldType.number),
+  FormFieldSpec('duration', 'Durée (min)', type: FieldType.number),
+];
+
+const _productFields = <FormFieldSpec>[
+  FormFieldSpec('name', 'Nom du produit', required: true),
+  FormFieldSpec('category', 'Catégorie'),
+  FormFieldSpec('price', 'Prix (Rs)', type: FieldType.number),
+  FormFieldSpec('stock', 'Stock', type: FieldType.number),
+];
 
 // ── Pre-authorizations (/provider/{slug}/pre-auth) ───────────────────────────
 class ProviderPreAuthScreen extends StatelessWidget {
@@ -198,9 +214,16 @@ class MyServicesScreen extends StatelessWidget {
       emptyIcon: FontAwesomeIcons.gears,
       emptyText: 'Aucun service configuré.',
       fetch: () => AgentApi.providerServices(providerId ?? ''),
-      tile: (s, _) {
+      onCreate: (reload) async {
+        final v = await showEntityForm(context, title: 'Nouveau service', fields: _serviceFields);
+        if (v == null || !context.mounted) return;
+        final ok = await AgentApi.createCustomService(v);
+        if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+      },
+      tile: (s, reload) {
         final price = s['price'] ?? s['fee'] ?? s['consultationFee'];
         final dur = s['duration'] ?? s['durationMinutes'];
+        final id = s['id']?.toString();
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.stethoscope),
           title: Text((s['name'] ?? s['title'] ?? 'Service').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -208,7 +231,10 @@ class MyServicesScreen extends StatelessWidget {
             if (s['description'] != null && s['description'].toString().isNotEmpty) s['description'].toString(),
             if (dur != null) '$dur min',
           ].join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: price == null ? null : Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: MediWyzColors.teal)),
+          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+            if (price != null) Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: MediWyzColors.teal)),
+            if (id != null) crudMenu(context, fields: _serviceFields, initial: s, reload: reload, onUpdate: (b) => AgentApi.updateCustomService(id, b), onDelete: () => AgentApi.deleteCustomService(id), editTitle: 'Modifier le service', deleteConfirm: 'Supprimer ce service ?'),
+          ]),
         );
       },
     );
@@ -230,11 +256,20 @@ class HealthShopScreen extends StatelessWidget {
       gateText: _gate,
       emptyIcon: FontAwesomeIcons.cubes,
       emptyText: 'Aucun produit en stock.',
+      countNoun: 'produits',
+      searchText: (it) => '${it['name'] ?? it['productName'] ?? ''} ${it['category'] ?? ''}',
       fetch: () => AgentApi.inventoryItems(),
-      tile: (it, _) {
+      onCreate: (reload) async {
+        final v = await showEntityForm(context, title: 'Nouveau produit', fields: _productFields);
+        if (v == null || !context.mounted) return;
+        final ok = await AgentApi.createInventoryItem(v);
+        if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+      },
+      tile: (it, reload) {
         final price = it['price'] ?? it['unitPrice'];
         final stock = it['stock'] ?? it['quantity'] ?? it['stockQuantity'];
         final status = (it['status'] ?? (stock != null && (stock is num) && stock <= 0 ? 'out_of_stock' : '')).toString();
+        final id = it['id']?.toString();
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.boxOpen),
           title: Text((it['name'] ?? it['productName'] ?? 'Produit').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -243,7 +278,10 @@ class HealthShopScreen extends StatelessWidget {
             if (stock != null) 'Stock: $stock',
             if (price != null) 'Rs $price',
           ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: status.isEmpty ? null : statusBadge(status),
+          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+            if (status.isNotEmpty) statusBadge(status),
+            if (id != null) crudMenu(context, fields: _productFields, initial: it, reload: reload, onUpdate: (b) => AgentApi.updateInventoryItem(id, b), onDelete: () => AgentApi.deleteInventoryItem(id), editTitle: 'Modifier le produit', deleteConfirm: 'Retirer ce produit ?'),
+          ]),
         );
       },
     );
@@ -253,33 +291,103 @@ class HealthShopScreen extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 // My Availability — the provider's weekly slots (/provider/{slug}/availability).
 // ─────────────────────────────────────────────────────────────────────────────
-class MyAvailabilityScreen extends StatelessWidget {
+final _timeOptions = <String>[for (int h = 6; h <= 22; h++) ...['${h.toString().padLeft(2, '0')}:00', if (h < 22) '${h.toString().padLeft(2, '0')}:30']];
+
+class _DaySlot {
+  bool active;
+  String start;
+  String end;
+  _DaySlot(this.active, this.start, this.end);
+}
+
+class MyAvailabilityScreen extends StatefulWidget {
   final bool loggedIn;
   final String? providerId;
   const MyAvailabilityScreen({super.key, required this.loggedIn, this.providerId});
+  @override
+  State<MyAvailabilityScreen> createState() => _MyAvailabilityScreenState();
+}
+
+class _MyAvailabilityScreenState extends State<MyAvailabilityScreen> {
+  late List<_DaySlot> _slots;
+  bool _loading = true;
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _slots = List.generate(7, (_) => _DaySlot(false, '09:00', '17:00'));
+    if (widget.loggedIn && widget.providerId != null) { _load(); } else { _loading = false; }
+  }
+
+  Future<void> _load() async {
+    setState(() => _loading = true);
+    final data = await AgentApi.providerAvailability(widget.providerId!);
+    for (final a in data) {
+      final d = a['dayOfWeek'];
+      if (d is int && d >= 0 && d < 7) {
+        _slots[d] = _DaySlot(a['isActive'] != false, (a['startTime'] ?? '09:00').toString(), (a['endTime'] ?? '17:00').toString());
+      }
+    }
+    if (mounted) setState(() => _loading = false);
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    final slots = [for (int i = 0; i < 7; i++) {'dayOfWeek': i, 'startTime': _slots[i].start, 'endTime': _slots[i].end, 'isActive': _slots[i].active}];
+    final ok = await AgentApi.setAvailability(widget.providerId!, slots);
+    if (mounted) { setState(() => _saving = false); toast(context, ok ? 'Disponibilités enregistrées' : 'Enregistrement impossible'); }
+  }
+
+  Widget _timeDropdown(String value, ValueChanged<String?> onChanged, bool enabled) => DropdownButton<String>(
+        value: _timeOptions.contains(value) ? value : _timeOptions.first,
+        underline: const SizedBox.shrink(),
+        isDense: true,
+        onChanged: enabled ? onChanged : null,
+        items: [for (final t in _timeOptions) DropdownMenuItem(value: t, child: Text(t, style: const TextStyle(fontSize: 13)))],
+      );
 
   @override
   Widget build(BuildContext context) {
-    return ListPage(
-      title: 'Mes disponibilités',
-      loggedIn: loggedIn && providerId != null,
-      myId: providerId,
-      gateText: _gate,
-      emptyIcon: FontAwesomeIcons.calendarDays,
-      emptyText: 'Aucune disponibilité définie.',
-      fetch: () => AgentApi.providerAvailability(providerId ?? ''),
-      tile: (a, _) {
-        final dow = a['dayOfWeek'];
-        final day = (dow is int && dow >= 0 && dow < 7) ? _days[dow] : (a['day']?.toString() ?? '—');
-        final range = [a['startTime'], a['endTime']].where((s) => s != null).join(' – ');
-        final active = a['isActive'] != false;
-        return ListTile(
-          leading: tileIcon(FontAwesomeIcons.clock),
-          title: Text(day, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-          subtitle: Text(range.isEmpty ? 'Fermé' : range, style: TextStyle(fontSize: 12, color: kSub(context))),
-          trailing: statusBadge(active ? 'available' : 'closed'),
-        );
-      },
+    final activeDays = _slots.where((s) => s.active).length;
+    return Scaffold(
+      appBar: MediwyzHeader(title: 'Mes disponibilités', loggedIn: widget.loggedIn, myId: widget.providerId),
+      floatingActionButton: (widget.loggedIn && widget.providerId != null)
+          ? FloatingActionButton.extended(onPressed: _saving ? null : _save, backgroundColor: MediWyzColors.navy, icon: _saving ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Icon(Icons.save, color: Colors.white), label: const Text('Enregistrer', style: TextStyle(color: Colors.white)))
+          : null,
+      body: !(widget.loggedIn && widget.providerId != null)
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_gate, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
+          : _loading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(padding: const EdgeInsets.fromLTRB(12, 12, 12, 88), children: [
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(12)),
+                    child: Row(children: [
+                      const FaIcon(FontAwesomeIcons.circleInfo, size: 16, color: MediWyzColors.teal),
+                      const SizedBox(width: 10),
+                      Expanded(child: Text('$activeDays jour${activeDays > 1 ? 's' : ''} actif${activeDays > 1 ? 's' : ''} — définissez vos horaires par jour, puis enregistrez.', style: TextStyle(fontSize: 12.5, color: kFg(context)))),
+                    ]),
+                  ),
+                  for (int i = 0; i < 7; i++)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(color: kSurface(context), borderRadius: BorderRadius.circular(12), border: Border.all(color: kLine(context))),
+                      child: Row(children: [
+                        SizedBox(width: 84, child: Text(_days[i], style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, color: kFg(context)))),
+                        Switch(value: _slots[i].active, activeThumbColor: MediWyzColors.teal, onChanged: (v) => setState(() => _slots[i].active = v)),
+                        Expanded(child: _slots[i].active
+                            ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                _timeDropdown(_slots[i].start, (v) => setState(() => _slots[i].start = v!), true),
+                                Text(' – ', style: TextStyle(color: kSub(context))),
+                                _timeDropdown(_slots[i].end, (v) => setState(() => _slots[i].end = v!), true),
+                              ])
+                            : Align(alignment: Alignment.centerRight, child: Text('Fermé', style: TextStyle(fontSize: 12.5, color: kFaint(context))))),
+                      ]),
+                    ),
+                ]),
     );
   }
 }

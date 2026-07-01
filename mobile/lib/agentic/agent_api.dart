@@ -157,6 +157,7 @@ class AgentApi {
   }
 
   // Config saves
+  static Future<bool> setAvailability(String userId, List<Map<String, dynamic>> slots) => _put('/users/$userId/availability', {'slots': slots});
   static Future<bool> updateCommissionConfig(Map<String, dynamic> b) => _put('/admin/commission-config', b);
   static Future<bool> patchRoleConfig(String userType, String featureKey, bool enabled) => _patch('/admin/role-config', {'userType': userType, 'featureKey': featureKey, 'enabled': enabled});
 
@@ -178,6 +179,16 @@ class AgentApi {
   static Future<bool> createRole(Map<String, dynamic> b) => _post('/regional/roles', b);
   static Future<bool> updateRole(String id, Map<String, dynamic> b) => _patch('/regional/roles/$id', b);
   static Future<bool> deleteRole(String id) => _delete('/regional/roles/$id');
+
+  // Provider inventory (Health Shop) CRUD
+  static Future<bool> createInventoryItem(Map<String, dynamic> b) => _post('/inventory', b);
+  static Future<bool> updateInventoryItem(String id, Map<String, dynamic> b) => _patch('/inventory/$id', b);
+  static Future<bool> deleteInventoryItem(String id) => _delete('/inventory/$id');
+
+  // Provider custom services CRUD
+  static Future<bool> createCustomService(Map<String, dynamic> b) => _post('/services/custom', b);
+  static Future<bool> updateCustomService(String id, Map<String, dynamic> b) => _patch('/services/custom/$id', b);
+  static Future<bool> deleteCustomService(String id) => _delete('/services/custom/$id');
 
   // Service catalog CRUD (admin)
   static Future<bool> createService(Map<String, dynamic> b) => _post('/services/admin', b);
