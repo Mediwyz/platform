@@ -7,6 +7,37 @@ import 'page_kit.dart';
 const _gate = 'Connectez-vous en tant que prestataire.';
 const _days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
+// ── Pre-authorizations (/provider/{slug}/pre-auth) ───────────────────────────
+class ProviderPreAuthScreen extends StatelessWidget {
+  final bool loggedIn;
+  const ProviderPreAuthScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Pré-autorisations',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.fileShield,
+        emptyText: 'Aucune pré-autorisation.',
+        fetch: () => AgentApi.providerPreAuths(),
+        tile: (a, _) {
+          final member = a['member'] is Map ? '${a['member']['firstName'] ?? ''} ${a['member']['lastName'] ?? ''}'.trim() : (a['memberId'] ?? 'Membre').toString();
+          final company = a['company'] is Map ? a['company']['companyName'] : a['companyName'];
+          final req = a['requestedAmount'] ?? a['amount'];
+          final appr = a['approvedAmount'];
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.fileShield),
+            title: Text(member.isEmpty ? 'Membre' : member, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text([
+              if (company != null) company.toString(),
+              if (req != null) 'Demandé Rs $req',
+              if (appr != null) 'Approuvé Rs $appr',
+            ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: (a['status'] ?? '').toString().isEmpty ? null : statusBadge(a['status'].toString()),
+          );
+        },
+      );
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // My Practice — the provider's patients (/provider/{slug}/practice).
 // ─────────────────────────────────────────────────────────────────────────────

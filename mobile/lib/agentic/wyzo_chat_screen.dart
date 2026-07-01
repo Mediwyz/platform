@@ -24,6 +24,7 @@ import 'insurance_pages.dart';
 import 'regional_pages.dart';
 import 'admin_pages.dart';
 import 'org_pages.dart';
+import 'invite_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
 import 'provider_bookings_screen.dart';
@@ -546,7 +547,12 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
       case '/regional/roles': return ProviderRolesScreen(loggedIn: li);
       case '/regional/org-categories': return OrgCategoriesScreen(loggedIn: li);
       case '/provider/{slug}': return ProviderDashboardScreen(loggedIn: li, providerId: uid);
+      case '/provider/{slug}/pre-auth': return ProviderPreAuthScreen(loggedIn: li);
       case '/patient/my-company': return MyOrganizationsScreen(loggedIn: li);
+      case '/admin/content': return AdminContentScreen(loggedIn: li);
+      case '/regional/services': return ServiceCatalogScreen(loggedIn: li);
+      case '/regional/role-requests': return RoleRequestsScreen(loggedIn: li);
+      case '/invite': return InviteScreen(loggedIn: li);
     }
     return null;
   }
@@ -769,8 +775,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         const SizedBox(width: 8),
         _hdrBtn(FontAwesomeIcons.userGroup, 'Mon réseau', _openNetwork),
         _hdrBtn(FontAwesomeIcons.bell, 'Notifications', _openNotifications),
-        _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _openWeb('/invite')),
-        _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => _openWeb('/')),
+        _hdrBtn(FontAwesomeIcons.gift, 'Inviter des amis', () => _push(InviteScreen(loggedIn: _user != null))),
+        _hdrBtn(FontAwesomeIcons.house, 'Accueil', () => Navigator.of(context).popUntil((r) => r.isFirst)),
         ValueListenableBuilder<ThemeMode>(
           valueListenable: themeMode,
           builder: (_, __, ___) => _hdrBtn(isDarkMode ? FontAwesomeIcons.solidSun : FontAwesomeIcons.solidMoon, isDarkMode ? 'Mode clair' : 'Mode sombre', toggleThemeMode),

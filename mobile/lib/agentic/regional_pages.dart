@@ -86,6 +86,60 @@ class OrgCategoriesScreen extends StatelessWidget {
       );
 }
 
+// ── Service catalog (/regional/services) ─────────────────────────────────────
+class ServiceCatalogScreen extends StatelessWidget {
+  final bool loggedIn;
+  const ServiceCatalogScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Catalogue de services',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.tag,
+        emptyText: 'Aucun service.',
+        fetch: () => AgentApi.servicesCatalog(),
+        tile: (s, _) {
+          final price = s['defaultPrice'] ?? s['price'];
+          return ListTile(
+            leading: tileIcon(FontAwesomeIcons.stethoscope),
+            title: Text((s['serviceName'] ?? s['name'] ?? 'Service').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text([
+              if (s['providerType'] != null) s['providerType'].toString().toLowerCase().replaceAll('_', ' '),
+              if (s['category'] != null) s['category'].toString(),
+            ].where((t) => t.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: price == null ? null : Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+          );
+        },
+      );
+}
+
+// ── Role requests (/regional/role-requests) — pending/inactive roles ─────────
+class RoleRequestsScreen extends StatelessWidget {
+  final bool loggedIn;
+  const RoleRequestsScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Demandes de rôles',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.inbox,
+        emptyText: 'Aucune demande.',
+        fetch: () async {
+          final all = await AgentApi.allRoles();
+          return all.where((r) => r['isActive'] == false).toList();
+        },
+        tile: (r, _) => ListTile(
+          leading: tileIcon(FontAwesomeIcons.userTag),
+          title: Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text([
+            if (r['regionCode'] != null) r['regionCode'].toString(),
+            if (r['description'] != null) r['description'].toString(),
+          ].where((s) => s.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+          trailing: statusBadge('pending'),
+        ),
+      );
+}
+
 Widget _chip(String label, Color color) => Container(
       margin: const EdgeInsets.only(left: 4),
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),

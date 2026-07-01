@@ -35,6 +35,37 @@ class RegionalAdminsScreen extends StatelessWidget {
       );
 }
 
+// ── Content / CMS (/admin/content) — testimonials + sections ─────────────────
+class AdminContentScreen extends StatelessWidget {
+  final bool loggedIn;
+  const AdminContentScreen({super.key, required this.loggedIn});
+  @override
+  Widget build(BuildContext context) => ListPage(
+        title: 'Contenu',
+        loggedIn: loggedIn,
+        gateText: _gate,
+        emptyIcon: FontAwesomeIcons.fileLines,
+        emptyText: 'Aucun contenu.',
+        fetch: () async {
+          final t = await AgentApi.cmsTestimonials();
+          final s = await AgentApi.cmsSections();
+          return [
+            ...t.map((e) => {...e, '_kind': 'testimonial'}),
+            ...s.map((e) => {...e, '_kind': 'section'}),
+          ];
+        },
+        tile: (c, _) {
+          final isT = c['_kind'] == 'testimonial';
+          return ListTile(
+            leading: tileIcon(isT ? FontAwesomeIcons.quoteLeft : FontAwesomeIcons.fileLines),
+            title: Text((c['name'] ?? c['title'] ?? c['sectionType'] ?? 'Contenu').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text((c['role'] ?? c['content'] ?? c['sectionType'] ?? '').toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: isT && c['rating'] != null ? Text('★ ${c['rating']}', style: const TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w700, fontSize: 12.5)) : null,
+          );
+        },
+      );
+}
+
 // ── Commission config (/admin/commission-config) — a settings object ─────────
 class CommissionConfigScreen extends StatefulWidget {
   final bool loggedIn;

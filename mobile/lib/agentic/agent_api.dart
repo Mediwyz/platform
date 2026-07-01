@@ -110,6 +110,15 @@ class AgentApi {
   // Patient organizations
   static Future<List<Map<String, dynamic>>> myCompanies() => _getList('/corporate/my-companies');
 
+  // Provider pre-authorizations (provider view)
+  static Future<List<Map<String, dynamic>>> providerPreAuths() => _getList('/corporate/insurance/pre-auth', qp: {'as': 'provider'});
+
+  // Regional / admin catalogs
+  static Future<List<Map<String, dynamic>>> servicesCatalog() => _getList('/services/catalog', key: 'services');
+  static Future<List<Map<String, dynamic>>> allRoles() => _getList('/roles', qp: {'all': 'true'}, key: 'roles');
+  static Future<List<Map<String, dynamic>>> cmsSections() => _getList('/cms/sections', key: 'sections');
+  static Future<List<Map<String, dynamic>>> cmsTestimonials() => _getList('/cms/testimonials', key: 'testimonials');
+
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
     try {
