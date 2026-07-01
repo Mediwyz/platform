@@ -1,4 +1,5 @@
 import '../api/client.dart';
+import '../api/auth_store.dart';
 
 /// Thin client for the Wyzo agent + the deterministic booking endpoints.
 /// All the intelligence lives on the NestJS backend; the app just renders.
@@ -398,7 +399,10 @@ class AgentApi {
   /// auth cookies on success (so subsequent calls are authenticated).
   static Future<Map<String, dynamic>> login(String email, String password) async {
     final res = await ApiClient.instance.post('/auth/login', data: {'email': email, 'password': password});
-    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+    final m = Map<String, dynamic>.from((res.data as Map?) ?? const {});
+    final token = m['token']?.toString();
+    if (m['success'] == true && token != null && token.isNotEmpty) await AuthStore.save(token);
+    return m;
   }
 
   /// POST /auth/forgot-password/question — returns the account's security question.
@@ -434,6 +438,7 @@ class AgentApi {
   /// POST /auth/logout — clears the auth cookies (start fresh / test guest flow).
   static Future<void> logout() async {
     try { await ApiClient.instance.post('/auth/logout'); } catch (_) { /* */ }
+    await AuthStore.clear();
   }
 
   /// POST /auth/register — creates a patient account. Active patient accounts
@@ -444,6 +449,9 @@ class AgentApi {
       ...data,
       'userType': 'patient',
     });
-    return Map<String, dynamic>.from((res.data as Map?) ?? const {});
+    final m = Map<String, dynamic>.from((res.data as Map?) ?? const {});
+    final token = m['token']?.toString();
+    if (m['success'] == true && token != null && token.isNotEmpty) await AuthStore.save(token);
+    return m;
   }
 }

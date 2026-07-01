@@ -110,6 +110,10 @@ export class AuthController {
         user: result.user,
         redirectPath: result.redirectPath,
         message: 'Login successful',
+        // Also return the JWT so non-browser clients (the mobile/Flutter app)
+        // can authenticate via the Authorization: Bearer header — the auth
+        // cookie can't cross origins from a localhost/native web build.
+        token: result.token,
       };
     } catch (error: any) {
       const status = error.status || 500;
@@ -147,6 +151,7 @@ export class AuthController {
           ...result,
           user: loginResult.user,
           redirectPath: loginResult.redirectPath,
+          token: loginResult.token, // Bearer token for the mobile/Flutter app
         };
       }
 

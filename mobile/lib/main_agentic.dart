@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
+import 'api/auth_store.dart';
 import 'theme/mediwyz_theme.dart';
 import 'theme/theme_controller.dart';
 import 'agentic/wyzo_chat_screen.dart';
@@ -11,8 +12,9 @@ import 'agentic/onboarding_screen.dart';
 ///   flutter run -d chrome -t lib/main_agentic.dart \
 ///     --dart-define=API_BASE=https://mediwyz.com/api \
 ///     --web-browser-flag "--disable-web-security"
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AuthStore.load(); // restore the JWT before the first /auth/me
   loadThemeMode(); // restore the persisted light/dark choice (best-effort)
   runApp(const WyzoApp());
 }

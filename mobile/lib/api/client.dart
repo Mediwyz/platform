@@ -3,6 +3,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/foundation.dart';
 import '../config.dart';
+import 'auth_store.dart';
 
 /// Shared Dio HTTP client with cookie support.
 ///
@@ -31,6 +32,17 @@ class ApiClient {
       // Native: persist cookies between app launches.
       dio.interceptors.add(CookieManager(CookieJar()));
     }
+
+    // Bearer-token auth: attach the JWT from /auth/login to every request. This
+    // is the reliable auth path on web (the httpOnly cookie can't cross origins)
+    // and belt-and-braces on native (alongside the cookie jar).
+    dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      final t = AuthStore.token;
+      if (t != null && t.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $t';
+      }
+      handler.next(options);
+    }));
 
     dio.interceptors.add(LogInterceptor(
       requestBody: false,
