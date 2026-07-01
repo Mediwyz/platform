@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 import 'call_screen.dart';
 import 'page_kit.dart';
 
@@ -18,6 +19,7 @@ class MyBookingsScreen extends StatelessWidget {
     return ListPage(
       title: 'Mes rendez-vous',
       loggedIn: loggedIn,
+      myId: user?['id']?.toString(),
       emptyIcon: FontAwesomeIcons.calendarCheck,
       emptyText: 'Aucun rendez-vous.',
       fetch: () => AgentApi.patientBookings(),
@@ -56,6 +58,7 @@ class PrescriptionsScreen extends StatelessWidget {
     return ListPage(
       title: 'Mes ordonnances',
       loggedIn: loggedIn && userId != null,
+      myId: userId,
       emptyIcon: FontAwesomeIcons.filePrescription,
       emptyText: 'Aucune ordonnance.',
       fetch: () => AgentApi.prescriptions(userId ?? ''),
@@ -150,7 +153,7 @@ class _MyHealthScreenState extends State<MyHealthScreen> {
     final sleep = _d['sleep'] ?? _d['sleepHours'];
     final calories = _d['calories'] ?? _d['caloriesConsumed'];
     return Scaffold(
-      appBar: AppBar(title: const Text('Mon bilan santé')),
+      appBar: MediwyzHeader(title: 'Mon bilan santé', loggedIn: widget.loggedIn),
       body: !widget.loggedIn
           ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour suivre votre santé.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
           : _loading
@@ -223,7 +226,7 @@ class _BillingScreenState extends State<BillingScreen> {
   Widget build(BuildContext context) {
     final balance = _wallet?['balance'] ?? _wallet?['available'] ?? 0;
     return Scaffold(
-      appBar: AppBar(title: const Text('Facturation')),
+      appBar: MediwyzHeader(title: 'Facturation', loggedIn: widget.loggedIn, myId: widget.userId),
       body: !(widget.loggedIn && widget.userId != null)
           ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour voir votre facturation.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
           : _loading

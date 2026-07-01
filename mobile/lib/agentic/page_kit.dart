@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
+import 'app_header.dart';
 
 /// Shared UI kit for the native data pages (mirror the web mobile layouts).
 
@@ -37,6 +38,7 @@ class ListPage extends StatefulWidget {
   final String gateText;
   final Future<List<Map<String, dynamic>>> Function() fetch;
   final Widget Function(Map<String, dynamic> item, VoidCallback reload) tile;
+  final String? myId;
   const ListPage({
     super.key,
     required this.title,
@@ -46,6 +48,7 @@ class ListPage extends StatefulWidget {
     required this.fetch,
     required this.tile,
     this.gateText = 'Connectez-vous pour voir cette page.',
+    this.myId,
   });
   @override
   State<ListPage> createState() => _ListPageState();
@@ -70,7 +73,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: MediwyzHeader(title: widget.title, loggedIn: widget.loggedIn, myId: widget.myId),
       body: !widget.loggedIn
           ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(widget.gateText, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54))))
           : _loading

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 
 /// slug → (backend UserType code, booking type). Mirrors the web
 /// `/search/[slug]` resolution + BOOKING_TYPE map.
@@ -87,7 +88,7 @@ class _ProviderSearchScreenState extends State<ProviderSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(searchTitleForSlug(widget.slug))),
+      appBar: MediwyzHeader(title: searchTitleForSlug(widget.slug), loggedIn: widget.loggedIn),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),

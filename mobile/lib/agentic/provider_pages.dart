@@ -20,6 +20,7 @@ class MyPracticeScreen extends StatelessWidget {
     return ListPage(
       title: 'Ma patientèle',
       loggedIn: loggedIn && providerId != null,
+      myId: providerId,
       gateText: _gate,
       emptyIcon: FontAwesomeIcons.userGroup,
       emptyText: 'Aucun patient pour le moment.',
@@ -54,6 +55,7 @@ class MyServicesScreen extends StatelessWidget {
     return ListPage(
       title: 'Mes services',
       loggedIn: loggedIn && providerId != null,
+      myId: providerId,
       gateText: _gate,
       emptyIcon: FontAwesomeIcons.gears,
       emptyText: 'Aucun service configuré.',
@@ -123,6 +125,7 @@ class MyAvailabilityScreen extends StatelessWidget {
     return ListPage(
       title: 'Mes disponibilités',
       loggedIn: loggedIn && providerId != null,
+      myId: providerId,
       gateText: _gate,
       emptyIcon: FontAwesomeIcons.calendarDays,
       emptyText: 'Aucune disponibilité définie.',

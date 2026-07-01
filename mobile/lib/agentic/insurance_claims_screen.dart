@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 
 /// Native insurance claims — the web insurance "Claims" page. Lists claims
 /// submitted to the company; pending ones can be approved. Auth-gated.
@@ -61,7 +62,7 @@ class _InsuranceClaimsScreenState extends State<InsuranceClaimsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Réclamations')),
+      appBar: MediwyzHeader(title: 'Réclamations', loggedIn: widget.loggedIn),
       body: !widget.loggedIn
           ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text("Connectez-vous en tant qu'assureur.", textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
           : _loading
