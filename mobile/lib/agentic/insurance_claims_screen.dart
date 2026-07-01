@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
+import 'page_kit.dart';
 
 /// Native insurance claims — the web insurance "Claims" page. Lists claims
 /// submitted to the company; pending ones can be approved. Auth-gated.
@@ -81,12 +82,12 @@ class _InsuranceClaimsScreenState extends State<InsuranceClaimsScreen> {
                           final amount = c['amount'] ?? c['claimAmount'];
                           return ListTile(
                             leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.fileInvoiceDollar, size: 15, color: MediWyzColors.teal)),
-                            title: Text(_member(c), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
+                            title: Text(_member(c), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
                             subtitle: Text([
                               if (c['claimType'] != null) c['claimType'].toString(),
                               if (amount != null) 'Rs $amount',
                               _date(c['createdAt']),
-                            ].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                            ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
                             trailing: pending
                                 ? TextButton(onPressed: () => _approve(c), child: const Text('Approuver'))
                                 : Container(

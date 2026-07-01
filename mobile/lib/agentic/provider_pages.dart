@@ -30,12 +30,12 @@ class MyPracticeScreen extends StatelessWidget {
         final visits = p['visitCount'] ?? p['appointmentCount'];
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.user),
-          title: Text(name.isEmpty ? (p['name'] ?? 'Patient').toString() : name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
+          title: Text(name.isEmpty ? (p['name'] ?? 'Patient').toString() : name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
           subtitle: Text([
             if (p['email'] != null) p['email'].toString(),
             if (visits != null) '$visits visite${visits == 1 ? '' : 's'}',
             if (p['lastVisit'] != null) 'Dernière: ${fmtDate(p['lastVisit'])}',
-          ].join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
         );
       },
     );
@@ -65,11 +65,11 @@ class MyServicesScreen extends StatelessWidget {
         final dur = s['duration'] ?? s['durationMinutes'];
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.stethoscope),
-          title: Text((s['name'] ?? s['title'] ?? 'Service').toString(), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
+          title: Text((s['name'] ?? s['title'] ?? 'Service').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
           subtitle: Text([
             if (s['description'] != null && s['description'].toString().isNotEmpty) s['description'].toString(),
             if (dur != null) '$dur min',
-          ].join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          ].join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: price == null ? null : Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: MediWyzColors.teal)),
         );
       },
@@ -99,12 +99,12 @@ class HealthShopScreen extends StatelessWidget {
         final status = (it['status'] ?? (stock != null && (stock is num) && stock <= 0 ? 'out_of_stock' : '')).toString();
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.boxOpen),
-          title: Text((it['name'] ?? it['productName'] ?? 'Produit').toString(), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
+          title: Text((it['name'] ?? it['productName'] ?? 'Produit').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
           subtitle: Text([
             if (it['category'] != null) it['category'].toString(),
             if (stock != null) 'Stock: $stock',
             if (price != null) 'Rs $price',
-          ].join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: status.isEmpty ? null : statusBadge(status),
         );
       },
@@ -137,8 +137,8 @@ class MyAvailabilityScreen extends StatelessWidget {
         final active = a['isActive'] != false;
         return ListTile(
           leading: tileIcon(FontAwesomeIcons.clock),
-          title: Text(day, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text(range.isEmpty ? 'Fermé' : range, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          title: Text(day, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text(range.isEmpty ? 'Fermé' : range, style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: statusBadge(active ? 'available' : 'closed'),
         );
       },

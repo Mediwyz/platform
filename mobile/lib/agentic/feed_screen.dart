@@ -6,6 +6,7 @@ import '../config.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
+import 'page_kit.dart';
 
 /// One reaction type — mirrors the web `REACTIONS` list in PostCard.tsx.
 class _Reaction {
@@ -181,7 +182,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return Card(
       margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14), side: const BorderSide(color: Color(0xFFE6EDF2))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14), side: BorderSide(color: kLine(context))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         // Author row + options
         Padding(
@@ -196,16 +197,16 @@ class _FeedScreenState extends State<FeedScreen> {
             const SizedBox(width: 10),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Flexible(child: Text(name.isEmpty ? 'Utilisateur' : name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: MediWyzColors.navy), overflow: TextOverflow.ellipsis)),
+                Flexible(child: Text(name.isEmpty ? 'Utilisateur' : name, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kFg(context)), overflow: TextOverflow.ellipsis)),
                 if (author['verified'] == true) const Padding(padding: EdgeInsets.only(left: 4), child: Icon(Icons.verified, size: 14, color: MediWyzColors.teal)),
               ]),
-              Text('${(author['userType'] ?? '').toString().toLowerCase().replaceAll('_', ' ')} · ${_ago(p['createdAt'])}', style: const TextStyle(fontSize: 11, color: Colors.black45)),
+              Text('${(author['userType'] ?? '').toString().toLowerCase().replaceAll('_', ' ')} · ${_ago(p['createdAt'])}', style: TextStyle(fontSize: 11, color: kFaint(context))),
             ])),
             const Icon(Icons.more_horiz, size: 20, color: Colors.black26),
           ]),
         ),
         if ((p['content'] ?? '').toString().isNotEmpty)
-          Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10), child: Text(p['content'].toString(), style: const TextStyle(fontSize: 14, height: 1.35, color: Color(0xFF1A2733)))),
+          Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10), child: Text(p['content'].toString(), style: TextStyle(fontSize: 14, height: 1.35, color: kFg(context)))),
         if (image.isNotEmpty)
           CachedNetworkImage(imageUrl: image, width: double.infinity, fit: BoxFit.cover, errorWidget: (_, __, ___) => const SizedBox.shrink()),
         // Counts summary (reaction dots + total, comments)

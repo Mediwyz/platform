@@ -5,6 +5,15 @@ import 'app_header.dart';
 
 /// Shared UI kit for the native data pages (mirror the web mobile layouts).
 
+/// Theme-aware colors — a light-first palette that flips in dark mode so the
+/// light-styled screens stay readable when the header's dark toggle is on.
+Color kFg(BuildContext c) => Theme.of(c).brightness == Brightness.dark ? const Color(0xFFE8EEF5) : MediWyzColors.navy;
+Color kSub(BuildContext c) => Theme.of(c).brightness == Brightness.dark ? const Color(0xFF9DB0C6) : Colors.black54;
+Color kFaint(BuildContext c) => Theme.of(c).brightness == Brightness.dark ? const Color(0xFF7C8CA3) : Colors.black45;
+Color kSurface(BuildContext c) => Theme.of(c).brightness == Brightness.dark ? const Color(0xFF12203A) : Colors.white;
+Color kLine(BuildContext c) => Theme.of(c).brightness == Brightness.dark ? Colors.white12 : const Color(0xFFE6EDF2);
+bool kDark(BuildContext c) => Theme.of(c).brightness == Brightness.dark;
+
 String fmtDate(dynamic iso) {
   final t = DateTime.tryParse(iso?.toString() ?? '');
   if (t == null) return iso?.toString() ?? '';
@@ -75,7 +84,7 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       appBar: MediwyzHeader(title: widget.title, loggedIn: widget.loggedIn, myId: widget.myId),
       body: !widget.loggedIn
-          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(widget.gateText, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54))))
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(widget.gateText, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
               ? const Center(child: CircularProgressIndicator())
               : RefreshIndicator(
@@ -83,9 +92,9 @@ class _ListPageState extends State<ListPage> {
                   child: _items.isEmpty
                       ? ListView(children: [
                           const SizedBox(height: 120),
-                          Center(child: FaIcon(widget.emptyIcon, size: 40, color: Colors.black12)),
+                          Center(child: FaIcon(widget.emptyIcon, size: 40, color: kFaint(context).withValues(alpha: 0.4))),
                           const SizedBox(height: 12),
-                          Center(child: Text(widget.emptyText, style: const TextStyle(color: Colors.black45))),
+                          Center(child: Text(widget.emptyText, style: TextStyle(color: kFaint(context)))),
                         ])
                       : ListView.separated(
                           itemCount: _items.length,

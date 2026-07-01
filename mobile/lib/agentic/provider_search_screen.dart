@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
+import 'page_kit.dart';
 
 /// slug → (backend UserType code, booking type). Mirrors the web
 /// `/search/[slug]` resolution + BOOKING_TYPE map.
@@ -123,13 +124,13 @@ class _ProviderSearchScreenState extends State<ProviderSearchScreen> {
                           final loc = (p['city'] ?? p['location'] ?? p['address'] ?? '').toString();
                           return ListTile(
                             leading: CircleAvatar(radius: 22, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), backgroundImage: (p['profileImage'] ?? p['avatar']) != null ? NetworkImage((p['profileImage'] ?? p['avatar']).toString()) : null, child: (p['profileImage'] ?? p['avatar']) == null ? const FaIcon(FontAwesomeIcons.userDoctor, size: 16, color: MediWyzColors.teal) : null),
-                            title: Text(_name(p), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
+                            title: Text(_name(p), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
                             subtitle: Text([
                               if (specialty.isNotEmpty && specialty != 'null') specialty,
                               if (rating != null) '★ $rating',
                               if (loc.isNotEmpty && loc != 'null') loc,
                               if (fee != null) 'Rs $fee',
-                            ].join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                            ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
                             isThreeLine: false,
                             trailing: TextButton(onPressed: () => _book(p), child: const Text('Réserver')),
                             onTap: () => _book(p),

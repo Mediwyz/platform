@@ -29,8 +29,8 @@ class MyBookingsScreen extends StatelessWidget {
         final when = [fmtDate(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']), (b['time'] ?? b['startTime'] ?? '').toString()].where((s) => s.isNotEmpty).join(' · ');
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.userDoctor, size: 15, color: MediWyzColors.teal)),
-          title: Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text([if (b['serviceType'] != null) b['serviceType'].toString(), when].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          title: Text(name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text([if (b['serviceType'] != null) b['serviceType'].toString(), when].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: [
             IconButton(
               icon: const FaIcon(FontAwesomeIcons.video, size: 16, color: MediWyzColors.teal),
@@ -68,8 +68,8 @@ class PrescriptionsScreen extends StatelessWidget {
         final status = (p['status'] ?? (p['active'] == true ? 'active' : '')).toString();
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.filePrescription, size: 15, color: MediWyzColors.teal)),
-          title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text([if (p['prescribedBy'] != null) 'Dr ${p['prescribedBy']}', if (p['dosage'] != null) p['dosage'].toString(), fmtDate(p['createdAt'] ?? p['issuedDate'] ?? p['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text([if (p['prescribedBy'] != null) 'Dr ${p['prescribedBy']}', if (p['dosage'] != null) p['dosage'].toString(), fmtDate(p['createdAt'] ?? p['issuedDate'] ?? p['date'])].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: status.isEmpty ? null : statusBadge(status),
         );
       },
@@ -100,8 +100,8 @@ class OrdersScreen extends StatelessWidget {
         final total = o['total'] ?? o['totalAmount'] ?? o['amount'];
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.receipt, size: 15, color: MediWyzColors.teal)),
-          title: Text(ref, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text([if (itemText != null) itemText, if (total != null) 'Rs $total', fmtDate(o['createdAt'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          title: Text(ref, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+          subtitle: Text([if (itemText != null) itemText, if (total != null) 'Rs $total', fmtDate(o['createdAt'])].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
           trailing: status.isEmpty ? null : statusBadge(status),
         );
       },
@@ -137,12 +137,12 @@ class _MyHealthScreenState extends State<MyHealthScreen> {
 
   Widget _metric(IconData icon, String label, String value) => Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: Colors.black12)),
+        decoration: BoxDecoration(color: kSurface(context), borderRadius: BorderRadius.circular(14), border: Border.all(color: kLine(context))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           FaIcon(icon, size: 16, color: MediWyzColors.teal),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: MediWyzColors.navy)),
-          Text(label, style: const TextStyle(fontSize: 11.5, color: Colors.black54)),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: kFg(context))),
+          Text(label, style: TextStyle(fontSize: 11.5, color: kSub(context))),
         ]),
       );
 
@@ -155,13 +155,13 @@ class _MyHealthScreenState extends State<MyHealthScreen> {
     return Scaffold(
       appBar: MediwyzHeader(title: 'Mon bilan santé', loggedIn: widget.loggedIn),
       body: !widget.loggedIn
-          ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour suivre votre santé.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text('Connectez-vous pour suivre votre santé.', textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
               ? const Center(child: CircularProgressIndicator())
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView(padding: const EdgeInsets.all(16), children: [
-                    const Text("Aujourd'hui", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: MediWyzColors.navy)),
+                    Text("Aujourd'hui", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kFg(context))),
                     const SizedBox(height: 12),
                     GridView.count(
                       shrinkWrap: true,
@@ -184,7 +184,7 @@ class _MyHealthScreenState extends State<MyHealthScreen> {
                       child: Row(children: [
                         const FaIcon(FontAwesomeIcons.robot, size: 18, color: MediWyzColors.teal),
                         const SizedBox(width: 12),
-                        Expanded(child: Text((_d['summary'] ?? _d['insight'] ?? "Suivez votre hydratation, votre sommeil et votre activité chaque jour. Demandez à Wyzo un conseil personnalisé.").toString(), style: const TextStyle(fontSize: 13, height: 1.4, color: MediWyzColors.navy))),
+                        Expanded(child: Text((_d['summary'] ?? _d['insight'] ?? "Suivez votre hydratation, votre sommeil et votre activité chaque jour. Demandez à Wyzo un conseil personnalisé.").toString(), style: TextStyle(fontSize: 13, height: 1.4, color: kFg(context)))),
                       ]),
                     ),
                   ]),
@@ -228,7 +228,7 @@ class _BillingScreenState extends State<BillingScreen> {
     return Scaffold(
       appBar: MediwyzHeader(title: 'Facturation', loggedIn: widget.loggedIn, myId: widget.userId),
       body: !(widget.loggedIn && widget.userId != null)
-          ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour voir votre facturation.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text('Connectez-vous pour voir votre facturation.', textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
               ? const Center(child: CircularProgressIndicator())
               : RefreshIndicator(
@@ -244,17 +244,17 @@ class _BillingScreenState extends State<BillingScreen> {
                         Text('Rs $balance', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800)),
                       ]),
                     ),
-                    const Padding(padding: EdgeInsets.fromLTRB(16, 4, 16, 8), child: Text('Factures', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: MediWyzColors.navy))),
+                    Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: Text('Factures', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: kFg(context)))),
                     if (_invoices.isEmpty)
-                      const Padding(padding: EdgeInsets.all(24), child: Center(child: Text('Aucune facture.', style: TextStyle(color: Colors.black45))))
+                      Padding(padding: const EdgeInsets.all(24), child: Center(child: Text('Aucune facture.', style: TextStyle(color: kFaint(context)))))
                     else
                       ..._invoices.map((inv) {
                         final status = (inv['status'] ?? '').toString();
                         final amount = inv['amount'] ?? inv['total'];
                         return ListTile(
                           leading: const FaIcon(FontAwesomeIcons.fileInvoice, size: 16, color: MediWyzColors.teal),
-                          title: Text((inv['description'] ?? inv['serviceType'] ?? 'Facture').toString(), style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: MediWyzColors.navy)),
-                          subtitle: Text([if (amount != null) 'Rs $amount', fmtDate(inv['createdAt'] ?? inv['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                          title: Text((inv['description'] ?? inv['serviceType'] ?? 'Facture').toString(), style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: kFg(context))),
+                          subtitle: Text([if (amount != null) 'Rs $amount', fmtDate(inv['createdAt'] ?? inv['date'])].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
                           trailing: status.isEmpty ? null : statusBadge(status),
                         );
                       }),
