@@ -110,6 +110,10 @@ class AgentApi {
   // Patient organizations
   static Future<List<Map<String, dynamic>>> myCompanies() => _getList('/corporate/my-companies');
 
+  // Subscription plans (billing)
+  static Future<List<Map<String, dynamic>>> subscriptionPlans() => _getList('/subscriptions', qp: {'type': 'individual'}, key: 'plans');
+  static Future<Map<String, dynamic>> userSubscription(String userId) => _getObj('/users/$userId/subscription');
+
   // Provider pre-authorizations (provider view)
   static Future<List<Map<String, dynamic>>> providerPreAuths() => _getList('/corporate/insurance/pre-auth', qp: {'as': 'provider'});
 

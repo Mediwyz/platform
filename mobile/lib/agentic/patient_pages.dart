@@ -222,6 +222,8 @@ class BillingScreen extends StatefulWidget {
 class _BillingScreenState extends State<BillingScreen> {
   Map<String, dynamic>? _wallet;
   List<Map<String, dynamic>> _invoices = [];
+  List<Map<String, dynamic>> _plans = [];
+  Map<String, dynamic> _subscription = {};
   bool _loading = true;
 
   @override
@@ -234,7 +236,44 @@ class _BillingScreenState extends State<BillingScreen> {
     setState(() => _loading = true);
     final w = await AgentApi.getWallet(widget.userId!);
     final inv = await AgentApi.invoices(widget.userId!);
-    if (mounted) setState(() { _wallet = w; _invoices = inv; _loading = false; });
+    final plans = await AgentApi.subscriptionPlans();
+    final sub = await AgentApi.userSubscription(widget.userId!);
+    if (mounted) setState(() { _wallet = w; _invoices = inv; _plans = plans; _subscription = sub; _loading = false; });
+  }
+
+  Widget _planCard(Map<String, dynamic> p) {
+    final feats = (p['features'] as List?)?.map((f) => f.toString()).toList() ?? const [];
+    final price = p['price'] ?? p['monthlyPremium'];
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: kSurface(context), borderRadius: BorderRadius.circular(14), border: Border.all(color: kLine(context))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text((p['name'] ?? 'Formule').toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kFg(context))),
+        const SizedBox(height: 2),
+        Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+          Text('Rs $price', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: MediWyzColors.teal)),
+          Text('/mois', style: TextStyle(fontSize: 12, color: kSub(context))),
+        ]),
+        const SizedBox(height: 10),
+        ...feats.take(6).map((f) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(children: [
+                const FaIcon(FontAwesomeIcons.circleCheck, size: 12, color: Color(0xFF27AE60)),
+                const SizedBox(width: 8),
+                Expanded(child: Text(f, style: TextStyle(fontSize: 12.5, color: kFg(context)))),
+              ]),
+            )),
+        const SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("L'abonnement sera disponible avec l'intégration de paiement."), duration: Duration(seconds: 2))),
+            child: const Text("S'abonner"),
+          ),
+        ),
+      ]),
+    );
   }
 
   @override
@@ -259,6 +298,24 @@ class _BillingScreenState extends State<BillingScreen> {
                         Text('Rs $balance', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800)),
                       ]),
                     ),
+                    // Subscription Management (matches web /patient/billing)
+                    Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 4), child: Row(children: [
+                      const FaIcon(FontAwesomeIcons.crown, size: 15, color: Color(0xFFE0A800)),
+                      const SizedBox(width: 8),
+                      Text('Abonnement', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: kFg(context))),
+                    ])),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                      child: Text(
+                        (_subscription['planName'] ?? _subscription['name']) != null
+                            ? 'Formule actuelle : ${_subscription['planName'] ?? _subscription['name']}'
+                            : "Vous n'avez pas d'abonnement actif. Choisissez une formule ci-dessous.",
+                        style: TextStyle(fontSize: 12.5, color: kSub(context)),
+                      ),
+                    ),
+                    if (_plans.isNotEmpty)
+                      Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Column(children: _plans.map(_planCard).toList())),
+                    const SizedBox(height: 8),
                     Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: Text('Factures', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: kFg(context)))),
                     if (_invoices.isEmpty)
                       Padding(padding: const EdgeInsets.all(24), child: Center(child: Text('Aucune facture.', style: TextStyle(color: kFaint(context)))))
