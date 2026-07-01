@@ -37,6 +37,10 @@ const _prescriptionsPath = '__prescriptions__';
 const _ordersPath = '__orders__';
 const _billingPath = '__billing__';
 const _healthPath = '__health__';
+const _practicePath = '__practice__';
+const _servicesPath = '__services__';
+const _shopPath = '__shop__';
+const _availabilityPath = '__availability__';
 
 // ── Shared "Search & Browse" section — each opens the native search page ──────
 // (a `/search/<slug>` path is resolved to a generic ProviderSearchScreen).
@@ -81,14 +85,14 @@ const patientNav = <NavItem>[
 const providerNav = <NavItem>[
   NavItem('Feed', _feedPath, FontAwesomeIcons.rss),
   NavItem('Dashboard', '/provider/{slug}', FontAwesomeIcons.house),
-  NavItem('My Practice', '/provider/{slug}/practice', FontAwesomeIcons.briefcaseMedical),
-  NavItem('Billing', '/provider/{slug}/billing', FontAwesomeIcons.moneyBillWave),
+  NavItem('My Practice', _practicePath, FontAwesomeIcons.briefcaseMedical),
+  NavItem('Billing', _billingPath, FontAwesomeIcons.moneyBillWave),
   NavItem('Pre-authorizations', '/provider/{slug}/pre-auth', FontAwesomeIcons.shieldHalved),
-  NavItem('My Services', '/provider/{slug}/services', FontAwesomeIcons.gears),
-  NavItem('Health Shop', '/provider/{slug}/inventory', FontAwesomeIcons.cubes),
+  NavItem('My Services', _servicesPath, FontAwesomeIcons.gears),
+  NavItem('Health Shop', _shopPath, FontAwesomeIcons.cubes),
   NavItem('Workflows', '/provider/{slug}/workflows', FontAwesomeIcons.diagramProject),
   NavItem('My Suggestions', '/provider/{slug}/workflows/my-suggestions', FontAwesomeIcons.paperPlane),
-  NavItem('My Availability', '/provider/{slug}/availability', FontAwesomeIcons.calendarDays),
+  NavItem('My Availability', _availabilityPath, FontAwesomeIcons.calendarDays),
   NavItem('Booking Requests', _provRequestsPath, FontAwesomeIcons.inbox),
   NavItem('Bookings', _provBookingsPath, FontAwesomeIcons.calendarCheck),
   NavItem('Reviews', _provReviewsPath, FontAwesomeIcons.star),
@@ -224,6 +228,10 @@ const prescriptionsSentinelPath = _prescriptionsPath;
 const ordersSentinelPath = _ordersPath;
 const billingSentinelPath = _billingPath;
 const healthSentinelPath = _healthPath;
+const practiceSentinelPath = _practicePath;
+const servicesSentinelPath = _servicesPath;
+const shopSentinelPath = _shopPath;
+const availabilitySentinelPath = _availabilityPath;
 
 /// A menu path that opens the native provider-search page — `/search/<slug>`
 /// where the slug is a known provider category. Returns the slug, or null.

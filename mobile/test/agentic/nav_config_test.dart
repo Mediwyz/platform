@@ -91,6 +91,19 @@ void main() {
       expect(byLabel['Reviews']?.path, provReviewsSentinelPath);
     });
 
+    test('provider practice/services/shop/availability/billing open native pages', () {
+      final byLabel = {for (final i in providerNav) i.label: i};
+      expect(byLabel['My Practice']?.path, practiceSentinelPath);
+      expect(byLabel['My Services']?.path, servicesSentinelPath);
+      expect(byLabel['Health Shop']?.path, shopSentinelPath);
+      expect(byLabel['My Availability']?.path, availabilitySentinelPath);
+      expect(byLabel['Billing']?.path, billingSentinelPath);
+      // No provider entry uses the old {slug} web path for these.
+      for (final l in ['My Practice', 'My Services', 'Health Shop', 'My Availability', 'Billing']) {
+        expect(byLabel[l]?.path.contains('{slug}'), isFalse, reason: '$l should be a native sentinel');
+      }
+    });
+
     test('Video/Audio Call entries use native call sentinels', () {
       for (final menu in [patientNav, providerNav]) {
         final byLabel = {for (final i in menu) i.label: i};

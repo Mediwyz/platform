@@ -180,6 +180,39 @@ class AgentApi {
     }
   }
 
+  /// GET /providers/:id/patients — the provider's patient list.
+  static Future<List<Map<String, dynamic>>> providerPatients(String providerId) async {
+    try {
+      final res = await ApiClient.instance.get('/providers/$providerId/patients');
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /providers/:id/availability — the provider's weekly availability slots.
+  static Future<List<Map<String, dynamic>>> providerAvailability(String providerId) async {
+    try {
+      final res = await ApiClient.instance.get('/providers/$providerId/availability');
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// GET /inventory — the provider's own Health-Shop products.
+  static Future<List<Map<String, dynamic>>> inventoryItems() async {
+    try {
+      final res = await ApiClient.instance.get('/inventory');
+      final data = (res.data as Map?)?['data'] as List?;
+      return data?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// GET /ai/health-tracker/dashboard — today's health aggregation.
   static Future<Map<String, dynamic>> healthDashboard() async {
     try {

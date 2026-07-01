@@ -16,6 +16,7 @@ import 'health_records_screen.dart';
 import 'insurance_claims_screen.dart';
 import 'messages_screen.dart';
 import 'patient_pages.dart';
+import 'provider_pages.dart';
 import 'provider_search_screen.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
@@ -501,6 +502,10 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == ordersSentinelPath) { _push(OrdersScreen(loggedIn: _user != null)); return; }
         if (it.path == billingSentinelPath) { _push(BillingScreen(loggedIn: _user != null, userId: _user?['id']?.toString())); return; }
         if (it.path == healthSentinelPath) { _push(MyHealthScreen(loggedIn: _user != null)); return; }
+        if (it.path == practiceSentinelPath) { _push(MyPracticeScreen(loggedIn: _user != null, providerId: _user?['id']?.toString())); return; }
+        if (it.path == servicesSentinelPath) { _push(MyServicesScreen(loggedIn: _user != null, providerId: _user?['id']?.toString())); return; }
+        if (it.path == shopSentinelPath) { _push(HealthShopScreen(loggedIn: _user != null)); return; }
+        if (it.path == availabilitySentinelPath) { _push(MyAvailabilityScreen(loggedIn: _user != null, providerId: _user?['id']?.toString())); return; }
         final slug = searchSlugForPath(it.path);
         if (slug != null) { _push(ProviderSearchScreen(slug: slug, loggedIn: _user != null)); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // legacy fallback (none remain)

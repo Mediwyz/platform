@@ -3,97 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'call_screen.dart';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Shared helpers for the patient data pages (mirror the web mobile layouts).
-// ─────────────────────────────────────────────────────────────────────────────
-
-String _fmtDate(dynamic iso) {
-  final t = DateTime.tryParse(iso?.toString() ?? '');
-  if (t == null) return iso?.toString() ?? '';
-  return '${t.day.toString().padLeft(2, '0')}/${t.month.toString().padLeft(2, '0')}/${t.year}';
-}
-
-Color _statusColor(String s) {
-  switch (s.toLowerCase()) {
-    case 'confirmed': case 'completed': case 'paid': case 'active': case 'delivered': case 'approved':
-      return const Color(0xFF27AE60);
-    case 'pending': case 'submitted': case 'processing': case 'shipped':
-      return const Color(0xFFE0A800);
-    case 'cancelled': case 'rejected': case 'failed': case 'expired':
-      return Colors.red;
-    default: return Colors.black45;
-  }
-}
-
-Widget _statusBadge(String status) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: _statusColor(status).withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
-      child: Text(status, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: _statusColor(status))),
-    );
-
-/// A generic auth-gated list page: title + async fetch + item renderer.
-class _ListPage extends StatefulWidget {
-  final String title;
-  final bool loggedIn;
-  final IconData emptyIcon;
-  final String emptyText;
-  final Future<List<Map<String, dynamic>>> Function() fetch;
-  final Widget Function(Map<String, dynamic> item, VoidCallback reload) tile;
-  const _ListPage({
-    required this.title,
-    required this.loggedIn,
-    required this.emptyIcon,
-    required this.emptyText,
-    required this.fetch,
-    required this.tile,
-  });
-  @override
-  State<_ListPage> createState() => _ListPageState();
-}
-
-class _ListPageState extends State<_ListPage> {
-  List<Map<String, dynamic>> _items = [];
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.loggedIn) { _load(); } else { _loading = false; }
-  }
-
-  Future<void> _load() async {
-    if (mounted) setState(() => _loading = true);
-    final r = await widget.fetch();
-    if (mounted) setState(() { _items = r; _loading = false; });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: !widget.loggedIn
-          ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour voir cette page.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
-          : _loading
-              ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  child: _items.isEmpty
-                      ? ListView(children: [
-                          const SizedBox(height: 120),
-                          Center(child: FaIcon(widget.emptyIcon, size: 40, color: Colors.black12)),
-                          const SizedBox(height: 12),
-                          Center(child: Text(widget.emptyText, style: const TextStyle(color: Colors.black45))),
-                        ])
-                      : ListView.separated(
-                          itemCount: _items.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (_, i) => widget.tile(_items[i], _load),
-                        ),
-                ),
-    );
-  }
-}
+import 'page_kit.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // My Bookings (patient) — mirrors /patient/bookings. Call button on each row.
@@ -105,7 +15,7 @@ class MyBookingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListPage(
+    return ListPage(
       title: 'Mes rendez-vous',
       loggedIn: loggedIn,
       emptyIcon: FontAwesomeIcons.calendarCheck,
@@ -114,7 +24,7 @@ class MyBookingsScreen extends StatelessWidget {
       tile: (b, _) {
         final name = (b['providerName'] ?? b['provider']?['name'] ?? 'Prestataire').toString();
         final status = (b['status'] ?? '').toString();
-        final when = [_fmtDate(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']), (b['time'] ?? b['startTime'] ?? '').toString()].where((s) => s.isNotEmpty).join(' · ');
+        final when = [fmtDate(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']), (b['time'] ?? b['startTime'] ?? '').toString()].where((s) => s.isNotEmpty).join(' · ');
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.userDoctor, size: 15, color: MediWyzColors.teal)),
           title: Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
@@ -125,7 +35,7 @@ class MyBookingsScreen extends StatelessWidget {
               tooltip: 'Appel vidéo',
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CallScreen(roomId: 'booking-${b['id']}', video: true, user: user))),
             ),
-            _statusBadge(status),
+            statusBadge(status),
           ]),
         );
       },
@@ -143,7 +53,7 @@ class PrescriptionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListPage(
+    return ListPage(
       title: 'Mes ordonnances',
       loggedIn: loggedIn && userId != null,
       emptyIcon: FontAwesomeIcons.filePrescription,
@@ -156,8 +66,8 @@ class PrescriptionsScreen extends StatelessWidget {
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.filePrescription, size: 15, color: MediWyzColors.teal)),
           title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text([if (p['prescribedBy'] != null) 'Dr ${p['prescribedBy']}', if (p['dosage'] != null) p['dosage'].toString(), _fmtDate(p['createdAt'] ?? p['issuedDate'] ?? p['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
-          trailing: status.isEmpty ? null : _statusBadge(status),
+          subtitle: Text([if (p['prescribedBy'] != null) 'Dr ${p['prescribedBy']}', if (p['dosage'] != null) p['dosage'].toString(), fmtDate(p['createdAt'] ?? p['issuedDate'] ?? p['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          trailing: status.isEmpty ? null : statusBadge(status),
         );
       },
     );
@@ -173,7 +83,7 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListPage(
+    return ListPage(
       title: 'Mes commandes',
       loggedIn: loggedIn,
       emptyIcon: FontAwesomeIcons.receipt,
@@ -188,8 +98,8 @@ class OrdersScreen extends StatelessWidget {
         return ListTile(
           leading: CircleAvatar(radius: 18, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), child: const FaIcon(FontAwesomeIcons.receipt, size: 15, color: MediWyzColors.teal)),
           title: Text(ref, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: MediWyzColors.navy)),
-          subtitle: Text([if (itemText != null) itemText, if (total != null) 'Rs $total', _fmtDate(o['createdAt'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
-          trailing: status.isEmpty ? null : _statusBadge(status),
+          subtitle: Text([if (itemText != null) itemText, if (total != null) 'Rs $total', fmtDate(o['createdAt'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          trailing: status.isEmpty ? null : statusBadge(status),
         );
       },
     );
@@ -341,8 +251,8 @@ class _BillingScreenState extends State<BillingScreen> {
                         return ListTile(
                           leading: const FaIcon(FontAwesomeIcons.fileInvoice, size: 16, color: MediWyzColors.teal),
                           title: Text((inv['description'] ?? inv['serviceType'] ?? 'Facture').toString(), style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: MediWyzColors.navy)),
-                          subtitle: Text([if (amount != null) 'Rs $amount', _fmtDate(inv['createdAt'] ?? inv['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
-                          trailing: status.isEmpty ? null : _statusBadge(status),
+                          subtitle: Text([if (amount != null) 'Rs $amount', fmtDate(inv['createdAt'] ?? inv['date'])].where((s) => s.isNotEmpty).join(' · '), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                          trailing: status.isEmpty ? null : statusBadge(status),
                         );
                       }),
                     const SizedBox(height: 16),
