@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 import 'page_kit.dart';
 
 const _gate = 'Connectez-vous en tant que prestataire.';
@@ -39,36 +40,126 @@ class ProviderPreAuthScreen extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// My Practice — the provider's patients (/provider/{slug}/practice).
+// My Practice — bookings hub (/provider/{slug}/practice): 4 stat cards
+// (Pending/Today/Active/Completed) + search + status filter + booking list.
 // ─────────────────────────────────────────────────────────────────────────────
-class MyPracticeScreen extends StatelessWidget {
+class MyPracticeScreen extends StatefulWidget {
   final bool loggedIn;
   final String? providerId;
   const MyPracticeScreen({super.key, required this.loggedIn, this.providerId});
+  @override
+  State<MyPracticeScreen> createState() => _MyPracticeScreenState();
+}
+
+class _MyPracticeScreenState extends State<MyPracticeScreen> {
+  List<Map<String, dynamic>> _bookings = [];
+  bool _loading = true;
+  String _query = '';
+  String _filter = 'all';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.loggedIn) { _load(); } else { _loading = false; }
+  }
+
+  Future<void> _load() async {
+    if (mounted) setState(() => _loading = true);
+    final b = await AgentApi.providerBookings();
+    if (mounted) setState(() { _bookings = b; _loading = false; });
+  }
+
+  bool _isToday(dynamic iso) {
+    final t = DateTime.tryParse(iso?.toString() ?? '');
+    if (t == null) return false;
+    final n = DateTime.now();
+    return t.year == n.year && t.month == n.month && t.day == n.day;
+  }
+
+  int _count(String kind) => _bookings.where((b) {
+        final s = (b['status'] ?? '').toString().toLowerCase();
+        switch (kind) {
+          case 'pending': return ['pending', 'submitted'].contains(s);
+          case 'today': return _isToday(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']);
+          case 'active': return ['confirmed', 'in_progress', 'active'].contains(s);
+          case 'completed': return s == 'completed';
+        }
+        return false;
+      }).length;
+
+  List<Map<String, dynamic>> get _filtered {
+    return _bookings.where((b) {
+      final s = (b['status'] ?? '').toString().toLowerCase();
+      if (_filter != 'all' && s != _filter) return false;
+      if (_query.trim().isEmpty) return true;
+      final hay = '${b['patientName'] ?? b['patient']?['name'] ?? ''} ${b['serviceType'] ?? ''}'.toLowerCase();
+      return hay.contains(_query.trim().toLowerCase());
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListPage(
-      title: 'Ma patientèle',
-      loggedIn: loggedIn && providerId != null,
-      myId: providerId,
-      gateText: _gate,
-      emptyIcon: FontAwesomeIcons.userGroup,
-      emptyText: 'Aucun patient pour le moment.',
-      fetch: () => AgentApi.providerPatients(providerId ?? ''),
-      tile: (p, _) {
-        final name = '${p['firstName'] ?? ''} ${p['lastName'] ?? ''}'.trim();
-        final visits = p['visitCount'] ?? p['appointmentCount'];
-        return ListTile(
-          leading: tileIcon(FontAwesomeIcons.user),
-          title: Text(name.isEmpty ? (p['name'] ?? 'Patient').toString() : name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-          subtitle: Text([
-            if (p['email'] != null) p['email'].toString(),
-            if (visits != null) '$visits visite${visits == 1 ? '' : 's'}',
-            if (p['lastVisit'] != null) 'Dernière: ${fmtDate(p['lastVisit'])}',
-          ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-        );
-      },
+    final items = _filtered;
+    return Scaffold(
+      appBar: MediwyzHeader(title: 'Ma pratique', loggedIn: widget.loggedIn, myId: widget.providerId),
+      body: !widget.loggedIn
+          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_gate, textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
+          : _loading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                  onRefresh: _load,
+                  child: ListView(padding: const EdgeInsets.all(12), children: [
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.7,
+                      children: [
+                        statCard(context, icon: FontAwesomeIcons.clock, label: 'En attente', value: '${_count('pending')}', accent: const Color(0xFFE0A800)),
+                        statCard(context, icon: FontAwesomeIcons.calendarDay, label: "Aujourd'hui", value: '${_count('today')}'),
+                        statCard(context, icon: FontAwesomeIcons.clipboardCheck, label: 'Actifs', value: '${_count('active')}', accent: const Color(0xFF27AE60)),
+                        statCard(context, icon: FontAwesomeIcons.clockRotateLeft, label: 'Terminés', value: '${_count('completed')}', accent: Colors.black45),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      onChanged: (v) => setState(() => _query = v),
+                      decoration: InputDecoration(hintText: 'Rechercher patient, service…', prefixIcon: const Icon(Icons.search, size: 20), isDense: true, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 34,
+                      child: ListView(scrollDirection: Axis.horizontal, children: [
+                        for (final f in const [('all', 'Tous'), ('pending', 'En attente'), ('confirmed', 'Confirmés'), ('completed', 'Terminés'), ('cancelled', 'Annulés')])
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(label: Text(f.$2), selected: _filter == f.$1, onSelected: (_) => setState(() => _filter = f.$1), labelStyle: TextStyle(fontSize: 12, color: _filter == f.$1 ? Colors.white : kFg(context)), selectedColor: MediWyzColors.navy),
+                          ),
+                      ]),
+                    ),
+                    const SizedBox(height: 8),
+                    if (items.isEmpty)
+                      Padding(padding: const EdgeInsets.all(32), child: Center(child: Text('Aucune réservation.', style: TextStyle(color: kFaint(context)))))
+                    else
+                      ...items.map((b) {
+                        final name = (b['patientName'] ?? b['patient']?['name'] ?? 'Patient').toString();
+                        final when = [fmtDate(b['date'] ?? b['appointmentDate'] ?? b['scheduledAt']), (b['time'] ?? b['startTime'] ?? '').toString()].where((s) => s.isNotEmpty).join(' · ');
+                        return Card(
+                          elevation: 0,
+                          color: kSurface(context),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: kLine(context))),
+                          child: ListTile(
+                            leading: tileIcon(FontAwesomeIcons.user),
+                            title: Text(name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+                            subtitle: Text([if (b['serviceType'] != null) b['serviceType'].toString(), when].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+                            trailing: (b['status'] ?? '').toString().isEmpty ? null : statusBadge(b['status'].toString()),
+                          ),
+                        );
+                      }),
+                  ]),
+                ),
     );
   }
 }
