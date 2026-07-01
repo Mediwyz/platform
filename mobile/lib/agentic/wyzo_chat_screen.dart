@@ -19,6 +19,8 @@ import 'messages_screen.dart';
 import 'patient_pages.dart';
 import 'provider_pages.dart';
 import 'provider_search_screen.dart';
+import 'role_dashboards.dart';
+import 'insurance_pages.dart';
 import 'nav_config.dart';
 import 'network_screen.dart';
 import 'provider_bookings_screen.dart';
@@ -509,6 +511,8 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
         if (it.path == availabilitySentinelPath) { _push(MyAvailabilityScreen(loggedIn: _user != null, providerId: _user?['id']?.toString())); return; }
         final slug = searchSlugForPath(it.path);
         if (slug != null) { _push(ProviderSearchScreen(slug: slug, loggedIn: _user != null)); return; }
+        final native = _nativeForPath(it.path);
+        if (native != null) { _push(native); return; }
         if (it.agentMsg != null) { _send(it.agentMsg!); return; } // legacy fallback (none remain)
         _openWeb(it.path);                                // web-only page → deep-link
       },
@@ -517,6 +521,25 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
 
   void _push(Widget screen) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
+
+  /// Resolve a web-only nav path to its native screen (so no entry opens the
+  /// browser). Returns null if there's no native screen for the path yet.
+  Widget? _nativeForPath(String p) {
+    final li = _user != null;
+    final uid = _user?['id']?.toString();
+    switch (p) {
+      case '/insurance': return InsuranceDashboardScreen(loggedIn: li, userId: uid);
+      case '/insurance/members': return InsuranceMembersScreen(loggedIn: li);
+      case '/insurance/clients': return InsuranceClientsScreen(loggedIn: li, repId: uid);
+      case '/insurance/plans': return InsurancePlansScreen(loggedIn: li);
+      case '/insurance/pre-auths': return InsurancePreAuthsScreen(loggedIn: li);
+      case '/insurance/member-payments': return InsuranceMemberPaymentsScreen(loggedIn: li);
+      case '/admin': return AdminDashboardScreen(loggedIn: li);
+      case '/regional': return RegionalDashboardScreen(loggedIn: li);
+      case '/provider/{slug}': return ProviderDashboardScreen(loggedIn: li, providerId: uid);
+    }
+    return null;
   }
 
   void _openFeed() {

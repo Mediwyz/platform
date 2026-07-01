@@ -106,6 +106,47 @@ class _ListPageState extends State<ListPage> {
   }
 }
 
+/// A dashboard stat card (icon + big value + label) — mirrors the web
+/// DashboardStatCard. Theme-aware surfaces so it works in light + dark.
+Widget statCard(BuildContext c, {required IconData icon, required String label, required String value, Color accent = MediWyzColors.teal}) => Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(color: kSurface(c), borderRadius: BorderRadius.circular(14), border: Border.all(color: kLine(c))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
+          child: FaIcon(icon, size: 16, color: accent),
+        ),
+        const SizedBox(height: 10),
+        Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kFg(c))),
+        const SizedBox(height: 2),
+        Text(label, style: TextStyle(fontSize: 11.5, color: kSub(c))),
+      ]),
+    );
+
+/// A scrollable 2-column grid of stat cards for a role dashboard.
+class DashboardGrid extends StatelessWidget {
+  final List<Widget> cards;
+  final List<Widget> below;
+  const DashboardGrid({super.key, required this.cards, this.below = const []});
+  @override
+  Widget build(BuildContext context) => ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1.35,
+            children: cards,
+          ),
+          ...below,
+        ],
+      );
+}
+
 /// A round teal leading avatar with an icon — the standard list-tile leading.
 Widget tileIcon(IconData icon) => CircleAvatar(
       radius: 18,

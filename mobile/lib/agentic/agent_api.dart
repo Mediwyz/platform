@@ -63,6 +63,53 @@ class AgentApi {
     }
   }
 
+  // ── Generic helpers for the back-office pages ──────────────────────────────
+  static Future<Map<String, dynamic>> _getObj(String path, {Map<String, dynamic>? qp}) async {
+    try {
+      final res = await ApiClient.instance.get(path, queryParameters: qp);
+      final b = res.data as Map?;
+      final d = (b?['data'] ?? b) as Map?;
+      return Map<String, dynamic>.from(d ?? const {});
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> _getList(String path, {Map<String, dynamic>? qp, String key = 'data'}) async {
+    try {
+      final res = await ApiClient.instance.get(path, queryParameters: qp);
+      final b = res.data as Map?;
+      final list = (b?[key] ?? b?['data'] ?? (b?['data'] is Map ? (b!['data'] as Map)[key] : null)) as List?;
+      return list?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? const [];
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  // Insurance (corporate owner + rep views)
+  static Future<Map<String, dynamic>> insuranceDashboard(String userId) => _getObj('/insurance/$userId/dashboard');
+  static Future<Map<String, dynamic>> insuranceAnalytics() => _getObj('/corporate/insurance/dashboard');
+  static Future<List<Map<String, dynamic>>> insurancePlans() => _getList('/insurance/plans');
+  static Future<List<Map<String, dynamic>>> insuranceClients(String repId) => _getList('/insurance/$repId/clients');
+  static Future<List<Map<String, dynamic>>> insuranceMembers() => _getList('/corporate/insurance/members');
+  static Future<List<Map<String, dynamic>>> insurancePreAuths() => _getList('/corporate/insurance/pre-auth', qp: {'as': 'owner'});
+
+  // Provider dashboard
+  static Future<Map<String, dynamic>> providerStatistics(String id) => _getObj('/providers/$id/statistics');
+
+  // Admin / regional dashboards + lists
+  static Future<Map<String, dynamic>> adminMetrics() => _getObj('/admin/metrics');
+  static Future<Map<String, dynamic>> adminSystemHealth() => _getObj('/admin/system-health');
+  static Future<List<Map<String, dynamic>>> adminAlerts() => _getList('/admin/alerts');
+  static Future<List<Map<String, dynamic>>> adminAdmins() => _getList('/admin/admins');
+  static Future<Map<String, dynamic>> adminCommissionConfig() => _getObj('/admin/commission-config');
+  static Future<List<Map<String, dynamic>>> regionalSubscriptions() => _getList('/regional/subscriptions');
+  static Future<List<Map<String, dynamic>>> regionalRoles() => _getList('/regional/roles');
+  static Future<List<Map<String, dynamic>>> regionalOrgCategories() => _getList('/regional/org-categories');
+
+  // Patient organizations
+  static Future<List<Map<String, dynamic>>> myCompanies() => _getList('/corporate/my-companies');
+
   /// GET /admin/accounts — user accounts (admin/regional). Status filter optional.
   static Future<List<Map<String, dynamic>>> adminAccounts({String? status}) async {
     try {
