@@ -1,8 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
 import 'app_header.dart';
 import 'page_kit.dart';
+import 'admin_pages.dart';
+import 'admin_users_screen.dart';
+import 'regional_pages.dart';
+
+Widget _dashSection(BuildContext c, String title, List<Widget> children) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: kFg(c))),
+        const SizedBox(height: 10),
+        ...children,
+      ],
+    );
+
+Widget _quickAction(BuildContext c, IconData icon, String label, VoidCallback onTap) => Expanded(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(color: kSurface(c), borderRadius: BorderRadius.circular(12), border: Border.all(color: kLine(c))),
+          child: Column(children: [
+            FaIcon(icon, size: 18, color: MediWyzColors.teal),
+            const SizedBox(height: 6),
+            Text(label, textAlign: TextAlign.center, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: kFg(c))),
+          ]),
+        ),
+      ),
+    );
+
+Widget _activityRow(BuildContext c, Map<String, dynamic> a) => Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(color: kSurface(c), borderRadius: BorderRadius.circular(10), border: Border.all(color: kLine(c))),
+      child: Row(children: [
+        const FaIcon(FontAwesomeIcons.circleInfo, size: 14, color: MediWyzColors.teal),
+        const SizedBox(width: 10),
+        Expanded(child: Text((a['message'] ?? a['title'] ?? a['description'] ?? 'Activité').toString(), style: TextStyle(fontSize: 12.5, color: kFg(c)))),
+        if (a['createdAt'] ?? a['timestamp'] != null) Text(fmtDate(a['createdAt'] ?? a['timestamp']), style: TextStyle(fontSize: 10.5, color: kFaint(c))),
+      ]),
+    );
 
 /// Pull a possibly-nested numeric/string value with fallbacks.
 dynamic _pick(Map m, List<String> keys) {
@@ -32,7 +75,8 @@ class _DashboardScaffold extends StatefulWidget {
   final bool loggedIn;
   final Future<Map<String, dynamic>> Function() fetch;
   final List<Widget> Function(BuildContext, Map<String, dynamic>) cards;
-  const _DashboardScaffold({required this.title, required this.loggedIn, required this.fetch, required this.cards});
+  final List<Widget> Function(BuildContext, Map<String, dynamic>)? below;
+  const _DashboardScaffold({required this.title, required this.loggedIn, required this.fetch, required this.cards, this.below});
   @override
   State<_DashboardScaffold> createState() => _DashboardScaffoldState();
 }
@@ -61,7 +105,7 @@ class _DashboardScaffoldState extends State<_DashboardScaffold> {
           ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text('Connectez-vous pour voir le tableau de bord.', textAlign: TextAlign.center, style: TextStyle(color: kSub(context)))))
           : _loading
               ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(onRefresh: _load, child: DashboardGrid(cards: widget.cards(context, _data))),
+              : RefreshIndicator(onRefresh: _load, child: DashboardGrid(cards: widget.cards(context, _data), below: widget.below?.call(context, _data) ?? const [])),
     );
   }
 }
@@ -139,7 +183,8 @@ class AdminDashboardScreen extends StatelessWidget {
         fetch: () async {
           final m = await AgentApi.adminMetrics();
           final h = await AgentApi.adminSystemHealth();
-          return {...m, ...h};
+          final alerts = await AgentApi.adminAlerts();
+          return {...m, ...h, '_alerts': alerts};
         },
         cards: (c, d) => [
           statCard(c, icon: FontAwesomeIcons.users, label: 'Utilisateurs', value: _num(_pick(d, ['totalUsers', 'users.total', 'users']))),
@@ -149,6 +194,21 @@ class AdminDashboardScreen extends StatelessWidget {
           statCard(c, icon: FontAwesomeIcons.microchip, label: 'CPU', value: _pct(_pick(d, ['cpuUsage', 'cpu.usage', 'cpu']))),
           statCard(c, icon: FontAwesomeIcons.memory, label: 'Mémoire', value: _pct(_pick(d, ['memoryUsage', 'memory.usage', 'memory']))),
         ],
+        below: (c, d) {
+          void go(Widget s) => Navigator.of(c).push(MaterialPageRoute(builder: (_) => s));
+          final alerts = (d['_alerts'] as List?)?.cast<Map<String, dynamic>>() ?? const [];
+          return [
+            _dashSection(c, 'Actions rapides', [
+              Row(children: [
+                _quickAction(c, FontAwesomeIcons.users, 'Utilisateurs', () => go(const AdminUsersScreen(loggedIn: true, initialStatus: ''))),
+                _quickAction(c, FontAwesomeIcons.userShield, 'Admins rég.', () => go(const RegionalAdminsScreen(loggedIn: true))),
+                _quickAction(c, FontAwesomeIcons.fileLines, 'Contenu', () => go(const AdminContentScreen(loggedIn: true))),
+                _quickAction(c, FontAwesomeIcons.shieldHalved, 'Sécurité', () => go(const SecuritySettingsScreen(loggedIn: true))),
+              ]),
+            ]),
+            if (alerts.isNotEmpty) _dashSection(c, 'Activité récente', [for (final a in alerts.take(6)) _activityRow(c, a)]),
+          ];
+        },
       );
 }
 
@@ -160,7 +220,11 @@ class RegionalDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) => _DashboardScaffold(
         title: 'Tableau de bord',
         loggedIn: loggedIn,
-        fetch: () => AgentApi.adminMetrics(),
+        fetch: () async {
+          final m = await AgentApi.adminMetrics();
+          final alerts = await AgentApi.adminAlerts();
+          return {...m, '_alerts': alerts};
+        },
         cards: (c, d) => [
           statCard(c, icon: FontAwesomeIcons.users, label: 'Utilisateurs', value: _num(_pick(d, ['totalUsers', 'users.total', 'users']))),
           statCard(c, icon: FontAwesomeIcons.userCheck, label: 'Utilisateurs actifs', value: _num(_pick(d, ['activeUsers', 'users.active'])), accent: const Color(0xFF27AE60)),
@@ -169,5 +233,19 @@ class RegionalDashboardScreen extends StatelessWidget {
           statCard(c, icon: FontAwesomeIcons.userDoctor, label: 'Prestataires', value: _num(_pick(d, ['providers', 'providers.total', 'totalProviders']))),
           statCard(c, icon: FontAwesomeIcons.clipboardCheck, label: 'Validations', value: _num(_pick(d, ['pendingValidations', 'validations.pending'])), accent: const Color(0xFFE0A800)),
         ],
+        below: (c, d) {
+          void go(Widget s) => Navigator.of(c).push(MaterialPageRoute(builder: (_) => s));
+          final alerts = (d['_alerts'] as List?)?.cast<Map<String, dynamic>>() ?? const [];
+          return [
+            _dashSection(c, 'Actions rapides', [
+              Row(children: [
+                _quickAction(c, FontAwesomeIcons.users, 'Utilisateurs', () => go(const AdminUsersScreen(loggedIn: true, initialStatus: ''))),
+                _quickAction(c, FontAwesomeIcons.userTag, 'Rôles', () => go(const ProviderRolesScreen(loggedIn: true))),
+                _quickAction(c, FontAwesomeIcons.shieldHalved, 'Sécurité', () => go(const SecuritySettingsScreen(loggedIn: true))),
+              ]),
+            ]),
+            if (alerts.isNotEmpty) _dashSection(c, 'Alertes récentes', [for (final a in alerts.take(6)) _activityRow(c, a)]),
+          ];
+        },
       );
 }

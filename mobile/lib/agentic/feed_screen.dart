@@ -29,6 +29,11 @@ _Reaction? _reactionByKey(String? k) {
   return null;
 }
 
+String _categoryLabel(String c) {
+  const m = {'health_tips': 'Conseils santé', 'article': 'Article', 'news': 'Actualité', 'case_study': 'Étude de cas', 'wellness': 'Bien-être'};
+  return m[c] ?? c;
+}
+
 /// Native social feed — mirrors the web "Feed" (PostCard): 5 reactions via a
 /// tap picker, reaction counts, comment + share. Posts from GET /posts (public).
 class FeedScreen extends StatefulWidget {
@@ -206,7 +211,16 @@ class _FeedScreenState extends State<FeedScreen> {
           ]),
         ),
         if ((p['content'] ?? '').toString().isNotEmpty)
-          Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10), child: Text(p['content'].toString(), style: TextStyle(fontSize: 14, height: 1.35, color: kFg(context)))),
+          Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 8), child: Text(p['content'].toString(), style: TextStyle(fontSize: 14, height: 1.35, color: kFg(context)))),
+        if ((p['category'] ?? '').toString().isNotEmpty || (p['tags'] is List && (p['tags'] as List).isNotEmpty))
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+            child: Wrap(spacing: 6, runSpacing: 4, children: [
+              if ((p['category'] ?? '').toString().isNotEmpty)
+                Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)), child: Text(_categoryLabel(p['category'].toString()), style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: MediWyzColors.teal))),
+              if (p['tags'] is List) ...(p['tags'] as List).take(4).map((t) => Text('#$t', style: TextStyle(fontSize: 11, color: kSub(context)))),
+            ]),
+          ),
         if (image.isNotEmpty)
           CachedNetworkImage(imageUrl: image, width: double.infinity, fit: BoxFit.cover, errorWidget: (_, __, ___) => const SizedBox.shrink()),
         // Counts summary (reaction dots + total, comments)

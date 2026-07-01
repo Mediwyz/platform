@@ -53,6 +53,10 @@ class ListPage extends StatefulWidget {
   final String Function(Map<String, dynamic> item)? searchText;
   /// Word for the count header ("N rendez-vous"). Defaults to "éléments".
   final String countNoun;
+  /// Optional status-filter chips: (value, label). 'all' shows everything.
+  final List<(String, String)>? filters;
+  /// Given an item, return its filter value (compared to the selected chip).
+  final String Function(Map<String, dynamic> item)? filterValue;
   const ListPage({
     super.key,
     required this.title,
@@ -65,6 +69,8 @@ class ListPage extends StatefulWidget {
     this.myId,
     this.searchText,
     this.countNoun = 'éléments',
+    this.filters,
+    this.filterValue,
   });
   @override
   State<ListPage> createState() => _ListPageState();
@@ -74,6 +80,7 @@ class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _items = [];
   bool _loading = true;
   String _query = '';
+  String _filter = 'all';
 
   @override
   void initState() {
@@ -88,9 +95,15 @@ class _ListPageState extends State<ListPage> {
   }
 
   List<Map<String, dynamic>> get _filtered {
-    if (widget.searchText == null || _query.trim().isEmpty) return _items;
-    final q = _query.trim().toLowerCase();
-    return _items.where((it) => widget.searchText!(it).toLowerCase().contains(q)).toList();
+    var list = _items;
+    if (widget.filters != null && widget.filterValue != null && _filter != 'all') {
+      list = list.where((it) => widget.filterValue!(it).toLowerCase() == _filter.toLowerCase()).toList();
+    }
+    if (widget.searchText != null && _query.trim().isNotEmpty) {
+      final q = _query.trim().toLowerCase();
+      list = list.where((it) => widget.searchText!(it).toLowerCase().contains(q)).toList();
+    }
+    return list;
   }
 
   @override
@@ -115,6 +128,27 @@ class _ListPageState extends State<ListPage> {
                           contentPadding: const EdgeInsets.symmetric(vertical: 6),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         ),
+                      ),
+                    ),
+                  if (widget.filters != null && _items.isNotEmpty)
+                    SizedBox(
+                      height: 40,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        children: [
+                          for (final f in widget.filters!)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: ChoiceChip(
+                                label: Text(f.$2),
+                                selected: _filter == f.$1,
+                                onSelected: (_) => setState(() => _filter = f.$1),
+                                labelStyle: TextStyle(fontSize: 12, color: _filter == f.$1 ? Colors.white : kFg(context)),
+                                selectedColor: MediWyzColors.navy,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   if (_items.isNotEmpty)

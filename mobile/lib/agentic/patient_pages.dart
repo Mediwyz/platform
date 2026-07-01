@@ -23,6 +23,8 @@ class MyBookingsScreen extends StatelessWidget {
       myId: user?['id']?.toString(),
       countNoun: 'rendez-vous',
       searchText: (b) => '${b['providerName'] ?? b['provider']?['name'] ?? ''} ${b['serviceType'] ?? ''}',
+      filters: const [('all', 'Tous'), ('pending', 'En attente'), ('confirmed', 'Confirmés'), ('completed', 'Terminés'), ('cancelled', 'Annulés')],
+      filterValue: (b) => (b['status'] ?? '').toString(),
       emptyIcon: FontAwesomeIcons.calendarCheck,
       emptyText: 'Aucun rendez-vous.',
       fetch: () => AgentApi.patientBookings(),

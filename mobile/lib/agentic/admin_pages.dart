@@ -18,6 +18,10 @@ class RegionalAdminsScreen extends StatelessWidget {
         gateText: _gate,
         emptyIcon: FontAwesomeIcons.userShield,
         emptyText: 'Aucun admin régional.',
+        countNoun: 'admins',
+        searchText: (a) => '${a['firstName'] ?? ''} ${a['lastName'] ?? ''} ${a['email'] ?? ''} ${a['region'] ?? ''}',
+        filters: const [('all', 'Tous'), ('active', 'Actifs'), ('pending', 'En attente'), ('suspended', 'Suspendus')],
+        filterValue: (a) => (a['accountStatus'] ?? '').toString(),
         fetch: () => AgentApi.adminAdmins(),
         tile: (a, _) {
           final name = '${a['firstName'] ?? ''} ${a['lastName'] ?? ''}'.trim();
