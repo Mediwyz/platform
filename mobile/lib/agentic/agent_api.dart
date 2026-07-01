@@ -162,6 +162,20 @@ class AgentApi {
   static Future<bool> updateOrgCategory(String id, Map<String, dynamic> b) => _patch('/regional/org-categories/$id', b);
   static Future<bool> deleteOrgCategory(String id) => _delete('/regional/org-categories/$id');
 
+  // Regional subscription plans CRUD
+  static Future<bool> createSubscription(Map<String, dynamic> b) => _post('/regional/subscriptions', b);
+  static Future<bool> updateSubscription(String id, Map<String, dynamic> b) => _patch('/regional/subscriptions/$id', b);
+
+  // Regional provider-roles CRUD
+  static Future<bool> createRole(Map<String, dynamic> b) => _post('/regional/roles', b);
+  static Future<bool> updateRole(String id, Map<String, dynamic> b) => _patch('/regional/roles/$id', b);
+  static Future<bool> deleteRole(String id) => _delete('/regional/roles/$id');
+
+  // Service catalog CRUD (admin)
+  static Future<bool> createService(Map<String, dynamic> b) => _post('/services/admin', b);
+  static Future<bool> updateService(String id, Map<String, dynamic> b) => _patch('/services/admin/$id', b);
+  static Future<bool> deleteService(String id) => _delete('/services/admin/$id');
+
   // Clinical knowledge CRUD
   static Future<bool> createClinicalKnowledge(Map<String, dynamic> b) => _post('/admin/clinical-knowledge', b);
   static Future<bool> updateClinicalKnowledge(String id, Map<String, dynamic> b) => _patch('/admin/clinical-knowledge/$id', b);

@@ -33,6 +33,49 @@ Future<Map<String, dynamic>?> showEntityForm(
   );
 }
 
+/// Split comma-separated string fields into lists for the API.
+Map<String, dynamic> splitListFields(Map<String, dynamic> v, List<String> keys) {
+  final out = Map<String, dynamic>.from(v);
+  for (final k in keys) {
+    if (out[k] is String) out[k] = (out[k] as String).split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+  }
+  return out;
+}
+
+/// A ⋮ menu with Edit + Delete for a list item, wired to the given callbacks.
+Widget crudMenu(
+  BuildContext context, {
+  required List<FormFieldSpec> fields,
+  required Map<String, dynamic> initial,
+  required Future<bool> Function(Map<String, dynamic> body) onUpdate,
+  Future<bool> Function()? onDelete,
+  required VoidCallback reload,
+  List<String> splitKeys = const [],
+  String editTitle = 'Modifier',
+  String deleteLabel = 'Supprimer',
+  String deleteConfirm = 'Supprimer cet élément ?',
+}) {
+  return PopupMenuButton<String>(
+    icon: Icon(Icons.more_vert, size: 18, color: kFaint(context)),
+    onSelected: (a) async {
+      if (a == 'edit') {
+        final v = await showEntityForm(context, title: editTitle, fields: fields, initial: initial);
+        if (v == null || !context.mounted) return;
+        final ok = await onUpdate(splitKeys.isEmpty ? v : splitListFields(v, splitKeys));
+        if (context.mounted) { ok ? reload() : toast(context, 'Modification impossible'); }
+      } else if (a == 'delete' && onDelete != null) {
+        if (!await confirmAction(context, deleteLabel, deleteConfirm, confirmLabel: deleteLabel) || !context.mounted) return;
+        final ok = await onDelete();
+        if (context.mounted) { ok ? reload() : toast(context, 'Suppression impossible'); }
+      }
+    },
+    itemBuilder: (_) => [
+      const PopupMenuItem(value: 'edit', child: Text('Modifier')),
+      if (onDelete != null) PopupMenuItem(value: 'delete', child: Text(deleteLabel)),
+    ],
+  );
+}
+
 class _EntityForm extends StatefulWidget {
   final String title;
   final List<FormFieldSpec> fields;

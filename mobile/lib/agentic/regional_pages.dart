@@ -25,6 +25,32 @@ const _knowledgeFields = <FormFieldSpec>[
   FormFieldSpec('active', 'Actif', type: FieldType.toggle),
 ];
 
+const _subFields = <FormFieldSpec>[
+  FormFieldSpec('name', 'Nom', required: true),
+  FormFieldSpec('type', 'Type (individual/corporate)'),
+  FormFieldSpec('price', 'Prix / mois (Rs)', type: FieldType.number),
+  FormFieldSpec('currency', 'Devise'),
+  FormFieldSpec('gpConsultsPerMonth', 'Consultations GP / mois', type: FieldType.number),
+  FormFieldSpec('features', 'Avantages (séparés par des virgules)', type: FieldType.multiline),
+];
+
+const _roleFields = <FormFieldSpec>[
+  FormFieldSpec('label', 'Libellé', required: true),
+  FormFieldSpec('code', 'Code', required: true),
+  FormFieldSpec('slug', 'Slug'),
+  FormFieldSpec('description', 'Description', type: FieldType.multiline),
+  FormFieldSpec('searchEnabled', 'Recherche activée', type: FieldType.toggle),
+  FormFieldSpec('bookingEnabled', 'Réservation activée', type: FieldType.toggle),
+];
+
+const _serviceFields = <FormFieldSpec>[
+  FormFieldSpec('serviceName', 'Nom du service', required: true),
+  FormFieldSpec('providerType', 'Type de prestataire'),
+  FormFieldSpec('category', 'Catégorie'),
+  FormFieldSpec('defaultPrice', 'Prix par défaut (Rs)', type: FieldType.number),
+  FormFieldSpec('description', 'Description', type: FieldType.multiline),
+];
+
 /// Split a comma-separated field into a list for the API (aliases/sources).
 Map<String, dynamic> _splitLists(Map<String, dynamic> v, List<String> keys) {
   final out = Map<String, dynamic>.from(v);
@@ -46,11 +72,18 @@ class RegionalSubscriptionsScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.crown,
         emptyText: 'Aucune formule.',
         fetch: () => AgentApi.regionalSubscriptions(),
-        tile: (p, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouvelle formule', fields: _subFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createSubscription(splitListFields(v, ['features']));
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (p, reload) {
           final price = p['price'];
           final cur = p['currency'] ?? 'Rs';
           final gp = p['gpConsultsPerMonth'];
           final feats = (p['features'] as List?)?.length;
+          final id = p['id']?.toString();
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.crown),
             title: Text((p['name'] ?? 'Formule').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
@@ -59,7 +92,10 @@ class RegionalSubscriptionsScreen extends StatelessWidget {
               if (gp != null) '$gp consultations/mois',
               if (feats != null) '$feats avantages',
             ].where((s) => s.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: price == null ? null : Text('$cur $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              if (price != null) Text('$cur $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+              if (id != null) crudMenu(context, fields: _subFields, initial: {...p, 'features': (p['features'] as List?)?.join(', ')}, splitKeys: const ['features'], reload: reload, onUpdate: (b) => AgentApi.updateSubscription(id, b), editTitle: 'Modifier la formule'),
+            ]),
           );
         },
       );
@@ -77,12 +113,19 @@ class ProviderRolesScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.usersGear,
         emptyText: 'Aucun rôle.',
         fetch: () => AgentApi.regionalRoles(),
-        tile: (r, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouveau rôle', fields: _roleFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createRole(v);
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (r, reload) {
           final search = r['searchEnabled'] == true;
           final booking = r['bookingEnabled'] == true;
           final inventory = r['inventoryEnabled'] == true;
           final desc = (r['description'] ?? r['blurb'] ?? '').toString();
           final docs = r['requiredDocumentCount'] ?? (r['requiredDocuments'] is List ? (r['requiredDocuments'] as List).length : null);
+          final id = r['id']?.toString();
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -93,6 +136,7 @@ class ProviderRolesScreen extends StatelessWidget {
                   Text((r['label'] ?? r['code'] ?? 'Rôle').toString(), style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kFg(context))),
                   Text((r['code'] ?? '').toString().toUpperCase(), style: TextStyle(fontSize: 10.5, color: kFaint(context), letterSpacing: 0.4)),
                 ])),
+                if (id != null) crudMenu(context, fields: _roleFields, initial: r, reload: reload, onUpdate: (b) => AgentApi.updateRole(id, b), onDelete: () => AgentApi.deleteRole(id), editTitle: 'Modifier le rôle', deleteConfirm: 'Supprimer ce rôle ?'),
               ]),
               if (desc.isNotEmpty && desc != 'null') Padding(padding: const EdgeInsets.only(top: 6), child: Text(desc, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, height: 1.3, color: kSub(context)))),
               const SizedBox(height: 6),
@@ -174,16 +218,27 @@ class ServiceCatalogScreen extends StatelessWidget {
         emptyIcon: FontAwesomeIcons.tag,
         emptyText: 'Aucun service.',
         fetch: () => AgentApi.servicesCatalog(),
-        tile: (s, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouveau service', fields: _serviceFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createService(v);
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (s, reload) {
           final price = s['defaultPrice'] ?? s['price'];
+          final id = s['id']?.toString();
           return ListTile(
             leading: tileIcon(FontAwesomeIcons.stethoscope),
             title: Text((s['serviceName'] ?? s['name'] ?? 'Service').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
             subtitle: Text([
               if (s['providerType'] != null) s['providerType'].toString().toLowerCase().replaceAll('_', ' '),
               if (s['category'] != null) s['category'].toString(),
-            ].where((t) => t.isNotEmpty).join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: price == null ? null : Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+              if (s['description'] != null) s['description'].toString(),
+            ].where((t) => t.isNotEmpty).join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              if (price != null) Text('Rs $price', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: MediWyzColors.teal)),
+              if (id != null) crudMenu(context, fields: _serviceFields, initial: s, reload: reload, onUpdate: (b) => AgentApi.updateService(id, b), onDelete: () => AgentApi.deleteService(id), editTitle: 'Modifier le service', deleteConfirm: 'Supprimer ce service ?'),
+            ]),
           );
         },
       );
