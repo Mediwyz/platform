@@ -5,7 +5,8 @@ import { checkAllergies } from './safety/allergy-filter';
 import { ClinicalKnowledgeService } from './clinical-knowledge.service';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
+// Env-configurable (see agent.service.ts) so models can be swapped without a redeploy.
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 const PROMPT_VERSION = '2026.04.1-centralised-profile';
 
 interface GroqMessage {

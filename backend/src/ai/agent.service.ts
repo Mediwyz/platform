@@ -6,7 +6,9 @@ import { AiService } from './ai.service';
 import { HealthTrackerService } from './health-tracker.service';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
+// Env-configurable so we can swap models without a redeploy (e.g. if Groq
+// deprecates one). Default stays on the current stable text model.
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 
 const PROVIDER_TYPES = [
   'DOCTOR', 'NURSE', 'NANNY', 'PHARMACIST', 'LAB_TECHNICIAN', 'EMERGENCY_WORKER',

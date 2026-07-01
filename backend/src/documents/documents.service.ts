@@ -121,7 +121,9 @@ export class DocumentsService {
     userFullName?: string,
   ): Promise<GroqDocAnalysis> {
     const apiKey = process.env.GROQ_API_KEY;
-    const model = process.env.GROQ_VISION_MODEL || 'llama-3.2-11b-vision-preview';
+    // llama-3.2-11b-vision-preview is a deprecated preview model; Llama 4 Scout
+    // is Groq's current stable vision model. Override via GROQ_VISION_MODEL.
+    const model = process.env.GROQ_VISION_MODEL || 'meta-llama/llama-4-scout-17b-16e-instruct';
 
     const nameInstruction = userFullName
       ? `The registered user's name is: "${userFullName}". Look for this name on the document.`
