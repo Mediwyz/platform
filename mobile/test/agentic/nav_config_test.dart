@@ -21,19 +21,22 @@ void main() {
       expect(navForRole('regional_admin'), same(regionalNav));
     });
 
-    test('insurance roles get the insurance menu', () {
+    test('insurance rep gets the insurance menu', () {
       expect(navForRole('INSURANCE_REP'), same(insuranceNav));
-      expect(navForRole('CORPORATE_ADMIN'), same(insuranceNav));
       expect(roleLabel('INSURANCE_REP'), 'Assureur');
       final claims = insuranceNav.where((i) => i.label == 'Claims');
       expect(claims, isNotEmpty);
       expect(claims.first.path, insClaimsSentinelPath);
     });
 
-    test('guests / unknown roles default to the patient menu', () {
+    test('guests / members / legacy corporate-admin + referral-partner get the member menu', () {
       expect(navForRole(null), same(patientNav));
       expect(navForRole(''), same(patientNav));
       expect(navForRole('WHATEVER'), same(patientNav));
+      expect(navForRole('MEMBER'), same(patientNav));
+      // No longer special account types → fall back to the member experience.
+      expect(navForRole('CORPORATE_ADMIN'), same(patientNav));
+      expect(navForRole('REFERRAL_PARTNER'), same(patientNav));
     });
   });
 

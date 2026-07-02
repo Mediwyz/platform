@@ -188,14 +188,17 @@ const _providerTypes = {
   'CAREGIVER', 'PHYSIOTHERAPIST', 'DENTIST', 'OPTOMETRIST', 'NUTRITIONIST',
 };
 
-/// Pick the sidebar for a user's role. Guests/members get the patient menu.
+/// Pick the sidebar for a user's role. Every connected user is a MEMBER or a
+/// PROVIDER (+ the admin/regional/insurance staff roles). Corporate-admin and
+/// referral-partner are NOT special accounts — creating/managing a company and
+/// referring people are universal member features (My Organizations + Invite).
 List<NavItem> navForRole(String? userType) {
   final t = (userType ?? '').toUpperCase();
   if (t == 'REGIONAL_ADMIN') return regionalNav;
   if (t == 'ADMIN' || t == 'SUPER_ADMIN') return adminNav;
-  if (t == 'INSURANCE_REP' || t == 'CORPORATE_ADMIN' || t == 'INSURANCE') return insuranceNav;
+  if (t == 'INSURANCE_REP' || t == 'INSURANCE') return insuranceNav;
   if (_providerTypes.contains(t)) return providerNav;
-  return patientNav;
+  return patientNav; // members (incl. legacy corporate-admin / referral-partner)
 }
 
 /// Human label for the current role (drawer header).
@@ -203,7 +206,7 @@ String roleLabel(String? userType) {
   final t = (userType ?? '').toUpperCase();
   if (t == 'REGIONAL_ADMIN') return 'Admin régional';
   if (t == 'ADMIN' || t == 'SUPER_ADMIN') return 'Administrateur';
-  if (t == 'INSURANCE_REP' || t == 'CORPORATE_ADMIN' || t == 'INSURANCE') return 'Assureur';
+  if (t == 'INSURANCE_REP' || t == 'INSURANCE') return 'Assureur';
   if (_providerTypes.contains(t)) return 'Prestataire';
   if (t.isEmpty) return 'Invité';
   return 'Membre';
