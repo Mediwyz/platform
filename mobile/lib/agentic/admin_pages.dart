@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/mediwyz_theme.dart';
@@ -13,6 +14,16 @@ const _testimonialFields = <FormFieldSpec>[
   FormFieldSpec('role', 'Rôle / titre'),
   FormFieldSpec('content', 'Témoignage', type: FieldType.multiline),
   FormFieldSpec('rating', 'Note (1-5)', type: FieldType.number),
+];
+
+const _slideFields = <FormFieldSpec>[
+  FormFieldSpec('title', 'Titre', required: true),
+  FormFieldSpec('subtitle', 'Sous-titre'),
+  FormFieldSpec('imageUrl', "URL de l'image"),
+  FormFieldSpec('ctaText', "Texte du bouton"),
+  FormFieldSpec('ctaLink', 'Lien du bouton'),
+  FormFieldSpec('order', 'Ordre', type: FieldType.number),
+  FormFieldSpec('isActive', 'Actif', type: FieldType.toggle),
 ];
 
 // ── Regional admins (/admin/regional-admins) ─────────────────────────────────
@@ -127,34 +138,73 @@ class AdminContentScreen extends StatelessWidget {
         gateText: _gate,
         emptyIcon: FontAwesomeIcons.fileLines,
         emptyText: 'Aucun contenu.',
+        countNoun: 'éléments',
         fetch: () async {
           final t = await AgentApi.cmsTestimonials();
+          final sl = await AgentApi.cmsHeroSlides();
           final s = await AgentApi.cmsSections();
           return [
+            ...sl.map((e) => {...e, '_kind': 'slide'}),
             ...t.map((e) => {...e, '_kind': 'testimonial'}),
             ...s.map((e) => {...e, '_kind': 'section'}),
           ];
         },
         onCreate: (reload) async {
-          final v = await showEntityForm(context, title: 'Nouveau témoignage', fields: _testimonialFields);
+          final kind = await showModalBottomSheet<String>(
+            context: context,
+            builder: (_) => SafeArea(child: Column(mainAxisSize: MainAxisSize.min, children: [
+              ListTile(leading: const FaIcon(FontAwesomeIcons.quoteLeft, size: 16), title: const Text('Nouveau témoignage'), onTap: () => Navigator.pop(context, 'testimonial')),
+              ListTile(leading: const FaIcon(FontAwesomeIcons.images, size: 16), title: const Text('Nouvelle diapositive'), onTap: () => Navigator.pop(context, 'slide')),
+            ])),
+          );
+          if (kind == null || !context.mounted) return;
+          final fields = kind == 'slide' ? _slideFields : _testimonialFields;
+          final v = await showEntityForm(context, title: kind == 'slide' ? 'Nouvelle diapositive' : 'Nouveau témoignage', fields: fields);
           if (v == null || !context.mounted) return;
-          final ok = await AgentApi.createTestimonial(v);
+          final ok = kind == 'slide' ? await AgentApi.createHeroSlide(v) : await AgentApi.createTestimonial(v);
           if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
         },
         tile: (c, reload) {
-          final isT = c['_kind'] == 'testimonial';
+          final kind = c['_kind'];
           final id = c['id']?.toString();
+          final icon = kind == 'testimonial' ? FontAwesomeIcons.quoteLeft : (kind == 'slide' ? FontAwesomeIcons.images : FontAwesomeIcons.fileLines);
+          final title = (c['name'] ?? c['title'] ?? c['sectionType'] ?? 'Contenu').toString();
           return ListTile(
-            leading: tileIcon(isT ? FontAwesomeIcons.quoteLeft : FontAwesomeIcons.fileLines),
-            title: Text((c['name'] ?? c['title'] ?? c['sectionType'] ?? 'Contenu').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-            subtitle: Text((c['role'] ?? c['content'] ?? c['sectionType'] ?? '').toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
+            leading: tileIcon(icon),
+            title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+            subtitle: Text((c['role'] ?? c['subtitle'] ?? c['content'] ?? c['sectionType'] ?? '').toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
             trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (isT && c['rating'] != null) Text('★ ${c['rating']}', style: const TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w700, fontSize: 12.5)),
-              if (isT && id != null) crudMenu(context, fields: _testimonialFields, initial: c, reload: reload, onUpdate: (b) => AgentApi.updateTestimonial(id, b), onDelete: () => AgentApi.deleteTestimonial(id), editTitle: 'Modifier le témoignage', deleteConfirm: 'Supprimer ce témoignage ?'),
+              if (kind == 'testimonial' && c['rating'] != null) Text('★ ${c['rating']}', style: const TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w700, fontSize: 12.5)),
+              if (kind == 'testimonial' && id != null) crudMenu(context, fields: _testimonialFields, initial: c, reload: reload, onUpdate: (b) => AgentApi.updateTestimonial(id, b), onDelete: () => AgentApi.deleteTestimonial(id), editTitle: 'Modifier le témoignage', deleteConfirm: 'Supprimer ce témoignage ?'),
+              if (kind == 'slide' && id != null) crudMenu(context, fields: _slideFields, initial: c, reload: reload, onUpdate: (b) => AgentApi.updateHeroSlide(id, b), onDelete: () => AgentApi.deleteHeroSlide(id), editTitle: 'Modifier la diapositive', deleteConfirm: 'Supprimer cette diapositive ?'),
+              if (kind == 'section') IconButton(icon: Icon(Icons.edit, size: 18, color: kFaint(context)), tooltip: 'Modifier le contenu', onPressed: () => _editSection(context, c, reload)),
             ]),
           );
         },
       );
+
+  Future<void> _editSection(BuildContext context, Map<String, dynamic> section, VoidCallback reload) async {
+    final type = (section['sectionType'] ?? '').toString();
+    final content = section['content'];
+    final ctl = TextEditingController(text: const JsonEncoder.withIndent('  ').convert(content ?? {}));
+    final save = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Section : $type'),
+        content: SizedBox(width: double.maxFinite, child: TextField(controller: ctl, maxLines: 12, style: const TextStyle(fontFamily: 'monospace', fontSize: 12), decoration: const InputDecoration(border: OutlineInputBorder(), helperText: 'Contenu JSON'))),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
+          ElevatedButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Enregistrer')),
+        ],
+      ),
+    );
+    ctl.dispose();
+    if (save != true || !context.mounted) return;
+    dynamic parsed;
+    try { parsed = jsonDecode(ctl.text); } catch (_) { toast(context, 'JSON invalide'); return; }
+    final ok = await AgentApi.updateCmsSection(type, {'sectionType': type, 'content': parsed, 'isVisible': section['isVisible'] ?? true});
+    if (context.mounted) { ok ? reload() : toast(context, 'Enregistrement impossible'); }
+  }
 }
 
 // ── Commission config (/admin/commission-config) — a settings object ─────────

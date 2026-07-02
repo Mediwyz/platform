@@ -197,6 +197,13 @@ class AgentApi {
   static Future<bool> updateService(String id, Map<String, dynamic> b) => _patch('/services/admin/$id', b);
   static Future<bool> deleteService(String id) => _delete('/services/admin/$id');
 
+  // CMS hero-slides CRUD + sections
+  static Future<List<Map<String, dynamic>>> cmsHeroSlides() => _getList('/cms/hero-slides', key: 'slides');
+  static Future<bool> createHeroSlide(Map<String, dynamic> b) => _post('/cms/hero-slides', b);
+  static Future<bool> updateHeroSlide(String id, Map<String, dynamic> b) => _patch('/cms/hero-slides/$id', b);
+  static Future<bool> deleteHeroSlide(String id) => _delete('/cms/hero-slides/$id');
+  static Future<bool> updateCmsSection(String sectionType, Map<String, dynamic> b) => _put('/cms/sections/$sectionType', b);
+
   // CMS testimonials CRUD
   static Future<bool> createTestimonial(Map<String, dynamic> b) => _post('/cms/testimonials', b);
   static Future<bool> updateTestimonial(String id, Map<String, dynamic> b) => _patch('/cms/testimonials/$id', b);
