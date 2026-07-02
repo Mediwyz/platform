@@ -535,7 +535,7 @@ class _WyzoChatScreenState extends State<WyzoChatScreen> with SingleTickerProvid
     final uid = _user?['id']?.toString();
     switch (p) {
       case '/insurance': return InsuranceDashboardScreen(loggedIn: li, userId: uid);
-      case '/insurance/members': return InsuranceMembersScreen(loggedIn: li);
+      case '/insurance/members': return InsuranceMembersScreen(loggedIn: li, userId: uid);
       case '/insurance/clients': return InsuranceClientsScreen(loggedIn: li, repId: uid);
       case '/insurance/plans': return InsurancePlansScreen(loggedIn: li);
       case '/insurance/pre-auths': return InsurancePreAuthsScreen(loggedIn: li);

@@ -92,6 +92,7 @@ class AgentApi {
   static Future<List<Map<String, dynamic>>> insurancePlans() => _getList('/insurance/plans');
   static Future<List<Map<String, dynamic>>> insuranceClients(String repId) => _getList('/insurance/$repId/clients');
   static Future<List<Map<String, dynamic>>> insuranceMembers() => _getList('/corporate/insurance/members');
+  static Future<bool> inviteInsuranceMember(String repId, Map<String, dynamic> body) => _post('/insurance/$repId/clients', body);
   static Future<List<Map<String, dynamic>>> insurancePreAuths() => _getList('/corporate/insurance/pre-auth', qp: {'as': 'owner'});
 
   // Provider dashboard

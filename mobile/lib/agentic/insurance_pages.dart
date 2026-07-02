@@ -23,9 +23,15 @@ String _fullName(Map m) {
 }
 
 // ── Members ──────────────────────────────────────────────────────────────────
+const _inviteFields = <FormFieldSpec>[
+  FormFieldSpec('email', 'E-mail du membre', required: true),
+  FormFieldSpec('planId', 'ID de la formule (optionnel)'),
+];
+
 class InsuranceMembersScreen extends StatelessWidget {
   final bool loggedIn;
-  const InsuranceMembersScreen({super.key, required this.loggedIn});
+  final String? userId;
+  const InsuranceMembersScreen({super.key, required this.loggedIn, this.userId});
   @override
   Widget build(BuildContext context) => ListPage(
         title: 'Membres',
@@ -35,6 +41,12 @@ class InsuranceMembersScreen extends StatelessWidget {
         searchText: (m) => '${_fullName(m)} ${m['email'] ?? ''}',
         filters: const [('all', 'Tous'), ('paid', 'À jour'), ('unpaid', 'Impayés')],
         filterValue: (m) => m['paidThisMonth'] == true ? 'paid' : 'unpaid',
+        onCreate: userId == null ? null : (reload) async {
+          final v = await showEntityForm(context, title: 'Inviter un membre', fields: _inviteFields, submitLabel: 'Inviter');
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.inviteInsuranceMember(userId!, v);
+          if (context.mounted) { ok ? reload() : toast(context, "Invitation impossible"); }
+        },
         emptyIcon: FontAwesomeIcons.users,
         emptyText: 'Aucun membre.',
         fetch: () => AgentApi.insuranceMembers(),
