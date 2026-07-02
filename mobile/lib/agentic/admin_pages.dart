@@ -8,6 +8,13 @@ import 'page_kit.dart';
 
 const _gate = "Connectez-vous en tant qu'administrateur.";
 
+const _testimonialFields = <FormFieldSpec>[
+  FormFieldSpec('name', 'Nom', required: true),
+  FormFieldSpec('role', 'Rôle / titre'),
+  FormFieldSpec('content', 'Témoignage', type: FieldType.multiline),
+  FormFieldSpec('rating', 'Note (1-5)', type: FieldType.number),
+];
+
 // ── Regional admins (/admin/regional-admins) ─────────────────────────────────
 class RegionalAdminsScreen extends StatelessWidget {
   final bool loggedIn;
@@ -128,13 +135,23 @@ class AdminContentScreen extends StatelessWidget {
             ...s.map((e) => {...e, '_kind': 'section'}),
           ];
         },
-        tile: (c, _) {
+        onCreate: (reload) async {
+          final v = await showEntityForm(context, title: 'Nouveau témoignage', fields: _testimonialFields);
+          if (v == null || !context.mounted) return;
+          final ok = await AgentApi.createTestimonial(v);
+          if (context.mounted) { ok ? reload() : toast(context, 'Création impossible'); }
+        },
+        tile: (c, reload) {
           final isT = c['_kind'] == 'testimonial';
+          final id = c['id']?.toString();
           return ListTile(
             leading: tileIcon(isT ? FontAwesomeIcons.quoteLeft : FontAwesomeIcons.fileLines),
             title: Text((c['name'] ?? c['title'] ?? c['sectionType'] ?? 'Contenu').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
             subtitle: Text((c['role'] ?? c['content'] ?? c['sectionType'] ?? '').toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: kSub(context))),
-            trailing: isT && c['rating'] != null ? Text('★ ${c['rating']}', style: const TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w700, fontSize: 12.5)) : null,
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              if (isT && c['rating'] != null) Text('★ ${c['rating']}', style: const TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w700, fontSize: 12.5)),
+              if (isT && id != null) crudMenu(context, fields: _testimonialFields, initial: c, reload: reload, onUpdate: (b) => AgentApi.updateTestimonial(id, b), onDelete: () => AgentApi.deleteTestimonial(id), editTitle: 'Modifier le témoignage', deleteConfirm: 'Supprimer ce témoignage ?'),
+            ]),
           );
         },
       );

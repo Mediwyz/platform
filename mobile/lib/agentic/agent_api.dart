@@ -196,6 +196,11 @@ class AgentApi {
   static Future<bool> updateService(String id, Map<String, dynamic> b) => _patch('/services/admin/$id', b);
   static Future<bool> deleteService(String id) => _delete('/services/admin/$id');
 
+  // CMS testimonials CRUD
+  static Future<bool> createTestimonial(Map<String, dynamic> b) => _post('/cms/testimonials', b);
+  static Future<bool> updateTestimonial(String id, Map<String, dynamic> b) => _patch('/cms/testimonials/$id', b);
+  static Future<bool> deleteTestimonial(String id) => _delete('/cms/testimonials/$id');
+
   // Clinical knowledge CRUD
   static Future<bool> createClinicalKnowledge(Map<String, dynamic> b) => _post('/admin/clinical-knowledge', b);
   static Future<bool> updateClinicalKnowledge(String id, Map<String, dynamic> b) => _patch('/admin/clinical-knowledge/$id', b);
