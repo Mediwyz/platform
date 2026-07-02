@@ -109,8 +109,10 @@ class AgentApi {
   static Future<List<Map<String, dynamic>>> regionalRoles() => _getList('/regional/roles');
   static Future<List<Map<String, dynamic>>> regionalOrgCategories() => _getList('/regional/org-categories');
 
-  // Patient organizations
+  // Organizations — any connected user can create/manage a company (incl. an
+  // insurance company). Corporate-admin is no longer a special account.
   static Future<List<Map<String, dynamic>>> myCompanies() => _getList('/corporate/my-companies');
+  static Future<bool> createCompany(Map<String, dynamic> b) => _post('/corporate/companies', b);
 
   // Subscription plans (billing)
   static Future<List<Map<String, dynamic>>> subscriptionPlans() => _getList('/subscriptions', qp: {'type': 'individual'}, key: 'plans');
