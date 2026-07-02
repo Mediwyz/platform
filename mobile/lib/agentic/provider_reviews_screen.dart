@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/mediwyz_theme.dart';
 import 'agent_api.dart';
+import 'app_header.dart';
 
 /// Native provider reviews — the web "Reviews" page. Shows the provider's
 /// average rating + the list of reviews they've received. Auth-gated.
@@ -52,10 +53,35 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
     return '${t.day.toString().padLeft(2, '0')}/${t.month.toString().padLeft(2, '0')}/${t.year}';
   }
 
+  Widget _distribution() {
+    final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+    for (final r in _reviews) {
+      final n = ((r['rating'] ?? 0) as num).round().clamp(1, 5);
+      counts[n] = (counts[n] ?? 0) + 1;
+    }
+    final total = _reviews.length;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
+      child: Column(children: [
+        for (var star = 5; star >= 1; star--)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Row(children: [
+              SizedBox(width: 16, child: Text('$star', style: const TextStyle(fontSize: 12, color: Colors.black54))),
+              const Icon(Icons.star, size: 12, color: Color(0xFFE0A800)),
+              const SizedBox(width: 8),
+              Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(4), child: LinearProgressIndicator(value: total == 0 ? 0 : counts[star]! / total, minHeight: 7, backgroundColor: const Color(0xFFECECEC), valueColor: const AlwaysStoppedAnimation(Color(0xFFE0A800))))),
+              SizedBox(width: 28, child: Text(' ${counts[star]}', style: const TextStyle(fontSize: 12, color: Colors.black45))),
+            ]),
+          ),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Mes avis')),
+      appBar: MediwyzHeader(title: 'Mes avis', loggedIn: widget.loggedIn, myId: widget.myId),
       body: !widget.loggedIn
           ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Connectez-vous pour voir vos avis.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54))))
           : _loading
@@ -75,6 +101,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                         Text('${_reviews.length} avis', style: const TextStyle(color: Colors.white70, fontSize: 13)),
                       ]),
                     ),
+                    if (_reviews.isNotEmpty) _distribution(),
                     if (_reviews.isEmpty)
                       const Padding(padding: EdgeInsets.all(28), child: Center(child: Text('Aucun avis pour le moment.', style: TextStyle(color: Colors.black54)))),
                     for (final r in _reviews)

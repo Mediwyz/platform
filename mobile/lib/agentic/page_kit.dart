@@ -59,6 +59,8 @@ class ListPage extends StatefulWidget {
   final String Function(Map<String, dynamic> item)? filterValue;
   /// Optional create action — shows a "+" FAB; the callback gets a reload fn.
   final void Function(VoidCallback reload)? onCreate;
+  /// Optional header rendered above the list (e.g. stat cards), given all items.
+  final Widget Function(BuildContext, List<Map<String, dynamic>> items)? headerBuilder;
   const ListPage({
     super.key,
     required this.title,
@@ -74,6 +76,7 @@ class ListPage extends StatefulWidget {
     this.filters,
     this.filterValue,
     this.onCreate,
+    this.headerBuilder,
   });
   @override
   State<ListPage> createState() => _ListPageState();
@@ -122,6 +125,7 @@ class _ListPageState extends State<ListPage> {
           : _loading
               ? const Center(child: CircularProgressIndicator())
               : Column(children: [
+                  if (widget.headerBuilder != null && _items.isNotEmpty) widget.headerBuilder!(context, _items),
                   if (widget.searchText != null && _items.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),

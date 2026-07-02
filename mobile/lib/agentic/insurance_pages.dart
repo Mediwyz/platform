@@ -60,6 +60,29 @@ class InsuranceMemberPaymentsScreen extends StatelessWidget {
         searchText: (m) => '${_fullName(m)} ${m['email'] ?? ''}',
         filters: const [('all', 'Tous'), ('paid', 'Payés'), ('unpaid', 'Impayés')],
         filterValue: (m) => m['paidThisMonth'] == true ? 'paid' : 'unpaid',
+        headerBuilder: (c, items) {
+          final total = items.length;
+          final paid = items.where((m) => m['paidThisMonth'] == true).length;
+          final rate = total == 0 ? 0 : (paid * 100 / total).round();
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+            child: Column(children: [
+              Row(children: [
+                Expanded(child: statCard(c, icon: FontAwesomeIcons.users, label: 'Membres', value: '$total')),
+                const SizedBox(width: 8),
+                Expanded(child: statCard(c, icon: FontAwesomeIcons.circleCheck, label: 'Payés', value: '$paid', accent: const Color(0xFF27AE60))),
+                const SizedBox(width: 8),
+                Expanded(child: statCard(c, icon: FontAwesomeIcons.circleXmark, label: 'Impayés', value: '${total - paid}', accent: Colors.red)),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                Text('Taux de recouvrement: $rate%', style: TextStyle(fontSize: 12, color: kSub(c))),
+                const SizedBox(width: 10),
+                Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(4), child: LinearProgressIndicator(value: rate / 100, minHeight: 6, backgroundColor: kLine(c), valueColor: const AlwaysStoppedAnimation(Color(0xFF27AE60))))),
+              ]),
+            ]),
+          );
+        },
         emptyIcon: FontAwesomeIcons.moneyBillWave,
         emptyText: 'Aucun paiement.',
         fetch: () => AgentApi.insuranceMembers(),
