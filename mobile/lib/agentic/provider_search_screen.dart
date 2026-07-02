@@ -72,6 +72,24 @@ class _ProviderSearchScreenState extends State<ProviderSearchScreen> {
     return n.isNotEmpty ? n : 'Prestataire';
   }
 
+  Widget _modeBadge(String mode) {
+    const labels = {'office': 'Au cabinet', 'home': 'À domicile', 'video': 'Vidéo', 'phone': 'Téléphone', 'emergency': 'Urgence', 'delivery': 'Livraison'};
+    final label = labels[mode.toLowerCase()] ?? mode;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(color: MediWyzColors.teal.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(20)),
+      child: Text(label, style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: MediWyzColors.teal)),
+    );
+  }
+
+  Future<void> _connect(Map<String, dynamic> p) async {
+    if (!widget.loggedIn) { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Connectez-vous pour vous connecter.'), duration: Duration(seconds: 2))); return; }
+    final id = (p['userId'] ?? p['id'] ?? '').toString();
+    if (id.isEmpty) return;
+    final ok = await AgentApi.createConnection(id);
+    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Demande de connexion envoyée' : 'Action impossible'), duration: const Duration(seconds: 2)));
+  }
+
   void _book(Map<String, dynamic> p) {
     if (!widget.loggedIn) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Connectez-vous pour réserver.'), duration: Duration(seconds: 2)));
@@ -113,27 +131,43 @@ class _ProviderSearchScreenState extends State<ProviderSearchScreen> {
                   : RefreshIndicator(
                       onRefresh: _load,
                       child: ListView.separated(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.only(top: 4, bottom: 16),
                         itemCount: _providers.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        separatorBuilder: (_, __) => const SizedBox.shrink(),
                         itemBuilder: (_, i) {
                           final p = _providers[i];
                           final specialty = (p['specialty'] ?? p['specialization'] ?? p['specializations'] ?? '').toString();
                           final rating = p['rating'] ?? p['averageRating'];
                           final fee = p['consultationFee'] ?? p['fee'] ?? p['price'];
                           final loc = (p['city'] ?? p['location'] ?? p['address'] ?? '').toString();
-                          return ListTile(
-                            leading: CircleAvatar(radius: 22, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), backgroundImage: (p['profileImage'] ?? p['avatar']) != null ? NetworkImage((p['profileImage'] ?? p['avatar']).toString()) : null, child: (p['profileImage'] ?? p['avatar']) == null ? const FaIcon(FontAwesomeIcons.userDoctor, size: 16, color: MediWyzColors.teal) : null),
-                            title: Text(_name(p), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
-                            subtitle: Text([
-                              if (specialty.isNotEmpty && specialty != 'null') specialty,
-                              if (rating != null) '★ $rating',
-                              if (loc.isNotEmpty && loc != 'null') loc,
-                              if (fee != null) 'Rs $fee',
-                            ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
-                            isThreeLine: false,
-                            trailing: TextButton(onPressed: () => _book(p), child: const Text('Réserver')),
-                            onTap: () => _book(p),
+                          final modes = (p['serviceModes'] ?? p['modes'] ?? p['availableModes']) as List?;
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(color: kSurface(context), borderRadius: BorderRadius.circular(12), border: Border.all(color: kLine(context))),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              Row(children: [
+                                CircleAvatar(radius: 22, backgroundColor: MediWyzColors.teal.withValues(alpha: 0.12), backgroundImage: (p['profileImage'] ?? p['avatar']) != null ? NetworkImage((p['profileImage'] ?? p['avatar']).toString()) : null, child: (p['profileImage'] ?? p['avatar']) == null ? const FaIcon(FontAwesomeIcons.userDoctor, size: 16, color: MediWyzColors.teal) : null),
+                                const SizedBox(width: 12),
+                                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                  Text(_name(p), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: kFg(context))),
+                                  Text([
+                                    if (specialty.isNotEmpty && specialty != 'null') specialty,
+                                    if (rating != null) '★ $rating',
+                                    if (loc.isNotEmpty && loc != 'null') loc,
+                                    if (fee != null) 'Rs $fee',
+                                  ].join(' · '), style: TextStyle(fontSize: 12, color: kSub(context))),
+                                ])),
+                              ]),
+                              if (modes != null && modes.isNotEmpty)
+                                Padding(padding: const EdgeInsets.only(top: 8), child: Wrap(spacing: 6, runSpacing: 4, children: [for (final m in modes.take(4)) _modeBadge(m.toString())])),
+                              const SizedBox(height: 8),
+                              Row(children: [
+                                OutlinedButton.icon(onPressed: () => _connect(p), icon: const FaIcon(FontAwesomeIcons.userPlus, size: 12), label: const Text('Connecter'), style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), textStyle: const TextStyle(fontSize: 12.5))),
+                                const Spacer(),
+                                ElevatedButton(onPressed: () => _book(p), style: ElevatedButton.styleFrom(backgroundColor: MediWyzColors.navy, padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8)), child: const Text('Réserver', style: TextStyle(color: Colors.white, fontSize: 12.5))),
+                              ]),
+                            ]),
                           );
                         },
                       ),

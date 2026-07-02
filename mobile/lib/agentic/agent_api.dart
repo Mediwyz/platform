@@ -434,6 +434,9 @@ class AgentApi {
     }
   }
 
+  /// POST /connections — send a connection request to another user.
+  static Future<bool> createConnection(String toUserId) => _post('/connections', {'toUserId': toUserId});
+
   /// PATCH /connections/:id — accept / reject / block a connection request.
   static Future<bool> connectionAction(String id, String action) async {
     try {
