@@ -96,6 +96,7 @@ class AgentApi {
 
   // Provider dashboard
   static Future<Map<String, dynamic>> providerStatistics(String id) => _getObj('/providers/$id/statistics');
+  static Future<List<Map<String, dynamic>>> providerWorkplaces(String id) => _getList('/providers/$id/workplaces', key: 'workplaces');
 
   // Admin / regional dashboards + lists
   static Future<Map<String, dynamic>> adminMetrics() => _getObj('/admin/metrics');

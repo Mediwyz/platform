@@ -7,6 +7,9 @@ import 'page_kit.dart';
 import 'admin_pages.dart';
 import 'admin_users_screen.dart';
 import 'regional_pages.dart';
+import 'provider_pages.dart';
+import 'messages_screen.dart';
+import 'patient_pages.dart';
 
 Widget _dashSection(BuildContext c, String title, List<Widget> children) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +163,11 @@ class ProviderDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) => _DashboardScaffold(
         title: 'Tableau de bord',
         loggedIn: loggedIn && providerId != null,
-        fetch: () => AgentApi.providerStatistics(providerId ?? ''),
+        fetch: () async {
+          final s = await AgentApi.providerStatistics(providerId ?? '');
+          final wp = await AgentApi.providerWorkplaces(providerId ?? '');
+          return {...s, '_workplaces': wp};
+        },
         cards: (c, s) => [
           statCard(c, icon: FontAwesomeIcons.calendarCheck, label: 'Rendez-vous', value: _num(_pick(s, ['totalBookings', 'bookings.total', 'total']))),
           statCard(c, icon: FontAwesomeIcons.hourglassHalf, label: 'En attente', value: _num(_pick(s, ['pendingBookings', 'bookings.pending', 'pending'])), accent: const Color(0xFFE0A800)),
@@ -169,6 +176,37 @@ class ProviderDashboardScreen extends StatelessWidget {
           statCard(c, icon: FontAwesomeIcons.star, label: 'Note', value: _num(_pick(s, ['rating', 'averageRating'])), accent: const Color(0xFFF59E0B)),
           statCard(c, icon: FontAwesomeIcons.userGroup, label: 'Patients', value: _num(_pick(s, ['patients', 'totalPatients', 'uniquePatients']))),
         ],
+        below: (c, d) {
+          void go(Widget s) => Navigator.of(c).push(MaterialPageRoute(builder: (_) => s));
+          final li = loggedIn;
+          final wp = (d['_workplaces'] as List?)?.cast<Map<String, dynamic>>() ?? const [];
+          return [
+            _dashSection(c, 'Accès rapide', [
+              Row(children: [
+                _quickAction(c, FontAwesomeIcons.briefcaseMedical, 'Ma pratique', () => go(MyPracticeScreen(loggedIn: li, providerId: providerId))),
+                _quickAction(c, FontAwesomeIcons.comments, 'Messages', () => go(MessagesScreen(loggedIn: li, myId: providerId))),
+                _quickAction(c, FontAwesomeIcons.moneyBillWave, 'Facturation', () => go(BillingScreen(loggedIn: li, userId: providerId))),
+                _quickAction(c, FontAwesomeIcons.robot, 'Wyzo', () => Navigator.of(c).popUntil((r) => r.isFirst)),
+              ]),
+            ]),
+            if (wp.isNotEmpty) _dashSection(c, 'Mes lieux de travail', [
+              for (final w in wp) Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(color: kSurface(c), borderRadius: BorderRadius.circular(10), border: Border.all(color: kLine(c))),
+                child: Row(children: [
+                  const FaIcon(FontAwesomeIcons.hospital, size: 15, color: MediWyzColors.teal),
+                  const SizedBox(width: 10),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text((w['entityName'] ?? w['name'] ?? w['entity']?['name'] ?? 'Établissement').toString(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, color: kFg(c))),
+                    if ((w['city'] ?? w['location'] ?? w['role']) != null) Text([w['role'], w['city'] ?? w['location']].where((s) => s != null).join(' · '), style: TextStyle(fontSize: 11.5, color: kSub(c))),
+                  ])),
+                  if (w['isPrimary'] == true || w['primary'] == true) statusBadge('principal'),
+                ]),
+              ),
+            ]),
+          ];
+        },
       );
 }
 
